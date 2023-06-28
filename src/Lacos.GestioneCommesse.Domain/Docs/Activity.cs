@@ -12,7 +12,7 @@ public class Activity : FullAuditedEntity
     public long JobId { get; set; }
     public Job? Job { get; set; }
 
-    public long? TypeId { get; set; }
+    public long TypeId { get; set; }
     public ActivityType? Type { get; set; }
 
     public long? SourceTicketId { get; set; }
@@ -20,4 +20,11 @@ public class Activity : FullAuditedEntity
 
     public long? SourcePuchaseOrderId { get; set; }
     public PurchaseOrder? SourcePurchaseOrder { get; set; }
+
+    public ICollection<Intervention> Interventions { get; set; }
+
+    public Activity()
+    {
+        Interventions = new List<Intervention>();
+    }
 }

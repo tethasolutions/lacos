@@ -18,9 +18,11 @@ public class CustomerAddress : FullAuditedEntity
     public Customer? Customer { get; set; }
 
     public ICollection<Activity> Activities { get; set; }
+    public ICollection<Product> Products { get; set; }
 
     public CustomerAddress()
     {
         Activities = new List<Activity>();
+        Products = new List<Product>();
     }
 }

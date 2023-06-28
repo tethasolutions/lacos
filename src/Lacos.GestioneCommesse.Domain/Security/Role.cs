@@ -3,5 +3,6 @@
 public enum Role
 {
     Administrator,
-    Operator
+    Operator,
+    Customer
 }

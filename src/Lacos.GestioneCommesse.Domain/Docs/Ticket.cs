@@ -1,19 +1,24 @@
-﻿namespace Lacos.GestioneCommesse.Domain.Docs;
+﻿using Lacos.GestioneCommesse.Domain.Registry;
+
+namespace Lacos.GestioneCommesse.Domain.Docs;
 
 public class Ticket : FullAuditedEntity
 {
-    public string? Notes { get; set; }
+    public string? Description { get; set; }
     public TicketStatus Status { get; set; }
 
-    public long InterventionId { get; set; }
+    public long? InterventionId { get; set; }
     public Intervention? Intervention { get; set; }
 
-    public ICollection<Activity> GeneratedActivities { get; set; }
+    public long CustomerId { get; set; }
+    public Customer? Customer { get; set; }
+
+    public Activity? GeneratedActivity { get; set; }
+
     public ICollection<TicketPicture> Pictures { get; set; }
 
     public Ticket()
     {
-        GeneratedActivities = new List<Activity>();
         Pictures = new List<TicketPicture>();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Lacos.GestioneCommesse.Domain.Security;
+﻿namespace Lacos.GestioneCommesse.Domain.Registry;
 
 public class OperatorDocument : FullAuditedEntity
 {
@@ -6,5 +6,5 @@ public class OperatorDocument : FullAuditedEntity
     public string? FileName { get; set; }
 
     public long OperatorId { get; set; }
-    public User? Operator { get; set; }
+    public Operator? Operator { get; set; }
 }

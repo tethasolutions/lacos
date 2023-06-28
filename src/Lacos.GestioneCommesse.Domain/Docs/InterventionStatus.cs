@@ -1,9 +1,9 @@
 ﻿namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public enum InterventionDisputeStatus
+public enum InterventionStatus
 {
-    Opened,
+    Pending,
     InProgress,
-    Resolved,
+    Completed,
     Canceled
 }

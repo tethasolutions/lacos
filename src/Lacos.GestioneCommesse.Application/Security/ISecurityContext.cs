@@ -7,7 +7,6 @@ namespace Lacos.GestioneCommesse.Application.Security;
 
 public interface ISecurityContext : IDisposable
 {
-    void ChangeEmailAddress(string? emailAddress);
     Task ChangePassword(string password);
     Task EnableUser(bool enabled);
     Task ChangeUserName(string userName);
@@ -15,8 +14,6 @@ public interface ISecurityContext : IDisposable
     Task GenerateUniqueAccessToken();
     Task HashPasswordWithUniqueSalt(string password);
     Task EnsureUserNameIsUnique(string userName);
-    void ChangeName(string? name, string? surname);
-    void ChangeColor(string? hex);
 }
 
 public class SecurityContext : ISecurityContext
@@ -50,12 +47,7 @@ public class SecurityContext : ISecurityContext
 
         user.Enabled = enabled;
     }
-
-    public void ChangeEmailAddress(string? emailAddress)
-    {
-        user.EmailAddress = emailAddress;
-    }
-
+    
     public async Task ChangePassword(string password)
     {
         var passwordVerified = VerifyPassword(password);
@@ -127,17 +119,6 @@ public class SecurityContext : ISecurityContext
         {
             throw new LacosException($"Nome utente {userName} già in uso.");
         }
-    }
-
-    public void ChangeName(string? name, string? surname)
-    {
-        user.Name = name;
-        user.Surname = surname;
-    }
-
-    public void ChangeColor(string? hex)
-    {
-        user.ColorHex = hex;
     }
 
     public void Dispose()

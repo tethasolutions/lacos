@@ -1,5 +1,4 @@
 ﻿using Lacos.GestioneCommesse.Domain.Registry;
-using Lacos.GestioneCommesse.Domain.Security;
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
@@ -8,17 +7,20 @@ public class Intervention : FullAuditedEntity
     public DateTimeOffset Start { get; set; }
     public DateTimeOffset End { get; set; }
 
-    public string? Notes { get; set; }
+    public InterventionStatus Status { get; set; }
+
+    public string? Description { get; set; }
     public string? FinalNotes { get; set; }
 
     public string? ReportFileName { get; set; }
-    public string? CustomerSignature { get; set; }
+    public DateTimeOffset? ReportGeneratedOn { get; set; }
+    public string? CustomerSignatureFileName { get; set; }
 
-    public long VehicleId { get; set; }
+    public long? VehicleId { get; set; }
     public Vehicle? Vehicle { get; set; }
 
-    public ICollection<User> Operators { get; set; }
-    public ICollection<InterventionPicture> Pictures { get; set; }
+    public ICollection<Operator> Operators { get; set; }
+    public ICollection<InterventionNote> Notes { get; set; }
     public ICollection<InterventionProduct> Products { get; set; }
     public ICollection<InterventionDispute> Disputes { get; set; }
     public ICollection<Ticket> Tickets { get; set; }
@@ -26,8 +28,8 @@ public class Intervention : FullAuditedEntity
 
     public Intervention()
     {
-        Pictures = new List<InterventionPicture>();
-        Operators = new List<User>();
+        Notes = new List<InterventionNote>();
+        Operators = new List<Operator>();
         Products = new List<InterventionProduct>();
         Disputes = new List<InterventionDispute>();
         Tickets = new List<Ticket>();

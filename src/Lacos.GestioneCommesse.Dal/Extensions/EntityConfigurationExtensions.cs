@@ -75,8 +75,8 @@ public static class EntityConfigurationExtensions
         var foreignKey = foreignKeyExpression.GetMemberAccess();
 
         builder
-            .HasOne(right.Name)
-            .WithOne(left.Name)
+            .HasOne(left.Name)
+            .WithOne(right.Name)
             .HasForeignKey(typeof(T2), foreignKey.Name)
             .IsRequired()
             .OnDelete(DeleteBehavior.ClientCascade);
@@ -91,8 +91,8 @@ public static class EntityConfigurationExtensions
         var foreignKey = foreignKeyExpression.GetMemberAccess();
 
         builder
-            .HasOne(right.Name)
-            .WithOne(left.Name)
+            .HasOne(left.Name)
+            .WithOne(right.Name)
             .HasForeignKey(typeof(T2), foreignKey.Name)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);

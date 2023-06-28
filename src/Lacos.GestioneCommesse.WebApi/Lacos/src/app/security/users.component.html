@@ -1,0 +1,33 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>
+            Utenti
+        </h3>
+    </div>
+    <div class="col-auto">
+        <button (click)="create()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<kendo-grid [data]="data" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
+    [group]="state.group" filterable="menu" [sortable]="true" [pageable]="true" scrollable="none"
+    (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column field="userName" title="Nome utente"></kendo-grid-column>
+    <kendo-grid-column field="enabled" title="Abilitato" filter="boolean">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.enabled | bool}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button (click)="edit(dataItem)" class="btn btn-primary btn-sm" title="Modifica">
+                <i class="fas fa-edit"></i>
+            </button>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+
+<lacos-user-modal #userModal></lacos-user-modal>

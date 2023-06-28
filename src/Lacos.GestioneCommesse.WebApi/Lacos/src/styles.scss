@@ -1,0 +1,151 @@
+body {
+    background-color: white;
+}
+
+.loader {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .6);
+    z-index: 99999;
+
+    &>div {
+        position: fixed;
+        top: calc(50% - 3rem);
+        left: calc(50% - 3rem);
+        width: 6rem;
+        height: 6rem;
+    }
+}
+
+.validation-message {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+.ng-invalid.ng-dirty~.validation-message {
+    display: block;
+}
+
+.form-control.ng-invalid.ng-dirty {
+    border-color: #dc3545;
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, .25);
+    }
+}
+
+.k-widget.ng-invalid.ng-dirty>.k-dropdown-wrap,
+.k-widget.ng-invalid.ng-dirty>.k-numeric-wrap {
+    border-color: #dc3545;
+
+    &.k-state-focused {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, .25);
+    }
+}
+
+.k-widget:not(.k-switch) {
+    width: 100%;
+}
+
+.btn.btn-primary {
+    color: #fff;
+}
+
+.k-dropdown .k-input {
+    background: #fff !important;
+}
+
+textarea {
+    resize: none;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.forbidden {
+    cursor: not-allowed;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.k-window-wrapper {
+    position: fixed;
+    z-index: 99999;
+    height: 100%;
+    width: 100%;
+    display: block;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+
+    kendo-window {
+        margin-bottom: 30px;
+    }
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.k-tooltip-content {
+    max-width: 350px !important;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.pre-line {
+    white-space: pre-line;
+}
+
+.k-notification-group {
+    z-index: 10001;
+}
+
+.mr-1 {
+    margin-right: 0.25rem;
+}
+
+.mr-2 {
+    margin-right: 0.5rem;
+}
+
+.ml-1 {
+    margin-left: 0.25rem;
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+.table {
+
+    td,
+    th {
+        vertical-align: middle;
+    }
+
+    td {
+        .form-group {
+            margin-bottom: 0;
+        }
+    }
+}

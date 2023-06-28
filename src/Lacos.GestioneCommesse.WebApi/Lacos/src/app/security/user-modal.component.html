@@ -1,0 +1,58 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="850" [top]="30">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Utente
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateUserForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Nome utente</label>
+                    <div class="form-group">
+                        <input class="form-control" name="field_1" [(ngModel)]="options.userName" required
+                            maxlength="64" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['field_1']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Password</label>
+                    <div class="form-group">
+                        <input class="form-control" name="field_2" [(ngModel)]="options.password" maxlength="16"
+                            novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['field_2']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Abilitato</label>
+                    <div class="form-group">
+                        <kendo-switch name="enabled" [(ngModel)]="options.enabled" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['enabled']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Email</label>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="field_3" [(ngModel)]="options.emailAddress"
+                            maxlength="128" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['field_3']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

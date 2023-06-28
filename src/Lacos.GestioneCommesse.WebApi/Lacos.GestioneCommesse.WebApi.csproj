@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Lacos\**" />
+    <Content Remove="Lacos\**" />
+    <EmbeddedResource Remove="Lacos\**" />
+    <None Remove="Lacos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.8" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2023.2.606" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lacos.GestioneCommesse.Application\Lacos.GestioneCommesse.Application.csproj" />
+    <ProjectReference Include="..\Lacos.GestioneCommesse.Dal\Lacos.GestioneCommesse.Dal.csproj" />
+    <ProjectReference Include="..\Lacos.GestioneCommesse.Domain\Lacos.GestioneCommesse.Domain.csproj" />
+    <ProjectReference Include="..\Lacos.GestioneCommesse.Framework\Lacos.GestioneCommesse.Framework.csproj" />
+  </ItemGroup>
+
+</Project>

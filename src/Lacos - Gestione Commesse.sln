@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lacos.GestioneCommesse.Domain", "Lacos.GestioneCommesse.Domain\Lacos.GestioneCommesse.Domain.csproj", "{77C3705F-47F5-4787-983E-C9B017699711}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacos.GestioneCommesse.Framework", "Lacos.GestioneCommesse.Framework\Lacos.GestioneCommesse.Framework.csproj", "{1102B3CB-7766-4EC7-85A5-EA0370622EA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacos.GestioneCommesse.Dal", "Lacos.GestioneCommesse.Dal\Lacos.GestioneCommesse.Dal.csproj", "{A23712E6-0DF5-4F5B-831D-1334686FF29A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacos.GestioneCommesse.Application", "Lacos.GestioneCommesse.Application\Lacos.GestioneCommesse.Application.csproj", "{AEB1685E-44EF-4AF8-A01D-962C86CE69E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lacos.GestioneCommesse.WebApi", "Lacos.GestioneCommesse.WebApi\Lacos.GestioneCommesse.WebApi.csproj", "{90C86562-8244-4B8E-A3CD-C417EB84D1B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77C3705F-47F5-4787-983E-C9B017699711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C3705F-47F5-4787-983E-C9B017699711}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C3705F-47F5-4787-983E-C9B017699711}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C3705F-47F5-4787-983E-C9B017699711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1102B3CB-7766-4EC7-85A5-EA0370622EA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1102B3CB-7766-4EC7-85A5-EA0370622EA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1102B3CB-7766-4EC7-85A5-EA0370622EA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1102B3CB-7766-4EC7-85A5-EA0370622EA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A23712E6-0DF5-4F5B-831D-1334686FF29A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A23712E6-0DF5-4F5B-831D-1334686FF29A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A23712E6-0DF5-4F5B-831D-1334686FF29A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A23712E6-0DF5-4F5B-831D-1334686FF29A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEB1685E-44EF-4AF8-A01D-962C86CE69E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEB1685E-44EF-4AF8-A01D-962C86CE69E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEB1685E-44EF-4AF8-A01D-962C86CE69E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEB1685E-44EF-4AF8-A01D-962C86CE69E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C86562-8244-4B8E-A3CD-C417EB84D1B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C86562-8244-4B8E-A3CD-C417EB84D1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C86562-8244-4B8E-A3CD-C417EB84D1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C86562-8244-4B8E-A3CD-C417EB84D1B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4DFC3DB-6F43-4E74-B224-DF6E8456F3D3}
+	EndGlobalSection
+EndGlobal

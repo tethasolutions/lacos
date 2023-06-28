@@ -19,6 +19,9 @@ public class Intervention : FullAuditedEntity
     public long? VehicleId { get; set; }
     public Vehicle? Vehicle { get; set; }
 
+    public long? ActivityId { get; set; }
+    public Activity? Activity { get; set; }
+
     public ICollection<Operator> Operators { get; set; }
     public ICollection<InterventionNote> Notes { get; set; }
     public ICollection<InterventionProduct> Products { get; set; }

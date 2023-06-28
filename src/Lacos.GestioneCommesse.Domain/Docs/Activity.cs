@@ -6,6 +6,8 @@ public class Activity : FullAuditedEntity
 {
     public ActivityStatus Status { get; set; }
 
+    public string? Description { get; set; }
+
     public long CustomerAddressId { get; set; }
     public CustomerAddress? CustomerAddress { get; set; }
 

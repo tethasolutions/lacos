@@ -1,4 +1,4 @@
-﻿using Lacos.GestioneCommesse.Domain.Security;
+﻿using Lacos.GestioneCommesse.Domain.Docs;
 
 namespace Lacos.GestioneCommesse.Domain.Registry;
 
@@ -9,9 +9,11 @@ public class Vehicle : FullAuditedEntity
     public string? Notes { get; set; }
     
     public ICollection<Operator> Operators { get; set; }
+    public ICollection<Intervention> Interventions { get; set; }
 
     public Vehicle()
     {
         Operators = new List<Operator>();
+        Interventions = new List<Intervention>();
     }
 }

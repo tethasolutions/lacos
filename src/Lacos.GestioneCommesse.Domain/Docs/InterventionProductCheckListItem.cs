@@ -11,6 +11,6 @@ public class InterventionProductCheckListItem : FullAuditedEntity
     public long? OperatorId { get; set; }
     public Operator? Operator { get; set; }
 
-    public long InterventionProductId { get; set; }
-    public InterventionProduct? InterventionProduct { get; set; }
+    public long CheckListId { get; set; }
+    public InterventionProductCheckList? CheckList { get; set; }
 }

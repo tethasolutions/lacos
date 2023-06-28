@@ -20,6 +20,7 @@ public class VehicleMap : BaseEntityMapping<Vehicle>
         builder.Property(e => e.Plate)
             .HasMaxLength(20);
 
-        builder.OneToMany(e => e.Operators, e => e.DefaultVehicle, e => e.DefaultVechicleId);
+        builder.OneToMany(e => e.Operators, e => e.DefaultVehicle, e => e.DefaultVehicleId);
+        builder.OneToMany(e => e.Interventions, e => e.Vehicle, e => e.VehicleId);
     }
 }

@@ -19,10 +19,12 @@ public class CustomerAddress : FullAuditedEntity
 
     public ICollection<Activity> Activities { get; set; }
     public ICollection<Product> Products { get; set; }
+    public ICollection<Ticket> Tickets { get; set; }
 
     public CustomerAddress()
     {
         Activities = new List<Activity>();
         Products = new List<Product>();
+        Tickets = new List<Ticket>();
     }
 }

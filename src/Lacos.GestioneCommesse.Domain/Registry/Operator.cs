@@ -9,7 +9,7 @@ public class Operator : FullAuditedEntity
     public string? ColorHex { get; set; }
     public string? Name { get; set; }
 
-    public long? DefaultVechicleId { get; set; }
+    public long? DefaultVehicleId { get; set; }
     public Vehicle? DefaultVehicle { get; set; }
 
     public long UserId { get; set; }
@@ -17,12 +17,16 @@ public class Operator : FullAuditedEntity
 
     public ICollection<OperatorDocument> Documents { get; set; }
     public ICollection<Intervention> Interventions { get; set; }
+    public ICollection<InterventionProductPicture> InterventionProductPictures { get; set; }
+    public ICollection<InterventionNote> InterventionNotes { get; set; }
     public ICollection<InterventionProductCheckListItem> InterventionProductCheckListItems { get; set; }
 
     public Operator()
     {
         Documents = new List<OperatorDocument>();
         Interventions = new List<Intervention>();
+        InterventionProductPictures = new List<InterventionProductPicture>();
         InterventionProductCheckListItems = new List<InterventionProductCheckListItem>();
+        InterventionNotes = new List<InterventionNote>();
     }
 }

@@ -41,5 +41,6 @@ public class CustomerAddressMap : BaseEntityMapping<CustomerAddress>
 
         builder.OneToMany(e => e.Activities, e => e.CustomerAddress, e => e.CustomerAddressId);
         builder.OneToMany(e => e.Products, e => e.CustomerAddress, e => e.CustomerAddressId);
+        builder.OneToMany(e => e.Tickets, e => e.CustomerAddress, e => e.CustomerAddressId);
     }
 }

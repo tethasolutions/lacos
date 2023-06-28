@@ -24,6 +24,8 @@ public class OperatorMap : BaseEntityMapping<Operator>
             .HasMaxLength(200);
 
         builder.OneToMany(e => e.Documents, e => e.Operator, e => e.OperatorId);
+        builder.OneToMany(e => e.InterventionProductPictures, e => e.Operator, e => e.OperatorId);
         builder.OneToMany(e => e.InterventionProductCheckListItems, e => e.Operator, e => e.OperatorId);
+        builder.OneToMany(e => e.InterventionNotes, e => e.Operator, e => e.OperatorId);
     }
 }

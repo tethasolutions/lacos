@@ -34,14 +34,12 @@ export class User {
         readonly userName: string,
         readonly enabled: boolean,
         readonly role: Role,
-        readonly emailAddress: string,
         readonly accessToken: string
     ) {
     }
 
     static build(obj: User) {
-        return new User(obj.id, obj.userName, obj.enabled, obj.role, obj.emailAddress,
-            obj.accessToken);
+        return new User(obj.id, obj.userName, obj.enabled, obj.role, obj.accessToken);
     }
 
 }
@@ -49,7 +47,8 @@ export class User {
 export enum Role {
 
     Administrator,
-    Operator
+    Operator,
+    Customer
 
 }
 
@@ -59,17 +58,16 @@ export class UpdateUserRequest {
         public userName: string,
         public enabled: boolean,
         public role: Role,
-        public emailAddress: string,
         public password: string
     ) {
     }
 
     static empty() {
-        return new UpdateUserRequest(null, true, Role.Operator, null, null);
+        return new UpdateUserRequest(null, true, Role.Operator, null);
     }
 
     static fromUser(user: User) {
-        return new UpdateUserRequest(user.userName, user.enabled, user.role, user.emailAddress, null);
+        return new UpdateUserRequest(user.userName, user.enabled, user.role, null);
     }
 
 }

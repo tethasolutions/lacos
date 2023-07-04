@@ -1,0 +1,121 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="850" [top]="30">
+        <kendo-window-titlebar>
+            <div *ngIf="options.type == 0" class="k-window-title">Cliente</div>
+            <div *ngIf="options.type == 1" class="k-window-title">Fornitore</div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateUserForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Tipo cliente</label>
+                    <div class="form-group">
+                        <select class="form-select form-control" name="fiscalType" required [(ngModel)]="options.fiscalType">
+                            <option value=0>Privato</option>
+                            <option value=1>Azienda</option>
+                            <option value=2>Condominio</option>
+                        </select>
+                        <div class="validation-message" [control]="form.controls['fiscalType']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Ragione sociale</label>
+                    <div class="form-group">
+                        <input class="form-control" name="companyName" [(ngModel)]="options.companyName" required
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['companyName']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>ERP Code</label>
+                    <div class="form-group">
+                        <input class="form-control" name="erpCode" [(ngModel)]="options.erpCode"
+                            maxlength="50" novalidate autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Nome</label>
+                    <div class="form-group">
+                        <input class="form-control" name="name" [(ngModel)]="options.name"
+                            maxlength="255" novalidate autocomplete="off" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Cognome</label>
+                    <div class="form-group">
+                        <input class="form-control" name="surname" [(ngModel)]="options.surname"
+                            maxlength="255" novalidate autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Telefono</label>
+                    <div class="form-group">
+                        <input class="form-control" name="telephone" [(ngModel)]="options.telephone"
+                            maxlength="255" novalidate autocomplete="off" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Email</label>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" [(ngModel)]="options.email"
+                            maxlength="255" novalidate autocomplete="off" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Alert</label>
+                    <div class="form-group">
+                        <kendo-switch name="alert" [(ngModel)]="options.alert" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['alert']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <label>Indirizzo</label>
+                    <div class="form-group">
+                        <kendo-combobox class="address-combobox"
+                            [class.address-validation-error-combobox]="isAddressInValidationError"
+                            [data]="options.addresses" 
+                            [(value)]="options.mainAddress" 
+                            textField="fullAddress"
+                            suggest="true"
+                            valueField="tempId"
+                            (valueChange)="mainAddressChanged($event)">
+                        </kendo-combobox>
+                        <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <input [hidden]="true" class="form-control" name="address" [(ngModel)]="options.mainAddress" required novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['address']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>&nbsp;</label>
+                    <div class="form-group">
+                        <button (click)="editAddresses()" type="button" class="btn btn-primary" title="Gestione indirizza">
+                            <i class="fa fa-edit"></i> Gestione indirizzi
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>
+
+<app-address-modal [customer]="options" #addressModal></app-address-modal>
+<app-addresses-modal [customer]="options" #addressesModal></app-addresses-modal>

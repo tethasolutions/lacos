@@ -39,6 +39,12 @@ import { LoaderInterceptor } from './services/interceptors/loader.interceptor';
 import { AuthGuard } from './services/guards/auth.guard';
 import { MenuComponent } from './menu/menu.component';
 import { BooleanPipe } from './pipes/boolean.pipe';
+import { CustomersComponent } from './customers/customers.component';
+import { CustomerService } from './services/customer.service';
+import { CustomerModalComponent } from './customer-modal/customer-modal.component';
+import { AddressesService } from './services/addresses.service';
+import { AddressModalComponent } from './address-modal/address-modal.component';
+import { AddressesModalComponent } from './addresses-modal/addresses-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -53,7 +59,11 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         LoginComponent,
         LogoutComponent,
         UserModalComponent,
-        MenuComponent
+        MenuComponent,
+        CustomersComponent,
+        CustomerModalComponent,
+        AddressModalComponent,
+        AddressesModalComponent
     ],
     imports: [
         BrowserModule,
@@ -90,7 +100,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         LoaderService,
         { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true, deps: [LoaderService] },
         Clipboard,
-        AuthGuard
+        AuthGuard,
+        CustomerService,
+        AddressesService
     ],
     bootstrap: [AppComponent]
 })

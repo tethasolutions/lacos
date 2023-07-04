@@ -29,6 +29,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TooltipsModule } from "@progress/kendo-angular-tooltip";
 import { StorageService } from './services/common/storage.service';
 import { UserService } from './services/security/user.service';
+import { VehiclesService } from './services/vehicles.service';
 import { SecurityService, refreshUserData } from './services/security/security.service';
 import { HeadersInterceptor } from './services/interceptors/headers.interceptor';
 import { ResponseInterceptor } from './services/interceptors/response.interceptor';
@@ -45,6 +46,8 @@ import { CustomerModalComponent } from './customer-modal/customer-modal.componen
 import { AddressesService } from './services/addresses.service';
 import { AddressModalComponent } from './address-modal/address-modal.component';
 import { AddressesModalComponent } from './addresses-modal/addresses-modal.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
+import { VehicleModalComponent } from './vehicle-modal/vehicle-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -63,7 +66,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         CustomersComponent,
         CustomerModalComponent,
         AddressModalComponent,
-        AddressesModalComponent
+        AddressesModalComponent,
+        VehiclesComponent,
+        VehicleModalComponent
     ],
     imports: [
         BrowserModule,
@@ -92,6 +97,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         },
         StorageService,
         UserService,
+        VehiclesService,
         SecurityService,
         { provide: APP_INITIALIZER, useFactory: refreshUserData, multi: true, deps: [SecurityService, UserService] },
         { provide: HTTP_INTERCEPTORS, useClass: HeadersInterceptor, multi: true, deps: [UserService] },

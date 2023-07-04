@@ -5,7 +5,6 @@ import { ApiUrls } from './common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { AddressModel } from '../shared/models/address.model';
-import { CustomerModel } from '../shared/models/customer.model';
 
 @Injectable()
 export class AddressesService {

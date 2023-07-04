@@ -24,6 +24,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/customers'], 'Clienti',
                     e => e.startsWith('/customers'),
                     e => e.isAuthenticated()
+                ),
+                new MenuEntry(['/vehicles'], 'Trasporti',
+                    e => e.startsWith('/vehicles'),
+                    e => e.isAuthenticated()
                 )
             ]),
             new MenuEntry(['/logout'], 'Logout',

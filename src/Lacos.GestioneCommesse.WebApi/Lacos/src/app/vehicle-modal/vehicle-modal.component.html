@@ -1,0 +1,50 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="110">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Trasporto
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateVehicleForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Nome trasporto</label>
+                    <div class="form-group">
+                        <input class="form-control" name="name" [(ngModel)]="options.name" required
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['name']"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Targa</label>
+                    <div class="form-group">
+                        <input class="form-control" name="plate" [(ngModel)]="options.plate" required
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['plate']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Note</label>
+                    <div class="form-group">
+                        <textarea rows="5" class="form-control" name="notes" [(ngModel)]="options.notes"
+                            maxlength="1024" novalidate autocomplete="off"></textarea>
+                        <div class="validation-message" [control]="form.controls['notes']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

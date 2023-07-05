@@ -7,6 +7,7 @@ import { LoginComponent } from './security/login.component';
 import { HomeComponent } from './home/home.component';
 import { CustomersComponent } from './customers/customers.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
+import { OperatorsComponent } from './operators/operators.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -15,7 +16,8 @@ const routes: Routes = [
     { path: 'logout', component: LogoutComponent },
     { path: 'users', component: UsersComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'vehicles', component: VehiclesComponent, canActivate: [AuthGuard.asInjectableGuard] },
-    { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard.asInjectableGuard] }
+    { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard.asInjectableGuard] }
 ];
 
 @NgModule({

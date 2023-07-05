@@ -69,4 +69,20 @@ export class VehiclesService {
                 })
             );
     }
+
+    readVehiclesList() {
+        return this._http.get<Array<VehicleModel>>(`${this._baseUrl}/vehicles-list`)
+            .pipe(
+                map(e =>
+                    {
+                        const vehicles: Array<VehicleModel> = [];
+                        e.forEach(item => {
+                            const vehicle: VehicleModel = Object.assign(new VehicleModel(), item);
+                            vehicles.push(vehicle);
+                        });
+                        return vehicles;
+                    }
+                )
+            );
+    }
 }

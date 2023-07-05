@@ -83,4 +83,35 @@ public class VehiclesController : LacosApiController
     {
         return Ok();
     }
+
+    [HttpGet("vehicles-list")]
+    public async Task<List<VehicleDto>> GetVehiclesList([DataSourceRequest] DataSourceRequest request)
+    {
+        List<VehicleDto> vehicles = new List<VehicleDto>
+        {
+            new VehicleDto
+            {
+                Id = 1,
+                Name = "Macchina",
+                Plate = "BG92354",
+                Notes = "autista Mario"
+            },
+            new VehicleDto
+            {
+                Id = 2,
+                Name = "Camion",
+                Plate = "MI63414",
+                Notes = "autista Fernando"
+            },
+            new VehicleDto
+            {
+                Id = 3,
+                Name = "Furgone",
+                Plate = "BL84274",
+                Notes = "autista Carlo"
+            }
+        };
+
+        return vehicles;
+    }
 }

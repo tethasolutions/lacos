@@ -48,6 +48,9 @@ import { AddressModalComponent } from './address-modal/address-modal.component';
 import { AddressesModalComponent } from './addresses-modal/addresses-modal.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
 import { VehicleModalComponent } from './vehicle-modal/vehicle-modal.component';
+import { OperatorsService } from './services/operators.service';
+import { OperatorsComponent } from './operators/operators.component';
+import { OperatorModalComponent } from './operator-modal/operator-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -68,7 +71,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         AddressModalComponent,
         AddressesModalComponent,
         VehiclesComponent,
-        VehicleModalComponent
+        VehicleModalComponent,
+        OperatorsComponent,
+        OperatorModalComponent
     ],
     imports: [
         BrowserModule,
@@ -108,7 +113,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         Clipboard,
         AuthGuard,
         CustomerService,
-        AddressesService
+        AddressesService,
+        OperatorsService
     ],
     bootstrap: [AppComponent]
 })

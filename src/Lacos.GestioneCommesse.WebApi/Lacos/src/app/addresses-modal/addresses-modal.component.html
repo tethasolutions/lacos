@@ -1,0 +1,55 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="1000" [top]="110">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Gestione indirizzi
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        
+        <div class="d-flex align-items-center master-detail-grid-header">
+            <div class="col"></div>
+            <div class="col-auto">
+                <button (click)="createAddress()" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i>
+                    NUOVO INDIRIZZO
+                </button>
+            </div>
+        </div>
+        <kendo-grid [data]="customer.addresses" [sortable]="false" [pageable]="false" scrollable="none">
+            <kendo-grid-column field="city" title="Città"></kendo-grid-column>
+            <kendo-grid-column field="address" title="Indirizzo"></kendo-grid-column>
+            <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
+            <kendo-grid-column field="zipCode" title="CAP"></kendo-grid-column>
+            <kendo-grid-column field="isMainAddress" title="Principale">
+                <ng-template kendoGridCellTemplate let-dataItemAddress>
+                    {{dataItemAddress.isMainAddress | bool}}
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
+                <ng-template kendoGridCellTemplate let-dataItemAddress>
+                    <button (click)="editAddress(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button *ngIf="!dataItemAddress.isMainAddress"
+                        (click)="setAddressAsMain(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Seleziona come principale">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button (click)="deleteAddress(dataItemAddress)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+
+        <div class="text-right mt-5">
+            <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                CHIUDI
+            </button>
+        </div>
+    </kendo-window>
+</div>
+
+<app-address-modal [customer]="customer" #addressModal></app-address-modal>

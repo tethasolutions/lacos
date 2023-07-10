@@ -5,6 +5,7 @@ import { ApiUrls } from './common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { OperatorModel } from '../shared/models/operator.model';
+import { VehicleModel } from '../shared/models/vehicle.model';
 
 @Injectable()
 export class OperatorsService {
@@ -26,6 +27,7 @@ export class OperatorsService {
                         const operators: Array<OperatorModel> = [];
                         e.data.forEach(item => {
                             const operator: OperatorModel = Object.assign(new OperatorModel(), item);
+                            operator.defaultVehicle = Object.assign(new VehicleModel(), operator.defaultVehicle);
                             operators.push(operator);
                         });
                         return <GridDataResult>{
@@ -65,6 +67,7 @@ export class OperatorsService {
             .pipe(
                 map(e => {
                     const operator = Object.assign(new OperatorModel(), e);
+                    operator.defaultVehicle = Object.assign(new VehicleModel(), operator.defaultVehicle);
                     return operator;
                 })
             );

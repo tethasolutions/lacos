@@ -13,15 +13,22 @@ public class OperatorsController : LacosApiController
     [HttpGet("operators")]
     public async Task<DataSourceResult> GetOperators([DataSourceRequest] DataSourceRequest request)
     {
-        List<OperatorDto> operators = new List<OperatorDto>
+        List<OperatorReadModel> operators = new List<OperatorReadModel>
         {
-            new OperatorDto
+            new OperatorReadModel
             {
                 Id = 1,
                 Email = "mario@gmail.com",
                 ColorHex = "green",
                 Name = "Mario Maroni",
                 DefaultVehicleId = 2,
+                DefaultVehicle = new VehicleDto
+                {
+                    Id = 2,
+                    Name = "Camion",
+                    Plate = "MI63414",
+                    Notes = "autista Fernando"
+                },
                 Documents = new List<OperatorDocumentDto>
                 {
                     new OperatorDocumentDto
@@ -38,13 +45,20 @@ public class OperatorsController : LacosApiController
                     }
                 }
             },
-            new OperatorDto
+            new OperatorReadModel
             {
                 Id = 2,
                 Email = "carlo@gmail.com",
                 ColorHex = "red",
                 Name = "Carlo Rossi",
                 DefaultVehicleId = 3,
+                DefaultVehicle = new VehicleDto
+                {
+                    Id = 3,
+                    Name = "Furgone",
+                    Plate = "BL84274",
+                    Notes = "autista Carlo"
+                },
                 Documents = new List<OperatorDocumentDto>
                 {
                     new OperatorDocumentDto
@@ -61,13 +75,20 @@ public class OperatorsController : LacosApiController
                     }
                 }
             },
-            new OperatorDto
+            new OperatorReadModel
             {
                 Id = 3,
                 Email = "fernando@gmail.com",
                 ColorHex = "blue",
                 Name = "Fernando Donati",
                 DefaultVehicleId = 1,
+                DefaultVehicle = new VehicleDto
+                {
+                    Id = 1,
+                    Name = "Macchina",
+                    Plate = "BG92354",
+                    Notes = "autista Mario"
+                },
                 Documents = new List<OperatorDocumentDto>
                 {
                     new OperatorDocumentDto
@@ -98,15 +119,22 @@ public class OperatorsController : LacosApiController
     }
 
     [HttpGet("operator-detail/{operatorId}")]
-    public async Task<OperatorDto> GetOperatorDetail(long operatorId)
+    public async Task<OperatorReadModel> GetOperatorDetail(long operatorId)
     {
-        OperatorDto operatorDetail = new OperatorDto
+        OperatorReadModel operatorDetail = new OperatorReadModel
         {
             Id = 2,
             Email = "carlo@gmail.com",
             ColorHex = "red",
             Name = "Carlo Rossi",
             DefaultVehicleId = 3,
+            DefaultVehicle = new VehicleDto
+            {
+                Id = 2,
+                Name = "Camion",
+                Plate = "MI63414",
+                Notes = "autista Fernando"
+            },
             Documents = new List<OperatorDocumentDto>
             {
                 new OperatorDocumentDto

@@ -18,7 +18,11 @@
             (dataStateChange)="dataStateChange($event)">
     <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
     <kendo-grid-column field="email" title="email"></kendo-grid-column>
-    <kendo-grid-column field="colorHex" title="colorHex"></kendo-grid-column>
+    <kendo-grid-column field="colorHex" title="colorHex">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="operator-color-in-grid" [style.background-color]="dataItem.colorHex"></div>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
         <ng-template kendoGridCellTemplate let-dataItem>
             <button (click)="editOperator(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">

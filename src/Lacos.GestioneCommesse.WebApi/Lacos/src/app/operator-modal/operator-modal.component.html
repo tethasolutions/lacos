@@ -48,12 +48,20 @@
                         <kendo-formerror>Trasporto principale è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <kendo-formfield class="form-group">
                         <label>Colore</label>
                         <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" required></kendo-colorpicker>
                         <kendo-formerror>Colore è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
+                </div>
+                <div *ngIf="options.id != null" class="col-md-3">
+                    <label>&nbsp;</label>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" title="Note" (click)="viewDocuments()">
+                            <i class="fa fa-file"></i> Certificati
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="text-right mt-5">
@@ -67,3 +75,5 @@
         </form>
     </kendo-window>
 </div>
+
+<app-operator-documents-modal #operatorDocumentsModal></app-operator-documents-modal>

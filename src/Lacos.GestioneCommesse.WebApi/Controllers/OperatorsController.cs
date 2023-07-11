@@ -34,12 +34,14 @@ public class OperatorsController : LacosApiController
                     new OperatorDocumentDto
                     {
                         Id = 1,
+                        OperatorId = 1,
                         Description = "Documento 1",
                         FileName = "document1.jpg"
                     },
                     new OperatorDocumentDto
                     {
                         Id = 2,
+                        OperatorId = 1,
                         Description = "Documento 2",
                         FileName = "document2.jpg"
                     }
@@ -64,12 +66,14 @@ public class OperatorsController : LacosApiController
                     new OperatorDocumentDto
                     {
                         Id = 1,
+                        OperatorId = 2,
                         Description = "Documento 1",
                         FileName = "document1.jpg"
                     },
                     new OperatorDocumentDto
                     {
                         Id = 2,
+                        OperatorId = 2,
                         Description = "Documento 2",
                         FileName = "document2.jpg"
                     }
@@ -94,12 +98,14 @@ public class OperatorsController : LacosApiController
                     new OperatorDocumentDto
                     {
                         Id = 1,
+                        OperatorId = 3,
                         Description = "Documento 1",
                         FileName = "document1.jpg"
                     },
                     new OperatorDocumentDto
                     {
                         Id = 2,
+                        OperatorId = 3,
                         Description = "Documento 2",
                         FileName = "document2.jpg"
                     }
@@ -140,12 +146,14 @@ public class OperatorsController : LacosApiController
                 new OperatorDocumentDto
                 {
                     Id = 1,
+                    OperatorId = 2,
                     Description = "Documento 1",
                     FileName = "document1.jpg"
                 },
                 new OperatorDocumentDto
                 {
                     Id = 2,
+                    OperatorId = 2,
                     Description = "Documento 2",
                     FileName = "document2.jpg"
                 }
@@ -169,6 +177,37 @@ public class OperatorsController : LacosApiController
 
     [HttpDelete("operator/{id}")]
     public async Task<IActionResult> DeleteOperator(long id)
+    {
+        return Ok();
+    }
+
+    [HttpGet("operator-document/{documentId}")]
+    public async Task<OperatorDocumentDto> GetOperatorDocument(long documentId)
+    {
+        var document = new OperatorDocumentDto
+        {
+            Id = 2,
+            OperatorId = 2,
+            Description = "Documento 2",
+            FileName = "document2.jpg"
+        };
+        return document;
+    }
+
+    [HttpPost("document")]
+    public async Task<IActionResult> CreateDocument([FromBody] OperatorDocumentDto request)
+    {
+        return Ok(2);
+    }
+
+    [HttpPut("document/{id}")]
+    public async Task<IActionResult> UpdateDocument(long id, [FromBody] OperatorDocumentDto request)
+    {
+        return NoContent();
+    }
+
+    [HttpDelete("document/{id}")]
+    public async Task<IActionResult> DeleteDocument(long id)
     {
         return Ok();
     }

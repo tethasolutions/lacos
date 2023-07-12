@@ -4,6 +4,8 @@ using Lacos.GestioneCommesse.Application.Vehicles.DTOs;
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -194,15 +196,35 @@ public class OperatorsController : LacosApiController
         return document;
     }
 
-    [HttpPost("document")]
-    public async Task<IActionResult> CreateDocument([FromBody] OperatorDocumentDto request)
+    [HttpPost("document/{operatorId}/{description}/{fileName}")]
+    public async Task<IActionResult> CreateDocument(long operatorId, string description, string fileName)
     {
+        var files = HttpContext.Request.Form.Files;
+        var provider = new MultipartMemoryStreamProvider();
+        // var postedFile = await Request.Content.ReadAsMultipartAsync(provider);
+        foreach (var file in provider.Contents)
+        {
+            // var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
+            var buffer = await file.ReadAsByteArrayAsync();
+            // Do whatever you want with filename and its binary data.
+            // var str = System.Text.Encoding.Default.GetString(buffer);
+        }
         return Ok(2);
     }
 
-    [HttpPut("document/{id}")]
-    public async Task<IActionResult> UpdateDocument(long id, [FromBody] OperatorDocumentDto request)
+    [HttpPut("document/{id}/{description}/{fileName}")]
+    public async Task<IActionResult> UpdateDocument(long id, string description, string fileName)
     {
+        var files = HttpContext.Request.Form.Files;
+        var provider = new MultipartMemoryStreamProvider();
+        // var postedFile = await Request.Content.ReadAsMultipartAsync(provider);
+        foreach (var file in provider.Contents)
+        {
+            // var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
+            var buffer = await file.ReadAsByteArrayAsync();
+            // Do whatever you want with filename and its binary data.
+            // var str = System.Text.Encoding.Default.GetString(buffer);
+        }
         return NoContent();
     }
 

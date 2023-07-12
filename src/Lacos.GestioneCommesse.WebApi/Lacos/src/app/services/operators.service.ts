@@ -99,7 +99,11 @@ export class OperatorsService {
     }
 
     createDocument(request: OperatorDocumentModel) {
-        return this._http.post<number>(`${this._baseUrl}/document`, request)
+        const formData: FormData = new FormData();
+        if (request.files.length > 0) {
+            formData.append('fileKey', request.files[0], request.files[0].name);
+        }
+        return this._http.post<number>(`${this._baseUrl}/document/${request.operatorId}/${request.description}/${request.fileName}`, formData)
             .pipe(
                 map(e => {
                     return e;
@@ -108,7 +112,12 @@ export class OperatorsService {
     }
 
     updateDocument(request: OperatorDocumentModel, id: number) {
-        return this._http.put<void>(`${this._baseUrl}/document/${id}`, request)
+        console.log(request);
+        const formData: FormData = new FormData();
+        if (request.files.length > 0) {
+            formData.append('fileKey', request.files[0], request.files[0].name);
+        }
+        return this._http.put<void>(`${this._baseUrl}/document/${id}/${request.description}/${request.fileName}`, formData)
             .pipe(
                 map(() => { })
             );

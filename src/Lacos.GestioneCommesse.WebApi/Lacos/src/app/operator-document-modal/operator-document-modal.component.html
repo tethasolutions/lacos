@@ -29,6 +29,15 @@
                     </kendo-formfield>
                 </div>
             </div>
+            <div class="row riga-form">
+                <div class="col-md-6">
+                    <kendo-formfield>
+                        <label>File</label>
+                        <kendo-fileselect [(ngModel)]="options.files" [multiple]="false" name="file" required></kendo-fileselect>
+                        <kendo-formerror>File è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+            </div>
             <div class="text-right mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
                     ANNULLA

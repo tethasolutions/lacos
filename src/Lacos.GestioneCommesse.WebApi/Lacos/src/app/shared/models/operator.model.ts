@@ -1,4 +1,5 @@
 import { OperatorDocumentModel } from './operator-document.model';
+import { VehicleModel } from './vehicle.model';
 
 export class OperatorModel {
     id: number;
@@ -6,6 +7,7 @@ export class OperatorModel {
     colorHex: string;
     name: string;
     defaultVehicleId: number;
+    defaultVehicle: VehicleModel;
     documents: Array<OperatorDocumentModel>;
 
     constructor() {
@@ -14,6 +16,7 @@ export class OperatorModel {
         this.colorHex = null;
         this.name = null;
         this.defaultVehicleId = null;
+        this.defaultVehicle = new VehicleModel();
         this.documents = null;
     }
 }

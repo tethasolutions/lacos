@@ -63,8 +63,8 @@ export class OperatorsComponent extends BaseComponent implements OnInit {
   }
 
   createOperator() {
+    this.operatorModal.loadData();
     const request = new OperatorModel();
-
     this._subscriptions.push(
         this.operatorModal.open(request)
             .pipe(
@@ -80,6 +80,7 @@ export class OperatorsComponent extends BaseComponent implements OnInit {
   }
 
   editOperator(operator: OperatorModel) {
+    this.operatorModal.loadData();
     this._subscriptions.push(
       this._operatorsService.getOperatorDetail(operator.id)
         .pipe(

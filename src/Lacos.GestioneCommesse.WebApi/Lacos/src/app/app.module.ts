@@ -51,6 +51,9 @@ import { VehicleModalComponent } from './vehicle-modal/vehicle-modal.component';
 import { OperatorsService } from './services/operators.service';
 import { OperatorsComponent } from './operators/operators.component';
 import { OperatorModalComponent } from './operator-modal/operator-modal.component';
+import { OperatorDocumentsModalComponent } from './operator-documents-modal/operator-documents-modal.component';
+import { OperatorDocumentModalComponent } from './operator-document-modal/operator-document-modal.component';
+import { UploadsModule } from "@progress/kendo-angular-upload";
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -73,7 +76,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         VehiclesComponent,
         VehicleModalComponent,
         OperatorsComponent,
-        OperatorModalComponent
+        OperatorModalComponent,
+        OperatorDocumentsModalComponent,
+        OperatorDocumentModalComponent
     ],
     imports: [
         BrowserModule,
@@ -94,7 +99,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         PDFExportModule,
         ExcelModule,
         InputsModule,
-        PDFModule
+        PDFModule,
+        UploadsModule
     ],
     providers: [
         {

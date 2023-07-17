@@ -9,31 +9,58 @@
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
         <form name="updateOperatorForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
-            <div class="row">
+            <div class="row riga-form">
                 <div class="col-md-6">
-                    <label>Nome</label>
-                    <div class="form-group">
-                        <input class="form-control" name="name" [(ngModel)]="options.name" required
-                            maxlength="255" novalidate autocomplete="off" />
-                        <div class="validation-message" [control]="form.controls['name']"></div>
-                    </div>
+                    <kendo-formfield class="form-group">
+                        <label>Nome</label>
+                        <kendo-textbox [(ngModel)]="options.name" 
+                            name="name"
+                            required>
+                        </kendo-textbox>
+                        <kendo-formerror>Nome è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
                 </div>
                 <div class="col-md-6">
-                    <label>Email</label>
-                    <div class="form-group">
-                        <input class="form-control" name="email" [(ngModel)]="options.email" required
-                            maxlength="255" novalidate autocomplete="off" />
-                        <div class="validation-message" [control]="form.controls['email']"></div>
-                    </div>
+                    <kendo-formfield class="form-group">
+                        <label>Email</label>
+                        <kendo-textbox [(ngModel)]="options.email" 
+                            name="email"
+                            type="email"
+                            required>
+                        </kendo-textbox>
+                        <kendo-formerror>Email è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
                 </div>
             </div>
-            <div class="row">
+            <div class="row riga-form">
                 <div class="col-md-6">
-                    <label>Colore</label>
+                    <kendo-formfield class="form-group">
+                        <label>Trasporto principale</label>
+                        <kendo-combobox [data]="vehicles" 
+                            [(ngModel)]="options.defaultVehicleId" 
+                            name="defaultVehicleId"
+                            suggest="true"
+                            textField="description"
+                            [valuePrimitive]="true"
+                            valueField="id"
+                            required>
+                        </kendo-combobox>
+                        <kendo-formerror>Trasporto principale è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label>Colore</label>
+                        <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" required></kendo-colorpicker>
+                        <kendo-formerror>Colore è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div *ngIf="options.id != null" class="col-md-3">
+                    <label>&nbsp;</label>
                     <div class="form-group">
-                        <input class="form-control" name="colorHex" [(ngModel)]="options.colorHex" required
-                            maxlength="255" novalidate autocomplete="off" />
-                        <div class="validation-message" [control]="form.controls['colorHex']"></div>
+                        <button type="button" class="btn btn-primary" title="Note" (click)="viewDocuments()">
+                            <i class="fa fa-file"></i> Certificati
+                        </button>
                     </div>
                 </div>
             </div>
@@ -48,3 +75,5 @@
         </form>
     </kendo-window>
 </div>
+
+<app-operator-documents-modal #operatorDocumentsModal></app-operator-documents-modal>

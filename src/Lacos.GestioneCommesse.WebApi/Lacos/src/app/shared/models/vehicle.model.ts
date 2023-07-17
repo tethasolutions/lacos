@@ -4,6 +4,10 @@ export class VehicleModel {
     plate: string;
     notes: string;
 
+    get description(): string {
+        return `${this.name} - ${this.plate}`;
+    }
+
     constructor() {
         this.id = null;
         this.name = null;

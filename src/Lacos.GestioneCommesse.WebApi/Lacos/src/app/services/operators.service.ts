@@ -5,6 +5,8 @@ import { ApiUrls } from './common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { OperatorModel } from '../shared/models/operator.model';
+import { VehicleModel } from '../shared/models/vehicle.model';
+import { OperatorDocumentModel } from '../shared/models/operator-document.model';
 
 @Injectable()
 export class OperatorsService {
@@ -26,6 +28,15 @@ export class OperatorsService {
                         const operators: Array<OperatorModel> = [];
                         e.data.forEach(item => {
                             const operator: OperatorModel = Object.assign(new OperatorModel(), item);
+                            operator.defaultVehicle = Object.assign(new VehicleModel(), operator.defaultVehicle);
+
+                            const documents: Array<OperatorDocumentModel> = [];
+                            operator.documents.forEach(docItem => {
+                                const document: OperatorDocumentModel = Object.assign(new OperatorDocumentModel(), docItem);
+                                documents.push(document);
+                            });
+                            operator.documents = documents;
+
                             operators.push(operator);
                         });
                         return <GridDataResult>{
@@ -65,8 +76,57 @@ export class OperatorsService {
             .pipe(
                 map(e => {
                     const operator = Object.assign(new OperatorModel(), e);
+                    operator.defaultVehicle = Object.assign(new VehicleModel(), operator.defaultVehicle);
+                    const documents: Array<OperatorDocumentModel> = [];
+                    operator.documents.forEach(docItem => {
+                        const document: OperatorDocumentModel = Object.assign(new OperatorDocumentModel(), docItem);
+                        documents.push(document);
+                    });
+                    operator.documents = documents;
                     return operator;
                 })
+            );
+    }
+
+    getOperatorDocument(id: number) {
+        return this._http.get<OperatorDocumentModel>(`${this._baseUrl}/operator-document/${id}`)
+            .pipe(
+                map(e => {
+                    const document = Object.assign(new OperatorDocumentModel(), e);
+                    return document;
+                })
+            );
+    }
+
+    createDocument(request: OperatorDocumentModel) {
+        const formData: FormData = new FormData();
+        if (request.files.length > 0) {
+            formData.append('fileKey', request.files[0], request.files[0].name);
+        }
+        return this._http.post<number>(`${this._baseUrl}/document/${request.operatorId}/${request.description}/${request.fileName}`, formData)
+            .pipe(
+                map(e => {
+                    return e;
+                })
+            );
+    }
+
+    updateDocument(request: OperatorDocumentModel, id: number) {
+        console.log(request);
+        const formData: FormData = new FormData();
+        if (request.files.length > 0) {
+            formData.append('fileKey', request.files[0], request.files[0].name);
+        }
+        return this._http.put<void>(`${this._baseUrl}/document/${id}/${request.description}/${request.fileName}`, formData)
+            .pipe(
+                map(() => { })
+            );
+    }
+
+    deleteDocument(id: number) {
+        return this._http.delete<void>(`${this._baseUrl}/document/${id}`)
+            .pipe(
+                map(() => { })
             );
     }
 }

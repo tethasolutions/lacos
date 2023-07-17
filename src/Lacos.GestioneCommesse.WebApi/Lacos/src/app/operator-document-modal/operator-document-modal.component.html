@@ -1,0 +1,50 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="850" [top]="30">
+        <kendo-window-titlebar>
+            <div class="k-window-title">Certificato</div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateActivityForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+            <div class="row riga-form">
+                <div class="col-md-6">
+                    <kendo-formfield>
+                        <label>Descrizione certificato</label>
+                        <kendo-textbox [(ngModel)]="options.description" 
+                            name="description"
+                            required>
+                        </kendo-textbox>
+                        <kendo-formerror>Descrizione certificato è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <kendo-formfield>
+                        <label>Percorso certificato</label>
+                        <kendo-textbox [(ngModel)]="options.fileName" 
+                            name="fileName">
+                        </kendo-textbox>
+                        <!-- <kendo-formerror>Percorso certificato è il campo obbligatorio</kendo-formerror> -->
+                    </kendo-formfield>
+                </div>
+            </div>
+            <div class="row riga-form">
+                <div class="col-md-6">
+                    <kendo-formfield>
+                        <label>File</label>
+                        <kendo-fileselect [(ngModel)]="options.files" [multiple]="false" name="file"></kendo-fileselect>
+                        <!-- <kendo-formerror>File è il campo obbligatorio</kendo-formerror> -->
+                    </kendo-formfield>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

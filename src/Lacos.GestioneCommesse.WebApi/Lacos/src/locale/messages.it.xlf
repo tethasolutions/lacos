@@ -2649,6 +2649,249 @@
         <note priority="1" from="description">The title of the close button</note>
         <note priority="1" from="meaning">kendo.tooltip.closeTitle</note>
       </trans-unit>
+      <trans-unit id="660278350824582724" datatype="html">
+        <source>Drop files here to select</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">3172</context>
+        </context-group>
+        <note priority="1" from="description">The drop zone hint</note>
+        <note priority="1" from="meaning">kendo.fileselect.dropFilesHere</note>
+      </trans-unit>
+      <trans-unit id="4664331691591215211" datatype="html">
+        <source>File type not allowed.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">3175</context>
+        </context-group>
+        <note priority="1" from="description">The text for the invalid allowed extensions restriction message</note>
+        <note priority="1" from="meaning">kendo.fileselect.invalidFileExtension</note>
+      </trans-unit>
+      <trans-unit id="7793317101233274017" datatype="html">
+        <source>File size too large.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">3178</context>
+        </context-group>
+        <note priority="1" from="description">The text for the invalid max file size restriction message</note>
+        <note priority="1" from="meaning">kendo.fileselect.invalidMaxFileSize</note>
+      </trans-unit>
+      <trans-unit id="6852116465202092102" datatype="html">
+        <source>File size too small.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">3181</context>
+        </context-group>
+        <note priority="1" from="description">The text for the invalid min file size restriction message</note>
+        <note priority="1" from="meaning">kendo.fileselect.invalidMinFileSize</note>
+      </trans-unit>
+      <trans-unit id="8968399983135301359" datatype="html">
+        <source>Remove</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">3184</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Remove button</note>
+        <note priority="1" from="meaning">kendo.fileselect.remove</note>
+      </trans-unit>
+      <trans-unit id="3297892120691863975" datatype="html">
+        <source>Select files...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">3187</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Select button</note>
+        <note priority="1" from="meaning">kendo.fileselect.select</note>
+      </trans-unit>
+      <trans-unit id="1628868291685658590" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4256</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Cancel button</note>
+        <note priority="1" from="meaning">kendo.upload.cancel</note>
+      </trans-unit>
+      <trans-unit id="3149650400352762187" datatype="html">
+        <source>Clear</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4259</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Clear button</note>
+        <note priority="1" from="meaning">kendo.upload.clearSelectedFiles</note>
+      </trans-unit>
+      <trans-unit id="6841325639465061593" datatype="html">
+        <source>Drop files here to upload</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4262</context>
+        </context-group>
+        <note priority="1" from="description">The drop zone hint</note>
+        <note priority="1" from="meaning">kendo.upload.dropFilesHere</note>
+      </trans-unit>
+      <trans-unit id="1052757211842837603" datatype="html">
+        <source>files</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4265</context>
+        </context-group>
+        <note priority="1" from="description">The status message for a batch of files</note>
+        <note priority="1" from="meaning">kendo.upload.filesBatchStatus</note>
+      </trans-unit>
+      <trans-unit id="5934737755327152932" datatype="html">
+        <source>files failed to upload.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4268</context>
+        </context-group>
+        <note priority="1" from="description">The status message for a batch of files after failed upload</note>
+        <note priority="1" from="meaning">kendo.upload.filesBatchStatusFailed</note>
+      </trans-unit>
+      <trans-unit id="4678582374156884660" datatype="html">
+        <source>files successfully uploaded.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4271</context>
+        </context-group>
+        <note priority="1" from="description">The status message for a batch of files after successful upload</note>
+        <note priority="1" from="meaning">kendo.upload.filesBatchStatusUploaded</note>
+      </trans-unit>
+      <trans-unit id="372927175642445287" datatype="html">
+        <source>File failed to upload.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4274</context>
+        </context-group>
+        <note priority="1" from="description">The file status message after failed upload</note>
+        <note priority="1" from="meaning">kendo.upload.fileStatusFailed</note>
+      </trans-unit>
+      <trans-unit id="6873833183057253097" datatype="html">
+        <source>File successfully uploaded.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4277</context>
+        </context-group>
+        <note priority="1" from="description">The file status message after successful upload</note>
+        <note priority="1" from="meaning">kendo.upload.fileStatusUploaded</note>
+      </trans-unit>
+      <trans-unit id="3443987862990095035" datatype="html">
+        <source>Paused</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4280</context>
+        </context-group>
+        <note priority="1" from="description">The header status message when the file upload is paused</note>
+        <note priority="1" from="meaning">kendo.upload.headerStatusPaused</note>
+      </trans-unit>
+      <trans-unit id="9210921126598204924" datatype="html">
+        <source>Done</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4283</context>
+        </context-group>
+        <note priority="1" from="description">The header status message after file upload completion</note>
+        <note priority="1" from="meaning">kendo.upload.headerStatusUploaded</note>
+      </trans-unit>
+      <trans-unit id="6336385612571616916" datatype="html">
+        <source>Uploading...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4286</context>
+        </context-group>
+        <note priority="1" from="description">The header status message during file upload</note>
+        <note priority="1" from="meaning">kendo.upload.headerStatusUploading</note>
+      </trans-unit>
+      <trans-unit id="2924979995055776233" datatype="html">
+        <source>File type not allowed.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4289</context>
+        </context-group>
+        <note priority="1" from="description">The text for the invalid allowed extensions restriction message</note>
+        <note priority="1" from="meaning">kendo.upload.invalidFileExtension</note>
+      </trans-unit>
+      <trans-unit id="6669611501469754964" datatype="html">
+        <source>File size too large.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4292</context>
+        </context-group>
+        <note priority="1" from="description">The text for the invalid max file size restriction message</note>
+        <note priority="1" from="meaning">kendo.upload.invalidMaxFileSize</note>
+      </trans-unit>
+      <trans-unit id="4319370666600195324" datatype="html">
+        <source>File size too small.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4295</context>
+        </context-group>
+        <note priority="1" from="description">The text for the invalid min file size restriction message</note>
+        <note priority="1" from="meaning">kendo.upload.invalidMinFileSize</note>
+      </trans-unit>
+      <trans-unit id="2303075305806756763" datatype="html">
+        <source>Pause</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4298</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Pause button</note>
+        <note priority="1" from="meaning">kendo.upload.pause</note>
+      </trans-unit>
+      <trans-unit id="8941644637700654622" datatype="html">
+        <source>Remove</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4301</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Remove button</note>
+        <note priority="1" from="meaning">kendo.upload.remove</note>
+      </trans-unit>
+      <trans-unit id="4056147860620862675" datatype="html">
+        <source>Resume</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4304</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Resume button</note>
+        <note priority="1" from="meaning">kendo.upload.resume</note>
+      </trans-unit>
+      <trans-unit id="8567960350691997515" datatype="html">
+        <source>Retry</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4307</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Retry button</note>
+        <note priority="1" from="meaning">kendo.upload.retry</note>
+      </trans-unit>
+      <trans-unit id="2943392613806104166" datatype="html">
+        <source>Select files...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4310</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Select button</note>
+        <note priority="1" from="meaning">kendo.upload.select</note>
+      </trans-unit>
+      <trans-unit id="4936937427147701307" datatype="html">
+        <source>Upload</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4313</context>
+        </context-group>
+        <note priority="1" from="description">The text for the Upload files button</note>
+        <note priority="1" from="meaning">kendo.upload.uploadSelectedFiles</note>
+      </trans-unit>
+      <trans-unit id="4908353240416682626" datatype="html">
+        <source>Drag and drop files here to upload</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
+          <context context-type="linenumber">4744</context>
+        </context-group>
+        <note priority="1" from="description">Sets the external drop-zone hint</note>
+        <note priority="1" from="meaning">kendo.uploaddropzone.externalDropFilesHere</note>
+      </trans-unit>
     </body>
   </file>
 </xliff>

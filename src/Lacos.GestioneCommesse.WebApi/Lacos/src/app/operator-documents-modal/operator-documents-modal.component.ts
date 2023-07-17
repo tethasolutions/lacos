@@ -61,6 +61,13 @@ export class OperatorDocumentsModalComponent extends ModalComponent<any> {
       );
   }
 
+  scaricaDocumento(certificato: OperatorDocumentModel) {
+    var link = document.createElement("a");
+    link.target = '_blank';
+    link.href = certificato.fileName;
+    link.click();
+  }
+
   protected _readDocuments() {
       this._subscriptions.push(
         this._operatorsService.getOperatorDetail(this.operatorId)

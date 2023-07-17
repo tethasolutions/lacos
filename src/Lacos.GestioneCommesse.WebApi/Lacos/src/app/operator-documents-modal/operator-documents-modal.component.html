@@ -21,10 +21,13 @@
                 <kendo-grid [data]="documents">
                     <kendo-grid-column field="description" title="Descrizione"> </kendo-grid-column>
                     <kendo-grid-column field="fileName" title="Percorso"> </kendo-grid-column>
-                    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="60">
+                    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="100">
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <button (click)="modificaDocumento(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica certificato">
                                 <i class="fas fa-edit"></i>
+                            </button>
+                            <button (click)="scaricaDocumento(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Scarica certificato">
+                                <i class="fas fa-download"></i>
                             </button>
                         </ng-template>
                     </kendo-grid-column>

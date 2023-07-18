@@ -1,1 +1,35 @@
-<p>checklist works!</p>
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>Checklists</h3>
+    </div>
+    <div class="col-auto">
+        <button (click)="createCheckList()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<kendo-grid [data]="checklists" [pageSize]="stateGridChecklists.take" 
+            [skip]="stateGridChecklists.skip" [sort]="stateGridChecklists.sort" 
+            [filter]="stateGridChecklists.filter"
+            [group]="stateGridChecklists.group" filterable="menu" 
+            [sortable]="true" [pageable]="true" scrollable="none"
+            (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column field="productType.name" title="Nome"></kendo-grid-column>
+    <kendo-grid-column field="pictureFileName" title="Immagine"></kendo-grid-column>
+    <kendo-grid-column field="activityType.name" title="Tipo attività"></kendo-grid-column>
+    <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button (click)="editCheckList(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="deleteOperator(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                <i class="fas fa-trash"></i>
+            </button>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+
+<app-checklist-modal #checklistModal></app-checklist-modal>

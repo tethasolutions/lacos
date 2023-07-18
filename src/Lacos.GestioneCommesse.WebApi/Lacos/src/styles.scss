@@ -157,3 +157,11 @@ textarea {
 .riga-form {
     margin-bottom: 10px;
 }
+
+.GridNoHeader .k-grid-header
+{
+    height: 0;
+    border-bottom-width: 0;
+    display: none;
+    overflow: hidden;
+}

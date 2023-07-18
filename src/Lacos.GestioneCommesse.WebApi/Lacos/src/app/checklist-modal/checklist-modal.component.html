@@ -1,7 +1,7 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="110">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="50">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Checklist
@@ -57,7 +57,7 @@
                             <!-- <h3>Voci checklist</h3> -->
                         </div>
                         <div class="col-auto">
-                            <button (click)="createNewItemCheckList()" class="btn btn-primary btn-sm">
+                            <button type="button" (click)="createNewItemCheckList()" class="btn btn-primary btn-sm" title="Aggiungi voce">
                                 <i class="fas fa-plus"></i>
                                 Aggiungi voce
                             </button>
@@ -69,10 +69,10 @@
                         <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
                         <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <button (click)="editCheckListItem(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                                <button type="button" (click)="editCheckListItem(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button (click)="deleteOperatorItem(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                                <button type="button" (click)="deleteOperatorItem(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </ng-template>

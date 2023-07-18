@@ -16,6 +16,7 @@ import { CheckListService } from '../services/check-list.service';
 import { ChecklistItemModalComponent } from '../checklist-item-modal/checklist-item-modal.component';
 import { ActivityProductTypeModel } from '../shared/models/activity-product-type.model';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
+import { CheckListItemModel } from '../shared/models/check-list-item.model';
 
 @Component({
   selector: 'app-checklist-modal',
@@ -74,16 +75,104 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
     );
   }
 
-  createNewItemCheckList() {
-
+  protected _readCheckListItems() {
+    if (this.options.id == null) { return; }
+    this._subscriptions.push(
+      this._checkListService.readCheckListItems(this.options.id)
+        .pipe(
+            tap(e => {
+              this.options.items = e;
+            })
+        )
+        .subscribe()
+    );
   }
 
-  editCheckListItem(dataItem: any) {
-
+  protected createNewItemCheckList() {
+    const request = new CheckListItemModel();
+    if (this.options.id == null) { 
+      this.checklistItemModal.open(request)
+        .pipe(
+            filter(e => e),
+            tap(e => {
+              this.options.items.push(request);
+              this._messageBox.success(`Voce checklist creata`);
+            })
+        )
+        .subscribe()
+    } else {
+      this._subscriptions.push(
+          this.checklistItemModal.open(request)
+              .pipe(
+                  filter(e => e),
+                  switchMap(() => this._checkListService.createCheckListItem(request)),
+                  tap(e => {
+                    this._messageBox.success(`Voce checklist creata`);
+                  }),
+                  tap(() => this._readCheckListItems())
+              )
+              .subscribe()
+      );
+    }
   }
 
-  deleteOperatorItem(dataItem: any) {
+  protected editCheckListItem(dataItem: CheckListItemModel) {
+    if (this.options.id == null) { 
+      const request: CheckListItemModel = Object.assign(new CheckListItemModel(), JSON.parse(JSON.stringify(dataItem)));
+      this.checklistItemModal.open(request)
+        .pipe(
+            filter(e => e),
+            tap(e => {
+              const indexItemToEdit = this.options.items.findIndex(x => x.tempId === request.tempId);
+              if (indexItemToEdit >= 0) {
+                this.options.items[indexItemToEdit] = request;
+                this._messageBox.success(`Voce checklist aggiornata`);
+              }
+            })
+        )
+        .subscribe()
+    } else {
+      this._subscriptions.push(
+        this._checkListService.getCheckListItemDetail(dataItem.id)
+          .pipe(
+              map(e => {
+                return Object.assign(new CheckListItemModel(), e);
+              }),
+              switchMap(e => this.checklistItemModal.open(e)),
+              filter(e => e),
+              map(() => this.checklistItemModal.options),
+              switchMap(e => this._checkListService.updateCheckListItem(e, dataItem.id)),
+              map(() => this.checklistItemModal.options),
+              tap(e => this._messageBox.success(`Voce checklist aggiornata`)),
+              tap(() => this._readCheckListItems())
+          )
+        .subscribe()
+      );
+    }
+  }
 
+  protected deleteOperatorItem(dataItem: CheckListItemModel) {
+    if (this.options.id == null) { 
+      this._messageBox.confirm(`Sei sicuro di voler cancellare la voce "${dataItem.description}"?`, 'Conferma l\'azione').subscribe(result => {
+          if (result == true) {
+            this.options.items = this.options.items.filter(x => x.tempId !== dataItem.tempId);
+              this._messageBox.success(`La voce "${dataItem.description}" cancellata con successo`);
+          }
+      });
+    } else {
+        this._messageBox.confirm(`Sei sicuro di voler cancellare la voce "${dataItem.description}"?`, 'Conferma l\'azione').subscribe(result => {
+        if (result == true) {
+          this._subscriptions.push(
+            this._checkListService.deleteCheckListItem(dataItem.id)
+              .pipe(
+                tap(e => this._messageBox.success(`La voce "${dataItem.description}" cancellata con successo`)),
+                tap(() => this._readCheckListItems())
+              )
+            .subscribe()
+          );
+        }
+      });
+    }
   }
 
   public loadData() {

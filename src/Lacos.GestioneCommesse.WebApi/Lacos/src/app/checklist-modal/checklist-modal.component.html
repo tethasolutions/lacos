@@ -45,6 +45,11 @@
                         </kendo-textarea>
                         <kendo-formerror>Descrizione è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
+                    <kendo-formfield>
+                        <label class="custom-form-field-label">Seleziona immagine</label>
+                        <kendo-fileselect [(ngModel)]="options.files" [multiple]="false" name="file"></kendo-fileselect>
+                        <!-- <kendo-formerror>File è il campo obbligatorio</kendo-formerror> -->
+                    </kendo-formfield>
                 </div>
                 <div class="col-md-4">
                     <img *ngIf="options.pictureFileName != null" [src]="options.pictureFileName" alt="" width="100%">

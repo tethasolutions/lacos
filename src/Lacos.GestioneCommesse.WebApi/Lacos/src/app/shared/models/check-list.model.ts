@@ -11,6 +11,7 @@ export class CheckListModel {
     activityTypeId: number;
     activityType: ActivityTypeModel;
     items: CheckListItemModel[];
+    files: Array<File>;
 
     constructor() {
         this.id = null;
@@ -21,5 +22,6 @@ export class CheckListModel {
         this.activityTypeId = null;
         this.activityType = new ActivityTypeModel();
         this.items = [];
+        this.files = [];
     }
 }

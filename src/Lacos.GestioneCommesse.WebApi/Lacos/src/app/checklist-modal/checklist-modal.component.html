@@ -47,7 +47,7 @@
                     </kendo-formfield>
                 </div>
                 <div class="col-md-4">
-                    <img src="https://okna-everest.ru/assets/products/vhodnye-dveri/plastikovaya-vhodnaya-odnostvorchataya-dver-so-steklom-800x2200.jpg" alt="" width="100%">
+                    <img *ngIf="options.pictureFileName != null" [src]="options.pictureFileName" alt="" width="100%">
                 </div>
             </div>
             <div class="row riga-form">

@@ -23,7 +23,7 @@ public class CheckListController : LacosApiController
             new CheckListDto
             {
                 Id = 1,
-                PictureFileName = "picture.jpg",
+                PictureFileName = "https://okna-everest.ru/assets/products/vhodnye-dveri/plastikovaya-vhodnaya-odnostvorchataya-dver-so-steklom-800x2200.jpg",
                 Description = "Portoncino 1 anta con fiancoluce",
                 ProductTypeId = 1,
                 ProductType = new ProductTypeDto
@@ -67,7 +67,7 @@ public class CheckListController : LacosApiController
             new CheckListDto
             {
                 Id = 2,
-                PictureFileName = "picture2.jpg",
+                PictureFileName = "https://oknap.ru/upload/medialibrary/e9f/size-1.jpg",
                 Description = "Portoncino 2 anta con fiancoluce",
                 ProductTypeId = 2,
                 ProductType = new ProductTypeDto
@@ -111,7 +111,7 @@ public class CheckListController : LacosApiController
             new CheckListDto
             {
                 Id = 3,
-                PictureFileName = "picture3.jpg",
+                PictureFileName = "https://www.okno-moskva.ru/files/647/1-1.jpg",
                 Description = "Portoncino 3 anta con fiancoluce",
                 ProductTypeId = 3,
                 ProductType = new ProductTypeDto
@@ -171,7 +171,7 @@ public class CheckListController : LacosApiController
         CheckListDto checkListDetail = new CheckListDto
         {
             Id = 2,
-            PictureFileName = "picture2.jpg",
+            PictureFileName = "https://okna-everest.ru/assets/products/vhodnye-dveri/plastikovaya-vhodnaya-odnostvorchataya-dver-so-steklom-800x2200.jpg",
             Description = "Portoncino 2 anta con fiancoluce",
             ProductTypeId = 2,
             ProductType = new ProductTypeDto

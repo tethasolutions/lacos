@@ -217,14 +217,28 @@ public class CheckListController : LacosApiController
     }
 
     [HttpPut("checklist/{id}")]
-    public async Task<IActionResult> UpdateCheckList(long id, [FromBody] CheckListDto request)
+    public async Task<IActionResult> UpdateCheckList(long id)
     {
+        // CheckListDto request from form
+        var files = HttpContext.Request.Form.Files;
+        var provider = new MultipartMemoryStreamProvider();
+        foreach (var file in provider.Contents)
+        {
+            var buffer = await file.ReadAsByteArrayAsync();
+        }
         return NoContent();
     }
 
     [HttpPost("checklist")]
-    public async Task<IActionResult> CreateCheckList([FromBody] CheckListDto request)
+    public async Task<IActionResult> CreateCheckList()
     {
+        // CheckListDto request from form
+        var files = HttpContext.Request.Form.Files;
+        var provider = new MultipartMemoryStreamProvider();
+        foreach (var file in provider.Contents)
+        {
+            var buffer = await file.ReadAsByteArrayAsync();
+        }
         return Ok(2);
     }
 

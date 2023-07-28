@@ -54,6 +54,10 @@ import { OperatorModalComponent } from './operator-modal/operator-modal.componen
 import { OperatorDocumentsModalComponent } from './operator-documents-modal/operator-documents-modal.component';
 import { OperatorDocumentModalComponent } from './operator-document-modal/operator-document-modal.component';
 import { UploadsModule } from "@progress/kendo-angular-upload";
+import { ChecklistComponent } from './checklist/checklist.component';
+import { ChecklistModalComponent } from './checklist-modal/checklist-modal.component';
+import { ChecklistItemModalComponent } from './checklist-item-modal/checklist-item-modal.component';
+import { CheckListService } from './services/check-list.service';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -78,7 +82,10 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         OperatorsComponent,
         OperatorModalComponent,
         OperatorDocumentsModalComponent,
-        OperatorDocumentModalComponent
+        OperatorDocumentModalComponent,
+        ChecklistComponent,
+        ChecklistModalComponent,
+        ChecklistItemModalComponent
     ],
     imports: [
         BrowserModule,
@@ -120,7 +127,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         AuthGuard,
         CustomerService,
         AddressesService,
-        OperatorsService
+        OperatorsService,
+        CheckListService
     ],
     bootstrap: [AppComponent]
 })

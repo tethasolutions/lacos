@@ -43,7 +43,8 @@ export class MessageBoxService {
             ],
             width: 450,
             height: 200,
-            minWidth: 250
+            minWidth: 250,
+            cssClass: 'confirm-dialog'
         };
         const dialogResult = this._dialog
             .open(options)

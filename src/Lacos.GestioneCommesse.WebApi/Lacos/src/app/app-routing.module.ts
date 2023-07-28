@@ -9,6 +9,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
 import { OperatorsComponent } from './operators/operators.component';
 import { ChecklistComponent } from './checklist/checklist.component';
+import { ProductsComponent } from './products/products.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,7 +20,8 @@ const routes: Routes = [
     { path: 'vehicles', component: VehiclesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
-    { path: 'checklist', component: ChecklistComponent, canActivate: [AuthGuard.asInjectableGuard] }
+    { path: 'checklist', component: ChecklistComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard.asInjectableGuard] }
 ];
 
 @NgModule({

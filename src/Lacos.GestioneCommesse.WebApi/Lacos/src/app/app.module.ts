@@ -58,6 +58,8 @@ import { ChecklistComponent } from './checklist/checklist.component';
 import { ChecklistModalComponent } from './checklist-modal/checklist-modal.component';
 import { ChecklistItemModalComponent } from './checklist-item-modal/checklist-item-modal.component';
 import { CheckListService } from './services/check-list.service';
+import { ProductsService } from './services/products.service';
+import { ProductsComponent } from './products/products.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -85,7 +87,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         OperatorDocumentModalComponent,
         ChecklistComponent,
         ChecklistModalComponent,
-        ChecklistItemModalComponent
+        ChecklistItemModalComponent,
+        ProductsComponent
     ],
     imports: [
         BrowserModule,
@@ -128,7 +131,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         CustomerService,
         AddressesService,
         OperatorsService,
-        CheckListService
+        CheckListService,
+        ProductsService
     ],
     bootstrap: [AppComponent]
 })

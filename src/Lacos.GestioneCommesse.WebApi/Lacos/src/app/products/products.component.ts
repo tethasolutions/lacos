@@ -6,6 +6,7 @@ import { ProductModel } from '../shared/models/product.model';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { ProductsService } from '../services/products.service';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { ProductModalComponent } from '../product-modal/product-modal.component';
 
 @Component({
   selector: 'app-products',
@@ -14,6 +15,8 @@ import { filter, map, switchMap, tap } from 'rxjs/operators';
 })
 
 export class ProductsComponent extends BaseComponent implements OnInit {
+
+  @ViewChild('productModal', { static: true }) productModal: ProductModalComponent;
 
   products: GridDataResult;
 
@@ -59,15 +62,55 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   }
 
   createProduct() {
-
+    this.productModal.loadData();
+    const request = new ProductModel();
+    this._subscriptions.push(
+        this.productModal.open(request)
+            .pipe(
+                filter(e => e),
+                switchMap(() => this._productsService.createProduct(request)),
+                tap(e => {
+                  this._messageBox.success(`Prodotto creato`);
+                }),
+                tap(() => this._readProducts())
+            )
+            .subscribe()
+    );
   }
 
   editProduct(product: ProductModel) {
-
+    this.productModal.loadData();
+    this._subscriptions.push(
+      this._productsService.getProductDetail(product.id)
+        .pipe(
+            map(e => {
+              return Object.assign(new ProductModel(), e);
+            }),
+            switchMap(e => this.productModal.open(e)),
+            filter(e => e),
+            map(() => this.productModal.options),
+            switchMap(e => this._productsService.updateProduct(e, product.id)),
+            map(() => this.productModal.options),
+            tap(e => this._messageBox.success(`Prodotto aggiornato`)),
+            tap(() => this._readProducts())
+        )
+      .subscribe()
+    );
   }
 
   deleteProduct(product: ProductModel) {
-
+    this._messageBox.confirm(`Sei sicuro di voler cancellare prodotto "${product.description}"?`, 'Conferma l\'azione').subscribe(result => {
+      if (result == true) {
+        this._subscriptions.push(
+          this._productsService.deleteProduct(product.id)
+            .pipe(
+              tap(e => this._messageBox.success(`Prodotto "${product.description}" cancellato con successo`)),
+              tap(() => this._readProducts())
+            )
+          .subscribe()
+        );
+      }
+    });
   }
 
   viewQrCodeProduct(product: ProductModel) {

@@ -106,4 +106,31 @@ export class CustomerService {
                 })
             );
     }
+
+    getCustomersList() {
+        return this._http.get<Array<CustomerModel>>(`${this._baseUrl}/customers-list`)
+            .pipe(
+                map(e =>
+                    {
+                        const customers: Array<CustomerModel> = [];
+                        e.forEach(item => {
+                            const customer: CustomerModel = Object.assign(new CustomerModel(), item);
+
+                            const addresses: Array<AddressModel> = [];
+                            customer.addresses.forEach(addressitem => {
+                                const address: AddressModel = Object.assign(new AddressModel(), addressitem);
+                                addresses.push(address);
+                            });
+                            customer.addresses = addresses;
+
+                            let mainAddress = addresses.find(x => x.isMainAddress);
+                            if (mainAddress == undefined) { mainAddress = new AddressModel(); }
+                            customer.mainAddress = mainAddress;
+                            customers.push(customer);
+                        });
+                        return customers;
+                    }
+                )
+            );
+    }
 }

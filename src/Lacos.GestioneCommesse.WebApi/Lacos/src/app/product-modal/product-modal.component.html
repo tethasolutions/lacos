@@ -1,0 +1,126 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="50">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Checklist
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateOperatorForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+            <div class="row riga-form">
+                <div class="col-md-8">
+                    <kendo-formfield class="form-group">
+                        <label>Tipologia impianto</label>
+                        <kendo-combobox [data]="productTypes" 
+                            [(ngModel)]="options.productTypeId" 
+                            name="productTypeId"
+                            suggest="true"
+                            textField="description"
+                            [valuePrimitive]="true"
+                            valueField="id"
+                            required>
+                        </kendo-combobox>
+                        <kendo-formerror>Tipologia impianto è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Codice</label>
+                        <kendo-textbox [(ngModel)]="options.code" 
+                            name="code"
+                            required>
+                        </kendo-textbox>
+                        <kendo-formerror>Codice è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Nome</label>
+                        <kendo-textbox [(ngModel)]="options.name" 
+                            name="name"
+                            required>
+                        </kendo-textbox>
+                        <kendo-formerror>Nome è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Descrizione</label>
+                        <kendo-textarea [(ngModel)]="options.description" 
+                            name="description" [rows]="5"
+                            required>
+                        </kendo-textarea>
+                        <kendo-formerror>Descrizione è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                    <kendo-formfield>
+                        <label class="custom-form-field-label">Seleziona immagine</label>
+                        <kendo-fileselect [(ngModel)]="options.files" [multiple]="false" name="file"></kendo-fileselect>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-4">
+                    <img *ngIf="options.pictureFileName != null" [src]="options.pictureFileName" alt="" width="100%">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label>Cliente</label>
+                        <kendo-combobox [data]="customers" 
+                            [(ngModel)]="options.customerId" 
+                            name="customerId"
+                            suggest="true"
+                            class="customer-combobox"
+                            textField="customerDescription"
+                            [valuePrimitive]="true"
+                            valueField="id"
+                            (valueChange)="customerChanged($event)"
+                            required>
+                        </kendo-combobox>
+                        <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button" title="Nuovo cliente">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <kendo-formerror>Cliente è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label>Indirizzo</label>
+                        <kendo-combobox [data]="customerSelezionato.addresses" 
+                            class="address-combobox"
+                            [(ngModel)]="options.customerAddressId" 
+                            name="customerAddressId"
+                            suggest="true"
+                            class="customer-combobox"
+                            textField="fullAddress"
+                            [valuePrimitive]="true"
+                            [disabled]="options.customerId == null"
+                            valueField="id"
+                            required>
+                        </kendo-combobox>
+                        <button [disabled]="options.customerId == null" (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <kendo-formerror>Indirizzo è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+            </div>
+            <div class="row riga-form">
+                <div class="col-md-8">
+                    <button type="button" (click)="generaQrCode()" class="btn btn-secondary me-2">
+                        Genera QR Code
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <img *ngIf="options.qrCode != null" [src]="options.qrCode" alt="" width="100%">
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>
+
+<app-customer-modal #customerModal></app-customer-modal>
+<app-address-modal [customer]="customerSelezionato" #addressModal></app-address-modal>

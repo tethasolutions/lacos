@@ -41,4 +41,71 @@ export class ProductsService {
                 )
             );
     }
+
+    readProductTypes() {
+        return this._http.get<Array<ActivityProductTypeModel>>(`${this._baseUrl}/product-types`)
+            .pipe(
+                map(e =>
+                    {
+                        const productTypes: Array<ActivityProductTypeModel> = [];
+                        e.forEach(item => {
+                            const productType: ActivityProductTypeModel = Object.assign(new ActivityProductTypeModel(), item);
+                            productTypes.push(productType);
+                        });
+                        return productTypes;
+                    }
+                )
+            );
+    }
+
+    getProductDetail(id: number) {
+        return this._http.get<ProductModel>(`${this._baseUrl}/product-detail/${id}`)
+            .pipe(
+                map(e => {
+                    const product: ProductModel = Object.assign(new ProductModel(), e);
+                    product.productType = Object.assign(new ActivityProductTypeModel(), product.productType);
+                    return product;
+                })
+            );
+    }
+
+    createProduct(request: ProductModel) {
+        const formData: FormData = new FormData();
+        if (request.files.length > 0) {
+            formData.append('fileKey', request.files[0], request.files[0].name);
+        }
+        return this._http.post<number>(`${this._baseUrl}/product`, formData)
+            .pipe(
+                map(e => {
+                    return e;
+                })
+            );
+    }
+
+    updateProduct(request: ProductModel, id: number) {
+        const formData: FormData = new FormData();
+        if (request.files.length > 0) {
+            formData.append('fileKey', request.files[0], request.files[0].name);
+        }
+        return this._http.put<void>(`${this._baseUrl}/product/${id}`, formData)
+            .pipe(
+                map(() => { })
+            );
+    }
+
+    deleteProduct(id: number) {
+        return this._http.delete<void>(`${this._baseUrl}/product/${id}`)
+            .pipe(
+                map(() => { })
+            );
+    }
+
+    createProductQrCode(productId: number) {
+        return this._http.post<string>(`${this._baseUrl}/product/${productId}`, null)
+            .pipe(
+                map(e => {
+                    return e;
+                })
+            );
+    }
 }

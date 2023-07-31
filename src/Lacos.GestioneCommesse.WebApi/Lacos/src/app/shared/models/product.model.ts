@@ -7,7 +7,11 @@ export class ProductModel {
     description: string;
     pictureFileName: string;
     qrCode: string;
+    productTypeId: number;
     productType: ActivityProductTypeModel;
+    customerId: number;
+    customerAddressId: number;
+    files: Array<File>;
 
     constructor() {
         this.id = null;
@@ -16,6 +20,10 @@ export class ProductModel {
         this.description = null;
         this.pictureFileName = null;
         this.qrCode = null;
+        this.productTypeId = null;
         this.productType = new ActivityProductTypeModel();
+        this.customerId = null;
+        this.customerAddressId = null;
+        this.files = [];
     }
 }

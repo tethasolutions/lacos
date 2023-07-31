@@ -72,4 +72,97 @@ public class ProductsController : LacosApiController
 
         return result;
     }
+
+    [HttpGet("product-detail/{productId}")]
+    public async Task<ProductDto> GetProductDetail(long productId)
+    {
+        ProductDto productDetail = new ProductDto
+        {
+            Id = 2,
+            ProductTypeId = 2,
+            Code = "F001",
+            Name = "Portoncino 2 anta",
+            Description = "Portoncino 2 anta con fiancoluce",
+            PictureFileName = "https://okna-everest.ru/assets/products/vhodnye-dveri/plastikovaya-vhodnaya-odnostvorchataya-dver-so-steklom-800x2200.jpg",
+            QrCode = "https://cdn.ttgtmedia.com/rms/misc/qr_code_barcode.jpg",
+            CustomerId = 2,
+            CustomerAddressId = 2
+        };
+        return productDetail;
+    }
+
+    [HttpPut("product/{id}")]
+    public async Task<IActionResult> UpdateProduct(long id)
+    {
+        // ProductDto request from form
+        var files = HttpContext.Request.Form.Files;
+        var provider = new MultipartMemoryStreamProvider();
+        foreach (var file in provider.Contents)
+        {
+            var buffer = await file.ReadAsByteArrayAsync();
+        }
+        return NoContent();
+    }
+
+    [HttpPost("product")]
+    public async Task<IActionResult> CreateProduct()
+    {
+        // ProductDto request from form
+        var files = HttpContext.Request.Form.Files;
+        var provider = new MultipartMemoryStreamProvider();
+        foreach (var file in provider.Contents)
+        {
+            var buffer = await file.ReadAsByteArrayAsync();
+        }
+        return Ok(2);
+    }
+
+    [HttpDelete("product/{id}")]
+    public async Task<IActionResult> DeleteProduct(long id)
+    {
+        return Ok();
+    }
+
+    [HttpGet("product-types")]
+    public async Task<List<ProductTypeDto>> GetProductTypes()
+    {
+        List<ProductTypeDto> productTypes = new List<ProductTypeDto>
+        {
+            new ProductTypeDto
+            {
+                Id = 1,
+                Code = "prod_code_1",
+                Name = "Porta",
+                Description = "Descrizione porta",
+                IsReiDoor = false,
+                IsSparePart = false
+            },
+            new ProductTypeDto
+            {
+                Id = 2,
+                Code = "prod_code_2",
+                Name = "Porta 2",
+                Description = "Descrizione porta 2",
+                IsReiDoor = false,
+                IsSparePart = false
+            },
+            new ProductTypeDto
+            {
+                Id = 3,
+                Code = "prod_code_3",
+                Name = "Porta 3",
+                Description = "Descrizione porta 3",
+                IsReiDoor = false,
+                IsSparePart = false
+            }
+        };
+
+        return productTypes;
+    }
+
+    [HttpPost("product-qr-code/{id}")]
+    public async Task<IActionResult> CreateProductQrCode(long productId)
+    {
+        return Ok("https://cdn.ttgtmedia.com/rms/misc/qr_code_barcode.jpg");
+    }
 }

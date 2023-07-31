@@ -9,6 +9,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Emit;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -73,5 +74,122 @@ public class CustomersController : LacosApiController
         
         var contact = await contactService.CreateContact(request);
         return Ok(contact);
+    }
+
+    [HttpGet("customers-list")]
+    public async Task<ActionResult<List<ContactDto>>> GetCustomersList()
+    {
+        var contacts = new List<ContactDto>
+        {
+            new ContactDto
+            {
+                Id = 1,
+                Type = ContactType.Customer,
+                CompanyName = "General Motors",
+                Name = "Mario",
+                Surname = "Rossi",
+                FiscalType = ContactFiscalType.PrivatePerson,
+                ErpCode = "ABC",
+                Alert = false,
+                Addresses = new List<AddressDto>
+                {
+                    new AddressDto
+                    {
+                        Id = 1,
+                        ContactId = 1,
+                        City = "Bergamo",
+                        StreetAddress = "via Zelasco 12",
+                        Province = "BG",
+                        ZipCode = "24012",
+                        Telephone = "+39832471924",
+                        Email = "mario@rossi.com"
+                    },
+                    new AddressDto
+                    {
+                        Id = 2,
+                        ContactId = 1,
+                        City = "Milano",
+                        StreetAddress = "via Volta 17",
+                        Province = "MI",
+                        ZipCode = "29018",
+                        Telephone = "+3983674352",
+                        Email = "mario@rossi.it"
+                    }
+                }
+            },
+            new ContactDto
+            {
+                Id = 2,
+                Type = ContactType.Customer,
+                CompanyName = "McDonalds",
+                Name = "Fernando",
+                Surname = "Torrez",
+                FiscalType = ContactFiscalType.PrivatePerson,
+                ErpCode = "DGH",
+                Alert = false,
+                Addresses = new List<AddressDto>
+                {
+                    new AddressDto
+                    {
+                        Id = 3,
+                        ContactId = 2,
+                        City = "Bologna",
+                        StreetAddress = "via Zelasco 14",
+                        Province = "BL",
+                        ZipCode = "24012",
+                        Telephone = "+39832471924",
+                        Email = "fernando@torrez.com"
+                    },
+                    new AddressDto
+                    {
+                        Id = 4,
+                        ContactId = 2,
+                        City = "Savona",
+                        StreetAddress = "via Volta 19",
+                        Province = "SV",
+                        ZipCode = "29018",
+                        Telephone = "+3983674352",
+                        Email = "fernando@torrez.it"
+                    }
+                }
+            },
+            new ContactDto
+            {
+                Id = 3,
+                Type = ContactType.Customer,
+                CompanyName = "Google",
+                Name = "Daniele",
+                Surname = "Valtemara",
+                FiscalType = ContactFiscalType.PrivatePerson,
+                ErpCode = "KLD",
+                Alert = false,
+                Addresses = new List<AddressDto>
+                {
+                    new AddressDto
+                    {
+                        Id = 5,
+                        ContactId = 3,
+                        City = "Genova",
+                        StreetAddress = "via Zelasco 23",
+                        Province = "GN",
+                        ZipCode = "28012",
+                        Telephone = "+39832471924",
+                        Email = "daniele@valtemara.com"
+                    },
+                    new AddressDto
+                    {
+                        Id = 6,
+                        ContactId = 3,
+                        City = "Venezia",
+                        StreetAddress = "via Volta 34",
+                        Province = "VN",
+                        ZipCode = "21018",
+                        Telephone = "+3983674352",
+                        Email = "daniele@valtemara.it"
+                    }
+                }
+            }
+        };
+        return Ok(contacts);
     }
 }

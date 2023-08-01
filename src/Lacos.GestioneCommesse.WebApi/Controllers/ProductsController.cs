@@ -79,7 +79,7 @@ public class ProductsController : LacosApiController
         ProductDto productDetail = new ProductDto
         {
             Id = 2,
-            ProductTypeId = 2,
+            ProductTypeId = 4,
             Code = "F001",
             Name = "Portoncino 2 anta",
             Description = "Portoncino 2 anta con fiancoluce",
@@ -153,6 +153,15 @@ public class ProductsController : LacosApiController
                 Name = "Porta 3",
                 Description = "Descrizione porta 3",
                 IsReiDoor = false,
+                IsSparePart = false
+            },
+            new ProductTypeDto
+            {
+                Id = 4,
+                Code = "porta_rei",
+                Name = "Porta rei",
+                Description = "Porta REI",
+                IsReiDoor = true,
                 IsSparePart = false
             }
         };

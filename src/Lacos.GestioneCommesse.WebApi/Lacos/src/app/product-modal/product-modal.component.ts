@@ -29,6 +29,8 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   customers: Array<CustomerModel> = [];
   customerSelezionato = new CustomerModel();
 
+  isImpiantoPortaRei = false;
+
   constructor(
       private readonly _messageBox: MessageBoxService,
       private readonly _productsService: ProductsService,
@@ -57,6 +59,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
         .pipe(
             tap(e => {
               this.productTypes = e;
+              this.checkIfImpiantoIsPortaRei();
             })
         )
         .subscribe()
@@ -160,6 +163,15 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
           )
           .subscribe()
     );
+  }
+
+  checkIfImpiantoIsPortaRei() {
+    this.isImpiantoPortaRei = false;
+    if (this.options.productTypeId == null || this.options.productTypeId == undefined) { return; }
+    const productTypeSelezionato: ActivityProductTypeModel = this.productTypes.find(x => x.id === this.options.productTypeId);
+    if (productTypeSelezionato != undefined) {
+      this.isImpiantoPortaRei = productTypeSelezionato.isReiDoor;
+    }
   }
 
   public loadData() {

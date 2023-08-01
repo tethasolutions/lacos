@@ -20,6 +20,7 @@
                             textField="description"
                             [valuePrimitive]="true"
                             valueField="id"
+                            (valueChange)="checkIfImpiantoIsPortaRei()"
                             required>
                         </kendo-combobox>
                         <kendo-formerror>Tipologia impianto è il campo obbligatorio</kendo-formerror>
@@ -52,16 +53,16 @@
                         <label class="custom-form-field-label">Seleziona immagine</label>
                         <kendo-fileselect [(ngModel)]="options.files" [multiple]="false" name="file"></kendo-fileselect>
                     </kendo-formfield>
-                    <button *ngIf="options.qrCode != null" type="button" (click)="generaQrCode()" class="btn btn-secondary me-2 qr-code-button">
+                    <button *ngIf="options.qrCode != null && isImpiantoPortaRei" type="button" (click)="generaQrCode()" class="btn btn-secondary me-2 qr-code-button">
                         Genera QR Code
                     </button>
                 </div>
                 <div class="col-md-4">
                     <img *ngIf="options.pictureFileName != null" [src]="options.pictureFileName" alt="" width="100%">
-                    <img *ngIf="options.qrCode != null" [src]="options.qrCode" alt="" class="qr-code-img">
+                    <img *ngIf="options.qrCode != null && isImpiantoPortaRei" [src]="options.qrCode" alt="" class="qr-code-img">
                 </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="isImpiantoPortaRei">
                 <div class="col-md-6">
                     <kendo-formfield class="form-group">
                         <label>Cliente</label>

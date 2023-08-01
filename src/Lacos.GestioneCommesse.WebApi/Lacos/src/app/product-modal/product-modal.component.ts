@@ -36,6 +36,9 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
       private readonly _addressesService: AddressesService
   ) {
       super();
+      this.openedEvent.subscribe(item => {
+        this.loadData();
+      });
   }
 
   protected _canClose() {
@@ -66,6 +69,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
         .pipe(
             tap(e => {
               this.customers = e;
+              // console.log(this.options);
               const customerSelezionato: CustomerModel = this.customers.find(x => x.id === this.options.customerId);
               if (customerSelezionato != undefined) { this.customerSelezionato = customerSelezionato; }
               if (creatoNuovoCustomer) {
@@ -89,7 +93,17 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   }
 
   protected generaQrCode() {
-
+    this._subscriptions.push(
+      this._productsService.createProductQrCode(this.options.id)
+        .pipe(
+            tap(e => {
+              this.options.qrCode = e;
+              this._messageBox.success(`QR Code generato con successo`);
+              console.log(e);
+            })
+        )
+        .subscribe()
+    );
   }
 
   createCustomer() {

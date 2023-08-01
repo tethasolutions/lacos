@@ -1,6 +1,6 @@
 import { BaseComponent } from './base.component';
 import { Subject } from 'rxjs';
-import { Directive, ViewChild } from '@angular/core';
+import { Directive, ViewChild, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { markAsDirty } from '../services/common/functions';
@@ -13,6 +13,8 @@ export abstract class ModalComponent<T> extends BaseComponent {
 
     private _closeSubject: Subject<boolean>;
     private _oveflow: string;
+
+    public openedEvent: EventEmitter<any> = new EventEmitter();
 
     constructor() {
         super();
@@ -28,6 +30,8 @@ export abstract class ModalComponent<T> extends BaseComponent {
 
         this.opened = true;
         this.options = options;
+
+        this.openedEvent.emit();
 
         return this._closeSubject.asObservable();
     }

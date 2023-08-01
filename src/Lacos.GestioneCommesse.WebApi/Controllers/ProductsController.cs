@@ -86,7 +86,7 @@ public class ProductsController : LacosApiController
             PictureFileName = "https://okna-everest.ru/assets/products/vhodnye-dveri/plastikovaya-vhodnaya-odnostvorchataya-dver-so-steklom-800x2200.jpg",
             QrCode = "https://cdn.ttgtmedia.com/rms/misc/qr_code_barcode.jpg",
             CustomerId = 2,
-            CustomerAddressId = 2
+            CustomerAddressId = 4
         };
         return productDetail;
     }
@@ -160,9 +160,9 @@ public class ProductsController : LacosApiController
         return productTypes;
     }
 
-    [HttpPost("product-qr-code/{id}")]
-    public async Task<IActionResult> CreateProductQrCode(long productId)
+    [HttpPost("product-qr-code/{productId}")]
+    public async Task<string> CreateProductQrCode(long productId)
     {
-        return Ok("https://cdn.ttgtmedia.com/rms/misc/qr_code_barcode.jpg");
+        return "https://cdn.ttgtmedia.com/rms/misc/qr_code_barcode.jpg";
     }
 }

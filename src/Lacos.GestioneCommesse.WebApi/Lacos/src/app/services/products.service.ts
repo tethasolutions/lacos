@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApiUrls } from './common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
@@ -101,9 +101,17 @@ export class ProductsService {
     }
 
     createProductQrCode(productId: number) {
-        return this._http.post<string>(`${this._baseUrl}/product/${productId}`, null)
+        const options  = {
+            headers: new HttpHeaders({
+              'Accept': 'text/html, application/xhtml+xml, */*',
+              'Content-Type': 'text/plain; charset=utf-8'
+            }),
+            responseType: 'text' as 'text'
+        }
+        return this._http.post(`${this._baseUrl}/product-qr-code/${productId}`, null, options)
             .pipe(
                 map(e => {
+                    console.log(e);
                     return e;
                 })
             );

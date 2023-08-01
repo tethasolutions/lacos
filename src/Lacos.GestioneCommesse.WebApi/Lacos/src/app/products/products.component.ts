@@ -79,7 +79,6 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   }
 
   editProduct(product: ProductModel) {
-    this.productModal.loadData();
     this._subscriptions.push(
       this._productsService.getProductDetail(product.id)
         .pipe(

@@ -30,7 +30,7 @@
             <button (click)="editProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
                 <i class="fas fa-edit"></i>
             </button>
-            <button (click)="viewQrCodeProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">
+            <button *ngIf="dataItem.qrCode != null" (click)="viewQrCodeProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">
                 <i class="fas fa-qrcode"></i>
             </button>
             <button (click)="deleteProduct(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
@@ -41,3 +41,4 @@
 </kendo-grid>
 
 <app-product-modal #productModal></app-product-modal>
+<app-product-qr-code-modal #productQrCodeModal></app-product-qr-code-modal>

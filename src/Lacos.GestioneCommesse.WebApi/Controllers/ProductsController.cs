@@ -41,7 +41,7 @@ public class ProductsController : LacosApiController
                 Name = "Finestra 2 ante",
                 Description = "Finestra 2 ante Green Evolution",
                 PictureFileName = "https://oknap.ru/upload/medialibrary/e9f/size-1.jpg",
-                QrCode = "https://cdn.ttgtmedia.com/rms/misc/qr_code_barcode.jpg",
+                QrCode = null,
                 ProductType = new ProductTypeDto
                 {
                     Name = "Finestra"

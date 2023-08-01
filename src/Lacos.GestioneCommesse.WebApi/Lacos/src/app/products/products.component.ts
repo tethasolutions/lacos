@@ -7,6 +7,7 @@ import { MessageBoxService } from '../services/common/message-box.service';
 import { ProductsService } from '../services/products.service';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { ProductModalComponent } from '../product-modal/product-modal.component';
+import { ProductQrCodeModalComponent } from '../product-qr-code-modal/product-qr-code-modal.component';
 
 @Component({
   selector: 'app-products',
@@ -17,6 +18,7 @@ import { ProductModalComponent } from '../product-modal/product-modal.component'
 export class ProductsComponent extends BaseComponent implements OnInit {
 
   @ViewChild('productModal', { static: true }) productModal: ProductModalComponent;
+  @ViewChild('productQrCodeModal', { static: true }) productQrCodeModal: ProductQrCodeModalComponent;
 
   products: GridDataResult;
 
@@ -113,6 +115,8 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   }
 
   viewQrCodeProduct(product: ProductModel) {
-
+    this._subscriptions.push(
+      this.productQrCodeModal.open(product).subscribe()
+    );
   }
 }

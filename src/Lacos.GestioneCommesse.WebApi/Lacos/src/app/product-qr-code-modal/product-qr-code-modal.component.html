@@ -1,0 +1,18 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="300" [top]="50">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                QR Code
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <img [src]="options.qrCode" alt="" width="268px">
+        <div class="text-right mt-5">
+            <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                CHIUDI
+            </button>
+        </div>
+    </kendo-window>
+</div>

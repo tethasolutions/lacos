@@ -34,6 +34,8 @@ export class AuthGuard {
                 return this._security.isAuthenticated();
             case url === '/checklist':
                 return this._security.isAuthenticated();
+            case url === '/products':
+                return this._security.isAuthenticated();
             case url === '/users':
                 return this._security.isAuthorized(Role.Administrator);
             default:

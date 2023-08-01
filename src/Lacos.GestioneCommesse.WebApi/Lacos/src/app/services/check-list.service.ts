@@ -99,22 +99,6 @@ export class CheckListService {
             );
     }
 
-    readProductTypes() {
-        return this._http.get<Array<ActivityProductTypeModel>>(`${this._baseUrl}/product-types`)
-            .pipe(
-                map(e =>
-                    {
-                        const productTypes: Array<ActivityProductTypeModel> = [];
-                        e.forEach(item => {
-                            const productType: ActivityProductTypeModel = Object.assign(new ActivityProductTypeModel(), item);
-                            productTypes.push(productType);
-                        });
-                        return productTypes;
-                    }
-                )
-            );
-    }
-
     readActivityTypes() {
         return this._http.get<Array<ActivityTypeModel>>(`${this._baseUrl}/activity-types`)
             .pipe(

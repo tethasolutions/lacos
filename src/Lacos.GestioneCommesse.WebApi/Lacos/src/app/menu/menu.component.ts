@@ -36,6 +36,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/checklist'], 'Checklist',
                     e => e.startsWith('/checklist'),
                     e => e.isAuthenticated()
+                ),
+                new MenuEntry(['/products'], 'Prodotti',
+                    e => e.startsWith('/products'),
+                    e => e.isAuthenticated()
                 )
             ]),
             new MenuEntry(['/logout'], 'Logout',

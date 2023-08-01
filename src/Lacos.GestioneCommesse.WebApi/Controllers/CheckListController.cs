@@ -248,43 +248,6 @@ public class CheckListController : LacosApiController
         return Ok();
     }
 
-    [HttpGet("product-types")]
-    public async Task<List<ProductTypeDto>> GetProductTypes()
-    {
-        List<ProductTypeDto> productTypes = new List<ProductTypeDto>
-        {
-            new ProductTypeDto
-            {
-                Id = 1,
-                Code = "prod_code_1",
-                Name = "Porta",
-                Description = "Descrizione porta",
-                IsReiDoor = false,
-                IsSparePart = false
-            },
-            new ProductTypeDto
-            {
-                Id = 2,
-                Code = "prod_code_2",
-                Name = "Porta 2",
-                Description = "Descrizione porta 2",
-                IsReiDoor = false,
-                IsSparePart = false
-            },
-            new ProductTypeDto
-            {
-                Id = 3,
-                Code = "prod_code_3",
-                Name = "Porta 3",
-                Description = "Descrizione porta 3",
-                IsReiDoor = false,
-                IsSparePart = false
-            }
-        };
-
-        return productTypes;
-    }
-
     [HttpGet("activity-types")]
     public async Task<List<ActivityTypeDto>> GetActivityTypes()
     {

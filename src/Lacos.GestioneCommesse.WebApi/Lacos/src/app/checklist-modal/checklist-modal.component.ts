@@ -17,6 +17,7 @@ import { ChecklistItemModalComponent } from '../checklist-item-modal/checklist-i
 import { ActivityProductTypeModel } from '../shared/models/activity-product-type.model';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 import { CheckListItemModel } from '../shared/models/check-list-item.model';
+import { ProductsService } from '../services/products.service';
 
 @Component({
   selector: 'app-checklist-modal',
@@ -36,7 +37,8 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
 
   constructor(
       private readonly _messageBox: MessageBoxService,
-      private readonly _checkListService: CheckListService
+      private readonly _checkListService: CheckListService,
+      private readonly _productsService: ProductsService
   ) {
       super();
   }
@@ -53,7 +55,7 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
 
   protected _readProductTypes() {
     this._subscriptions.push(
-      this._checkListService.readProductTypes()
+      this._productsService.readProductTypes()
         .pipe(
             tap(e => {
               this.productTypes = e;

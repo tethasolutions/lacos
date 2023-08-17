@@ -15,7 +15,12 @@ namespace Lacos.GestioneCommesse.Application.Operators.DTOs
         public string? ColorHex { get; set; }
         public string? Name { get; set; }
         public long? DefaultVehicleId { get; set; }
-        public bool hasUser { get; set; }
-        public ICollection<OperatorDocumentDto> Documents { get; set; }
+        public bool? hasUser { get; set; }
+        public ICollection<OperatorDocumentDto>? Documents { get; set; }
+
+        public OperatorDto()
+        {
+            Documents = new List<OperatorDocumentDto>();
+        }
     }
 }

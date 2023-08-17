@@ -1,7 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 navbar-border">
     <div class="container">
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="home">
+                        <img src="assets/icons/favicon-32x32.png" width="24px" /> Home
+                    </a>
+                </li>
                 <ng-container *ngFor="let entry of menu.entries">
                     <li class="nav-item" [class.dropdown]="entry.isDropDown" [class.active]="entry.active"
                         [class.show]="entry.isOpen" *ngIf="entry.enabled">

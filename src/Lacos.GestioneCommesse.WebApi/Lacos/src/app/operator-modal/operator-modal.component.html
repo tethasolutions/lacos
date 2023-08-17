@@ -1,14 +1,14 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="110">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false"[top]="100">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Tipo Intervento
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="updateActivityTypeForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+        <form name="updateActivityTypeForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options" class="redimensionModal">
             <div class="row riga-form">
                 <div class="col-md-6">
                     <kendo-formfield class="form-group">

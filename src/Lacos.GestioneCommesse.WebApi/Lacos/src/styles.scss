@@ -178,3 +178,38 @@ textarea {
 .confirm-dialog .k-window {
     z-index: 99999!important;
 }
+
+.navbar-border {
+    border-bottom: 5px solid #46a43e;
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width:1750px !important;
+    }
+}
+
+.redimensionModal {
+    width: 850px !important;
+}
+@media (max-width: 800px) {
+    .redimensionModal {
+        width:100% !important;
+    }
+}
+
+kendo-scheduler .k-event, .k-event
+{
+    padding-right: 0px !important;
+}
+
+.k-file-size
+{
+    visibility: hidden;
+    display: none;
+}
+
+.k-dialog-wrapper
+{
+    z-index: 100000;
+}

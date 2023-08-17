@@ -1,4 +1,4 @@
-﻿using Lacos.GestioneCommesse.Application.CheckList.DTOs;
+﻿using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using System;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lacos.GestioneCommesse.Application.CheckList.DTOs
+namespace Lacos.GestioneCommesse.Application.Registry.DTOs
 {
     public class ProductTypeDto
     {

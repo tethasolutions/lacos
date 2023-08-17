@@ -4,14 +4,14 @@
     <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="110">
         <kendo-window-titlebar>
             <div class="k-window-title">
-                Trasporto
+                Mezzo di Trasporto
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
         <form name="updateVehicleForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
             <div class="row">
                 <div class="col-md-6">
-                    <label>Nome trasporto</label>
+                    <label>Nome veicolo</label>
                     <div class="form-group">
                         <input class="form-control" name="name" [(ngModel)]="options.name" required
                             maxlength="255" novalidate autocomplete="off" />

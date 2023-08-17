@@ -1,0 +1,44 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>Tipi Prodotto</h3>
+    </div>
+    <div class="col-auto">
+        <button (click)="createProductType()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<kendo-grid [data]="dataProductTypes" [pageSize]="stateGridProductTypes.take" 
+            [skip]="stateGridProductTypes.skip" [sort]="stateGridProductTypes.sort" 
+            [filter]="stateGridProductTypes.filter"
+            [group]="stateGridProductTypes.group" filterable="menu" 
+            [sortable]="true" [pageable]="true" scrollable="none"
+            (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column field="code" title="Codice"></kendo-grid-column>
+    <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
+    <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+    <kendo-grid-column field="isReiDoor" title="Porta REI">
+        <ng-template kendoGridCellTemplate let-dataItemAddress>
+            {{dataItemAddress.isReiDoor | bool}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="isSparePart" title="Ricambio">
+        <ng-template kendoGridCellTemplate let-dataItemAddress>
+            {{dataItemAddress.isSparePart | bool}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button (click)="editProductType(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="deleteProductType(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                <i class="fas fa-trash"></i>
+            </button>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+
+<app-productType-modal #productTypeModal></app-productType-modal>

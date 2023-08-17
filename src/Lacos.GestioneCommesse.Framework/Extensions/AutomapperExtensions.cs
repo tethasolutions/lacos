@@ -74,15 +74,18 @@ public static class AutomapperExtensions
             expression = expression
                 .Ignore(nameof(AuditedEntity.CreatedOn))
                 .Ignore(nameof(AuditedEntity.CreatedBy))
+                .Ignore(nameof(AuditedEntity.CreatedById))
                 .Ignore(nameof(AuditedEntity.EditedOn))
-                .Ignore(nameof(AuditedEntity.EditedBy));
+                .Ignore(nameof(AuditedEntity.EditedBy))
+                .Ignore(nameof(AuditedEntity.EditedById));
         }
 
         if (FullAuditedEntityType.IsAssignableFrom(destType))
         {
             expression = expression
                 .Ignore(nameof(FullAuditedEntity.DeletedBy))
-                .Ignore(nameof(FullAuditedEntity.DeletedOn));
+                .Ignore(nameof(FullAuditedEntity.DeletedOn))
+                .Ignore(nameof(FullAuditedEntity.DeletedById));
         }
 
         if (SoftDeleteType.IsAssignableFrom(destType))

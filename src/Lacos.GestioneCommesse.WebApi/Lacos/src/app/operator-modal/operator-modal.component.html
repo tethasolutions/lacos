@@ -4,11 +4,11 @@
     <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="110">
         <kendo-window-titlebar>
             <div class="k-window-title">
-                Operatore
+                Tipo Intervento
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="updateOperatorForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+        <form name="updateActivityTypeForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
             <div class="row riga-form">
                 <div class="col-md-6">
                     <kendo-formfield class="form-group">
@@ -17,7 +17,7 @@
                             name="name"
                             required>
                         </kendo-textbox>
-                        <kendo-formerror>Nome è il campo obbligatorio</kendo-formerror>
+                        <kendo-formerror>Nome è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                 </div>
                 <div class="col-md-6">
@@ -75,5 +75,3 @@
         </form>
     </kendo-window>
 </div>
-
-<app-operator-documents-modal #operatorDocumentsModal></app-operator-documents-modal>

@@ -1,6 +1,8 @@
 ﻿using Lacos.GestioneCommesse.Application.Customers.Services;
+using Lacos.GestioneCommesse.Application.Registry.Services;
 using Lacos.GestioneCommesse.Application.Security;
 using Lacos.GestioneCommesse.Application.Session;
+using Lacos.GestioneCommesse.Application.Vehicles.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lacos.GestioneCommesse.Application;
@@ -15,7 +17,10 @@ public static class ApplicationConfiguration
             .AddScoped<ISecurityService, SecurityService>()
             .AddScoped<IAccessTokenProvider, TAccessTokenProvider>()
             .AddScoped<IContactService, ContactService>()
-            .AddScoped<IAddressService, AddressService>();
+            .AddScoped<IAddressService, AddressService>()
+            .AddScoped<IActivityTypeService, ActivityTypeService>()
+            .AddScoped<IProductTypeService, ProductTypeService>()
+            .AddScoped<IVehicleService, VehicleService>();
 
         return services;
     }

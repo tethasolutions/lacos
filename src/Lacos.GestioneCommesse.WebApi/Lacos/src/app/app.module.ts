@@ -62,6 +62,12 @@ import { ProductsService } from './services/products.service';
 import { ProductsComponent } from './products/products.component';
 import { ProductModalComponent } from './product-modal/product-modal.component';
 import { ProductQrCodeModalComponent } from './product-qr-code-modal/product-qr-code-modal.component';
+import { ActivityTypesService } from './services/activityTypes.service';
+import { ActivityTypesComponent } from './activitytypes/activitytypes.component';
+import { ActivityTypeModalComponent } from './activitytype-modal/activitytype-modal.component';
+import { ProductTypesComponent } from './producttypes/producttypes.component';
+import { ProductTypeModalComponent } from './producttype-modal/producttype-modal.component';
+import { ProductTypesService } from './services/productTypes.service';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -92,7 +98,11 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ChecklistItemModalComponent,
         ProductsComponent,
         ProductModalComponent,
-        ProductQrCodeModalComponent
+        ProductQrCodeModalComponent,
+        ActivityTypesComponent,
+        ActivityTypeModalComponent,
+        ProductTypesComponent,
+        ProductTypeModalComponent
     ],
     imports: [
         BrowserModule,
@@ -136,7 +146,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         AddressesService,
         OperatorsService,
         CheckListService,
-        ProductsService
+        ProductsService,
+        ActivityTypesService,
+        ProductTypesService
     ],
     bootstrap: [AppComponent]
 })

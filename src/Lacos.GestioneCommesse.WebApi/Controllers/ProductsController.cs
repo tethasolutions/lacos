@@ -6,10 +6,10 @@ using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using System.Net.Http;
 using System.Web.Http;
-using Lacos.GestioneCommesse.Application.CheckList.DTOs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Telerik.SvgIcons;
 using Lacos.GestioneCommesse.Application.Products.DTOs;
+using Lacos.GestioneCommesse.Application.Registry.DTOs;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 

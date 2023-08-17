@@ -1,4 +1,5 @@
-﻿using Lacos.GestioneCommesse.Domain.Registry;
+﻿using Lacos.GestioneCommesse.Application.Registry.DTOs;
+using Lacos.GestioneCommesse.Domain.Registry;
 using System;
 using System.Collections.Generic;
 using System.Linq;

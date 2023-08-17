@@ -9,7 +9,7 @@ export class VehicleModel {
     }
 
     constructor() {
-        this.id = null;
+        this.id = 0;
         this.name = null;
         this.plate = null;
         this.notes = null;

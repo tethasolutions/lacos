@@ -28,6 +28,8 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
 
   readonly role = Role;
 
+  @Input() operator = new OperatorModel();
+
   constructor(
       private readonly _messageBox: MessageBoxService,
       private readonly _vehiclesService: VehiclesService

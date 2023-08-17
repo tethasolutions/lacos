@@ -1,6 +1,7 @@
 ﻿using Lacos.GestioneCommesse.WebApi.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Lacos.GestioneCommesse.Application.Vehicles.DTOs;
+using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
@@ -9,12 +10,17 @@ using System.Web.Http;
 using Lacos.GestioneCommesse.Application.CheckList.DTOs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Telerik.SvgIcons;
+using Lacos.GestioneCommesse.Application.Registry.DTOs;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
 [RequireUser]
 public class CheckListController : LacosApiController
 {
+    public CheckListController()
+    {
+    }
+
     [HttpGet("checklist")]
     public async Task<DataSourceResult> GetCheckList([DataSourceRequest] DataSourceRequest request)
     {
@@ -246,34 +252,6 @@ public class CheckListController : LacosApiController
     public async Task<IActionResult> DeleteCheckList(long id)
     {
         return Ok();
-    }
-
-    [HttpGet("activity-types")]
-    public async Task<List<ActivityTypeDto>> GetActivityTypes()
-    {
-        List<ActivityTypeDto> activityTypes = new List<ActivityTypeDto>
-        {
-            new ActivityTypeDto
-            {
-                Id = 1,
-                Name = "Posa",
-                PictureRequired = false
-            },
-            new ActivityTypeDto
-            {
-                Id = 2,
-                Name = "Posa 2",
-                PictureRequired = false
-            },
-            new ActivityTypeDto
-            {
-                Id = 3,
-                Name = "Posa 3",
-                PictureRequired = false
-            }
-        };
-
-        return activityTypes;
     }
 
     [HttpGet("checklist-items/{checklistId}")]

@@ -6,124 +6,22 @@ using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using System.Net.Http;
 using System.Web.Http;
+using Lacos.GestioneCommesse.Application.Operators.Services;
+using Lacos.GestioneCommesse.Application.Vehicles.Services;
+using Kendo.Mvc.Extensions;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
 [RequireUser]
 public class OperatorsController : LacosApiController
 {
+    private readonly IOperatorService operatorService;
+
     [HttpGet("operators")]
-    public async Task<DataSourceResult> GetOperators([DataSourceRequest] DataSourceRequest request)
+    public async Task<ActionResult> GetOperators([DataSourceRequest] DataSourceRequest request)
     {
-        List<OperatorReadModel> operators = new List<OperatorReadModel>
-        {
-            new OperatorReadModel
-            {
-                Id = 1,
-                Email = "mario@gmail.com",
-                ColorHex = "green",
-                Name = "Mario Maroni",
-                DefaultVehicleId = 2,
-                DefaultVehicle = new VehicleDto
-                {
-                    Id = 2,
-                    Name = "Camion",
-                    Plate = "MI63414",
-                    Notes = "autista Fernando"
-                },
-                Documents = new List<OperatorDocumentDto>
-                {
-                    new OperatorDocumentDto
-                    {
-                        Id = 1,
-                        OperatorId = 1,
-                        Description = "Documento 1",
-                        FileName = "document1.jpg"
-                    },
-                    new OperatorDocumentDto
-                    {
-                        Id = 2,
-                        OperatorId = 1,
-                        Description = "Documento 2",
-                        FileName = "document2.jpg"
-                    }
-                }
-            },
-            new OperatorReadModel
-            {
-                Id = 2,
-                Email = "carlo@gmail.com",
-                ColorHex = "red",
-                Name = "Carlo Rossi",
-                DefaultVehicleId = 3,
-                DefaultVehicle = new VehicleDto
-                {
-                    Id = 3,
-                    Name = "Furgone",
-                    Plate = "BL84274",
-                    Notes = "autista Carlo"
-                },
-                Documents = new List<OperatorDocumentDto>
-                {
-                    new OperatorDocumentDto
-                    {
-                        Id = 1,
-                        OperatorId = 2,
-                        Description = "Documento 1",
-                        FileName = "document1.jpg"
-                    },
-                    new OperatorDocumentDto
-                    {
-                        Id = 2,
-                        OperatorId = 2,
-                        Description = "Documento 2",
-                        FileName = "document2.jpg"
-                    }
-                }
-            },
-            new OperatorReadModel
-            {
-                Id = 3,
-                Email = "fernando@gmail.com",
-                ColorHex = "blue",
-                Name = "Fernando Donati",
-                DefaultVehicleId = 1,
-                DefaultVehicle = new VehicleDto
-                {
-                    Id = 1,
-                    Name = "Macchina",
-                    Plate = "BG92354",
-                    Notes = "autista Mario"
-                },
-                Documents = new List<OperatorDocumentDto>
-                {
-                    new OperatorDocumentDto
-                    {
-                        Id = 1,
-                        OperatorId = 3,
-                        Description = "Documento 1",
-                        FileName = "document1.jpg"
-                    },
-                    new OperatorDocumentDto
-                    {
-                        Id = 2,
-                        OperatorId = 3,
-                        Description = "Documento 2",
-                        FileName = "document2.jpg"
-                    }
-                }
-            }
-        };
-
-        DataSourceResult result = new DataSourceResult
-        {
-            AggregateResults = null,
-            Errors = null,
-            Total = 3,
-            Data = operators
-        };
-
-        return result;
+        var operators = await operatorService.GetOperators();
+        return Ok(await operators.ToDataSourceResultAsync(request));
     }
 
     [HttpGet("operator-detail/{operatorId}")]

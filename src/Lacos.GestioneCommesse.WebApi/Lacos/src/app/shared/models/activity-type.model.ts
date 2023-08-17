@@ -6,6 +6,6 @@ export class ActivityTypeModel {
     constructor() {
         this.id = null;
         this.name = null;
-        this.pictureRequired = null;
+        this.pictureRequired = false;
     }
 }

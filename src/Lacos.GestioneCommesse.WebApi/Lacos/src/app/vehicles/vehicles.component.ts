@@ -71,7 +71,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
                 filter(e => e),
                 switchMap(() => this._vehiclesService.createVehicle(request)),
                 tap(e => {
-                  this._messageBox.success(`Trasporto ${request.name} ${request.plate} creato`);
+                  this._messageBox.success(`Veicolo ${request.name} ${request.plate} creato`);
                 }),
                 tap(() => this._readVehicles())
             )
@@ -91,7 +91,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
             map(() => this.vehicleModal.options),
             switchMap(e => this._vehiclesService.updateVehicle(e, vehicle.id)),
             map(() => this.vehicleModal.options),
-            tap(e => this._messageBox.success(`Trasporto ${vehicle.name} ${vehicle.plate} aggiornato`)),
+            tap(e => this._messageBox.success(`Veicolo ${vehicle.name} ${vehicle.plate} aggiornato`)),
             tap(() => this._readVehicles())
         )
       .subscribe()
@@ -99,18 +99,19 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
   }
 
   deleteVehicle(vehicle: VehicleModel) {
-    this._messageBox.confirm(`Sei sicuro di voler cancellare il trasporto ${vehicle.name} ${vehicle.plate}?`, 'Conferma l\'azione').subscribe(result => {
-      if (result == true) {
-        this._subscriptions.push(
-          this._vehiclesService.deleteVehicle(vehicle.id)
-            .pipe(
-              tap(e => this._messageBox.success(`Trasporto ${vehicle.name} ${vehicle.plate} cancellato con successo`)),
-              tap(() => this._readVehicles())
-            )
-          .subscribe()
-        );
-      }
-    });
+    this._messageBox.info('Eliminazione elemento non attiva');
+    // this._messageBox.confirm(`Sei sicuro di voler cancellare il trasporto ${vehicle.name} ${vehicle.plate}?`, 'Conferma l\'azione').subscribe(result => {
+    //   if (result == true) {
+    //     this._subscriptions.push(
+    //       this._vehiclesService.deleteVehicle(vehicle.id)
+    //         .pipe(
+    //           tap(e => this._messageBox.success(`Trasporto ${vehicle.name} ${vehicle.plate} cancellato con successo`)),
+    //           tap(() => this._readVehicles())
+    //         )
+    //       .subscribe()
+    //     );
+    //   }
+    // });
   }
 
 }

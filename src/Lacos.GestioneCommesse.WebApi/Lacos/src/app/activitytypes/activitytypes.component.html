@@ -1,0 +1,37 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>Tipi Intervento</h3>
+    </div>
+    <div class="col-auto">
+        <button (click)="createActivityType()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<kendo-grid [data]="dataActivityTypes" [pageSize]="stateGridActivityTypes.take" 
+            [skip]="stateGridActivityTypes.skip" [sort]="stateGridActivityTypes.sort" 
+            [filter]="stateGridActivityTypes.filter"
+            [group]="stateGridActivityTypes.group" filterable="menu" 
+            [sortable]="true" [pageable]="true" scrollable="none"
+            (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
+    <kendo-grid-column field="pictureRequired" title="Immagine Obbligatoria">
+        <ng-template kendoGridCellTemplate let-dataItemAddress>
+            {{dataItemAddress.pictureRequired | bool}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button (click)="editActivityType(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="deleteActivityType(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                <i class="fas fa-trash"></i>
+            </button>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+
+<app-activityType-modal #activityTypeModal></app-activityType-modal>

@@ -1,0 +1,21 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ProductTypeModalComponent } from './producttype-modal.component';
+
+describe('ProductTypeModalComponent', () => {
+  let component: ProductTypeModalComponent;
+  let fixture: ComponentFixture<ProductTypeModalComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [ProductTypeModalComponent]
+    });
+    fixture = TestBed.createComponent(ProductTypeModalComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

@@ -10,6 +10,8 @@ import { VehiclesComponent } from './vehicles/vehicles.component';
 import { OperatorsComponent } from './operators/operators.component';
 import { ChecklistComponent } from './checklist/checklist.component';
 import { ProductsComponent } from './products/products.component';
+import { ActivityTypesComponent } from './activitytypes/activitytypes.component';
+import { ProductTypesComponent } from './producttypes/producttypes.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -21,7 +23,9 @@ const routes: Routes = [
     { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'checklist', component: ChecklistComponent, canActivate: [AuthGuard.asInjectableGuard] },
-    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard.asInjectableGuard] }
+    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'activitytypes', component: ActivityTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'producttypes', component: ProductTypesComponent, canActivate: [AuthGuard.asInjectableGuard] }
 ];
 
 @NgModule({

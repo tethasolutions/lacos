@@ -1,0 +1,42 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="110">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Tipo Intervento
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateActivityTypeForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+            <div class="row riga-form">
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label>Nome</label>
+                        <kendo-textbox [(ngModel)]="options.name" 
+                            name="name"
+                            required>
+                        </kendo-textbox>
+                        <kendo-formerror>Nome è un campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <label>Immagine obbligatoria</label>
+                    <div class="form-group">
+                        <kendo-switch name="pictureRequired" [(ngModel)]="options.pictureRequired" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['pictureRequired']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

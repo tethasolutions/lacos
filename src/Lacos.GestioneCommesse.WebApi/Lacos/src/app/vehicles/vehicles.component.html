@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h3>Trasporti</h3>
+        <h3>Mezzi di trasporto</h3>
     </div>
     <div class="col-auto">
         <button (click)="createVehicle()" class="btn btn-primary btn-sm">
@@ -16,7 +16,7 @@
             [group]="stateGridVehicles.group" filterable="menu" 
             [sortable]="true" [pageable]="true" scrollable="none"
             (dataStateChange)="dataStateChange($event)">
-    <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
+    <kendo-grid-column field="name" title="Nome Veicolo"></kendo-grid-column>
     <kendo-grid-column field="plate" title="Targa"></kendo-grid-column>
     <kendo-grid-column field="notes" title="Note"></kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">

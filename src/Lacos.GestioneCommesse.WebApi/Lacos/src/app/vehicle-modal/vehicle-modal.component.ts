@@ -1,6 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
-import { AddressModel } from '../shared/models/address.model';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -18,6 +17,8 @@ export class VehicleModalComponent extends ModalComponent<VehicleModel> {
   @ViewChild('form') form: NgForm;
 
   readonly role = Role;
+  
+  @Input() vehicleModal = new VehicleModel();
 
   constructor(
       private readonly _messageBox: MessageBoxService
@@ -35,4 +36,6 @@ export class VehicleModalComponent extends ModalComponent<VehicleModel> {
       return this.form.valid;
   }
 
+  public loadData() {
+  }
 }

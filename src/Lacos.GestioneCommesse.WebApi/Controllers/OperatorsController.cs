@@ -73,9 +73,9 @@ public class OperatorsController : LacosApiController
     }
 
     [HttpGet("{id}/all-documents")]
-    public async Task<OperatorDocumentDto> GetAllOperatorDocuments(long documentId)
+    public async Task<List<OperatorDocumentReadModel>> GetAllOperatorDocuments(long documentId)
     {
-        var docmumentOperator = await operatorService.GetAllOperatorDocuments(documentId);
+        var docmumentOperator = (await operatorService.GetAllOperatorDocuments(documentId)).ToList();
         return docmumentOperator;
     }
 

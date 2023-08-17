@@ -19,7 +19,7 @@ public static class FrameworkConfiguration
             .AddScoped<ILacosSession, TSession>()
             .AddSingleton<IGuidGenerator, GuidGenerator>()
             .AddSingleton(configuration)
-            .AddSingleton<IMimeTypeProvider, MimeTypeProvider>();;
+            .AddSingleton<IMimeTypeProvider, MimeTypeProvider>();
 
         return services;
     }

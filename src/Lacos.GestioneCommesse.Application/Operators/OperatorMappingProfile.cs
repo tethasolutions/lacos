@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Lacos.GestioneCommesse.Application.Registry
 {
-    internal class OperatorMappingProfile : Profile
+    public class OperatorMappingProfile : Profile
     {
         public OperatorMappingProfile()
         {

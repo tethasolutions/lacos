@@ -1,5 +1,6 @@
 ﻿using Lacos.GestioneCommesse.Application.Customers.Services;
 using Lacos.GestioneCommesse.Application.Operators.Services;
+using Lacos.GestioneCommesse.Application.Products.Service;
 using Lacos.GestioneCommesse.Application.Registry.Services;
 using Lacos.GestioneCommesse.Application.Security;
 using Lacos.GestioneCommesse.Application.Session;
@@ -22,7 +23,9 @@ public static class ApplicationConfiguration
             .AddScoped<IActivityTypeService, ActivityTypeService>()
             .AddScoped<IProductTypeService, ProductTypeService>()
             .AddScoped<IVehicleService, VehicleService>()
-            .AddScoped<IOperatorService, OperatorService>();
+            .AddScoped<IOperatorService, OperatorService>()
+            .AddScoped<IProductService, ProductService>()
+            ;
 
         return services;
     }

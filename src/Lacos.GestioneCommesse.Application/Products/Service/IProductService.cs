@@ -21,7 +21,6 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
          Task UpdateProduct(long id, ProductDto productDto);
          Task<ProductDto> CreateProduct(ProductDto productDto);
          Task DeleteProduct(long productId);
-         Task<string> GetProductQrCode(long productId);
          Task<IEnumerable<ProductTypeDto>> GetProductTypes();
          Task<string> CreateProductQrCode(long productId);
      }

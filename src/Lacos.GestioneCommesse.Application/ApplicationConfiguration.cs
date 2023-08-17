@@ -24,7 +24,7 @@ public static class ApplicationConfiguration
             .AddScoped<IProductTypeService, ProductTypeService>()
             .AddScoped<IVehicleService, VehicleService>()
             .AddScoped<IOperatorService, OperatorService>()
-            .AddScoped<IProductService, ProductService>()
+            .AddScoped<IProductService, IProductService>()
             ;
 
         return services;

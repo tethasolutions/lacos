@@ -1,4 +1,5 @@
-﻿using Lacos.GestioneCommesse.Application.Customers.Services;
+﻿using Lacos.GestioneCommesse.Application.CheckList;
+using Lacos.GestioneCommesse.Application.Customers.Services;
 using Lacos.GestioneCommesse.Application.Operators.Services;
 using Lacos.GestioneCommesse.Application.Products.Service;
 using Lacos.GestioneCommesse.Application.Registry.Services;
@@ -24,8 +25,8 @@ public static class ApplicationConfiguration
             .AddScoped<IProductTypeService, ProductTypeService>()
             .AddScoped<IVehicleService, VehicleService>()
             .AddScoped<IOperatorService, OperatorService>()
-            .AddScoped<IProductService, IProductService>()
-            ;
+            .AddScoped<IProductService, ProductService>()
+            .AddScoped<ICheckListService, CheckListService>();
 
         return services;
     }

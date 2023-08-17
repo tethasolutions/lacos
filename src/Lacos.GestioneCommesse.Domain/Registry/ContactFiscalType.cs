@@ -3,6 +3,5 @@
 public enum ContactFiscalType
 {
     PrivatePerson,
-    Company,
-    Building
+    Company
 }

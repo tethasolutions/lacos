@@ -72,8 +72,6 @@ export class CustomersComponent extends BaseComponent implements OnInit {
 
   createCustomer() {
     const request = new CustomerModel();
-    if (this.anagraficaType == 'customers') { request.type = 0; }
-    if (this.anagraficaType == 'providers') { request.type = 1; }
 
     this._subscriptions.push(
         this.customerModal.open(request)
@@ -114,12 +112,12 @@ export class CustomersComponent extends BaseComponent implements OnInit {
   }
 
   deleteCustomer(customer: CustomerModel) {
-    this._messageBox.confirm(`Sei sicuro di voler cancellare il cliente ${customer.name} ${customer.surname}?`, 'Conferma l\'azione').subscribe(result => {
+    this._messageBox.confirm(`Sei sicuro di voler cancellare il cliente ${customer.name}?`, 'Conferma l\'azione').subscribe(result => {
       if (result == true) {
         this._subscriptions.push(
           this._customerService.deleteCustomer(customer.id)
             .pipe(
-              tap(e => this._messageBox.success(`Cliente ${customer.name} ${customer.surname} cancellato con successo`)),
+              tap(e => this._messageBox.success(`Cliente ${customer.name} cancellato con successo`)),
               tap(() => this._readCustomers())
             )
           .subscribe()

@@ -1,4 +1,4 @@
-import { ActivityProductTypeModel } from "./activity-product-type.model";
+import { ProductTypeModel } from "./product-type.model";
 import { ActivityTypeModel } from "./activity-type.model";
 import { CheckListItemModel } from "./check-list-item.model";
 
@@ -7,7 +7,7 @@ export class CheckListModel {
     pictureFileName: string;
     description: string;
     productTypeId: number;
-    productType: ActivityProductTypeModel;
+    productType: ProductTypeModel;
     activityTypeId: number;
     activityType: ActivityTypeModel;
     items: CheckListItemModel[];
@@ -18,7 +18,7 @@ export class CheckListModel {
         this.pictureFileName = null;
         this.description = null;
         this.productTypeId = null;
-        this.productType = new ActivityProductTypeModel();
+        this.productType = new ProductTypeModel();
         this.activityTypeId = null;
         this.activityType = new ActivityTypeModel();
         this.items = [];

@@ -6,7 +6,7 @@ import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { CheckListModel } from '../shared/models/check-list.model';
 import { CheckListItemModel } from '../shared/models/check-list-item.model';
-import { ActivityProductTypeModel } from '../shared/models/activity-product-type.model';
+import { ProductTypeModel } from '../shared/models/product-type.model';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class CheckListService {
                         const checkList: Array<CheckListModel> = [];
                         e.data.forEach(item => {
                             const checkListElement: CheckListModel = Object.assign(new CheckListModel(), item);
-                            checkListElement.productType = Object.assign(new ActivityProductTypeModel(), checkListElement.productType);
+                            checkListElement.productType = Object.assign(new ProductTypeModel(), checkListElement.productType);
                             checkListElement.activityType = Object.assign(new ActivityTypeModel(), checkListElement.activityType);
 
                             const items: Array<CheckListItemModel> = [];
@@ -54,7 +54,7 @@ export class CheckListService {
             .pipe(
                 map(e => {
                     const checkListElement: CheckListModel = Object.assign(new CheckListModel(), e);
-                    checkListElement.productType = Object.assign(new ActivityProductTypeModel(), checkListElement.productType);
+                    checkListElement.productType = Object.assign(new ProductTypeModel(), checkListElement.productType);
                     checkListElement.activityType = Object.assign(new ActivityTypeModel(), checkListElement.activityType);
 
                     const items: Array<CheckListItemModel> = [];

@@ -8,6 +8,8 @@ public class Customer : FullAuditedEntity
     public string? Name { get; set; }
     public string? Notes { get; set; }
     public CustomerFiscalType FiscalType { get; set; }
+    public string? Telephone { get; set; }
+    public string? Email { get; set; }
     public bool CanGenerateTickets { get; set; }
 
     public long? UserId { get; set; }

@@ -10,46 +10,27 @@
         <form name="updateUserForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
             <div class="row">
                 <div class="col-md-4">
-                    <label>Tipo cliente</label>
+                    <label>Nominativo</label>
                     <div class="form-group">
-                        <select class="form-select form-control" name="fiscalType" required [(ngModel)]="options.fiscalType">
-                            <option value=0>Privato</option>
-                            <option value=1>Azienda</option>
-                            <option value=2>Condominio</option>
-                        </select>
-                        <div class="validation-message" [control]="form.controls['fiscalType']"></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label>Ragione sociale</label>
-                    <div class="form-group">
-                        <input class="form-control" name="companyName" [(ngModel)]="options.companyName" required
+                        <input class="form-control" name="name" [(ngModel)]="options.name" required
                             maxlength="255" novalidate autocomplete="off" />
-                        <div class="validation-message" [control]="form.controls['companyName']"></div>
+                        <div class="validation-message" [control]="form.controls['name']"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label>ERP Code</label>
-                    <div class="form-group">
-                        <input class="form-control" name="erpCode" [(ngModel)]="options.erpCode"
-                            maxlength="50" novalidate autocomplete="off" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <label>Nome</label>
-                    <div class="form-group">
-                        <input class="form-control" name="name" [(ngModel)]="options.name"
-                            maxlength="255" novalidate autocomplete="off" />
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label>Cognome</label>
-                    <div class="form-group">
-                        <input class="form-control" name="surname" [(ngModel)]="options.surname"
-                            maxlength="255" novalidate autocomplete="off" />
-                    </div>
+                    <kendo-formfield class="form-group">
+                        <label>Tipo Cliente</label>
+                        <kendo-dropdownlist [data]="states" [(ngModel)]="options.customerFiscalType" name="status"
+                            [valuePrimitive]="true" required>
+                            <ng-template kendoDropDownListItemTemplate let-dataItem>
+                                {{dataItem | customerFiscalType}}
+                            </ng-template>
+                            <ng-template kendoDropDownListValueTemplate let-dataItem>
+                                {{dataItem | customerFiscalType}}
+                            </ng-template>
+                        </kendo-dropdownlist>
+                        <kendo-formerror>Tipo è un campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
                 </div>
             </div>
             <div class="row">
@@ -68,11 +49,11 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label>Alert</label>
+                    <label>Può generare tickets</label>
                     <div class="form-group">
-                        <kendo-switch name="alert" [(ngModel)]="options.alert" onLabel="Si" offLabel="No">
+                        <kendo-switch name="canGenerateTickets" [(ngModel)]="options.canGenerateTickets" onLabel="Si" offLabel="No">
                         </kendo-switch>
-                        <div class="validation-message" [control]="form.controls['alert']"></div>
+                        <div class="validation-message" [control]="form.controls['canGenerateTickets']"></div>
                     </div>
                 </div>
             </div>

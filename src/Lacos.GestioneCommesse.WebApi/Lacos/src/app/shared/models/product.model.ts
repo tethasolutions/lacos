@@ -1,4 +1,4 @@
-import { ActivityProductTypeModel } from "./activity-product-type.model";
+import { ProductTypeModel } from "./product-type.model";
 
 export class ProductModel {
     id: number;
@@ -8,7 +8,7 @@ export class ProductModel {
     pictureFileName: string;
     qrCode: string;
     productTypeId: number;
-    productType: ActivityProductTypeModel;
+    productType: ProductTypeModel;
     customerId: number;
     customerAddressId: number;
     files: Array<File>;
@@ -21,7 +21,7 @@ export class ProductModel {
         this.pictureFileName = null;
         this.qrCode = null;
         this.productTypeId = null;
-        this.productType = new ActivityProductTypeModel();
+        this.productType = new ProductTypeModel();
         this.customerId = null;
         this.customerAddressId = null;
         this.files = [];

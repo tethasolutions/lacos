@@ -4,4 +4,5 @@ public interface ILacosConfiguration
 {
     bool AllowCors { get; }
     string? CorsOrigins { get; }
+    string? AttachmentsPath { get; }
 }

@@ -12,7 +12,7 @@ public class Operator : FullAuditedEntity
     public long? DefaultVehicleId { get; set; }
     public Vehicle? DefaultVehicle { get; set; }
 
-    public long UserId { get; set; }
+    public long? UserId { get; set; }
     public User? User { get; set; }
 
     public ICollection<OperatorDocument> Documents { get; set; }

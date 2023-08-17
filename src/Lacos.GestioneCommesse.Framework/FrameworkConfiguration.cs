@@ -1,5 +1,6 @@
 ﻿using Lacos.GestioneCommesse.Framework.Common;
 using Lacos.GestioneCommesse.Framework.Configuration;
+using Lacos.GestioneCommesse.Framework.IO;
 using Lacos.GestioneCommesse.Framework.Security;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,8 @@ public static class FrameworkConfiguration
             .AddSingleton<IPasswordGenerator, PasswordGenerator>()
             .AddScoped<ILacosSession, TSession>()
             .AddSingleton<IGuidGenerator, GuidGenerator>()
-            .AddSingleton(configuration);
+            .AddSingleton(configuration)
+            .AddSingleton<IMimeTypeProvider, MimeTypeProvider>();;
 
         return services;
     }

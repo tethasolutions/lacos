@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
+using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Extensions;
@@ -16,7 +17,9 @@ namespace Lacos.GestioneCommesse.Application.Registry
         public OperatorMappingProfile()
         {
             CreateMap<Operator, OperatorDto>()
-                .Ignore(x => x.Documents);
+                .Ignore(x => x.Documents)
+                .MapMember(x => x.hasUser, y => y.UserId == null);
+
 
             CreateMap<OperatorDto, Operator>()
                 .IgnoreCommonMembers()
@@ -28,6 +31,21 @@ namespace Lacos.GestioneCommesse.Application.Registry
                 .Ignore(x => x.DefaultVehicle)
                 .Ignore(x => x.UserId)
                 .Ignore(x => x.User);
+
+            CreateMap<Operator, OperatorReadModel>();
+
+            CreateMap<OperatorDocument, OperatorDocumentReadModel>();
+            CreateMap<OperatorDocumentReadModel, OperatorDocument>()
+                .Ignore(x=>x.Operator)
+                .Ignore(x => x.OperatorId)
+                .IgnoreCommonMembers();
+
+
+            CreateMap<OperatorDocument, OperatorDocumentDto>();
+            CreateMap<OperatorDocumentDto, OperatorDocument>()
+                .Ignore(x=>x.Operator)
+                .IgnoreCommonMembers();
+
         }
     }
 }

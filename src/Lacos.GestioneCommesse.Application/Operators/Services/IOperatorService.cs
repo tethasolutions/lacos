@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
 using AutoMapper;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using Lacos.GestioneCommesse.Dal;
-using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +16,8 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         Task UpdateOperator(long id, OperatorDto operatorDto);
         Task DeleteOperator(long id);
         Task<OperatorDto> CreateOperator(OperatorDto operatorDto);
-
-        Task<OperatorDocumentDto> GetOperatorDocmument(long docId);
+        Task<OperatorDocumentReadModel> DownloadOperatorDocument(string filename);
+        Task<IEnumerable<OperatorDocumentReadModel>> GetAllOperatorDocuments(long operatorId);
 
     }
     public class OperatorService : IOperatorService
@@ -77,11 +73,28 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
             var singleOperator = await operatorRepository
                 .Query()
                 .Where(x => x.Id == id)
+                .Include(x=>x.Documents)
                 .SingleOrDefaultAsync();
-
+            
             if (singleOperator == null)
-                throw new ApplicationException($"Impossibile trovare attività con id {id}");
+                throw new ApplicationException($"Impossibile trovare operatore con id {id}");
+            
+            foreach (var operatorDocument in singleOperator.Documents.Reverse<OperatorDocument>())
+            {
+                if (operatorDto.Documents.All(x => x.FileName != operatorDocument.FileName))
+                {
+                    singleOperator.Documents.Remove(operatorDocument);
+                }
+            }
+            operatorRepository.Update(singleOperator);
 
+            foreach (var operatorDtoDocument in operatorDto.Documents.Reverse<OperatorDocumentDto>())
+            {
+                if (singleOperator.Documents.All(x => x.FileName != operatorDtoDocument.FileName))
+                {
+                    operatorDto.Documents.ToList().Remove(operatorDtoDocument);
+                }
+            }
             operatorDto.MapTo(singleOperator, mapper);
             operatorRepository.Update(singleOperator);
 
@@ -94,6 +107,12 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
 
             await operatorRepository.Insert(singleOperator);
 
+            foreach (var file in operatorDto.Documents)
+            {
+                var operatorDocument = file.MapTo<OperatorDocument>(mapper);
+                operatorDocument.OperatorId = singleOperator.Id;
+                await operatorDocumentRepository.Insert(operatorDocument);
+            }
             await dbContext.SaveChanges();
 
             return singleOperator.MapTo<OperatorDto>(mapper);
@@ -116,10 +135,32 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
             await dbContext.SaveChanges();
         }
 
+        public async Task<OperatorDocumentReadModel> DownloadOperatorDocument(string filename)
+        {
+            var operatorDocument = await operatorDocumentRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.FileName == filename)
+                .SingleOrDefaultAsync();
+
+            return operatorDocument.MapTo<OperatorDocumentReadModel>(mapper);
+        }
+
+        public async Task<IEnumerable<OperatorDocumentReadModel>> GetAllOperatorDocuments(long operatorId)
+        {
+            var operatorDocuments = await operatorDocumentRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.OperatorId == operatorId)
+                .SingleOrDefaultAsync();
+
+            return operatorDocuments.MapTo<IEnumerable<OperatorDocumentReadModel>>(mapper);
+        }
+
         public async Task<OperatorDocumentDto> GetOperatorDocmument(long docId)
         {
             if (docId == 0)
-                throw new ApplicationException("Impossibile recuperare un docmumento operatore con id 0");
+                throw new ApplicationException("Impossibile recuperare un documento operatore con id 0");
 
             var documentOperator = await operatorDocumentRepository
                 .Query()

@@ -1,102 +1,138 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Extensions;
-using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lacos.GestioneCommesse.Application.Operators.Services
 {
     public interface IOperatorService
     {
-        Task<IEnumerable<OperatorDto>> GetOperators();
-
+        IQueryable<OperatorDto> GetOperators();
+        Task<OperatorReadModel> GetOperator(long id);
+        Task UpdateOperator(long id, OperatorDto operatorDto);
+        Task DeleteOperator(long id);
         Task<OperatorDto> CreateOperator(OperatorDto operatorDto);
 
-        Task UpdateOperator(long id, OperatorDto operatorDto);
-
-        Task<OperatorDto> GetOperator(long id);
+        Task<OperatorDocumentDto> GetOperatorDocmument(long docId);
 
     }
-
     public class OperatorService : IOperatorService
     {
+        private readonly ILacosDbContext dbContext;
         private readonly IMapper mapper;
         private readonly IRepository<Operator> operatorRepository;
-        private readonly ILacosDbContext dbContext;
-        private readonly ILacosSession session;
+        private readonly IRepository<OperatorDocument> operatorDocumentRepository;
 
-        public OperatorService(
-            IMapper mapper,
-            IRepository<Operator> operatorRepository,
-            ILacosDbContext dbContext, ILacosSession session)
+        public OperatorService(IMapper mapper, IRepository<Operator> operatorRepository, ILacosDbContext dbContext, IRepository<OperatorDocument> operatorDocumentRepository)
         {
             this.mapper = mapper;
             this.operatorRepository = operatorRepository;
             this.dbContext = dbContext;
-            this.session = session;
+            this.operatorDocumentRepository = operatorDocumentRepository;
         }
 
-        public async Task<OperatorDto> CreateOperator(OperatorDto operatorDto)
+        public IQueryable<OperatorDto> GetOperators()
         {
-            if (operatorDto.Id > 0)
-                throw new ApplicationException("Impossibile creare un nuovo tipo con un id già esistente");
-
-            var operatorResult = operatorDto.MapTo<Operator>(mapper);
-
-            await operatorRepository.Insert(operatorResult);
-
-            await dbContext.SaveChanges();
-
-            return operatorResult.MapTo<OperatorDto>(mapper);
-        }
-
-        public async Task<OperatorDto> GetOperator(long id)
-        {
-            var operatorResult = await operatorRepository
+            var operators = operatorRepository
                 .Query()
                 .AsNoTracking()
+                .Where(x => !x.IsDeleted)
+                .Project<OperatorDto>(mapper);
+            return operators;
+        }
+
+        public async Task<OperatorReadModel> GetOperator(long id)
+        {
+            if (id == 0)
+                throw new ApplicationException("Impossibile recuperare un operatore con id 0");
+
+            var singleOperator = await operatorRepository
+                .Query()
+                .AsNoTracking()
+                .Include(x => x.DefaultVehicle)
+                .Include(x => x.User)
                 .Where(x => x.Id == id)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
 
-            return operatorResult.MapTo<OperatorDto>(mapper);
-        }
+            if (singleOperator == null)
+                throw new ApplicationException($"Impossibile trovare l'operatore con id {id}");
 
-        public async Task<IEnumerable<OperatorDto>> GetOperators()
-        {
-            var operators = await operatorRepository
-                .Query()
-                .AsNoTracking()
-                .OrderBy(x => x.Name)
-                .ToArrayAsync();
+            return singleOperator.MapTo<OperatorReadModel>(mapper);
 
-            return operators.MapTo<IEnumerable<OperatorDto>>(mapper);
         }
 
         public async Task UpdateOperator(long id, OperatorDto operatorDto)
         {
             if (id == 0)
-                throw new ApplicationException("Impossibile aggiornare un tipo con id 0");
+                throw new ApplicationException("Impossibile aggiornare un operatore con id 0");
 
-            var operatorResult = await operatorRepository
+            var singleOperator = await operatorRepository
                 .Query()
-                .AsNoTracking()
                 .Where(x => x.Id == id)
                 .SingleOrDefaultAsync();
 
-            if (operatorResult == null)
-                throw new ApplicationException($"Impossibile trovare un tipo con id {id}");
+            if (singleOperator == null)
+                throw new ApplicationException($"Impossibile trovare attività con id {id}");
 
-            operatorDto.MapTo(operatorResult, mapper);
-            operatorRepository.Update(operatorResult);
+            operatorDto.MapTo(singleOperator, mapper);
+            operatorRepository.Update(singleOperator);
+
             await dbContext.SaveChanges();
         }
+
+        public async Task<OperatorDto> CreateOperator(OperatorDto operatorDto)
+        {
+            var singleOperator = operatorDto.MapTo<Operator>(mapper);
+
+            await operatorRepository.Insert(singleOperator);
+
+            await dbContext.SaveChanges();
+
+            return singleOperator.MapTo<OperatorDto>(mapper);
+        }
+
+        public async Task DeleteOperator(long id)
+        {
+            if (id == 0)
+                throw new ApplicationException("Impossible eliminare un operatore con id 0");
+
+            var singleOperator = await operatorRepository
+                .Query()
+                .Where(x => x.Id == id)
+                .SingleOrDefaultAsync();
+
+            if (singleOperator == null)
+                throw new ApplicationException($"Impossibile trovare il contatto con id {id}");
+
+            operatorRepository.Delete(singleOperator);
+            await dbContext.SaveChanges();
+        }
+
+        public async Task<OperatorDocumentDto> GetOperatorDocmument(long docId)
+        {
+            if (docId == 0)
+                throw new ApplicationException("Impossibile recuperare un docmumento operatore con id 0");
+
+            var documentOperator = await operatorDocumentRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.Id == docId)
+                .SingleOrDefaultAsync();
+
+            if (documentOperator == null)
+                throw new ApplicationException($"Impossibile trovare il docmumento operatore con id {docId}");
+
+            return documentOperator.MapTo<OperatorDocumentDto>(mapper);
+
+        }
+
     }
 }

@@ -44,7 +44,7 @@ namespace Lacos.GestioneCommesse.Application.Jobs.Services
             IRepository<Job> jobRepository,
             IRepository<ProductType> productTypeRepository,
             ILacosDbContext dbContext, IRepository<User> userRepository,
-            IRepository<Activity> activityRepository, IRepository<Customer> customerRepository, IRepository<Note> noteRepository)
+            IRepository<Activity> activityRepository, IRepository<Customer> customerRepository)
         {
             this.mapper = mapper;
             this.jobRepository = jobRepository;

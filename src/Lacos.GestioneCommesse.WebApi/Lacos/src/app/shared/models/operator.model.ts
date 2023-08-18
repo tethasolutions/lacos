@@ -8,6 +8,9 @@ export class OperatorModel {
     name: string;
     defaultVehicleId: number;
     defaultVehicle: VehicleModel;
+    hasUser:boolean;
+    username: string;
+    password:string;
     documents: Array<OperatorDocumentModel>;
 
     constructor() {
@@ -16,6 +19,9 @@ export class OperatorModel {
         this.colorHex = null;
         this.name = null;
         this.defaultVehicleId = null;
+        this.username = "";
+        this.password = "";
+        this.hasUser = false;
         this.defaultVehicle = new VehicleModel();
         this.documents = [];
     }

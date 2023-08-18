@@ -19,6 +19,9 @@ namespace Lacos.GestioneCommesse.Application.Operators.DTOs
         public ICollection<OperatorDocumentDto>? Documents { get; set; }
         public Vehicle? DefaultVehicle { get; set; }
 
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
+
         public OperatorDto()
         {
             Documents = new List<OperatorDocumentDto>();

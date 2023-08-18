@@ -1,5 +1,4 @@
 ﻿using Lacos.GestioneCommesse.Application.CheckList;
-using Lacos.GestioneCommesse.Application.Customers.Services;
 using Lacos.GestioneCommesse.Application.Operators.Services;
 using Lacos.GestioneCommesse.Application.Products.Service;
 using Lacos.GestioneCommesse.Application.Registry.Services;
@@ -19,8 +18,8 @@ public static class ApplicationConfiguration
             .AddScoped<ISecurityContextFactory, SecurityContextFactory>()
             .AddScoped<ISecurityService, SecurityService>()
             .AddScoped<IAccessTokenProvider, TAccessTokenProvider>()
-            .AddScoped<IContactService, ContactService>()
-            .AddScoped<IAddressService, AddressService>()
+            //.AddScoped<IContactService, ContactService>()
+            //.AddScoped<IAddressService, AddressService>()
             .AddScoped<IActivityTypeService, ActivityTypeService>()
             .AddScoped<IProductTypeService, ProductTypeService>()
             .AddScoped<IVehicleService, VehicleService>()

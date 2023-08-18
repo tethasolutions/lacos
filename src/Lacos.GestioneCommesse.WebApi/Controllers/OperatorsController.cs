@@ -8,7 +8,6 @@ using System.Net.Http;
 using System.Web.Http;
 using Kendo.Mvc.Extensions;
 using Lacos.GestioneCommesse.Application.Operators.Services;
-using Lacos.GestioneCommesse.Application.Customers.Services;
 using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
 using Microsoft.AspNetCore.Authorization;
@@ -123,7 +122,7 @@ public class OperatorsController : LacosApiController
         var path = Path.Combine(folder, fileName);
 
         Stream stream = System.IO.File.OpenRead(path);
-        return File(stream, mimeTypeProvider.Provide(fileName), operatorDocument.Description);
+        return File(stream, mimeTypeProvider.Provide(fileName), operatorDocument.FileName);
     }
 
     [HttpPost("document/upload-file")]

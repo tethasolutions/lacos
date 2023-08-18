@@ -17,13 +17,14 @@ namespace Lacos.GestioneCommesse.Application.Registry
         public OperatorMappingProfile()
         {
             CreateMap<Operator, OperatorDto>()
-                .Ignore(x => x.Documents)
-                .MapMember(x => x.hasUser, y => y.UserId == null);
+
+                .MapMember(x => x.hasUser, y => y.UserId == null)
+                .Ignore(x=>x.UserName)
+                .Ignore(x=>x.Password);
 
 
             CreateMap<OperatorDto, Operator>()
                 .IgnoreCommonMembers()
-                .Ignore(x => x.Documents)
                 .Ignore(x => x.Interventions)
                 .Ignore(x => x.InterventionNotes)
                 .Ignore(x => x.InterventionProductCheckListItems)

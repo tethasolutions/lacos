@@ -12,7 +12,7 @@ public class OperatorDocumentMap : BaseEntityMapping<OperatorDocument>
 
         builder.ToTable("OperatorDocuments", "Registry");
 
-        builder.Property(e => e.Description)
+        builder.Property(e => e.OriginalFilename)
             .IsRequired()
             .HasMaxLength(200);
 

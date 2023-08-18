@@ -2,8 +2,10 @@
 
 using AutoMapper;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
+using Lacos.GestioneCommesse.Application.Security;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
+using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,13 +28,17 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         private readonly IMapper mapper;
         private readonly IRepository<Operator> operatorRepository;
         private readonly IRepository<OperatorDocument> operatorDocumentRepository;
+        private readonly IRepository<User> userRepository;
+        private readonly ISecurityContextFactory securityContextFactory;
 
-        public OperatorService(IMapper mapper, IRepository<Operator> operatorRepository, ILacosDbContext dbContext, IRepository<OperatorDocument> operatorDocumentRepository)
+        public OperatorService(IMapper mapper, IRepository<Operator> operatorRepository, ILacosDbContext dbContext, IRepository<OperatorDocument> operatorDocumentRepository, IRepository<User> userRepository, ISecurityContextFactory securityContextFactory)
         {
             this.mapper = mapper;
             this.operatorRepository = operatorRepository;
             this.dbContext = dbContext;
             this.operatorDocumentRepository = operatorDocumentRepository;
+            this.userRepository = userRepository;
+            this.securityContextFactory = securityContextFactory;
         }
 
         public IQueryable<OperatorDto> GetOperators()
@@ -54,6 +60,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
             var singleOperator = await operatorRepository
                 .Query()
                 .AsNoTracking()
+                .Include(x=>x.Documents)
                 .Include(x => x.DefaultVehicle)
                 .Include(x => x.User)
                 .Where(x => x.Id == id)
@@ -107,14 +114,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
             var singleOperator = operatorDto.MapTo<Operator>(mapper);
 
             await operatorRepository.Insert(singleOperator);
-
-            foreach (var file in operatorDto.Documents)
-            {
-                var operatorDocument = file.MapTo<OperatorDocument>(mapper);
-                operatorDocument.OperatorId = singleOperator.Id;
-                await operatorDocumentRepository.Insert(operatorDocument);
-            }
-
+            
             try
             {
                 await dbContext.SaveChanges();
@@ -184,6 +184,48 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
 
             return documentOperator.MapTo<OperatorDocumentDto>(mapper);
 
+        }
+
+        private async Task CreateUser (string username, string password)
+        {
+
+            var user = new User() {Enabled = true, Id = 0, Role = Role.Operator};
+
+            await ExecuteOnUser(user, async context =>
+            {
+                await context.EnsureUserNameIsUnique(user.UserName);
+                await context.HashPasswordWithUniqueSalt(password);
+                await context.GenerateUniqueAccessToken();
+            });
+        }
+
+        private async Task UpdateUser (long id, string username, string password)
+        {
+            
+            await ExecuteOnUser(id,
+                async context =>
+                {
+                    await context.ChangeUserName(username);
+
+                    if (!string.IsNullOrEmpty(password) && !context.VerifyPassword(password))
+                    {
+                        await context.ChangePassword(password);
+                    }
+
+                    await context.EnableUser(true);
+                });
+
+        }
+
+        private async Task ExecuteOnUser(User user, Func<ISecurityContext, Task> action)
+        {
+            using (var context = securityContextFactory.CreateSecurityContext(user))
+            {
+                await action(context);
+            }
+
+            await userRepository.InsertOrUpdate(user);
+            await dbContext.SaveChanges();
         }
 
     }

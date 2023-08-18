@@ -88,12 +88,6 @@ namespace Lacos.GestioneCommesse.Application.Jobs.Services
             if (job == null)
                 throw new ApplicationException($"Impossibile trovare job con id {id}");
 
-            //se sto cambiando stato e il nuovo stato è "in fatturazione" allora sposto la data di scadenza avanti di 30 gg
-            if (job.Status != jobDto.Status)
-            {
-                jobDto.ExpirationDate = DateTime.Now.AddDays(30);
-            }
-
             jobDto.MapTo(job, mapper);
             jobRepository.Update(job);
             await dbContext.SaveChanges();

@@ -12,11 +12,9 @@ namespace Lacos.GestioneCommesse.Application.Jobs.DTOs
     {
         public long? Id { get; set; }
         public string? Description { get; set; }
-        public string? ResultNote { get; set; }
         public string? Code { get; set; }
         public long OperatorId { get; set; }
         public DateTimeOffset JobDate { get; set; }
-        public DateTimeOffset ExpirationDate { get; set; }
         public long CustomerId { get; set; }
         public CustomerReadModel? Customer { get; set; }
         public string? CustomerName { get; set; }

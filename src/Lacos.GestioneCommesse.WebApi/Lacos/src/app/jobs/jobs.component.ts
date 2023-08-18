@@ -13,26 +13,20 @@ import { AddressModalComponent } from '../address-modal/address-modal.component'
 import { Router, NavigationEnd } from '@angular/router';
 import { JobStatusEnum } from '../shared/enums/job-status.enum';
 import { JobDetailModel } from '../shared/models/job-detail.model';
-import { ActivityModalComponent } from '../activity-modal/activity-modal.component';
-import { ActivitiesService } from '../services/activities.service';
-import { ActivityModel } from '../shared/models/activity.model';
-import { ActivityStatusEnum } from '../shared/enums/activity-status.enum';
 
 @Component({
-    selector: 'app-jobs-active',
-    templateUrl: './jobs-active.component.html',
-    styleUrls: ['./jobs-active.component.scss']
+    selector: 'app-jobs',
+    templateUrl: './jobs.component.html',
+    styleUrls: ['./jobs.component.scss']
 })
-export class JobsActiveComponent extends BaseComponent implements OnInit {
+export class JobsComponent extends BaseComponent implements OnInit {
 
     @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;
-    @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
+    //@ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     
     jobType: string;
 
     statusList: Array<string> = [];
-
-    jobNotes: Array<NoteModel> = [];
 
     dataJobs: GridDataResult;
     stateGridJobs: State = {
@@ -50,19 +44,11 @@ export class JobsActiveComponent extends BaseComponent implements OnInit {
         private readonly _jobsService: JobsService,
         private readonly _messageBox: MessageBoxService,
         private readonly _router: Router,
-        private readonly _activitiesService: ActivitiesService
     ) {
         super();
     }
 
     ngOnInit() {
-        console.log(this._router.url);
-        if (this._router.url === '/jobs/acceptance') { this.jobType = 'acceptance'; }
-        if (this._router.url === '/jobs/active') { this.jobType = 'active'; }
-        if (this._router.url === '/jobs/completed') { this.jobType = 'completed'; }
-        if (this._router.url === '/jobs/billing') { this.jobType = 'billing'; }
-        if (this._router.url === '/jobs/paid') { this.jobType = 'paid'; }
-        this.statusList = Object.keys(ActivityStatusEnum);
         this._readJobs();
     }
 
@@ -141,35 +127,5 @@ export class JobsActiveComponent extends BaseComponent implements OnInit {
             }
         });
     }
-
-    createActivity(job: JobModel) {
-        const request = new ActivityModel();
-
-        request.jobId = job.id;
-        request.jobDescription = job.description;
-        request.jobCode = job.code;
-        request.customerName = job.customer.name;
-
-        this.activityModal.loadData();
-
-        this._subscriptions.push(
-            this.activityModal.open(request)
-                .pipe(
-                    filter(e => e),
-                    map(() => this.activityModal.options),
-                    switchMap(e => this._activitiesService.createActivity(e)),
-                    tap(e => this._messageBox.success(`Intervento creato`)),
-                    tap(() => this._readJobs())
-                )
-                .subscribe()
-        );
-    }
-
-    isVisibleNew(): boolean 
-    {
-        return this.jobType == "acceptance" ||
-                this.jobType == "active";
-    }  
-   
 
 }

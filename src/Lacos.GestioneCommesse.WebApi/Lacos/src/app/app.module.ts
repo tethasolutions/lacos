@@ -70,6 +70,8 @@ import { ProductTypeModalComponent } from './producttype-modal/producttype-modal
 import { ProductTypesService } from './services/productTypes.service';
 import { CustomerFiscalTypePipe } from './pipes/customer-fiscal-type.pipe';
 import { ActivityStatusPipe } from './pipes/activity-status.pipe';
+import { JobsComponent } from './jobs/jobs.component';
+import { JobsService } from './services/jobs.service';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -106,7 +108,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ProductTypesComponent,
         ProductTypeModalComponent,
         CustomerFiscalTypePipe,
-        ActivityStatusPipe
+        ActivityStatusPipe,
+        JobsComponent
     ],
     imports: [
         BrowserModule,
@@ -152,7 +155,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         CheckListService,
         ProductsService,
         ActivityTypesService,
-        ProductTypesService
+        ProductTypesService,
+        JobsService
     ],
     bootstrap: [AppComponent]
 })

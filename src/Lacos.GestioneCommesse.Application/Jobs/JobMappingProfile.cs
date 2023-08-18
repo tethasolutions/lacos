@@ -30,17 +30,26 @@ namespace Lacos.GestioneCommesse.Application.Jobs
                 .IgnoreCommonMembers();
            
             CreateMap<Job, JobDetailDto>()
-                .Ignore(x=>x.OperatorId);
+                .Ignore(x=>x.OperatorId)
+                .Ignore(x => x.CustomerAddressId)
+                .Ignore(x => x.ProductTypeId);
 
             CreateMap<Job, JobDetailReadModel>()
                 .MapMember(x=>x.Code,y=>y.Number+"/"+ y.Year)
+                .Ignore(x => x.CustomerFullAddress)
+                .Ignore(x => x.CustomerAddressId)
+                .Ignore(x => x.CustomerAddress)
                 //.MapMember(x=>x.CustomerFullAddress,y => y.CustomerAddress.StreetAddress + " - " + y.CustomerAddress.City + " - " + y.CustomerAddress.Province)
                 .Ignore(x => x.OperatorId);
 
-            CreateMap<User, JobOperatorDto>();
+            CreateMap<User, JobOperatorDto>()
+                .Ignore(x => x.Name);
 
             CreateMap<Job, JobSearchReadModel>()
                 .MapMember(x => x.Code, y => y.Number + "/" + y.Year)
+                .Ignore(x => x.CustomerFullAddress)
+                .Ignore(x => x.CustomerAddressId)
+                .Ignore(x => x.CustomerAddress)
                 //.MapMember(x => x.CustomerFullAddress, y => y.CustomerAddress.StreetAddress + " - " + y.CustomerAddress.City + " - " + y.CustomerAddress.Province)
                 .Ignore(x => x.OperatorId);
         }

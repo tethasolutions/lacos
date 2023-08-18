@@ -13,6 +13,8 @@ public interface IAddressService
     Task<AddressDto> GetAddress(
         long id);
 
+    Task<IEnumerable<AddressDto>> GetCustomerAddresses(long customerId);
+
     Task<AddressDto> CreateAddress(
         AddressDto addressDto);
 
@@ -150,5 +152,22 @@ public class AddressService : IAddressService
             a.IsMainAddress = false;
             customerAddressRepository.Update(a);
         }
+    }
+
+    public async Task<IEnumerable<AddressDto>> GetCustomerAddresses(
+        long customerId)
+    {
+
+        var addresses = customerAddressRepository
+            .Query()
+            .Where(x => x.CustomerId == customerId)
+            .ToArray();
+
+        if (addresses == null)
+        {
+            throw new NotFoundException(typeof(CustomerAddress), customerId);
+        }
+
+        return addresses.MapTo<IEnumerable<AddressDto>>(mapper);
     }
 }

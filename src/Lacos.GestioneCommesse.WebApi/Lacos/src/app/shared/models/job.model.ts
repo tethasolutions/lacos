@@ -11,7 +11,7 @@ export class JobModel {
 
     number: number;
     year: number;
-    expirationDate: Date;
+    jobDate: Date;
     description: string;
     status: JobStatusEnum;
     // statusChangedOn: Date;
@@ -38,16 +38,6 @@ export class JobModel {
         return `${this.id} - ${this.customer.name} - ${this.customerAddress.fullAddress}`;
     }
 
-    get expired(): boolean {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const expiration = new Date(this.expirationDate);
-        expiration.setHours(0, 0, 0, 0);
-
-        return today > expiration;
-    }
-
     get code(): string {
         return `${this.number}/${this.year}`;
     }
@@ -57,7 +47,7 @@ export class JobModel {
         this.createdOn = null;
         this.number = null;
         this.year = null;
-        this.expirationDate = null;
+        this.jobDate = null;
         this.description = null;
         this.status = null;
         this.customer = new CustomerModel();

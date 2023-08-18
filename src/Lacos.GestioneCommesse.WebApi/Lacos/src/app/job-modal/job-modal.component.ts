@@ -18,9 +18,6 @@ import { AddressModalComponent } from '../address-modal/address-modal.component'
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { CustomerService } from '../services/customer.service';
 import { AddressesService } from '../services/addresses.service';
-import { NotesModalComponent } from '../notes-modal/notes-modal.component';
-import { NoteModel } from '../shared/models/note.model';
-import { NotesService } from '../services/notes.service';
 import { emitDistinctChangesOnlyDefaultValue } from '@angular/compiler';
 import { Observable } from 'rxjs';
 import { ComboBoxComponent } from '@progress/kendo-angular-dropdowns';
@@ -35,7 +32,6 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
   @ViewChild('form') form: NgForm;
   @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
   @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
-  @ViewChild('notesModal', { static: true }) notesModal: NotesModalComponent;
   readonly role = Role;
   name = '';
 
@@ -48,7 +44,6 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
   sources: Array<JobSourceModel> = [];
   productTypes: Array<ProductTypeModel> = [];
   states = listEnum<JobStatusEnum>(JobStatusEnum);
-  jobNotes: Array<NoteModel> = [];
 
   readonly jobStatusEnum = JobStatusEnum;
 
@@ -58,8 +53,7 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
   constructor(private readonly _messageBox: MessageBoxService,
     private readonly _jobsService: JobsService,
     private readonly _addressesService: AddressesService,
-    private readonly _customerService: CustomerService,
-    private readonly _notesService: NotesService) {
+    private readonly _customerService: CustomerService) {
     super();
     this.options = new JobDetailModel();
   }
@@ -137,18 +131,6 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
     );
   }
 
-  protected _readJobProductTypes() {
-    this._subscriptions.push(
-      this._jobsService.getJobProductTypes()
-        .pipe(
-          tap(e => {
-            this.productTypes = e;
-          })
-        )
-        .subscribe()
-    );
-  }
-
   customerChanged(customerId: number) {
     this.options.customerAddressId = null;
     if (customerId == undefined) {
@@ -173,7 +155,7 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
           map(() => this.customerModal.options),
           switchMap(e => this._customerService.updateCustomer(e, this.options.customerId)),
           map(() => this.customerModal.options),
-          tap(e => this._messageBox.success(`Cliente ${e.customerDescription} aggiornato`)),
+          tap(e => this._messageBox.success(`Cliente ${e.name} aggiornato`)),
           tap(() => { this.loadData(); })
         )
         .subscribe()
@@ -206,7 +188,7 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
 
   createAddress() {
     const request = new AddressModel();
-    request.contactId = this.options.id;
+    request.customerId = this.options.id;
     this._subscriptions.push(
       this.addressModal.open(request)
         .pipe(
@@ -218,8 +200,6 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
         .subscribe()
     );
   }
-
-
 
   addNewAddress(address: AddressModel) {
     this._subscriptions.push(
@@ -254,7 +234,6 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
 
   createCustomer() {
     const request = new CustomerModel();
-    request.type = 0;
     const a = this.options;
     this._subscriptions.push(
       this.customerModal.open(request)
@@ -271,29 +250,6 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
     );
   }
 
-  viewNotes() {
-    this.notesModal.id = this.options.id;
-    this.notesModal.loadData();
-    this.notesModal.open(null);
-    /* this._subscriptions.push(
-      this._notesService.getJobNotes(this.options.id)
-        .pipe(
-            map(e => {
-              this.jobNotes = e;
-            }),
-            switchMap(e => this.notesModal.open(e))
-        )
-      .subscribe()
-    ); */
-  }
-
-  isVisibleResultNote(): boolean {
-    return this.options.status == this.jobStatusEnum.Completed ||
-           this.options.status == this.jobStatusEnum.Billing ||
-           this.options.status == this.jobStatusEnum.Billed ||
-           this.options.status == this.jobStatusEnum.Paid;
-  }  
-
   handleFilter(value: string) {
     this._filterCustomers(value);
   }
@@ -301,8 +257,6 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
   public loadData() {
     this._readJobCustomers();
     this._readOperators();
-    this._readJobSources();
-    this._readJobProductTypes();
     this._readCustomerAddresses();
   }
 
@@ -319,7 +273,7 @@ export class JobModalComponent extends ModalComponent<JobDetailModel> {
     else {
       value = value.toLowerCase();
       //TODO Ottimizzare filtro
-      this.customersFiltered = this.customers.filter((s) => s.customerDescription.toLowerCase().indexOf(value) !== -1);
+      this.customersFiltered = this.customers.filter((s) => s.name.toLowerCase().indexOf(value) !== -1);
     }
 
   }

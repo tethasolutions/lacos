@@ -54,4 +54,18 @@ export class AddressesService {
                 map(() => { })
             );
     }
+    
+    getCustomerAddresses(customerId: number) {      
+        return this._http.get<Array<AddressModel>>(`${this._baseUrl}/address/customer/${customerId}`)
+            .pipe(
+                map(result => {
+                    const addresses: Array<AddressModel> = [];
+                    result.forEach(item => {
+                        const address = Object.assign(new AddressModel(), item);
+                        addresses.push(address);
+                    });
+                    return addresses;
+                })
+            );
+    }
 }

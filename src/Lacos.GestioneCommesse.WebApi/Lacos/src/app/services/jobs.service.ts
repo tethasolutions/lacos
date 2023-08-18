@@ -7,7 +7,6 @@ import { State, toDataSourceRequestString, translateDataSourceResultGroups } fro
 import { CustomerAddressModel } from '../shared/models/customer-address.model';
 import { JobModel } from '../shared/models/job.model';
 import { CustomerModel } from '../shared/models/customer.model';
-import { JobCountersModel } from "../shared/models/job-counters.model";
 import { JobOperatorModel } from '../shared/models/job-operator.model';
 import { AddressModel } from '../shared/models/address.model';
 import { JobSourceModel } from '../shared/models/job-source.model';
@@ -34,7 +33,6 @@ export class JobsService {
                         const jobs: Array<JobDetailModel> = [];
                         e.data.forEach(item => {
                             const job: JobDetailModel = Object.assign(new JobDetailModel(), item);
-                            job.expirationDate = new Date(job.expirationDate);
                             job.jobDate = new Date(job.jobDate);
                             job.customer = Object.assign(new CustomerModel(), job.customer);
 
@@ -58,16 +56,6 @@ export class JobsService {
                         };
                     }
                 )
-            );
-    }
-
-    getJobCounters() {
-        return this._http.get<JobCountersModel>(`${this._baseUrl}/job-counters`)
-            .pipe(
-                map(e => {
-                    const jobCounters: JobCountersModel = Object.assign(new JobCountersModel(), e);
-                    return jobCounters;
-                })
             );
     }
 
@@ -113,34 +101,6 @@ export class JobsService {
             );
     }
 
-    getJobSuppliers() {
-        return this._http.get<Array<CustomerModel>>(`${this._baseUrl}/job-suppliers`)
-            .pipe(
-                map(response => {
-                    const customers: Array<CustomerModel> = [];
-
-                    response.forEach(item => {
-                        const customer: CustomerModel = Object.assign(new CustomerModel(), item);
-
-                        const addresses: Array<AddressModel> = [];
-                        customer.addresses.forEach(addressItem => {
-                            const address: AddressModel = Object.assign(new AddressModel(), addressItem);
-                            addresses.push(address);
-                        });
-                        customer.addresses = addresses;
-
-                        let mainAddress = addresses.find(x => x.isMainAddress);
-                        if (mainAddress == undefined) { mainAddress = new AddressModel(); }
-                        customer.mainAddress = mainAddress;
-
-                        customers.push(customer);
-                    });
-
-                    return customers;
-                })
-            );
-    }
-
     getJobSources() {
         return this._http.get<Array<JobSourceModel>>(`${this._baseUrl}/job-sources`)
             .pipe(
@@ -155,20 +115,6 @@ export class JobsService {
             );
     }
 
-    getJobProductTypes() {
-        return this._http.get<Array<ProductTypeModel>>(`${this._baseUrl}/job-product-types`)
-            .pipe(
-                map(response => {
-                    const productTypes: Array<ProductTypeModel> = [];
-                    response.forEach(item => {
-                        const productType = Object.assign(new ProductTypeModel(), item);
-                        productTypes.push(productType);
-                    });
-                    return productTypes;
-                })
-            );
-    }
-
     getJobDetail(id: number) {
         return this._http.get<JobDetailModel>(`${this._baseUrl}/job-detail/${id}`)
             .pipe(
@@ -176,7 +122,6 @@ export class JobsService {
                     const job: JobDetailModel = Object.assign(new JobDetailModel(), response);
 
                     job.jobDate = new Date(job.jobDate);
-                    job.expirationDate = new Date(job.expirationDate);
 
                     const customer: CustomerModel = Object.assign(new CustomerModel(), job.customer);
 
@@ -196,12 +141,6 @@ export class JobsService {
                     const customerAddress: AddressModel = Object.assign(new AddressModel(), job.customerAddress);
                     job.customerAddress = customerAddress;
 
-                    const source: JobSourceModel = Object.assign(new JobSourceModel(), job.source);
-                    job.source = source;
-
-                    const productType: ProductTypeModel = Object.assign(new ProductTypeModel(), job.productType);
-                    job.productType = productType;
-
                     return job;
                 })
             );
@@ -210,15 +149,16 @@ export class JobsService {
     createJob(request: JobDetailModel) {
         return this._http.post<CustomerModel>(`${this._baseUrl}/create-job`, request)
             .pipe(
-                tap(() => this._bus.jobUpdated())
+                map(e => {
+                    return e;
+                })
             );
     }
 
     updateJob(request: JobDetailModel, id: number) {
         return this._http.put<void>(`${this._baseUrl}/update-job/${id}`, request)
             .pipe(
-                map(() => { }),
-                tap(() => this._bus.jobUpdated())
+                map(() => { })
             );
     }
 
@@ -237,7 +177,6 @@ export class JobsService {
                         const jobs: Array<JobModel> = [];
                         result.forEach(item => {
                             const job: JobModel = Object.assign(new JobModel(), item);
-                            job.expirationDate = new Date(job.expirationDate);
                             job.jobDate = new Date(job.jobDate);
                             job.customer = Object.assign(new CustomerModel(), job.customer);
 

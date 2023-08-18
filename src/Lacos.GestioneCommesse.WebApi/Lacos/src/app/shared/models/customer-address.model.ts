@@ -1,6 +1,6 @@
 import { CustomerModel } from "./customer.model";
 
-export class ContactAddressModel {
+export class CustomerAddressModel {
     description: string;
     city: string;
     streetAddress: string;

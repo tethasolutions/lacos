@@ -1,0 +1,82 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3 *ngIf="jobType == 'acceptance'">Richieste</h3>
+        <h3 *ngIf="jobType == 'active'">In lavorazione</h3>
+        <h3 *ngIf="jobType == 'completed'">Conti da fare</h3>
+        <h3 *ngIf="jobType == 'billing'">Conti pronti</h3>
+        <h3 *ngIf="jobType == 'paid'">Pagati</h3>
+    </div>
+    
+    <div class="col-auto" *ngIf="isVisibleNew()">
+        <button (click)="createJob()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVA
+        </button>
+    </div>
+</div>
+<kendo-grid [data]="dataJobs" [pageSize]="stateGridJobs.take"
+            [skip]="stateGridJobs.skip" [sort]="stateGridJobs.sort"
+            [filter]="stateGridJobs.filter"
+            [group]="stateGridJobs.group" filterable="menu"
+            [sortable]="true" [pageable]="true" scrollable="none"
+            (dataStateChange)="dataStateChange($event)">
+            
+    <kendo-grid-column field="expired" [sortable]="false" [filterable]="false" title=" ">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="!dataItem.expired && dataItem.status < 4" class="job-active">&nbsp;</div>
+            <div *ngIf="dataItem.expired && dataItem.status < 4" class="job-expired">&nbsp;</div>
+            <div *ngIf="dataItem.status >= 4 " class="job-success">&nbsp;</div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="jobDate" title="Data richiesta" filter="date" format="{0:d}"></kendo-grid-column>
+    <kendo-grid-column field="code" title="Progr."></kendo-grid-column>
+    <kendo-grid-column field="customerName" title="Cliente">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="!dataItem.customer.alert">{{dataItem.customerName}}</div>
+            <div *ngIf="dataItem.customer.alert" class="customer-alert">
+                {{dataItem.customerName}}<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="customerAddress.telephone" title="Telefono"></kendo-grid-column>
+    <kendo-grid-column field="customerFullAddress" title="Indirizzo"></kendo-grid-column>
+    <kendo-grid-column field="productType.name" title="Categoria"></kendo-grid-column>
+    <kendo-grid-column field="description" title="Descrizione">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div [innerHTML]="dataItem.description"></div>
+            </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="status" title="Stato">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.status | jobStatus}}
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="number" [sortable]="false" [filterable]="false" title=" " [width]="120">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="d-flex flex-wrap gap-1 justify-content-center">
+                <button class="btn btn-secondary btn-sm" title="Genera preventivo" (click)="createQuotation(dataItem)">
+                    <i class="fas fa-coins"></i>
+                </button>
+                <button class="btn btn-secondary btn-sm" title="Ordine fornitore" (click)="createOrder(dataItem)">
+                    <i class="fas fa-box"></i>
+                </button>
+                <button class="btn btn-secondary btn-sm" title="Genera intervento" (click)="createActivity(dataItem)">
+                    <i class="fas fa-calendar-days"></i>
+                </button>
+                <button class="btn btn-primary btn-sm" title="Note" (click)="viewLastNote(dataItem)">
+                    <i class="fas fa-book"></i>
+                </button>
+                <button class="btn btn-primary btn-sm" title="Modifica" (click)="editJob(dataItem)">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger btn-sm" title="Elimina" (click)="deleteJob(dataItem)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+
+<app-job-modal #jobModal></app-job-modal>
+<app-activity-modal #activityModal></app-activity-modal>

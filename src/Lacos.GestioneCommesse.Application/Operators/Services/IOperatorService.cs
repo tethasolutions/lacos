@@ -41,6 +41,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
                 .Query()
                 .AsNoTracking()
                 .Where(x => !x.IsDeleted)
+                .Include(x=>x.DefaultVehicle)
                 .Project<OperatorDto>(mapper);
             return operators;
         }

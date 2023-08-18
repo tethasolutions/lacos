@@ -17,6 +17,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.DTOs
         public long? DefaultVehicleId { get; set; }
         public bool? hasUser { get; set; }
         public ICollection<OperatorDocumentDto>? Documents { get; set; }
+        public Vehicle? DefaultVehicle { get; set; }
 
         public OperatorDto()
         {

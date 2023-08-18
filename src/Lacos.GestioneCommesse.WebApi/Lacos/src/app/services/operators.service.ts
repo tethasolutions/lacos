@@ -98,35 +98,35 @@ export class OperatorsService {
             );
     }
 
-    createDocument(request: OperatorDocumentModel) {
-        const formData: FormData = new FormData();
-        if (request.files.length > 0) {
-            formData.append('fileKey', request.files[0], request.files[0].name);
-        }
-        return this._http.post<number>(`${this._baseUrl}/document/${request.operatorId}/${request.description}/${request.fileName}`, formData)
-            .pipe(
-                map(e => {
-                    return e;
-                })
-            );
-    }
+    // createDocument(request: OperatorDocumentModel) {
+    //     const formData: FormData = new FormData();
+    //     if (request.files.length > 0) {
+    //         formData.append('fileKey', request.files[0], request.files[0].name);
+    //     }
+    //     return this._http.post<number>(`${this._baseUrl}/document/${request.operatorId}/${request.description}/${request.fileName}`, formData)
+    //         .pipe(
+    //             map(e => {
+    //                 return e;
+    //             })
+    //         );
+    // }
 
-    updateDocument(request: OperatorDocumentModel, id: number) {
-        console.log(request);
-        const formData: FormData = new FormData();
-        if (request.files.length > 0) {
-            formData.append('fileKey', request.files[0], request.files[0].name);
-        }
-        return this._http.put<void>(`${this._baseUrl}/document/${id}/${request.description}/${request.fileName}`, formData)
-            .pipe(
-                map(() => { })
-            );
-    }
+    // updateDocument(request: OperatorDocumentModel, id: number) {
+    //     console.log(request);
+    //     const formData: FormData = new FormData();
+    //     if (request.files.length > 0) {
+    //         formData.append('fileKey', request.files[0], request.files[0].name);
+    //     }
+    //     return this._http.put<void>(`${this._baseUrl}/document/${id}/${request.description}/${request.fileName}`, formData)
+    //         .pipe(
+    //             map(() => { })
+    //         );
+    // }
 
-    deleteDocument(id: number) {
-        return this._http.delete<void>(`${this._baseUrl}/document/${id}`)
-            .pipe(
-                map(() => { })
-            );
-    }
+    // deleteDocument(id: number) {
+    //     return this._http.delete<void>(`${this._baseUrl}/document/${id}`)
+    //         .pipe(
+    //             map(() => { })
+    //         );
+    // }
 }

@@ -26,8 +26,7 @@ public static class ApplicationConfiguration
             .AddScoped<IVehicleService, VehicleService>()
             .AddScoped<IOperatorService, OperatorService>()
             .AddScoped<IProductService, ProductService>()
-            .AddScoped<ICheckListService, CheckListService>()
-            ;
+            .AddScoped<ICheckListService, CheckListService>();
 
         return services;
     }

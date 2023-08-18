@@ -12,10 +12,10 @@ import { OperatorDocumentModel } from '../shared/models/operator-document.model'
   styleUrls: ['./operator-documents-modal.component.scss']
 })
 
-export class OperatorDocumentsModalComponent extends ModalComponent<any> {
+export class OperatorDocumentsModalComponent extends ModalComponent<OperatorDocumentModel> {
 
   @ViewChild('operatorDocumentModal', { static: true }) operatorDocumentModal: OperatorDocumentModalComponent;
-  public operatorId: number = null;
+  public operatorId: number;
 
   documents: Array<OperatorDocumentModel> = [];
 
@@ -23,43 +23,43 @@ export class OperatorDocumentsModalComponent extends ModalComponent<any> {
     super();
   }
 
-  aggiungiDocumento() {
-      const request = new OperatorDocumentModel();
-      request.operatorId = this.operatorId;
-      this._subscriptions.push(
-          this.operatorDocumentModal.open(request)
-              .pipe(
-                  filter(e => e),
-                  switchMap(() => this._operatorsService.createDocument(request)),
-                  tap(e => {
-                    this._messageBox.success(`Documento aggiunto`);
-                  }),
-                  tap(() => {
-                    this.loadData();
-                  })
-              )
-              .subscribe()
-      );
-  }
+  // aggiungiDocumento() {
+  //     const request = new OperatorDocumentModel();
+  //     request.operatorId = this.operatorId;
+  //     this._subscriptions.push(
+  //         this.operatorDocumentModal.open(request)
+  //             .pipe(
+  //                 filter(e => e),
+  //                 switchMap(() => this._operatorsService.createDocument(request)),
+  //                 tap(e => {
+  //                   this._messageBox.success(`Documento aggiunto`);
+  //                 }),
+  //                 tap(() => {
+  //                   this.loadData();
+  //                 })
+  //             )
+  //             .subscribe()
+  //     );
+  // }
 
-  modificaDocumento(document: OperatorDocumentModel) {
-      this._subscriptions.push(
-        this._operatorsService.getOperatorDocument(document.id)
-          .pipe(
-              map(e => {
-                return e;
-              }),
-              switchMap(e => this.operatorDocumentModal.open(e)),
-              filter(e => e),
-              map(() => this.operatorDocumentModal.options),
-              switchMap(e => this._operatorsService.updateDocument(e, e.id)),
-              map(() => this.operatorDocumentModal.options),
-              tap(e => this._messageBox.success(`Documento aggiornato`)),
-              tap(() => this.loadData())
-          )
-        .subscribe()
-      );
-  }
+  // modificaDocumento(document: OperatorDocumentModel) {
+  //     this._subscriptions.push(
+  //       this._operatorsService.getOperatorDocument(document.id)
+  //         .pipe(
+  //             map(e => {
+  //               return e;
+  //             }),
+  //             switchMap(e => this.operatorDocumentModal.open(e)),
+  //             filter(e => e),
+  //             map(() => this.operatorDocumentModal.options),
+  //             switchMap(e => this._operatorsService.updateDocument(e, e.id)),
+  //             map(() => this.operatorDocumentModal.options),
+  //             tap(e => this._messageBox.success(`Documento aggiornato`)),
+  //             tap(() => this.loadData())
+  //         )
+  //       .subscribe()
+  //     );
+  // }
 
   scaricaDocumento(certificato: OperatorDocumentModel) {
     var link = document.createElement("a");
@@ -80,7 +80,7 @@ export class OperatorDocumentsModalComponent extends ModalComponent<any> {
       );
   }
 
-  public loadData() {
+  loadData() {
     this._readDocuments();
   }
 

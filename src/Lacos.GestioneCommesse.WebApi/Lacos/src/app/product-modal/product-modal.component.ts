@@ -6,7 +6,7 @@ import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { ProductsService } from '../services/products.service';
 import { CustomerService } from '../services/customer.service';
-import { ActivityProductTypeModel } from '../shared/models/activity-product-type.model';
+import { ProductTypeModel } from '../shared/models/product-type.model';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { CustomerModel } from '../shared/models/customer.model';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
@@ -25,7 +25,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   @ViewChild('form') form: NgForm;
   @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
   @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
-  productTypes: Array<ActivityProductTypeModel> = [];
+  productTypes: Array<ProductTypeModel> = [];
   customers: Array<CustomerModel> = [];
   customerSelezionato = new CustomerModel();
 
@@ -111,7 +111,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
 
   createCustomer() {
     const request = new CustomerModel();
-    request.type = 0;
+    request.fiscalType = 0;
 
     this._subscriptions.push(
         this.customerModal.open(request)
@@ -168,7 +168,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   checkIfImpiantoIsPortaRei() {
     this.isImpiantoPortaRei = false;
     if (this.options.productTypeId == null || this.options.productTypeId == undefined) { return; }
-    const productTypeSelezionato: ActivityProductTypeModel = this.productTypes.find(x => x.id === this.options.productTypeId);
+    const productTypeSelezionato: ProductTypeModel = this.productTypes.find(x => x.id === this.options.productTypeId);
     if (productTypeSelezionato != undefined) {
       this.isImpiantoPortaRei = productTypeSelezionato.isReiDoor;
     }

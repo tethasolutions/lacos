@@ -1,9 +1,3 @@
-import { ContactAddressModel } from './contact-address.model';
-import { OrderModel } from './order.model';
-import { ContactModel } from './contact.model';
-import { NoteModel } from './note.model';
-import { ActivityModel } from './activity.model';
-import { QuotationModel } from './quotation.model';
 import { ProductTypeModel } from './product-type.model';
 import { JobSourceModel } from './job-source.model';
 import { JobStatusEnum } from '../enums/job-status.enum';
@@ -41,7 +35,7 @@ export class JobModel {
     customerAddress: AddressModel;
 
     get fullDescription(): string {
-        return `${this.id} - ${this.customer.customerDescription} - ${this.customerAddress.fullAddress}`;
+        return `${this.id} - ${this.customer.name} - ${this.customerAddress.fullAddress}`;
     }
 
     get expired(): boolean {

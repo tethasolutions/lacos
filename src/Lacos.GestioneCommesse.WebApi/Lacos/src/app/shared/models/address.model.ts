@@ -10,6 +10,7 @@ export class AddressModel {
     telephone: string;
     email: string;
     isMainAddress: boolean;
+    notes: string;
     tempId: string;
 
     get fullAddress(): string {
@@ -29,6 +30,7 @@ export class AddressModel {
         this.province = null;
         this.zipCode = null;
         this.isMainAddress = false;
+        this.notes = null;
         this.tempId = uuidv4();
     }
 }

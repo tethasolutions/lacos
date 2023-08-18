@@ -2,18 +2,18 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { ActivityStatusEnum } from '../shared/enums/activity-status.enum';
 import { compileClassMetadata } from '@angular/compiler';
-import { ContactFiscalTypeEnum } from '../shared/enums/contact-fiscal-type.enum';
+import { CustomerFiscalTypeEnum } from '../shared/enums/customer-fiscal-type.enum';
 
 @Pipe({
-    name: 'contactFiscalType'
+    name: 'customerFiscalType'
 })
-export class ContactFiscalTypePipe extends BaseComponent implements PipeTransform {
+export class CustomerFiscalTypePipe extends BaseComponent implements PipeTransform {
 
-    transform(value: ContactFiscalTypeEnum) {
+    transform(value: CustomerFiscalTypeEnum) {
         switch (value) {
-            case ContactFiscalTypeEnum.Company:
+            case CustomerFiscalTypeEnum.Company:
                 return 'Azienda';
-            case ContactFiscalTypeEnum.PrivatePerson:
+            case CustomerFiscalTypeEnum.PrivatePerson:
                 return 'Privato';
             default:
                 return value;

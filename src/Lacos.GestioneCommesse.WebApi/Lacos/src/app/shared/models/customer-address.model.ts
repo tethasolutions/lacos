@@ -1,5 +1,4 @@
-import { ContactModel } from './contact.model';
-import { JobModel } from './job.model';
+import { CustomerModel } from "./customer.model";
 
 export class ContactAddressModel {
     description: string;
@@ -10,6 +9,7 @@ export class ContactAddressModel {
     telephone: string;
     email: string;
     isMainAddress: boolean;
-    contactId: number;
-    contact: ContactModel;
+    notes: string;
+    customerId: number;
+    customer: CustomerModel;
 }

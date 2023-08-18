@@ -13,7 +13,7 @@ import { SimpleLookupModel } from '../shared/models/simple-lookup.model';
 import { OperatorDocumentsModalComponent } from '../operator-documents-modal/operator-documents-modal.component';
 import { CheckListModel } from '../shared/models/check-list.model';
 import { CheckListService } from '../services/check-list.service';
-import { ActivityProductTypeModel } from '../shared/models/activity-product-type.model';
+import { ProductTypeModel } from '../shared/models/product-type.model';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 import { CheckListItemModel } from '../shared/models/check-list-item.model';
 

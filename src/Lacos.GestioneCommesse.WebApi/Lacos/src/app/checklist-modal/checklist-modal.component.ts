@@ -14,7 +14,7 @@ import { OperatorDocumentsModalComponent } from '../operator-documents-modal/ope
 import { CheckListModel } from '../shared/models/check-list.model';
 import { CheckListService } from '../services/check-list.service';
 import { ChecklistItemModalComponent } from '../checklist-item-modal/checklist-item-modal.component';
-import { ActivityProductTypeModel } from '../shared/models/activity-product-type.model';
+import { ProductTypeModel } from '../shared/models/product-type.model';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 import { CheckListItemModel } from '../shared/models/check-list-item.model';
 import { ProductsService } from '../services/products.service';
@@ -30,7 +30,7 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
   @ViewChild('form') form: NgForm;
   @ViewChild('checklistItemModal', { static: true }) checklistItemModal: ChecklistItemModalComponent;
 
-  productTypes: Array<ActivityProductTypeModel> = [];
+  productTypes: Array<ProductTypeModel> = [];
   activityTypes: Array<ActivityTypeModel> = [];
 
   readonly role = Role;

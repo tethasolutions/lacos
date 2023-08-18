@@ -8,7 +8,7 @@ import { OperatorModel } from '../shared/models/operator.model';
 import { VehicleModel } from '../shared/models/vehicle.model';
 import { OperatorDocumentModel } from '../shared/models/operator-document.model';
 import { ProductModel } from '../shared/models/product.model';
-import { ActivityProductTypeModel } from "../shared/models/activity-product-type.model";
+import { ProductTypeModel } from "../shared/models/product-type.model";
 
 @Injectable()
 export class ProductsService {
@@ -30,7 +30,7 @@ export class ProductsService {
                         const products: Array<ProductModel> = [];
                         e.data.forEach(item => {
                             const product: ProductModel = Object.assign(new ProductModel(), item);
-                            product.productType = Object.assign(new ActivityProductTypeModel(), product.productType);
+                            product.productType = Object.assign(new ProductTypeModel(), product.productType);
                             products.push(product);
                         });
                         return <GridDataResult>{
@@ -43,13 +43,13 @@ export class ProductsService {
     }
 
     readProductTypes() {
-        return this._http.get<Array<ActivityProductTypeModel>>(`${this._baseUrl}/product-types`)
+        return this._http.get<Array<ProductTypeModel>>(`${this._baseUrl}/product-types`)
             .pipe(
                 map(e =>
                     {
-                        const productTypes: Array<ActivityProductTypeModel> = [];
+                        const productTypes: Array<ProductTypeModel> = [];
                         e.forEach(item => {
-                            const productType: ActivityProductTypeModel = Object.assign(new ActivityProductTypeModel(), item);
+                            const productType: ProductTypeModel = Object.assign(new ProductTypeModel(), item);
                             productTypes.push(productType);
                         });
                         return productTypes;
@@ -63,7 +63,7 @@ export class ProductsService {
             .pipe(
                 map(e => {
                     const product: ProductModel = Object.assign(new ProductModel(), e);
-                    product.productType = Object.assign(new ActivityProductTypeModel(), product.productType);
+                    product.productType = Object.assign(new ProductTypeModel(), product.productType);
                     return product;
                 })
             );

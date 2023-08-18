@@ -76,7 +76,7 @@ export class AddressesModalComponent extends BaseComponent {
                 .subscribe()
         );
     } else {
-        request.contactId = this.customer.id;
+        request.customerId = this.customer.id;
         this._subscriptions.push(
             this.addressModal.open(request)
                 .pipe(

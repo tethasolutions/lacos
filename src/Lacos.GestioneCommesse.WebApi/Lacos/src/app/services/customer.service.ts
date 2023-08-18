@@ -16,11 +16,11 @@ export class CustomerService {
         private readonly _http: HttpClient
     ) {}
 
-    readCustomers(state: State, anagraficaType: string) {
+    readCustomers(state: State) {
         const params = toDataSourceRequestString(state);
         const hasGroups = state.group && state.group.length;
 
-        return this._http.get<GridDataResult>(`${this._baseUrl}/${anagraficaType}?${params}`)
+        return this._http.get<GridDataResult>(`${this._baseUrl}/customers?${params}`)
             .pipe(
                 map(e =>
                     {

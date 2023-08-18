@@ -13,10 +13,9 @@
 
             <div class="row">
                 <div *ngIf="customer.id !== null" class="col-md-4">
-                    <label *ngIf="customer.type == 0">Cliente</label>
-                    <label *ngIf="customer.type == 1">Fornitore</label>
+                    <label>Cliente</label>
                     <div class="form-group">
-                        <input class="form-control" name="contactId" [disabled]="true" [value]="customer.customerDescription" />
+                        <input class="form-control" name="contactId" [disabled]="true" [value]="customer.name"/>
                     </div>
                 </div>
                 <div class="col-md-4">

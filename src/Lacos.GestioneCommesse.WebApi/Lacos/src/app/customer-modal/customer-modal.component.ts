@@ -3,7 +3,7 @@ import { ModalComponent } from '../shared/modal.component';
 import { CustomerModel } from '../shared/models/customer.model';
 import { AddressModel } from '../shared/models/address.model';
 import { NgForm } from '@angular/forms';
-import { markAsDirty } from '../services/common/functions';
+import { listEnum, markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { Role } from '../services/security/models';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
@@ -11,20 +11,23 @@ import { AddressesModalComponent } from '../addresses-modal/addresses-modal.comp
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { CustomerService } from '../services/customer.service';
 import { AddressesService } from '../services/addresses.service';
+import { CustomerFiscalTypeEnum } from '../shared/enums/customer-fiscal-type.enum';
 
 @Component({
-  selector: 'app-customer-modal',
-  templateUrl: './customer-modal.component.html',
-  styleUrls: ['./customer-modal.component.scss']
+    selector: 'app-customer-modal',
+    templateUrl: './customer-modal.component.html',
+    styleUrls: ['./customer-modal.component.scss']
 })
 
 export class CustomerModalComponent extends ModalComponent<CustomerModel> {
-  
+
     @ViewChild('form') form: NgForm;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('addressesModal', { static: true }) addressesModal: AddressesModalComponent;
 
     readonly role = Role;
+    
+    fiscalTypes = listEnum<CustomerFiscalTypeEnum>(CustomerFiscalTypeEnum);
 
     get isAddressInValidationError(): boolean {
         if (this.form == undefined) { return false; }
@@ -80,21 +83,21 @@ export class CustomerModalComponent extends ModalComponent<CustomerModel> {
 
     readAddresses() {
         this._subscriptions.push(
-          this._customerService.getCustomer(this.options.id)
-            .pipe(
-                map(e => {
-                  const result = Object.assign(new CustomerModel(), e);
-                  this.options.addresses = result.addresses;
-                }),
-                tap(() => {})
-            )
-          .subscribe()
+            this._customerService.getCustomer(this.options.id)
+                .pipe(
+                    map(e => {
+                        const result = Object.assign(new CustomerModel(), e);
+                        this.options.addresses = result.addresses;
+                    }),
+                    tap(() => { })
+                )
+                .subscribe()
         );
-      }
+    }
 
     createAddress() {
         const request = new AddressModel();
-        request.contactId = this.options.id;
+        request.customerId = this.options.id;
         this._subscriptions.push(
             this.addressModal.open(request)
                 .pipe(
@@ -119,4 +122,5 @@ export class CustomerModalComponent extends ModalComponent<CustomerModel> {
                 .subscribe()
         );
     }
+
 }

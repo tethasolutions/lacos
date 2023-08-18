@@ -130,7 +130,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
 
   createAddress() {
     const request = new AddressModel();
-    request.contactId = this.options.customerId;
+    request.customerId = this.options.customerId;
     this._subscriptions.push(
         this.addressModal.open(request)
             .pipe(

@@ -18,9 +18,7 @@ namespace Lacos.GestioneCommesse.Application.Registry
 
             CreateMap<AddressDto, CustomerAddress>()
                 .IgnoreCommonMembers()
-                .Ignore(x => x.Description)
                 .Ignore(x => x.Notes)
-                .Ignore(x => x.CustomerId)
                 .Ignore(x => x.Customer)
                 .Ignore(x => x.Products)
                 .Ignore(x => x.Tickets)

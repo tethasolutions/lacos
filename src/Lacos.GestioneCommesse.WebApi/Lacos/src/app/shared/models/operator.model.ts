@@ -17,6 +17,6 @@ export class OperatorModel {
         this.name = null;
         this.defaultVehicleId = null;
         this.defaultVehicle = new VehicleModel();
-        this.documents = null;
+        this.documents = [];
     }
 }

@@ -11,6 +11,11 @@ import { VehiclesService } from '../services/vehicles.service';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { SimpleLookupModel } from '../shared/models/simple-lookup.model';
 import { OperatorDocumentsModalComponent } from '../operator-documents-modal/operator-documents-modal.component';
+import { ApiUrls } from '../services/common/api-urls';
+import { RemoveEvent, SuccessEvent, FileInfo,FileState,SelectEvent} from "@progress/kendo-angular-upload";
+import { UploadFileModel } from '../shared/models/upload-file.model';
+import { Observable } from 'rxjs';
+import { OperatorDocumentModel } from '../shared/models/operator-document.model';
 
 @Component({
   selector: 'app-operator-modal',
@@ -22,6 +27,14 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
 
   @ViewChild('form') form: NgForm;
   @ViewChild('operatorDocumentsModal', { static: true }) operatorDocumentsModal: OperatorDocumentsModalComponent;
+
+  private readonly _baseUrl = `${ApiUrls.baseApiUrl}/operators`;
+  uploadSaveUrl = `${this._baseUrl}/document/upload-file`;
+  uploadRemoveUrl = `${this._baseUrl}/document/remove-file`; 
+
+  attachmentsFileInfo:Array<FileInfo>= [];
+  attachmentsUploads: Array<UploadFileModel> =[];
+  isUploaded:Array<boolean>= [];
 
   vehicles: Array<VehicleModel> = [];
   roles: Array<SimpleLookupModel> = [];
@@ -35,6 +48,81 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
       private readonly _vehiclesService: VehiclesService
   ) {
       super();
+  }
+
+  override open(options: OperatorModel): Observable<boolean> 
+  {
+    const result = super.open(options);
+    this.attachmentsFileInfo = [];
+    this.isUploaded = [];
+    this.attachmentsUploads = [];
+      
+    this.options.documents.forEach(element => {
+      if(element.originalFileName !=null && element.fileName != null)
+      {
+        const noteAttachment = new UploadFileModel(element.fileName,element.originalFileName);
+        this.attachmentsUploads.push(noteAttachment);
+        this.attachmentsFileInfo.push({name: element.originalFileName});  
+        this.isUploaded.push(true);
+      }
+    });    
+    return result;
+  }
+
+  public AttachmentExecutionSuccess(e: SuccessEvent): void
+  {
+    const body = e.response.body;
+    if(body != null)
+    {
+
+      const uploadedFile = body as UploadFileModel;
+      const operatorAttachment = new UploadFileModel(uploadedFile.fileName,uploadedFile.originalFileName);
+      this.attachmentsUploads.push(operatorAttachment);        
+      let operatorAttachmentModal = new OperatorDocumentModel();
+      operatorAttachmentModal.fileName = uploadedFile.fileName;
+      operatorAttachmentModal.originalFileName = uploadedFile.originalFileName;
+      this.options.documents.push(operatorAttachmentModal);        
+      this.isUploaded.push(true);
+    }
+    else
+    {
+      const deletedFile = e.files[0].name;
+      const index = this.attachmentsUploads.findIndex(x=>x.originalFileName == deletedFile);
+      if(index>-1)
+      {
+      this.attachmentsUploads.splice(index,1);
+      this.options.documents.splice(index,1);        
+      this.isUploaded.pop();
+      }
+    }
+  }
+
+  public AttachmentSelect(e: SelectEvent): void
+  {
+    const files = e.files;
+    let popup = false;
+    files.forEach(element => {
+      var index = this.attachmentsUploads.findIndex(x=>x.originalFileName == element.name);
+      if(index > -1)
+      {
+        files.splice(index,1);
+      popup = true;
+      }
+    });     
+    if(popup)
+    {
+      this._messageBox.alert(`Sono presenti tra i file caricati alcuni file con lo stesso nome di quelli che si vogliono caricare`);
+    }
+  }
+
+  public CreateUrl(fileName:string) : string
+  {
+    let ret = "";
+    this.attachmentsUploads.forEach(element => {
+      if(element.originalFileName == fileName)
+      ret = `${this._baseUrl}/document/download-file/${element.fileName}`;
+     });       
+     return ret;
   }
 
   protected _canClose() {

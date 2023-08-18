@@ -41,6 +41,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
                 .Query()
                 .AsNoTracking()
                 .Where(x => !x.IsDeleted)
+                .Include(x=>x.DefaultVehicle)
                 .Project<OperatorDto>(mapper);
             return operators;
         }
@@ -113,7 +114,17 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
                 operatorDocument.OperatorId = singleOperator.Id;
                 await operatorDocumentRepository.Insert(operatorDocument);
             }
-            await dbContext.SaveChanges();
+
+            try
+            {
+                await dbContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
 
             return singleOperator.MapTo<OperatorDto>(mapper);
         }

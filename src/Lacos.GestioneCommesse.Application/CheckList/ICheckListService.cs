@@ -86,5 +86,6 @@ namespace Lacos.GestioneCommesse.Application.CheckList
 
 
 
+
     }
 }

@@ -39,6 +39,8 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
   vehicles: Array<VehicleModel> = [];
   roles: Array<SimpleLookupModel> = [];
 
+  notHasUser:boolean;
+
   readonly role = Role;
 
   @Input() operator = new OperatorModel();
@@ -57,6 +59,8 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
     this.isUploaded = [];
     this.attachmentsUploads = [];
       
+    this.notHasUser = !this.options.hasUser;
+
     this.options.documents.forEach(element => {
       if(element.originalFileName !=null && element.fileName != null)
       {
@@ -120,7 +124,7 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
     let ret = "";
     this.attachmentsUploads.forEach(element => {
       if(element.originalFileName == fileName)
-      ret = `${this._baseUrl}/document/download-file/${element.fileName}`;
+      ret = `${this._baseUrl}/document/download-file/${element.fileName}/${element.originalFileName}`;
      });       
      return ret;
   }

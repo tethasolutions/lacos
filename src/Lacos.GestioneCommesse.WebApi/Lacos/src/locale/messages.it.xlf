@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="it" datatype="plaintext" original="ng2.template">
+  <file source-language="it-IT" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="7493428362965307555" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="&quot;&gt;
@@ -1083,7 +1083,7 @@
       </trans-unit>
       <trans-unit id="4517333145483748843" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="&quot;
-
+            
             i18n-filterCellOperatorLabel=&quot;ke"/></source>
         <target>Operatori filtro per {columnName}</target>
         <context-group purpose="location">
@@ -2651,6 +2651,7 @@
       </trans-unit>
       <trans-unit id="660278350824582724" datatype="html">
         <source>Drop files here to select</source>
+        <target>Rilascia qui i file per l'upload</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">3172</context>
@@ -2660,6 +2661,7 @@
       </trans-unit>
       <trans-unit id="4664331691591215211" datatype="html">
         <source>File type not allowed.</source>
+        <target>Tipo di file non permesso.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">3175</context>
@@ -2669,6 +2671,7 @@
       </trans-unit>
       <trans-unit id="7793317101233274017" datatype="html">
         <source>File size too large.</source>
+        <target>Dimensione file troppo larga.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">3178</context>
@@ -2678,6 +2681,7 @@
       </trans-unit>
       <trans-unit id="6852116465202092102" datatype="html">
         <source>File size too small.</source>
+        <target>Dimensione file troppo piccola.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">3181</context>
@@ -2687,6 +2691,7 @@
       </trans-unit>
       <trans-unit id="8968399983135301359" datatype="html">
         <source>Remove</source>
+        <target>Rimuovi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">3184</context>
@@ -2696,6 +2701,7 @@
       </trans-unit>
       <trans-unit id="3297892120691863975" datatype="html">
         <source>Select files...</source>
+        <target>Seleziona...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">3187</context>
@@ -2705,6 +2711,7 @@
       </trans-unit>
       <trans-unit id="1628868291685658590" datatype="html">
         <source>Cancel</source>
+        <target>Annulla</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4256</context>
@@ -2714,6 +2721,7 @@
       </trans-unit>
       <trans-unit id="3149650400352762187" datatype="html">
         <source>Clear</source>
+        <target>Cancella</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4259</context>
@@ -2723,6 +2731,7 @@
       </trans-unit>
       <trans-unit id="6841325639465061593" datatype="html">
         <source>Drop files here to upload</source>
+        <target>rilascia qui i file per l'upload</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4262</context>
@@ -2732,6 +2741,7 @@
       </trans-unit>
       <trans-unit id="1052757211842837603" datatype="html">
         <source>files</source>
+        <target>files</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4265</context>
@@ -2741,6 +2751,7 @@
       </trans-unit>
       <trans-unit id="5934737755327152932" datatype="html">
         <source>files failed to upload.</source>
+        <target>Upload dei file fallito.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4268</context>
@@ -2750,6 +2761,7 @@
       </trans-unit>
       <trans-unit id="4678582374156884660" datatype="html">
         <source>files successfully uploaded.</source>
+        <target>Upload dei file completata con successo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4271</context>
@@ -2759,6 +2771,7 @@
       </trans-unit>
       <trans-unit id="372927175642445287" datatype="html">
         <source>File failed to upload.</source>
+        <target>Upload dei file fallito.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4274</context>
@@ -2768,6 +2781,7 @@
       </trans-unit>
       <trans-unit id="6873833183057253097" datatype="html">
         <source>File successfully uploaded.</source>
+        <target>Upload dei file completata con successo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4277</context>
@@ -2777,6 +2791,7 @@
       </trans-unit>
       <trans-unit id="3443987862990095035" datatype="html">
         <source>Paused</source>
+        <target>Pausa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4280</context>
@@ -2786,6 +2801,7 @@
       </trans-unit>
       <trans-unit id="9210921126598204924" datatype="html">
         <source>Done</source>
+        <target>Fatto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4283</context>
@@ -2795,6 +2811,7 @@
       </trans-unit>
       <trans-unit id="6336385612571616916" datatype="html">
         <source>Uploading...</source>
+        <target>Upload in corso...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4286</context>
@@ -2804,6 +2821,7 @@
       </trans-unit>
       <trans-unit id="2924979995055776233" datatype="html">
         <source>File type not allowed.</source>
+        <target>Tipo di file non permesso.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4289</context>
@@ -2813,6 +2831,7 @@
       </trans-unit>
       <trans-unit id="6669611501469754964" datatype="html">
         <source>File size too large.</source>
+        <target>Dimensione file troppo larga.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4292</context>
@@ -2822,6 +2841,7 @@
       </trans-unit>
       <trans-unit id="4319370666600195324" datatype="html">
         <source>File size too small.</source>
+        <target>Dimensione file troppo piccola.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4295</context>
@@ -2840,6 +2860,7 @@
       </trans-unit>
       <trans-unit id="8941644637700654622" datatype="html">
         <source>Remove</source>
+        <target>Rimuovi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4301</context>
@@ -2858,6 +2879,7 @@
       </trans-unit>
       <trans-unit id="8567960350691997515" datatype="html">
         <source>Retry</source>
+        <target>Riprova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4307</context>
@@ -2867,6 +2889,7 @@
       </trans-unit>
       <trans-unit id="2943392613806104166" datatype="html">
         <source>Select files...</source>
+        <target>Seleziona...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4310</context>
@@ -2876,6 +2899,7 @@
       </trans-unit>
       <trans-unit id="4936937427147701307" datatype="html">
         <source>Upload</source>
+        <target>Upload dei file selezionati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-upload/fesm2020/progress-kendo-angular-upload.mjs</context>
           <context context-type="linenumber">4313</context>

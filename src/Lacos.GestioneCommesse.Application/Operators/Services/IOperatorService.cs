@@ -3,9 +3,11 @@
 using AutoMapper;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using Lacos.GestioneCommesse.Application.Security;
+using Lacos.GestioneCommesse.Application.Security.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Domain.Security;
+using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,16 +31,16 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         private readonly IRepository<Operator> operatorRepository;
         private readonly IRepository<OperatorDocument> operatorDocumentRepository;
         private readonly IRepository<User> userRepository;
-        private readonly ISecurityContextFactory securityContextFactory;
+        private readonly ISecurityService securityService;
 
-        public OperatorService(IMapper mapper, IRepository<Operator> operatorRepository, ILacosDbContext dbContext, IRepository<OperatorDocument> operatorDocumentRepository, IRepository<User> userRepository, ISecurityContextFactory securityContextFactory)
+        public OperatorService(IMapper mapper, IRepository<Operator> operatorRepository, ILacosDbContext dbContext, IRepository<OperatorDocument> operatorDocumentRepository, IRepository<User> userRepository, ISecurityService securityService)
         {
             this.mapper = mapper;
             this.operatorRepository = operatorRepository;
             this.dbContext = dbContext;
             this.operatorDocumentRepository = operatorDocumentRepository;
             this.userRepository = userRepository;
-            this.securityContextFactory = securityContextFactory;
+            this.securityService = securityService;
         }
 
         public IQueryable<OperatorDto> GetOperators()
@@ -55,7 +57,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         public async Task<OperatorReadModel> GetOperator(long id)
         {
             if (id == 0)
-                throw new ApplicationException("Impossibile recuperare un operatore con id 0");
+                throw new LacosException("Impossibile recuperare un operatore con id 0");
 
             var singleOperator = await operatorRepository
                 .Query()
@@ -67,7 +69,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
                 .SingleOrDefaultAsync();
 
             if (singleOperator == null)
-                throw new ApplicationException($"Impossibile trovare l'operatore con id {id}");
+                throw new LacosException($"Impossibile trovare l'operatore con id {id}");
 
             return singleOperator.MapTo<OperatorReadModel>(mapper);
 
@@ -76,7 +78,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         public async Task UpdateOperator(long id, OperatorDto operatorDto)
         {
             if (id == 0)
-                throw new ApplicationException("Impossibile aggiornare un operatore con id 0");
+                throw new LacosException("Impossibile aggiornare un operatore con id 0");
 
             var singleOperator = await operatorRepository
                 .Query()
@@ -85,8 +87,38 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
                 .SingleOrDefaultAsync();
             
             if (singleOperator == null)
-                throw new ApplicationException($"Impossibile trovare operatore con id {id}");
+                throw new LacosException($"Impossibile trovare operatore con id {id}");
+
+            bool userOp = false;
+            if (singleOperator.UserId != null && (operatorDto.hasUser is null || !operatorDto.hasUser.Value) && !userOp)
+            {
+                 await DeleteUser(singleOperator.UserId.Value);
+                singleOperator.UserId = null;
+                singleOperator.User = null;
+                userOp = true;
+            }
             
+            if (singleOperator.UserId == null && operatorDto.hasUser.Value && !userOp)
+            {
+                singleOperator.UserId =  (await CreateUser(operatorDto.UserName, operatorDto.Password)).Id;
+                userOp = true;
+            }
+
+            if (singleOperator.UserId != null && operatorDto.hasUser.Value && !userOp)
+            {
+
+                if (await securityService.CheckUserNameExists(singleOperator.UserId.Value, operatorDto.UserName))
+                {
+                    throw new LacosException($"Lo username {operatorDto.UserName} è già associato ad un'altro utente");
+              
+                }
+
+                await UpdateUser(singleOperator.UserId.Value, operatorDto.UserName, operatorDto.Password);
+                userOp = true;
+            }
+
+
+
             foreach (var operatorDocument in singleOperator.Documents.Reverse<OperatorDocument>())
             {
                 if (operatorDto.Documents.All(x => x.FileName != operatorDocument.FileName))
@@ -106,15 +138,29 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
             operatorDto.MapTo(singleOperator, mapper);
             operatorRepository.Update(singleOperator);
 
-            await dbContext.SaveChanges();
+
+            try
+            {
+                await dbContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
         }
 
         public async Task<OperatorDto> CreateOperator(OperatorDto operatorDto)
         {
             var singleOperator = operatorDto.MapTo<Operator>(mapper);
-
             await operatorRepository.Insert(singleOperator);
-            
+
+            if (operatorDto.hasUser.Value)
+            {
+              singleOperator.UserId =  (await CreateUser(operatorDto.UserName, operatorDto.Password)).Id;
+            }
+
             try
             {
                 await dbContext.SaveChanges();
@@ -132,7 +178,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         public async Task DeleteOperator(long id)
         {
             if (id == 0)
-                throw new ApplicationException("Impossible eliminare un operatore con id 0");
+                throw new LacosException("Impossible eliminare un operatore con id 0");
 
             var singleOperator = await operatorRepository
                 .Query()
@@ -140,9 +186,15 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
                 .SingleOrDefaultAsync();
 
             if (singleOperator == null)
-                throw new ApplicationException($"Impossibile trovare il contatto con id {id}");
+                throw new LacosException($"Impossibile trovare il contatto con id {id}");
 
             operatorRepository.Delete(singleOperator);
+
+            if (singleOperator.UserId != null)
+            {
+                await DeleteUser(singleOperator.UserId.Value);
+            }
+           
             await dbContext.SaveChanges();
         }
 
@@ -171,7 +223,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         public async Task<OperatorDocumentDto> GetOperatorDocmument(long docId)
         {
             if (docId == 0)
-                throw new ApplicationException("Impossibile recuperare un documento operatore con id 0");
+                throw new LacosException("Impossibile recuperare un documento operatore con id 0");
 
             var documentOperator = await operatorDocumentRepository
                 .Query()
@@ -180,29 +232,25 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
                 .SingleOrDefaultAsync();
 
             if (documentOperator == null)
-                throw new ApplicationException($"Impossibile trovare il docmumento operatore con id {docId}");
+                throw new LacosException($"Impossibile trovare il docmumento operatore con id {docId}");
 
             return documentOperator.MapTo<OperatorDocumentDto>(mapper);
 
         }
 
-        private async Task CreateUser (string username, string password)
+        private async Task<UserDto> CreateUser (string username, string password)
         {
+            var user = new UserDto() {UserName = username, Enabled = true, Id = 0, Role = Role.Operator};
 
-            var user = new User() {Enabled = true, Id = 0, Role = Role.Operator};
-
-            await ExecuteOnUser(user, async context =>
-            {
-                await context.EnsureUserNameIsUnique(user.UserName);
-                await context.HashPasswordWithUniqueSalt(password);
-                await context.GenerateUniqueAccessToken();
-            });
+            return await securityService.Register(user, password);
         }
 
         private async Task UpdateUser (long id, string username, string password)
         {
-            
-            await ExecuteOnUser(id,
+
+           
+
+            await securityService.ExecuteOnUser(id,
                 async context =>
                 {
                     await context.ChangeUserName(username);
@@ -211,22 +259,12 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
                     {
                         await context.ChangePassword(password);
                     }
-
-                    await context.EnableUser(true);
                 });
-
         }
 
-        private async Task ExecuteOnUser(User user, Func<ISecurityContext, Task> action)
+        private async Task DeleteUser (long id)
         {
-            using (var context = securityContextFactory.CreateSecurityContext(user))
-            {
-                await action(context);
-            }
-
-            await userRepository.InsertOrUpdate(user);
-            await dbContext.SaveChanges();
+            await securityService.DeleteUser(id);
         }
-
     }
 }

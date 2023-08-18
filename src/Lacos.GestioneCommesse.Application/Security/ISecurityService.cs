@@ -14,6 +14,7 @@ public interface ISecurityService
 {
     IQueryable<UserReadModel> Query();
     Task<UserDto> Login(string userName, string password);
+    Task<bool> CheckUserNameExists(long id, string userName);
     Task<UserDto> Register(UserDto user, string password);
     Task<UserDto> ChangeCurrentUserPassword(string currentPassword, string newPassword);
     Task<UserDto> GetUser(long id);
@@ -68,6 +69,16 @@ public class SecurityService : ISecurityService
         }
 
         return user.MapTo<UserDto>(mapper);
+    }
+
+    public async Task<bool> CheckUserNameExists(long id, string userName)
+    {
+       var user = await userRepository
+            .Query()
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.UserName == userName && x.Id != id && !x.IsDeleted);
+
+        return user != null;
     }
 
     public async Task<UserDto> Register(UserDto userDto, string password)

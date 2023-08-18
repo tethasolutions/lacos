@@ -67,7 +67,9 @@ public class OperatorsController : LacosApiController
     [HttpDelete("operator/{id}")]
     public async Task<IActionResult> DeleteOperator(long id)
     {
+
         await operatorService.DeleteOperator(id);
+
         return Ok();
     }
 
@@ -111,18 +113,20 @@ public class OperatorsController : LacosApiController
     //}
     
     [AllowAnonymous]
-    [HttpGet("document/download-file/{fileName}")]
-    public async Task<FileResult> DownloadAttachment(string fileName)
+    [HttpGet("document/download-file/{fileName}/{orginalFileName}")]
+    public async Task<FileResult> DownloadAttachment(string fileName,string originalFileName)
     {
-        fileName = Uri.UnescapeDataString(fileName);
+       
         OperatorDocumentReadModel operatorDocument = (await operatorService.DownloadOperatorDocument(fileName));
-        
+
+        string downloadFileName = operatorDocument == null ? originalFileName : operatorDocument.OriginalFilename;
+
         var folder = configuration.AttachmentsPath;
         Directory.CreateDirectory(folder);
         var path = Path.Combine(folder, fileName);
 
         Stream stream = System.IO.File.OpenRead(path);
-        return File(stream, mimeTypeProvider.Provide(fileName), operatorDocument.FileName);
+        return File(stream, mimeTypeProvider.Provide(fileName),downloadFileName);
     }
 
     [HttpPost("document/upload-file")]

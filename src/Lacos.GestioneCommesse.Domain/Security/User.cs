@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Security;
 
-public class User : BaseEntity
+public class User : BaseEntity,ISoftDelete
 {
     public string? UserName { get; set; }
     public string? PasswordHash { get; set; }
@@ -13,4 +13,5 @@ public class User : BaseEntity
 
     public Operator? Operator { get; set; }
     public Customer? Customer { get; set; }
+    public bool IsDeleted { get; set; }
 }

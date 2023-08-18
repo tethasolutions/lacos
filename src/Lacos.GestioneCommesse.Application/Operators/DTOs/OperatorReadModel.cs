@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lacos.GestioneCommesse.Application.Security.DTOs;
+using Lacos.GestioneCommesse.Domain.Security;
 
 namespace Lacos.GestioneCommesse.Application.Operators.DTOs
 {
@@ -16,6 +18,9 @@ namespace Lacos.GestioneCommesse.Application.Operators.DTOs
         public string? Name { get; set; }
         public long? DefaultVehicleId { get; set; }
         public VehicleDto? DefaultVehicle { get; set; }
+        public bool? hasUser { get; set; }
+        public string? Username { get; set; }
+
         public ICollection<OperatorDocumentDto> Documents { get; set; }
     }
 }

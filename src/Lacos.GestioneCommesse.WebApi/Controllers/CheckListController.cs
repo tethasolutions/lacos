@@ -12,6 +12,8 @@ using Lacos.GestioneCommesse.Domain.Registry;
 using Telerik.SvgIcons;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Application.CheckList.Services;
+using Lacos.GestioneCommesse.Application.Operators.Services;
+using Microsoft.CodeAnalysis.Editing;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -51,80 +53,66 @@ public class CheckListController : LacosApiController
     }
 
     [HttpPost("checklist")]
-    public async Task<IActionResult> CreateCheckList()
+    public async Task<IActionResult> CreateCheckList( [FromBody] CheckListDto checkListDto)
     {
-        // CheckListDto request from form
-        var files = HttpContext.Request.Form.Files;
-        var provider = new MultipartMemoryStreamProvider();
-        foreach (var file in provider.Contents)
+        if (!ModelState.IsValid)
         {
-            var buffer = await file.ReadAsByteArrayAsync();
+            return BadRequest(ModelState);
         }
-        return Ok(2);
+        await checklistService.CreateCheckList(checkListDto);
+        return Ok(checkListDto);
     }
 
     [HttpDelete("checklist/{id}")]
     public async Task<IActionResult> DeleteCheckList(long id)
     {
+        await checklistService.DeleteCheckList(id);
+
         return Ok();
     }
 
     [HttpGet("checklist-items/{checklistId}")]
     public async Task<List<CheckListItemDto>> GetCheckListItems(long checklistId)
     {
-        List<CheckListItemDto> checkListItems = new List<CheckListItemDto>
-        {
-            new CheckListItemDto
-            {
-                Id = 4,
-                CheckListId = 2,
-                Description = "Sigillatura"
-            },
-            new CheckListItemDto
-            {
-                Id = 5,
-                CheckListId = 2,
-                Description = "Posa riempimento"
-            },
-            new CheckListItemDto
-            {
-                Id = 6,
-                CheckListId = 2,
-                Description = "Integrità prodotti"
-            }
-        };
-
+        var checkListItems = (await checklistService.GetCheckListItems(checklistId)).ToList();
         return checkListItems;
     }
 
     [HttpGet("checklist-item-detail/{checklistItemId}")]
     public async Task<CheckListItemDto> GetCheckListItemDetail(long checkListItemId)
     {
-        CheckListItemDto checkListItemDetail = new CheckListItemDto
-        {
-            Id = 4,
-            CheckListId = 2,
-            Description = "Sigillatura"
-        };
-
+        var checkListItemDetail = await checklistService.GetCheckListItemDetail(checkListItemId);
         return checkListItemDetail;
     }
 
     [HttpPut("checklist-item/{id}")]
-    public async Task<IActionResult> UpdateCheckListItem(long id, [FromBody] CheckListItemDto request)
+    public async Task<IActionResult> UpdateCheckListItem(long id, [FromBody] CheckListItemDto checkListItemDto)
     {
-        return NoContent();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        await checklistService.UpdateCheckListItem(id, checkListItemDto);
+        return Ok();
     }
 
     [HttpPost("checklist-item")]
-    public async Task<IActionResult> CreateCheckListItem([FromBody] CheckListItemDto request)
+    public async Task<IActionResult> CreateCheckListItem([FromBody] CheckListItemDto checkListItemDto)
     {
-        return Ok(2);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        await checklistService.CreateCheckListItem(checkListItemDto);
+        return Ok(checkListItemDto);
     }
 
     [HttpDelete("checklist-item/{id}")]
     public async Task<IActionResult> DeleteCheckListItem(long id)
     {
+      
+        await checklistService.DeleteCheckListItem(id);
+
         return Ok();
     }
 }

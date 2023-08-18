@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lacos.GestioneCommesse.Framework.Exceptions;
 
 namespace Lacos.GestioneCommesse.Application.Registry.Services
 {
@@ -47,7 +48,7 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
         public async Task<ProductTypeDto> CreateProductType(ProductTypeDto productTypeDto)
         {
             if (productTypeDto.Id > 0)
-                throw new ApplicationException("Impossibile creare un nuovo tipo con un id già esistente");
+                throw new LacosException("Impossibile creare un nuovo tipo con un id già esistente");
 
             var productType = productTypeDto.MapTo<ProductType>(mapper);
 
@@ -83,7 +84,7 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
         public async Task UpdateProductType(long id, ProductTypeDto productTypeDto)
         {
             if (id == 0)
-                throw new ApplicationException("Impossibile aggiornare un tipo con id 0");
+                throw new LacosException("Impossibile aggiornare un tipo con id 0");
 
             var productType = await productTypeRepository
                 .Query()
@@ -92,7 +93,7 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
                 .SingleOrDefaultAsync();
 
             if (productType == null)
-                throw new ApplicationException($"Impossibile trovare un tipo con id {id}");
+                throw new LacosException($"Impossibile trovare un tipo con id {id}");
 
             productTypeDto.MapTo(productType, mapper);
             productTypeRepository.Update(productType);

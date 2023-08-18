@@ -11,7 +11,7 @@ using Lacos.GestioneCommesse.Application.CheckList.DTOs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Telerik.SvgIcons;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
-using Lacos.GestioneCommesse.Application.CheckList;
+using Lacos.GestioneCommesse.Application.CheckList.Services;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 

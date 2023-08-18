@@ -11,6 +11,7 @@ using Lacos.GestioneCommesse.Application.Products.DTOs;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
+using Lacos.GestioneCommesse.Framework.Exceptions;
 
 namespace Lacos.GestioneCommesse.Application.Products.Service
 {
@@ -51,7 +52,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
         public async Task<ProductReadModel> GetProductDetail(long productId)
         {
             if (productId == 0)
-                throw new ApplicationException("Impossibile recuperare un prodotto con id 0");
+                throw new LacosException("Impossibile recuperare un prodotto con id 0");
 
             var product = await productRepository
                 .Query()
@@ -61,7 +62,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
                 .SingleOrDefaultAsync();
 
             if (product == null)
-                throw new ApplicationException($"Impossibile trovare l'articolo con id {productId}");
+                throw new LacosException($"Impossibile trovare l'articolo con id {productId}");
 
             return product.MapTo<ProductReadModel>(mapper);
 
@@ -70,7 +71,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
         public async Task UpdateProduct(long id, ProductDto productDto)
         {
             if (id == 0)
-                throw new ApplicationException("Impossibile aggiornare un operatore con id 0");
+                throw new LacosException("Impossibile aggiornare un operatore con id 0");
 
             var product = await productRepository
                 .Query()
@@ -78,7 +79,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
                 .SingleOrDefaultAsync();
             
             if (product == null)
-                throw new ApplicationException($"Impossibile trovare operatore con id {id}");
+                throw new LacosException($"Impossibile trovare operatore con id {id}");
 
             productDto.MapTo(product, mapper);
 
@@ -100,7 +101,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
         public async Task DeleteProduct(long productId)
         {
             if (productId == 0)
-                throw new ApplicationException("Impossible eliminare un prodotto con id 0");
+                throw new LacosException("Impossible eliminare un prodotto con id 0");
 
             var product = await productRepository
                 .Query()
@@ -108,7 +109,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
                 .SingleOrDefaultAsync();
 
             if (product == null)
-                throw new ApplicationException($"Impossibile trovare il prodotto con id {productId}");
+                throw new LacosException($"Impossibile trovare il prodotto con id {productId}");
 
             productRepository.Delete(product);
             await dbContext.SaveChanges();
@@ -127,7 +128,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
         public async Task<string> CreateProductQrCode(long productId)
         {
             if (productId == 0)
-                throw new ApplicationException("Impossible eliminare un prodotto con id 0");
+                throw new LacosException("Impossible eliminare un prodotto con id 0");
 
             var product = await 
                 productRepository
@@ -136,7 +137,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
                 .SingleOrDefaultAsync(x => x.Id == productId);
 
             if (product == null)
-                throw new ApplicationException($"Impossibile trovare il prodotto con id {productId}");
+                throw new LacosException($"Impossibile trovare il prodotto con id {productId}");
 
 
             if (product.QrCode == null)

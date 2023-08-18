@@ -18,7 +18,7 @@ namespace Lacos.GestioneCommesse.Application.Registry
         {
             CreateMap<Operator, OperatorDto>()
 
-                .MapMember(x => x.hasUser, y => y.UserId == null)
+                .MapMember(x => x.hasUser, y => y.UserId != null)
                 .Ignore(x=>x.UserName)
                 .Ignore(x=>x.Password);
 
@@ -33,7 +33,10 @@ namespace Lacos.GestioneCommesse.Application.Registry
                 .Ignore(x => x.UserId)
                 .Ignore(x => x.User);
 
-            CreateMap<Operator, OperatorReadModel>();
+            CreateMap<Operator, OperatorReadModel>()
+                .MapMember(x => x.hasUser, y => y.UserId != null)
+                .MapMember(x => x.Username, y => y.User == null? null : y.User.UserName);
+                
 
             CreateMap<OperatorDocument, OperatorDocumentReadModel>();
             CreateMap<OperatorDocumentReadModel, OperatorDocument>()

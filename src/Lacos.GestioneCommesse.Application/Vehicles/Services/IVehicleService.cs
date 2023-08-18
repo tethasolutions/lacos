@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lacos.GestioneCommesse.Framework.Exceptions;
 
 namespace Lacos.GestioneCommesse.Application.Vehicles.Services
 {
@@ -47,7 +48,7 @@ namespace Lacos.GestioneCommesse.Application.Vehicles.Services
         public async Task<VehicleDto> CreateVehicle(VehicleDto vehicleDto)
         {
             if (vehicleDto.Id > 0)
-                throw new ApplicationException("Impossibile creare un nuovo tipo con un id già esistente");
+                throw new LacosException("Impossibile creare un nuovo tipo con un id già esistente");
 
             var vehicle = vehicleDto.MapTo<Vehicle>(mapper);
 
@@ -83,7 +84,7 @@ namespace Lacos.GestioneCommesse.Application.Vehicles.Services
         public async Task UpdateVehicle(long id, VehicleDto vehicleDto)
         {
             if (id == 0)
-                throw new ApplicationException("Impossibile aggiornare un tipo con id 0");
+                throw new LacosException("Impossibile aggiornare un tipo con id 0");
 
             var vehicle = await vehicleRepository
                 .Query()
@@ -92,7 +93,7 @@ namespace Lacos.GestioneCommesse.Application.Vehicles.Services
                 .SingleOrDefaultAsync();
 
             if (vehicle == null)
-                throw new ApplicationException($"Impossibile trovare un tipo con id {id}");
+                throw new LacosException($"Impossibile trovare un tipo con id {id}");
 
             vehicleDto.MapTo(vehicle, mapper);
             vehicleRepository.Update(vehicle);

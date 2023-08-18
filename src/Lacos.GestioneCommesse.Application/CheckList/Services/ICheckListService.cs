@@ -8,10 +8,11 @@ using AutoMapper;
 using Lacos.GestioneCommesse.Application.CheckList.DTOs;
 using Lacos.GestioneCommesse.Framework.Session;
 using Lacos.GestioneCommesse.Domain.Registry;
+using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lacos.GestioneCommesse.Application.CheckList
+namespace Lacos.GestioneCommesse.Application.CheckList.Services
 {
 
     public interface ICheckListService
@@ -50,19 +51,19 @@ namespace Lacos.GestioneCommesse.Application.CheckList
         public async Task<CheckListDto> GetCheckListDetail(long id)
         {
             if (id == 0)
-                throw new ApplicationException("Impossibile recuperare una checklist con id 0");
+                throw new LacosException("Impossibile recuperare una checklist con id 0");
 
             var checklist = await checklistRepository
                 .Query()
                 .AsNoTracking()
-                .Include(x=>x.ProductType)
-                .Include(x=>x.ActivityType)
-                .Include(x=>x.Items)
+                .Include(x => x.ProductType)
+                .Include(x => x.ActivityType)
+                .Include(x => x.Items)
                 .Where(x => x.Id == id)
                 .SingleOrDefaultAsync();
 
             if (checklist == null)
-                throw new ApplicationException($"Impossibile trovare la checklist con id {id}");
+                throw new LacosException($"Impossibile trovare la checklist con id {id}");
 
             return checklist.MapTo<CheckListDto>(mapper);
         }
@@ -70,16 +71,16 @@ namespace Lacos.GestioneCommesse.Application.CheckList
         public async Task UpdateCheckList(long id, CheckListDto checkListDto)
         {
             if (id == 0)
-                throw new ApplicationException("Impossibile aggiornare una checklist con id 0");
+                throw new LacosException("Impossibile aggiornare una checklist con id 0");
 
-            var checklist= await checklistRepository
+            var checklist = await checklistRepository
                 .Query()
                 .Where(x => x.Id == id)
                 .SingleOrDefaultAsync();
 
             if (checklist == null)
-                throw new ApplicationException($"Impossibile trovare una quotation con id {id}");
-            
+                throw new LacosException($"Impossibile trovare una quotation con id {id}");
+
             checkListDto.MapTo(checklist, mapper);
             await dbContext.SaveChanges();
         }

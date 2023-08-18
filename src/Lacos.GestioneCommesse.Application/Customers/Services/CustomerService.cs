@@ -2,6 +2,7 @@
 using Lacos.GestioneCommesse.Application.Customers.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
+using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,7 +40,7 @@ public class CustomerService : ICustomerService
     public async Task<CustomerDto> CreateCustomer(CustomerDto dto)
     {
         if (dto.Id > 0)
-            throw new ApplicationException("Impossibile creare un nuovo contatto con un id già esistente");
+            throw new LacosException("Impossibile creare un nuovo contatto con un id già esistente");
 
         var customer = dto.MapTo<Customer>(mapper);
         customerRepository.Insert(customer);
@@ -51,7 +52,7 @@ public class CustomerService : ICustomerService
     public async Task DeleteCustomer(long id)
     {
         if (id == 0)
-            throw new ApplicationException("Impossible eliminare un contatto con id 0");
+            throw new LacosException("Impossible eliminare un contatto con id 0");
 
         var customer = await customerRepository
             .Query()
@@ -60,7 +61,7 @@ public class CustomerService : ICustomerService
             .SingleOrDefaultAsync();
 
         if (customer == null)
-            throw new ApplicationException($"Impossibile trovare il contatto con id {id}");
+            throw new LacosException($"Impossibile trovare il contatto con id {id}");
 
         customerRepository.Delete(customer);
         await dbContext.SaveChanges();
@@ -69,7 +70,7 @@ public class CustomerService : ICustomerService
     public async Task<CustomerDto> UpdateCustomer(long id,CustomerDto dto)
     {
         if (id == 0)
-            throw new ApplicationException("Impossibile aggiornare un contatto con id 0");
+            throw new LacosException("Impossibile aggiornare un contatto con id 0");
 
         var customer = await customerRepository
             .Query()
@@ -78,7 +79,7 @@ public class CustomerService : ICustomerService
             .SingleOrDefaultAsync();
 
         if (customer == null)
-            throw new ApplicationException($"Impossibile trovare il contatto con id {id}");
+            throw new LacosException($"Impossibile trovare il contatto con id {id}");
 
         dto.MapTo(customer, mapper);
         customerRepository.Update(customer);
@@ -90,7 +91,7 @@ public class CustomerService : ICustomerService
     public async Task<CustomerDto> GetCustomer(long id)
     {
         if (id == 0)
-            throw new ApplicationException("Impossibile recuperare un contatto con id 0");
+            throw new LacosException("Impossibile recuperare un contatto con id 0");
 
         var customer = await customerRepository
             .Query()
@@ -100,7 +101,7 @@ public class CustomerService : ICustomerService
             .SingleOrDefaultAsync();
 
         if (customer == null)
-            throw new ApplicationException($"Impossibile trovare il contatto con id {id}");
+            throw new LacosException($"Impossibile trovare il contatto con id {id}");
 
         return customer.MapTo<CustomerDto>(mapper);
     }

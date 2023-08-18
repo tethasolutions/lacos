@@ -30,27 +30,27 @@ public interface IAddressService
 public class AddressService : IAddressService
 {
     private readonly IMapper mapper;
-    private readonly IRepository<ContactAddress> contactAddressRepository;
+    private readonly IRepository<CustomerAddress> customerAddressRepository;
     private readonly ILacosDbContext dbContext;
 
     public AddressService(
         IMapper mapper,
-        IRepository<ContactAddress> contactAddressRepository,
+        IRepository<CustomerAddress> customerAddressRepository,
         ILacosDbContext dbContext)
     {
         this.mapper = mapper;
-        this.contactAddressRepository = contactAddressRepository;
+        this.customerAddressRepository = customerAddressRepository;
         this.dbContext = dbContext;
     }
 
     public async Task<AddressDto> GetAddress(
         long id)
     {
-        var address = await contactAddressRepository.Get(id);
+        var address = await customerAddressRepository.Get(id);
 
         if (address == null)
         {
-            throw new NotFoundException(typeof(ContactAddress), id);
+            throw new NotFoundException(typeof(CustomerAddress), id);
         }
 
         return address.MapTo<AddressDto>(mapper);
@@ -59,12 +59,12 @@ public class AddressService : IAddressService
     public async Task<AddressDto> CreateAddress(
         AddressDto addressDto)
     {
-        var address = addressDto.MapTo<ContactAddress>(mapper);
+        var address = addressDto.MapTo<CustomerAddress>(mapper);
 
         if (address.IsMainAddress)
-            ResetAddresses(address.ContactId, null);
+            ResetAddresses(address.CustomerId, null);
         
-        await contactAddressRepository.Insert(address);
+        await customerAddressRepository.Insert(address);
 
         await dbContext.SaveChanges();
 
@@ -75,11 +75,11 @@ public class AddressService : IAddressService
         long id,
         AddressDto addressDto)
     {
-        var address = await contactAddressRepository.Get(id);
+        var address = await customerAddressRepository.Get(id);
 
         if (address == null)
         {
-            throw new NotFoundException(typeof(ContactAddress), id);
+            throw new NotFoundException(typeof(CustomerAddress), id);
         }
 
         addressDto.MapTo(address, mapper);
@@ -92,25 +92,25 @@ public class AddressService : IAddressService
     public async Task DeleteAddress(
         long id)
     {
-        var address = await contactAddressRepository.Get(id);
+        var address = await customerAddressRepository.Get(id);
 
         if (address == null)
         {
-            throw new NotFoundException(typeof(ContactAddress), id);
+            throw new NotFoundException(typeof(CustomerAddress), id);
         }
 
         if (address.IsMainAddress)
         {
-            ResetAddresses(address.ContactId, address.Id);
+            ResetAddresses(address.CustomerId, address.Id);
             
-            var firstAddress = await contactAddressRepository
+            var firstAddress = await customerAddressRepository
                 .Query()
-                .FirstAsync(x => x.ContactId == address.ContactId && x.Id != address.Id);
+                .FirstAsync(x => x.CustomerId == address.CustomerId && x.Id != address.Id);
 
             firstAddress.IsMainAddress = true;
         }
         
-        contactAddressRepository.Delete(address);
+        customerAddressRepository.Delete(address);
 
         await dbContext.SaveChanges();
     }
@@ -118,18 +118,18 @@ public class AddressService : IAddressService
     public async Task<AddressDto> SetMainAddress(
         long id)
     {
-        var address = await contactAddressRepository.Get(id);
+        var address = await customerAddressRepository.Get(id);
 
         if (address == null)
         {
-            throw new NotFoundException(typeof(ContactAddress), id);
+            throw new NotFoundException(typeof(CustomerAddress), id);
         }
 
-        ResetAddresses(address.ContactId, address.Id);
+        ResetAddresses(address.CustomerId, address.Id);
 
         address.IsMainAddress = true;
 
-        contactAddressRepository.Update(address);
+        customerAddressRepository.Update(address);
 
         await dbContext.SaveChanges();
 
@@ -140,15 +140,15 @@ public class AddressService : IAddressService
         long contactId,
         long? addressId)
     {
-        var addresses = contactAddressRepository
+        var addresses = customerAddressRepository
             .Query()
-            .Where(x => x.ContactId == contactId && x.Id != addressId)
+            .Where(x => x.CustomerId == contactId && x.Id != addressId)
             .ToArray();
 
         foreach (var a in addresses)
         {
             a.IsMainAddress = false;
-            contactAddressRepository.Update(a);
+            customerAddressRepository.Update(a);
         }
     }
 }

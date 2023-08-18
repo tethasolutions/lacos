@@ -10,7 +10,6 @@ import { CustomerModalComponent } from '../customer-modal/customer-modal.compone
 import { CustomerModel } from '../shared/models/customer.model';
 import { AddressModel } from '../shared/models/address.model';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
-import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-customers',
@@ -36,20 +35,15 @@ export class CustomersComponent extends BaseComponent implements OnInit {
 
   customerSelezionato = new CustomerModel();
 
-  anagraficaType: string;
-
   constructor(
       private readonly _customerService: CustomerService,
       private readonly _addressesService: AddressesService,
       private readonly _messageBox: MessageBoxService,
-      private readonly _router: Router
   ) {
       super();
   }
 
   ngOnInit() {
-      if (this._router.url === '/customers') { this.anagraficaType = 'customers'; }
-      if (this._router.url === '/providers') { this.anagraficaType = 'providers'; }
       this._readCustomers();
   }
 
@@ -60,7 +54,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
 
   protected _readCustomers() {
     this._subscriptions.push(
-      this._customerService.readCustomers(this.stateGridCustomers, this.anagraficaType)
+      this._customerService.readCustomers(this.stateGridCustomers)
         .pipe(
             tap(e => {
               this.dataCustomers = e;
@@ -79,12 +73,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
                 filter(e => e),
                 switchMap(() => this._customerService.createCustomer(request)),
                 tap(e => {
-                  if (this.anagraficaType == 'customers') { 
                     this._messageBox.success(`Cliente ${request.name} creato`);
-                  }
-                  if (this.anagraficaType == 'providers') { 
-                    this._messageBox.success(`Fornitore ${request.name} creato`);
-                  }
                 }),
                 tap(() => this._readCustomers())
             )
@@ -129,7 +118,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
   createAddress(customer: CustomerModel) {
     this.customerSelezionato = customer;
     const request = new AddressModel();
-    request.contactId = customer.id;
+    request.customerId = customer.id;
     this._subscriptions.push(
         this.addressModal.open(request)
             .pipe(

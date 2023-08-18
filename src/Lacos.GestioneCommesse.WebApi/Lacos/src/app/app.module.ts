@@ -68,6 +68,8 @@ import { ActivityTypeModalComponent } from './activitytype-modal/activitytype-mo
 import { ProductTypesComponent } from './producttypes/producttypes.component';
 import { ProductTypeModalComponent } from './producttype-modal/producttype-modal.component';
 import { ProductTypesService } from './services/productTypes.service';
+import { CustomerFiscalTypePipe } from './pipes/customer-fiscal-type.pipe';
+import { ActivityStatusPipe } from './pipes/activity-status.pipe';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -102,7 +104,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ActivityTypesComponent,
         ActivityTypeModalComponent,
         ProductTypesComponent,
-        ProductTypeModalComponent
+        ProductTypeModalComponent,
+        CustomerFiscalTypePipe,
+        ActivityStatusPipe
     ],
     imports: [
         BrowserModule,

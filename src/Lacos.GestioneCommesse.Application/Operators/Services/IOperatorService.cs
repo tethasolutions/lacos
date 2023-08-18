@@ -202,18 +202,18 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         private async Task UpdateUser (long id, string username, string password)
         {
             
-            await ExecuteOnUser(id,
-                async context =>
-                {
-                    await context.ChangeUserName(username);
+            //await ExecuteOnUser(id,
+            //    async context =>
+            //    {
+            //        await context.ChangeUserName(username);
 
-                    if (!string.IsNullOrEmpty(password) && !context.VerifyPassword(password))
-                    {
-                        await context.ChangePassword(password);
-                    }
+            //        if (!string.IsNullOrEmpty(password) && !context.VerifyPassword(password))
+            //        {
+            //            await context.ChangePassword(password);
+            //        }
 
-                    await context.EnableUser(true);
-                });
+            //        await context.EnableUser(true);
+            //    });
 
         }
 

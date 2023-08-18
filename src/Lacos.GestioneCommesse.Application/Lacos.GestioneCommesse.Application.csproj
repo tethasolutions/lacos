@@ -9,7 +9,6 @@
   <ItemGroup>
     <Compile Remove="Customers\DTOs\ContactDto.cs" />
     <Compile Remove="Customers\DTOs\ContactReadModel.cs" />
-    <Compile Remove="Customers\Services\AddressService.cs" />
     <Compile Remove="Customers\Services\ContactService.cs" />
   </ItemGroup>
 
@@ -27,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="CheckList\Services\" />
-    <Folder Include="Customers\Services\" />
   </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@
                 <div class="col-md-4">
                     <kendo-formfield class="form-group">
                         <label>Tipo Cliente</label>
-                        <kendo-dropdownlist [data]="states" [(ngModel)]="options.customerFiscalType" name="status"
+                        <kendo-dropdownlist [data]="customerFiscalType" [(ngModel)]="options.customerFiscalType" name="customerFiscalType"
                             [valuePrimitive]="true" required>
                             <ng-template kendoDropDownListItemTemplate let-dataItem>
                                 {{dataItem | customerFiscalType}}

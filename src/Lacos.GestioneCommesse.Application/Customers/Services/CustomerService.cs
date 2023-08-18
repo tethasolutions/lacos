@@ -7,126 +7,113 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lacos.GestioneCommesse.Application.Customers.Services;
 
-public interface IContactService
+public interface ICustomerService
 {
-    Task<ContactDto> CreateContact(
-        ContactDto dto);
+    Task<CustomerDto> CreateCustomer(CustomerDto dto);
 
-    Task DeleteContact(
-        long id);
+    Task DeleteCustomer(long id);
 
-    Task<ContactDto> UpdateContact(
-        long id,
-        ContactDto dto);
+    Task<CustomerDto> UpdateCustomer(long id,CustomerDto dto);
 
-    Task<ContactDto> GetContact(
-        long id);
+    Task<CustomerDto> GetCustomer(long id);
 
-    Task<IEnumerable<ContactDto>> GetContacts(
-        ContactType type);
+    Task<IEnumerable<CustomerDto>> GetCustomers();
 }
 
-public class ContactService : IContactService
+public class CustomerService : ICustomerService
 {
     private readonly IMapper mapper;
-    private readonly IRepository<Contact> contactRepository;
+    private readonly IRepository<Customer> customerRepository;
     private readonly ILacosDbContext dbContext;
 
-    public ContactService(
+    public CustomerService(
         IMapper mapper,
-        IRepository<Contact> contactRepository,
+        IRepository<Customer> customerRepository,
         ILacosDbContext dbContext)
     {
         this.mapper = mapper;
-        this.contactRepository = contactRepository;
+        this.customerRepository = customerRepository;
         this.dbContext = dbContext;
     }
 
-    public async Task<ContactDto> CreateContact(
-        ContactDto dto)
+    public async Task<CustomerDto> CreateCustomer(CustomerDto dto)
     {
         if (dto.Id > 0)
             throw new ApplicationException("Impossibile creare un nuovo contatto con un id già esistente");
 
-        var contact = dto.MapTo<Contact>(mapper);
-        contactRepository.Insert(contact);
+        var customer = dto.MapTo<Customer>(mapper);
+        customerRepository.Insert(customer);
         await dbContext.SaveChanges();
 
-        return contact.MapTo<ContactDto>(mapper);
+        return customer.MapTo<CustomerDto>(mapper);
     }
 
-    public async Task DeleteContact(
-        long id)
+    public async Task DeleteCustomer(long id)
     {
         if (id == 0)
             throw new ApplicationException("Impossible eliminare un contatto con id 0");
 
-        var contact = await contactRepository
+        var customer = await customerRepository
             .Query()
             .Include(x => x.Addresses)
             .Where(x => x.Id == id)
             .SingleOrDefaultAsync();
 
-        if (contact == null)
+        if (customer == null)
             throw new ApplicationException($"Impossibile trovare il contatto con id {id}");
 
-        contactRepository.Delete(contact);
+        customerRepository.Delete(customer);
         await dbContext.SaveChanges();
     }
 
-    public async Task<ContactDto> UpdateContact(
-        long id,
-        ContactDto dto)
+    public async Task<CustomerDto> UpdateCustomer(long id,CustomerDto dto)
     {
         if (id == 0)
             throw new ApplicationException("Impossibile aggiornare un contatto con id 0");
 
-        var contact = await contactRepository
+        var customer = await customerRepository
             .Query()
             .Include(x => x.Addresses)
             .Where(x => x.Id == id)
             .SingleOrDefaultAsync();
 
-        if (contact == null)
+        if (customer == null)
             throw new ApplicationException($"Impossibile trovare il contatto con id {id}");
 
-        dto.MapTo(contact, mapper);
-        contactRepository.Update(contact);
+        dto.MapTo(customer, mapper);
+        customerRepository.Update(customer);
         await dbContext.SaveChanges();
 
-        return contact.MapTo<ContactDto>(mapper);
+        return customer.MapTo<CustomerDto>(mapper);
     }
 
-    public async Task<ContactDto> GetContact(
-        long id)
+    public async Task<CustomerDto> GetCustomer(long id)
     {
         if (id == 0)
             throw new ApplicationException("Impossibile recuperare un contatto con id 0");
 
-        var contact = await contactRepository
+        var customer = await customerRepository
             .Query()
             .AsNoTracking()
             .Include(x => x.Addresses)
             .Where(x => x.Id == id)
             .SingleOrDefaultAsync();
 
-        if (contact == null)
+        if (customer == null)
             throw new ApplicationException($"Impossibile trovare il contatto con id {id}");
 
-        return contact.MapTo<ContactDto>(mapper);
+        return customer.MapTo<CustomerDto>(mapper);
     }
 
-    public async Task<IEnumerable<ContactDto>> GetContacts(
-        ContactType type)
+    public async Task<IEnumerable<CustomerDto>> GetCustomers()
     {
-        var contacts = await contactRepository
+        var customers = await customerRepository
             .Query()
             .AsNoTracking()
             .Include(x => x.Addresses)
-            .Where(x => x.Type == type)
-            .OrderBy(x => x.CompanyName ?? x.Surname)
+            .OrderBy(x => x.Name)
             .ToArrayAsync();
 
-        return contacts.MapTo<IEnumerable<ContactDto>>(mapper);
+        return customers.MapTo<IEnumerable<CustomerDto>>(mapper);
     }
 }

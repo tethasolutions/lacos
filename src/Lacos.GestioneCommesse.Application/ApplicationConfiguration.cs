@@ -19,7 +19,7 @@ public static class ApplicationConfiguration
             .AddScoped<ISecurityContextFactory, SecurityContextFactory>()
             .AddScoped<ISecurityService, SecurityService>()
             .AddScoped<IAccessTokenProvider, TAccessTokenProvider>()
-            .AddScoped<IContactService, ContactService>()
+            .AddScoped<ICustomerService, CustomerService>()
             .AddScoped<IAddressService, AddressService>()
             .AddScoped<IActivityTypeService, ActivityTypeService>()
             .AddScoped<IProductTypeService, ProductTypeService>()

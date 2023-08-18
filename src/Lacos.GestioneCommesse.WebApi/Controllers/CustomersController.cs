@@ -16,70 +16,63 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers;
 [RequireUser]
 public class CustomersController : LacosApiController
 {
-    private readonly IContactService contactService;
+    private readonly ICustomerService customerService;
 
     public CustomersController(
-        IContactService contactService)
+        ICustomerService customerService)
     {
-        this.contactService = contactService;
+        this.customerService = customerService;
     }
 
     [HttpGet("customers")]
     public async Task<ActionResult<DataSourceResult>> GetCustomers([DataSourceRequest] DataSourceRequest request)
     {
-        var contacts = await contactService.GetContacts(ContactType.Customer);
-        return Ok(await contacts.ToDataSourceResultAsync(request));
-    }
-
-    [HttpGet("providers")]
-    public async Task<ActionResult<DataSourceResult>> GetProviders([DataSourceRequest] DataSourceRequest request)
-    {
-        var contacts = await contactService.GetContacts(ContactType.Supplier);
-        return Ok(await contacts.ToDataSourceResultAsync(request));
+        var customers = await customerService.GetCustomers();
+        return Ok(await customers.ToDataSourceResultAsync(request));
     }
 
     [HttpGet("customer/{id}")]
-    public async Task<ActionResult<ContactDto>> GetCustomer(long id)
+    public async Task<ActionResult<CustomerDto>> GetCustomer(long id)
     {
-        var contact = await contactService.GetContact(id);
-        return Ok(contact);
+        var customer = await customerService.GetCustomer(id);
+        return Ok(customer);
     }
 
     [HttpPut("customer/{id}")]
-    public async Task<IActionResult> UpdateCustomer(long id, [FromBody] ContactDto request)
+    public async Task<IActionResult> UpdateCustomer(long id, [FromBody] CustomerDto request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
         
-        await contactService.UpdateContact(id, request);
+        await customerService.UpdateCustomer(id, request);
         return Ok();
     }
 
     [HttpDelete("customer/{id}")]
     public async Task<IActionResult> DeleteCustomer(long id)
     {
-        await contactService.DeleteContact(id);
+        await customerService.DeleteCustomer(id);
         return Ok();
     }
 
     [HttpPost("customer")]
-    public async Task<IActionResult> CreateCustomer([FromBody] ContactDto request)
+    public async Task<IActionResult> CreateCustomer([FromBody] CustomerDto request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
         
-        var contact = await contactService.CreateContact(request);
-        return Ok(contact);
+        var customer = await customerService.CreateCustomer(request);
+        return Ok(customer);
     }
 
     [HttpGet("customers-list")]
-    public async Task<ActionResult<List<ContactDto>>> GetCustomersList()
+    public async Task<ActionResult<List<CustomerDto>>> GetCustomersList()
     {
-        var contacts = (await contactService.GetContacts(ContactType.Customer)).ToList();
-        return Ok(contacts);
+        var customers = (await customerService.GetCustomers()).ToList();
+        return Ok(customers);
     }
 }

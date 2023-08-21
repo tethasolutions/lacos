@@ -1,4 +1,4 @@
-﻿using Lacos.GestioneCommesse.Application.CheckList.Services;
+﻿using Lacos.GestioneCommesse.Application.CheckLists.Services;
 using Lacos.GestioneCommesse.Application.Customers.Services;
 using Lacos.GestioneCommesse.Application.Operators.Services;
 using Lacos.GestioneCommesse.Application.Products.Service;

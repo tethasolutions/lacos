@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Lacos.GestioneCommesse.Application.CheckList.DTOs;
+using Lacos.GestioneCommesse.Application.CheckLists.DTOs;
 using Lacos.GestioneCommesse.Framework.Session;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lacos.GestioneCommesse.Application.CheckList.Services
+namespace Lacos.GestioneCommesse.Application.CheckLists.Services
 {
 
     public interface ICheckListService
@@ -86,6 +86,7 @@ namespace Lacos.GestioneCommesse.Application.CheckList.Services
             var checklist = await checklistRepository
                 .Query()
                 .Where(x => x.Id == id)
+                .Include(x => x.Items)
                 .SingleOrDefaultAsync();
 
             if (checklist == null)

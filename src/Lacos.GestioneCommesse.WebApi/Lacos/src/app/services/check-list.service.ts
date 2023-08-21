@@ -69,11 +69,11 @@ export class CheckListService {
     }
 
     createCheckList(request: CheckListModel) {
-        const formData: FormData = new FormData();
-        if (request.files.length > 0) {
-            formData.append('fileKey', request.files[0], request.files[0].name);
-        }
-        return this._http.post<number>(`${this._baseUrl}/checklist`, formData)
+        // const formData: FormData = new FormData();
+        // if (request.files.length > 0) {
+        //     formData.append('fileKey', request.files[0], request.files[0].name);
+        // }
+        return this._http.post<number>(`${this._baseUrl}/checklist`, request)
             .pipe(
                 map(e => {
                     return e;
@@ -82,11 +82,11 @@ export class CheckListService {
     }
 
     updateCheckList(request: CheckListModel, id: number) {
-        const formData: FormData = new FormData();
-        if (request.files.length > 0) {
-            formData.append('fileKey', request.files[0], request.files[0].name);
-        }
-        return this._http.put<void>(`${this._baseUrl}/checklist/${id}`, formData)
+        // const formData: FormData = new FormData();
+        // if (request.files.length > 0) {
+        //     formData.append('fileKey', request.files[0], request.files[0].name);
+        // }
+        return this._http.put<void>(`${this._baseUrl}/checklist/${id}`, request)
             .pipe(
                 map(() => { })
             );

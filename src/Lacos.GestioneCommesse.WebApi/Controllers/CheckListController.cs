@@ -7,11 +7,11 @@ using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using System.Net.Http;
 using System.Web.Http;
-using Lacos.GestioneCommesse.Application.CheckList.DTOs;
+using Lacos.GestioneCommesse.Application.CheckLists.DTOs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Telerik.SvgIcons;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
-using Lacos.GestioneCommesse.Application.CheckList.Services;
+using Lacos.GestioneCommesse.Application.CheckLists.Services;
 using Lacos.GestioneCommesse.Application.Operators.Services;
 using Microsoft.CodeAnalysis.Editing;
 

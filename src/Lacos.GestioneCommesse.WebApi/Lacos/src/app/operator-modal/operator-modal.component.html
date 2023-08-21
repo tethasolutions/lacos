@@ -59,11 +59,12 @@
 
             <div class="row riga-form form-group">
                 <div class="col-md-2">
-                    <kendo-formfield class="form-group">  
+                    <div class="form-group">
                         <kendo-label class="k-checkbox-label" [for]="notification">Assegna Utente?</kendo-label>
-                       
-                        <input type="checkbox" [(ngModel)]="options.hasUser" name="hasUser" #notification kendoCheckBox />
-                    </kendo-formfield>
+                        <kendo-switch name="hasUser" [(ngModel)]="options.hasUser" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['pictureRequired']"></div>
+                    </div>
                 </div>
                 <div class="col-md-5" *ngIf="options.hasUser">
                     <kendo-formfield class="form-group">    

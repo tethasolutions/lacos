@@ -19,7 +19,7 @@
     <kendo-grid-column field="productType.name" title="Nome"></kendo-grid-column>
     <kendo-grid-column field="pictureFileName" title="Immagine">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <img *ngIf="dataItem.pictureFileName != null" [src]="dataItem.pictureFileName" alt="" width="100px">
+            <img *ngIf="dataItem.pictureFileName != null" [src]="pathImage + dataItem.pictureFileName" alt="" width="100px">
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="activityType.name" title="Tipo attività"></kendo-grid-column>

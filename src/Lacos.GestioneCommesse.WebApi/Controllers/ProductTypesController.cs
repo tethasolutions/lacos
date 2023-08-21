@@ -7,11 +7,12 @@ using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using System.Net.Http;
 using System.Web.Http;
-using Lacos.GestioneCommesse.Application.CheckList.DTOs;
+using Lacos.GestioneCommesse.Application.CheckLists.DTOs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Telerik.SvgIcons;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Application.Registry.Services;
+using Lacos.GestioneCommesse.Application.Vehicles.Services;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -67,4 +68,10 @@ public class ProductTypesController : LacosApiController
         return Ok();
     }
 
+    [HttpGet("producttypes-list")]
+    public async Task<List<ProductTypeDto>> GetProductTypesList([DataSourceRequest] DataSourceRequest request)
+    {
+        var productTypes = (await productTypeService.GetProductTypes()).ToList();
+        return productTypes;
+    }
 }

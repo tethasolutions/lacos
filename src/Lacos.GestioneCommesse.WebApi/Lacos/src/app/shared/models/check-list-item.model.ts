@@ -9,7 +9,7 @@ export class CheckListItemModel {
     constructor() {
         this.id = null;
         this.description = null;
-        this.checkListId = null;
+        this.checkListId = 0;
         this.tempId = uuidv4();
     }
 }

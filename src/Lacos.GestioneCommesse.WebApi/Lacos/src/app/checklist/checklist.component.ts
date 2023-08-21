@@ -8,6 +8,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { CheckListModel } from '../shared/models/check-list.model';
 import { ChecklistModalComponent } from '../checklist-modal/checklist-modal.component';
 import { CheckListService } from '../services/check-list.service';
+import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
   selector: 'app-checklist',
@@ -18,6 +19,7 @@ export class ChecklistComponent extends BaseComponent implements OnInit {
 
   @ViewChild('checklistModal', { static: true }) checklistModal: ChecklistModalComponent;
 
+  pathImage = `${ApiUrls.baseUrl}/attachments/`;
   checklists: GridDataResult;
 
   stateGridChecklists: State = {
@@ -63,7 +65,6 @@ export class ChecklistComponent extends BaseComponent implements OnInit {
   }
 
   createCheckList() {
-    this.checklistModal.loadData();
     const request = new CheckListModel();
     this._subscriptions.push(
         this.checklistModal.open(request)
@@ -80,7 +81,6 @@ export class ChecklistComponent extends BaseComponent implements OnInit {
   }
 
   editCheckList(checkList: CheckListModel) {
-    this.checklistModal.loadData();
     this._subscriptions.push(
       this._checkListService.getCheckListDetail(checkList.id)
         .pipe(

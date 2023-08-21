@@ -1,13 +1,10 @@
 import { Component, ViewChild, Input } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
-import { AddressModel } from '../shared/models/address.model';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { Role } from '../services/security/models';
 import { OperatorModel } from '../shared/models/operator.model';
-import { VehicleModel } from '../shared/models/vehicle.model';
-import { VehiclesService } from '../services/vehicles.service';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { SimpleLookupModel } from '../shared/models/simple-lookup.model';
 import { OperatorDocumentsModalComponent } from '../operator-documents-modal/operator-documents-modal.component';
@@ -17,7 +14,11 @@ import { ChecklistItemModalComponent } from '../checklist-item-modal/checklist-i
 import { ProductTypeModel } from '../shared/models/product-type.model';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 import { CheckListItemModel } from '../shared/models/check-list-item.model';
-import { ProductsService } from '../services/products.service';
+import { ProductTypesService } from '../services/productTypes.service';
+import { ActivityTypesService } from '../services/activityTypes.service';
+import { ApiUrls } from '../services/common/api-urls';
+import { RemoveEvent, SuccessEvent, FileInfo,FileState,SelectEvent} from "@progress/kendo-angular-upload";
+import { UploadFileModel } from '../shared/models/upload-file.model';
 
 @Component({
   selector: 'app-checklist-modal',
@@ -30,17 +31,34 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
   @ViewChild('form') form: NgForm;
   @ViewChild('checklistItemModal', { static: true }) checklistItemModal: ChecklistItemModalComponent;
 
+  private readonly _baseUrl = `${ApiUrls.baseApiUrl}/operators`;
+  uploadSaveUrl = `${this._baseUrl}/document/upload-file`;
+  uploadRemoveUrl = `${this._baseUrl}/document/remove-file`; 
+  
   productTypes: Array<ProductTypeModel> = [];
   activityTypes: Array<ActivityTypeModel> = [];
+  attachmentsUploads: Array<UploadFileModel> =[];
+  isUploaded:Array<boolean>= [];
+
+  pathImage = `${ApiUrls.baseUrl}/attachments/`;
+  attachmentsFileInfo:any;
 
   readonly role = Role;
 
   constructor(
       private readonly _messageBox: MessageBoxService,
       private readonly _checkListService: CheckListService,
-      private readonly _productsService: ProductsService
+      private readonly _productTypesService: ProductTypesService,
+      private readonly _activityTypesService: ActivityTypesService
   ) {
       super();
+  }
+  
+  override open(checkListModel : CheckListModel){
+    const result = super.open(checkListModel);
+    this.attachmentsFileInfo = null;
+    this.loadData();
+    return result;
   }
 
   protected _canClose() {
@@ -55,7 +73,7 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
 
   protected _readProductTypes() {
     this._subscriptions.push(
-      this._productsService.readProductTypes()
+      this._productTypesService.readProductTypesList()
         .pipe(
             tap(e => {
               this.productTypes = e;
@@ -67,7 +85,7 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
 
   protected _readActivityTypes() {
     this._subscriptions.push(
-      this._checkListService.readActivityTypes()
+      this._activityTypesService.readActivityTypesList()
         .pipe(
             tap(e => {
               this.activityTypes = e;
@@ -103,6 +121,7 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
         )
         .subscribe()
     } else {
+      request.checkListId = this.options.id;
       this._subscriptions.push(
           this.checklistItemModal.open(request)
               .pipe(
@@ -177,9 +196,51 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
     }
   }
 
+  public AttachmentExecutionSuccess(e: SuccessEvent): void
+  {
+    const body = e.response.body;
+    if(body != null)
+    {
+
+      const uploadedFile = body as UploadFileModel;
+      const operatorAttachment = new UploadFileModel(uploadedFile.fileName,uploadedFile.originalFileName);
+      this.options.pictureFileName = uploadedFile.fileName;   
+      this.isUploaded.push(true);
+    }
+    else
+    {
+      const deletedFile = e.files[0].name;
+      const index = this.attachmentsUploads.findIndex(x=>x.originalFileName == deletedFile);
+      if(index>-1)
+      {
+      this.attachmentsUploads.splice(index,1);
+      this.isUploaded.pop();
+      }
+    }
+  }
+
+  // public AttachmentSelect(e: SelectEvent): void
+  // {
+  //   const files = e.files;
+  //   let popup = false;
+  //   files.forEach(element => {
+  //     var index = this.attachmentsUploads.findIndex(x=>x.originalFileName == element.name);
+  //     if(index > -1)
+  //     {
+  //       files.splice(index,1);
+  //     popup = true;
+  //     }
+  //   });     
+  //   if(popup)
+  //   {
+  //     this._messageBox.alert(`Sono presenti tra i file caricati alcuni file con lo stesso nome di quelli che si vogliono caricare`);
+  //   }
+  // }
+  
   public loadData() {
     this._readProductTypes();
     this._readActivityTypes();
+    this._readCheckListItems();
   }
 
 }

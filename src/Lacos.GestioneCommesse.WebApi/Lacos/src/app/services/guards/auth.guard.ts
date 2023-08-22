@@ -32,6 +32,7 @@ export class AuthGuard {
             case url === '/products':
             case url === '/activitytypes':
             case url === '/producttypes':
+            case url === '/jobs':
                 return this._security.isAuthenticated();
             case url === '/users':
                 return this._security.isAuthorized(Role.Administrator);

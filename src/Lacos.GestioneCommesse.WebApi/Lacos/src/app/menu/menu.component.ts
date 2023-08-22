@@ -50,6 +50,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                     e => e.isAuthenticated()
                 )
             ]),
+            new MenuEntry(['/jobs'], 'Commesse',
+                e => e.startsWith('/jobs'),
+                e => e.isAuthenticated()
+            ),
             new MenuEntry(['/logout'], 'Logout',
                 () => false,
                 e => e.isAuthenticated()

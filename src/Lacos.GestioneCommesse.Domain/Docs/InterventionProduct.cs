@@ -6,8 +6,9 @@ public class InterventionProduct : FullAuditedEntity
 {
     public long ProductId { get; set; }
     public Product? Product { get; set; }
-
-    public long InterventionId { get; set; }
+    public long ActivityId { get; set; }
+    public Activity? Activity { get; set; }
+    public long? InterventionId { get; set; }
     public Intervention? Intervention { get; set; }
 
     public InterventionProductCheckList? CheckList { get; set; }

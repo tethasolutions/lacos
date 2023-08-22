@@ -16,6 +16,6 @@ namespace Lacos.GestioneCommesse.Application.Products.DTOs
         public string? Description { get; set; }
         public string? PictureFileName { get; set; }
         public string? QrCode { get; set; }
-        public ProductTypeDto? ProductType { get; set; }
+        public string? ProductType { get; set; }
     }
 }

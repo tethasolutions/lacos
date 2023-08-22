@@ -27,6 +27,21 @@ public class ProductMap : BaseEntityMapping<Product>
         builder.Property(e => e.QrCode)
             .HasMaxLength(50);
 
+        builder.Property(e => e.Location)
+            .HasMaxLength(200);
+
+        builder.Property(e => e.SerialNumber)
+            .HasMaxLength(50);
+
+        builder.Property(e => e.ReiType)
+            .HasMaxLength(50);
+
+        builder.Property(e => e.ConstructorName)
+            .HasMaxLength(200);
+
+        builder.Property(e => e.VocType)
+            .HasMaxLength(50);
+
         builder.OneToMany(e => e.PurchaseOrderItems, e => e.Product, e => e.ProductId);
         builder.OneToMany(e => e.InterventionProducts, e => e.Product, e => e.ProductId);
         builder.OneToMany(e => e.Documents, e => e.Product, e => e.ProductId);

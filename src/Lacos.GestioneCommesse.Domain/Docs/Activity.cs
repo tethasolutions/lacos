@@ -25,9 +25,11 @@ public class Activity : FullAuditedEntity
     public PurchaseOrder? SourcePurchaseOrder { get; set; }
 
     public ICollection<Intervention> Interventions { get; set; }
+    public ICollection<InterventionProduct> Products { get; set; }
 
     public Activity()
     {
         Interventions = new List<Intervention>();
+        Products = new List<InterventionProduct>();
     }
 }

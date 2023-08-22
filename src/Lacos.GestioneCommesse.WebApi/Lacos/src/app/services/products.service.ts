@@ -4,9 +4,6 @@ import { map } from 'rxjs/operators';
 import { ApiUrls } from './common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
-import { OperatorModel } from '../shared/models/operator.model';
-import { VehicleModel } from '../shared/models/vehicle.model';
-import { OperatorDocumentModel } from '../shared/models/operator-document.model';
 import { ProductModel } from '../shared/models/product.model';
 import { ProductTypeModel } from "../shared/models/product-type.model";
 
@@ -26,17 +23,9 @@ export class ProductsService {
         return this._http.get<GridDataResult>(`${this._baseUrl}/products?${params}`)
             .pipe(
                 map(e =>
-                    {
-                        const products: Array<ProductModel> = [];
-                        e.data.forEach(item => {
-                            const product: ProductModel = Object.assign(new ProductModel(), item);
-                            product.productType = Object.assign(new ProductTypeModel(), product.productType);
-                            products.push(product);
-                        });
-                        return <GridDataResult>{
-                            data: hasGroups ? translateDataSourceResultGroups(products) : products,
-                            total: e.total
-                        };
+                    <GridDataResult>{
+                        data: hasGroups ? translateDataSourceResultGroups(e.data) : e.data,
+                        total: e.total
                     }
                 )
             );
@@ -70,11 +59,11 @@ export class ProductsService {
     }
 
     createProduct(request: ProductModel) {
-        const formData: FormData = new FormData();
-        if (request.files.length > 0) {
-            formData.append('fileKey', request.files[0], request.files[0].name);
-        }
-        return this._http.post<number>(`${this._baseUrl}/product`, formData)
+        // const formData: FormData = new FormData();
+        // if (request.documents.length > 0) {
+        //     formData.append('fileKey', request.documents[0], request.documents[0].originalFileName);
+        // }
+        return this._http.post<number>(`${this._baseUrl}/product`, request)
             .pipe(
                 map(e => {
                     return e;
@@ -83,11 +72,11 @@ export class ProductsService {
     }
 
     updateProduct(request: ProductModel, id: number) {
-        const formData: FormData = new FormData();
-        if (request.files.length > 0) {
-            formData.append('fileKey', request.files[0], request.files[0].name);
-        }
-        return this._http.put<void>(`${this._baseUrl}/product/${id}`, formData)
+        // const formData: FormData = new FormData();
+        // if (request.documents.length > 0) {
+        //     formData.append('fileKey', request.documents[0], request.documents[0].originalFileName);
+        // }
+        return this._http.put<void>(`${this._baseUrl}/product/${id}`, request)
             .pipe(
                 map(() => { })
             );

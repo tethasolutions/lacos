@@ -13,6 +13,9 @@ import { AddressModalComponent } from '../address-modal/address-modal.component'
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { AddressModel } from '../shared/models/address.model';
 import { AddressesService } from '../services/addresses.service';
+import { ApiUrls } from '../services/common/api-urls';
+import { RemoveEvent, SuccessEvent, FileInfo,FileState,SelectEvent} from "@progress/kendo-angular-upload";
+import { UploadFileModel } from '../shared/models/upload-file.model';
 
 @Component({
   selector: 'app-product-modal',
@@ -25,10 +28,19 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   @ViewChild('form') form: NgForm;
   @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
   @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
+  
+  private readonly _baseUrl = `${ApiUrls.baseApiUrl}/operators`;
+  uploadSaveUrl = `${this._baseUrl}/document/upload-file`;
+  uploadRemoveUrl = `${this._baseUrl}/document/remove-file`; 
   productTypes: Array<ProductTypeModel> = [];
   customers: Array<CustomerModel> = [];
   customerSelezionato = new CustomerModel();
 
+  attachmentsUploads: Array<UploadFileModel> =[];
+  isUploaded:Array<boolean>= [];
+
+  pathImage = `${ApiUrls.baseUrl}/attachments/`;
+  attachmentsFileInfo:any;
   isImpiantoPortaRei = false;
 
   constructor(
@@ -173,6 +185,47 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
       this.isImpiantoPortaRei = productTypeSelezionato.isReiDoor;
     }
   }
+
+  public AttachmentExecutionSuccess(e: SuccessEvent): void
+  {
+    const body = e.response.body;
+    if(body != null)
+    {
+
+      const uploadedFile = body as UploadFileModel;
+      const operatorAttachment = new UploadFileModel(uploadedFile.fileName,uploadedFile.originalFileName);
+      this.options.pictureFileName = uploadedFile.fileName;   
+      this.isUploaded.push(true);
+    }
+    else
+    {
+      const deletedFile = e.files[0].name;
+      const index = this.attachmentsUploads.findIndex(x=>x.originalFileName == deletedFile);
+      if(index>-1)
+      {
+      this.attachmentsUploads.splice(index,1);
+      this.isUploaded.pop();
+      }
+    }
+  }
+
+  // public AttachmentSelect(e: SelectEvent): void
+  // {
+  //   const files = e.files;
+  //   let popup = false;
+  //   files.forEach(element => {
+  //     var index = this.attachmentsUploads.findIndex(x=>x.originalFileName == element.name);
+  //     if(index > -1)
+  //     {
+  //       files.splice(index,1);
+  //     popup = true;
+  //     }
+  //   });     
+  //   if(popup)
+  //   {
+  //     this._messageBox.alert(`Sono presenti tra i file caricati alcuni file con lo stesso nome di quelli che si vogliono caricare`);
+  //   }
+  // }
 
   public loadData() {
     this._readProductTypes();

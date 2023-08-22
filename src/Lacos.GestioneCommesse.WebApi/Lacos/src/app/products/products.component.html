@@ -16,24 +16,24 @@
             [group]="stateGridProducts.group" filterable="menu" 
             [sortable]="true" [pageable]="true" scrollable="none"
             (dataStateChange)="dataStateChange($event)">
-    <kendo-grid-column field="productType.name" title="Tipologia impianto"></kendo-grid-column>
+    <kendo-grid-column field="productType" title="Tipologia impianto"></kendo-grid-column>
     <kendo-grid-column field="code" title="Codice"></kendo-grid-column>
     <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
-    <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
     <kendo-grid-column field="pictureFileName" title="Immagine">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <img *ngIf="dataItem.pictureFileName != null" [src]="dataItem.pictureFileName" alt="" width="100px">
+            <img *ngIf="dataItem.pictureFileName != null" [src]="pathImage + dataItem.pictureFileName" alt="" width="100px">
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <button (click)="editProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
-                <i class="fas fa-edit"></i>
-            </button>
             <button *ngIf="dataItem.qrCode != null" (click)="viewQrCodeProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">
                 <i class="fas fa-qrcode"></i>
             </button>
-            <button (click)="deleteProduct(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+            <button (click)="editProduct(dataItem.id)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="deleteProduct(dataItem.id)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
                 <i class="fas fa-trash"></i>
             </button>
         </ng-template>

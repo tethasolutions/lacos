@@ -1,108 +1,163 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="700" [top]="50">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="50">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Prodotto
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="updateOperatorForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+        <form name="updateOperatorForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()"
+            *ngIf="options" class="redimensionModal">
             <div class="row riga-form">
                 <div class="col-md-8">
-                    <kendo-formfield class="form-group">
-                        <label>Tipologia impianto</label>
-                        <kendo-combobox [data]="productTypes" 
-                            [(ngModel)]="options.productTypeId" 
-                            name="productTypeId"
-                            suggest="true"
-                            textField="description"
-                            [valuePrimitive]="true"
-                            valueField="id"
-                            (valueChange)="checkIfImpiantoIsPortaRei()"
-                            required>
-                        </kendo-combobox>
-                        <kendo-formerror>Tipologia impianto è il campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
-                    <kendo-formfield class="form-group">
-                        <label class="custom-form-field-label">Codice</label>
-                        <kendo-textbox [(ngModel)]="options.code" 
-                            name="code"
-                            required>
-                        </kendo-textbox>
-                        <kendo-formerror>Codice è il campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Codice</label>
+                                <kendo-textbox [(ngModel)]="options.code" name="code" required>
+                                </kendo-textbox>
+                                <kendo-formerror>Codice è il campo obbligatorio</kendo-formerror>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-6">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Tipologia prodotto</label>
+                                <kendo-combobox [data]="productTypes" [(ngModel)]="options.productTypeId"
+                                    name="productTypeId" suggest="true" textField="name" [valuePrimitive]="true"
+                                    valueField="id" (valueChange)="checkIfImpiantoIsPortaRei()" required>
+                                </kendo-combobox>
+                                <kendo-formerror>Tipologia prodotto è il campo obbligatorio</kendo-formerror>
+                            </kendo-formfield>
+                        </div>
+                    </div>
                     <kendo-formfield class="form-group">
                         <label class="custom-form-field-label">Nome</label>
-                        <kendo-textbox [(ngModel)]="options.name" 
-                            name="name"
-                            required>
+                        <kendo-textbox [(ngModel)]="options.name" name="name" required>
                         </kendo-textbox>
                         <kendo-formerror>Nome è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                     <kendo-formfield class="form-group">
                         <label class="custom-form-field-label">Descrizione</label>
-                        <kendo-textarea [(ngModel)]="options.description" 
-                            name="description" [rows]="5"
-                            required>
+                        <kendo-textarea [(ngModel)]="options.description" name="description" [rows]="5" required>
                         </kendo-textarea>
                         <kendo-formerror>Descrizione è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
-                    <kendo-formfield>
-                        <label class="custom-form-field-label">Seleziona immagine</label>
-                        <kendo-fileselect [(ngModel)]="options.files" [multiple]="false" name="file"></kendo-fileselect>
+                    <kendo-formfield class="form-group">
+                        <label>Immagine</label>
+                        <kendo-upload [(ngModel)]="this.attachmentsFileInfo"
+                            (success)="AttachmentExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
+                            [removeUrl]="uploadRemoveUrl" name="myUpload">
+                        </kendo-upload>
                     </kendo-formfield>
-                    <button *ngIf="options.qrCode != null && isImpiantoPortaRei" type="button" (click)="generaQrCode()" class="btn btn-secondary me-2 qr-code-button">
-                        Genera QR Code
-                    </button>
                 </div>
                 <div class="col-md-4">
-                    <img *ngIf="options.pictureFileName != null" [src]="options.pictureFileName" alt="" width="100%">
-                    <img *ngIf="options.qrCode != null && isImpiantoPortaRei" [src]="options.qrCode" alt="" class="qr-code-img">
+                    <img *ngIf="options.pictureFileName != null" [src]="pathImage + options.pictureFileName" alt=""
+                        width="100%">
+                    <img *ngIf="options.qrCode != null && isImpiantoPortaRei" [src]="options.qrCode" alt=""
+                        class="qr-code-img">
                 </div>
             </div>
             <div class="row" *ngIf="isImpiantoPortaRei">
-                <div class="col-md-6">
-                    <kendo-formfield class="form-group">
-                        <label>Cliente</label>
-                        <kendo-combobox [data]="customers" 
-                            [(ngModel)]="options.customerId" 
-                            name="customerId"
-                            suggest="true"
-                            class="customer-combobox"
-                            textField="customerDescription"
-                            [valuePrimitive]="true"
-                            valueField="id"
-                            (valueChange)="customerChanged($event)"
-                            required>
-                        </kendo-combobox>
-                        <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button" title="Nuovo cliente">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <kendo-formerror>Cliente è il campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
+                <hr/>
+                <div class="col-12">
+                    <label><strong>Dati Porte REI</strong></label>
                 </div>
-                <div class="col-md-6">
-                    <kendo-formfield class="form-group">
-                        <label>Indirizzo</label>
-                        <kendo-combobox [data]="customerSelezionato.addresses" 
-                            class="address-combobox"
-                            [(ngModel)]="options.customerAddressId" 
-                            name="customerAddressId"
-                            suggest="true"
-                            class="customer-combobox"
-                            textField="fullAddress"
-                            [valuePrimitive]="true"
-                            [disabled]="options.customerId == null"
-                            valueField="id"
-                            required>
-                        </kendo-combobox>
-                        <button [disabled]="options.customerId == null" (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <kendo-formerror>Indirizzo è il campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
+                <div class="col-12">
+                    <button *ngIf="options.qrCode == null && isImpiantoPortaRei" type="button" (click)="generaQrCode()"
+                        class="btn btn-primary me-2 qr-code-button">
+                        Genera QR Code
+                    </button>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <kendo-formfield class="form-group">
+                                <label>Cliente</label>
+                                <kendo-combobox [data]="customers" [(ngModel)]="options.customerId" name="customerId"
+                                    suggest="true" class="customer-combobox" textField="name" [valuePrimitive]="true"
+                                    valueField="id" (valueChange)="customerChanged($event)" required>
+                                </kendo-combobox>
+                                <button (click)="createCustomer()" type="button"
+                                    class="btn btn-primary add-customer-button" title="Nuovo cliente">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                                <kendo-formerror>Cliente è il campo obbligatorio</kendo-formerror>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-6">
+                            <kendo-formfield class="form-group">
+                                <label>Indirizzo</label>
+                                <kendo-combobox [data]="customerSelezionato.addresses" class="address-combobox"
+                                    [(ngModel)]="options.customerAddressId" name="customerAddressId" suggest="true"
+                                    class="customer-combobox" textField="fullAddress" [valuePrimitive]="true"
+                                    [disabled]="options.customerId == null" valueField="id" required>
+                                </kendo-combobox>
+                                <button [disabled]="options.customerId == null" (click)="createAddress()" type="button"
+                                    class="btn btn-primary add-address-button" title="Nuovo indirizzo">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                                <kendo-formerror>Indirizzo è il campo obbligatorio</kendo-formerror>
+                            </kendo-formfield>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Ubicazione</label>
+                                <kendo-textbox [(ngModel)]="options.location" name="location"> </kendo-textbox>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Matricola</label>
+                                <kendo-textbox [(ngModel)]="options.serialNumber" name="serialNumber"> </kendo-textbox>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Tipo</label>
+                                <kendo-textbox [(ngModel)]="options.reiType" name="reiType"> </kendo-textbox>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Costruttore</label>
+                                <kendo-textbox [(ngModel)]="options.constructorName" name="constructorName">
+                                </kendo-textbox>
+                            </kendo-formfield>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Push bar</label>
+                                <kendo-switch name="hasPushBar" [(ngModel)]="options.hasPushBar" onLabel="Si"
+                                    offLabel="No">
+                                </kendo-switch>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Anno</label>
+                                <kendo-numerictextbox [(ngModel)]="options.year" name="year" format="0" [decimals]="0" [min]="1950" [max]="2099"> </kendo-numerictextbox>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Tipologia VOC</label>
+                                <kendo-textbox [(ngModel)]="options.vocType" name="vocType"> </kendo-textbox>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Ante</label>
+                                <kendo-numerictextbox [(ngModel)]="options.numberOfDoors" name="numberOfDoors" format="0" [decimals]="0">
+                                </kendo-numerictextbox>
+                            </kendo-formfield>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="text-right mt-5">

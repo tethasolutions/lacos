@@ -12,6 +12,9 @@ using Telerik.SvgIcons;
 using Lacos.GestioneCommesse.Application.Products.DTOs;
 using Lacos.GestioneCommesse.Application.Products.Service;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
+using Lacos.GestioneCommesse.Application.Operators.Services;
+using Lacos.GestioneCommesse.Framework.Configuration;
+using Lacos.GestioneCommesse.Framework.IO;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -20,6 +23,15 @@ public class ProductsController : LacosApiController
 {
 
     private readonly IProductService productService;
+    private readonly ILacosConfiguration configuration;
+    private readonly IMimeTypeProvider mimeTypeProvider;
+
+    public ProductsController(IProductService productService, ILacosConfiguration configuration, IMimeTypeProvider mimeTypeProvider)
+    {
+        this.productService = productService;
+        this.configuration = configuration;
+        this.mimeTypeProvider = mimeTypeProvider;
+    }
 
     [HttpGet("products")]
     public async Task<DataSourceResult> GetProducts([DataSourceRequest] DataSourceRequest request)
@@ -29,7 +41,7 @@ public class ProductsController : LacosApiController
     }
 
     [HttpGet("product-detail/{productId}")]
-    public async Task<ProductReadModel> GetProductDetail(long productId)
+    public async Task<ProductDto> GetProductDetail(long productId)
     {
         var product = await productService.GetProductDetail(productId);
         return product;

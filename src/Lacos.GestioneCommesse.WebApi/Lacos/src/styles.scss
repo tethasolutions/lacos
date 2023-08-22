@@ -190,7 +190,7 @@ textarea {
 }
 
 .redimensionModal {
-    width: 850px !important;
+    width: 1000px !important;
 }
 @media (max-width: 800px) {
     .redimensionModal {
@@ -211,5 +211,5 @@ kendo-scheduler .k-event, .k-event
 
 .k-dialog-wrapper
 {
-    z-index: 100000;
+    z-index: 100000;    
 }

@@ -8,6 +8,7 @@ import { ProductsService } from '../services/products.service';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { ProductModalComponent } from '../product-modal/product-modal.component';
 import { ProductQrCodeModalComponent } from '../product-qr-code-modal/product-qr-code-modal.component';
+import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
   selector: 'app-products',
@@ -20,6 +21,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   @ViewChild('productModal', { static: true }) productModal: ProductModalComponent;
   @ViewChild('productQrCodeModal', { static: true }) productQrCodeModal: ProductQrCodeModalComponent;
 
+  pathImage = `${ApiUrls.baseUrl}/attachments/`;
   products: GridDataResult;
 
   stateGridProducts: State = {
@@ -80,9 +82,9 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     );
   }
 
-  editProduct(product: ProductModel) {
+  editProduct(id: number) {
     this._subscriptions.push(
-      this._productsService.getProductDetail(product.id)
+      this._productsService.getProductDetail(id)
         .pipe(
             map(e => {
               return Object.assign(new ProductModel(), e);
@@ -90,7 +92,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
             switchMap(e => this.productModal.open(e)),
             filter(e => e),
             map(() => this.productModal.options),
-            switchMap(e => this._productsService.updateProduct(e, product.id)),
+            switchMap(e => this._productsService.updateProduct(e, id)),
             map(() => this.productModal.options),
             tap(e => this._messageBox.success(`Prodotto aggiornato`)),
             tap(() => this._readProducts())

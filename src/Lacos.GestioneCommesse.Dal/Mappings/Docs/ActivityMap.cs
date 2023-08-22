@@ -17,5 +17,6 @@ public class ActivityMap : BaseEntityMapping<Activity>
             .IsRequired();
 
         builder.OneToMany(e => e.Interventions, e => e.Activity, e => e.ActivityId);
+        builder.OneToMany(e => e.Products, e => e.Activity, e => e.ActivityId);
     }
 }

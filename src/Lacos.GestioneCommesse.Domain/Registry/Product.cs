@@ -25,6 +25,16 @@ public class Product : FullAuditedEntity
     public long ProductTypeId { get; set; }
     public ProductType? ProductType { get; set; }
 
+    public string? Location { get; set; }
+    public string? SerialNumber { get; set; }
+    public string? ReiType { get; set; }
+    public string? ConstructorName { get; set; }
+    public bool? HasPushBar { get; set; }
+    public int? Year { get; set; }
+    public string? VocType { get; set; }
+    public int? NumberOfDoors { get; set; }
+
+
     public ICollection<PurchaseOrderItem> PurchaseOrderItems { get; set; }
     public ICollection<InterventionProduct> InterventionProducts { get; set; }
     public ICollection<ProductDocument> Documents { get; set; }

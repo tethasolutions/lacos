@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230822131310_release7")]
+    partial class release7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1380,7 +1383,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ConstructorName")
+                    b.Property<string>("Constructor")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -1452,7 +1455,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ReiType")
+                    b.Property<string>("REIType")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -1460,7 +1463,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("VocType")
+                    b.Property<string>("VOCType")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 

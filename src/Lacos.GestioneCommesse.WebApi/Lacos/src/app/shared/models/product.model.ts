@@ -1,4 +1,7 @@
+import { getDate } from "@progress/kendo-date-math";
+import { ProductDocumentModel } from "./product-document.model";
 import { ProductTypeModel } from "./product-type.model";
+import { getNow } from "@progress/kendo-angular-dateinputs/util";
 
 export class ProductModel {
     id: number;
@@ -9,9 +12,19 @@ export class ProductModel {
     qrCode: string;
     productTypeId: number;
     productType: ProductTypeModel;
+    
     customerId: number;
     customerAddressId: number;
-    files: Array<File>;
+    location: string;
+    serialNumber: string;
+    reiType: string;
+    constructorName: string;
+    hasPushBar: boolean;
+    year: number;
+    vocType: string;
+    numberOfDoors: number;
+
+    documents: Array<ProductDocumentModel>;
 
     constructor() {
         this.id = null;
@@ -24,6 +37,25 @@ export class ProductModel {
         this.productType = new ProductTypeModel();
         this.customerId = null;
         this.customerAddressId = null;
-        this.files = [];
+        this.location = null;
+        this.serialNumber = null;
+        this.reiType = null;
+        this.constructorName = null;
+        this.hasPushBar = false;
+        this.year = new Date().getFullYear();
+        this.vocType = null;
+        this.numberOfDoors = null;
+
+        this.documents = [];
     }
+}
+
+export interface ProductReadModel {
+    readonly id: number;
+    readonly code: string;
+    readonly name: string;
+    readonly description: string;
+    readonly pictureFileName: string;
+    readonly qrCode: string;
+    readonly productType: string;
 }

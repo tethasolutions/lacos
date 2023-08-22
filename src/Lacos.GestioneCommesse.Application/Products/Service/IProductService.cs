@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
 using System;
@@ -17,39 +16,42 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
 {
      public interface IProductService
      {
-         IQueryable<ProductDto> GetProducts();
-         Task<ProductReadModel> GetProductDetail(long productId);
+         IQueryable<ProductReadModel> GetProducts();
+         Task<ProductDto> GetProductDetail(long productId);
          Task UpdateProduct(long id, ProductDto productDto);
          Task<ProductDto> CreateProduct(ProductDto productDto);
          Task DeleteProduct(long productId);
          Task<IEnumerable<ProductTypeDto>> GetProductTypes();
          Task<string> CreateProductQrCode(long productId);
-     }
+        Task<ProductDocumentReadModel> DownloadProductDocument(string filename);
+        Task<IEnumerable<ProductDocumentReadModel>> GetAllProductDocuments(long productId);
+    }
     public class ProductService : IProductService
     {
         private readonly ILacosDbContext dbContext;
         private readonly IMapper mapper;
         private readonly IRepository<Product> productRepository;
         private readonly IRepository<ProductType> productTypeRepository;
-        public ProductService(IRepository<Product> productRepository, IMapper mapper, ILacosDbContext dbContext, IRepository<ProductType> productTypeRepository)
+        private readonly IRepository<ProductDocument> productDocumentRepository;
+        public ProductService(IRepository<Product> productRepository, IMapper mapper, ILacosDbContext dbContext, IRepository<ProductType> productTypeRepository, IRepository<ProductDocument> productDocumentRepository)
         {
             this.productRepository = productRepository;
             this.mapper = mapper;
             this.dbContext = dbContext;
             this.productTypeRepository = productTypeRepository;
+            this.productDocumentRepository = productDocumentRepository;
         }
 
-        public IQueryable<ProductDto> GetProducts()
+        public IQueryable<ProductReadModel> GetProducts()
         {
             var products = productRepository
                 .Query()
                 .AsNoTracking()
-                .Where(x => !x.IsDeleted)
-                .Project<ProductDto>(mapper);
+                .Project<ProductReadModel>(mapper);
             return products;
         }
 
-        public async Task<ProductReadModel> GetProductDetail(long productId)
+        public async Task<ProductDto> GetProductDetail(long productId)
         {
             if (productId == 0)
                 throw new LacosException("Impossibile recuperare un prodotto con id 0");
@@ -64,7 +66,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
             if (product == null)
                 throw new LacosException($"Impossibile trovare l'articolo con id {productId}");
 
-            return product.MapTo<ProductReadModel>(mapper);
+            return product.MapTo<ProductDto>(mapper);
 
         }
 
@@ -142,11 +144,50 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
 
             if (product.QrCode == null)
             {
-               //TODO Codice per creare QrCode
-
+                //TODO Codice per creare QrCode
+                product.QrCode = "US0401";
             }
            
             return product.QrCode;
+
+        }
+        public async Task<ProductDocumentReadModel> DownloadProductDocument(string filename)
+        {
+            var productDocument = await productDocumentRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.FileName == filename)
+                .SingleOrDefaultAsync();
+
+            return productDocument.MapTo<ProductDocumentReadModel>(mapper);
+        }
+
+        public async Task<IEnumerable<ProductDocumentReadModel>> GetAllProductDocuments(long productId)
+        {
+            var productDocuments = await productDocumentRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.ProductId == productId)
+                .SingleOrDefaultAsync();
+
+            return productDocuments.MapTo<IEnumerable<ProductDocumentReadModel>>(mapper);
+        }
+
+        public async Task<ProductDocumentReadModel> GetProductDocument(long docId)
+        {
+            if (docId == 0)
+                throw new LacosException("Impossibile recuperare un documento operatore con id 0");
+
+            var productDocument = await productDocumentRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.Id == docId)
+                .SingleOrDefaultAsync();
+
+            if (productDocument == null)
+                throw new LacosException($"Impossibile trovare il docmumento operatore con id {docId}");
+
+            return productDocument.MapTo<ProductDocumentReadModel>(mapper);
 
         }
     }

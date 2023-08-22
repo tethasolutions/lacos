@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using System;
 using System.Collections.Generic;
@@ -26,7 +25,8 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.InterventionProducts)
                 .Ignore(x => x.Documents);
 
-            CreateMap<Product, ProductReadModel>();
+            CreateMap<Product, ProductReadModel>()
+                .MapMember(x => x.ProductType, y => y.ProductType.Name);
 
             CreateMap<ProductReadModel, Product>()
                 .Ignore(x => x.Customer)
@@ -37,7 +37,26 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.ProductTypeId)
                 .Ignore(x => x.PurchaseOrderItems)
                 .Ignore(x => x.InterventionProducts)
+                .Ignore(x => x.Location)
+                .Ignore(x => x.SerialNumber)
+                .Ignore(x => x.ReiType)
+                .Ignore(x => x.ConstructorName)
+                .Ignore(x => x.HasPushBar)
+                .Ignore(x => x.Year)
+                .Ignore(x => x.VocType)
+                .Ignore(x => x.NumberOfDoors)
                 .Ignore(x => x.Documents)
+                .IgnoreCommonMembers();
+
+            CreateMap<ProductDocument, ProductDocumentReadModel>();
+            CreateMap<ProductDocumentReadModel, ProductDocument>()
+                .Ignore(x => x.Product)
+                .Ignore(x => x.ProductId)
+                .IgnoreCommonMembers();
+
+            CreateMap<ProductDocument, ProductDocumentDto>();
+            CreateMap<ProductDocumentDto, ProductDocument>()
+                .Ignore(x => x.Product)
                 .IgnoreCommonMembers();
         }
     }

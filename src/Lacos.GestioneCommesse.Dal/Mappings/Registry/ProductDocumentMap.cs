@@ -12,6 +12,10 @@ public class ProductDocumentMap : BaseEntityMapping<ProductDocument>
 
         builder.ToTable("ProductDocuments", "Registry");
 
+        builder.Property(e => e.OriginalFilename)
+            .IsRequired()
+            .HasMaxLength(200);
+
         builder.Property(e => e.FileName)
             .IsRequired()
             .HasMaxLength(50);

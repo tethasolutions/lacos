@@ -130,6 +130,7 @@ public static class WebApiConfiguration
     {
         var response = context.Response;
         var feature = context.Features.Get<IExceptionHandlerFeature>();
+        var environment = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
         var error = feature?.Error is AggregateException
             ? feature.Error.InnerException
             : feature?.Error;
@@ -160,7 +161,10 @@ public static class WebApiConfiguration
             default:
                 response.ContentType = "text/plain";
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                await response.WriteAsync("Si è verificato un errore imprevisto.");
+                var text = environment.IsProduction()
+                    ? "Si è verificato un errore imprevisto."
+                    : error?.Message ?? "Si è verificato un errore imprevisto.";
+                await response.WriteAsync(text);
                 break;
         }
     }

@@ -1,57 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Lacos.GestioneCommesse.Application.Customers.DTOs;
+﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Jobs.DTOs;
 using Lacos.GestioneCommesse.Domain.Docs;
-using Lacos.GestioneCommesse.Domain.Registry;
-using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Extensions;
 
-namespace Lacos.GestioneCommesse.Application.Jobs
+namespace Lacos.GestioneCommesse.Application.Jobs;
+
+public class JobMappingProfile : Profile
 {
-
-    public class JobMappingProfile : Profile
+    public JobMappingProfile()
     {
-        public JobMappingProfile()
-        {
 
-            CreateMap<Job, JobReadModel>();
-            CreateMap<Customer, CustomerReadModel>();
+        CreateMap<Job, JobReadModel>()
+            .MapMember(x => x.Code, y => y.Number + "/" + y.Year)
+            .MapMember(x => x.Date, y => y.JobDate)
+            .MapMember(x => x.Customer, y => y.Customer!.Name)
+            .MapMember(x => x.CanBeRemoved, y => y.Status == JobStatus.Pending);
 
-            CreateMap<JobDetailDto, Job>()
-                .Ignore(x => x.Number)
-                .Ignore(x => x.Year)
-                .Ignore(x => x.Activities)
-                .Ignore(x => x.Customer)
-                .IgnoreCommonMembers();
-           
-            CreateMap<Job, JobDetailDto>()
-                .Ignore(x=>x.OperatorId)
-                .Ignore(x => x.CustomerAddressId)
-                .Ignore(x => x.ProductTypeId);
-
-            CreateMap<Job, JobDetailReadModel>()
-                .MapMember(x=>x.Code,y=>y.Number+"/"+ y.Year)
-                .Ignore(x => x.CustomerFullAddress)
-                .Ignore(x => x.CustomerAddressId)
-                .Ignore(x => x.CustomerAddress)
-                //.MapMember(x=>x.CustomerFullAddress,y => y.CustomerAddress.StreetAddress + " - " + y.CustomerAddress.City + " - " + y.CustomerAddress.Province)
-                .Ignore(x => x.OperatorId);
-
-            CreateMap<User, JobOperatorDto>()
-                .Ignore(x => x.Name);
-
-            CreateMap<Job, JobSearchReadModel>()
-                .MapMember(x => x.Code, y => y.Number + "/" + y.Year)
-                .Ignore(x => x.CustomerFullAddress)
-                .Ignore(x => x.CustomerAddressId)
-                .Ignore(x => x.CustomerAddress)
-                //.MapMember(x => x.CustomerFullAddress, y => y.CustomerAddress.StreetAddress + " - " + y.CustomerAddress.City + " - " + y.CustomerAddress.Province)
-                .Ignore(x => x.OperatorId);
-        }
+        CreateMap<JobDto, Job>()
+            .IgnoreCommonMembers()
+            .Ignore(x => x.Activities)
+            .Ignore(x => x.Customer)
+            .Ignore(x => x.Number)
+            .Ignore(x => x.Year)
+            .Ignore(x => x.Status)
+            .MapMember(x => x.JobDate, (x, y) => y.IsTransient() ? x.Date : y.JobDate)
+            .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId);
+        
+        CreateMap<Job, JobDto>()
+            .MapMember(x => x.Date, y => y.JobDate);
     }
 }

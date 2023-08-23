@@ -2,6 +2,7 @@
 
 public enum JobStatus
 {
+    Pending,
     InProgress,
     Completed,
     Canceled

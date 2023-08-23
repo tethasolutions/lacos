@@ -1,49 +1,46 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GridDataResult } from '@progress/kendo-angular-grid';
-import { JobsService } from '../services/jobs.service';
-import { AddressesService } from '../services/addresses.service';
+import { JobsService } from '../services/jobs/jobs.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { filter, switchMap, tap } from 'rxjs/operators';
 import { JobModalComponent } from '../job-modal/job-modal.component';
-import { JobModel } from '../shared/models/job.model';
-import { AddressModel } from '../shared/models/address.model';
-import { AddressModalComponent } from '../address-modal/address-modal.component';
-import { Router, NavigationEnd } from '@angular/router';
-import { JobStatusEnum } from '../shared/enums/job-status.enum';
-import { JobDetailModel } from '../shared/models/job-detail.model';
+import { IJobReadModel, Job, JobStatus, jobStates } from '../services/jobs/models';
+import { getToday } from '../services/common/functions';
 
 @Component({
     selector: 'app-jobs',
-    templateUrl: './jobs.component.html',
-    styleUrls: ['./jobs.component.scss']
+    templateUrl: 'jobs.component.html'
 })
 export class JobsComponent extends BaseComponent implements OnInit {
 
-    @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;
-    //@ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
-    
-    jobType: string;
+    @ViewChild('jobModal', { static: true })
+    jobModal: JobModalComponent;
 
-    statusList: Array<string> = [];
-
-    dataJobs: GridDataResult;
-    stateGridJobs: State = {
+    data: GridDataResult;
+    gridState: State = {
         skip: 0,
-        take: 10,
+        take: 15,
         filter: {
-            filters: [],
+            filters: [
+                {
+                    filters: [JobStatus.Pending, JobStatus.InProgress]
+                        .map(e => ({ field: 'status', operator: 'eq', value: e })),
+                    logic: 'or'
+                }
+            ],
             logic: 'and'
         },
         group: [],
-        sort: [{ field: "jobDate", dir: "asc" }]
+        sort: [{ field: 'date', dir: 'asc' }]
     };
 
+    readonly jobStates = jobStates;
+
     constructor(
-        private readonly _jobsService: JobsService,
-        private readonly _messageBox: MessageBoxService,
-        private readonly _router: Router,
+        private readonly _service: JobsService,
+        private readonly _messageBox: MessageBoxService
     ) {
         super();
     }
@@ -53,79 +50,74 @@ export class JobsComponent extends BaseComponent implements OnInit {
     }
 
     dataStateChange(state: State) {
-        this.stateGridJobs = state;
+        this.gridState = state;
         this._readJobs();
     }
 
     protected _readJobs() {
-        console.log(this.jobType);
-        if (this.jobType == undefined) { return; }
         this._subscriptions.push(
-            this._jobsService.readJobs(this.stateGridJobs, this.jobType)
+            this._service.read(this.gridState)
                 .pipe(
-                    tap(e => {
-                        console.log(e);
-                        this.dataJobs = e;
-                    })
+                    tap(e => this.data = e)
                 )
                 .subscribe()
         );
     }
 
-    createJob() {
-        const request = new JobDetailModel();
+    create() {
+        const today = getToday();
+        const job = new Job(0, null, today.getFullYear(), today, null, JobStatus.Pending, null);
 
         this._subscriptions.push(
-            this.jobModal.open(request)
+            this.jobModal.open(job)
                 .pipe(
                     filter(e => e),
-                    switchMap(() => this._jobsService.createJob(request)),
-                    tap(e => {
-                        this._messageBox.success(`Job ${request.description} creato`);
-                    }),
-                    tap(() => this._readJobs())
+                    switchMap(() => this._service.create(job)),
+                    tap(e => this._afterSaved(e))
                 )
                 .subscribe()
         );
     }
 
-    editJob(job: JobModel) {
-
+    edit(job: IJobReadModel) {
         this._subscriptions.push(
-            this._jobsService.getJobDetail(job.id)
+            this._service.get(job.id)
                 .pipe(
-                    map(e => {
-                        return e;
-                    }),
                     switchMap(e => this.jobModal.open(e)),
                     filter(e => e),
-                    map(() => this.jobModal.options),
-                    switchMap(e => this._jobsService.updateJob(e, e.id)),
-                    map(() => this.jobModal.options),
-                    tap(e => this._messageBox.success(`Job '${e.description}' aggiornato`)),
-                    tap(() => this._readJobs())
+                    switchMap(() => this._service.update(this.jobModal.options)),
+                    tap(e => this._afterSaved(e))
                 )
                 .subscribe()
         );
     }
 
-    deleteJob(job: JobModel) {
-        this._messageBox.confirm(`Sei sicuro di voler cancellare la richiesta ${job.code}?`, 'Conferma l\'azione').subscribe(result => {
-            if (result == true) {
-                this._messageBox.confirm(`Cancellando la richiesta ${job.code} verranno rimossi anche i relativi preventivi, ordini e interventi. Continuare?`, 'Conferma l\'azione').subscribe(result => {
-                    if (result == true) {
-                        this._subscriptions.push(
-                            this._jobsService.deleteJob(job.id)
-                                .pipe(
-                                    tap(e => this._messageBox.success(`Richiesta ${job.code} cancellato con successo`)),
-                                    tap(() => this._readJobs())
-                                )
-                                .subscribe()
-                        );
-                    }
-                });
-            }
-        });
+    askRemove(job: IJobReadModel) {
+        const text = `Sei sicuro di voler rimuovere la commessa ${job.code}?`;
+
+        this._subscriptions.push(
+            this._messageBox.confirm(text, 'Attenzione')
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._service.delete(job.id)),
+                    tap(() => this._afterRemoved(job))
+                )
+                .subscribe()
+        );
+    }
+
+    private _afterSaved(job: Job) {
+        this._messageBox.success(`Commessa ${job.code} salvata.`);
+
+        this._readJobs();
+    }
+
+    private _afterRemoved(job: IJobReadModel) {
+        const text = `Commessa ${job.code} rimossa.`;
+
+        this._messageBox.success(text);
+
+        this._readJobs();
     }
 
 }

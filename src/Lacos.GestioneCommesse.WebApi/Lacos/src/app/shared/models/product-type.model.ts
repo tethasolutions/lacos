@@ -1,5 +1,3 @@
-import { JobModel } from './job.model';
-
 export class ProductTypeModel {
     id: number;
     code: string;
@@ -7,7 +5,7 @@ export class ProductTypeModel {
     description: string;
     isReiDoor: boolean;
     isSparePart: boolean;
-        
+
     constructor() {
         this.id = null;
         this.code = null;

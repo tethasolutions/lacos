@@ -3,198 +3,71 @@
 <div class="k-window-wrapper" *ngIf="opened">
     <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
         <kendo-window-titlebar>
-            <div class="k-window-title">Richiesta</div>
+            <div *ngIf="!!options.id" class="k-window-title">
+                Commessa {{options.code}} &bull; {{options.status | jobStatus}}
+            </div>
+            <div *ngIf="!options.id" class="k-window-title">
+                Nuova Commessa
+            </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form class="k-form" name="updateUserForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" class="redimensionModal"
-            *ngIf="options">
+        <form name="jobModalForm" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+            class="redimensionModal">
+
             <div class="row">
-                <div class="col-md-4">
-                    <kendo-formfield class="form-group">
-                        <label>Operatore inserimento</label>
-                        <kendo-combobox [data]="operators" [(ngModel)]="options.operatorId" name="operatorId"
-                            suggest="true" textField="description" [valuePrimitive]="true" valueField="id" required>
-                        </kendo-combobox>
-                        <kendo-formerror>Operatore è un campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
-                </div>
-                <div class="col-md-4">
-                    <kendo-formfield class="form-group">
-                        <label>Data richiesta</label>
-                        <kendo-datepicker name="jobDate" [(ngModel)]="options.jobDate" required></kendo-datepicker>
-                        <kendo-formerror>Data richiesta è un campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
-                </div>
-                <div class="col-md-4">
-                    <kendo-formfield class="form-group">
-                        <label>Data scadenza</label>
-                        <kendo-datepicker name="expirationDate" [(ngModel)]="options.expirationDate"
-                            required></kendo-datepicker>
-                        <kendo-formerror>Data scadenza è un campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <kendo-formfield class="form-group">
-                        <label>Cliente</label>
-                        <kendo-combobox [data]="customersFiltered" [(ngModel)]="options.customerId" name="customerId"
-                            suggest="true" class="customer-combobox" textField="customerDescription"
-                            [valuePrimitive]="true" valueField="id" (valueChange)="customerChanged($event)" 
-                            [filterable]="true" (filterChange)="handleFilter($event)"
-                            required>
-                        </kendo-combobox>
-                        <button [disabled]="options.customerId == null" (click)="editCustomer()" type="button"
-                            class="btn btn-primary add-address-button" title="Modifica cliente">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button"
-                            title="Nuovo cliente">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <kendo-formerror>Cliente è un campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
-                </div>
-                <div class="col-md-6">
-                    <kendo-formfield class="form-group">
-                        <label>Indirizzo</label>
-                        <kendo-combobox [data]="options.customer.addresses" class="address-combobox"
-                            [(ngModel)]="options.customerAddressId" name="customerAddressId" suggest="true"
-                            class="address-combobox" textField="fullAddress" [valuePrimitive]="true"
-                            [disabled]="options.customerId == null" valueField="id">
-                        </kendo-combobox>
-                        <button [disabled]="options.customerAddressId == null" (click)="editAddress()" type="button"
-                            class="btn btn-primary add-address-button" title="Modifica indirizzo">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button [disabled]="options.customerId == null" (click)="createAddress()" type="button"
-                            class="btn btn-primary add-address-button" title="Nuovo indirizzo">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <kendo-formerror>Errore campo Indirizzo</kendo-formerror>
-                    </kendo-formfield>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <kendo-formfield class="form-group">
-                        <label>Fonte</label>
-                        <kendo-combobox [data]="sources" [(ngModel)]="options.sourceId" name="sourceId" textField="name"
-                            suggest="true" [valuePrimitive]="true" valueField="id" required>
-                        </kendo-combobox>
-                        <kendo-formerror>Fonte è un campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
-                </div>
-                <div class="col-md-4">
-                    <kendo-formfield class="form-group">
-                        <label>Categoria intervento</label>
-                        <kendo-combobox [data]="productTypes" [(ngModel)]="options.productTypeId" name="productTypeId"
-                            suggest="true" textField="name" [valuePrimitive]="true" valueField="id" required>
-                        </kendo-combobox>
-                        <kendo-formerror>Categoria intervento è un campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
-                </div>
-                <div class="col-md-4">
-                    <kendo-formfield class="form-group">
-                        <label>Stato</label>
-                        <kendo-dropdownlist [data]="states" [(ngModel)]="options.status" name="status"
-                            [valuePrimitive]="true" required>
-                            <ng-template kendoDropDownListItemTemplate let-dataItem>
-                                {{dataItem | jobStatus}}
-                            </ng-template>
-                            <ng-template kendoDropDownListValueTemplate let-dataItem>
-                                {{dataItem | jobStatus}}
-                            </ng-template>
-                        </kendo-dropdownlist>
-                        <kendo-formerror>Stato è un campo obbligatorio</kendo-formerror>
-                    </kendo-formfield>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- <kendo-formfield class="form-group"> -->
-                        <label>Descrizione richiesta</label>
-                        <kendo-editor name="description" [(ngModel)]="options.description" required>
-                            <kendo-toolbar>  
-                                    <kendo-toolbar-button kendoEditorSelectAllButton></kendo-toolbar-button>
-                                    <kendo-toolbar-buttongroup>
-                                      <kendo-toolbar-button kendoEditorUndoButton></kendo-toolbar-button>
-                                      <kendo-toolbar-button kendoEditorRedoButton></kendo-toolbar-button>
-                                    </kendo-toolbar-buttongroup>                              
-                                    <kendo-toolbar-buttongroup>
-                                      <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
-                                      <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
-                                      <kendo-toolbar-button
-                                        kendoEditorUnderlineButton
-                                      ></kendo-toolbar-button>
-                                      <kendo-toolbar-button
-                                        kendoEditorStrikethroughButton
-                                      ></kendo-toolbar-button>
-                                    </kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-buttongroup>
-                                      <kendo-toolbar-button
-                                        kendoEditorAlignLeftButton
-                                      ></kendo-toolbar-button>
-                                      <kendo-toolbar-button
-                                        kendoEditorAlignCenterButton
-                                      ></kendo-toolbar-button>
-                                      <kendo-toolbar-button
-                                        kendoEditorAlignRightButton
-                                      ></kendo-toolbar-button>
-                                      <kendo-toolbar-button
-                                        kendoEditorAlignJustifyButton
-                                      ></kendo-toolbar-button>
-                                    </kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-dropdownlist
-                                      kendoEditorFormat
-                                    ></kendo-toolbar-dropdownlist>
-                                    <kendo-toolbar-dropdownlist
-                                      kendoEditorFontSize
-                                    ></kendo-toolbar-dropdownlist>
-                                    <kendo-toolbar-dropdownlist
-                                      kendoEditorFontFamily
-                                    ></kendo-toolbar-dropdownlist>
-                                    <kendo-toolbar-colorpicker
-                                      kendoEditorForeColor
-                                    ></kendo-toolbar-colorpicker>
-                                    <kendo-toolbar-buttongroup>
-                                      <kendo-toolbar-button
-                                        kendoEditorInsertUnorderedListButton
-                                      ></kendo-toolbar-button>
-                                      <kendo-toolbar-button
-                                        kendoEditorInsertOrderedListButton
-                                      ></kendo-toolbar-button>
-                                      <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
-                                      <kendo-toolbar-button kendoEditorOutdentButton></kendo-toolbar-button>
-                                    </kendo-toolbar-buttongroup>
-                                                                        
-                            </kendo-toolbar>
-                        </kendo-editor>
-                        <!-- <kendo-textarea [(ngModel)]="options.description" name="description" required></kendo-textarea> -->
-                        <!-- <kendo-formerror>Descrizione richiesta è un campo obbligatorio</kendo-formerror> -->
-                    <!-- </kendo-formfield> -->
-                </div>
-                <div *ngIf="options.id != null" class="col-md-4">
-                    <label>&nbsp;</label>
+                <div class="col-md-3">
+                    <label>Data</label>
                     <div class="form-group">
-                        <button type="button" class="btn btn-primary" title="Note" (click)="viewNotes()">
-                            <i class="fa fa-edit"></i> Note
-                        </button>
+                        <kendo-datepicker format="dd/MM/yyyy" name="date" [(ngModel)]="options.date" required
+                            [disabled]="!!options.id" (valueChange)="onDateChange()">
+                        </kendo-datepicker>
+                        <div class="validation-message" [control]="form.controls['date']"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label>Anno</label>
+                    <div class="form-group">
+                        <input class="form-control" name="year" [(ngModel)]="options.year" novalidate autocomplete="off"
+                            disabled />
+                        <div class="validation-message" [control]="form.controls['year']"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label>Numero</label>
+                    <div class="form-group">
+                        <input class="form-control" name="number" [(ngModel)]="options.number" novalidate
+                            autocomplete="off" disabled />
+                        <div class="validation-message" [control]="form.controls['number']"></div>
                     </div>
                 </div>
             </div>
-          
-            <div class="row" *ngIf="isVisibleResultNote()">
-                <div class="col-md-12">
-                    <kendo-formfield class="form-group">
-                        <label>Descrizione interventi</label>                        
-                        <kendo-textarea [(ngModel)]="options.resultNote" name="resultNote"></kendo-textarea>                       
-                    </kendo-formfield>
-                </div>               
+
+            <div class="row">
+                <div class="col-md-7">
+                    <label>Cliente</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="customers" [valuePrimitive]="true" textField="name" valueField="id"
+                            name="customerId" [(ngModel)]="options.customerId" required [suggest]="true"
+                            [allowCustom]="false" [disabled]="!!options.id">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['customerId']"></div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="text-right mt-5">
-                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Descrizione</label>
+                    <div class="form-group">
+                        <textarea class="form-control" name="description" [(ngModel)]="options.description" novalidate
+                            autocomplete="off" maxlength="500" required rows="4"></textarea>
+                        <div class="validation-message" [control]="form.controls['description']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary">
                     ANNULLA
                 </button>
                 <button type="submit" class="btn btn-primary">
@@ -204,6 +77,3 @@
         </form>
     </kendo-window>
 </div>
-<!-- 
-<app-customer-modal #customerModal></app-customer-modal>
-<app-address-modal [customer]="options.customer" #addressModal></app-address-modal> -->

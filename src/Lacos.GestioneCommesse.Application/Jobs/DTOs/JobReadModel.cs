@@ -1,22 +1,14 @@
-﻿using Lacos.GestioneCommesse.Application.Customers.DTOs;
-using Lacos.GestioneCommesse.Domain.Docs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Lacos.GestioneCommesse.Domain.Docs;
 
-namespace Lacos.GestioneCommesse.Application.Jobs.DTOs
+namespace Lacos.GestioneCommesse.Application.Jobs.DTOs;
+
+public class JobReadModel
 {
-    public class JobReadModel
-    {
-        public long Id { get; set; }
-        public DateTimeOffset JobDate { get; set; }
-        public int Number { get; set; }
-        public int Year { get; set; }
-        public string? Description { get; set; }
-        public JobStatus Status { get; set; }
-        public CustomerReadModel? Customer { get; set; }
-       
-    }
+    public long Id { get; set; }
+    public string? Code { get; set; }
+    public DateTimeOffset Date { get; set; }
+    public string? Description { get; set; }
+    public JobStatus Status { get; set; }
+    public string? Customer { get; set; }
+    public bool CanBeRemoved { get; set; }
 }

@@ -1,4 +1,4 @@
-import { JobModel } from './job.model';
+import { JobModel } from '../../services/jobs/models';
 
 export class JobSourceModel {
     id: number;

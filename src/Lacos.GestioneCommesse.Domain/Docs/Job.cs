@@ -19,4 +19,25 @@ public class Job : FullAuditedEntity
     {
         Activities = new List<Activity>();
     }
+
+    public void Cancel()
+    {
+        Status = JobStatus.Canceled;
+
+        foreach (var activity in Activities)
+        {
+            activity.Cancel();
+        }
+    }
+
+    public void SetCode(int year, int number)
+    {
+        Year = year;
+        Number = number;
+    }
+
+    public bool HasActivities()
+    {
+        return Activities.Any();
+    }
 }

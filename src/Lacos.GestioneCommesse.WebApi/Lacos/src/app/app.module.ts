@@ -71,7 +71,11 @@ import { ProductTypesService } from './services/productTypes.service';
 import { CustomerFiscalTypePipe } from './pipes/customer-fiscal-type.pipe';
 import { ActivityStatusPipe } from './pipes/activity-status.pipe';
 import { JobsComponent } from './jobs/jobs.component';
-import { JobsService } from './services/jobs.service';
+import { JobsService } from './services/jobs/jobs.service';
+import { JobModalComponent } from './job-modal/job-modal.component';
+import { JobStatusPipe } from './shared/pipes/job-status.pipe';
+import { DropdownlistGridColumnFilterComponent } from './shared/dropdownlist-grid-column-filter.component';
+import { MultiselectGridColumnFilterComponent } from './shared/multiselect-grid-column-filter.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -109,7 +113,11 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ProductTypeModalComponent,
         CustomerFiscalTypePipe,
         ActivityStatusPipe,
-        JobsComponent
+        JobsComponent,
+        JobModalComponent,
+        JobStatusPipe,
+        DropdownlistGridColumnFilterComponent,
+        MultiselectGridColumnFilterComponent
     ],
     imports: [
         BrowserModule,

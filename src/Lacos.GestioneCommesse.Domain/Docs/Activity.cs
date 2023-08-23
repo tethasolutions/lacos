@@ -32,4 +32,14 @@ public class Activity : FullAuditedEntity
         Interventions = new List<Intervention>();
         Products = new List<InterventionProduct>();
     }
+
+    public void Cancel()
+    {
+        Status = ActivityStatus.Canceled;
+
+        foreach (var intervention in Interventions)
+        {
+            intervention.Cancel();
+        }
+    }
 }

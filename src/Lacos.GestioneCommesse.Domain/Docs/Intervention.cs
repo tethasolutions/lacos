@@ -38,4 +38,9 @@ public class Intervention : FullAuditedEntity
         Tickets = new List<Ticket>();
         PurchaseOrders = new List<PurchaseOrder>();
     }
+
+    public void Cancel()
+    {
+        Status = InterventionStatus.Canceled;
+    }
 }

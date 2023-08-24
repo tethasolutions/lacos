@@ -1,4 +1,4 @@
-export class InterventionProduct {
+export class ActivityProduct {
 
     constructor(
         readonly activityId: number,
@@ -8,7 +8,7 @@ export class InterventionProduct {
 
 }
 
-export interface IInterventionProductReadModel {
+export interface IActivityProductReadModel {
 
     readonly id: number;
     readonly type: string;
@@ -17,10 +17,6 @@ export interface IInterventionProductReadModel {
     readonly pictureFileName: string;
     readonly qrCode: string;
     readonly activityId: number;
-    readonly interventionId: number;
-    readonly interventionStart: Date | string;
-    readonly interventionEnd: Date | string;
-    readonly interventionOperators: string[];
     readonly canBeRemoved: boolean;
 
 }

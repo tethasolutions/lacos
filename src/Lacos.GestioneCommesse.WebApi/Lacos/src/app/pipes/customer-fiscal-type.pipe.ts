@@ -1,7 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
-import { ActivityStatusEnum } from '../shared/enums/activity-status.enum';
-import { compileClassMetadata } from '@angular/compiler';
 import { CustomerFiscalTypeEnum } from '../shared/enums/customer-fiscal-type.enum';
 
 @Pipe({

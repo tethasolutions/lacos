@@ -2,11 +2,21 @@
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using System.Linq.Expressions;
 
 namespace Lacos.GestioneCommesse.Application.Docs;
 
 public class ActivityMappingProfile : Profile
 {
+    private static readonly Expression<Func<Activity, ActivityStatusDto>> StatusExpression = j =>
+        !j.Interventions
+            .Any()
+            ? ActivityStatusDto.Pending
+            : j.Interventions
+                .Any(i => i.Status == InterventionStatus.Scheduled)
+                ? ActivityStatusDto.InProgress
+                : ActivityStatusDto.Completed;
+
     public ActivityMappingProfile()
     {
         CreateMap<Activity, ActivityReadModel>()
@@ -19,12 +29,15 @@ public class ActivityMappingProfile : Profile
                         : y.SourcePurchaseOrder.Description
                     : y.SourceTicket.Description
             )
-            .MapMember(x => x.CanBeRemoved, y => y.Status == ActivityStatus.Pending)
+            .MapMember(x => x.Status, StatusExpression)
+            .MapMember(x => x.CanBeRemoved, y =>
+                y.Interventions
+                    .All(i => i.Status == InterventionStatus.Scheduled)
+            )
             .MapMember(x => x.Number, y => y.RowNumber);
 
         CreateMap<ActivityDto, Activity>()
             .IgnoreCommonMembers()
-            .Ignore(x => x.Status)
             .Ignore(x => x.RowNumber)
             .MapMember(x => x.CustomerAddressId, (x, y) => y.IsTransient() ? x.CustomerAddressId : y.CustomerAddressId)
             .Ignore(x => x.CustomerAddress)
@@ -37,10 +50,11 @@ public class ActivityMappingProfile : Profile
             .Ignore(x => x.SourcePuchaseOrderId)
             .Ignore(x => x.SourcePurchaseOrder)
             .Ignore(x => x.Interventions)
-            .Ignore(x => x.Products);
+            .Ignore(x => x.ActivityProducts);
 
         CreateMap<Activity, ActivityDto>()
-            .MapMember(x => x.Number, y => y.RowNumber);
+            .MapMember(x => x.Number, y => y.RowNumber)
+            .MapMember(x => x.Status, StatusExpression);
 
         CreateMap<Activity, ActivityDetailDto>()
             .MapMember(x => x.Number, y => y.RowNumber)
@@ -55,6 +69,7 @@ public class ActivityMappingProfile : Profile
                         ? null
                         : y.SourcePurchaseOrder.Description
                     : y.SourceTicket.Description
-            );
+            )
+            .MapMember(x => x.Status, StatusExpression);
     }
 }

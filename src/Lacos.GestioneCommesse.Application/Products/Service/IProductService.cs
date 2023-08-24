@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lacos.GestioneCommesse.Application.Products.DTOs;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;

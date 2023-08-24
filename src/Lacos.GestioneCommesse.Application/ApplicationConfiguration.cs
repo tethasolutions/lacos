@@ -30,7 +30,7 @@ public static class ApplicationConfiguration
             .AddScoped<ICheckListService, CheckListService>()
             .AddScoped<IJobsService, JobsService>()
             .AddScoped<IActivitiesService, ActivitiesService>()
-            .AddScoped<IInterventionProductsService, InterventionProductsService>();
+            .AddScoped<IActivityProductsService, ActivityProductsService>();
 
         return services;
     }

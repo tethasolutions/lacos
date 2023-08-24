@@ -85,7 +85,8 @@ public class JobsService : IJobsService
             .Include(e => e.Activities)
             .ThenInclude(e => e.Interventions)
             .Include(e => e.Activities)
-            .ThenInclude(e => e.Products)
+            .ThenInclude(e => e.ActivityProducts)
+            .ThenInclude(e => e.InterventionProducts)
             .ThenInclude(e => e.CheckList)
             .ThenInclude(e => e!.Items)
             .FirstOrDefaultAsync(e => e.Id == id);
@@ -95,28 +96,13 @@ public class JobsService : IJobsService
             return;
         }
 
-        switch (job.Status)
+        if (job.HasCompletedInterventions())
         {
-            case JobStatus.Pending:
-                if (job.HasActivities())
-                {
-                    job.Cancel();
-                    repository.Update(job);
-                }
-                else
-                {
-                    repository.Delete(job);
-                }
-                break;
-            case JobStatus.Canceled:
-                throw new LacosException("La commessa è già stata annullata.");
-            case JobStatus.InProgress:
-            case JobStatus.Completed:
-                throw new LacosException("Non puoi eliminare una commessa in corso o completata.");
-            default:
-                throw new ArgumentOutOfRangeException();
+            throw new LacosException("Non puoi eliminare una commessa con interventi completati.");
         }
 
+        repository.Delete(job);
+        
         await dbContext.SaveChanges();
     }
 

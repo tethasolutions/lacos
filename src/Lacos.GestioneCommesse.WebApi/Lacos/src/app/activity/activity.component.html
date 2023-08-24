@@ -61,12 +61,12 @@
     <h4>
         Prodotti associati
     </h4>
-    <a class="btn btn-primary btn-sm" (click)="createInterventionProduct()">
+    <a class="btn btn-primary btn-sm" (click)="createActivityProduct()">
         <span class="fa fa-plus"></span>
         Nuovo
     </a>
 </div>
 
-<app-intervention-products #interventionProducts [activityId]="activity.id"></app-intervention-products>
+<app-activity-products #activityProducts [activityId]="activity.id"></app-activity-products>
 <app-job-activity-modal #jobActivityModal></app-job-activity-modal>
-<app-intervention-product-modal #interventionProductModal></app-intervention-product-modal>
+<app-activity-product-modal #activityProductModal></app-activity-product-modal>

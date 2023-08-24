@@ -1,12 +1,6 @@
 ﻿using Lacos.GestioneCommesse.Dal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Lacos.GestioneCommesse.Application.CheckLists.DTOs;
-using Lacos.GestioneCommesse.Framework.Session;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;

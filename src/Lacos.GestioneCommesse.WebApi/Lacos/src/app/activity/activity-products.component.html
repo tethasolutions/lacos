@@ -15,26 +15,18 @@
     </kendo-grid-column>
     <kendo-grid-column field="name" title="Nome">
     </kendo-grid-column>
-    <kendo-grid-column field="interventionStart" title="Intervento" filter="date">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div *ngIf="dataItem.interventionId">
-                {{dataItem.interventionStart | date:'d MMM yyyy H:mm'}}
-                &rarr;
-                {{dataItem.interventionEnd | date:'H:mm'}}
-                <ng-container *ngIf="dataItem.interventionOperators?.length">
-                    <br>
-                    {{dataItem.interventionOperators | strings}}
-                </ng-container>
-            </div>
-        </ng-template>
-    </kendo-grid-column>
 
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
-                (click)="askRemove(dataItem)">
-                <i class="fas fa-trash"></i>
-            </button>
+            <div class="d-flex text-nowrap gap-1">
+                <button class="btn btn-primary btn-sm" title="Duplica" (click)="askDuplicate(dataItem)">
+                    <i class="fas fa-copy"></i>
+                </button>
+                <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
+                    (click)="askRemove(dataItem)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
         </ng-template>
     </kendo-grid-column>
 

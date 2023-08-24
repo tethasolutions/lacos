@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
-[Route("api/intervention-products")]
-public class InterventionProductsController : LacosApiController
+[Route("api/activity-products")]
+public class ActivityProductsController : LacosApiController
 {
-    private readonly IInterventionProductsService service;
+    private readonly IActivityProductsService service;
 
-    public InterventionProductsController(IInterventionProductsService service)
+    public ActivityProductsController(IActivityProductsService service)
     {
         this.service = service;
     }
@@ -24,9 +24,15 @@ public class InterventionProductsController : LacosApiController
     }
 
     [HttpPost]
-    public Task Create(InterventionProductDto interventionProductDto)
+    public Task Create(ActivityProductDto activityProductDto)
     {
-        return service.Create(interventionProductDto);
+        return service.Create(activityProductDto);
+    }
+
+    [HttpPost("{id}/duplicate")]
+    public Task Duplicate(long id)
+    {
+        return service.Duplicate(id);
     }
 
     [HttpDelete("{id}")]

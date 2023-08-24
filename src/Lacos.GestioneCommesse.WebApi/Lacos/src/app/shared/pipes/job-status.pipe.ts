@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { BaseComponent } from '../base.component';
-import { JobStatus } from 'src/app/services/jobs/models';
-import { activityStatusNames } from 'src/app/services/activities/models';
+import { JobStatus, jobStatusNames } from 'src/app/services/jobs/models';
 
 @Pipe({
     name: 'jobStatus'
@@ -9,7 +8,7 @@ import { activityStatusNames } from 'src/app/services/activities/models';
 export class JobStatusPipe extends BaseComponent implements PipeTransform {
 
     transform(value: JobStatus) {
-        return activityStatusNames[value];
+        return jobStatusNames[value];
     }
 
 }

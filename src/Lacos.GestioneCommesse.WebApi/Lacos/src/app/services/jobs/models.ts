@@ -4,8 +4,7 @@ export enum JobStatus {
 
     Pending,
     InProgress,
-    Completed,
-    Canceled
+    Completed
 
 }
 
@@ -13,8 +12,7 @@ export const jobStatusNames: Dictionary<JobStatus, string> = {
 
     [JobStatus.Pending]: 'In attesa',
     [JobStatus.InProgress]: 'In corso',
-    [JobStatus.Completed]: 'Completata',
-    [JobStatus.Canceled]: 'Annullata'
+    [JobStatus.Completed]: 'Completata'
 
 };
 

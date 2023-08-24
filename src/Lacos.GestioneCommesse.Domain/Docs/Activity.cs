@@ -4,7 +4,6 @@ namespace Lacos.GestioneCommesse.Domain.Docs;
 
 public class Activity : FullAuditedEntity
 {
-    public ActivityStatus Status { get; set; }
     public int RowNumber { get; set; }
 
     public string? Description { get; set; }
@@ -25,12 +24,12 @@ public class Activity : FullAuditedEntity
     public PurchaseOrder? SourcePurchaseOrder { get; set; }
 
     public ICollection<Intervention> Interventions { get; set; }
-    public ICollection<InterventionProduct> Products { get; set; }
+    public ICollection<ActivityProduct> ActivityProducts { get; set; }
 
     public Activity()
     {
         Interventions = new List<Intervention>();
-        Products = new List<InterventionProduct>();
+        ActivityProducts = new List<ActivityProduct>();
     }
 
     public void SetNumber(int number)
@@ -38,18 +37,9 @@ public class Activity : FullAuditedEntity
         RowNumber = number;
     }
 
-    public void Cancel()
+    public bool HasCompletedInterventions()
     {
-        Status = ActivityStatus.Canceled;
-
-        foreach (var intervention in Interventions)
-        {
-            intervention.Cancel();
-        }
-    }
-
-    public bool HasInterventions()
-    {
-        return Interventions.Any();
+        return Interventions
+            .Any(ee => ee.IsCompleted());
     }
 }

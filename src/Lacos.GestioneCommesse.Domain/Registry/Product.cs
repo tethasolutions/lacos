@@ -34,15 +34,14 @@ public class Product : FullAuditedEntity
     public string? VocType { get; set; }
     public int? NumberOfDoors { get; set; }
 
-
     public ICollection<PurchaseOrderItem> PurchaseOrderItems { get; set; }
-    public ICollection<InterventionProduct> InterventionProducts { get; set; }
+    public ICollection<ActivityProduct> ActivityProducts { get; set; }
     public ICollection<ProductDocument> Documents { get; set; }
 
     public Product()
     {
         PurchaseOrderItems = new List<PurchaseOrderItem>();
-        InterventionProducts = new List<InterventionProduct>();
+        ActivityProducts = new List<ActivityProduct>();
         Documents = new List<ProductDocument>();
     }
 }

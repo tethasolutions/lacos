@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
-import { InterventionProduct } from './models';
+import { ActivityProduct } from './models';
 import { readData } from '../common/functions';
 
 @Injectable()
-export class InterventionProductsService {
+export class ActivityProductsService {
 
-    private readonly _baseUrl = `${ApiUrls.baseApiUrl}/intervention-products`;
+    private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activity-products`;
 
     constructor(
         private readonly _http: HttpClient
@@ -22,8 +22,15 @@ export class InterventionProductsService {
         return readData(this._http, state, url);
     }
 
-    create(interventionProduct: InterventionProduct) {
-        return this._http.post<void>(this._baseUrl, interventionProduct)
+    create(activityProduct: ActivityProduct) {
+        return this._http.post<void>(this._baseUrl, activityProduct)
+            .pipe(
+                map(() => { })
+            );
+    }
+
+    duplicate(id: number) {
+        return this._http.post<void>(`${this._baseUrl}/${id}/duplicate`, null)
             .pipe(
                 map(() => { })
             );

@@ -8,7 +8,6 @@ public class Job : FullAuditedEntity
     public int Year { get; set; }
     public DateTimeOffset JobDate { get; set; }
     public string? Description { get; set; }
-    public JobStatus Status { get; set; }
 
     public long CustomerId { get; set; }
     public Customer? Customer { get; set; }
@@ -20,24 +19,15 @@ public class Job : FullAuditedEntity
         Activities = new List<Activity>();
     }
 
-    public void Cancel()
-    {
-        Status = JobStatus.Canceled;
-
-        foreach (var activity in Activities)
-        {
-            activity.Cancel();
-        }
-    }
-
     public void SetCode(int year, int number)
     {
         Year = year;
         Number = number;
     }
 
-    public bool HasActivities()
+    public bool HasCompletedInterventions()
     {
-        return Activities.Any();
+        return Activities
+            .Any(ee => ee.HasCompletedInterventions());
     }
 }

@@ -2,8 +2,7 @@
 
 public enum InterventionStatus
 {
-    Pending,
-    InProgress,
-    Completed,
-    Canceled
+    Scheduled,
+    CompletedSuccesfully,
+    CompletedUnsuccesfully
 }

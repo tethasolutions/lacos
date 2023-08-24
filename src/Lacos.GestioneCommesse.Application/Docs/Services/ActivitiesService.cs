@@ -99,7 +99,8 @@ public class ActivitiesService : IActivitiesService
         var activity = await repository.Query()
             .AsSplitQuery()
             .Include(e => e.Interventions)
-            .Include(e => e.Products)
+            .Include(e => e.ActivityProducts)
+            .ThenInclude(e => e.InterventionProducts)
             .ThenInclude(e => e.CheckList)
             .ThenInclude(e => e!.Items)
             .FirstOrDefaultAsync(e => e.Id == id);
@@ -109,28 +110,12 @@ public class ActivitiesService : IActivitiesService
             return;
         }
 
-        switch (activity.Status)
+        if (activity.HasCompletedInterventions())
         {
-            case ActivityStatus.Pending:
-                if (activity.HasInterventions())
-                {
-                    activity.Cancel();
-                    repository.Update(activity);
-                }
-                else
-                {
-                    repository.Delete(activity);
-                }
-
-                break;
-            case ActivityStatus.Canceled:
-                throw new LacosException("L'attività è già stata annullata.");
-            case ActivityStatus.InProgress:
-            case ActivityStatus.Completed:
-                throw new LacosException("Impossibile eliminare un'attività in corso o completata.");
-            default:
-                throw new ArgumentOutOfRangeException();
+            throw new LacosException("Non puoi eliminare un'attività con interventi completati.");
         }
+
+        repository.Delete(activity);
 
         await dbContext.SaveChanges();
     }

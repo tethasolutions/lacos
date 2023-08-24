@@ -4,7 +4,7 @@ import { tap } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
-import { InterventionProduct } from '../services/intervention-products/models';
+import { ActivityProduct } from '../services/activity-products/models';
 import { ProductTypesService } from '../services/productTypes.service';
 import { ProductTypeModel } from '../shared/models/product-type.model';
 import { ProductsService } from '../services/products.service';
@@ -13,10 +13,10 @@ import { State } from '@progress/kendo-data-query';
 import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
-    selector: 'app-intervention-product-modal',
-    templateUrl: 'intervention-product-modal.component.html'
+    selector: 'app-activity-product-modal',
+    templateUrl: 'activity-product-modal.component.html'
 })
-export class InterventionProductModalComponent extends ModalComponent<InterventionProductModalOptions> implements OnInit {
+export class ActivityProductModalComponent extends ModalComponent<ActivityProductModalOptions> implements OnInit {
 
     @ViewChild('form', { static: false })
     form: NgForm;
@@ -40,7 +40,7 @@ export class InterventionProductModalComponent extends ModalComponent<Interventi
         this._getProductTypes();
     }
 
-    override open(options: InterventionProductModalOptions) {
+    override open(options: ActivityProductModalOptions) {
         const result = super.open(options);
 
         this.productType = null;
@@ -111,11 +111,11 @@ export class InterventionProductModalComponent extends ModalComponent<Interventi
 
 }
 
-export class InterventionProductModalOptions {
+export class ActivityProductModalOptions {
 
     constructor(
         readonly customerAddressId: number,
-        readonly product: InterventionProduct
+        readonly product: ActivityProduct
     ) {
     }
 

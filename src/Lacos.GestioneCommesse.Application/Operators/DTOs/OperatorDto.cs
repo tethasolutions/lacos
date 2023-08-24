@@ -1,10 +1,4 @@
-﻿using Lacos.GestioneCommesse.Application.Vehicles.DTOs;
-using Lacos.GestioneCommesse.Domain.Registry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Lacos.GestioneCommesse.Domain.Registry;
 
 namespace Lacos.GestioneCommesse.Application.Operators.DTOs
 {

@@ -80,10 +80,10 @@ import { ActivitiesService } from './services/activities/activities.service';
 import { ActivityComponent } from './activity/activity.component';
 import { ActivityStatusPipe } from './shared/pipes/activity-status.pipe';
 import { JobActivityModalComponent } from './jobs/job-activity-modal.component';
-import { InterventionProductsComponent } from './activity/intervention-products.component';
+import { ActivityProductsComponent } from './activity/activity-products.component';
 import { StringsPipe } from './shared/pipes/strings.pipe';
-import { InterventionProductModalComponent } from './activity/intervention-product-modal.component';
-import { InterventionProductsService } from './services/intervention-products/intervention-products.service';
+import { ActivityProductModalComponent } from './activity/activity-product-modal.component';
+import { ActivityProductsService } from './services/activity-products/activity-products.service';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -130,9 +130,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         JobActivitiesComponent,
         ActivityComponent,
         JobActivityModalComponent,
-        InterventionProductsComponent,
+        ActivityProductsComponent,
         StringsPipe,
-        InterventionProductModalComponent
+        ActivityProductModalComponent
     ],
     imports: [
         BrowserModule,
@@ -181,7 +181,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ProductTypesService,
         JobsService,
         ActivitiesService,
-        InterventionProductsService
+        ActivityProductsService
     ],
     bootstrap: [AppComponent]
 })

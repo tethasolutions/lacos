@@ -4,15 +4,15 @@ import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { filter, switchMap, tap } from 'rxjs';
-import { IInterventionProductReadModel } from '../services/intervention-products/models';
+import { IActivityProductReadModel } from '../services/activity-products/models';
 import { ApiUrls } from '../services/common/api-urls';
-import { InterventionProductsService } from '../services/intervention-products/intervention-products.service';
+import { ActivityProductsService } from '../services/activity-products/activity-products.service';
 
 @Component({
-    selector: 'app-intervention-products',
-    templateUrl: 'intervention-products.component.html'
+    selector: 'app-activity-products',
+    templateUrl: 'activity-products.component.html'
 })
-export class InterventionProductsComponent extends BaseComponent implements OnChanges {
+export class ActivityProductsComponent extends BaseComponent implements OnChanges {
 
     @Input()
     activityId: number;
@@ -34,7 +34,7 @@ export class InterventionProductsComponent extends BaseComponent implements OnCh
     };
 
     constructor(
-        private readonly _service: InterventionProductsService,
+        private readonly _service: ActivityProductsService,
         private readonly _messageBox: MessageBoxService
     ) {
         super();
@@ -66,7 +66,7 @@ export class InterventionProductsComponent extends BaseComponent implements OnCh
         );
     }
 
-    askRemove(product: IInterventionProductReadModel) {
+    askRemove(product: IActivityProductReadModel) {
         const text = `Sei sicuro di voler rimuovere ${product.name} dall'attività?`;
 
         this._subscriptions.push(
@@ -80,8 +80,30 @@ export class InterventionProductsComponent extends BaseComponent implements OnCh
         );
     }
 
-    private _afterRemoved(product: IInterventionProductReadModel) {
+    askDuplicate(product: IActivityProductReadModel) {
+        const text = `Sei sicuro di voler associare un altro ${product.name} all'attività?`;
+
+        this._subscriptions.push(
+            this._messageBox.confirm(text, 'Attenzione')
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._service.duplicate(product.id)),
+                    tap(() => this._afterDuplicated(product))
+                )
+                .subscribe()
+        );
+    }
+
+    private _afterRemoved(product: IActivityProductReadModel) {
         const text = `${product.name} rimosso dall'attività.`;
+
+        this._messageBox.success(text);
+
+        this._read();
+    }
+
+    private _afterDuplicated(product: IActivityProductReadModel) {
+        const text = `${product.name} associato all'attività.`;
 
         this._messageBox.success(text);
 

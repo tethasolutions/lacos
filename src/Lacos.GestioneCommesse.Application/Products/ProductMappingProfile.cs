@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Domain.Registry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lacos.GestioneCommesse.Application.Products.DTOs;
 using Lacos.GestioneCommesse.Framework.Extensions;
 
@@ -22,7 +17,7 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.CustomerAddress)
                 .Ignore(x => x.ProductType)
                 .Ignore(x => x.PurchaseOrderItems)
-                .Ignore(x => x.InterventionProducts)
+                .Ignore(x => x.ActivityProducts)
                 .Ignore(x => x.Documents);
 
             CreateMap<Product, ProductReadModel>()
@@ -36,7 +31,7 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.ProductType)
                 .Ignore(x => x.ProductTypeId)
                 .Ignore(x => x.PurchaseOrderItems)
-                .Ignore(x => x.InterventionProducts)
+                .Ignore(x => x.ActivityProducts)
                 .Ignore(x => x.Location)
                 .Ignore(x => x.SerialNumber)
                 .Ignore(x => x.ReiType)

@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Vehicles.DTOs;
 using Lacos.GestioneCommesse.Dal;
-using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 
 namespace Lacos.GestioneCommesse.Application.Vehicles.Services

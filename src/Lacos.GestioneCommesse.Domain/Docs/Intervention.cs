@@ -19,7 +19,7 @@ public class Intervention : FullAuditedEntity
     public long? VehicleId { get; set; }
     public Vehicle? Vehicle { get; set; }
 
-    public long? ActivityId { get; set; }
+    public long ActivityId { get; set; }
     public Activity? Activity { get; set; }
 
     public ICollection<Operator> Operators { get; set; }
@@ -39,8 +39,10 @@ public class Intervention : FullAuditedEntity
         PurchaseOrders = new List<PurchaseOrder>();
     }
 
-    public void Cancel()
+    public bool IsCompleted()
     {
-        Status = InterventionStatus.Canceled;
+        return Status is
+            InterventionStatus.CompletedSuccesfully or
+            InterventionStatus.CompletedUnsuccesfully;
     }
 }

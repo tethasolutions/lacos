@@ -7,10 +7,10 @@ import { ActivitiesService } from '../services/activities/activities.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { NgForm } from '@angular/forms';
 import { JobActivityModalComponent, JobActivityModalOptions } from '../jobs/job-activity-modal.component';
-import { InterventionProductModalComponent, InterventionProductModalOptions } from './intervention-product-modal.component';
-import { InterventionProduct } from '../services/intervention-products/models';
-import { InterventionProductsService } from '../services/intervention-products/intervention-products.service';
-import { InterventionProductsComponent } from './intervention-products.component';
+import { ActivityProductModalComponent, ActivityProductModalOptions } from './activity-product-modal.component';
+import { ActivityProduct } from '../services/activity-products/models';
+import { ActivityProductsService } from '../services/activity-products/activity-products.service';
+import { ActivityProductsComponent } from './activity-products.component';
 
 @Component({
     selector: 'app-activity',
@@ -24,11 +24,11 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     @ViewChild('jobActivityModal', { static: true })
     jobActivityModal: JobActivityModalComponent;
 
-    @ViewChild('interventionProductModal', { static: true })
-    interventionProductModal: InterventionProductModalComponent;
+    @ViewChild('activityProductModal', { static: true })
+    activityProductModal: ActivityProductModalComponent;
 
-    @ViewChild('interventionProducts', { static: true })
-    interventionProducts: InterventionProductsComponent;
+    @ViewChild('activityProducts', { static: true })
+    activityProducts: ActivityProductsComponent;
 
     activity: ActivityDetail;
 
@@ -36,7 +36,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         private readonly _route: ActivatedRoute,
         private readonly _service: ActivitiesService,
         private readonly _messageBox: MessageBoxService,
-        private readonly _interventionProductsService: InterventionProductsService
+        private readonly _activityProductsService: ActivityProductsService
     ) {
         super();
     }
@@ -60,16 +60,16 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         );
     }
 
-    createInterventionProduct() {
-        const product = new InterventionProduct(this.activity.id, null);
-        const options = new InterventionProductModalOptions(this.activity.customerAddressId, product);
+    createActivityProduct() {
+        const product = new ActivityProduct(this.activity.id, null);
+        const options = new ActivityProductModalOptions(this.activity.customerAddressId, product);
 
         this._subscriptions.push(
-            this.interventionProductModal.open(options)
+            this.activityProductModal.open(options)
                 .pipe(
                     filter(e => e),
-                    switchMap(() => this._interventionProductsService.create(product)),
-                    tap(() => this._afterInterventionProductCreated(this.interventionProductModal.product.name))
+                    switchMap(() => this._activityProductsService.create(product)),
+                    tap(() => this._afterActivityProductCreated(this.activityProductModal.product.name))
                 )
                 .subscribe()
         );
@@ -97,10 +97,10 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         );
     }
 
-    private _afterInterventionProductCreated(name: string) {
+    private _afterActivityProductCreated(name: string) {
         this._messageBox.success(`${name} associato all'attività.`);
 
-        this.interventionProducts.refresh();
+        this.activityProducts.refresh();
     }
 
 }

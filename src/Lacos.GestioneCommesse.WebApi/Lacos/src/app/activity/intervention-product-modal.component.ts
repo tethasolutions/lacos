@@ -21,10 +21,10 @@ export class InterventionProductModalComponent extends ModalComponent<Interventi
     @ViewChild('form', { static: false })
     form: NgForm;
 
-    productTypes: ProductTypeModel[];
-    productType: ProductTypeModel;
-    products: ProductReadModel[];
-    product: ProductReadModel;
+    productTypes: SelectableProductType[];
+    productType: SelectableProductType;
+    products: SelectableProduct[];
+    product: SelectableProduct;
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
 
@@ -79,7 +79,7 @@ export class InterventionProductModalComponent extends ModalComponent<Interventi
         this._subscriptions.push(
             this._productsService.readProducts(state)
                 .pipe(
-                    tap(e => this.products = e.data)
+                    tap(e => this.products = (e.data as ProductReadModel[]).map(ee => new SelectableProduct(ee)))
                 )
                 .subscribe()
         );
@@ -103,7 +103,7 @@ export class InterventionProductModalComponent extends ModalComponent<Interventi
         this._subscriptions.push(
             this._productTypesService.readProductTypesList()
                 .pipe(
-                    tap(e => this.productTypes = e)
+                    tap(e => this.productTypes = e.map(ee => new SelectableProductType(ee)))
                 )
                 .subscribe()
         );
@@ -117,7 +117,44 @@ export class InterventionProductModalOptions {
         readonly customerAddressId: number,
         readonly product: InterventionProduct
     ) {
+    }
 
+}
+
+class SelectableProductType {
+
+    readonly id: number;
+    readonly code: string;
+    readonly name: string;
+    readonly fullName: string;
+
+    constructor(
+        productType: ProductTypeModel
+    ) {
+        this.id = productType.id;
+        this.code = productType.code;
+        this.name = productType.name;
+        this.fullName = `${productType.code} - ${productType.name}`;
+    }
+
+}
+
+class SelectableProduct {
+
+    readonly id: number;
+    readonly code: string;
+    readonly name: string;
+    readonly fullName: string;
+    readonly pictureFileName: string;
+
+    constructor(
+        product: ProductReadModel
+    ) {
+        this.id = product.id;
+        this.code = product.code;
+        this.name = product.name;
+        this.fullName = `${product.code} - ${product.name}`;
+        this.pictureFileName = product.pictureFileName;
     }
 
 }

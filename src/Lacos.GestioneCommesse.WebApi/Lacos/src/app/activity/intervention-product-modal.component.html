@@ -15,7 +15,7 @@
                 <div class="col-md-4">
                     <label>Tipologia</label>
                     <div class="form-group">
-                        <kendo-combobox [data]="productTypes" textField="name" valueField="id" name="productType"
+                        <kendo-combobox [data]="productTypes" textField="fullName" valueField="id" name="productType"
                             [(ngModel)]="productType" required [suggest]="true" [allowCustom]="false"
                             (valueChange)="onProductTypeChanged()">
                         </kendo-combobox>
@@ -25,7 +25,7 @@
                 <div class="col-md-8">
                     <label>Prodotto</label>
                     <div class="form-group">
-                        <kendo-combobox [data]="products" textField="name" valueField="id" name="product"
+                        <kendo-combobox [data]="products" textField="fullName" valueField="id" name="product"
                             [(ngModel)]="product" required [suggest]="true" [allowCustom]="false"
                             (valueChange)="onProductChange()">
                             <ng-template kendoComboBoxItemTemplate let-dataItem>
@@ -33,7 +33,7 @@
                                     <img *ngIf="dataItem.pictureFileName" [src]="imagesUrl + dataItem.pictureFileName"
                                         class="thumbnail-xs">
                                     <span>
-                                        {{dataItem.name}}
+                                        {{dataItem.fullName}}
                                     </span>
                                 </div>
                             </ng-template>

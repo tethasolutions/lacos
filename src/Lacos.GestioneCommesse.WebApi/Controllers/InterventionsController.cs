@@ -6,40 +6,40 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
-public class JobsController : LacosApiController
+public class InterventionsController : LacosApiController
 {
-    private readonly IJobsService service;
+    private readonly IInterventionsService service;
 
-    public JobsController(IJobsService service)
+    public InterventionsController(IInterventionsService service)
     {
         this.service = service;
     }
 
     [HttpGet("read")]
-    public Task<DataSourceResult> Read(DataSourceRequest request)
+    public Task<DataSourceResult> Read([DataSourceRequest] DataSourceRequest request)
     {
         return service.Query()
             .ToDataSourceResultAsync(request);
     }
 
     [HttpGet("{id}")]
-    public Task<JobDto> Get(long id)
+    public Task<InterventionDto> Get(long id)
     {
         return service.Get(id);
     }
 
     [HttpPost]
-    public Task<JobDto> Create(JobDto jobDto)
+    public Task<InterventionDto> Create(InterventionDto interventionDto)
     {
-        return service.Create(jobDto);
+        return service.Create(interventionDto);
     }
 
     [HttpPut("{id}")]
-    public Task<JobDto> Update(long id, JobDto jobDto)
+    public Task<InterventionDto> Update(long id, InterventionDto interventionDto)
     {
-        jobDto.Id = id;
+        interventionDto.Id = id;
 
-        return service.Update(jobDto);
+        return service.Update(interventionDto);
     }
 
     [HttpDelete("{id}")]

@@ -59,8 +59,7 @@ export class ActivityProductsComponent extends BaseComponent implements OnChange
         this._subscriptions.push(
             this._service.read(this.gridState)
                 .pipe(
-                    tap(e => this.data = e),
-                    tap(e => this.console.log(e))
+                    tap(e => this.data = e)
                 )
                 .subscribe()
         );

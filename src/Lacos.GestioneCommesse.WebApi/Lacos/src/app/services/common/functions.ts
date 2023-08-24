@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { UntypedFormControl, AbstractControl, NgForm, UntypedFormGroup, FormControl, FormGroup } from '@angular/forms';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
+import { DateTime } from 'luxon';
 import { map } from 'rxjs';
 
 export function getToday() {
@@ -28,8 +29,14 @@ export function listEnum<T>(x: any) {
         .filter(e => e >= 0) as any as T[];
 }
 
+export function parseDate(text: string, format: string) {
+    return DateTime.fromFormat(text, format).toJSDate();
+}
+
 export function readData(http: HttpClient, state: State, url: string) {
-    const params = toDataSourceRequestString(state);
+    let params = toDataSourceRequestString(state);
+    params = fixDateTimes(params);
+
     const hasGroups = !!state.group?.length;
 
     return http.get<GridDataResult>(`${url}?${params}`)
@@ -41,4 +48,21 @@ export function readData(http: HttpClient, state: State, url: string) {
                 }
             )
         );
+}
+
+function fixDateTimes(params: string) {
+    const regex = /(datetime'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}')/gi;
+    const matches = regex.exec(params);
+
+    if (matches) {
+        for (const match of matches) {
+            const dateString = match.replace(/datetime|'/gi, '');
+            const date = parseDate(dateString, 'yyyy-MM-dd\'T\'HH-mm-ss');
+            const offsetString = `datetime'${date.toOffsetString()}'`;
+
+            params = params.replace(match, offsetString);
+        }
+    }
+
+    return params;
 }

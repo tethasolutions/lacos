@@ -66,6 +66,11 @@ public class InterventionsService : IInterventionsService
             throw new NotFoundException($"Intervento con Id {interventionDto.Id} non trovato.");
         }
 
+        if (intervention.Status != InterventionStatus.Scheduled)
+        {
+            throw new LacosException("Non puoi modificare un intervento già completato.");
+        }
+
         intervention = interventionDto.MapTo(intervention, mapper);
 
         repository.Update(intervention);
@@ -91,11 +96,11 @@ public class InterventionsService : IInterventionsService
 
         if (intervention.IsCompleted())
         {
-            throw new LacosException("Non puoi eliminare un intervento completato.");
+            throw new LacosException("Non puoi eliminare un intervento già completato.");
         }
 
-
         repository.Delete(intervention);
+
         await dbContext.SaveChanges();
     }
 }

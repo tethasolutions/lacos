@@ -24,6 +24,7 @@ public static class WebApiConfiguration
             {
                 e.Filters.Add<AuthorizeFilter>();
                 e.ModelBinderProviders.Insert(0, new DateTimeOffsetModelBinderProvider());
+                e.ModelBinderProviders.Insert(0, new LacosDataSourceModelBinderProvider());
             })
             .ConfigureApiBehaviorOptions(e => e.SuppressModelStateInvalidFilter = true)
             .AddControllersAsServices()

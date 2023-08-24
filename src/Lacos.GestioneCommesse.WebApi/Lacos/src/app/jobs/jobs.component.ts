@@ -5,7 +5,7 @@ import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { JobModalComponent } from '../job-modal/job-modal.component';
+import { JobModalComponent } from './job-modal.component';
 import { IJobReadModel, Job, JobStatus, jobStatusNames } from '../services/jobs/models';
 import { getToday } from '../services/common/functions';
 import { JobActivityModalComponent, JobActivityModalOptions } from './job-activity-modal.component';

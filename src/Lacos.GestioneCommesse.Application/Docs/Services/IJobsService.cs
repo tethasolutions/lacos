@@ -1,6 +1,6 @@
-﻿using Lacos.GestioneCommesse.Application.Jobs.DTOs;
+﻿using Lacos.GestioneCommesse.Application.Docs.DTOs;
 
-namespace Lacos.GestioneCommesse.Application.Jobs.Services;
+namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
 public interface IJobsService
 {

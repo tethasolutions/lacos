@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
-public class JobsController : LacosApiController
+public class ActivitiesController : LacosApiController
 {
-    private readonly IJobsService service;
+    private readonly IActivitiesService service;
 
-    public JobsController(IJobsService service)
+    public ActivitiesController(IActivitiesService service)
     {
         this.service = service;
     }
@@ -23,23 +23,29 @@ public class JobsController : LacosApiController
     }
 
     [HttpGet("{id}")]
-    public Task<JobDto> Get(long id)
+    public Task<ActivityDto> Get(long id)
     {
         return service.Get(id);
     }
 
-    [HttpPost]
-    public Task<JobDto> Create(JobDto jobDto)
+    [HttpGet("{id}/detail")]
+    public Task<ActivityDetailDto> GetDetail(long id)
     {
-        return service.Create(jobDto);
+        return service.GetDetail(id);
+    }
+
+    [HttpPost]
+    public Task<ActivityDto> Create(ActivityDto activityDto)
+    {
+        return service.Create(activityDto);
     }
 
     [HttpPut("{id}")]
-    public Task<JobDto> Update(long id, JobDto jobDto)
+    public Task<ActivityDto> Update(long id, ActivityDto activityDto)
     {
-        jobDto.Id = id;
+        activityDto.Id = id;
 
-        return service.Update(jobDto);
+        return service.Update(activityDto);
     }
 
     [HttpDelete("{id}")]

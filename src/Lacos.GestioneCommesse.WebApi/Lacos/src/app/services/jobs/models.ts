@@ -9,7 +9,7 @@ export enum JobStatus {
 
 }
 
-export const jobStates: Dictionary<JobStatus, string> = {
+export const jobStatusNames: Dictionary<JobStatus, string> = {
 
     [JobStatus.Pending]: 'In attesa',
     [JobStatus.InProgress]: 'In corso',
@@ -25,6 +25,7 @@ export interface IJobReadModel {
     readonly date: Date | string;
     readonly description: string;
     readonly status: JobStatus;
+    readonly customerId: number,
     readonly customer: string;
     readonly canBeRemoved: boolean;
 
@@ -35,7 +36,7 @@ export class Job {
     date: Date;
 
     get code() {
-        return `${this.number}/${this.year}`;
+        return `${this.year}/${this.number}`;
     }
 
     constructor(
@@ -44,7 +45,7 @@ export class Job {
         public year: number,
         date: Date | string,
         public description: string,
-        public status: JobStatus,
+        readonly status: JobStatus,
         public customerId: number
     ) {
         this.date = date ? new Date(date) : null;

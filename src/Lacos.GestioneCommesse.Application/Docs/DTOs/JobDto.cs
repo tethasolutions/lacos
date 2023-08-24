@@ -1,7 +1,7 @@
 ﻿using Lacos.GestioneCommesse.Application.Shared;
 using Lacos.GestioneCommesse.Domain.Docs;
 
-namespace Lacos.GestioneCommesse.Application.Jobs.DTOs;
+namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
 
 public class JobDto : BaseEntityDto
 {

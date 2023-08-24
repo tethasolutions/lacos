@@ -7,11 +7,11 @@
                 Commessa {{options.code}} &bull; {{options.status | jobStatus}}
             </div>
             <div *ngIf="!options.id" class="k-window-title">
-                Nuova Commessa
+                Nuova commessa
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="jobModalForm" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+        <form name="job-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
             class="redimensionModal">
 
             <div class="row">
@@ -68,10 +68,10 @@
 
             <div class="d-flex justify-content-end gap-2 mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">
-                    ANNULLA
+                    Annulla
                 </button>
                 <button type="submit" class="btn btn-primary">
-                    SALVA
+                    Salva
                 </button>
             </div>
         </form>

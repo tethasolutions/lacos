@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
-using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
-using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Lacos.GestioneCommesse.Application.Registry
+namespace Lacos.GestioneCommesse.Application.Operators
 {
     public class OperatorMappingProfile : Profile
     {

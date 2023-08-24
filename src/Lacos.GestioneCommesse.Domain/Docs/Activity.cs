@@ -33,6 +33,11 @@ public class Activity : FullAuditedEntity
         Products = new List<InterventionProduct>();
     }
 
+    public void SetNumber(int number)
+    {
+        RowNumber = number;
+    }
+
     public void Cancel()
     {
         Status = ActivityStatus.Canceled;
@@ -41,5 +46,10 @@ public class Activity : FullAuditedEntity
         {
             intervention.Cancel();
         }
+    }
+
+    public bool HasInterventions()
+    {
+        return Interventions.Any();
     }
 }

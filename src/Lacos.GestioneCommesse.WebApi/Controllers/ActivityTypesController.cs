@@ -68,7 +68,7 @@ public class ActivityTypesController : LacosApiController
     }
 
     [HttpGet("activitytypes-list")]
-    public async Task<List<ActivityTypeDto>> GetActivityTypesList([DataSourceRequest] DataSourceRequest request)
+    public async Task<List<ActivityTypeDto>> GetActivityTypesList()
     {
         var activityTypes = (await activityTypeService.GetActivityTypes()).ToList();
         return activityTypes;

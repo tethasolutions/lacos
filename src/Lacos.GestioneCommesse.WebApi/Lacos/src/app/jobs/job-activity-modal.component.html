@@ -1,0 +1,69 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
+        <kendo-window-titlebar>
+            <div *ngIf="!!options.activity.id" class="k-window-title">
+                Attività {{options.activity.number}} &bull; {{options.activity.status | activityStatus}}
+            </div>
+            <div *ngIf="!options.activity.id" class="k-window-title">
+                Nuova attività
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="job-activity-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+            class="redimensionModal">
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label>Numero</label>
+                    <div class="form-group">
+                        <input class="form-control" name="number" [ngModel]="options.activity.number" novalidate
+                            autocomplete="off" disabled />
+                        <div class="validation-message" [control]="form.controls['number']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Tipologia</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="activityTypes" [valuePrimitive]="true" textField="name" valueField="id"
+                            name="typeId" [(ngModel)]="options.activity.typeId" required [suggest]="true"
+                            [allowCustom]="false" [disabled]="!!options.activity.id">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['typeId']"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Indirizzo</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="customer?.addresses" [valuePrimitive]="true" textField="fullAddress"
+                            valueField="id" name="customerAddressId" [(ngModel)]="options.activity.customerAddressId"
+                            required [suggest]="true" [allowCustom]="false" [disabled]="!!options.activity.id">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['customerAddressId']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Descrizione</label>
+                    <div class="form-group">
+                        <textarea class="form-control" name="description" [(ngModel)]="options.activity.description"
+                            novalidate autocomplete="off" maxlength="500" required rows="4"></textarea>
+                        <div class="validation-message" [control]="form.controls['description']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                    Annulla
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    Salva
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

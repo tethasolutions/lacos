@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Lacos.GestioneCommesse.Application.Jobs.DTOs;
+using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lacos.GestioneCommesse.Application.Jobs.Services;
+namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
 public class JobsService : IJobsService
 {
@@ -55,7 +55,7 @@ public class JobsService : IJobsService
         job.SetCode(job.JobDate.Year, number);
 
         await repository.Insert(job);
-            
+
         await dbContext.SaveChanges();
 
         return await Get(job.Id);

@@ -1,0 +1,55 @@
+<h3>
+    Attività {{activity.number}} &bull; {{activity.status | activityStatus}}
+    <span class="fa fa-edit pointer" (click)="edit()"></span>
+</h3>
+
+<p>
+    <i>
+        {{activity.description}}
+    </i>
+</p>
+
+<div class="row">
+    <div class="col-3">
+        <b>
+            Cliente
+        </b>
+        <p>
+            {{activity.customer}}
+        </p>
+    </div>
+    <div class="col-3">
+        <b>
+            Indirizzo
+        </b>
+        <p>
+            {{activity.customerAddress}}
+        </p>
+    </div>
+    <div class="col-2">
+        <b>
+            Tipologia
+        </b>
+        <p>
+            {{activity.type}}
+        </p>
+    </div>
+    <div *ngIf="activity.source" class="col-2">
+        <b>
+            Sorgente
+        </b>
+        <p>
+            {{activity.source}}
+        </p>
+    </div>
+    <div class="col-12">
+        <b>
+            Commessa
+        </b>
+        <p>
+            {{activity.job}}
+        </p>
+    </div>
+</div>
+
+<app-job-activity-modal #jobActivityModal></app-job-activity-modal>

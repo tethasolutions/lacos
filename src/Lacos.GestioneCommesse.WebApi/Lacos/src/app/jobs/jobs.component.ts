@@ -1,13 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridDataResult } from '@progress/kendo-angular-grid';
+import { GridComponent, GridDataResult } from '@progress/kendo-angular-grid';
 import { JobsService } from '../services/jobs/jobs.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { JobModalComponent } from '../job-modal/job-modal.component';
-import { IJobReadModel, Job, JobStatus, jobStates } from '../services/jobs/models';
+import { IJobReadModel, Job, JobStatus, jobStatusNames } from '../services/jobs/models';
 import { getToday } from '../services/common/functions';
+import { JobActivityModalComponent, JobActivityModalOptions } from './job-activity-modal.component';
+import { Activity, ActivityStatus } from '../services/activities/models';
+import { ActivitiesService } from '../services/activities/activities.service';
 
 @Component({
     selector: 'app-jobs',
@@ -17,6 +20,12 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     @ViewChild('jobModal', { static: true })
     jobModal: JobModalComponent;
+
+    @ViewChild('jobActivityModal', { static: true })
+    jobActivityModal: JobActivityModalComponent;
+
+    @ViewChild('grid', { static: true })
+    grid: GridComponent;
 
     data: GridDataResult;
     gridState: State = {
@@ -33,35 +42,27 @@ export class JobsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'asc' }]
+        sort: [{ field: 'code', dir: 'desc' }]
     };
+    expandedDetailKeys = new Array<number>();
 
-    readonly jobStates = jobStates;
+    readonly jobStatusNames = jobStatusNames;
 
     constructor(
         private readonly _service: JobsService,
+        private readonly _activitiesService: ActivitiesService,
         private readonly _messageBox: MessageBoxService
     ) {
         super();
     }
 
     ngOnInit() {
-        this._readJobs();
+        this._read();
     }
 
     dataStateChange(state: State) {
         this.gridState = state;
-        this._readJobs();
-    }
-
-    protected _readJobs() {
-        this._subscriptions.push(
-            this._service.read(this.gridState)
-                .pipe(
-                    tap(e => this.data = e)
-                )
-                .subscribe()
-        );
+        this._read();
     }
 
     create() {
@@ -106,10 +107,39 @@ export class JobsComponent extends BaseComponent implements OnInit {
         );
     }
 
+    createActivity(job: IJobReadModel) {
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, job.id, null, null);
+        const options = new JobActivityModalOptions(job.customerId, activity);
+
+        this._subscriptions.push(
+            this.jobActivityModal.open(options)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._activitiesService.create(activity)),
+                    tap(e => this._afterActivityCreated(job, e))
+                )
+                .subscribe()
+        );
+    }
+
+    expandDetailsBy = (job: IJobReadModel) => {
+        return job.id;
+    };
+
+    protected _read() {
+        this._subscriptions.push(
+            this._service.read(this.gridState)
+                .pipe(
+                    tap(e => this.data = e)
+                )
+                .subscribe()
+        );
+    }
+
     private _afterSaved(job: Job) {
         this._messageBox.success(`Commessa ${job.code} salvata.`);
 
-        this._readJobs();
+        this._read();
     }
 
     private _afterRemoved(job: IJobReadModel) {
@@ -117,7 +147,17 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
         this._messageBox.success(text);
 
-        this._readJobs();
+        this._read();
+    }
+
+    private _afterActivityCreated(job: IJobReadModel, activity: Activity) {
+        this._messageBox.success(`Attività ${activity.number} creata per la commessa ${job.code}.`);
+
+        if (this.expandedDetailKeys.indexOf(job.id) < 0) {
+            this.expandedDetailKeys = this.expandedDetailKeys.concat(job.id);
+        }
+
+        this._read();
     }
 
 }

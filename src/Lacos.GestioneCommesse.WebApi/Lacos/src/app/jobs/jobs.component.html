@@ -13,7 +13,8 @@
 
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-    scrollable="none" (dataStateChange)="dataStateChange($event)">
+    scrollable="none" [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys"
+    (dataStateChange)="dataStateChange($event)">
 
     <kendo-grid-column field="date" title="Data" filter="date" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -26,7 +27,7 @@
         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
             let-filterService="filterService">
             <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
-                [data]="jobStates">
+                [data]="jobStatusNames">
             </app-multiselect-grid-column-filter>
         </ng-template>
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -42,6 +43,9 @@
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">
+                <a class="btn btn-secondary btn-sm" title="Aggiungi attività" (click)="createActivity(dataItem)">
+                    <i class="fas fa-plus"></i>
+                </a>
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                     <i class="fas fa-edit"></i>
                 </button>
@@ -53,6 +57,11 @@
         </ng-template>
     </kendo-grid-column>
 
+    <div *kendoGridDetailTemplate="let dataItem">
+        <app-job-activities [job]="dataItem"></app-job-activities>
+    </div>
+
 </kendo-grid>
 
 <app-job-modal #jobModal></app-job-modal>
+<app-job-activity-modal #jobActivityModal></app-job-activity-modal>

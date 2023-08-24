@@ -69,13 +69,17 @@ import { ProductTypesComponent } from './producttypes/producttypes.component';
 import { ProductTypeModalComponent } from './producttype-modal/producttype-modal.component';
 import { ProductTypesService } from './services/productTypes.service';
 import { CustomerFiscalTypePipe } from './pipes/customer-fiscal-type.pipe';
-import { ActivityStatusPipe } from './pipes/activity-status.pipe';
 import { JobsComponent } from './jobs/jobs.component';
 import { JobsService } from './services/jobs/jobs.service';
 import { JobModalComponent } from './job-modal/job-modal.component';
 import { JobStatusPipe } from './shared/pipes/job-status.pipe';
 import { DropdownlistGridColumnFilterComponent } from './shared/dropdownlist-grid-column-filter.component';
 import { MultiselectGridColumnFilterComponent } from './shared/multiselect-grid-column-filter.component';
+import { JobActivitiesComponent } from './jobs/job-activities.component';
+import { ActivitiesService } from './services/activities/activities.service';
+import { ActivityComponent } from './activity/activity.component';
+import { ActivityStatusPipe } from './shared/pipes/activity-status.pipe';
+import { JobActivityModalComponent } from './jobs/job-activity-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -117,7 +121,11 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         JobModalComponent,
         JobStatusPipe,
         DropdownlistGridColumnFilterComponent,
-        MultiselectGridColumnFilterComponent
+        MultiselectGridColumnFilterComponent,
+        ActivityStatusPipe,
+        JobActivitiesComponent,
+        ActivityComponent,
+        JobActivityModalComponent
     ],
     imports: [
         BrowserModule,
@@ -164,7 +172,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ProductsService,
         ActivityTypesService,
         ProductTypesService,
-        JobsService
+        JobsService,
+        ActivitiesService
     ],
     bootstrap: [AppComponent]
 })

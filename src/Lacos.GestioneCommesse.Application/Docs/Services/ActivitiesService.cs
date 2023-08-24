@@ -140,7 +140,7 @@ public class ActivitiesService : IActivitiesService
         var maxNumber = await repository.Query()
             .Where(e => e.JobId == jobId)
             .Select(e => (int?)e.RowNumber)
-            .MinAsync();
+            .MaxAsync();
 
         return (maxNumber ?? 0) + 1;
     }

@@ -12,7 +12,7 @@ export class ProductModel {
     qrCode: string;
     productTypeId: number;
     productType: ProductTypeModel;
-    
+
     customerId: number;
     customerAddressId: number;
     location: string;
@@ -58,4 +58,6 @@ export interface ProductReadModel {
     readonly pictureFileName: string;
     readonly qrCode: string;
     readonly productType: string;
+    readonly customerAddressId: number;
+    readonly productTypeId: number;
 }

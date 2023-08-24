@@ -25,7 +25,6 @@ public class JobsService : IJobsService
         this.dbContext = dbContext;
     }
 
-
     public IQueryable<JobReadModel> Query()
     {
         return repository.Query()
@@ -113,7 +112,7 @@ public class JobsService : IJobsService
                 throw new LacosException("La commessa è già stata annullata.");
             case JobStatus.InProgress:
             case JobStatus.Completed:
-                throw new LacosException("Impossibile eliminare una commessa in corso o completata.");
+                throw new LacosException("Non puoi eliminare una commessa in corso o completata.");
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -126,7 +125,7 @@ public class JobsService : IJobsService
         var maxNumber = await repository.Query()
             .Where(e => e.Year == year)
             .Select(e => (int?)e.Number)
-            .MinAsync();
+            .MaxAsync();
 
         return (maxNumber ?? 0) + 1;
     }

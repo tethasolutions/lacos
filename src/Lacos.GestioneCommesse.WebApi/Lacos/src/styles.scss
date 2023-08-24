@@ -159,8 +159,7 @@ textarea {
     margin-bottom: 10px;
 }
 
-.GridNoHeader .k-grid-header
-{
+.GridNoHeader .k-grid-header {
     height: 0;
     border-bottom-width: 0;
     display: none;
@@ -168,15 +167,15 @@ textarea {
 }
 
 .confirm-dialog.k-dialog-wrapper {
-    z-index: 99999!important;
+    z-index: 99999 !important;
 }
 
 .confirm-dialog .k-overlay {
-    z-index: 99999!important;
+    z-index: 99999 !important;
 }
 
 .confirm-dialog .k-window {
-    z-index: 99999!important;
+    z-index: 99999 !important;
 }
 
 .navbar-border {
@@ -185,31 +184,45 @@ textarea {
 
 @media (min-width: 1400px) {
     .container {
-        max-width:1750px !important;
+        max-width: 1750px !important;
     }
 }
 
 .redimensionModal {
     width: 1000px !important;
 }
+
 @media (max-width: 800px) {
     .redimensionModal {
-        width:100% !important;
+        width: 100% !important;
     }
 }
 
-kendo-scheduler .k-event, .k-event
-{
+kendo-scheduler .k-event,
+.k-event {
     padding-right: 0px !important;
 }
 
-.k-file-size
-{
+.k-file-size {
     visibility: hidden;
     display: none;
 }
 
-.k-dialog-wrapper
-{
-    z-index: 100000;    
+.k-dialog-wrapper {
+    z-index: 100000;
+}
+
+.thumbnail {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.thumbnail-s {
+    max-width: 75px;
+    max-height: 75px;
+}
+
+.thumbnail-xs {
+    max-width: 50px;
+    max-height: 50px;
 }

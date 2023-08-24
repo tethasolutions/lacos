@@ -33,7 +33,7 @@ export class JobActivitiesComponent extends BaseComponent implements OnChanges {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'number', dir: 'desc' }]
+        sort: [{ field: 'number', dir: 'asc' }]
     };
 
     readonly activityStatusNames = activityStatusNames;

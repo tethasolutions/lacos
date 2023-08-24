@@ -31,7 +31,7 @@
                 <a class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', dataItem.id]">
                     <i class="fas fa-external-link"></i>
                 </a>
-                <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Elimina"
+                <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
                     (click)="askRemove(dataItem)">
                     <i class="fas fa-trash"></i>
                 </button>

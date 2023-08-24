@@ -14,7 +14,7 @@
     </i>
 </p>
 
-<div class="row">
+<div class="row mb-4">
     <div class="col-3">
         <b>
             Cliente
@@ -57,4 +57,16 @@
     </div>
 </div>
 
+<div class="d-flex align-items-center gap-3 mb-2">
+    <h4>
+        Prodotti associati
+    </h4>
+    <a class="btn btn-primary btn-sm" (click)="createInterventionProduct()">
+        <span class="fa fa-plus"></span>
+        Nuovo
+    </a>
+</div>
+
+<app-intervention-products #interventionProducts [activityId]="activity.id"></app-intervention-products>
 <app-job-activity-modal #jobActivityModal></app-job-activity-modal>
+<app-intervention-product-modal #interventionProductModal></app-intervention-product-modal>

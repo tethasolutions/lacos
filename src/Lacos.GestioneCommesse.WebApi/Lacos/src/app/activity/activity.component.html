@@ -1,7 +1,12 @@
-<h3>
-    Attività {{activity.number}} &bull; {{activity.status | activityStatus}}
-    <span class="fa fa-edit pointer" (click)="edit()"></span>
-</h3>
+<div class="d-flex align-items-center gap-3">
+    <h3>
+        Attività {{activity.number}} &bull; {{activity.status | activityStatus}}
+    </h3>
+    <a class="btn btn-primary btn-sm" (click)="edit()">
+        <span class="fa fa-edit"></span>
+        Modifica
+    </a>
+</div>
 
 <p>
     <i>

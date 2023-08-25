@@ -1,4 +1,4 @@
-<div class="d-flex align-items-center gap-3">
+<div class="d-flex align-items-center gap-3 mb-2">
     <h3>
         Attività {{activity.number}} &bull; {{activity.status | activityStatus}}
     </h3>
@@ -71,17 +71,19 @@
     <kendo-tabstrip-tab [selected]="true">
         <ng-template kendoTabTitle>
             <h4>Interventi</h4>
-          </ng-template>
+        </ng-template>
         <ng-template kendoTabContent>
-            <app-interventions-calendar #interventionsCalendar class="mb-4 d-flex" [interventionModal]="interventionModal"
-                [options]="{jobId: activity.jobId, activityId: activity.id}">
+            <app-interventions-calendar #interventionsCalendar [interventionModal]="interventionModal"
+                [options]="{jobId: activity.jobId, activityId: activity.id}"
+                (interventionUpdated)="onInterventionsChanged()" (interventionCreated)="onInterventionsChanged()"
+                (interventionRemoved)="onInterventionsChanged()">
             </app-interventions-calendar>
         </ng-template>
     </kendo-tabstrip-tab>
     <kendo-tabstrip-tab>
         <ng-template kendoTabTitle>
             <h4>Prodotti</h4>
-          </ng-template>
+        </ng-template>
         <ng-template kendoTabContent>
             <app-activity-products #activityProducts [activityId]="activity.id"></app-activity-products>
         </ng-template>

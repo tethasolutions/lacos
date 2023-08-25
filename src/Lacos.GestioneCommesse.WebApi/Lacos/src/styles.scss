@@ -227,6 +227,11 @@ kendo-scheduler .k-event,
     max-height: 50px;
 }
 
+.thumbnail-xxs {
+    max-width: 25px;
+    max-height: 25px;
+}
+
 app-operator-avatar {
     border-radius: 50%;
     width: 18px;
@@ -243,6 +248,7 @@ app-operator-avatar {
     padding: 1rem 0 0 0;
 }
 
-.k-event-actions {
-    display: none;
+kendo-scheduler .k-event .k-event-actions:first-child,
+.k-event .k-event-actions:first-child {
+    margin: 0;
 }

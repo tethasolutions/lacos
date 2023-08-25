@@ -68,7 +68,7 @@ export class InterventionsCalendarComponent extends BaseComponent {
         this._subscriptions.push(
             this._service.get(intervention.id)
                 .pipe(
-                    tap(e => this._resizeIntervention(e, event.start, event.end)),
+                    tap(e => this._resizeIntervention(e, event.start, event.end, false)),
                     switchMap(e => this._service.update(e)),
                     tap(e => this._afterInterventionUpdated(e))
                 )
@@ -84,7 +84,7 @@ export class InterventionsCalendarComponent extends BaseComponent {
         this._subscriptions.push(
             this._service.get(intervention.id)
                 .pipe(
-                    tap(e => this._resizeIntervention(e, event.start, event.end)),
+                    tap(e => this._resizeIntervention(e, event.start, event.end, event.isAllDay)),
                     switchMap(e => this._service.update(e)),
                     tap(e => this._afterInterventionUpdated(e))
                 )
@@ -114,7 +114,12 @@ export class InterventionsCalendarComponent extends BaseComponent {
         this._read();
     }
 
-    private _resizeIntervention(intervention: Intervention, start: Date, end: Date) {
+    private _resizeIntervention(intervention: Intervention, start: Date, end: Date, isAllDay: boolean) {
+        if (isAllDay) {
+            start = start.toDateWithoutTime();
+            end = start.addDays(1);
+        }
+
         intervention.start = start;
         intervention.end = end;
     }
@@ -152,7 +157,7 @@ export class InterventionsCalendarComponent extends BaseComponent {
         this._subscriptions.push(
             this._service.read(state)
                 .pipe(
-                    tap(e => this.interventions = e.data.as<IInterventionReadModel>().map(ee => new InterventionSchedulerModel(ee)))
+                    tap(e => this.interventions = (e.data as IInterventionReadModel[]).map(ee => new InterventionSchedulerModel(ee)))
                 )
                 .subscribe()
         );
@@ -238,6 +243,7 @@ class InterventionSchedulerModel {
     readonly description: string;
     readonly operators: IInterventionOperatorReadModel[];
     readonly activityType: string;
+    readonly isAllDay: boolean;
 
     constructor(
         intervention: IInterventionReadModel
@@ -251,6 +257,7 @@ class InterventionSchedulerModel {
         this.description = intervention.description;
         this.operators = intervention.operators;
         this.activityType = intervention.activityType;
+        this.isAllDay = this.start.addDays(1).hasSameDateAndTime(this.end);
     }
 
 }

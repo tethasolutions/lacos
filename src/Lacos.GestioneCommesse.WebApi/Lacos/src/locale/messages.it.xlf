@@ -3071,7 +3071,7 @@
       </trans-unit>
       <trans-unit id="4013373256580533285" datatype="html">
         <source>Day</source>
-        <target>Titolo</target>
+        <target>Giorno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
           <context context-type="linenumber">6991</context>
@@ -3280,7 +3280,7 @@
       </trans-unit>
       <trans-unit id="6087685798709247238" datatype="html">
         <source>Event</source>
-        <target>Titolo</target>
+        <target>Evento</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
           <context context-type="linenumber">7054</context>

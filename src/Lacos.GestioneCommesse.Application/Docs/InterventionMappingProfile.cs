@@ -20,7 +20,7 @@ public class InterventionMappingProfile : Profile
         CreateMap<Intervention, InterventionDto>()
             .MapMember(x => x.JobId, y => y.Activity!.JobId)
             .MapMember(x => x.Operators, y => y.Operators.Select(e => e.Id))
-            .MapMember(x => x.Products, y => y.Products.Select(e => e.Id));
+            .MapMember(x => x.ActivityProducts, y => y.Products.Select(e => e.ActivityProductId));
 
         CreateMap<InterventionDto, Intervention>()
             .IgnoreCommonMembers()

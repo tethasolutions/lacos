@@ -8,8 +8,8 @@
     </kendo-grid-column>
     <kendo-grid-column field="pictureFileName" title="Immagine" [sortable]="false" [filterable]="false" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <a [href]="imagesUrl + dataItem.pictureFileName" target="_blank">
-                <img *ngIf="dataItem.pictureFileName" [src]="imagesUrl + dataItem.pictureFileName" class="thumbnail-s">
+            <a *ngIf="dataItem.pictureFileName" [href]="imagesUrl + dataItem.pictureFileName" target="_blank">
+                <img [src]="imagesUrl + dataItem.pictureFileName" class="thumbnail-s">
             </a>
         </ng-template>
     </kendo-grid-column>

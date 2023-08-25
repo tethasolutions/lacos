@@ -21,7 +21,7 @@ export class Intervention {
         public activityId: number,
         public jobId: number,
         public operators: number[],
-        public products: number[]
+        public activityProducts: number[]
     ) {
         this.start = new Date(start);
         this.end = new Date(end);
@@ -29,7 +29,7 @@ export class Intervention {
 
     static build(o: Intervention) {
         return new Intervention(o.id, o.start, o.end, o.status, o.description, o.vehicleId,
-            o.activityId, o.jobId, o.operators, o.products);
+            o.activityId, o.jobId, o.operators, o.activityProducts);
     }
 
 }

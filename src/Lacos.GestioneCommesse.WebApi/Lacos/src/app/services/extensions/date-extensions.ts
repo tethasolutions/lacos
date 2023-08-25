@@ -142,8 +142,4 @@ export function dateExtensions() {
         return new Date(this);
     }
 
-    // Date.prototype.toJSON = function () {
-    //     return this.toOffsetString();
-    // }
-
 }

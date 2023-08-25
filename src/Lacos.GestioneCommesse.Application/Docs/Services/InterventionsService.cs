@@ -14,19 +14,22 @@ public class InterventionsService : IInterventionsService
     private readonly IMapper mapper;
     private readonly IRepository<Intervention> repository;
     private readonly IRepository<Operator> operatorRepository;
+    private readonly IRepository<ActivityProduct> activityProductRepository;
     private readonly ILacosDbContext dbContext;
 
     public InterventionsService(
         IMapper mapper,
         IRepository<Intervention> repository,
         IRepository<Operator> operatorRepository,
-        ILacosDbContext dbContext
+        ILacosDbContext dbContext,
+        IRepository<ActivityProduct> activityProductRepository
     )
     {
         this.mapper = mapper;
         this.repository = repository;
         this.operatorRepository = operatorRepository;
         this.dbContext = dbContext;
+        this.activityProductRepository = activityProductRepository;
     }
 
     public IQueryable<InterventionReadModel> Query()
@@ -53,12 +56,9 @@ public class InterventionsService : IInterventionsService
     public async Task<InterventionDto> Create(InterventionDto interventionDto)
     {
         var intervention = interventionDto.MapTo<Intervention>(mapper);
-        
-        intervention.Operators.AddRange(
-            await operatorRepository.Query()
-                .Where(e => interventionDto.Operators.Contains(e.Id))
-                .ToListAsync()
-        );
+
+        await MergeInterventionOperators(intervention, interventionDto.Operators);
+        await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
 
         await repository.Insert(intervention);
 
@@ -89,12 +89,8 @@ public class InterventionsService : IInterventionsService
 
         intervention = interventionDto.MapTo(intervention, mapper);
 
-        intervention.Operators.Clear();
-        intervention.Operators.AddRange(
-            await operatorRepository.Query()
-                .Where(e => interventionDto.Operators.Contains(e.Id))
-                .ToListAsync()
-        );
+        await MergeInterventionOperators(intervention, interventionDto.Operators);
+        await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
 
         repository.Update(intervention);
 
@@ -125,5 +121,66 @@ public class InterventionsService : IInterventionsService
         repository.Delete(intervention);
 
         await dbContext.SaveChanges();
+    }
+
+    private async Task MergeInterventionOperators(Intervention intervention, IEnumerable<long> operatorIds)
+    {
+        var ids = operatorIds.ToList();
+
+        foreach (var @operator in intervention.Operators.ToList())
+        {
+            if (!ids.Contains(@operator.Id))
+            {
+                intervention.Operators.Remove(@operator);
+            }
+
+            ids.Remove(@operator.Id);
+        }
+
+        var operatorsToAdd = await operatorRepository.Query()
+                .Where(e => ids.Contains(e.Id))
+                .ToListAsync();
+
+        intervention.Operators.AddRange(operatorsToAdd);
+    }
+
+    private async Task MergeInterventionProducts(Intervention intervention, IEnumerable<long> activityProductIds)
+    {
+        var ids = activityProductIds.ToList();
+
+        foreach (var product in intervention.Products.ToList())
+        {
+            if (!ids.Contains(product.ActivityProductId))
+            {
+                intervention.Products.Remove(product);
+            }
+
+            ids.Remove(product.ActivityProductId);
+        }
+
+        var productsToAdd = await activityProductRepository.Query()
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Where(e => ids.Contains(e.Id))
+            .Select(ap => new InterventionProduct
+            {
+                ActivityProductId = ap.Id,
+                CheckList = ap.Activity!.Type!.CheckLists
+                    .Where(cl => cl.ProductTypeId == ap.Product!.ProductTypeId)
+                    .Select(cl => new InterventionProductCheckList
+                    {
+                        Description = cl.Description,
+                        Items = cl.Items
+                            .Select(i => new InterventionProductCheckListItem
+                            {
+                                Description = i.Description
+                            })
+                            .ToList()
+                    })
+                    .FirstOrDefault()
+            })
+            .ToListAsync();
+
+        intervention.Products.AddRange(productsToAdd);
     }
 }

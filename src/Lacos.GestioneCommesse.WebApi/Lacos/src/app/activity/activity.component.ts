@@ -87,7 +87,8 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     }
 
     createIntervention() {
-        const intervention = new Intervention(0, new Date(), new Date().addHours(1), InterventionStatus.Scheduled,
+        const now = new Date();
+        const intervention = new Intervention(0, now, now.addHours(1), InterventionStatus.Scheduled,
             null, null, this.activity.id, this.activity.jobId, [], []);
 
         this._subscriptions.push(
@@ -99,6 +100,10 @@ export class ActivityComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+
+    onInterventionsChanged() {
+        this._getActivity();
     }
 
     private _subscribeRouteParams() {
@@ -133,6 +138,16 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         this._messageBox.success(`Intervento programmato.`);
 
         this.interventionsCalendar?.refresh();
+    }
+
+    private _getActivity() {
+        this._subscriptions.push(
+            this._service.getDetail(this.activity.id)
+                .pipe(
+                    tap(e => this.activity = e)
+                )
+                .subscribe()
+        );
     }
 
 }

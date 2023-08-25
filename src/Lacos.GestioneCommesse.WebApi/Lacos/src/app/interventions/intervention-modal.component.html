@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <kendo-combobox [data]="activities" textField="fullName" valueField="id" name="activityId"
                             [(ngModel)]="options.activityId" required [suggest]="true" [allowCustom]="false"
-                            [valuePrimitive]="true" [readonly]="activityReadonly">
+                            [valuePrimitive]="true" [readonly]="activityReadonly" (valueChange)="onActivityChanged()">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['activityId']"></div>
                     </div>
@@ -60,8 +60,20 @@
                     <label>Operatori</label>
                     <div class="form-group">
                         <kendo-multiselect [data]="operators" textField="name" valueField="id" name="operators"
-                            [(ngModel)]="options.operators" required [allowCustom]="false"
-                            [valuePrimitive]="true" [readonly]="readonly" (valueChange)="onOperatorsChanged($event)">
+                            [(ngModel)]="options.operators" required [allowCustom]="false" [valuePrimitive]="true"
+                            [readonly]="readonly" (valueChange)="onOperatorsChanged($event)">
+                            <ng-template kendoMultiSelectItemTemplate let-dataItem>
+                                <div class="d-flex gap-1">
+                                    <app-operator-avatar [options]="dataItem"></app-operator-avatar>
+                                    {{ dataItem.name }}
+                                </div>
+                            </ng-template>
+                            <ng-template kendoMultiSelectTagTemplate let-dataItem>
+                                <div class="d-flex gap-1">
+                                    <app-operator-avatar [options]="dataItem"></app-operator-avatar>
+                                    {{ dataItem.name }}
+                                </div>
+                            </ng-template>
                         </kendo-multiselect>
                         <div class="validation-message" [control]="form.controls['operators']"></div>
                     </div>
@@ -74,6 +86,29 @@
                             [valuePrimitive]="true" [readonly]="readonly">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['vehicleId']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Prodotti</label>
+                    <div class="form-group">
+                        <kendo-multiselect [data]="products" textField="fullName" valueField="id"
+                            name="activityProducts" [(ngModel)]="options.activityProducts" required
+                            [allowCustom]="false" [valuePrimitive]="true" [readonly]="readonly">
+                            <ng-template kendoMultiSelectItemTemplate let-dataItem>
+                                <img *ngIf="dataItem.pictureFileName" [src]="imagesUrl + dataItem.pictureFileName"
+                                    class="thumbnail-xs">
+                                {{ dataItem.fullName }}
+                            </ng-template>
+                            <ng-template kendoMultiSelectTagTemplate let-dataItem>
+                                <img *ngIf="dataItem.pictureFileName" [src]="imagesUrl + dataItem.pictureFileName"
+                                    class="thumbnail-xxs">
+                                {{ dataItem.fullName }}
+                            </ng-template>
+                        </kendo-multiselect>
+                        <div class="validation-message" [control]="form.controls['activityProducts']"></div>
                     </div>
                 </div>
             </div>

@@ -14,6 +14,9 @@ import { VehicleModel } from '../shared/models/vehicle.model';
 import { VehiclesService } from '../services/vehicles.service';
 import { OperatorsService } from '../services/operators.service';
 import { OperatorModel } from '../shared/models/operator.model';
+import { ApiUrls } from '../services/common/api-urls';
+import { IActivityProductReadModel } from '../services/activity-products/models';
+import { ActivityProductsService } from '../services/activity-products/activity-products.service';
 
 @Component({
     selector: 'app-intervention-modal',
@@ -26,18 +29,22 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
 
     jobs: SelectableJob[];
     activities: SelectableActivity[];
+    products: SelectableActivityProduct[];
     vehicles: SelectableVehicle[];
     activityReadonly: boolean;
     jobReadonly: boolean;
     readonly: boolean;
     operators: OperatorModel[];
 
+    readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
+
     constructor(
         private readonly _jobsService: JobsService,
         private readonly _activitiesService: ActivitiesService,
         private readonly _messageBox: MessageBoxService,
         private readonly _vechiclesService: VehiclesService,
-        private readonly _operatorsService: OperatorsService
+        private readonly _operatorsService: OperatorsService,
+        private readonly _activityProductsService: ActivityProductsService
     ) {
         super();
     }
@@ -47,9 +54,30 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         this._getOperators();
     }
 
+    override open(options: Intervention) {
+        const result = super.open(options);
+
+        this.activityReadonly = !!this.options.activityId;
+        this.jobReadonly = !!this.options.jobId;
+        this.readonly = this.options.status !== InterventionStatus.Scheduled;
+
+        this._getJobs();
+        this._tryGetActivities();
+        this._tryGetProducts();
+
+        return result;
+    }
+
     onJobChanged() {
         this.options.activityId = null;
         this._tryGetActivities();
+
+        this.onActivityChanged();
+    }
+
+    onActivityChanged() {
+        this.options.activityProducts = [];
+        this._tryGetProducts();
     }
 
     onOperatorsChanged() {
@@ -62,19 +90,6 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         } else if (!firstOperatorId && this.options.vehicleId) {
             this.options.vehicleId = null;
         }
-    }
-
-    override open(options: Intervention) {
-        const result = super.open(options);
-
-        this.activityReadonly = !!this.options.activityId;
-        this.jobReadonly = !!this.options.jobId;
-        this.readonly = this.options.status !== InterventionStatus.Scheduled;
-
-        this._getJobs();
-        this._tryGetActivities();
-
-        return result;
     }
 
     protected override _canClose() {
@@ -141,6 +156,34 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
             this._activitiesService.read(state)
                 .pipe(
                     tap(e => this.activities = (e.data as IActivityReadModel[]).map(e => new SelectableActivity(e)))
+                )
+                .subscribe()
+        );
+    }
+
+    private _tryGetProducts() {
+        if (!this.options.activityId) {
+            this.products = [];
+            return;
+        }
+
+        const state: State = {
+            filter: {
+                filters: [
+                    { field: 'activityId', operator: 'eq', value: this.options.activityId }
+                ],
+                logic: 'and'
+            },
+            sort: [
+                { field: 'code', dir: 'asc' },
+                { field: 'name', dir: 'asc' }
+            ]
+        };
+
+        this._subscriptions.push(
+            this._activityProductsService.read(state)
+                .pipe(
+                    tap(e => this.products = (e.data as IActivityProductReadModel[]).map(ee => new SelectableActivityProduct(ee)))
                 )
                 .subscribe()
         );
@@ -224,6 +267,27 @@ class SelectableVehicle {
         this.name = vehicle.name;
         this.plate = vehicle.plate;
         this.fullName = `${vehicle.plate} - ${vehicle.name}`;
+    }
+
+}
+
+
+class SelectableActivityProduct {
+
+    readonly id: number;
+    readonly code: string;
+    readonly name: string;
+    readonly pictureFileName: string;
+    readonly fullName: string;
+
+    constructor(
+        product: IActivityProductReadModel
+    ) {
+        this.id = product.id;
+        this.code = product.code;
+        this.name = product.name;
+        this.pictureFileName = product.pictureFileName;
+        this.fullName = `${product.code} - ${product.name}`;
     }
 
 }

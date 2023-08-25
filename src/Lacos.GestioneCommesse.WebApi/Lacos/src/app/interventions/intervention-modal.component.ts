@@ -47,6 +47,23 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         this._getOperators();
     }
 
+    onJobChanged() {
+        this.options.activityId = null;
+        this._tryGetActivities();
+    }
+
+    onOperatorsChanged() {
+        const firstOperatorId = this.options.operators[0];
+
+        if (firstOperatorId && !this.options.vehicleId) {
+            this.options.vehicleId = this.operators
+                .find(e => e.id === firstOperatorId)
+                ?.defaultVehicleId;
+        } else if (!firstOperatorId && this.options.vehicleId) {
+            this.options.vehicleId = null;
+        }
+    }
+
     override open(options: Intervention) {
         const result = super.open(options);
 
@@ -58,11 +75,6 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         this._tryGetActivities();
 
         return result;
-    }
-
-    onJobChanged() {
-        this.options.activityId = null;
-        this._tryGetActivities();
     }
 
     protected override _canClose() {

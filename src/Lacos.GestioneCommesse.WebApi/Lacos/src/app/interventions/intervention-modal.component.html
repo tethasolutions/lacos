@@ -61,7 +61,7 @@
                     <div class="form-group">
                         <kendo-multiselect [data]="operators" textField="name" valueField="id" name="operators"
                             [(ngModel)]="options.operators" required [allowCustom]="false"
-                            [valuePrimitive]="true" [readonly]="readonly">
+                            [valuePrimitive]="true" [readonly]="readonly" (valueChange)="onOperatorsChanged($event)">
                         </kendo-multiselect>
                         <div class="validation-message" [control]="form.controls['operators']"></div>
                     </div>

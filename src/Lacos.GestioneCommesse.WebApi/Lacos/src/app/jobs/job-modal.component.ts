@@ -19,8 +19,6 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
 
     customers: CustomerModel[];
 
-    readonly states = listEnum<JobStatus>(JobStatus);
-
     constructor(
         private readonly _customersService: CustomerService,
         private readonly _messageBox: MessageBoxService

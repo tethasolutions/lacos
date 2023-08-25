@@ -6,6 +6,10 @@
         <span class="fa fa-edit"></span>
         Modifica
     </a>
+    <a class="btn btn-secondary btn-sm" (click)="createIntervention()">
+        <span class="fa fa-plus"></span>
+        Programma intervento
+    </a>
 </div>
 
 <p>
@@ -57,6 +61,10 @@
     </div>
 </div>
 
+<app-interventions-calendar class="mb-4 d-flex" [interventionModal]="interventionModal"
+    [options]="{jobId: activity.jobId, activityId: activity.id}">
+</app-interventions-calendar>
+
 <div class="d-flex align-items-center gap-3 mb-2">
     <h4>
         Prodotti associati
@@ -70,3 +78,4 @@
 <app-activity-products #activityProducts [activityId]="activity.id"></app-activity-products>
 <app-job-activity-modal #jobActivityModal></app-job-activity-modal>
 <app-activity-product-modal #activityProductModal></app-activity-product-modal>
+<app-intervention-modal #interventionModal></app-intervention-modal>

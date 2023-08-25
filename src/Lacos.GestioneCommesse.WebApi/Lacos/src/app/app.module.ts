@@ -84,6 +84,11 @@ import { ActivityProductsComponent } from './activity/activity-products.componen
 import { StringsPipe } from './shared/pipes/strings.pipe';
 import { ActivityProductModalComponent } from './activity/activity-product-modal.component';
 import { ActivityProductsService } from './services/activity-products/activity-products.service';
+import { InterventionModalComponent } from './interventions/intervention-modal.component';
+import { InterventionsService } from './services/interventions/interventions.service';
+import { InterventionsCalendarComponent } from './interventions/interventions-calendar.component';
+import { SchedulerModule } from '@progress/kendo-angular-scheduler';
+import { OperatorAvatarComponent } from './shared/operator-avatar.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -132,7 +137,10 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         JobActivityModalComponent,
         ActivityProductsComponent,
         StringsPipe,
-        ActivityProductModalComponent
+        ActivityProductModalComponent,
+        InterventionModalComponent,
+        InterventionsCalendarComponent,
+        OperatorAvatarComponent
     ],
     imports: [
         BrowserModule,
@@ -154,7 +162,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ExcelModule,
         InputsModule,
         PDFModule,
-        UploadsModule
+        UploadsModule,
+        SchedulerModule
     ],
     providers: [
         {
@@ -181,7 +190,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ProductTypesService,
         JobsService,
         ActivitiesService,
-        ActivityProductsService
+        ActivityProductsService,
+        InterventionsService
     ],
     bootstrap: [AppComponent]
 })

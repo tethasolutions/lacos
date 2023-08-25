@@ -2,6 +2,7 @@
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -12,16 +13,19 @@ public class InterventionsService : IInterventionsService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Intervention> repository;
+    private readonly IRepository<Operator> operatorRepository;
     private readonly ILacosDbContext dbContext;
 
     public InterventionsService(
         IMapper mapper,
         IRepository<Intervention> repository,
+        IRepository<Operator> operatorRepository,
         ILacosDbContext dbContext
     )
     {
         this.mapper = mapper;
         this.repository = repository;
+        this.operatorRepository = operatorRepository;
         this.dbContext = dbContext;
     }
 
@@ -49,6 +53,12 @@ public class InterventionsService : IInterventionsService
     public async Task<InterventionDto> Create(InterventionDto interventionDto)
     {
         var intervention = interventionDto.MapTo<Intervention>(mapper);
+        
+        intervention.Operators.AddRange(
+            await operatorRepository.Query()
+                .Where(e => interventionDto.Operators.Contains(e.Id))
+                .ToListAsync()
+        );
 
         await repository.Insert(intervention);
 
@@ -59,7 +69,13 @@ public class InterventionsService : IInterventionsService
 
     public async Task<InterventionDto> Update(InterventionDto interventionDto)
     {
-        var intervention = await repository.Get(interventionDto.Id);
+        var intervention = await repository.Query()
+            .Include(e => e.Operators)
+            .Include(e => e.Products)
+            .ThenInclude(e => e.CheckList)
+            .ThenInclude(e => e!.Items)
+            .Where(e => e.Id == interventionDto.Id)
+            .FirstOrDefaultAsync();
 
         if (intervention == null)
         {
@@ -72,6 +88,13 @@ public class InterventionsService : IInterventionsService
         }
 
         intervention = interventionDto.MapTo(intervention, mapper);
+
+        intervention.Operators.Clear();
+        intervention.Operators.AddRange(
+            await operatorRepository.Query()
+                .Where(e => interventionDto.Operators.Contains(e.Id))
+                .ToListAsync()
+        );
 
         repository.Update(intervention);
 

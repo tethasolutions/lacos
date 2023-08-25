@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Extensions;
 
 namespace Lacos.GestioneCommesse.Application.Docs;
@@ -12,10 +13,14 @@ public class InterventionMappingProfile : Profile
         CreateMap<Intervention, InterventionReadModel>()
             .MapMember(x => x.Customer, y => y.Activity!.Job!.Customer!.Name)
             .MapMember(x => x.CustomerAddress, y => y.Activity!.CustomerAddress!.StreetAddress + ", " + y.Activity!.CustomerAddress.City + " (" + y.Activity!.CustomerAddress.Province + ")")
-            .MapMember(x => x.Operators, y => y.Operators.Select(e => e.Name));
+            .MapMember(x => x.ActivityType, y => y.Activity!.Type!.Name);
+
+        CreateMap<Operator, InterventionOperatorReadModel>();
 
         CreateMap<Intervention, InterventionDto>()
-            .MapMember(x => x.JobId, y => y.Activity!.JobId);
+            .MapMember(x => x.JobId, y => y.Activity!.JobId)
+            .MapMember(x => x.Operators, y => y.Operators.Select(e => e.Id))
+            .MapMember(x => x.Products, y => y.Products.Select(e => e.Id));
 
         CreateMap<InterventionDto, Intervention>()
             .IgnoreCommonMembers()

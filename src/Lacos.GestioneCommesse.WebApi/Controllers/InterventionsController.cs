@@ -16,7 +16,7 @@ public class InterventionsController : LacosApiController
     }
 
     [HttpGet("read")]
-    public Task<DataSourceResult> Read([DataSourceRequest] DataSourceRequest request)
+    public Task<DataSourceResult> Read(DataSourceRequest request)
     {
         return service.Query()
             .ToDataSourceResultAsync(request);

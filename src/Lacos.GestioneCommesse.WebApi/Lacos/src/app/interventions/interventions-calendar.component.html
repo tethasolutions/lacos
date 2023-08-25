@@ -1,0 +1,58 @@
+<kendo-scheduler [events]="interventions" [selectedDate]="date" [workWeekStart]="1" [workWeekEnd]="6"
+    workDayStart="07:00" workDayEnd="20:00" [selectedViewIndex]="1" [showWorkHours]="true" [editable]="true"
+    [highlightOngoingEvents]="false"  (dateChange)="onDateChange($event)" (eventDblClick)="onEventDblClick($event)" (slotDblClick)="onSlotDblClick($event)"
+    style="height: 800px;">
+    <kendo-scheduler-day-view>
+        <ng-template kendoSchedulerEventTemplate let-event="event">
+            <div>
+                <div class="d-flex align-items-center gap-2">
+                    <b>
+                        {{event.dataItem.customer}}
+                    </b>
+                    <div class="d-flex gap-1 align-items-center">
+                        <app-operator-avatar *ngFor="let operator of event.dataItem.operators"
+                            [options]="operator"></app-operator-avatar>
+                    </div>
+                </div>
+                {{event.dataItem.customerAddress}}
+                <br>
+                {{event.dataItem.activityType}}
+            </div>
+        </ng-template>
+        <ng-template kendoSchedulerAllDayEventTemplate let-event="event">
+            <div class="d-flex align-items-center gap-2">
+                <span>
+                    {{event.dataItem.customer}}
+                </span>
+                <div class="d-flex gap-1 align-items-center">
+                    <app-operator-avatar *ngFor="let operator of event.dataItem.operators"
+                        [options]="operator"></app-operator-avatar>
+                </div>
+                <div>
+                    {{event.dataItem.customerAddress}}
+                    &bull;
+                    {{event.dataItem.activityType}}
+                </div>
+            </div>
+        </ng-template>
+    </kendo-scheduler-day-view>
+    <kendo-scheduler-work-week-view>
+        <ng-template kendoSchedulerEventTemplate let-event="event">
+            <span>
+                {{event.dataItem.customer}}
+            </span>
+        </ng-template>
+        <ng-template kendoSchedulerAllDayEventTemplate let-event="event">
+            <div class="d-flex align-items-center gap-2">
+                <span>
+                    {{event.dataItem.customer}}
+                </span>
+                <div class="d-flex gap-1 align-items-center">
+                    <app-operator-avatar *ngFor="let operator of event.dataItem.operators"
+                        [options]="operator"></app-operator-avatar>
+                </div>
+            </div>
+        </ng-template>
+    </kendo-scheduler-work-week-view>
+    <kendo-scheduler-month-view></kendo-scheduler-month-view>
+</kendo-scheduler>

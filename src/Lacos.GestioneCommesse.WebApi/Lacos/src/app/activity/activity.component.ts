@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '../shared/base.component';
 import { filter, switchMap, tap } from 'rxjs';
-import { Activity, ActivityDetail } from '../services/activities/models';
+import { ActivityDetail } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { NgForm } from '@angular/forms';
@@ -11,6 +11,9 @@ import { ActivityProductModalComponent, ActivityProductModalOptions } from './ac
 import { ActivityProduct } from '../services/activity-products/models';
 import { ActivityProductsService } from '../services/activity-products/activity-products.service';
 import { ActivityProductsComponent } from './activity-products.component';
+import { InterventionModalComponent } from '../interventions/intervention-modal.component';
+import { InterventionsService } from '../services/interventions/interventions.service';
+import { Intervention, InterventionStatus } from '../services/interventions/models';
 
 @Component({
     selector: 'app-activity',
@@ -30,13 +33,17 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     @ViewChild('activityProducts', { static: true })
     activityProducts: ActivityProductsComponent;
 
+    @ViewChild('interventionModal', { static: true })
+    interventionModal: InterventionModalComponent;
+
     activity: ActivityDetail;
 
     constructor(
         private readonly _route: ActivatedRoute,
         private readonly _service: ActivitiesService,
         private readonly _messageBox: MessageBoxService,
-        private readonly _activityProductsService: ActivityProductsService
+        private readonly _activityProductsService: ActivityProductsService,
+        private readonly _interventionsService: InterventionsService
     ) {
         super();
     }
@@ -75,6 +82,21 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         );
     }
 
+    createIntervention() {
+        const intervention = new Intervention(0, new Date(), new Date().addHours(1), InterventionStatus.Scheduled,
+            null, null, this.activity.id, this.activity.jobId, [], []);
+
+        this._subscriptions.push(
+            this.interventionModal.open(intervention)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._interventionsService.create(intervention)),
+                    tap(() => this._afterInterventionCreated())
+                )
+                .subscribe()
+        );
+    }
+
     private _subscribeRouteParams() {
         this._subscriptions.push(
             this._route.data
@@ -101,6 +123,10 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         this._messageBox.success(`${name} associato all'attività.`);
 
         this.activityProducts.refresh();
+    }
+
+    private _afterInterventionCreated() {
+        this._messageBox.success(`Intervento programmato.`);
     }
 
 }

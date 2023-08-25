@@ -2399,6 +2399,987 @@
         <note priority="1" from="description">The aria-label attribute for the Circular ProgressBar component.</note>
         <note priority="1" from="meaning">kendo.circularprogressbar.progressBarLabel</note>
       </trans-unit>
+      <trans-unit id="8788943645292671161" datatype="html">
+        <source>Repeat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5011</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.repeat</note>
+      </trans-unit>
+      <trans-unit id="1576286772964686531" datatype="html">
+        <source>day(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5014</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;day(s)&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.dailyInterval</note>
+      </trans-unit>
+      <trans-unit id="2375882472818653457" datatype="html">
+        <source>Repeat every</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5017</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat every&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.dailyRepeatEvery</note>
+      </trans-unit>
+      <trans-unit id="7243646588531721642" datatype="html">
+        <source>week(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5020</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;week(s)&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.weeklyInterval</note>
+      </trans-unit>
+      <trans-unit id="4914310067503948792" datatype="html">
+        <source>Repeat every</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5023</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat every&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.weeklyRepeatEvery</note>
+      </trans-unit>
+      <trans-unit id="4147240639502605432" datatype="html">
+        <source>Repeat on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5026</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat on&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.weeklyRepeatOn</note>
+      </trans-unit>
+      <trans-unit id="7227479698248140015" datatype="html">
+        <source>Day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5029</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Day&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.monthlyDay</note>
+      </trans-unit>
+      <trans-unit id="4064971617373785103" datatype="html">
+        <source>month(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5032</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;month(s)&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.monthlyInterval</note>
+      </trans-unit>
+      <trans-unit id="8052133877234013470" datatype="html">
+        <source>Repeat every</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5035</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat every&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.monthlyRepeatEvery</note>
+      </trans-unit>
+      <trans-unit id="5679551064569721903" datatype="html">
+        <source>Repeat on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5038</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat on&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.monthlyRepeatOn</note>
+      </trans-unit>
+      <trans-unit id="4042178120150268671" datatype="html">
+        <source>of</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5041</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;of&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.yearlyOf</note>
+      </trans-unit>
+      <trans-unit id="40013948560808339" datatype="html">
+        <source>Repeat every</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5044</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat every&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.yearlyRepeatEvery</note>
+      </trans-unit>
+      <trans-unit id="8341877415603464181" datatype="html">
+        <source>Repeat on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5047</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat on&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.yearlyRepeatOn</note>
+      </trans-unit>
+      <trans-unit id="2807249993287587395" datatype="html">
+        <source>year(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5050</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;year(s)&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.yearlyInterval</note>
+      </trans-unit>
+      <trans-unit id="3411828321534606106" datatype="html">
+        <source>Daily</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5053</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Daily&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.frequenciesDaily</note>
+      </trans-unit>
+      <trans-unit id="1888636560142623619" datatype="html">
+        <source>Monthly</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5056</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Monthly&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.frequenciesMonthly</note>
+      </trans-unit>
+      <trans-unit id="3868019025342455426" datatype="html">
+        <source>Never</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5059</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Never&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.frequenciesNever</note>
+      </trans-unit>
+      <trans-unit id="7751757060995164198" datatype="html">
+        <source>Weekly</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5062</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Weekly&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.frequenciesWeekly</note>
+      </trans-unit>
+      <trans-unit id="5461952213371726138" datatype="html">
+        <source>Yearly</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5065</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Yearly&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.frequenciesYearly</note>
+      </trans-unit>
+      <trans-unit id="3509219036806379154" datatype="html">
+        <source>Second</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5071</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Second&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.offsetPositionsSecond</note>
+      </trans-unit>
+      <trans-unit id="3360007263021545136" datatype="html">
+        <source>Third</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5074</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Third&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.offsetPositionsThird</note>
+      </trans-unit>
+      <trans-unit id="1973074769088335432" datatype="html">
+        <source>Fourth</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5077</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Fourth&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.offsetPositionsFourth</note>
+      </trans-unit>
+      <trans-unit id="921310214903186573" datatype="html">
+        <source>Last</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5080</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Last&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.offsetPositionsLast</note>
+      </trans-unit>
+      <trans-unit id="327147532266939448" datatype="html">
+        <source>Day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5083</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Day&apos; displayed in the repeat by section of the monthly recurrence pattern.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.weekdaysDay</note>
+      </trans-unit>
+      <trans-unit id="3509665360149175299" datatype="html">
+        <source>Weekday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5086</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Weekday&apos; displayed in the repeat by section of the monthly recurrence pattern.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.weekdaysWeekday</note>
+      </trans-unit>
+      <trans-unit id="5795746900681495493" datatype="html">
+        <source>Weekend Day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5089</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Weekend Day&apos; displayed in the repeat by section of the monthly recurrence pattern.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.weekdaysWeekendday</note>
+      </trans-unit>
+      <trans-unit id="8163894072062565978" datatype="html">
+        <source>After</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5092</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;After&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.endAfter</note>
+      </trans-unit>
+      <trans-unit id="7520391809247875756" datatype="html">
+        <source>occurrence(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5095</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;occurrence(s)&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.endOccurrence</note>
+      </trans-unit>
+      <trans-unit id="356781468184706156" datatype="html">
+        <source>End</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5098</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;End&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.endLabel</note>
+      </trans-unit>
+      <trans-unit id="8881058177741426019" datatype="html">
+        <source>Never</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5101</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Never&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.endNever</note>
+      </trans-unit>
+      <trans-unit id="5812894481751230966" datatype="html">
+        <source>On</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">5104</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;On&apos; displayed in the recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.recurrenceeditor.endOn</note>
+      </trans-unit>
+      <trans-unit id="8408622862957502888" datatype="html">
+        <source>All events</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6955</context>
+        </context-group>
+        <note priority="1" from="description">The All events text displayed in the timeline views when there is no vertical grouping.</note>
+        <note priority="1" from="meaning">kendo.scheduler.allEvents</note>
+      </trans-unit>
+      <trans-unit id="1312095086929656823" datatype="html">
+        <source>all day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6958</context>
+        </context-group>
+        <note priority="1" from="description">The all day text displayed in the day and week views.</note>
+        <note priority="1" from="meaning">kendo.scheduler.allDay</note>
+      </trans-unit>
+      <trans-unit id="6984691347020720127" datatype="html">
+        <source>Date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6961</context>
+        </context-group>
+        <note priority="1" from="description">The date header text displayed in the agenda view.</note>
+        <note priority="1" from="meaning">kendo.scheduler.dateHeader</note>
+      </trans-unit>
+      <trans-unit id="8587582897660323296" datatype="html">
+        <source>Time</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6964</context>
+        </context-group>
+        <note priority="1" from="description">The time header text displayed in the agenda view.</note>
+        <note priority="1" from="meaning">kendo.scheduler.timeHeader</note>
+      </trans-unit>
+      <trans-unit id="3978422734727725369" datatype="html">
+        <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6967</context>
+        </context-group>
+        <note priority="1" from="description">The delete icon title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.deleteTitle</note>
+      </trans-unit>
+      <trans-unit id="2796853291807558926" datatype="html">
+        <source>Event</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6970</context>
+        </context-group>
+        <note priority="1" from="description">The event header text displayed in the agenda view.</note>
+        <note priority="1" from="meaning">kendo.scheduler.eventHeader</note>
+      </trans-unit>
+      <trans-unit id="5955416358076623168" datatype="html">
+        <source>Next</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6973</context>
+        </context-group>
+        <note priority="1" from="description">The title of the navigation next button.</note>
+        <note priority="1" from="meaning">kendo.scheduler.nextTitle</note>
+      </trans-unit>
+      <trans-unit id="8718593914002864927" datatype="html">
+        <source>Previous</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6976</context>
+        </context-group>
+        <note priority="1" from="description">The title of the navigation previous button.</note>
+        <note priority="1" from="meaning">kendo.scheduler.previousTitle</note>
+      </trans-unit>
+      <trans-unit id="8822764848863163824" datatype="html">
+        <source>Show full day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6979</context>
+        </context-group>
+        <note priority="1" from="description">The text of the show full day button displayed in the footer of the day, week and timeline views.</note>
+        <note priority="1" from="meaning">kendo.scheduler.showFullDay</note>
+      </trans-unit>
+      <trans-unit id="3936978764162144919" datatype="html">
+        <source>Show business hours</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6982</context>
+        </context-group>
+        <note priority="1" from="description">The text of the show work day button displayed in the footer of the day, week and timeline views.</note>
+        <note priority="1" from="meaning">kendo.scheduler.showWorkDay</note>
+      </trans-unit>
+      <trans-unit id="7902376714654319987" datatype="html">
+        <source>Today</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6985</context>
+        </context-group>
+        <note priority="1" from="description">The today button text displayed in the navigation.</note>
+        <note priority="1" from="meaning">kendo.scheduler.today</note>
+      </trans-unit>
+      <trans-unit id="3220648218786128347" datatype="html">
+        <source>TODAY</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6988</context>
+        </context-group>
+        <note priority="1" from="description">The text of today&apos;s date in the header of the Calendar.</note>
+        <note priority="1" from="meaning">kendo.scheduler.calendarToday</note>
+      </trans-unit>
+      <trans-unit id="4013373256580533285" datatype="html">
+        <source>Day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6991</context>
+        </context-group>
+        <note priority="1" from="description">The day view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.dayViewTitle</note>
+      </trans-unit>
+      <trans-unit id="4942025028043440996" datatype="html">
+        <source>Multi-Day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6994</context>
+        </context-group>
+        <note priority="1" from="description">The multi day view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.multiDayViewTitle</note>
+      </trans-unit>
+      <trans-unit id="4740641677277537900" datatype="html">
+        <source>Week</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">6997</context>
+        </context-group>
+        <note priority="1" from="description">The week view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.weekViewTitle</note>
+      </trans-unit>
+      <trans-unit id="5945679415328129389" datatype="html">
+        <source>Work Week</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7000</context>
+        </context-group>
+        <note priority="1" from="description">The work week view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.workWeekViewTitle</note>
+      </trans-unit>
+      <trans-unit id="1742125707942154077" datatype="html">
+        <source>Month</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7003</context>
+        </context-group>
+        <note priority="1" from="description">The month view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.monthViewTitle</note>
+      </trans-unit>
+      <trans-unit id="1293465521242670078" datatype="html">
+        <source>Multi-Week</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7006</context>
+        </context-group>
+        <note priority="1" from="description">The multi week view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.multiWeekViewTitle</note>
+      </trans-unit>
+      <trans-unit id="8217382496677055298" datatype="html">
+        <source>Timeline</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7009</context>
+        </context-group>
+        <note priority="1" from="description">The timeline view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.timelineViewTitle</note>
+      </trans-unit>
+      <trans-unit id="3115529717588498176" datatype="html">
+        <source>Timeline Week</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7012</context>
+        </context-group>
+        <note priority="1" from="description">The timeline week view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.timelineWeekViewTitle</note>
+      </trans-unit>
+      <trans-unit id="5220476278066772606" datatype="html">
+        <source>Timeline Month</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7015</context>
+        </context-group>
+        <note priority="1" from="description">The timeline month view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.timelineMonthViewTitle</note>
+      </trans-unit>
+      <trans-unit id="3706328927689979096" datatype="html">
+        <source>Agenda</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7018</context>
+        </context-group>
+        <note priority="1" from="description">The agenda view title.</note>
+        <note priority="1" from="meaning">kendo.scheduler.agendaViewTitle</note>
+      </trans-unit>
+      <trans-unit id="3362605619020331305" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7021</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Cancel&apos; displayed in scheduler.</note>
+        <note priority="1" from="meaning">kendo.scheduler.cancel</note>
+      </trans-unit>
+      <trans-unit id="1135434150799803990" datatype="html">
+        <source>Save</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7024</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Save&apos; displayed in scheduler.</note>
+        <note priority="1" from="meaning">kendo.scheduler.save</note>
+      </trans-unit>
+      <trans-unit id="4679570191412964384" datatype="html">
+        <source>Title</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7027</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Title&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventTitle</note>
+      </trans-unit>
+      <trans-unit id="8950463545934402114" datatype="html">
+        <source>Start</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7030</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Start&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventStart</note>
+      </trans-unit>
+      <trans-unit id="3790399863174995244" datatype="html">
+        <source>Start Time Zone</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7033</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Start Time Zone&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventStartTimeZone</note>
+      </trans-unit>
+      <trans-unit id="4517224154488404602" datatype="html">
+        <source>End</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7036</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;End&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventEnd</note>
+      </trans-unit>
+      <trans-unit id="7038735539999845663" datatype="html">
+        <source>End Time Zone</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7039</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;End Time Zone&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventEndTimeZone</note>
+      </trans-unit>
+      <trans-unit id="7143574931251605534" datatype="html">
+        <source>All Day Event</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7042</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;All Day event&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventAllDay</note>
+      </trans-unit>
+      <trans-unit id="2326906337842303047" datatype="html">
+        <source>Description</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7045</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Description&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventDescription</note>
+      </trans-unit>
+      <trans-unit id="2965234059535254725" datatype="html">
+        <source>End in different Time Zone</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7048</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Use separate Start and End Time Zones&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventSeparateTimeZones</note>
+      </trans-unit>
+      <trans-unit id="2236213542221741073" datatype="html">
+        <source>Specify Time Zone</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7051</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Time Zone&apos; displayed in the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorEventTimeZone</note>
+      </trans-unit>
+      <trans-unit id="6087685798709247238" datatype="html">
+        <source>Event</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7054</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Event&apos; displayed as title of the scheduler event editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editorTitle</note>
+      </trans-unit>
+      <trans-unit id="2771130446018606333" datatype="html">
+        <source>Repeat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7057</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorRepeat</note>
+      </trans-unit>
+      <trans-unit id="7156265113240976747" datatype="html">
+        <source>day(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7060</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;day(s)&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorDailyInterval</note>
+      </trans-unit>
+      <trans-unit id="4754044655309841246" datatype="html">
+        <source>Repeat every</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7063</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat every&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorDailyRepeatEvery</note>
+      </trans-unit>
+      <trans-unit id="6964433212570735746" datatype="html">
+        <source>week(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7066</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;week(s)&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorWeeklyInterval</note>
+      </trans-unit>
+      <trans-unit id="3817801398781476456" datatype="html">
+        <source>Repeat every</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7069</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat every&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorWeeklyRepeatEvery</note>
+      </trans-unit>
+      <trans-unit id="6453859475568542185" datatype="html">
+        <source>Repeat on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7072</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat on&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorWeeklyRepeatOn</note>
+      </trans-unit>
+      <trans-unit id="5599748045690190536" datatype="html">
+        <source>Day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7075</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Day&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorMonthlyDay</note>
+      </trans-unit>
+      <trans-unit id="3575417344638854070" datatype="html">
+        <source>month(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7078</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;month(s)&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorMonthlyInterval</note>
+      </trans-unit>
+      <trans-unit id="7719819752023049444" datatype="html">
+        <source>Repeat every</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7081</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat every&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorMonthlyRepeatEvery</note>
+      </trans-unit>
+      <trans-unit id="2096766037382368468" datatype="html">
+        <source>Repeat on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7084</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat on&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorMonthlyRepeatOn</note>
+      </trans-unit>
+      <trans-unit id="6672695259943113660" datatype="html">
+        <source>of</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7087</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;of&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorYearlyOf</note>
+      </trans-unit>
+      <trans-unit id="8141119167461241688" datatype="html">
+        <source>Repeat every</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7090</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat every&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorYearlyRepeatEvery</note>
+      </trans-unit>
+      <trans-unit id="2145735653820863227" datatype="html">
+        <source>Repeat on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7093</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Repeat on&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorYearlyRepeatOn</note>
+      </trans-unit>
+      <trans-unit id="1652202196533936726" datatype="html">
+        <source>year(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7096</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;year(s)&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorYearlyInterval</note>
+      </trans-unit>
+      <trans-unit id="5023213595781266531" datatype="html">
+        <source>Daily</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7099</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Daily&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorFrequenciesDaily</note>
+      </trans-unit>
+      <trans-unit id="3884314422864893067" datatype="html">
+        <source>Monthly</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7102</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Monthly&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorFrequenciesMonthly</note>
+      </trans-unit>
+      <trans-unit id="7758510782582934936" datatype="html">
+        <source>Never</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7105</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Never&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorFrequenciesNever</note>
+      </trans-unit>
+      <trans-unit id="3105770084102237891" datatype="html">
+        <source>Weekly</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7108</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Weekly&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorFrequenciesWeekly</note>
+      </trans-unit>
+      <trans-unit id="3776729014363660971" datatype="html">
+        <source>Yearly</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7111</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Yearly&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorFrequenciesYearly</note>
+      </trans-unit>
+      <trans-unit id="5597626547885665582" datatype="html">
+        <source>First</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7114</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;First&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorOffsetPositionsFirst</note>
+      </trans-unit>
+      <trans-unit id="6416510614694965999" datatype="html">
+        <source>Second</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7117</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Second&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorOffsetPositionsSecond</note>
+      </trans-unit>
+      <trans-unit id="5473687794099280167" datatype="html">
+        <source>Third</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7120</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Third&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorOffsetPositionsThird</note>
+      </trans-unit>
+      <trans-unit id="3450058621151317524" datatype="html">
+        <source>Fourth</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7123</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Fourth&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorOffsetPositionsFourth</note>
+      </trans-unit>
+      <trans-unit id="6038647414973413875" datatype="html">
+        <source>Last</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7126</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Last&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorOffsetPositionsLast</note>
+      </trans-unit>
+      <trans-unit id="7655296102419034905" datatype="html">
+        <source>Day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7129</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Day&apos; displayed in the repeat by section of the monthly recurrence pattern.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorWeekdaysDay</note>
+      </trans-unit>
+      <trans-unit id="4094983069547710260" datatype="html">
+        <source>Weekday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7132</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Weekday&apos; displayed in the repeat by section of the monthly recurrence pattern.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorWeekdaysWeekday</note>
+      </trans-unit>
+      <trans-unit id="7054014236026062694" datatype="html">
+        <source>Weekend Day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7135</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Weekend Day&apos; displayed in the repeat by section of the monthly recurrence pattern.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorWeekdaysWeekendday</note>
+      </trans-unit>
+      <trans-unit id="2097703021296390048" datatype="html">
+        <source>After</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7138</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;After&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorEndAfter</note>
+      </trans-unit>
+      <trans-unit id="1451056976548055926" datatype="html">
+        <source>occurrence(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7141</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;occurrence(s)&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorEndOccurrence</note>
+      </trans-unit>
+      <trans-unit id="5231487492500110340" datatype="html">
+        <source>End</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7144</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;End&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorEndLabel</note>
+      </trans-unit>
+      <trans-unit id="5437573022604353578" datatype="html">
+        <source>Never</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7147</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Never&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorEndNever</note>
+      </trans-unit>
+      <trans-unit id="3682093993696692809" datatype="html">
+        <source>On</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7150</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;On&apos; displayed in the scheduler recurrence editor.</note>
+        <note priority="1" from="meaning">kendo.scheduler.recurrenceEditorEndOn</note>
+      </trans-unit>
+      <trans-unit id="7253460703217602757" datatype="html">
+        <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7153</context>
+        </context-group>
+        <note priority="1" from="description">The text of the &apos;Delete&apos; button displayed in the scheduler remove confirmation dialog.</note>
+        <note priority="1" from="meaning">kendo.scheduler.destroy</note>
+      </trans-unit>
+      <trans-unit id="5917959048626452273" datatype="html">
+        <source>Are you sure you want to delete this event?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7156</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Are you sure you want to delete this event?&apos; displayed in scheduler remove confirmation dialog.</note>
+        <note priority="1" from="meaning">kendo.scheduler.deleteConfirmation</note>
+      </trans-unit>
+      <trans-unit id="1834554343916221051" datatype="html">
+        <source>Do you want to edit only this event occurrence or the whole series?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7159</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Do you want to edit only this event occurrence or the whole series?&apos; displayed in the scheduler recurring confirmation dialog.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editRecurringConfirmation</note>
+      </trans-unit>
+      <trans-unit id="8272351580358548563" datatype="html">
+        <source>Edit current occurrence</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7162</context>
+        </context-group>
+        <note priority="1" from="description">The text of the &apos;Edit current occurrence&apos; button displayed in the scheduler recurring confirmation dialog.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editOccurrence</note>
+      </trans-unit>
+      <trans-unit id="125777708095000773" datatype="html">
+        <source>Edit the series</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7165</context>
+        </context-group>
+        <note priority="1" from="description">The text of the &apos;Edit the series&apos; button displayed in the scheduler recurring confirmation dialog.</note>
+        <note priority="1" from="meaning">kendo.scheduler.editSeries</note>
+      </trans-unit>
+      <trans-unit id="3713756894071974624" datatype="html">
+        <source>Do you want to delete only this event occurrence or the whole series?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7168</context>
+        </context-group>
+        <note priority="1" from="description">The text similar to &apos;Do you want to delete only this event occurrence or the whole series?&apos; displayed in the scheduler recurring confirmation dialog.</note>
+        <note priority="1" from="meaning">kendo.scheduler.deleteRecurringConfirmation</note>
+      </trans-unit>
+      <trans-unit id="1748288149909224362" datatype="html">
+        <source>Delete current occurrence</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7171</context>
+        </context-group>
+        <note priority="1" from="description">The text of the &apos;Delete current occurrence&apos; button displayed in the scheduler recurring confirmation dialog.</note>
+        <note priority="1" from="meaning">kendo.scheduler.deleteOccurrence</note>
+      </trans-unit>
+      <trans-unit id="3833220248658630693" datatype="html">
+        <source>Delete the series</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7174</context>
+        </context-group>
+        <note priority="1" from="description">The text similar of the &apos;Delete the series&apos; button displayed in the scheduler recurring confirmation dialog.</note>
+        <note priority="1" from="meaning">kendo.scheduler.deleteSeries</note>
+      </trans-unit>
+      <trans-unit id="1567169606122407258" datatype="html">
+        <source>Delete Event</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7177</context>
+        </context-group>
+        <note priority="1" from="description">The title of the remove confirmation dialog, similar to &apos;Delete Event&apos;.</note>
+        <note priority="1" from="meaning">kendo.scheduler.deleteDialogTitle</note>
+      </trans-unit>
+      <trans-unit id="3767124003690482688" datatype="html">
+        <source>Delete Recurring Item</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7180</context>
+        </context-group>
+        <note priority="1" from="description">The title of the recurring remove confirmation dialog, similar to &apos;Delete Recurring Item&apos;</note>
+        <note priority="1" from="meaning">kendo.scheduler.deleteRecurringDialogTitle</note>
+      </trans-unit>
+      <trans-unit id="6062715259991815291" datatype="html">
+        <source>Edit Recurring Item</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7183</context>
+        </context-group>
+        <note priority="1" from="description">The title of the recurring edit confirmation dialog, similar to &apos;Edit Recurring Item&apos;</note>
+        <note priority="1" from="meaning">kendo.scheduler.editRecurringDialogTitle</note>
+      </trans-unit>
+      <trans-unit id="1522986521915521885" datatype="html">
+        <source>Select View</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">node_modules/@progress/kendo-angular-scheduler/fesm2020/progress-kendo-angular-scheduler.mjs</context>
+          <context context-type="linenumber">7186</context>
+        </context-group>
+        <note priority="1" from="description">The value of the aria-label attribute of the &lt;select&gt; element used for switching the Scheduler views.</note>
+        <note priority="1" from="meaning">kendo.scheduler.selectView</note>
+      </trans-unit>
       <trans-unit id="1245147641110884896" datatype="html">
         <source>Close</source>
         <context-group purpose="location">

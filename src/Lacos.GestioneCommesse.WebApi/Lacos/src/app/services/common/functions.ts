@@ -51,8 +51,7 @@ export function readData(http: HttpClient, state: State, url: string) {
 }
 
 function fixDateTimes(params: string) {
-    const regex = /(datetime'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}')/gi;
-    const matches = regex.exec(params);
+    const matches = params.match(/(datetime'.{1,}?')/gi);
 
     if (matches) {
         for (const match of matches) {

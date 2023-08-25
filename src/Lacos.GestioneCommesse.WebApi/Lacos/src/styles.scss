@@ -226,3 +226,14 @@ kendo-scheduler .k-event,
     max-width: 50px;
     max-height: 50px;
 }
+
+app-operator-avatar {
+    border-radius: 50%;
+    width: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    line-height: 18px;
+    height: 18px;
+}

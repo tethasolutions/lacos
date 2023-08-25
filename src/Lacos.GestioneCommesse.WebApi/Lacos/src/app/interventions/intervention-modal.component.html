@@ -1,0 +1,103 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Intervento
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="intervention-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+            class="redimensionModal">
+
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Commessa</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
+                            [(ngModel)]="options.jobId" required [suggest]="true" [allowCustom]="false"
+                            [valuePrimitive]="true" (valueChange)="onJobChanged()" [readonly]="jobReadonly">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['jobId']"></div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <label>Attività</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="activities" textField="fullName" valueField="id" name="activityId"
+                            [(ngModel)]="options.activityId" required [suggest]="true" [allowCustom]="false"
+                            [valuePrimitive]="true" [readonly]="activityReadonly">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['activityId']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Inizio</label>
+                    <div class="form-group">
+                        <kendo-datetimepicker name="start" [(ngModel)]="options.start" required [max]="options.end"
+                            [steps]="{minute:15}" [readonly]="readonly">
+                        </kendo-datetimepicker>
+                        <div class="validation-message" [control]="form.controls['start']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Fine</label>
+                    <div class="form-group">
+                        <kendo-datetimepicker name="end" [(ngModel)]="options.end" required [min]="options.start"
+                            [steps]="{minute:15}" [readonly]="readonly">
+                        </kendo-datetimepicker>
+                        <div class="validation-message" [control]="form.controls['end']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <label>Operatori</label>
+                    <div class="form-group">
+                        <kendo-multiselect [data]="operators" textField="name" valueField="id" name="operators"
+                            [(ngModel)]="options.operators" required [allowCustom]="false"
+                            [valuePrimitive]="true" [readonly]="readonly">
+                        </kendo-multiselect>
+                        <div class="validation-message" [control]="form.controls['operators']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Veicolo</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="vehicles" textField="fullName" valueField="id" name="vehicleId"
+                            [(ngModel)]="options.vehicleId" [suggest]="true" [allowCustom]="false"
+                            [valuePrimitive]="true" [readonly]="readonly">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['vehicleId']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Descrizione</label>
+                    <div class="form-group">
+                        <textarea class="form-control" name="description" [(ngModel)]="options.description" novalidate
+                            autocomplete="off" maxlength="500" required rows="4" [readonly]="readonly">
+                        </textarea>
+                        <div class="validation-message" [control]="form.controls['description']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                    Annulla
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    Salva
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

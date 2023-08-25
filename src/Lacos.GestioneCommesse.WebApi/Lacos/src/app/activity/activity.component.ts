@@ -14,6 +14,7 @@ import { ActivityProductsComponent } from './activity-products.component';
 import { InterventionModalComponent } from '../interventions/intervention-modal.component';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { Intervention, InterventionStatus } from '../services/interventions/models';
+import { InterventionsCalendarComponent } from '../interventions/interventions-calendar.component';
 
 @Component({
     selector: 'app-activity',
@@ -30,8 +31,11 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     @ViewChild('activityProductModal', { static: true })
     activityProductModal: ActivityProductModalComponent;
 
-    @ViewChild('activityProducts', { static: true })
+    @ViewChild('activityProducts', { static: false })
     activityProducts: ActivityProductsComponent;
+
+    @ViewChild('interventionsCalendar', { static: false })
+    interventionsCalendar: InterventionsCalendarComponent;
 
     @ViewChild('interventionModal', { static: true })
     interventionModal: InterventionModalComponent;
@@ -122,11 +126,13 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     private _afterActivityProductCreated(name: string) {
         this._messageBox.success(`${name} associato all'attività.`);
 
-        this.activityProducts.refresh();
+        this.activityProducts?.refresh();
     }
 
     private _afterInterventionCreated() {
         this._messageBox.success(`Intervento programmato.`);
+
+        this.interventionsCalendar?.refresh();
     }
 
 }

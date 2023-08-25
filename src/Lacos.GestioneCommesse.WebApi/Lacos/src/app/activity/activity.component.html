@@ -2,14 +2,20 @@
     <h3>
         Attività {{activity.number}} &bull; {{activity.status | activityStatus}}
     </h3>
-    <a class="btn btn-primary btn-sm" (click)="edit()">
-        <span class="fa fa-edit"></span>
-        Modifica
-    </a>
-    <a class="btn btn-secondary btn-sm" (click)="createIntervention()">
-        <span class="fa fa-plus"></span>
-        Programma intervento
-    </a>
+    <div class="d-flex gap-1">
+        <a class="btn btn-primary btn-sm" (click)="edit()">
+            <span class="fa fa-edit"></span>
+            Modifica attività
+        </a>
+        <a class="btn btn-secondary btn-sm" (click)="createIntervention()">
+            <span class="fa fa-calendar-plus"></span>
+            Programma intervento
+        </a>
+        <a class="btn btn-secondary btn-sm" (click)="createActivityProduct()">
+            <span class="fa fa-plus"></span>
+            Associa prodotto
+        </a>
+    </div>
 </div>
 
 <p>
@@ -61,21 +67,27 @@
     </div>
 </div>
 
-<app-interventions-calendar class="mb-4 d-flex" [interventionModal]="interventionModal"
-    [options]="{jobId: activity.jobId, activityId: activity.id}">
-</app-interventions-calendar>
+<kendo-tabstrip>
+    <kendo-tabstrip-tab [selected]="true">
+        <ng-template kendoTabTitle>
+            <h4>Interventi</h4>
+          </ng-template>
+        <ng-template kendoTabContent>
+            <app-interventions-calendar #interventionsCalendar class="mb-4 d-flex" [interventionModal]="interventionModal"
+                [options]="{jobId: activity.jobId, activityId: activity.id}">
+            </app-interventions-calendar>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab>
+        <ng-template kendoTabTitle>
+            <h4>Prodotti</h4>
+          </ng-template>
+        <ng-template kendoTabContent>
+            <app-activity-products #activityProducts [activityId]="activity.id"></app-activity-products>
+        </ng-template>
+    </kendo-tabstrip-tab>
+</kendo-tabstrip>
 
-<div class="d-flex align-items-center gap-3 mb-2">
-    <h4>
-        Prodotti associati
-    </h4>
-    <a class="btn btn-primary btn-sm" (click)="createActivityProduct()">
-        <span class="fa fa-plus"></span>
-        Nuovo
-    </a>
-</div>
-
-<app-activity-products #activityProducts [activityId]="activity.id"></app-activity-products>
 <app-job-activity-modal #jobActivityModal></app-job-activity-modal>
 <app-activity-product-modal #activityProductModal></app-activity-product-modal>
 <app-intervention-modal #interventionModal></app-intervention-modal>

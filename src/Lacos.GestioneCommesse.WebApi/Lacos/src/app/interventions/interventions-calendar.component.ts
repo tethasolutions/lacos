@@ -110,6 +110,10 @@ export class InterventionsCalendarComponent extends BaseComponent {
         );
     }
 
+    refresh() {
+        this._read();
+    }
+
     private _resizeIntervention(intervention: Intervention, start: Date, end: Date) {
         intervention.start = start;
         intervention.end = end;

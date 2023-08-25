@@ -89,6 +89,7 @@ import { InterventionsService } from './services/interventions/interventions.ser
 import { InterventionsCalendarComponent } from './interventions/interventions-calendar.component';
 import { SchedulerModule } from '@progress/kendo-angular-scheduler';
 import { OperatorAvatarComponent } from './shared/operator-avatar.component';
+import { LayoutModule } from '@progress/kendo-angular-layout';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -163,7 +164,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         InputsModule,
         PDFModule,
         UploadsModule,
-        SchedulerModule
+        SchedulerModule,
+        LayoutModule
     ],
     providers: [
         {

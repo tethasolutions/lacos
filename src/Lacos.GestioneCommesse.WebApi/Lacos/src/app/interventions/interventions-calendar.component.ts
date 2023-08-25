@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { IInterventionOperatorReadModel, IInterventionReadModel, Intervention, InterventionStatus } from '../services/interventions/models';
-import { getToday } from '../services/common/functions';
-import { DateChangeEvent, DateRange, EventClickEvent, SchedulerComponent, SlotClickEvent } from '@progress/kendo-angular-scheduler';
+import { DateChangeEvent, DateRange, DragEndEvent, EventClickEvent, RemoveEvent, ResizeEndEvent, SchedulerComponent, SlotClickEvent } from '@progress/kendo-angular-scheduler';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { State } from '@progress/kendo-data-query';
 import { filter, switchMap, tap } from 'rxjs';
@@ -13,7 +12,7 @@ import { MessageBoxService } from '../services/common/message-box.service';
     selector: 'app-interventions-calendar',
     templateUrl: 'interventions-calendar.component.html'
 })
-export class InterventionsCalendarComponent extends BaseComponent implements OnInit {
+export class InterventionsCalendarComponent extends BaseComponent {
 
     @Input()
     interventionModal: InterventionModalComponent;
@@ -26,6 +25,9 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
 
     @Output()
     readonly interventionCreated = new EventEmitter<Intervention>();
+
+    @Output()
+    readonly interventionRemoved = new EventEmitter<number>();
 
     @ViewChild('scheduler', { static: true })
     scheduler: SchedulerComponent;
@@ -42,8 +44,6 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
         super();
     }
 
-    ngOnInit() { }
-
     onDateChange(event: DateChangeEvent) {
         this._dateRange = event.dateRange;
 
@@ -53,11 +53,66 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
     onEventDblClick(event: EventClickEvent) {
         const intervention = event.event as InterventionSchedulerModel;
 
-        this._edit(intervention.id);
+        this._editIntervention(intervention.id);
     }
 
     onSlotDblClick(event: SlotClickEvent) {
-        this._create(event.start);
+        this._createIntervention(event.start);
+    }
+
+    onResizeEnd(event: ResizeEndEvent) {
+        const intervention = event.dataItem as InterventionSchedulerModel;
+
+        this._checkInterventionIsEditable(intervention);
+
+        this._subscriptions.push(
+            this._service.get(intervention.id)
+                .pipe(
+                    tap(e => this._resizeIntervention(e, event.start, event.end)),
+                    switchMap(e => this._service.update(e)),
+                    tap(e => this._afterInterventionUpdated(e))
+                )
+                .subscribe()
+        );
+    }
+
+    onDragEnd(event: DragEndEvent) {
+        const intervention = event.dataItem as InterventionSchedulerModel;
+
+        this._checkInterventionIsEditable(intervention);
+
+        this._subscriptions.push(
+            this._service.get(intervention.id)
+                .pipe(
+                    tap(e => this._resizeIntervention(e, event.start, event.end)),
+                    switchMap(e => this._service.update(e)),
+                    tap(e => this._afterInterventionUpdated(e))
+                )
+                .subscribe()
+        );
+    }
+
+    onRemove(event: RemoveEvent) {
+        const intervention = event.dataItem as InterventionSchedulerModel;
+
+        this._checkInterventionIsEditable(intervention);
+
+        const text = `Sei sicuro di voler rimuovere l'intervento selezionato?`;
+
+        this._subscriptions.push(
+            this._messageBox.confirm(text, 'Attenzione')
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._service.delete(intervention.id)),
+                    tap(() => this._afterInterventionRemoved(intervention.id))
+                )
+                .subscribe()
+        );
+    }
+
+    private _resizeIntervention(intervention: Intervention, start: Date, end: Date) {
+        intervention.start = start;
+        intervention.end = end;
     }
 
     private _read() {
@@ -99,21 +154,20 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
         );
     }
 
-    private _edit(id: number) {
+    private _editIntervention(id: number) {
         this._subscriptions.push(
             this._service.get(id)
                 .pipe(
                     switchMap(e => this.interventionModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._service.update(this.interventionModal.options)),
-                    tap(e => this._afterUpdated(e))
+                    tap(e => this._afterInterventionUpdated(e))
                 )
                 .subscribe()
         );
     }
 
-    private _create(start: Date) {
-        this.console.log(this.options);
+    private _createIntervention(start: Date) {
         const intervention = new Intervention(0, start, start.addHours(1), InterventionStatus.Scheduled,
             null, null, this.options?.activityId, this.options?.jobId, [], []);
 
@@ -122,13 +176,13 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._service.create(intervention)),
-                    tap(e => this._afterCreated(e))
+                    tap(e => this._afterInterventionCreated(e))
                 )
                 .subscribe()
         );
     }
 
-    private _afterUpdated(intervention: Intervention) {
+    private _afterInterventionUpdated(intervention: Intervention) {
         this._messageBox.success('Intervento aggiornato.');
 
         this.interventionUpdated.emit(intervention);
@@ -136,12 +190,35 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
         this._read();
     }
 
-    private _afterCreated(intervention: Intervention) {
+    private _afterInterventionCreated(intervention: Intervention) {
         this._messageBox.success('Intervento programmato.');
 
         this.interventionCreated.emit(intervention);
 
         this._read();
+    }
+
+    private _afterInterventionRemoved(id: number) {
+        this._messageBox.success('Intervento rimosso.');
+
+        this.interventionRemoved.emit(id);
+
+        this._read();
+    }
+
+    private _checkInterventionIsEditable(intervention: InterventionSchedulerModel) {
+        if (intervention.status === InterventionStatus.Scheduled) {
+            return true;
+        }
+
+        const text = `Non puoi modificare o eliminare un intervento già completato.`;
+
+        this._subscriptions.push(
+            this._messageBox.alert(text, 'Attenzione')
+                .subscribe()
+        );
+
+        return false;
     }
 
 }

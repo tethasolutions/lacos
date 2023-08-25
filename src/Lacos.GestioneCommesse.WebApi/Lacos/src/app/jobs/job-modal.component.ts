@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
-import { Job, JobStatus } from '../services/jobs/models';
+import { Job } from '../services/jobs/models';
 import { tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
-import { listEnum, markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 
 @Component({
@@ -35,7 +34,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     }
 
     protected override _canClose() {
-        markAsDirty(this.form);
+        this.form.markAsDirty();
 
         if (this.form.invalid) {
             this._messageBox.error('Compilare correttamente tutti i campi.');

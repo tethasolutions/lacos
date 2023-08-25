@@ -57,7 +57,7 @@ function fixDateTimes(params: string) {
         for (const match of matches) {
             const dateString = match.replace(/datetime|'/gi, '');
             const date = parseDate(dateString, 'yyyy-MM-dd\'T\'HH-mm-ss');
-            const offsetString = `datetime'${date.toOffsetString()}'`;
+            const offsetString = `datetime'${date.toOffsetString().replace(/\+/gi, '%2B')}'`;
 
             params = params.replace(match, offsetString);
         }

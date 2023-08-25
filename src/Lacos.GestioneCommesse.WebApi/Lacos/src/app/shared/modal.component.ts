@@ -1,9 +1,6 @@
 import { BaseComponent } from './base.component';
 import { Subject } from 'rxjs';
-import { Directive, ViewChild, EventEmitter } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { MessageBoxService } from '../services/common/message-box.service';
-import { markAsDirty } from '../services/common/functions';
+import { Directive, EventEmitter } from '@angular/core';
 
 @Directive()
 export abstract class ModalComponent<T> extends BaseComponent {
@@ -60,26 +57,3 @@ export abstract class ModalComponent<T> extends BaseComponent {
 
 }
 
-@Directive()
-export abstract class FormModalComponent<T> extends ModalComponent<T> {
-
-    @ViewChild('form')
-    form: NgForm;
-
-    constructor(
-        protected readonly _messageBox: MessageBoxService
-    ) {
-        super();
-    }
-
-    protected _canClose() {
-        markAsDirty(this.form);
-
-        if (this.form.invalid) {
-            this._messageBox.error('Compilare correttamente tutti i campi');
-        }
-
-        return this.form.valid;
-    }
-
-}

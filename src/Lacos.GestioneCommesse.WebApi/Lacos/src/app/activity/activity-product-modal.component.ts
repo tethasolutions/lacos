@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { tap } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { ActivityProduct } from '../services/activity-products/models';
 import { ProductTypesService } from '../services/productTypes.service';
@@ -90,7 +89,7 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
     }
 
     protected override _canClose() {
-        markAsDirty(this.form);
+        this.form.markAsDirty();
 
         if (this.form.invalid) {
             this._messageBox.error('Compilare correttamente tutti i campi.');

@@ -262,7 +262,7 @@ public class LacosDataSourceRequestModelBinder : IModelBinder
             var filterToken = Expect(FilterTokenType.DateTime);
             return new DateTimeNode
             {
-                Value = DateTimeOffset.Parse(filterToken.Value?.Replace(" ", "+"))
+                Value = DateTimeOffset.Parse(filterToken.Value)
             };
         }
 

@@ -6,7 +6,6 @@ import { tap } from 'rxjs';
 import { ActivityTypesService } from '../services/activityTypes.service';
 import { CustomerService } from '../services/customer.service';
 import { NgForm } from '@angular/forms';
-import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { CustomerModel } from '../shared/models/customer.model';
 
@@ -43,7 +42,7 @@ export class JobActivityModalComponent extends ModalComponent<JobActivityModalOp
     }
 
     protected override _canClose() {
-        markAsDirty(this.form);
+        this.form.markAsDirty();
 
         if (this.form.invalid) {
             this._messageBox.error('Compilare correttamente tutti i campi.');

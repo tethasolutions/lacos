@@ -1,3 +1,6 @@
+import { NgForm } from '@angular/forms';
+import { markAsDirty } from '../common/functions';
+
 declare global {
     interface String {
         capitalize(): string;

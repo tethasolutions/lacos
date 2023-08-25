@@ -3,7 +3,6 @@ import { ModalComponent } from '../shared/modal.component';
 import { Intervention, InterventionStatus } from '../services/interventions/models';
 import { NgForm } from '@angular/forms';
 import { tap } from 'rxjs';
-import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { IJobReadModel } from '../services/jobs/models';
 import { IActivityReadModel } from '../services/activities/models';
@@ -105,7 +104,7 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
             return true;
         }
 
-        markAsDirty(this.form);
+        this.form.markAsDirty();
 
         if (this.form.invalid) {
             this._messageBox.error('Compilare correttamente tutti i campi.');

@@ -92,7 +92,19 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         }
     }
 
+    trySave() {
+        if (this.readonly) {
+            this.dismiss();
+        } else {
+            this.close();
+        }
+    }
+
     protected override _canClose() {
+        if (this.readonly) {
+            return true;
+        }
+
         markAsDirty(this.form);
 
         if (this.form.invalid) {

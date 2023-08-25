@@ -91,6 +91,8 @@ import { SchedulerModule } from '@progress/kendo-angular-scheduler';
 import { OperatorAvatarComponent } from './shared/operator-avatar.component';
 import { LayoutModule } from '@progress/kendo-angular-layout';
 import { InterventionsComponent } from './interventions/interventions.component';
+import { InterventionsGridComponent } from './interventions/interventions-grid.component';
+import { InterventionStatusPipe } from './shared/pipes/intervention-status.pipe';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -143,7 +145,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         InterventionModalComponent,
         InterventionsCalendarComponent,
         OperatorAvatarComponent,
-        InterventionsComponent
+        InterventionsComponent,
+        InterventionsGridComponent,
+        InterventionStatusPipe
     ],
     imports: [
         BrowserModule,

@@ -1,3 +1,5 @@
+import { Dictionary } from '../common/models';
+
 export enum InterventionStatus {
 
     Scheduled,
@@ -5,6 +7,14 @@ export enum InterventionStatus {
     CompletedUnsuccesfully
 
 }
+
+export const interventionStatusNames: Dictionary<InterventionStatus, string> = {
+
+    [InterventionStatus.Scheduled]: 'Programmato',
+    [InterventionStatus.CompletedSuccesfully]: 'Completato OK',
+    [InterventionStatus.CompletedUnsuccesfully]: 'Completato KO'
+
+};
 
 export class Intervention {
 
@@ -45,6 +55,8 @@ export interface IInterventionReadModel {
     readonly description: string;
     readonly operators: IInterventionOperatorReadModel[];
     readonly activityType: string;
+    readonly activityId: number;
+    readonly canBeRemoved: boolean;
 
 }
 

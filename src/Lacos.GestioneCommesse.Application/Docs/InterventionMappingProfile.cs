@@ -13,7 +13,8 @@ public class InterventionMappingProfile : Profile
         CreateMap<Intervention, InterventionReadModel>()
             .MapMember(x => x.Customer, y => y.Activity!.Job!.Customer!.Name)
             .MapMember(x => x.CustomerAddress, y => y.Activity!.CustomerAddress!.StreetAddress + ", " + y.Activity!.CustomerAddress.City + " (" + y.Activity!.CustomerAddress.Province + ")")
-            .MapMember(x => x.ActivityType, y => y.Activity!.Type!.Name);
+            .MapMember(x => x.ActivityType, y => y.Activity!.Type!.Name)
+            .MapMember(x => x.CanBeRemoved, y => y.Status == InterventionStatus.Scheduled);
 
         CreateMap<Operator, InterventionOperatorReadModel>();
 

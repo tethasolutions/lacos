@@ -13,16 +13,11 @@ public class InterventionReadModel
     public string? Description { get; set; }
     public IEnumerable<InterventionOperatorReadModel> Operators { get; set; }
     public string? ActivityType { get; set; }
+    public long ActivityId { get; set; }
+    public bool CanBeRemoved { get; set; }
 
     public InterventionReadModel()
     {
         Operators = new List<InterventionOperatorReadModel>();
     }
-}
-
-public class InterventionOperatorReadModel
-{
-    public long Id { get; set; }
-    public string? Name { get; set; }
-    public string? ColorHex { get; set; }
 }

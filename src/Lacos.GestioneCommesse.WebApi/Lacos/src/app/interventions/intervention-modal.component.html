@@ -8,7 +8,7 @@
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="intervention-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+        <form name="intervention-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="trySave()"
             class="redimensionModal">
 
             <div class="row">
@@ -95,8 +95,8 @@
                     <label>Prodotti</label>
                     <div class="form-group">
                         <kendo-multiselect [data]="products" textField="fullName" valueField="id"
-                            name="activityProducts" [(ngModel)]="options.activityProducts" required
-                            [allowCustom]="false" [valuePrimitive]="true" [readonly]="readonly">
+                            name="activityProducts" [(ngModel)]="options.activityProducts" [allowCustom]="false"
+                            [valuePrimitive]="true" [readonly]="readonly">
                             <ng-template kendoMultiSelectItemTemplate let-dataItem>
                                 <img *ngIf="dataItem.pictureFileName" [src]="imagesUrl + dataItem.pictureFileName"
                                     class="thumbnail-xs">
@@ -129,7 +129,7 @@
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">
                     Annulla
                 </button>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" [disabled]="readonly">
                     Salva
                 </button>
             </div>

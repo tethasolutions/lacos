@@ -18,7 +18,10 @@ export class InterventionsCalendarComponent extends BaseComponent {
     interventionModal: InterventionModalComponent;
 
     @Input()
-    options: InterventionsCalendarOptions;
+    jobId: number;
+
+    @Input()
+    activityId: number;
 
     @Output()
     readonly interventionUpdated = new EventEmitter<Intervention>();
@@ -63,7 +66,10 @@ export class InterventionsCalendarComponent extends BaseComponent {
     onResizeEnd(event: ResizeEndEvent) {
         const intervention = event.dataItem as InterventionSchedulerModel;
 
-        this._checkInterventionIsEditable(intervention);
+        if (!intervention.canBeEdited) {
+            this._showAlert(`Non puoi modificare un intervento già completato.`);
+            return;
+        }
 
         this._subscriptions.push(
             this._service.get(intervention.id)
@@ -79,7 +85,10 @@ export class InterventionsCalendarComponent extends BaseComponent {
     onDragEnd(event: DragEndEvent) {
         const intervention = event.dataItem as InterventionSchedulerModel;
 
-        this._checkInterventionIsEditable(intervention);
+        if (!intervention.canBeEdited) {
+            this._showAlert(`Non puoi modificare un intervento già completato.`);
+            return;
+        }
 
         this._subscriptions.push(
             this._service.get(intervention.id)
@@ -95,7 +104,10 @@ export class InterventionsCalendarComponent extends BaseComponent {
     onRemove(event: RemoveEvent) {
         const intervention = event.dataItem as InterventionSchedulerModel;
 
-        this._checkInterventionIsEditable(intervention);
+        if (!intervention.canBeRemoved) {
+            this._showAlert(`Non puoi eliminare un intervento già completato.`);
+            return;
+        }
 
         const text = `Sei sicuro di voler rimuovere l'intervento selezionato?`;
 
@@ -178,7 +190,7 @@ export class InterventionsCalendarComponent extends BaseComponent {
 
     private _createIntervention(start: Date) {
         const intervention = new Intervention(0, start, start.addHours(1), InterventionStatus.Scheduled,
-            null, null, this.options?.activityId, this.options?.jobId, [], []);
+            null, null, this.activityId, this.jobId, [], []);
 
         this._subscriptions.push(
             this.interventionModal.open(intervention)
@@ -215,19 +227,11 @@ export class InterventionsCalendarComponent extends BaseComponent {
         this._read();
     }
 
-    private _checkInterventionIsEditable(intervention: InterventionSchedulerModel) {
-        if (intervention.status === InterventionStatus.Scheduled) {
-            return true;
-        }
-
-        const text = `Non puoi modificare o eliminare un intervento già completato.`;
-
+    private _showAlert(text: string) {
         this._subscriptions.push(
             this._messageBox.alert(text, 'Attenzione')
                 .subscribe()
         );
-
-        return false;
     }
 
 }
@@ -244,6 +248,8 @@ class InterventionSchedulerModel {
     readonly operators: IInterventionOperatorReadModel[];
     readonly activityType: string;
     readonly isAllDay: boolean;
+    readonly canBeRemoved: boolean;
+    readonly canBeEdited: boolean;
 
     constructor(
         intervention: IInterventionReadModel
@@ -258,13 +264,8 @@ class InterventionSchedulerModel {
         this.operators = intervention.operators;
         this.activityType = intervention.activityType;
         this.isAllDay = this.start.addDays(1).hasSameDateAndTime(this.end);
+        this.canBeRemoved = intervention.canBeRemoved;
+        this.canBeEdited = intervention.status === InterventionStatus.Scheduled;
     }
-
-}
-
-export interface InterventionsCalendarOptions {
-
-    readonly activityId: number,
-    readonly jobId: number
 
 }

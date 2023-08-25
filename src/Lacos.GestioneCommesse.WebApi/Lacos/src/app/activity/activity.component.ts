@@ -15,6 +15,7 @@ import { InterventionModalComponent } from '../interventions/intervention-modal.
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { Intervention, InterventionStatus } from '../services/interventions/models';
 import { InterventionsCalendarComponent } from '../interventions/interventions-calendar.component';
+import { InterventionsGridComponent } from '../interventions/interventions-grid.component';
 
 @Component({
     selector: 'app-activity',
@@ -36,6 +37,9 @@ export class ActivityComponent extends BaseComponent implements OnInit {
 
     @ViewChild('interventionsCalendar', { static: false })
     interventionsCalendar: InterventionsCalendarComponent;
+
+    @ViewChild('interventionsGrid', { static: false })
+    interventionsGrid: InterventionsGridComponent;
 
     @ViewChild('interventionModal', { static: true })
     interventionModal: InterventionModalComponent;
@@ -138,6 +142,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         this._messageBox.success(`Intervento programmato.`);
 
         this.interventionsCalendar?.refresh();
+        this.interventionsGrid?.refresh();
     }
 
     private _getActivity() {

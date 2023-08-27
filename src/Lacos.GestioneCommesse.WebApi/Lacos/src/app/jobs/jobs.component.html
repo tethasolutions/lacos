@@ -43,7 +43,7 @@
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">
-                <a class="btn btn-secondary btn-sm" title="Aggiungi attività" (click)="createActivity(dataItem)">
+                <a class="btn btn-primary btn-sm" title="Aggiungi attività" (click)="createActivity(dataItem)">
                     <i class="fas fa-plus"></i>
                 </a>
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">

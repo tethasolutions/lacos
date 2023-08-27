@@ -93,6 +93,7 @@ import { LayoutModule } from '@progress/kendo-angular-layout';
 import { InterventionsComponent } from './interventions/interventions.component';
 import { InterventionsGridComponent } from './interventions/interventions-grid.component';
 import { InterventionStatusPipe } from './shared/pipes/intervention-status.pipe';
+import { InterventionsListComponent } from './interventions/interventions-list.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -147,7 +148,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         OperatorAvatarComponent,
         InterventionsComponent,
         InterventionsGridComponent,
-        InterventionStatusPipe
+        InterventionStatusPipe,
+        InterventionsListComponent
     ],
     imports: [
         BrowserModule,

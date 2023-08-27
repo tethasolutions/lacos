@@ -1,15 +1,15 @@
 <div class="d-flex align-items-center gap-3 mb-4">
     <h3>
-        Calendario Interventi
+        Elenco Interventi
     </h3>
-    <a class="btn btn-primary btn-sm" (click)="create()">
+    <a class="btn btn-primary tn-sm" (click)="create()">
         <span class="fa fa-calendar-plus"></span>
         Programma intervento
     </a>
 </div>
 
 
-<app-interventions-calendar #interventionsCalendar [interventionModal]="interventionModal">
-</app-interventions-calendar>
+<app-interventions-grid #interventionsGrid [interventionModal]="interventionModal">
+</app-interventions-grid>
 
 <app-intervention-modal #interventionModal></app-intervention-modal>

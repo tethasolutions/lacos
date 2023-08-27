@@ -16,6 +16,7 @@ import { JobsComponent } from './jobs/jobs.component';
 import { ActivityComponent } from './activity/activity.component';
 import { ActivitiesService } from './services/activities/activities.service';
 import { InterventionsComponent } from './interventions/interventions.component';
+import { InterventionsListComponent } from './interventions/interventions-list.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -32,6 +33,7 @@ const routes: Routes = [
     { path: 'producttypes', component: ProductTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs', component: JobsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities/:activityId', component: ActivityComponent, canActivate: [AuthGuard.asInjectableGuard], resolve: { activity: ActivitiesService.asActivityDetailResolver } },
+    { path: 'interventions-list', component: InterventionsListComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'interventions', component: InterventionsComponent, canActivate: [AuthGuard.asInjectableGuard] }
 ];
 

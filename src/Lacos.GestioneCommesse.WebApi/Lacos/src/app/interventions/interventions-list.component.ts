@@ -2,19 +2,19 @@ import { Component, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { InterventionModalComponent } from './intervention-modal.component';
-import { InterventionsCalendarComponent } from './interventions-calendar.component';
 import { filter, switchMap, tap } from 'rxjs';
 import { Intervention, InterventionStatus } from '../services/interventions/models';
 import { MessageBoxService } from '../services/common/message-box.service';
+import { InterventionsGridComponent } from './interventions-grid.component';
 
 @Component({
-    selector: 'app-interventions',
-    templateUrl: 'interventions.component.html'
+    selector: 'app-interventions-list',
+    templateUrl: 'interventions-list.component.html'
 })
-export class InterventionsComponent extends BaseComponent {
+export class InterventionsListComponent extends BaseComponent {
 
-    @ViewChild('interventionsCalendar', { static: true })
-    interventionsCalendar: InterventionsCalendarComponent;
+    @ViewChild('interventionsGrid', { static: true })
+    interventionsGrid: InterventionsGridComponent;
 
     @ViewChild('interventionModal', { static: true })
     interventionModal: InterventionModalComponent;
@@ -46,7 +46,7 @@ export class InterventionsComponent extends BaseComponent {
     private _afterCreated() {
         this._messageBox.success(`Intervento programmato.`);
 
-        this.interventionsCalendar.refresh();
+        this.interventionsGrid.refresh();
     }
 
 }

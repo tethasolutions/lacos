@@ -38,7 +38,7 @@
                 <div class="col-md-3">
                     <label>Inizio</label>
                     <div class="form-group">
-                        <kendo-datetimepicker name="start" [(ngModel)]="options.start" required [max]="options.end"
+                        <kendo-datetimepicker name="start" [(ngModel)]="options.start" required
                             [steps]="{minute:15}" [readonly]="readonly">
                         </kendo-datetimepicker>
                         <div class="validation-message" [control]="form.controls['start']"></div>

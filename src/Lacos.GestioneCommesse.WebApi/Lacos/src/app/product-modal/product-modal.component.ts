@@ -38,6 +38,9 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
 
   attachmentsUploads: Array<UploadFileModel> =[];
   isUploaded:Array<boolean>= [];
+  get qrCode(){
+    return (this.options.qrCodePrefix ?? '') + (this.options.qrCodeNumber ?? "0") .toString().padStart(4,'0');
+  }
 
   pathImage = `${ApiUrls.baseUrl}/attachments/`;
   attachmentsFileInfo:any;
@@ -105,20 +108,6 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
     const nuovoCustomerSelezionato: CustomerModel = this.customers.find(x => x.id === customerId);
     if (nuovoCustomerSelezionato == undefined) { return; }
     this.customerSelezionato = nuovoCustomerSelezionato;
-  }
-
-  protected generaQrCode() {
-    this._subscriptions.push(
-      this._productsService.createProductQrCode(this.options.id)
-        .pipe(
-            tap(e => {
-              this.options.qrCode = e;
-              this._messageBox.success(`QR Code generato con successo`);
-              console.log(e);
-            })
-        )
-        .subscribe()
-    );
   }
 
   createCustomer() {

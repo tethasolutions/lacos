@@ -17,7 +17,6 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
          Task<ProductDto> CreateProduct(ProductDto productDto);
          Task DeleteProduct(long productId);
          Task<IEnumerable<ProductTypeDto>> GetProductTypes();
-         Task<string> CreateProductQrCode(long productId);
         Task<ProductDocumentReadModel> DownloadProductDocument(string filename);
         Task<IEnumerable<ProductDocumentReadModel>> GetAllProductDocuments(long productId);
     }
@@ -88,8 +87,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
             var product = productDto.MapTo<Product>(mapper);
 
             await productRepository.Insert(product);
-
-         
+                     
             await dbContext.SaveChanges();
 
             return product.MapTo<ProductDto>(mapper);
@@ -122,30 +120,6 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
             return productTypes.MapTo<IEnumerable<ProductTypeDto>>(mapper);
         }
 
-        public async Task<string> CreateProductQrCode(long productId)
-        {
-            if (productId == 0)
-                throw new LacosException("Impossible eliminare un prodotto con id 0");
-
-            var product = await 
-                productRepository
-                .Query()
-                .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.Id == productId);
-
-            if (product == null)
-                throw new LacosException($"Impossibile trovare il prodotto con id {productId}");
-
-
-            if (product.QrCode == null)
-            {
-                //TODO Codice per creare QrCode
-                product.QrCode = "US0401";
-            }
-           
-            return product.QrCode;
-
-        }
         public async Task<ProductDocumentReadModel> DownloadProductDocument(string filename)
         {
             var productDocument = await productDocumentRepository

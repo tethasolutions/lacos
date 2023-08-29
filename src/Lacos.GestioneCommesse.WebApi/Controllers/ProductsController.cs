@@ -83,10 +83,4 @@ public class ProductsController : LacosApiController
         return productTypes;
     }
 
-    [HttpGet("product-qr-code/{productId}")]
-    public async Task<string> CreateProductQrCode(long productId)
-    {
-        string qrCode = await productService.CreateProductQrCode(productId);
-        return qrCode;
-    }
 }

@@ -89,20 +89,4 @@ export class ProductsService {
             );
     }
 
-    createProductQrCode(productId: number) {
-        const options  = {
-            headers: new HttpHeaders({
-              'Accept': 'text/html, application/xhtml+xml, */*',
-              'Content-Type': 'text/plain; charset=utf-8'
-            }),
-            responseType: 'text' as 'text'
-        }
-        return this._http.post(`${this._baseUrl}/product-qr-code/${productId}`, null, options)
-            .pipe(
-                map(e => {
-                    console.log(e);
-                    return e;
-                })
-            );
-    }
 }

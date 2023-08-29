@@ -9,7 +9,8 @@ export class ProductModel {
     name: string;
     description: string;
     pictureFileName: string;
-    qrCode: string;
+    qrCodePrefix: string;
+    qrCodeNumber: number;
     productTypeId: number;
     productType: ProductTypeModel;
 
@@ -32,7 +33,8 @@ export class ProductModel {
         this.name = null;
         this.description = null;
         this.pictureFileName = null;
-        this.qrCode = null;
+        this.qrCodePrefix = null;
+        this.qrCodeNumber = 0;
         this.productTypeId = null;
         this.productType = new ProductTypeModel();
         this.customerId = null;

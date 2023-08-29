@@ -48,6 +48,7 @@
         "@progress/kendo-licensing": "1.3.1",
         "@progress/kendo-recurrence": "1.0.3",
         "@progress/kendo-theme-bootstrap": "6.7.0",
+        "@progress/kendo-angular-barcodes": "13.3.0",
         "bootstrap": "5.3.1",
         "rxjs": "7.8.1",
         "tslib": "2.6.2",

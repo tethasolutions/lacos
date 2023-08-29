@@ -94,6 +94,7 @@ import { InterventionsComponent } from './interventions/interventions.component'
 import { InterventionsGridComponent } from './interventions/interventions-grid.component';
 import { InterventionStatusPipe } from './shared/pipes/intervention-status.pipe';
 import { InterventionsListComponent } from './interventions/interventions-list.component';
+import { BarcodesModule } from '@progress/kendo-angular-barcodes';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -173,7 +174,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         PDFModule,
         UploadsModule,
         SchedulerModule,
-        LayoutModule
+        LayoutModule,
+        BarcodesModule
     ],
     providers: [
         {

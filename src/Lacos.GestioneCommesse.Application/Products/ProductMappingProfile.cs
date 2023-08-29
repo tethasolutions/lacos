@@ -21,6 +21,7 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.Documents);
 
             CreateMap<Product, ProductReadModel>()
+                .MapMember(x => x.QrCode, y => (y.QrCodePrefix == null ? "" : y.QrCodePrefix) + (y.QrCodeNumber == null ? 0 : y.QrCodeNumber).ToString().PadLeft(4,'0'))
                 .MapMember(x => x.ProductType, y => y.ProductType.Name);
 
             CreateMap<ProductReadModel, Product>()
@@ -41,6 +42,8 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.VocType)
                 .Ignore(x => x.NumberOfDoors)
                 .Ignore(x => x.Documents)
+                .Ignore(x => x.QrCodeNumber)
+                .Ignore(x => x.QrCodePrefix)
                 .IgnoreCommonMembers();
 
             CreateMap<ProductDocument, ProductDocumentReadModel>();

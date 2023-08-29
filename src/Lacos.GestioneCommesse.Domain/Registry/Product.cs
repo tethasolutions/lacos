@@ -12,7 +12,8 @@ public class Product : FullAuditedEntity
     public string? PictureFileName { get; set; }
 
     // qrcode della porta rei
-    public string? QrCode { get; set; }
+    public string? QrCodePrefix { get; set; }
+    public int? QrCodeNumber { get; set; }
 
     // associazione della porta rei con il cliente
     public long? CustomerId { get; set; }

@@ -27,7 +27,7 @@
     <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <button *ngIf="dataItem.qrCode != null" (click)="viewQrCodeProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">
+            <button *ngIf="dataItem.qrCode != '0000'" (click)="viewQrCodeProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">
                 <i class="fas fa-qrcode"></i>
             </button>
             <button (click)="editProduct(dataItem.id)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">

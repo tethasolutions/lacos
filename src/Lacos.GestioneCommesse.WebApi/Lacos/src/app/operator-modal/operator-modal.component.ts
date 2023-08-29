@@ -55,7 +55,7 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
   override open(options: OperatorModel): Observable<boolean> 
   {
     const result = super.open(options);
-    this.attachmentsFileInfo = null;
+    this.attachmentsFileInfo = [];
     this.isUploaded = [];
     this.attachmentsUploads = [];
       

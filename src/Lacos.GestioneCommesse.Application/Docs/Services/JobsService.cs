@@ -49,7 +49,7 @@ public class JobsService : IJobsService
     public async Task<JobDto> Create(JobDto jobDto)
     {
         var job = jobDto.MapTo<Job>(mapper);
-        var number = await GetNextNumber(job.Year);
+        var number = await GetNextNumber(job.JobDate.Year);
 
         job.SetCode(job.JobDate.Year, number);
 

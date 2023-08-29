@@ -9,6 +9,13 @@
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
         <div class="row">
+            <div class="col-12">
+                <p><strong>{{options.code}}</strong> - {{options.name}}</p>
+                <p>{{options.description}}</p>
+                <p>QR Code: <strong>{{options.qrCode}}</strong></p>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-12" style="text-align:center">
                 <kendo-qrcode [value]="options.qrCode" errorCorrection="M" encoding="UTF_8">
                 </kendo-qrcode>

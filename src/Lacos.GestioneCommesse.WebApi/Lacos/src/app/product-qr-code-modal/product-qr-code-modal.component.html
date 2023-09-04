@@ -17,8 +17,11 @@
         </div>
         <div class="row">
             <div class="col-12" style="text-align:center">
-                <kendo-qrcode [value]="options.qrCode" errorCorrection="M" encoding="UTF_8">
+                <kendo-qrcode #qrcode [value]="options.qrCode" errorCorrection="M" encoding="UTF_8">
                 </kendo-qrcode>
+                <button type="button" (click)="exportQRCode()" class="btn btn-primary">
+                    Esporta Immagine
+                </button>
             </div>
         </div>
         <div class="text-right mt-5">

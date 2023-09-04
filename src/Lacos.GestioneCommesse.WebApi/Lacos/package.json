@@ -4,7 +4,7 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
-        "release": "ng build --configuration production --output-path ../wwwroot",
+        "release": "ng build --configuration production --output-path ../wwwroot --base-href /lacos/",
         "extract-i18n": "ng extract-i18n --output-path src/locale",
         "kendo-translate": "npx kendo-translate src/locale/messages.it.xlf --locale it-IT",
         "kendo-license": "npx kendo-ui-license activate"

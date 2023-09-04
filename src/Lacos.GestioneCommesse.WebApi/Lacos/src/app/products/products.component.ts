@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
-import { ProductModel } from '../shared/models/product.model';
+import { ProductModel, ProductReadModel } from '../shared/models/product.model';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { ProductsService } from '../services/products.service';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
@@ -116,7 +116,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     });
   }
 
-  viewQrCodeProduct(product: ProductModel) {
+  viewQrCodeProduct(product: ProductReadModel) {
     this._subscriptions.push(
       this.productQrCodeModal.open(product).subscribe()
     );

@@ -104,12 +104,12 @@ public static class WebApiConfiguration
             app
                 .UseDeveloperExceptionPage();
         }
-        else
-        {
-            app
-                .UseHsts()
-                .UseHttpsRedirection();
-        }
+        //else
+        //{
+        //    app
+        //        .UseHsts()
+        //        .UseHttpsRedirection();
+        //}
 
         app
             .UseDefaultFiles()

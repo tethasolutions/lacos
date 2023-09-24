@@ -271,3 +271,9 @@ kendo-scheduler .k-event .k-event-actions:first-child,
 {
     color:#46a43e;
 }
+
+.k-scheduler-table td,
+.k-scheduler-table th {
+    padding-block: 0.2rem;
+    padding-inline: 0.2rem;
+}

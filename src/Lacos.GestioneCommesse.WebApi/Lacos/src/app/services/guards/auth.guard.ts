@@ -36,6 +36,8 @@ export class AuthGuard {
             case (/^\/activities\/([0-9]{1,}?)$/gi).test(url):
             case url === '/interventions':
             case url === '/interventions-list':
+            case url === '/tickets':
+            case url === '/orders':
                 return this._security.isAuthenticated();
             case url === '/users':
                 return this._security.isAuthorized(Role.Administrator);

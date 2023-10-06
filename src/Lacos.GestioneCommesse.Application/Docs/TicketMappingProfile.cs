@@ -18,9 +18,10 @@ public class TicketMappingProfile : Profile
 
         CreateMap<TicketDto, Ticket>()
             .IgnoreCommonMembers()
+            .Ignore(x => x.Intervention)
+            .Ignore(x => x.GeneratedActivity)
             .Ignore(x => x.Customer)
-            .Ignore(x => x.Number)
-            .Ignore(x => x.Year)
+            .Ignore(x => x.CustomerAddress)
             .MapMember(x => x.TicketDate, (x, y) => y.IsTransient() ? x.Date : y.TicketDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId);
 

@@ -90,7 +90,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     }
 
     askRemove(ticket: ITicketReadModel) {
-        const text = `Sei sicuro di voler rimuovere la commessa ${ticket.code}?`;
+        const text = `Sei sicuro di voler rimuovere il ticket ${ticket.code}?`;
 
         this._subscriptions.push(
             this._messageBox.confirm(text, 'Attenzione')
@@ -118,13 +118,13 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     }
 
     private _afterSaved(ticket: Ticket) {
-        this._messageBox.success(`Commessa ${ticket.code} salvata.`);
+        this._messageBox.success(`Ticket ${ticket.code} salvata.`);
 
         this._read();
     }
 
     private _afterRemoved(ticket: ITicketReadModel) {
-        const text = `Commessa ${ticket.code} rimossa.`;
+        const text = `Ticket ${ticket.code} rimossa.`;
 
         this._messageBox.success(text);
 
@@ -132,7 +132,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     }
 
     private _afterActivityCreated(ticket: ITicketReadModel, activity: Activity) {
-        this._messageBox.success(`Attività ${activity.number} creata per la commessa ${ticket.code}.`);
+        this._messageBox.success(`Attività ${activity.number} creata per il ticket ${ticket.code}.`);
 
         if (this.expandedDetailKeys.indexOf(ticket.id) < 0) {
             this.expandedDetailKeys = this.expandedDetailKeys.concat(ticket.id);

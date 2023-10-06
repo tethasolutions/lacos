@@ -26,4 +26,4 @@ public class TicketDto : BaseEntityDto
     {
         Pictures = new List<TicketPicture>();
     }
-}
+} 

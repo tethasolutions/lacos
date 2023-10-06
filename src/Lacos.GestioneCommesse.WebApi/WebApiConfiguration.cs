@@ -103,6 +103,7 @@ public static class WebApiConfiguration
         {
             app
                 .UseDeveloperExceptionPage();
+            
         }
         //else
         //{

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Security.DTOs;
+using Lacos.GestioneCommesse.Contracts.Dtos;
+using Lacos.GestioneCommesse.Contracts.Dtos.Security;
 using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Extensions;
 
@@ -9,7 +11,11 @@ public class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
+       
+
         CreateMap<User, UserDto>();
+
+
 
         CreateMap<UserDto, User>()
             .IgnoreCommonMembers()

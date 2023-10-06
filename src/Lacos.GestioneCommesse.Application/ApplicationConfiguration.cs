@@ -6,6 +6,7 @@ using Lacos.GestioneCommesse.Application.Products.Service;
 using Lacos.GestioneCommesse.Application.Registry.Services;
 using Lacos.GestioneCommesse.Application.Security;
 using Lacos.GestioneCommesse.Application.Session;
+using Lacos.GestioneCommesse.Application.Sync;
 using Lacos.GestioneCommesse.Application.Vehicles.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,6 +30,7 @@ public static class ApplicationConfiguration
             .AddScoped<IProductService, ProductService>()
             .AddScoped<ICheckListService, CheckListService>()
             .AddScoped<IJobsService, JobsService>()
+            .AddScoped<ISyncService, SyncService>()
             .AddScoped<IActivitiesService, ActivitiesService>()
             .AddScoped<IActivityProductsService, ActivityProductsService>()
             .AddScoped<IInterventionsService, InterventionsService>();

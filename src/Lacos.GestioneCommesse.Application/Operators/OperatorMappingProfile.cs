@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
+using Lacos.GestioneCommesse.Contracts.Dtos;
+using Lacos.GestioneCommesse.Contracts.Dtos.Registry;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Extensions;
 
@@ -9,6 +11,8 @@ namespace Lacos.GestioneCommesse.Application.Operators
     {
         public OperatorMappingProfile()
         {
+           
+
             CreateMap<Operator, OperatorDto>()
 
                 .MapMember(x => x.hasUser, y => y.UserId != null)

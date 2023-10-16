@@ -55,6 +55,7 @@ export interface IInterventionReadModel {
     readonly description: string;
     readonly operators: IInterventionOperatorReadModel[];
     readonly activityType: string;
+    readonly activityColor: string;
     readonly activityId: number;
     readonly canBeRemoved: boolean;
 

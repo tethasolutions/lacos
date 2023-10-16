@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lacos.GestioneCommesse.Application\Lacos.GestioneCommesse.Application.csproj" />
+    <ProjectReference Include="..\Lacos.GestioneCommesse.Contracts\Lacos.GestioneCommesse.Contracts.csproj" />
     <ProjectReference Include="..\Lacos.GestioneCommesse.Dal\Lacos.GestioneCommesse.Dal.csproj" />
     <ProjectReference Include="..\Lacos.GestioneCommesse.Domain\Lacos.GestioneCommesse.Domain.csproj" />
     <ProjectReference Include="..\Lacos.GestioneCommesse.Framework\Lacos.GestioneCommesse.Framework.csproj" />

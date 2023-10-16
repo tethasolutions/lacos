@@ -12,6 +12,7 @@ export class OperatorModel {
     username: string;
     password:string;
     documents: Array<OperatorDocumentModel>;
+    activityTypes: number[];
 
     constructor() {
         this.id = null;
@@ -24,5 +25,6 @@ export class OperatorModel {
         this.hasUser = false;
         this.defaultVehicle = new VehicleModel();
         this.documents = [];
+        this.activityTypes = [];
     }
 }

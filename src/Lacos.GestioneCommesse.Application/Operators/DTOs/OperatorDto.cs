@@ -1,4 +1,5 @@
-﻿using Lacos.GestioneCommesse.Domain.Registry;
+﻿using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Domain.Registry;
 
 namespace Lacos.GestioneCommesse.Application.Operators.DTOs
 {
@@ -11,6 +12,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.DTOs
         public long? DefaultVehicleId { get; set; }
         public bool? hasUser { get; set; }
         public ICollection<OperatorDocumentDto>? Documents { get; set; }
+        public IEnumerable<long> ActivityTypes { get; set; }
         public Vehicle? DefaultVehicle { get; set; }
 
         public string? UserName { get; set; }
@@ -19,6 +21,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.DTOs
         public OperatorDto()
         {
             Documents = new List<OperatorDocumentDto>();
+            ActivityTypes = new List<long>();
         }
     }
 }

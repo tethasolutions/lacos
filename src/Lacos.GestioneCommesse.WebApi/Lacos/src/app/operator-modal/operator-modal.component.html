@@ -57,6 +57,30 @@
                 </div>             
             </div>
 
+            <div class="row riga-form">
+                <div class="col-md-6">
+                    <label>Tipi Attività</label>
+                    <div class="form-group">
+                        <kendo-multiselect [data]="activityTypes" textField="name" valueField="id" name="activitytypes"
+                            [(ngModel)]="options.activityTypes" required [allowCustom]="false" [valuePrimitive]="true"
+                            [readonly]="readonly">
+                            <ng-template kendoMultiSelectItemTemplate let-dataItem>
+                                <div class="d-flex gap-1">
+                                    <app-operator-avatar [options]="dataItem"></app-operator-avatar>
+                                    {{ dataItem.name }}
+                                </div>
+                            </ng-template>
+                            <ng-template kendoMultiSelectTagTemplate let-dataItem>
+                                <div class="d-flex gap-1">
+                                    <app-operator-avatar [options]="dataItem"></app-operator-avatar>
+                                    {{ dataItem.name }}
+                                </div>
+                            </ng-template>
+                        </kendo-multiselect>
+                        <div class="validation-message" [control]="form.controls['activitytypes']"></div>
+                    </div>
+                </div>
+            </div>
             <div class="row riga-form form-group">
                 <div class="col-md-2">
                     <div class="form-group">

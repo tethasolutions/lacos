@@ -17,7 +17,8 @@ namespace Lacos.GestioneCommesse.Application.Operators
 
                 .MapMember(x => x.hasUser, y => y.UserId != null)
                 .Ignore(x=>x.UserName)
-                .Ignore(x=>x.Password);
+                .Ignore(x=>x.Password)
+                .MapMember(x => x.ActivityTypes, y => y.ActivityTypes.Select(e => e.Id)); 
 
 
             CreateMap<OperatorDto, Operator>()
@@ -28,7 +29,8 @@ namespace Lacos.GestioneCommesse.Application.Operators
                 .Ignore(x => x.InterventionProductPictures)
                 .Ignore(x => x.DefaultVehicle)
                 .Ignore(x => x.UserId)
-                .Ignore(x => x.User);
+                .Ignore(x => x.User)
+                .Ignore(x => x.ActivityTypes);
 
             CreateMap<Operator, OperatorReadModel>()
                 .MapMember(x => x.hasUser, y => y.UserId != null)

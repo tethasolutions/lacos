@@ -16,6 +16,7 @@ import { RemoveEvent, SuccessEvent, FileInfo,FileState,SelectEvent} from "@progr
 import { UploadFileModel } from '../shared/models/upload-file.model';
 import { Observable } from 'rxjs';
 import { OperatorDocumentModel } from '../shared/models/operator-document.model';
+import { IActivityTypeOperator } from '../shared/models/activity-type.model';
 
 @Component({
   selector: 'app-operator-modal',
@@ -38,6 +39,7 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
 
   vehicles: Array<VehicleModel> = [];
   roles: Array<SimpleLookupModel> = [];
+  activityTypes: SelectableActivityType[];
 
   notHasUser:boolean;
 
@@ -166,9 +168,23 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
     this.operatorDocumentsModal.open(null);
   }
 
+
   public loadData() {
     this._readVehicles();
     this.setRoles();
   }
 
+}
+
+class SelectableActivityType {
+
+  readonly id: number;
+  readonly name: string;
+
+  constructor(
+      activityType: IActivityTypeOperator
+  ) {
+      this.id = activityType.id;
+      this.name = activityType.name;
+  }
 }

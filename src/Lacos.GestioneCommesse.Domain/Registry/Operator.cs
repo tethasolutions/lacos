@@ -15,6 +15,8 @@ public class Operator : FullAuditedEntity
     public long? UserId { get; set; }
     public User? User { get; set; }
 
+    public ICollection<ActivityType> ActivityTypes { get; set; }
+
     public ICollection<OperatorDocument> Documents { get; set; }
     public ICollection<Intervention> Interventions { get; set; }
     public ICollection<InterventionProductPicture> InterventionProductPictures { get; set; }
@@ -23,6 +25,7 @@ public class Operator : FullAuditedEntity
 
     public Operator()
     {
+        ActivityTypes = new List<ActivityType>();
         Documents = new List<OperatorDocument>();
         Interventions = new List<Intervention>();
         InterventionProductPictures = new List<InterventionProductPicture>();

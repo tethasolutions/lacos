@@ -209,7 +209,7 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
                 .subscribe()
         )
     }
-
+ 
     private _getOperators() {
         const state: State = {
             sort: [

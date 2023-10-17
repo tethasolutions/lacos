@@ -2,6 +2,7 @@
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
+using Lacos.GestioneCommesse.WebApi.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
@@ -17,9 +18,9 @@ public class ActivityProductsController : LacosApiController
     }
 
     [HttpGet("read")]
-    public Task<DataSourceResult> Read([DataSourceRequest] DataSourceRequest request)
+    public async Task<DataSourceResult> Read([LacosDataSourceRequest] DataSourceRequest request)
     {
-        return service.Query()
+        return await service.Query()
             .ToDataSourceResultAsync(request);
     }
 

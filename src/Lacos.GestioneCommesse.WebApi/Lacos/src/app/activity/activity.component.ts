@@ -110,6 +110,20 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         this._getActivity();
     }
 
+    assignAllCustomerProducts() {
+        const text = 'Sei sicuro di voler associare all\'attività tutti i prodotti di ' + this.activity.customer + ' in ' + this.activity.customerAddress + '?';
+
+        this._subscriptions.push(
+            this._messageBox.confirm(text)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._service.assignAllCustomerProducts(this.activity.id)),
+                    tap(() => this._afterAllCustomerProductsAssigned())
+                )
+                .subscribe()
+        );
+    }
+
     private _subscribeRouteParams() {
         this._subscriptions.push(
             this._route.data
@@ -134,6 +148,12 @@ export class ActivityComponent extends BaseComponent implements OnInit {
 
     private _afterActivityProductCreated(name: string) {
         this._messageBox.success(`${name} associato all'attività.`);
+
+        this.activityProducts?.refresh();
+    }
+
+    private _afterAllCustomerProductsAssigned() {
+        this._messageBox.success(`Prodotti associati all'attività.`);
 
         this.activityProducts?.refresh();
     }

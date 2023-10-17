@@ -2,6 +2,7 @@
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,22 @@ public class ActivitiesService : IActivitiesService
     private readonly IMapper mapper;
     private readonly IRepository<Activity> repository;
     private readonly ILacosDbContext dbContext;
+    private readonly IRepository<ActivityProduct> activityProductRepository;
+    private readonly IRepository<Product> productRepository;
 
     public ActivitiesService(
         IMapper mapper,
         IRepository<Activity> repository,
-        ILacosDbContext dbContext
+        ILacosDbContext dbContext,
+        IRepository<ActivityProduct> activityProductRepository,
+        IRepository<Product> productRepository
     )
     {
         this.mapper = mapper;
         this.repository = repository;
         this.dbContext = dbContext;
+        this.activityProductRepository = activityProductRepository;
+        this.productRepository = productRepository;
     }
 
 
@@ -116,6 +123,41 @@ public class ActivitiesService : IActivitiesService
         }
 
         repository.Delete(activity);
+
+        await dbContext.SaveChanges();
+    }
+
+    public async Task AssignAllCustomerProducts(long id)
+    {
+        var activity = await repository.Query()
+            .AsNoTracking()
+            .Where(e => e.Id == id)
+            .FirstAsync();
+        var activityProducts = activityProductRepository.Query()
+            .Where(e => e.ActivityId == id);
+        var products = productRepository.Query()
+            .Where(e => e.CustomerAddressId == activity.CustomerAddressId);
+        var missingProducts = await (
+                from product in products
+                join activityProduct in activityProducts
+                    on product.Id equals activityProduct.ProductId
+                    into join1
+                from activityProduct in join1.DefaultIfEmpty()
+                where activityProduct == null
+                select product
+            )
+            .ToListAsync();
+
+        foreach (var missingProduct in missingProducts)
+        {
+            var missingActivityProduct = new ActivityProduct
+            {
+                ProductId = missingProduct.Id,
+                ActivityId = id
+            };
+
+            await activityProductRepository.Insert(missingActivityProduct);
+        }
 
         await dbContext.SaveChanges();
     }

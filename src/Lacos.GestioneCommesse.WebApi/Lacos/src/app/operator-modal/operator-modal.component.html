@@ -109,8 +109,9 @@
                             [removeUrl]="uploadRemoveUrl" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
                                 <span *ngIf="!isUploaded">{{ files[0].name }}</span>
-                                <a [href]="CreateUrl(files[0].name)" target="_blank" *ngIf="isUploaded">{{ files[0].name
-                                    }}</a>
+                                <a [href]="CreateUrl(files[0].name)" target="_blank" *ngIf="isUploaded">
+                                    {{ files[0].name }}
+                                </a>
                             </ng-template>
                         </kendo-upload>
                     </kendo-formfield>

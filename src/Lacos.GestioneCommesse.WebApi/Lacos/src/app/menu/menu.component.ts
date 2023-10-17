@@ -50,23 +50,27 @@ export class MenuComponent extends BaseComponent implements OnInit {
                     e => e.isAuthenticated()
                 )
             ]),
-            new MenuEntry(['/jobs'], 'Commesse',
-                e => e.startsWith('/jobs'),
-                e => e.isAuthenticated()
-            ),
             new MenuEntry(['/tickets'], 'Tickets',
                 e => e.startsWith('/tickets'),
                 e => e.isAuthenticated()
             ),
-            new DropDownMenuEntry('Interventi', [
+            new DropDownMenuEntry('Pianificazione', [
+                new MenuEntry(['/jobs'], 'Commesse',
+                    e => e.startsWith('/jobs'),
+                    e => e.isAuthenticated()
+                ),
+                new MenuEntry(['/activities'], 'Attività',
+                    e => e.startsWith('/activities'),
+                    e => e.isAuthenticated()
+                ),
                 new MenuEntry(['/interventions'], 'Calendario',
-                    e => e.startsWith('/interventions'),
+                    e => e === '/interventions',
                     e => e.isAuthenticated()
                 ),
                 new MenuEntry(['/interventions-list'], 'Elenco Interventi',
                     e => e.startsWith('/interventions-list'),
                     e => e.isAuthenticated()
-                )
+                ),
             ]),
             new MenuEntry(['/logout'], 'Logout',
                 () => false,

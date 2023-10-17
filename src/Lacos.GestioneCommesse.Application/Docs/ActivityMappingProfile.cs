@@ -34,7 +34,9 @@ public class ActivityMappingProfile : Profile
                 y.Interventions
                     .All(i => i.Status == InterventionStatus.Scheduled)
             )
-            .MapMember(x => x.Number, y => y.RowNumber);
+            .MapMember(x => x.Number, y => y.RowNumber)
+            .MapMember(x => x.JobCode, y => y.Job!.Year.ToString() + "/" + y.Job.Number.ToString())
+            .MapMember(x => x.Customer, y => y.Job!.Customer!.Name);
 
         CreateMap<ActivityDto, Activity>()
             .IgnoreCommonMembers()

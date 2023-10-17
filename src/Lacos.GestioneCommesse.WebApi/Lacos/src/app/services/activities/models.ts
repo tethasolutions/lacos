@@ -27,6 +27,8 @@ export interface IActivityReadModel {
     readonly type: string;
     readonly source: string;
     readonly canBeRemoved: boolean;
+    readonly jobCode: string;
+    readonly customer: string;
 
 }
 

@@ -9,7 +9,7 @@ import { CustomerModel } from '../shared/models/customer.model';
 
 @Injectable()
 export class CustomerService {
-    
+
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/customers`;
 
     constructor(

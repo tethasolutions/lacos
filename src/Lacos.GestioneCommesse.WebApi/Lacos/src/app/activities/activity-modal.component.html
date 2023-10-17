@@ -11,8 +11,21 @@
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="job-activity-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+        <form name="activity-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
             class="redimensionModal">
+
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Commessa</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
+                            [(ngModel)]="options.activity.jobId" required [suggest]="true" [allowCustom]="false"
+                            [valuePrimitive]="true" (valueChange)="onJobChanged()" [readonly]="jobReadonly">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['jobId']"></div>
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-2">

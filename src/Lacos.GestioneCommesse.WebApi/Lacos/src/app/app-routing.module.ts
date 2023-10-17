@@ -13,11 +13,12 @@ import { ProductsComponent } from './products/products.component';
 import { ActivityTypesComponent } from './activitytypes/activitytypes.component';
 import { ProductTypesComponent } from './producttypes/producttypes.component';
 import { JobsComponent } from './jobs/jobs.component';
-import { ActivityComponent } from './activity/activity.component';
+import { ActivityComponent } from './activities/activity.component';
 import { ActivitiesService } from './services/activities/activities.service';
 import { InterventionsComponent } from './interventions/interventions.component';
 import { InterventionsListComponent } from './interventions/interventions-list.component';
 import { TicketsComponent } from './ticket/tickets.component';
+import { ActivitiesComponent } from './activities/activities.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -34,6 +35,7 @@ const routes: Routes = [
     { path: 'producttypes', component: ProductTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs', component: JobsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'tickets', component: TicketsComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'activities', component: ActivitiesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities/:activityId', component: ActivityComponent, canActivate: [AuthGuard.asInjectableGuard], resolve: { activity: ActivitiesService.asActivityDetailResolver } },
     { path: 'interventions-list', component: InterventionsListComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'interventions', component: InterventionsComponent, canActivate: [AuthGuard.asInjectableGuard] }

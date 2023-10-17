@@ -14,13 +14,13 @@ export class AuthGuard {
     ) {
     }
 
-    canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (!this._security.isAuthenticated()) {
             this._router.navigate(['/login']);
             return false;
         }
 
-        const url = state.url;
+        const url = '/' + route.url.join('/');
 
         switch (true) {
             case url === '/':
@@ -38,11 +38,12 @@ export class AuthGuard {
             case url === '/interventions-list':
             case url === '/tickets':
             case url === '/orders':
+            case url === '/activities':
                 return this._security.isAuthenticated();
             case url === '/users':
                 return this._security.isAuthorized(Role.Administrator);
             default:
-                throw new Error(`Url ${state.url} sconosciuto`);
+                throw new Error(`Url ${url} sconosciuto`);
         }
     }
 

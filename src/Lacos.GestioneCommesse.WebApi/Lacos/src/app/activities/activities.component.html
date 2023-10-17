@@ -1,7 +1,22 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>Attività</h3>
+    </div>
+
+    <div class="col-auto">
+        <button (click)="create()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVA
+        </button>
+    </div>
+</div>
+
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
     scrollable="none" (dataStateChange)="dataStateChange($event)">
 
+    <kendo-grid-column field="jobCode" title="Commessa" [width]="1">
+    </kendo-grid-column>
     <kendo-grid-column field="number" title="Numero" [width]="1" filter="numeric" format="n0">
     </kendo-grid-column>
     <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric">
@@ -23,11 +38,16 @@
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Descrizione">
     </kendo-grid-column>
+    <kendo-grid-column field="customer" title="Cliente">
+    </kendo-grid-column>
     <kendo-grid-column field="customerAddress" title="Indirizzo">
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">
+                <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
+                    <i class="fas fa-edit"></i>
+                </button>
                 <a class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', dataItem.id]">
                     <i class="fas fa-external-link"></i>
                 </a>
@@ -40,3 +60,5 @@
     </kendo-grid-column>
 
 </kendo-grid>
+
+<app-activity-modal #activityModal></app-activity-modal>

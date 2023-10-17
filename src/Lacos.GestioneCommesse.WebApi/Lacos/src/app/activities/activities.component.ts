@@ -28,7 +28,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         filter: {
             filters: [
                 {
-                    filters: [ActivityStatus.Pending, ActivityStatus.InProgress]
+                    filters: [ActivityStatus.Pending, ActivityStatus.InProgress, ActivityStatus.ReadyForCompletion]
                         .map(e => ({ field: 'status', operator: 'eq', value: e })),
                     logic: 'or'
                 },

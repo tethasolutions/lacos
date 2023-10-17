@@ -4,7 +4,7 @@
     <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
         <kendo-window-titlebar>
             <div *ngIf="!!options.activity.id" class="k-window-title">
-                Attività {{options.activity.number}} &bull; {{options.activity.status | activityStatus}}
+                Attività {{options.activity.number}} &bull; {{status | activityStatus}}
             </div>
             <div *ngIf="!options.activity.id" class="k-window-title">
                 Nuova attività
@@ -23,6 +23,16 @@
                             [valuePrimitive]="true" (valueChange)="onJobChanged()" [readonly]="jobReadonly">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['jobId']"></div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <label>Indirizzo</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="customer?.addresses" [valuePrimitive]="true" textField="fullAddress"
+                            valueField="id" name="customerAddressId" [(ngModel)]="options.activity.customerAddressId"
+                            required [suggest]="true" [allowCustom]="false" [disabled]="!!options.activity.id">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['customerAddressId']"></div>
                     </div>
                 </div>
             </div>
@@ -46,14 +56,19 @@
                         <div class="validation-message" [control]="form.controls['typeId']"></div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <label>Indirizzo</label>
+                <div class="col-md-4">
+                    <label>Stato</label>
                     <div class="form-group">
-                        <kendo-combobox [data]="customer?.addresses" [valuePrimitive]="true" textField="fullAddress"
-                            valueField="id" name="customerAddressId" [(ngModel)]="options.activity.customerAddressId"
-                            required [suggest]="true" [allowCustom]="false" [disabled]="!!options.activity.id">
-                        </kendo-combobox>
-                        <div class="validation-message" [control]="form.controls['customerAddressId']"></div>
+                        <kendo-dropdownlist [data]="states" [valuePrimitive]="true" name="status"
+                            [(ngModel)]="options.activity.status" required>
+                            <ng-template kendoDropDownListValueTemplate let-dataItem>
+                                {{dataItem | activityStatus}}
+                            </ng-template>
+                            <ng-template kendoDropDownListItemTemplate let-dataItem>
+                                {{dataItem | activityStatus}}
+                            </ng-template>
+                        </kendo-dropdownlist>
+                        <div class="validation-message" [control]="form.controls['status']"></div>
                     </div>
                 </div>
             </div>

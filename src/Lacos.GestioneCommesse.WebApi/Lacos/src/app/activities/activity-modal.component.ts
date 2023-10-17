@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Activity } from '../services/activities/models';
+import { Activity, ActivityStatus } from '../services/activities/models';
 import { ModalComponent } from '../shared/modal.component';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 import { tap } from 'rxjs';
@@ -11,6 +11,7 @@ import { CustomerModel } from '../shared/models/customer.model';
 import { JobsService } from '../services/jobs/jobs.service';
 import { State } from '@progress/kendo-data-query';
 import { IJobReadModel } from '../services/jobs/models';
+import { listEnum } from '../services/common/functions';
 
 @Component({
     selector: 'app-activity-modal',
@@ -25,6 +26,9 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     customer: CustomerModel;
     jobs: SelectableJob[];
     jobReadonly: boolean;
+    status: ActivityStatus;
+
+    readonly states = listEnum<ActivityStatus>(ActivityStatus);
 
     constructor(
         private readonly _activityTypesService: ActivityTypesService,
@@ -50,6 +54,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
         this.jobReadonly = !!options.activity.jobId;
         this.customer = null;
+        this.status = options.activity.status;
         this._getJobs();
 
         return result;

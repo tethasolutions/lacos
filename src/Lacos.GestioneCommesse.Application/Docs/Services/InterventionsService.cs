@@ -15,6 +15,7 @@ public class InterventionsService : IInterventionsService
     private readonly IRepository<Intervention> repository;
     private readonly IRepository<Operator> operatorRepository;
     private readonly IRepository<ActivityProduct> activityProductRepository;
+    private readonly IRepository<Activity> activityRepository;
     private readonly ILacosDbContext dbContext;
 
     public InterventionsService(
@@ -22,7 +23,8 @@ public class InterventionsService : IInterventionsService
         IRepository<Intervention> repository,
         IRepository<Operator> operatorRepository,
         ILacosDbContext dbContext,
-        IRepository<ActivityProduct> activityProductRepository
+        IRepository<ActivityProduct> activityProductRepository,
+        IRepository<Activity> activityRepository
     )
     {
         this.mapper = mapper;
@@ -30,6 +32,7 @@ public class InterventionsService : IInterventionsService
         this.operatorRepository = operatorRepository;
         this.dbContext = dbContext;
         this.activityProductRepository = activityProductRepository;
+        this.activityRepository = activityRepository;
     }
 
     public IQueryable<InterventionReadModel> Query()
@@ -57,12 +60,19 @@ public class InterventionsService : IInterventionsService
     {
         var intervention = interventionDto.MapTo<Intervention>(mapper);
 
-        await MergeInterventionOperators(intervention, interventionDto.Operators);
-        await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
+        await using (var transaction = await dbContext.BeginTransaction())
+        {
+            await MergeInterventionOperators(intervention, interventionDto.Operators);
+            await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
 
-        await repository.Insert(intervention);
+            await repository.Insert(intervention);
 
-        await dbContext.SaveChanges();
+            await dbContext.SaveChanges();
+
+            await UpdateActivityStatus(intervention.ActivityId);
+
+            await transaction.CommitAsync();
+        }
 
         return await Get(intervention.Id);
     }
@@ -87,14 +97,27 @@ public class InterventionsService : IInterventionsService
             throw new LacosException("Non puoi modificare un intervento già completato.");
         }
 
+        var previousActivityId = intervention.ActivityId;
         intervention = interventionDto.MapTo(intervention, mapper);
 
-        await MergeInterventionOperators(intervention, interventionDto.Operators);
-        await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
+        await using (var transaction = await dbContext.BeginTransaction())
+        {
+            await MergeInterventionOperators(intervention, interventionDto.Operators);
+            await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
 
-        repository.Update(intervention);
+            repository.Update(intervention);
 
-        await dbContext.SaveChanges();
+            await dbContext.SaveChanges();
+
+            await UpdateActivityStatus(intervention.ActivityId);
+
+            if (previousActivityId != intervention.ActivityId)
+            {
+                await UpdateActivityStatus(previousActivityId);
+            }
+
+            await transaction.CommitAsync();
+        }
 
         return await Get(intervention.Id);
     }
@@ -118,30 +141,27 @@ public class InterventionsService : IInterventionsService
             throw new LacosException("Non puoi eliminare un intervento già completato.");
         }
 
-        repository.Delete(intervention);
+        await using (var transaction = await dbContext.BeginTransaction())
+        {
+            repository.Delete(intervention);
 
-        await dbContext.SaveChanges();
+            await dbContext.SaveChanges();
+
+            await UpdateActivityStatus(intervention.ActivityId);
+
+            await transaction.CommitAsync();
+        }
     }
 
     private async Task MergeInterventionOperators(Intervention intervention, IEnumerable<long> operatorIds)
     {
-        var ids = operatorIds.ToList();
+        intervention.Operators.Clear();
 
-        foreach (var @operator in intervention.Operators.ToList())
-        {
-            if (!ids.Contains(@operator.Id))
-            {
-                intervention.Operators.Remove(@operator);
-            }
+        var operators = await operatorRepository.Query()
+            .Where(e => operatorIds.Contains(e.Id))
+            .ToListAsync();
 
-            ids.Remove(@operator.Id);
-        }
-
-        var operatorsToAdd = await operatorRepository.Query()
-                .Where(e => ids.Contains(e.Id))
-                .ToListAsync();
-
-        intervention.Operators.AddRange(operatorsToAdd);
+        intervention.Operators.AddRange(operators);
     }
 
     private async Task MergeInterventionProducts(Intervention intervention, IEnumerable<long> activityProductIds)
@@ -182,5 +202,30 @@ public class InterventionsService : IInterventionsService
             .ToListAsync();
 
         intervention.Products.AddRange(productsToAdd);
+    }
+
+    private async Task UpdateActivityStatus(long id)
+    {
+        var activity = await activityRepository.Query()
+            .Where(e => e.Id == id)
+            .Select(e => new
+            {
+                CurrentStatus = e.Status,
+                Status = !e.Interventions.Any()
+                    ? ActivityStatus.Pending
+                    : e.Interventions.Any(i => i.Status == InterventionStatus.Scheduled)
+                        ? ActivityStatus.InProgress
+                        : ActivityStatus.Completed
+            })
+            .FirstAsync();
+
+        if (activity.Status == activity.CurrentStatus)
+        {
+            return;
+        }
+
+        await activityRepository.Update(id, e => e.Status = activity.Status);
+
+        await dbContext.SaveChanges();
     }
 }

@@ -92,19 +92,32 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <label>Prodotti</label>
+                    <div class="d-flex gap-2 align-items-center">
+                        <label>
+                            Prodotti
+                        </label>
+                        <ng-container *ngIf="!readonly">
+                            <button type="button" class="btn btn-sm btn-link" (click)="selectAllProducts()">
+                                Seleziona tutti
+                            </button>
+                            <button type="button" class="btn btn-sm btn-link" (click)="unselectAllProducts()">
+                                Deseleziona tutti
+                            </button>
+                        </ng-container>
+                    </div>
+
                     <div class="input-group mb-1">
                         <span class="input-group-text">
                             <span class="fa fa-search"></span>
                         </span>
                         <input type="text" class="form-control" [(ngModel)]="filterProductsValue"
                             name="filterProductsValue" (ngModelChange)="onSearchProductsValueChange($event)"
-                            placeholder="Cerca tra prodotti dell'attività per codice o nome...">
+                            placeholder="Cerca tra i prodotti dell'attività per codice o nome...">
                     </div>
                     <div class="row" kendoTooltip style="max-height: 300px; overflow: auto;">
                         <div *ngFor="let product of products; index as i"
                             class="col-6 d-flex gap-1 align-items-center mb-2" [class.hidden]="product.hidden">
-                            <input type="checkbox" kendoCheckBox [(ngModel)]="product.selected"
+                            <input type="checkbox" kendoCheckBox [(ngModel)]="product.selected" [disabled]="readonly"
                                 [name]="i + '_productSelected'" (ngModelChange)="onProductSelectionChange(product)">
                             <img *ngIf="product.pictureFileName" [src]="imagesUrl + product.pictureFileName"
                                 class="thumbnail-xs">

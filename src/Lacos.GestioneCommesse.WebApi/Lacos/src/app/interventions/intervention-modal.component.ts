@@ -124,8 +124,28 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         } else {
             this.options.activityProducts.filterAndRemove(e => e === product.id);
         }
+    }
 
-        this.console.log(this.options.activityProducts);
+    selectAllProducts() {
+        for (const product of this.products) {
+            if (product.selected) {
+                continue;
+            }
+
+            product.selected = true;
+            this.options.activityProducts.pushIfNotContained(product.id);
+        }
+    }
+
+    unselectAllProducts() {
+        for (const product of this.products) {
+            if (!product.selected) {
+                continue;
+            }
+
+            product.selected = false;
+            this.options.activityProducts.filterAndRemove(e => e === product.id);
+        }
     }
 
     protected override _canClose() {

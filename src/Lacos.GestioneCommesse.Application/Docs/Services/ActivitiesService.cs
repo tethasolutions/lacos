@@ -144,7 +144,7 @@ public class ActivitiesService : IActivitiesService
                     into join1
                 from activityProduct in join1.DefaultIfEmpty()
                 where activityProduct == null
-                select product
+                select product.Id
             )
             .ToListAsync();
 
@@ -152,7 +152,7 @@ public class ActivitiesService : IActivitiesService
         {
             var missingActivityProduct = new ActivityProduct
             {
-                ProductId = missingProduct.Id,
+                ProductId = missingProduct,
                 ActivityId = id
             };
 

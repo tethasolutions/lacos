@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Lacos\**" />
+    <Compile Remove="wwwroot\attachments\**" />
     <Content Remove="Lacos\**" />
+    <Content Remove="wwwroot\attachments\**" />
     <EmbeddedResource Remove="Lacos\**" />
+    <EmbeddedResource Remove="wwwroot\attachments\**" />
     <None Remove="Lacos\**" />
+    <None Remove="wwwroot\attachments\**" />
   </ItemGroup>
 
   <ItemGroup>

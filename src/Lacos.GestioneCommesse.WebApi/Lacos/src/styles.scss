@@ -267,13 +267,18 @@ kendo-scheduler .k-event .k-event-actions:first-child,
     padding-bottom: 10px;
 }
 
-.lacos 
-{
-    color:#46a43e;
+.lacos {
+    color: #46a43e;
 }
 
 .k-scheduler-table td,
 .k-scheduler-table th {
     padding-block: 0.2rem;
     padding-inline: 0.2rem;
+}
+
+.text-ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

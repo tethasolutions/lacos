@@ -9,7 +9,7 @@ export class OperatorModel {
     defaultVehicleId: number;
     defaultVehicle: VehicleModel;
     hasUser:boolean;
-    username: string;
+    userName: string;
     password:string;
     documents: Array<OperatorDocumentModel>;
     activityTypes: number[];
@@ -20,7 +20,7 @@ export class OperatorModel {
         this.colorHex = null;
         this.name = null;
         this.defaultVehicleId = null;
-        this.username = "";
+        this.userName = "";
         this.password = "";
         this.hasUser = false;
         this.defaultVehicle = new VehicleModel();

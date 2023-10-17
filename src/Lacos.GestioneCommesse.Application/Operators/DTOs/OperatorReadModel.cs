@@ -10,7 +10,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.DTOs
         public string? Name { get; set; }
         public long? DefaultVehicleId { get; set; }
         public VehicleDto? DefaultVehicle { get; set; }
-        public bool? hasUser { get; set; }
+        public bool HasUser { get; set; }
         public string? Username { get; set; }
 
         public ICollection<OperatorDocumentDto> Documents { get; set; }

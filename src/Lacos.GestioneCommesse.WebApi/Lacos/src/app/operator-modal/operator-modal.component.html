@@ -1,21 +1,20 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false"[top]="100">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="100">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Operatore
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="updateActivityTypeForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options" class="redimensionModal">
+        <form name="updateActivityTypeForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()"
+            *ngIf="options" class="redimensionModal">
             <div class="row riga-form">
                 <div class="col-md-6">
                     <kendo-formfield class="form-group">
                         <label>Nome</label>
-                        <kendo-textbox [(ngModel)]="options.name" 
-                            name="name"
-                            required>
+                        <kendo-textbox [(ngModel)]="options.name" name="name" required>
                         </kendo-textbox>
                         <kendo-formerror>Nome è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
@@ -23,10 +22,7 @@
                 <div class="col-md-6">
                     <kendo-formfield class="form-group">
                         <label>Email</label>
-                        <kendo-textbox [(ngModel)]="options.email" 
-                            name="email"
-                            type="email"
-                            required>
+                        <kendo-textbox [(ngModel)]="options.email" name="email" type="email" required>
                         </kendo-textbox>
                         <kendo-formerror>Email è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
@@ -36,14 +32,8 @@
                 <div class="col-md-6">
                     <kendo-formfield class="form-group">
                         <label>Trasporto principale</label>
-                        <kendo-combobox [data]="vehicles" 
-                            [(ngModel)]="options.defaultVehicleId" 
-                            name="defaultVehicleId"
-                            suggest="true"
-                            textField="description"
-                            [valuePrimitive]="true"
-                            valueField="id"
-                            required>
+                        <kendo-combobox [data]="vehicles" [(ngModel)]="options.defaultVehicleId" name="defaultVehicleId"
+                            suggest="true" textField="description" [valuePrimitive]="true" valueField="id" required>
                         </kendo-combobox>
                         <kendo-formerror>Trasporto principale è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
@@ -51,18 +41,19 @@
                 <div class="col-md-3">
                     <kendo-formfield class="form-group">
                         <label>Colore</label>
-                        <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" format="hex"  required></kendo-colorpicker>
+                        <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" format="hex" required>
+                        </kendo-colorpicker>
                         <kendo-formerror>Colore è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
-                </div>             
+                </div>
             </div>
 
             <div class="row riga-form">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label>Tipi Attività</label>
                     <div class="form-group">
                         <kendo-multiselect [data]="activityTypes" textField="name" valueField="id" name="activitytypes"
-                            [(ngModel)]="options.activityTypes" required [allowCustom]="false" [valuePrimitive]="true"
+                            [(ngModel)]="options.activityTypes" [allowCustom]="false" [valuePrimitive]="true"
                             [readonly]="readonly">
                             <ng-template kendoMultiSelectItemTemplate let-dataItem>
                                 <div class="d-flex gap-1">
@@ -81,6 +72,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row riga-form form-group">
                 <div class="col-md-2">
                     <div class="form-group">
@@ -91,16 +83,17 @@
                     </div>
                 </div>
                 <div class="col-md-5" *ngIf="options.hasUser">
-                    <kendo-formfield class="form-group">    
+                    <kendo-formfield class="form-group">
                         <label>Username</label>
-                        <kendo-textbox [(ngModel)]="options.username" name="username" required></kendo-textbox>
+                        <kendo-textbox [(ngModel)]="options.userName" name="userName" required></kendo-textbox>
                         <kendo-formerror>Username è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                 </div>
                 <div class="col-md-5" *ngIf="options.hasUser">
-                    <kendo-formfield class="form-group">    
+                    <kendo-formfield class="form-group">
                         <label>Password</label>
-                        <kendo-textbox [(ngModel)]="options.password" name="password" [(required)] ="this.notHasUser"></kendo-textbox>
+                        <kendo-textbox [(ngModel)]="options.password" name="password"
+                            [(required)]="this.notHasUser"></kendo-textbox>
                         <kendo-formerror>Password è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                 </div>
@@ -109,12 +102,15 @@
 
             <div class="row riga-form form-group">
                 <div class="col-md-12">
-                    <kendo-formfield class="form-group">                            
+                    <kendo-formfield class="form-group">
                         <label>Allegati</label>
-                        <kendo-upload [(ngModel)]="this.attachmentsFileInfo" (select)="AttachmentSelect($event)" (success)="AttachmentExecutionSuccess($event)" [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" name="myUpload">
+                        <kendo-upload [(ngModel)]="this.attachmentsFileInfo" (select)="AttachmentSelect($event)"
+                            (success)="AttachmentExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
+                            [removeUrl]="uploadRemoveUrl" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
                                 <span *ngIf="!isUploaded">{{ files[0].name }}</span>
-                                <a [href]="CreateUrl(files[0].name)" target="_blank" *ngIf="isUploaded">{{ files[0].name }}</a>
+                                <a [href]="CreateUrl(files[0].name)" target="_blank" *ngIf="isUploaded">{{ files[0].name
+                                    }}</a>
                             </ng-template>
                         </kendo-upload>
                     </kendo-formfield>

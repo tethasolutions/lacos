@@ -53,6 +53,14 @@
             {{activity.type}}
         </p>
     </div>
+    <div *ngIf="activity.expirationDate" class="col-2">
+        <b>
+            Scadenza
+        </b>
+        <p>
+            {{activity.expirationDate | date:'dd/MM/yyyy'}}
+        </p>
+    </div>
     <div *ngIf="activity.source" class="col-2">
         <b>
             Sorgente

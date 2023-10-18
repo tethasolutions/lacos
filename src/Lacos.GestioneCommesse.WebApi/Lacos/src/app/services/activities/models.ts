@@ -31,29 +31,48 @@ export interface IActivityReadModel {
     readonly canBeRemoved: boolean;
     readonly jobCode: string;
     readonly customer: string;
+    readonly expirationDate: Date | string;
 
 }
 
 export class Activity {
 
+    expirationDate: Date;
+
     constructor(
         readonly id: number,
-        readonly status: ActivityStatus,
+        public status: ActivityStatus,
         readonly number: number,
         public description: string,
-        readonly jobId: number,
+        public jobId: number,
         public customerAddressId: number,
-        public typeId: number
+        public typeId: number,
+        expirationDate: Date | string
     ) {
+        this.expirationDate = expirationDate ? new Date(expirationDate) : null;
+    }
+
+    toJSON() {
+        const result = {
+            ...this
+        };
+
+        result.expirationDate = result.expirationDate
+            ? result.expirationDate.toOffsetString() as any
+            : null;
+
+        return result;
     }
 
     static build(o: Activity) {
-        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.customerAddressId, o.typeId);
+        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.customerAddressId, o.typeId, o.expirationDate);
     }
 
 }
 
 export class ActivityDetail {
+
+    readonly expirationDate: Date | string;
 
     constructor(
         readonly id: number,
@@ -68,18 +87,20 @@ export class ActivityDetail {
         readonly customerAddress: number,
         readonly typeId: number,
         readonly type: string,
-        readonly source: string
+        readonly source: string,
+        expirationDate: Date | string
     ) {
+        this.expirationDate = expirationDate ? new Date(expirationDate) : null;
     }
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.description, this.jobId,
-            this.customerAddressId, this.typeId);
+            this.customerAddressId, this.typeId, this.expirationDate);
     }
 
     static build(o: ActivityDetail) {
         return new ActivityDetail(o.id, o.status, o.number, o.description, o.jobId, o.job, o.customerId,
-            o.customer, o.customerAddressId, o.customerAddress, o.typeId, o.type, o.source);
+            o.customer, o.customerAddressId, o.customerAddress, o.typeId, o.type, o.source, o.expirationDate);
     }
 
 }

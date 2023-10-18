@@ -56,7 +56,15 @@
                         <div class="validation-message" [control]="form.controls['typeId']"></div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label>Scadenza</label>
+                    <div class="form-group">
+                        <kendo-datepicker name="expirationDate" [(ngModel)]="options.activity.expirationDate" format="dd/MM/yyyy">
+                        </kendo-datepicker>
+                        <div class="validation-message" [control]="form.controls['expirationDate']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <label>Stato</label>
                     <div class="form-group">
                         <kendo-dropdownlist [data]="states" [valuePrimitive]="true" name="status"

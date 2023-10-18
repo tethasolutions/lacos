@@ -17,4 +17,5 @@ public class ActivityDetailDto
     public long TypeId { get; set; }
     public string? Type { get; set; }
     public string? Source { get; set; }
+    public DateTimeOffset? ExpirationDate { get; set; }
 }

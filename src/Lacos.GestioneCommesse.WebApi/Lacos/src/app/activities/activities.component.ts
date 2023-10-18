@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridDataResult } from '@progress/kendo-angular-grid';
+import { GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
@@ -77,7 +77,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     create() {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, this._job?.id, null, null);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, this._job?.id, null, null, null);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -104,6 +104,25 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
+
+    readonly rowCallback = (context: RowClassArgs) => {
+        const activity = context.dataItem as IActivityReadModel;
+
+        switch (true) {
+            case !!activity.expirationDate && new Date(activity.expirationDate).isPast():
+                return { 'activity-expired': true };
+            case activity.status === ActivityStatus.Completed:
+                return { 'activity-completed': true };
+            case activity.status === ActivityStatus.Pending:
+                return { 'activity-pending': true };
+            case activity.status === ActivityStatus.ReadyForCompletion:
+                return { 'activity-ready-for-completion': true };
+            case activity.status === ActivityStatus.InProgress:
+                return { 'activity-in-progress': true };
+            default:
+                return {};
+        }
+    };
 
     protected _read() {
         this._subscriptions.push(

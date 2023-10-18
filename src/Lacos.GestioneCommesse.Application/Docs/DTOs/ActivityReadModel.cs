@@ -15,4 +15,5 @@ public class ActivityReadModel
     public string? Type { get; set; }
     public string? Source { get; set; }
     public bool CanBeRemoved { get; set; }
+    public DateTimeOffset? ExpirationDate { get; set; }
 }

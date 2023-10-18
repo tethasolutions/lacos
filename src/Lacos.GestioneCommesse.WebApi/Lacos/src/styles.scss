@@ -294,3 +294,30 @@ kendo-scheduler .k-event .k-event-actions:first-child,
     white-space: nowrap;
     overflow: hidden;
 }
+
+@mixin striped-background($color1, $color2, $stripeSize: 10px) {
+    background: repeating-linear-gradient(135deg, $color1, $color1 $stripeSize, $color2 $stripeSize, $color2 $stripeSize*2);
+}
+
+app-activities {
+
+    .activity-expired .activity-status {
+        @include striped-background(rgba(220, 53, 69, .3), rgba(220, 53, 69, .1));
+    }
+
+    .activity-completed .activity-status {
+        @include striped-background(rgba(13, 110, 253, .3), rgba(13, 110, 253, .1));
+    }
+
+    .activity-pending .activity-status {
+        @include striped-background(rgba(255, 193, 7, .3), rgba(255, 193, 7, .1));
+    }
+
+    .activity-ready-for-completion .activity-status {
+        @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
+    }
+
+    .activity-in-progress .activity-status {
+        @include striped-background(rgba(25, 135, 84, .3), rgba(25, 135, 84, .1));
+    }
+}

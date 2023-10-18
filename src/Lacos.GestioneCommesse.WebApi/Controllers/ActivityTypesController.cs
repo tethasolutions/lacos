@@ -1,15 +1,7 @@
 ﻿using Lacos.GestioneCommesse.WebApi.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Lacos.GestioneCommesse.Application.Vehicles.DTOs;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
-using Lacos.GestioneCommesse.Domain.Docs;
-using Lacos.GestioneCommesse.Application.Operators.DTOs;
-using System.Net.Http;
-using System.Web.Http;
-using Lacos.GestioneCommesse.Application.CheckLists.DTOs;
-using Lacos.GestioneCommesse.Domain.Registry;
-using Telerik.SvgIcons;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Application.Registry.Services;
 
@@ -68,9 +60,8 @@ public class ActivityTypesController : LacosApiController
     }
 
     [HttpGet("activitytypes-list")]
-    public async Task<List<ActivityTypeDto>> GetActivityTypesList()
+    public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypesList()
     {
-        var activityTypes = (await activityTypeService.GetActivityTypes()).ToList();
-        return activityTypes;
+        return await activityTypeService.GetActivityTypes();
     }
 }

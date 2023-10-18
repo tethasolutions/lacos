@@ -54,6 +54,7 @@ public class LacosSession : ILacosSession
     private async Task<LacosUser?> BuildUser()
     {
         var user = await Query<User>()
+            .Include(e => e.Operator)
             .SingleOrDefaultAsync(e => e.AccessToken == AccessToken);
 
         if (user == null)
@@ -61,8 +62,8 @@ public class LacosSession : ILacosSession
             return null;
         }
 
-        var rivendellUser = new LacosUser(user.Id, user.Role, user.Enabled, user.AccessToken, user.Salt,
-            user.PasswordHash, user.UserName);
+        var rivendellUser = new LacosUser(user.Id, user.Role, user.Enabled, user.AccessToken!, user.Salt!,
+            user.PasswordHash!, user.UserName!, user.Operator?.Id);
 
         return rivendellUser;
     }

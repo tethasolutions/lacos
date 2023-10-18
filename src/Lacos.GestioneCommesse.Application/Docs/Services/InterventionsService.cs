@@ -3,8 +3,10 @@ using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
+using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
@@ -16,6 +18,7 @@ public class InterventionsService : IInterventionsService
     private readonly IRepository<Operator> operatorRepository;
     private readonly IRepository<ActivityProduct> activityProductRepository;
     private readonly IRepository<Activity> activityRepository;
+    private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
     public InterventionsService(
@@ -24,7 +27,8 @@ public class InterventionsService : IInterventionsService
         IRepository<Operator> operatorRepository,
         ILacosDbContext dbContext,
         IRepository<ActivityProduct> activityProductRepository,
-        IRepository<Activity> activityRepository
+        IRepository<Activity> activityRepository,
+        ILacosSession session
     )
     {
         this.mapper = mapper;
@@ -33,11 +37,25 @@ public class InterventionsService : IInterventionsService
         this.dbContext = dbContext;
         this.activityProductRepository = activityProductRepository;
         this.activityRepository = activityRepository;
+        this.session = session;
     }
 
     public IQueryable<InterventionReadModel> Query()
     {
-        return repository.Query()
+        var query = repository.Query();
+
+        if (session.IsAuthorized(Role.Operator))
+        {
+            var user = session.CurrentUser!;
+
+            query = query
+                .Where(i =>
+                    i.Activity!.Type!.Operators.Any(o => o.Id == user.OperatorId) ||
+                    i.Operators.Any(o => o.Id == user.OperatorId)
+                );
+        }
+
+        return query
             .Project<InterventionReadModel>(mapper);
     }
 

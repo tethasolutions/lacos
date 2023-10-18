@@ -2,6 +2,7 @@
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
+using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
@@ -66,13 +67,23 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
 
         public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypes()
         {
-            var activityTypes = await activityTypeRepository
-                .Query()
-                .AsNoTracking()
-                .OrderBy(x => x.Name)
-                .ToArrayAsync();
+            var query = activityTypeRepository.Query()
+                .AsNoTracking();
 
-            return activityTypes.MapTo<IEnumerable<ActivityTypeDto>>(mapper);
+            if(session.IsAuthenticated() && session.IsAuthorized(Role.Operator))
+            {
+                var user = session.CurrentUser!;
+
+                query = query
+                    .Where(t =>
+                        t.Operators.Any(o => o.Id == user.OperatorId)
+                    );
+            }
+
+            return await query
+                .Project<ActivityTypeDto>(mapper)
+                .OrderBy(e => e.Name)
+                .ToListAsync();
         }
 
         public async Task UpdateActivityType(long id, ActivityTypeDto activityTypeDto)

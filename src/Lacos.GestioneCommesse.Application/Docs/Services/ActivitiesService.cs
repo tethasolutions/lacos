@@ -3,8 +3,10 @@ using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
+using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
@@ -16,13 +18,15 @@ public class ActivitiesService : IActivitiesService
     private readonly ILacosDbContext dbContext;
     private readonly IRepository<ActivityProduct> activityProductRepository;
     private readonly IRepository<Product> productRepository;
+    private readonly ILacosSession session;
 
     public ActivitiesService(
         IMapper mapper,
         IRepository<Activity> repository,
         ILacosDbContext dbContext,
         IRepository<ActivityProduct> activityProductRepository,
-        IRepository<Product> productRepository
+        IRepository<Product> productRepository,
+        ILacosSession session
     )
     {
         this.mapper = mapper;
@@ -30,12 +34,26 @@ public class ActivitiesService : IActivitiesService
         this.dbContext = dbContext;
         this.activityProductRepository = activityProductRepository;
         this.productRepository = productRepository;
+        this.session = session;
     }
 
 
     public IQueryable<ActivityReadModel> Query()
     {
-        return repository.Query()
+        var query = repository.Query();
+
+        if (session.IsAuthenticated() && session.IsAuthorized(Role.Operator))
+        {
+            var user = session.CurrentUser!;
+
+            query = query
+                .Where(e =>
+                    e.Type!.Operators.Any(o => o.Id == user.OperatorId) ||
+                    e.Interventions.Any(i => i.Operators.Any(o => o.Id == user.OperatorId))
+                );
+        }
+
+        return query
             .Project<ActivityReadModel>(mapper);
     }
 

@@ -11,4 +11,5 @@ public interface ILacosUser
     string Salt { get; }
     string PasswordHash { get; }
     string UserName { get; }
+    public long? OperatorId { get; }
 }

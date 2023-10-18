@@ -23,31 +23,31 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 ),
                 new MenuEntry(['/customers'], 'Clienti',
                     e => e.startsWith('/customers'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/operators'], 'Operatori',
                     e => e.startsWith('/operators'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/checklist'], 'Checklist',
                     e => e.startsWith('/checklist'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/products'], 'Prodotti',
                     e => e.startsWith('/products'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/vehicles'], 'Mezzi di trasporto',
                     e => e.startsWith('/vehicles'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/activitytypes'], 'Tipologie Attività',
                     e => e.startsWith('/activitytypes'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/producttypes'], 'Tipi Prodotto',
                     e => e.startsWith('/producttypes'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new MenuEntry(['/tickets'], 'Tickets',
@@ -57,7 +57,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
             new DropDownMenuEntry('Pianificazione', [
                 new MenuEntry(['/jobs'], 'Commesse',
                     e => e.startsWith('/jobs'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/activities'], 'Attività',
                     e => e.startsWith('/activities'),

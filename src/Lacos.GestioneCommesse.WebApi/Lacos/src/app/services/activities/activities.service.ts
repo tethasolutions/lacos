@@ -65,4 +65,11 @@ export class ActivitiesService {
                 map(() => { })
             );
     }
+
+    assignAllCustomerProducts(id: number) {
+        return this._http.put<void>(`${this._baseUrl}/${id}/assign-all-customer-products`, null)
+            .pipe(
+                map(() => { })
+            );
+    }
 }

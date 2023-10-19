@@ -14,6 +14,8 @@ public class InterventionMappingProfile : Profile
             .MapMember(x => x.Customer, y => y.Activity!.Job!.Customer!.Name)
             .MapMember(x => x.CustomerAddress, y => y.Activity!.CustomerAddress!.StreetAddress + ", " + y.Activity!.CustomerAddress.City + " (" + y.Activity!.CustomerAddress.Province + ")")
             .MapMember(x => x.ActivityType, y => y.Activity!.Type!.Name)
+            .MapMember(x => x.ActivityTypeId, y => y.Activity!.TypeId)
+            .MapMember(x => x.ActivityColor, y => y.Activity!.Type!.ColorHex)
             .MapMember(x => x.CanBeRemoved, y => y.Status == InterventionStatus.Scheduled);
 
         CreateMap<Operator, InterventionOperatorReadModel>();

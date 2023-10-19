@@ -14,7 +14,8 @@ namespace Lacos.GestioneCommesse.Application.Registry
             CreateMap<ActivityTypeDto, ActivityType>()
                 .IgnoreCommonMembers()
                 .Ignore(x=> x.Activities)
-                .Ignore(x => x.CheckLists);
+                .Ignore(x => x.CheckLists)
+                .Ignore(x => x.Operators);
         }
     }
 }

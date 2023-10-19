@@ -6,7 +6,7 @@ import { ActivityDetail } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { NgForm } from '@angular/forms';
-import { JobActivityModalComponent, JobActivityModalOptions } from '../jobs/job-activity-modal.component';
+import { ActivityModalComponent, ActivityModalOptions } from './activity-modal.component';
 import { ActivityProductModalComponent, ActivityProductModalOptions } from './activity-product-modal.component';
 import { ActivityProduct } from '../services/activity-products/models';
 import { ActivityProductsService } from '../services/activity-products/activity-products.service';
@@ -26,8 +26,8 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     @ViewChild('form', { static: false })
     form: NgForm;
 
-    @ViewChild('jobActivityModal', { static: true })
-    jobActivityModal: JobActivityModalComponent;
+    @ViewChild('activityModal', { static: true })
+    activityModal: ActivityModalComponent;
 
     @ViewChild('activityProductModal', { static: true })
     activityProductModal: ActivityProductModalComponent;
@@ -62,10 +62,10 @@ export class ActivityComponent extends BaseComponent implements OnInit {
 
     edit() {
         const activity = this.activity.asActivity();
-        const options = new JobActivityModalOptions(this.activity.customerId, activity);
+        const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
-            this.jobActivityModal.open(options)
+            this.activityModal.open(options)
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._service.update(activity)),
@@ -110,6 +110,20 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         this._getActivity();
     }
 
+    assignAllCustomerProducts() {
+        const text = 'Sei sicuro di voler associare all\'attività tutti i prodotti di ' + this.activity.customer + ' in ' + this.activity.customerAddress + '?';
+
+        this._subscriptions.push(
+            this._messageBox.confirm(text)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._service.assignAllCustomerProducts(this.activity.id)),
+                    tap(() => this._afterAllCustomerProductsAssigned())
+                )
+                .subscribe()
+        );
+    }
+
     private _subscribeRouteParams() {
         this._subscriptions.push(
             this._route.data
@@ -134,6 +148,12 @@ export class ActivityComponent extends BaseComponent implements OnInit {
 
     private _afterActivityProductCreated(name: string) {
         this._messageBox.success(`${name} associato all'attività.`);
+
+        this.activityProducts?.refresh();
+    }
+
+    private _afterAllCustomerProductsAssigned() {
+        this._messageBox.success(`Prodotti associati all'attività.`);
 
         this.activityProducts?.refresh();
     }

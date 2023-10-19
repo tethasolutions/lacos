@@ -75,14 +75,14 @@ import { JobModalComponent } from './jobs/job-modal.component';
 import { JobStatusPipe } from './shared/pipes/job-status.pipe';
 import { DropdownlistGridColumnFilterComponent } from './shared/dropdownlist-grid-column-filter.component';
 import { MultiselectGridColumnFilterComponent } from './shared/multiselect-grid-column-filter.component';
-import { JobActivitiesComponent } from './jobs/job-activities.component';
+import { ActivitiesComponent } from './activities/activities.component';
 import { ActivitiesService } from './services/activities/activities.service';
-import { ActivityComponent } from './activity/activity.component';
+import { ActivityComponent } from './activities/activity.component';
 import { ActivityStatusPipe } from './shared/pipes/activity-status.pipe';
-import { JobActivityModalComponent } from './jobs/job-activity-modal.component';
-import { ActivityProductsComponent } from './activity/activity-products.component';
+import { ActivityModalComponent } from './activities/activity-modal.component';
+import { ActivityProductsComponent } from './activities/activity-products.component';
 import { StringsPipe } from './shared/pipes/strings.pipe';
-import { ActivityProductModalComponent } from './activity/activity-product-modal.component';
+import { ActivityProductModalComponent } from './activities/activity-product-modal.component';
 import { ActivityProductsService } from './services/activity-products/activity-products.service';
 import { InterventionModalComponent } from './interventions/intervention-modal.component';
 import { InterventionsService } from './services/interventions/interventions.service';
@@ -143,9 +143,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         DropdownlistGridColumnFilterComponent,
         MultiselectGridColumnFilterComponent,
         ActivityStatusPipe,
-        JobActivitiesComponent,
+        ActivitiesComponent,
         ActivityComponent,
-        JobActivityModalComponent,
+        ActivityModalComponent,
         ActivityProductsComponent,
         StringsPipe,
         ActivityProductModalComponent,

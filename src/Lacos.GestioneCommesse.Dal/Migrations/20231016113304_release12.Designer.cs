@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231016113304_release12")]
+    partial class release12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,10 +100,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
-                    b.Property<DateTimeOffset?>("ExpirationDate")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -115,9 +114,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<long?>("SourceTicketId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<long>("TypeId")
                         .HasColumnType("bigint");

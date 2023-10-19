@@ -2,8 +2,11 @@
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Domain.Registry;
+using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
@@ -13,22 +16,44 @@ public class ActivitiesService : IActivitiesService
     private readonly IMapper mapper;
     private readonly IRepository<Activity> repository;
     private readonly ILacosDbContext dbContext;
+    private readonly IRepository<ActivityProduct> activityProductRepository;
+    private readonly IRepository<Product> productRepository;
+    private readonly ILacosSession session;
 
     public ActivitiesService(
         IMapper mapper,
         IRepository<Activity> repository,
-        ILacosDbContext dbContext
+        ILacosDbContext dbContext,
+        IRepository<ActivityProduct> activityProductRepository,
+        IRepository<Product> productRepository,
+        ILacosSession session
     )
     {
         this.mapper = mapper;
         this.repository = repository;
         this.dbContext = dbContext;
+        this.activityProductRepository = activityProductRepository;
+        this.productRepository = productRepository;
+        this.session = session;
     }
 
 
     public IQueryable<ActivityReadModel> Query()
     {
-        return repository.Query()
+        var query = repository.Query();
+
+        if (session.IsAuthenticated() && session.IsAuthorized(Role.Operator))
+        {
+            var user = session.CurrentUser!;
+
+            query = query
+                .Where(e =>
+                    e.Type!.Operators.Any(o => o.Id == user.OperatorId) ||
+                    e.Interventions.Any(i => i.Operators.Any(o => o.Id == user.OperatorId))
+                );
+        }
+
+        return query
             .Project<ActivityReadModel>(mapper);
     }
 
@@ -116,6 +141,41 @@ public class ActivitiesService : IActivitiesService
         }
 
         repository.Delete(activity);
+
+        await dbContext.SaveChanges();
+    }
+
+    public async Task AssignAllCustomerProducts(long id)
+    {
+        var activity = await repository.Query()
+            .AsNoTracking()
+            .Where(e => e.Id == id)
+            .FirstAsync();
+        var activityProducts = activityProductRepository.Query()
+            .Where(e => e.ActivityId == id);
+        var products = productRepository.Query()
+            .Where(e => e.CustomerAddressId == activity.CustomerAddressId);
+        var missingProducts = await (
+                from product in products
+                join activityProduct in activityProducts
+                    on product.Id equals activityProduct.ProductId
+                    into join1
+                from activityProduct in join1.DefaultIfEmpty()
+                where activityProduct == null
+                select product.Id
+            )
+            .ToListAsync();
+
+        foreach (var missingProduct in missingProducts)
+        {
+            var missingActivityProduct = new ActivityProduct
+            {
+                ProductId = missingProduct,
+                ActivityId = id
+            };
+
+            await activityProductRepository.Insert(missingActivityProduct);
+        }
 
         await dbContext.SaveChanges();
     }

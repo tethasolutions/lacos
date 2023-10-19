@@ -165,7 +165,7 @@ public static class WebApiConfiguration
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 var text = environment.IsProduction()
                     ? "Si è verificato un errore imprevisto."
-                    : error?.Message ?? "Si è verificato un errore imprevisto.";
+                    : error?.ToString() ?? "Si è verificato un errore imprevisto.";
                 await response.WriteAsync(text);
                 break;
         }

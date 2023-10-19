@@ -21,11 +21,28 @@
                     </kendo-formfield>
                 </div>
                 <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label>Colore</label>
+                        <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" format="hex"  required></kendo-colorpicker>
+                        <kendo-formerror>Colore è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>      
+            </div>
+            <div class="row riga-form">
+                <div class="col-md-6">
                     <label>Immagine obbligatoria</label>
                     <div class="form-group">
                         <kendo-switch name="pictureRequired" [(ngModel)]="options.pictureRequired" onLabel="Si" offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['pictureRequired']"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Attività Interna</label>
+                    <div class="form-group">
+                        <kendo-switch name="isInternal" [(ngModel)]="options.isInternal" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['isInternal']"></div>
                     </div>
                 </div>
             </div>

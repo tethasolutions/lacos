@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { IInterventionOperatorReadModel, IInterventionReadModel, Intervention, InterventionStatus } from '../services/interventions/models';
 import { DateChangeEvent, DateRange, DragEndEvent, EventClickEvent, RemoveEvent, ResizeEndEvent, SchedulerComponent, SlotClickEvent } from '@progress/kendo-angular-scheduler';
@@ -7,12 +7,14 @@ import { State } from '@progress/kendo-data-query';
 import { filter, switchMap, tap } from 'rxjs';
 import { InterventionModalComponent } from './intervention-modal.component';
 import { MessageBoxService } from '../services/common/message-box.service';
+import { ActivityTypesService } from '../services/activityTypes.service';
+import { ActivityTypeModel } from '../shared/models/activity-type.model';
 
 @Component({
     selector: 'app-interventions-calendar',
     templateUrl: 'interventions-calendar.component.html'
 })
-export class InterventionsCalendarComponent extends BaseComponent {
+export class InterventionsCalendarComponent extends BaseComponent implements OnInit {
 
     @Input()
     interventionModal: InterventionModalComponent;
@@ -37,14 +39,20 @@ export class InterventionsCalendarComponent extends BaseComponent {
 
     interventions: InterventionSchedulerModel[] = [];
     date: Date;
+    activityTypes: SelectableActivityType[];
 
     private _dateRange: DateRange;
 
     constructor(
         private readonly _service: InterventionsService,
-        private readonly _messageBox: MessageBoxService
+        private readonly _messageBox: MessageBoxService,
+        private readonly _activityTypesService: ActivityTypesService
     ) {
         super();
+    }
+
+    ngOnInit() {
+        this._getActivityTypes();
     }
 
     onDateChange(event: DateChangeEvent) {
@@ -126,6 +134,20 @@ export class InterventionsCalendarComponent extends BaseComponent {
         this._read();
     }
 
+    toggleActivityType(activityType: SelectableActivityType) {
+        activityType.selected = !activityType.selected;
+
+        const allUnselected = this.activityTypes
+            .all(e => !e.selected);
+
+        if (allUnselected) {
+            this.activityTypes
+                .forEach(e => e.selected = true);
+        }
+
+        this._read();
+    }
+
     private _resizeIntervention(intervention: Intervention, start: Date, end: Date, isAllDay: boolean) {
         if (isAllDay) {
             start = start.toDateWithoutTime();
@@ -142,29 +164,45 @@ export class InterventionsCalendarComponent extends BaseComponent {
                 filters: [
                     {
                         filters: [
-                            { field: 'start', operator: 'gte', value: this._dateRange.start },
-                            { field: 'start', operator: 'lte', value: this._dateRange.end }
+                            {
+                                filters: [
+                                    { field: 'start', operator: 'gte', value: this._dateRange.start },
+                                    { field: 'start', operator: 'lte', value: this._dateRange.end }
+                                ],
+                                logic: 'and'
+                            },
+                            {
+                                filters: [
+                                    { field: 'end', operator: 'gte', value: this._dateRange.start },
+                                    { field: 'end', operator: 'lte', value: this._dateRange.end }
+                                ],
+                                logic: 'and'
+                            },
+                            {
+                                filters: [
+                                    { field: 'start', operator: 'lte', value: this._dateRange.start },
+                                    { field: 'end', operator: 'gte', value: this._dateRange.end }
+                                ],
+                                logic: 'and'
+                            }
                         ],
-                        logic: 'and'
-                    },
-                    {
-                        filters: [
-                            { field: 'end', operator: 'gte', value: this._dateRange.start },
-                            { field: 'end', operator: 'lte', value: this._dateRange.end }
-                        ],
-                        logic: 'and'
-                    },
-                    {
-                        filters: [
-                            { field: 'start', operator: 'lte', value: this._dateRange.start },
-                            { field: 'end', operator: 'gte', value: this._dateRange.end }
-                        ],
-                        logic: 'and'
+                        logic: 'or'
                     }
                 ],
-                logic: 'or'
+                logic: 'and'
             }
         };
+
+        if (this.activityTypes?.any()) {
+            state.filter.filters.push(
+                {
+                    filters: this.activityTypes
+                        .filter(e => e.selected)
+                        .map(e => ({ field: 'activityTypeId', operator: 'eq', value: e.id })),
+                    logic: 'or'
+                }
+            );
+        }
 
         this._subscriptions.push(
             this._service.read(state)
@@ -234,6 +272,21 @@ export class InterventionsCalendarComponent extends BaseComponent {
         );
     }
 
+    private _getActivityTypes() {
+        this._subscriptions.push(
+            this._activityTypesService.readActivityTypesList()
+                .pipe(
+                    tap(e => this._setActivityTypes(e))
+                )
+                .subscribe()
+        );
+    }
+
+    private _setActivityTypes(activityTypes: ActivityTypeModel[]) {
+        this.activityTypes = activityTypes
+            .map(e => new SelectableActivityType(e.id, e.colorHex, e.name));
+    }
+
 }
 
 class InterventionSchedulerModel {
@@ -266,6 +319,19 @@ class InterventionSchedulerModel {
         this.isAllDay = this.start.addDays(1).hasSameDateAndTime(this.end);
         this.canBeRemoved = intervention.canBeRemoved;
         this.canBeEdited = intervention.status === InterventionStatus.Scheduled;
+    }
+
+}
+
+class SelectableActivityType {
+
+    selected = true;
+
+    constructor(
+        readonly id: number,
+        readonly colorHex: string,
+        readonly name: string
+    ) {
     }
 
 }

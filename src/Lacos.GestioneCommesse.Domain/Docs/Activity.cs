@@ -4,6 +4,8 @@ namespace Lacos.GestioneCommesse.Domain.Docs;
 
 public class Activity : FullAuditedEntity
 {
+    public DateTimeOffset? ExpirationDate { get; set; }
+
     public int RowNumber { get; set; }
 
     public string? Description { get; set; }
@@ -22,6 +24,8 @@ public class Activity : FullAuditedEntity
 
     public long? SourcePuchaseOrderId { get; set; }
     public PurchaseOrder? SourcePurchaseOrder { get; set; }
+
+    public ActivityStatus Status { get; set; }
 
     public ICollection<Intervention> Interventions { get; set; }
     public ICollection<ActivityProduct> ActivityProducts { get; set; }
@@ -42,4 +46,12 @@ public class Activity : FullAuditedEntity
         return Interventions
             .Any(ee => ee.IsCompleted());
     }
+}
+
+public enum ActivityStatus
+{
+    Pending,
+    InProgress,
+    ReadyForCompletion,
+    Completed
 }

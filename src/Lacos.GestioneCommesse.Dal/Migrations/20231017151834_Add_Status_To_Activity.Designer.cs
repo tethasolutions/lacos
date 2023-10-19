@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231017151834_Add_Status_To_Activity")]
+    partial class Add_Status_To_Activity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,10 +97,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTimeOffset?>("EditedOn")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
-                    b.Property<DateTimeOffset?>("ExpirationDate")
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 

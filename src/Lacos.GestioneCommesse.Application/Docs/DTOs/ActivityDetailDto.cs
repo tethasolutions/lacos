@@ -1,9 +1,11 @@
-﻿namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
+﻿using Lacos.GestioneCommesse.Domain.Docs;
+
+namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
 
 public class ActivityDetailDto
 {
     public long Id { get; set; }
-    public ActivityStatusDto Status { get; set; }
+    public ActivityStatus Status { get; set; }
     public int Number { get; set; }
     public string? Description { get; set; }
     public long JobId { get; set; }
@@ -15,4 +17,5 @@ public class ActivityDetailDto
     public long TypeId { get; set; }
     public string? Type { get; set; }
     public string? Source { get; set; }
+    public DateTimeOffset? ExpirationDate { get; set; }
 }

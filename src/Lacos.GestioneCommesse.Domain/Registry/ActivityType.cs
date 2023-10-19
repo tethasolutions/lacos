@@ -7,13 +7,17 @@ public class ActivityType : FullAuditedEntity
     public string? Name { get; set; }
 
     public bool PictureRequired { get; set; }
+    public bool IsInternal { get; set; }
+    public string? ColorHex { get; set; }
 
     public ICollection<Activity> Activities { get; set; }
     public ICollection<CheckList> CheckLists { get; set; }
+    public ICollection<Operator> Operators { get; set; }
 
     public ActivityType()
     {
         Activities = new List<Activity>();
         CheckLists = new List<CheckList>();
+        Operators = new List<Operator>();
     }
 }

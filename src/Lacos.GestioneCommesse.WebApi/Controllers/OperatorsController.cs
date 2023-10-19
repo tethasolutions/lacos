@@ -1,15 +1,12 @@
 ﻿using Lacos.GestioneCommesse.WebApi.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Lacos.GestioneCommesse.Application.Vehicles.DTOs;
 using Kendo.Mvc.UI;
-using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Application.Operators.DTOs;
-using System.Net.Http;
-using System.Web.Http;
 using Kendo.Mvc.Extensions;
 using Lacos.GestioneCommesse.Application.Operators.Services;
 using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
+using Lacos.GestioneCommesse.WebApi.ModelBinders;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
@@ -29,88 +26,43 @@ public class OperatorsController : LacosApiController
     }
 
     [HttpGet("operators")]
-    public async Task<DataSourceResult> GetOperators([DataSourceRequest] DataSourceRequest request)
+    public Task<DataSourceResult> GetOperators([LacosDataSourceRequest] DataSourceRequest request)
     {
-        var operators = operatorService.GetOperators();
-        return await operators.ToDataSourceResultAsync(request);
+        return operatorService.GetOperators()
+            .ToDataSourceResultAsync(request);
     }
 
     [HttpGet("operator-detail/{operatorId}")]
-    public async Task<OperatorReadModel> GetOperatorDetail(long operatorId)
+    public Task<OperatorDto> GetOperatorDetail(long operatorId)
     {
-        var singleOperator = await operatorService.GetOperator(operatorId);
-        return singleOperator;
+        return operatorService.GetOperator(operatorId);
     }
 
     [HttpPut("operator/{id}")]
-    public async Task<IActionResult> UpdateOperator(long id, [FromBody] OperatorDto operatorDto)
+    public Task UpdateOperator(long id, OperatorDto operatorDto)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        await operatorService.UpdateOperator(id, operatorDto);
-        return Ok();
+        operatorDto.Id = id;
+
+        return operatorService.UpdateOperator(operatorDto);
     }
 
     [HttpPost("operator")]
-    public async Task<IActionResult> CreateOperator([FromBody] OperatorDto operatorDto)
+    public Task<OperatorDto> CreateOperator(OperatorDto operatorDto)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        await operatorService.CreateOperator(operatorDto);
-        return Ok(operatorDto);
+        return operatorService.CreateOperator(operatorDto);
     }
 
     [HttpDelete("operator/{id}")]
-    public async Task<IActionResult> DeleteOperator(long id)
+    public Task DeleteOperator(long id)
     {
-
-        await operatorService.DeleteOperator(id);
-
-        return Ok();
+        return operatorService.DeleteOperator(id);
     }
 
     [HttpGet("{id}/all-documents")]
-    public async Task<List<OperatorDocumentReadModel>> GetAllOperatorDocuments(long documentId)
+    public Task<IEnumerable<OperatorDocumentReadModel>> GetAllOperatorDocuments(long documentId)
     {
-        var docmumentOperator = (await operatorService.GetAllOperatorDocuments(documentId)).ToList();
-        return docmumentOperator;
+        return operatorService.GetAllOperatorDocuments(documentId);
     }
-
-    //[HttpPost("document/{operatorId}/{description}/{fileName}")]
-    //public async Task<IActionResult> CreateDocument(long operatorId, string description, string fileName)
-    //{
-    //    var files = HttpContext.Request.Form.Files;
-    //    var provider = new MultipartMemoryStreamProvider();
-    //    // var postedFile = await Request.Content.ReadAsMultipartAsync(provider);
-    //    foreach (var file in provider.Contents)
-    //    {
-    //        // var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
-    //        var buffer = await file.ReadAsByteArrayAsync();
-    //        // Do whatever you want with filename and its binary data.
-    //        // var str = System.Text.Encoding.Default.GetString(buffer);
-    //    }
-    //    return Ok(2);
-    //}
-
-    //[HttpPut("document/{id}/{description}/{fileName}")]
-    //public async Task<IActionResult> UpdateDocument(long id, string description, string fileName)
-    //{
-    //    var files = HttpContext.Request.Form.Files;
-    //    var provider = new MultipartMemoryStreamProvider();
-    //    // var postedFile = await Request.Content.ReadAsMultipartAsync(provider);
-    //    foreach (var file in provider.Contents)
-    //    {
-    //        // var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
-    //        var buffer = await file.ReadAsByteArrayAsync();
-    //        // Do whatever you want with filename and its binary data.
-    //        // var str = System.Text.Encoding.Default.GetString(buffer);
-    //    }
-    //    return NoContent();
-    //}
     
     [AllowAnonymous]
     [HttpGet("document/download-file/{fileName}/{orginalFileName}")]

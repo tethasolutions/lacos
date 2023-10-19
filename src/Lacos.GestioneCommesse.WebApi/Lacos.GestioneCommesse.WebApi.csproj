@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Lacos\**" />
+    <Compile Remove="wwwroot\attachments\**" />
     <Content Remove="Lacos\**" />
+    <Content Remove="wwwroot\attachments\**" />
     <EmbeddedResource Remove="Lacos\**" />
+    <EmbeddedResource Remove="wwwroot\attachments\**" />
     <None Remove="Lacos\**" />
+    <None Remove="wwwroot\attachments\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lacos.GestioneCommesse.Application\Lacos.GestioneCommesse.Application.csproj" />
+    <ProjectReference Include="..\Lacos.GestioneCommesse.Contracts\Lacos.GestioneCommesse.Contracts.csproj" />
     <ProjectReference Include="..\Lacos.GestioneCommesse.Dal\Lacos.GestioneCommesse.Dal.csproj" />
     <ProjectReference Include="..\Lacos.GestioneCommesse.Domain\Lacos.GestioneCommesse.Domain.csproj" />
     <ProjectReference Include="..\Lacos.GestioneCommesse.Framework\Lacos.GestioneCommesse.Framework.csproj" />

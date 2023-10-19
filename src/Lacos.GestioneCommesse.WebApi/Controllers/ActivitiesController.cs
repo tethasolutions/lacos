@@ -53,4 +53,10 @@ public class ActivitiesController : LacosApiController
     {
         return service.Delete(id);
     }
+
+    [HttpPut("{id}/assign-all-customer-products")]
+    public Task AssignAllCustomerProducts(long id)
+    {
+        return service.AssignAllCustomerProducts(id);
+    }
 }

@@ -22,6 +22,16 @@
             {{dataItemAddress.pictureRequired | bool}}
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="isInternal" title="Attività interna">
+        <ng-template kendoGridCellTemplate let-dataItemAddress>
+            {{dataItemAddress.pictureRequired | bool}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="colorHex" title="Colore">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="operator-color-in-grid" [style.background-color]="dataItem.colorHex"></div>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
         <ng-template kendoGridCellTemplate let-dataItem>
             <button (click)="editActivityType(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">

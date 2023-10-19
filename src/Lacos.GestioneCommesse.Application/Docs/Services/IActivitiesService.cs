@@ -10,4 +10,5 @@ public interface IActivitiesService
     Task<ActivityDto> Create(ActivityDto activityDto);
     Task<ActivityDto> Update(ActivityDto activityDto);
     Task Delete(long id);
+    Task AssignAllCustomerProducts(long id);
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { Intervention, InterventionStatus } from '../services/interventions/models';
 import { NgForm } from '@angular/forms';
-import { tap } from 'rxjs';
+import { Subject, debounce, debounceTime, distinctUntilChanged, tap } from 'rxjs';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { IJobReadModel } from '../services/jobs/models';
 import { IActivityReadModel } from '../services/activities/models';
@@ -34,8 +34,12 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
     jobReadonly: boolean;
     readonly: boolean;
     operators: OperatorModel[];
+    filterProductsValue: string;
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
+
+    private readonly _searchProductsValueChange = new Subject<string>();
+    private readonly _onSearchProductsValueChange = this._searchProductsValueChange.asObservable();
 
     constructor(
         private readonly _jobsService: JobsService,
@@ -51,6 +55,16 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
     ngOnInit() {
         this._getVehicles();
         this._getOperators();
+
+        this._subscriptions.push(
+            this._onSearchProductsValueChange
+                .pipe(
+                    debounceTime(500),
+                    distinctUntilChanged(),
+                    tap(e => this._filterProducts(e))
+                )
+                .subscribe()
+        );
     }
 
     override open(options: Intervention) {
@@ -59,6 +73,7 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         this.activityReadonly = !!this.options.activityId;
         this.jobReadonly = !!this.options.jobId;
         this.readonly = this.options.status !== InterventionStatus.Scheduled;
+        this.filterProductsValue = null;
 
         this._getJobs();
         this._tryGetActivities();
@@ -99,6 +114,40 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         }
     }
 
+    onSearchProductsValueChange(value: string) {
+        this._searchProductsValueChange.next(value);
+    }
+
+    onProductSelectionChange(product: SelectableActivityProduct) {
+        if (product.selected) {
+            this.options.activityProducts.pushIfNotContained(product.id);
+        } else {
+            this.options.activityProducts.filterAndRemove(e => e === product.id);
+        }
+    }
+
+    selectAllProducts() {
+        for (const product of this.products) {
+            if (product.selected) {
+                continue;
+            }
+
+            product.selected = true;
+            this.options.activityProducts.pushIfNotContained(product.id);
+        }
+    }
+
+    unselectAllProducts() {
+        for (const product of this.products) {
+            if (!product.selected) {
+                continue;
+            }
+
+            product.selected = false;
+            this.options.activityProducts.filterAndRemove(e => e === product.id);
+        }
+    }
+
     protected override _canClose() {
         if (this.readonly) {
             return true;
@@ -111,6 +160,17 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         }
 
         return this.form.valid;
+    }
+
+    private _filterProducts(value: string) {
+        value = value?.toLocaleLowerCase().trim() ?? '';
+
+        this.products
+            .forEach(e =>
+                e.hidden = !!value &&
+                !e.normalizedCode.includes(value) &&
+                !e.normalizedName.includes(value)
+            );
     }
 
     private _getJobs() {
@@ -194,10 +254,21 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         this._subscriptions.push(
             this._activityProductsService.read(state)
                 .pipe(
-                    tap(e => this.products = (e.data as IActivityProductReadModel[]).map(ee => new SelectableActivityProduct(ee)))
+                    tap(e => this._setProducts(e.data as IActivityProductReadModel[]))
                 )
                 .subscribe()
         );
+    }
+
+    private _setProducts(products: IActivityProductReadModel[]) {
+        this.products = products
+            .leftJoin(
+                this.options.activityProducts,
+                (o, i) => o.id === i,
+                (o, i) => new SelectableActivityProduct(o, i != null)
+            );
+
+        this._filterProducts(this.filterProductsValue);
     }
 
     private _getVehicles() {
@@ -290,13 +361,20 @@ class SelectableActivityProduct {
     readonly name: string;
     readonly pictureFileName: string;
     readonly fullName: string;
+    readonly normalizedCode: string;
+    readonly normalizedName: string;
+
+    hidden = false;
 
     constructor(
-        product: IActivityProductReadModel
+        product: IActivityProductReadModel,
+        public selected: boolean
     ) {
         this.id = product.id;
         this.code = product.code;
+        this.normalizedCode = product.code?.toLocaleLowerCase().trim() ?? '';
         this.name = product.name;
+        this.normalizedName = product.code?.toLocaleLowerCase().trim() ?? '';
         this.pictureFileName = product.pictureFileName;
         this.fullName = `${product.code} - ${product.name}`;
     }

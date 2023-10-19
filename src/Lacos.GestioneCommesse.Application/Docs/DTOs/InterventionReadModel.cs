@@ -12,7 +12,9 @@ public class InterventionReadModel
     public string? CustomerAddress { get; set; }
     public string? Description { get; set; }
     public IEnumerable<InterventionOperatorReadModel> Operators { get; set; }
+    public string? ActivityTypeId { get; set; }
     public string? ActivityType { get; set; }
+    public string? ActivityColor { get; set; }
     public long ActivityId { get; set; }
     public bool CanBeRemoved { get; set; }
 

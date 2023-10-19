@@ -54,7 +54,9 @@ export interface IInterventionReadModel {
     readonly customerAddress: string;
     readonly description: string;
     readonly operators: IInterventionOperatorReadModel[];
+    readonly activityTypeId: string;
     readonly activityType: string;
+    readonly activityColor: string;
     readonly activityId: number;
     readonly canBeRemoved: boolean;
 

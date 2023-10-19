@@ -15,9 +15,9 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
 {
     public interface IOperatorService
     {
-        IQueryable<OperatorDto> GetOperators();
-        Task<OperatorReadModel> GetOperator(long id);
-        Task UpdateOperator(long id, OperatorDto operatorDto);
+        IQueryable<OperatorReadModel> GetOperators();
+        Task<OperatorDto> GetOperator(long id);
+        Task UpdateOperator(OperatorDto operatorDto);
         Task DeleteOperator(long id);
         Task<OperatorDto> CreateOperator(OperatorDto operatorDto);
         Task<OperatorDocumentReadModel> DownloadOperatorDocument(string filename);
@@ -32,8 +32,17 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
         private readonly IRepository<OperatorDocument> operatorDocumentRepository;
         private readonly IRepository<User> userRepository;
         private readonly ISecurityService securityService;
+        private readonly IRepository<ActivityType> activityTypeRepository;
 
-        public OperatorService(IMapper mapper, IRepository<Operator> operatorRepository, ILacosDbContext dbContext, IRepository<OperatorDocument> operatorDocumentRepository, IRepository<User> userRepository, ISecurityService securityService)
+        public OperatorService(
+            IMapper mapper, 
+            IRepository<Operator> operatorRepository,
+            ILacosDbContext dbContext, 
+            IRepository<OperatorDocument> operatorDocumentRepository,
+            IRepository<User> userRepository, 
+            ISecurityService securityService, 
+            IRepository<ActivityType> activityTypeRepository
+        )
         {
             this.mapper = mapper;
             this.operatorRepository = operatorRepository;
@@ -41,138 +50,112 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
             this.operatorDocumentRepository = operatorDocumentRepository;
             this.userRepository = userRepository;
             this.securityService = securityService;
+            this.activityTypeRepository = activityTypeRepository;
         }
 
-        public IQueryable<OperatorDto> GetOperators()
+        public IQueryable<OperatorReadModel> GetOperators()
         {
-            var operators = operatorRepository
-                .Query()
+            return operatorRepository.Query()
                 .AsNoTracking()
-                .Where(x => !x.IsDeleted)
-                .Include(x=>x.DefaultVehicle)
-                .Project<OperatorDto>(mapper);
-            return operators;
+                .Project<OperatorReadModel>(mapper);
         }
 
-        public async Task<OperatorReadModel> GetOperator(long id)
+        public async Task<OperatorDto> GetOperator(long id)
         {
-            if (id == 0)
-                throw new LacosException("Impossibile recuperare un operatore con id 0");
-
-            var singleOperator = await operatorRepository
-                .Query()
+            var @operator = await operatorRepository.Query()
                 .AsNoTracking()
-                .Include(x=>x.Documents)
-                .Include(x => x.DefaultVehicle)
-                .Include(x => x.User)
+                .Include(e => e.User)
+                .Include(x => x.Documents)
+                .Include(x => x.ActivityTypes)
                 .Where(x => x.Id == id)
                 .SingleOrDefaultAsync();
 
-            if (singleOperator == null)
+            if (@operator == null)
+            {
                 throw new LacosException($"Impossibile trovare l'operatore con id {id}");
+            }
 
-            return singleOperator.MapTo<OperatorReadModel>(mapper);
-
+            return @operator.MapTo<OperatorDto>(mapper);
         }
 
-        public async Task UpdateOperator(long id, OperatorDto operatorDto)
+        public async Task UpdateOperator(OperatorDto operatorDto)
         {
-            if (id == 0)
-                throw new LacosException("Impossibile aggiornare un operatore con id 0");
-
             var singleOperator = await operatorRepository
                 .Query()
-                .Where(x => x.Id == id)
-                .Include(x=>x.Documents)
+                .Include(x => x.Documents)
+                .Include(x => x.ActivityTypes)
+                .Where(e => e.Id == operatorDto.Id)
                 .SingleOrDefaultAsync();
-            
+
             if (singleOperator == null)
-                throw new LacosException($"Impossibile trovare operatore con id {id}");
-
-            bool userOp = false;
-            if (singleOperator.UserId != null && (operatorDto.hasUser is null || !operatorDto.hasUser.Value) && !userOp)
             {
-                 await DeleteUser(singleOperator.UserId.Value);
-                singleOperator.UserId = null;
-                singleOperator.User = null;
-                userOp = true;
-            }
-            
-            if (singleOperator.UserId == null && operatorDto.hasUser.Value && !userOp)
-            {
-                singleOperator.UserId =  (await CreateUser(operatorDto.UserName, operatorDto.Password)).Id;
-                userOp = true;
+                throw new LacosException($"Impossibile trovare operatore con id {operatorDto.Id}");
             }
 
-            if (singleOperator.UserId != null && operatorDto.hasUser.Value && !userOp)
+            await using (var transaction = await dbContext.BeginTransaction())
             {
-
-                if (await securityService.CheckUserNameExists(singleOperator.UserId.Value, operatorDto.UserName))
+                if (singleOperator.UserId != null && operatorDto.HasUser != true)
                 {
-                    throw new LacosException($"Lo username {operatorDto.UserName} è già associato ad un'altro utente");
-              
+                    await DeleteUser(singleOperator.UserId.Value);
+                    singleOperator.UserId = null;
+                    singleOperator.User = null;
+                }
+                else if (singleOperator.UserId == null && operatorDto.HasUser == true)
+                {
+                    singleOperator.UserId = (await CreateUser(operatorDto.UserName, operatorDto.Password)).Id;
+                }
+                else if (singleOperator.UserId != null && operatorDto.HasUser == true)
+                {
+                    if (await securityService.CheckUserNameExists(singleOperator.UserId.Value, operatorDto.UserName))
+                    {
+                        throw new LacosException($"Lo username {operatorDto.UserName} è già associato ad un'altro utente");
+                    }
+
+                    await UpdateUser(singleOperator.UserId.Value, operatorDto.UserName, operatorDto.Password);
                 }
 
-                await UpdateUser(singleOperator.UserId.Value, operatorDto.UserName, operatorDto.Password);
-                userOp = true;
-            }
+                var activityTypes = await activityTypeRepository.Query()
+                    .Where(e => operatorDto.ActivityTypes.Contains(e.Id))
+                    .ToListAsync();
 
+                singleOperator.ActivityTypes.Clear();
+                singleOperator.ActivityTypes.AddRange(activityTypes);
 
+                operatorDto.MapTo(singleOperator, mapper);
+                operatorRepository.Update(singleOperator);
 
-            foreach (var operatorDocument in singleOperator.Documents.Reverse<OperatorDocument>())
-            {
-                if (operatorDto.Documents.All(x => x.FileName != operatorDocument.FileName))
-                {
-                    singleOperator.Documents.Remove(operatorDocument);
-                }
-            }
-            operatorRepository.Update(singleOperator);
-
-            foreach (var operatorDtoDocument in operatorDto.Documents.Reverse<OperatorDocumentDto>())
-            {
-                if (singleOperator.Documents.All(x => x.FileName != operatorDtoDocument.FileName))
-                {
-                    operatorDto.Documents.ToList().Remove(operatorDtoDocument);
-                }
-            }
-            operatorDto.MapTo(singleOperator, mapper);
-            operatorRepository.Update(singleOperator);
-
-
-            try
-            {
                 await dbContext.SaveChanges();
+
+                await transaction.CommitAsync();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            
         }
 
         public async Task<OperatorDto> CreateOperator(OperatorDto operatorDto)
         {
-            var singleOperator = operatorDto.MapTo<Operator>(mapper);
-            await operatorRepository.Insert(singleOperator);
-
-            if (operatorDto.hasUser.Value)
+            await using (var transaction = await dbContext.BeginTransaction())
             {
-              singleOperator.UserId =  (await CreateUser(operatorDto.UserName, operatorDto.Password)).Id;
-            }
+                var singleOperator = operatorDto.MapTo<Operator>(mapper);
 
-            try
-            {
+                if (operatorDto.HasUser == true)
+                {
+                    singleOperator.UserId = (await CreateUser(operatorDto.UserName, operatorDto.Password)).Id;
+                }
+
+                var activityTypes = await activityTypeRepository.Query()
+                    .Where(e => operatorDto.ActivityTypes.Contains(e.Id))
+                    .ToListAsync();
+
+                singleOperator.ActivityTypes.Clear();
+                singleOperator.ActivityTypes.AddRange(activityTypes);
+
+                await operatorRepository.Insert(singleOperator);
+
                 await dbContext.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            
 
-            return singleOperator.MapTo<OperatorDto>(mapper);
+                await transaction.CommitAsync();
+
+                return singleOperator.MapTo<OperatorDto>(mapper);
+            }
         }
 
         public async Task DeleteOperator(long id)
@@ -247,9 +230,6 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
 
         private async Task UpdateUser (long id, string username, string password)
         {
-
-           
-
             await securityService.ExecuteOnUser(id,
                 async context =>
                 {

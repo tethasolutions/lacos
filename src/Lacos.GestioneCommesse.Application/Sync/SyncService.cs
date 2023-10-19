@@ -81,7 +81,36 @@ namespace Lacos.GestioneCommesse.Application.Sync
             return ret;
         }
 
-        public async Task<SyncFullDbDto>  SyncFromDBToApp_FullDb(DateTime date)
+        public async Task SyncFromAppToDB_LocalChanges(SyncLocalDbChanges syncLocalDbChanges)
+        {
+             await using (var transaction = await dbContext.BeginTransaction())
+             {
+                 await InsertUpdateAllModified<SyncInterventionDto, Intervention>(syncLocalDbChanges.Interventions);
+                 await InsertUpdateAllModified<SyncInterventionNoteDto, InterventionNote>(syncLocalDbChanges
+                     .InterventionNotes);
+                 await InsertUpdateAllModified<SyncInterventionDisputeDto, InterventionDispute>(syncLocalDbChanges
+                     .InterventionDisputes);
+                 await InsertUpdateAllModified<SyncInterventionProductDto, InterventionProduct>(syncLocalDbChanges
+                     .InterventionProducts);
+                 await InsertUpdateAllModified<SyncInterventionProductPictureDto, InterventionProductPicture>(
+                     syncLocalDbChanges.InterventionProductPictures);
+                 await InsertUpdateAllModified<SyncInterventionProductCheckListDto, InterventionProductCheckList>(
+                     syncLocalDbChanges.InterventionProductCheckLists);
+                 await
+                     InsertUpdateAllModified<SyncInterventionProductCheckListItemDto, InterventionProductCheckListItem>(
+                         syncLocalDbChanges.InterventionProductCheckListItems);
+                 await InsertUpdateAllModified<SyncTicketDto, Ticket>(syncLocalDbChanges.Tickets);
+                 await InsertUpdateAllModified<SyncTicketPictureDto, TicketPicture>(syncLocalDbChanges.TicketPictures);
+                 await InsertUpdateAllModified<SyncPurchaseOrderDto, PurchaseOrder>(syncLocalDbChanges.PurchaseOrders);
+                 await InsertUpdateAllModified<SyncPurchaseOrderItemDto, PurchaseOrderItem>(syncLocalDbChanges
+                     .PurchaseOrderItems);
+                 await transaction.CommitAsync();
+             }
+
+             return;
+        }
+
+        public async Task<SyncFullDbDto>  SyncFromDBToApp_FullDb(DateTimeOffset date)
         {
             try
             {
@@ -112,8 +141,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             syncFullDb.OperatorDocuments = await GetAllModifiedRecord<OperatorDocument, SyncOperatorDocumentDto>(date);
             syncFullDb.Products = await GetAllModifiedRecord<Product, SyncProductDto>(date);
             syncFullDb.ProductDocuments = await GetAllModifiedRecord<ProductDocument, SyncProductDocumentDto>(date);
-            syncFullDb.ProductTypes= await GetAllModifiedRecord<ProductType, SyncProductTypeDto>(date);
-            syncFullDb.Vehicles = await GetAllModifiedRecord<Vehicle, SyncVehicleDto>(date);
+            syncFullDb.ProductTypes= await GetAllModifiedRecord<ProductType, SyncProductTypeDto>(date);           
             return syncFullDb;
             }
             catch (Exception e)
@@ -125,15 +153,27 @@ namespace Lacos.GestioneCommesse.Application.Sync
             
         }
 
-        private async Task<List<TDto>> GetAllModifiedRecord<TRepository,TDto>(DateTime date) where  TRepository:FullAuditedEntity where TDto:SyncBaseDto
+        private async Task InsertUpdateAllModified <TDto,TRepository>(List<TDto> tdoModels) where TRepository:FullAuditedEntity where TDto:SyncBaseDto
         {
             var repository = serviceProvider.GetRequiredService<IRepository<TRepository>>();
-            DateTimeOffset dto = new DateTimeOffset(date,TimeSpan.Zero);
+
+            foreach (var model in tdoModels)
+            {
+                repository.InsertOrUpdate(model.MapTo<TRepository>(mapper));
+                dbContext.SaveChanges();
+            }
+            return;
+        }
+
+
+        private async Task<List<TDto>> GetAllModifiedRecord<TRepository,TDto>(DateTimeOffset date) where  TRepository:FullAuditedEntity where TDto:SyncBaseDto
+        {
+            var repository = serviceProvider.GetRequiredService<IRepository<TRepository>>();
 
             var list = await dbContext.ExecuteWithDisabledQueryFilters(() =>
                     repository.Query()
                         .AsNoTracking()
-                        .Where(x=>x.CreatedOn > dto || x.EditedOn.Value > dto || x.DeletedOn.Value > dto)
+                        .Where(x=>x.CreatedOn >= date || (x.EditedOn ?? DateTimeOffset.MinValue) >= date || (x.DeletedOn ?? DateTimeOffset.MinValue) >= date)
                         .ToListAsync()
                 , QueryFilter.SoftDelete);
 

@@ -1,4 +1,5 @@
 ﻿using Kendo.Mvc.UI;
+using Lacos.GestioneCommesse.Application.CheckLists.DTOs;
 using Lacos.GestioneCommesse.Application.Sync;
 using Lacos.GestioneCommesse.Contracts.Dtos;
 using Lacos.GestioneCommesse.Contracts.Dtos.Application;
@@ -49,14 +50,24 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
 
         
         [AllowAnonymous]
-        [HttpGet("Db/{y}/{M}/{d}/{h}/{min}/{s}")]
-        public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb(int y,int M, int d, int h,int min, int s)
+        [HttpGet("Db/{strDate}")]
+        public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb(string strDate)
         {
-            DateTime date = new DateTime(y, M, d, h, min, s);
+            string sDate = Uri.UnescapeDataString(strDate);
+
+            DateTimeOffset date = DateTimeOffset.Parse(sDate);
 
             var result = await service.SyncFromDBToApp_FullDb(date);
 
             return result;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("LocalDb")]
+        public async Task SyncFromAppToDb_Changes([FromBody] SyncLocalDbChanges syncLocalDbChanges)
+        {
+            await service.SyncFromAppToDB_LocalChanges(syncLocalDbChanges);
+            return;   
         }
     }
     

@@ -47,12 +47,10 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
 
         
         [AllowAnonymous]
-        [HttpGet("Db/{strDate}")]
-        public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb(string strDate)
+        [HttpPost("Db")]
+        public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb([FromBody] SyncDbDate dbDate)
         {
-            string sDate = Uri.UnescapeDataString(strDate);
-            DateTimeOffset date = DateTimeOffset.Parse(sDate);
-            var result = await service.SyncFromDBToApp_FullDb(date);
+            var result = await service.SyncFromDBToApp_FullDb(dbDate.Date);
             return result;
         }
 

@@ -300,6 +300,7 @@ class InterventionSchedulerModel {
     readonly description: string;
     readonly operators: IInterventionOperatorReadModel[];
     readonly activityType: string;
+    readonly activityColor: string;
     readonly isAllDay: boolean;
     readonly canBeRemoved: boolean;
     readonly canBeEdited: boolean;
@@ -316,6 +317,7 @@ class InterventionSchedulerModel {
         this.description = intervention.description;
         this.operators = intervention.operators;
         this.activityType = intervention.activityType;
+        this.activityColor = intervention.activityColor;
         this.isAllDay = this.start.addDays(1).hasSameDateAndTime(this.end);
         this.canBeRemoved = intervention.canBeRemoved;
         this.canBeEdited = intervention.status === InterventionStatus.Scheduled;

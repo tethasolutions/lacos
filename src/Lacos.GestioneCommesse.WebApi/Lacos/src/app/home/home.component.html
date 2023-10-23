@@ -1,61 +1,55 @@
 <div class="row">
-    <div class="col-md-3">
-        <img src="assets/logo_lacos.png" width="90%" />
+    <div class="col-md-2">
+        <img src="assets/logo_lacos.png" width="100%" />
     </div>
-    <div class="col-md-9">
-        <ng-container *ngIf="isAdmin">
-            <div class="row">
-                <div class="col-12">
-                    <div class="title lacos" style="margin-bottom: 10px;"><i>Anagrafiche</i></div>
-                </div>
+    <div class="col-md-10">        
+        <div class="row">
+            <div class="col-12">
+                <div class="title lacos" style="margin-bottom: 10px;"><i>Attività in corso</i></div>
             </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <a class="btn btn-light dashboardBtn" routerLink="/customers" routerLinkActive="active">
-                        <div class="title">Clienti</div>
-                        <span><i class="fa fa-3x fa-users"></i></span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a class="btn btn-light dashboardBtn" routerLink="/products" routerLinkActive="active">
-                        <div class="title">Prodotti</div>
-                        <span><i class="fa fa-3x fa-window-restore"></i></span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a class="btn btn-light dashboardBtn" routerLink="/checklist" routerLinkActive="active">
-                        <div class="title">Check Lists</div>
-                        <span><i class="fa fa-3x fa-list-check"></i></span>
-                    </a>
-                </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let activityType of activitiesCounters" class="col-md-2">
+                <a class="btn btn-light dashboardBtn" routerLink="/activities"
+                    [style.background-color]="activityType.activityColor || '#3485fd'" routerLinkActive="active">
+                    <div class="green-number bage-number">{{activityType.active}}</div>
+                    <div class="red-number bage-number">{{activityType.expired}}</div>
+                    <div class="title">{{activityType.activityName}}</div>
+                </a>
             </div>
-            <hr class="lacos" />
-        </ng-container>
+        </div>
+        <hr class="lacos" />
         <div class="row">
             <div class="col-12">
                 <div class="title lacos" style="margin-bottom: 10px;"><i>Gestione Commesse</i></div>
             </div>
         </div>
         <div class="row">
-            <div *ngIf="isAdmin" class="col-md-3">
+            <div *ngIf="isAdmin" class="col-md-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/jobs" routerLinkActive="active">
                     <div class="title">Commesse</div>
                     <span><i class="fa fa-3x fa-door-open"></i></span>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <a class="btn btn-light dashboardBtn" routerLink="/activities" routerLinkActive="active">
+                    <div class="title">Attività</div>
+                    <span><i class="fa fa-3x fa-list-check"></i></span>
+                </a>
+            </div>
+            <div class="col-md-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/interventions" routerLinkActive="active">
-                    <div class="title">Calendario Interventi</div>
+                    <div class="title">Calendario</div>
                     <span><i class="fa fa-3x fa-calendar-days"></i></span>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/tickets" routerLinkActive="active">
                     <div class="title">Tickets</div>
                     <span><i class="fa fa-3x fa-tag"></i></span>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a class="btn btn-light dashboardBtn" routerLink="#" routerLinkActive="active">
                     <div class="title">Ordini Acquisto</div>
                     <span><i class="fa fa-3x fa-shop"></i></span>
@@ -69,7 +63,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a class="btn btn-light dashboardBtn" routerLink="#" routerLinkActive="active">
                     <div class="title">Porte REI</div>
                     <span><i class="fa fa-3x fa-qrcode"></i></span>

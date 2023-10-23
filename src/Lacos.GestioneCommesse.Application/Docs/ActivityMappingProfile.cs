@@ -60,5 +60,6 @@ public class ActivityMappingProfile : Profile
                         : y.SourcePurchaseOrder.Description
                     : y.SourceTicket.Description
             );
+
     }
 }

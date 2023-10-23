@@ -44,6 +44,7 @@ export class Intervention {
 
 }
 
+
 export interface IInterventionReadModel {
 
     readonly id: number;

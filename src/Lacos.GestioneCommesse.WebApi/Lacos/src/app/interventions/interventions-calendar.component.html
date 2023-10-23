@@ -49,12 +49,14 @@
     </kendo-scheduler-day-view>
     <kendo-scheduler-work-week-view>
         <ng-template kendoSchedulerEventTemplate let-event="event">
-            <div>
-                {{event.dataItem.customer}}
-            </div>
-            <div class="d-flex gap-1 align-items-center">
-                <app-operator-avatar *ngFor="let operator of event.dataItem.operators"
-                    [options]="operator"></app-operator-avatar>
+            <div [ngStyle]="{'background-color':event.dataItem.activityColor}">
+                <div>
+                    {{event.dataItem.customer}}
+                </div>
+                <div class="d-flex gap-1 align-items-center">
+                    <app-operator-avatar *ngFor="let operator of event.dataItem.operators"
+                        [options]="operator"></app-operator-avatar>
+                </div>
             </div>
         </ng-template>
         <ng-template kendoSchedulerAllDayEventTemplate let-event="event">

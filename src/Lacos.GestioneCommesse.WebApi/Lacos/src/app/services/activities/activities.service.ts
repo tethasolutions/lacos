@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
-import { Activity, ActivityDetail } from './models';
+import { Activity, ActivityCounter, ActivityDetail } from './models';
 import { readData } from '../common/functions';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 
@@ -70,6 +70,22 @@ export class ActivitiesService {
         return this._http.put<void>(`${this._baseUrl}/${id}/assign-all-customer-products`, null)
             .pipe(
                 map(() => { })
+            );
+    }
+
+    readActivityTypesCounters() {
+        return this._http.get<Array<ActivityCounter>>(`${this._baseUrl}/activities-counters`)
+            .pipe(
+                map(e =>
+                    {
+                        const activityTypes: Array<ActivityCounter> = [];
+                        e.forEach(item => {
+                            const activityType: ActivityCounter = Object.assign(new ActivityCounter(), item);
+                            activityTypes.push(activityType);
+                        });
+                        return activityTypes;
+                    }
+                )
             );
     }
 }

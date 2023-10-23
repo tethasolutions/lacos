@@ -2,6 +2,7 @@
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
@@ -58,5 +59,11 @@ public class ActivitiesController : LacosApiController
     public Task AssignAllCustomerProducts(long id)
     {
         return service.AssignAllCustomerProducts(id);
+    }
+
+    [HttpGet("activities-counters")]
+    public async Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters()
+    {
+        return await service.GetActivitiesCounters();
     }
 }

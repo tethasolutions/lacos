@@ -116,19 +116,22 @@ namespace Lacos.GestioneCommesse.Application.Sync
             }
             return syncLocalDbChangesRemote;
         }
-         public async Task SyncFromAppToDB_LocalImage(SyncImageDto syncLocalImage)
+        public async Task SyncFromAppToDB_LocalImage(SyncImageDto syncLocalImage)
         {
             try
             {
-                    await using Stream streamOriginalImage = new MemoryStream(syncLocalImage.Content);
-                    var folder = configuration.AttachmentsPath;
-                    Directory.CreateDirectory(folder);
-                    var path = Path.Combine(folder, syncLocalImage.Filename);
-                    if (!File.Exists(path))
-                    {
-                        await using Stream stremNewImage = File.Create(path);
-                        await streamOriginalImage.CopyToAsync(stremNewImage);
-                    }
+                if (syncLocalImage.Content is null)
+                    throw new ArgumentException("Manca il contenuto dell'immagine");
+
+                await using Stream streamOriginalImage = new MemoryStream(syncLocalImage.Content);
+                var folder = configuration.AttachmentsPath;
+                Directory.CreateDirectory(folder);
+                var path = Path.Combine(folder, syncLocalImage.Filename);
+                if (!File.Exists(path))
+                {
+                    await using Stream stremNewImage = File.Create(path);
+                    await streamOriginalImage.CopyToAsync(stremNewImage);
+                }
             }
             catch (Exception e)
             {
@@ -137,30 +140,30 @@ namespace Lacos.GestioneCommesse.Application.Sync
             }
         }
 
-         public async Task<SyncImageDto> SyncFromDBToApp_RemoteImage(SyncImageDto syncRemoteImage)
-         {
-             try
-             {
-                 var folder = configuration.AttachmentsPath;
-                 var path = Path.Combine(folder, syncRemoteImage.Filename);
-                 if (File.Exists(path))
-                 {
-                     syncRemoteImage.Content = await File.ReadAllBytesAsync(path);
-                    return syncRemoteImage;
-                 }
-                 //else
-                 //{
-                 //    throw new Exception("Immagine inesistente");
-                 //}
-             }
-             catch (Exception e)
-             {
-                 Console.WriteLine(e);
-                 
-                 throw;
-             }
-             return null;
-         }
+        public async Task<SyncImageDto> SyncFromDBToApp_RemoteImage(SyncImageDto syncRemoteImage)
+        {
+            try
+            {
+                var folder = configuration.AttachmentsPath;
+                var path = Path.Combine(folder, syncRemoteImage.Filename);
+                if (File.Exists(path))
+                {
+                    syncRemoteImage.Content = await File.ReadAllBytesAsync(path);
+
+                }
+                return syncRemoteImage;
+                //else
+                //{
+                //    throw new Exception("Immagine inesistente");
+                //}
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                throw;
+            }
+        }
 
         public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb(DateTimeOffset date)
         {
@@ -208,14 +211,14 @@ namespace Lacos.GestioneCommesse.Application.Sync
         private async Task<List<TDto>> InsertUpdateAllModified<TDto, TEntity>(List<TDto> tdoModels) where TEntity : FullAuditedEntity where TDto : SyncBaseDto
         {
             var repository = serviceProvider.GetRequiredService<IRepository<TEntity>>();
-            List<TDto>  list = new List<TDto>();
-            
+            List<TDto> list = new List<TDto>();
+
             foreach (var model in tdoModels)
             {
                 var entity = await
                     repository
                         .Query()
-                        .Where(x=>x.Id == model.Id)
+                        .Where(x => x.Id == model.Id)
                         .SingleOrDefaultAsync();
 
                 if (entity != null)
@@ -225,28 +228,28 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     await dbContext.SaveChanges();
                 }
                 else
-                { 
+                {
                     var newEntity = model.MapTo<TEntity>(mapper);
                     await repository.Insert(newEntity);
                     await dbContext.SaveChanges();
                     list.Add(newEntity.MapTo<TDto>(mapper));
                 }
             }
-            
+
             return list;
         }
 
-        private async Task<List<SyncInterventionProductCheckListDto>> InsertUpdateAllModifiedInterventionProductCheckList(List<SyncInterventionProductCheckListDto> tdoModels,List<SyncInterventionProductCheckListItemDto> tdoChild) 
+        private async Task<List<SyncInterventionProductCheckListDto>> InsertUpdateAllModifiedInterventionProductCheckList(List<SyncInterventionProductCheckListDto> tdoModels, List<SyncInterventionProductCheckListItemDto> tdoChild)
         {
             var repository = serviceProvider.GetRequiredService<IRepository<InterventionProductCheckList>>();
-            List<SyncInterventionProductCheckListDto>  list = new List<SyncInterventionProductCheckListDto>();
+            List<SyncInterventionProductCheckListDto> list = new List<SyncInterventionProductCheckListDto>();
 
             foreach (var model in tdoModels)
             {
                 var entity = await
                     repository
                         .Query()
-                        .Where(x=>x.Id == model.Id)
+                        .Where(x => x.Id == model.Id)
                         .SingleOrDefaultAsync();
 
                 if (entity != null)
@@ -256,7 +259,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     await dbContext.SaveChanges();
                 }
                 else
-                { 
+                {
                     var oldId = model.Id;
 
                     var newEntity = model.MapTo<InterventionProductCheckList>(mapper);
@@ -266,23 +269,23 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
                     if (tdoChild != null)
                     {
-                        tdoChild.ForEach(x=>x.CheckListId = (x.CheckListId == oldId?  newEntity.Id : x.CheckListId));
+                        tdoChild.ForEach(x => x.CheckListId = (x.CheckListId == oldId ? newEntity.Id : x.CheckListId));
                     }
                 }
             }
             return list;
         }
 
-        private async Task<List<SyncTicketDto>> InsertUpdateAllModifiedTicket(List<SyncTicketDto> tdoModels,List<SyncTicketPictureDto> tdoChild) 
+        private async Task<List<SyncTicketDto>> InsertUpdateAllModifiedTicket(List<SyncTicketDto> tdoModels, List<SyncTicketPictureDto> tdoChild)
         {
             var repository = serviceProvider.GetRequiredService<IRepository<Ticket>>();
-            List<SyncTicketDto>  list = new List<SyncTicketDto>();
+            List<SyncTicketDto> list = new List<SyncTicketDto>();
             foreach (var model in tdoModels)
             {
                 var entity = await
                     repository
                         .Query()
-                        .Where(x=>x.Id == model.Id)
+                        .Where(x => x.Id == model.Id)
                         .SingleOrDefaultAsync();
 
                 if (entity != null)
@@ -292,7 +295,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     await dbContext.SaveChanges();
                 }
                 else
-                { 
+                {
                     var oldId = model.Id;
 
                     var newEntity = model.MapTo<Ticket>(mapper);
@@ -301,23 +304,23 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     list.Add(newEntity.MapTo<SyncTicketDto>(mapper));
                     if (tdoChild != null)
                     {
-                        tdoChild.ForEach(x=>x.TicketId = (x.TicketId == oldId?  newEntity.Id : x.TicketId));
+                        tdoChild.ForEach(x => x.TicketId = (x.TicketId == oldId ? newEntity.Id : x.TicketId));
                     }
                 }
             }
             return list;
         }
 
-        private async Task<List<SyncPurchaseOrderDto>> InsertUpdateAllModifiedPurchaseOrder(List<SyncPurchaseOrderDto> tdoModels,List<SyncPurchaseOrderItemDto> tdoChild) 
+        private async Task<List<SyncPurchaseOrderDto>> InsertUpdateAllModifiedPurchaseOrder(List<SyncPurchaseOrderDto> tdoModels, List<SyncPurchaseOrderItemDto> tdoChild)
         {
             var repository = serviceProvider.GetRequiredService<IRepository<PurchaseOrder>>();
-            List<SyncPurchaseOrderDto>  list = new List<SyncPurchaseOrderDto>();
+            List<SyncPurchaseOrderDto> list = new List<SyncPurchaseOrderDto>();
             foreach (var model in tdoModels)
             {
                 var entity = await
                     repository
                         .Query()
-                        .Where(x=>x.Id == model.Id)
+                        .Where(x => x.Id == model.Id)
                         .SingleOrDefaultAsync();
 
                 if (entity != null)
@@ -328,7 +331,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
                 }
                 else
-                { 
+                {
                     var oldId = model.Id;
 
                     var newEntity = model.MapTo<PurchaseOrder>(mapper);
@@ -337,7 +340,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     list.Add(newEntity.MapTo<SyncPurchaseOrderDto>(mapper));
                     if (tdoChild != null)
                     {
-                        tdoChild.ForEach(x=>x.PurchaseOrderId = (x.PurchaseOrderId == oldId?  newEntity.Id : x.PurchaseOrderId));
+                        tdoChild.ForEach(x => x.PurchaseOrderId = (x.PurchaseOrderId == oldId ? newEntity.Id : x.PurchaseOrderId));
                     }
                 }
             }

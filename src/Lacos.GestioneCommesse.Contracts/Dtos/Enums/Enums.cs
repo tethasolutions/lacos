@@ -40,4 +40,12 @@
         PrivatePerson,
         Company
     }
+
+    public enum ActivityStatus
+    {
+        Pending,
+        InProgress,
+        ReadyForCompletion,
+        Completed
+    }
 }

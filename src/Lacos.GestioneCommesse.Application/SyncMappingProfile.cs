@@ -7,6 +7,7 @@ using Lacos.GestioneCommesse.Contracts.Dtos.Security;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Domain.Security;
+using Lacos.GestioneCommesse.Framework.Extensions;
 
 namespace Lacos.GestioneCommesse.Application
 {
@@ -16,7 +17,8 @@ namespace Lacos.GestioneCommesse.Application
         {
             CreateMap<Activity, SyncActivityDto>();
             CreateMap<ActivityProduct, SyncActivityProductDto>();
-            CreateMap<Intervention, SyncInterventionDto>();
+            CreateMap<Intervention, SyncInterventionDto>()
+                .MapMember(x=>x.OperatorIds,y=>y.Operators.Select(x=>x.Id).ToList());
             CreateMap<InterventionDispute, SyncInterventionDisputeDto>();
             CreateMap<InterventionNote, SyncInterventionNoteDto>();
             CreateMap<InterventionProduct, SyncInterventionProductDto>();
@@ -28,7 +30,8 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<PurchaseOrderItem, SyncPurchaseOrderItemDto>();
             CreateMap<Ticket, SyncTicketDto>();
             CreateMap<TicketPicture, SyncTicketPictureDto>();
-            CreateMap<ActivityType, SyncActivityTypeDto>();
+            CreateMap<ActivityType, SyncActivityTypeDto>()
+                .MapMember(x=>x.OperatorIds,y=>y.Operators.Select(x=>x.Id).ToList());;
             CreateMap<CheckList, SyncCheckListDto>();
             CreateMap<CheckListItem, SyncCheckListItemDto>();
             CreateMap<Customer, SyncCustomerDto>();
@@ -40,6 +43,39 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<OperatorDocument, SyncOperatorDocumentDto>();
             CreateMap<Vehicle, SyncVehicleDto>();
             CreateMap<User, SyncUserDto>();
+
+            CreateMap<SyncInterventionDto, Intervention>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncInterventionDisputeDto, InterventionDispute>()
+                .IgnoreCommonMembers().IgnoreNavigationPropertyEntity();
+            CreateMap<SyncInterventionNoteDto, InterventionNote>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncInterventionProductDto, InterventionProduct>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncInterventionProductCheckListDto, InterventionProductCheckList>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncInterventionProductCheckListItemDto, InterventionProductCheckListItem>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncInterventionProductPictureDto, InterventionProductPicture>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncPurchaseOrderDto, PurchaseOrder>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncPurchaseOrderItemDto, PurchaseOrderItem>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncTicketDto, Ticket>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
+            CreateMap<SyncTicketPictureDto, TicketPicture>()
+                .IgnoreCommonMembers()
+                .IgnoreNavigationPropertyEntity();
 
 
         }

@@ -16,6 +16,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public string? CustomerSignatureFileName { get; set; }
         public long? VehicleId { get; set; }
         public long? ActivityId { get; set; }
+        public IEnumerable<long> OperatorIds { get; set; } = new List<long>();
 
 
     }

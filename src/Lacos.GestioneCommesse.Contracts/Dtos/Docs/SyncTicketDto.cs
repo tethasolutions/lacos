@@ -10,6 +10,10 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public long? CustomerId { get; set; }
         public long? CustomerAddressId { get; set; }
 
+        public int? Number { get; set; }
+        public int? Year { get; set; }
+        public DateTimeOffset? TicketDate { get; set; }
+
     }
 
    

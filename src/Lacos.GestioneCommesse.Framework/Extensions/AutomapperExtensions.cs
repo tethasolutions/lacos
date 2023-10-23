@@ -97,6 +97,25 @@ public static class AutomapperExtensions
         return expression;
     }
 
+    public static IMappingExpression<TSource, TDest> IgnoreNavigationPropertyEntity<TSource, TDest>(
+        this IMappingExpression<TSource, TDest> expression)
+        where TDest : BaseEntity
+    {
+        var destType = typeof(TDest);
+
+        foreach (var property in destType.GetProperties())
+        {
+            if (typeof(BaseEntity).IsAssignableFrom(property.PropertyType) || 
+                property.PropertyType.GetInterfaces().Any(x=>x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>) && x.GenericTypeArguments.Any(y=>typeof(BaseEntity).IsAssignableFrom(y))))
+            {
+                expression.Ignore(property.Name);
+            }
+        }
+
+        return expression;
+    }
+
+
     public static T MapTo<T>(this object source, IMapper mapper)
     {
         return mapper.Map<T>(source);

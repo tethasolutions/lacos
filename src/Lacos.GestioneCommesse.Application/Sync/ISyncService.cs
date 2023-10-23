@@ -21,7 +21,9 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
         Task<SyncFullDbDto> SyncFromDBToApp_FullDb(DateTimeOffset date);
 
-        Task SyncFromAppToDB_LocalChanges(SyncLocalDbChanges syncLocalDbChanges);
+        Task<SyncLocalDbChanges> SyncFromAppToDB_LocalChanges(SyncLocalDbChanges syncLocalDbChanges);
 
+        Task SyncFromAppToDB_LocalImage(SyncImageDto syncLocalImage);
+        Task<SyncImageDto> SyncFromDBToApp_RemoteImage(SyncImageDto syncLocalImage);
     }
 }

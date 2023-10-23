@@ -26,7 +26,6 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         public async Task<List<SyncUserDto>> SyncFromDBToApp_Users()
         {
             var result = await service.SyncFromDBToApp_Users();
-
             return result;
         }
 
@@ -35,7 +34,6 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         public async Task<List<SyncOperatorDto>> SyncFromDBToApp_Operators()
         {
             var result = await service.SyncFromDBToApp_Operators();
-
             return result;
         }
 
@@ -44,7 +42,6 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         public async Task<List<SyncVehicleDto>> SyncFromDBToApp_Vehicles()
         {
             var result = await service.SyncFromDBToApp_Vehicles();
-
             return result;
         }
 
@@ -54,20 +51,38 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb(string strDate)
         {
             string sDate = Uri.UnescapeDataString(strDate);
-
             DateTimeOffset date = DateTimeOffset.Parse(sDate);
-
             var result = await service.SyncFromDBToApp_FullDb(date);
-
             return result;
         }
 
         [AllowAnonymous]
         [HttpPost("LocalDb")]
-        public async Task SyncFromAppToDb_Changes([FromBody] SyncLocalDbChanges syncLocalDbChanges)
+        public async Task<SyncLocalDbChanges> SyncFromAppToDb_Changes([FromBody] SyncLocalDbChanges syncLocalDbChanges)
         {
-            await service.SyncFromAppToDB_LocalChanges(syncLocalDbChanges);
-            return;   
+            return await service.SyncFromAppToDB_LocalChanges(syncLocalDbChanges);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("LocalImage")]
+        public async Task<IActionResult> SyncFromAppToDb_LocalImage([FromBody] SyncImageDto syncLocalImage)
+        {
+            try
+            {
+                await service.SyncFromAppToDB_LocalImage(syncLocalImage);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("RemoteImage")]
+        public async Task<SyncImageDto> SyncFromAppToDb_RemoteImage([FromBody] SyncImageDto syncLocalImage)
+        {
+               return await service.SyncFromDBToApp_RemoteImage(syncLocalImage);
         }
     }
     

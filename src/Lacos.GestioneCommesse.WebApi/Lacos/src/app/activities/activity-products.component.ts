@@ -22,7 +22,7 @@ export class ActivityProductsComponent extends BaseComponent implements OnChange
     data: GridDataResult;
     gridState: State = {
         skip: 0,
-        take: 10,
+        take: 20,
         filter: {
             filters: [
                 this._buildActivityIdFilter()

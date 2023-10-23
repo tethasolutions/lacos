@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { IInterventionOperatorReadModel, IInterventionReadModel, Intervention, InterventionStatus } from '../services/interventions/models';
-import { DateChangeEvent, DateRange, DragEndEvent, EventClickEvent, RemoveEvent, ResizeEndEvent, SchedulerComponent, SlotClickEvent } from '@progress/kendo-angular-scheduler';
+import { DateChangeEvent, DateRange, DragEndEvent, EventClickEvent, EventStyleArgs, RemoveEvent, ResizeEndEvent, SchedulerComponent, SlotClickEvent } from '@progress/kendo-angular-scheduler';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { State } from '@progress/kendo-data-query';
 import { filter, switchMap, tap } from 'rxjs';
@@ -146,6 +146,11 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
         }
 
         this._read();
+    }
+
+    eventStylesCallback = (args: EventStyleArgs) => {
+        const intervention = args.event.dataItem as InterventionSchedulerModel;
+        return {'background-color':intervention.activityColor};
     }
 
     private _resizeIntervention(intervention: Intervention, start: Date, end: Date, isAllDay: boolean) {

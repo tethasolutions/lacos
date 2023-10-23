@@ -22,7 +22,7 @@ export class VehiclesComponent extends BaseComponent implements OnInit {
   dataVehicles: GridDataResult;
   stateGridVehicles: State = {
       skip: 0,
-      take: 10,
+      take: 20,
       filter: {
           filters: [],
           logic: 'and'

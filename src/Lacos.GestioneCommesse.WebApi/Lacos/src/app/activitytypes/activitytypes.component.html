@@ -24,7 +24,7 @@
     </kendo-grid-column>
     <kendo-grid-column field="isInternal" title="Attività interna">
         <ng-template kendoGridCellTemplate let-dataItemAddress>
-            {{dataItemAddress.pictureRequired | bool}}
+            {{dataItemAddress.isInternal | bool}}
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="colorHex" title="Colore">

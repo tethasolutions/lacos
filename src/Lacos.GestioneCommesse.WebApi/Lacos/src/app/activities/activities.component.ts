@@ -24,7 +24,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     data: GridDataResult;
     gridState: State = {
         skip: 0,
-        take: 10,
+        take: 20,
         filter: {
             filters: [
                 {

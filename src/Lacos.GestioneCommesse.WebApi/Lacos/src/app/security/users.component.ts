@@ -20,7 +20,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     data: GridDataResult;
     state: State = {
         skip: 0,
-        take: 10,
+        take: 20,
         filter: {
             filters: [{
                 field: 'role',

@@ -11,4 +11,5 @@ public interface IActivitiesService
     Task<ActivityDto> Update(ActivityDto activityDto);
     Task Delete(long id);
     Task AssignAllCustomerProducts(long id);
+    Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters();
 }

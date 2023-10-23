@@ -109,7 +109,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         const activity = context.dataItem as IActivityReadModel;
 
         switch (true) {
-            case !!activity.expirationDate && new Date(activity.expirationDate).isPast():
+            case !!activity.expirationDate && new Date(activity.expirationDate).addDays(1).isPast():
                 return { 'activity-expired': true };
             case activity.status === ActivityStatus.Completed:
                 return { 'activity-completed': true };

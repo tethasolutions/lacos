@@ -104,3 +104,20 @@ export class ActivityDetail {
     }
 
 }
+
+export class ActivityCounter {
+    readonly id: number;
+    readonly colorHex: string;
+    readonly name: string;
+    readonly active: number;
+    readonly expired: number;
+    
+    constructor() {
+        this.id = null;
+        this.colorHex = null;
+        this.name = null;
+        this.active = null;
+        this.expired = null;
+    }
+
+}

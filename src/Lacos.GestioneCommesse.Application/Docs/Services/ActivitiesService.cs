@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
@@ -8,6 +9,7 @@ using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -188,5 +190,26 @@ public class ActivitiesService : IActivitiesService
             .MaxAsync();
 
         return (maxNumber ?? 0) + 1;
+    }
+    public async Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters()
+    {
+        var query = repository.Query()
+            .AsNoTracking()
+            .Where(e => e.Status != ActivityStatus.Completed)
+            .GroupBy(e => e.TypeId)
+            .Select(group => new ActivityCounterDto
+            {
+                ActivityId = group.Key,
+                ActivityName = group.First().Type.Name,
+                ActivityColor = group.First().Type.ColorHex,
+                Active = group.Where(e => e.ExpirationDate >= DateTimeOffset.UtcNow.Date).Count(),
+                Expired = group.Where(e => e.ExpirationDate < DateTimeOffset.UtcNow.Date).Count()
+            })
+            //.Project<ActivityCounterDto>(mapper)
+            .OrderBy(e => e.ActivityName)
+            .ToListAsync();
+
+        return await query;
+
     }
 }

@@ -12,9 +12,13 @@
             <div *ngFor="let activityType of activitiesCounters" class="col-md-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/activities"
                     [style.background-color]="activityType.activityColor || '#3485fd'" routerLinkActive="active">
-                    <div class="green-number bage-number">{{activityType.active}}</div>
-                    <div class="red-number bage-number">{{activityType.expired}}</div>
-                    <div class="title">{{activityType.activityName}}</div>
+                    <div class="row">
+                        <div class="col-md-9 title">{{activityType.activityName}}</div>
+                        <div class="col-md-3">
+                            <div class="green-number bage-number">{{activityType.active}}</div>
+                            <div class="red-number bage-number">{{activityType.expired}}</div>
+                        </div>
+                    </div>
                 </a>
             </div>
         </div>

@@ -39,7 +39,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   attachmentsUploads: Array<UploadFileModel> =[];
   isUploaded:Array<boolean>= [];
   get qrCode(){
-    return (this.options.qrCodePrefix ?? '') + (this.options.qrCodeNumber ?? "0") .toString().padStart(4,'0');
+    return (this.options.qrCodePrefix ?? '') + (this.options.qrCodeNumber ?? "");
   }
 
   pathImage = `${ApiUrls.baseUrl}/attachments/`;

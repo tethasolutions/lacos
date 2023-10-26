@@ -71,8 +71,8 @@
                             <kendo-textbox [(ngModel)]="options.qrCodePrefix" name="qrCodePrefix" [maxlength]="10"> </kendo-textbox>
                         </div>
                         <div class="col-1">/</div>
-                        <div class="col-7">
-                            <kendo-numerictextbox [(ngModel)]="options.qrCodeNumber" name="qrCodeNumber" format="0" [decimals]="0" [max]="9999" [min]="0"> </kendo-numerictextbox>
+                        <div class="col-7">                            
+                            <kendo-textbox [(ngModel)]="options.qrCodeNumber" name="qrCodeNumber" [maxlength]="10"> </kendo-textbox>
                         </div>
                     </div>
                 </div>

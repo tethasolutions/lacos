@@ -17,7 +17,7 @@ public class ActivityProductMappingProfile : Profile
             .MapMember(x => x.QrCode, y => 
                 y.Product == null || y.Product.QrCodeNumber == null 
                     ? null 
-                    : y.Product.QrCodePrefix + y.Product.QrCodeNumber.Value.ToString().PadLeft(4, '0')
+                    : y.Product.QrCodePrefix + y.Product.QrCodeNumber
             )
             .MapMember(x => x.CanBeRemoved, 
                 y => y.InterventionProducts

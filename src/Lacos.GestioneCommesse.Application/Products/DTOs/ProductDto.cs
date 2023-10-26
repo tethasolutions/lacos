@@ -9,7 +9,7 @@
         public string? Description { get; set; }
         public string? PictureFileName { get; set; }
         public string? QrCodePrefix { get; set; }
-        public int? QrCodeNumber { get; set; }
+        public string? QrCodeNumber { get; set; }
         public long? CustomerId { get; set; }
         public long? CustomerAddressId { get; set; }
         public long? ProductTypeId { get; set; }

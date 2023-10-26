@@ -1674,3 +1674,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231026084953_Modify_Product_QrCodeNumber_int_to_string')
+BEGIN
+    DECLARE @var17 sysname;
+    SELECT @var17 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Registry].[Products]') AND [c].[name] = N'QrCodeNumber');
+    IF @var17 IS NOT NULL EXEC(N'ALTER TABLE [Registry].[Products] DROP CONSTRAINT [' + @var17 + '];');
+    ALTER TABLE [Registry].[Products] ALTER COLUMN [QrCodeNumber] nvarchar(10) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231026084953_Modify_Product_QrCodeNumber_int_to_string')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231026084953_Modify_Product_QrCodeNumber_int_to_string', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

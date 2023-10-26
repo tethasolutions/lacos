@@ -27,6 +27,10 @@ public class ProductMap : BaseEntityMapping<Product>
         builder.Property(e => e.QrCodePrefix)
             .HasMaxLength(10);
 
+        builder.Property(e => e.QrCodeNumber)
+            .HasMaxLength(10);
+
+
         builder.Property(e => e.Location)
             .HasMaxLength(200);
 

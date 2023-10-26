@@ -13,7 +13,7 @@ public class Product : FullAuditedEntity
 
     // qrcode della porta rei
     public string? QrCodePrefix { get; set; }
-    public int? QrCodeNumber { get; set; }
+    public string? QrCodeNumber { get; set; }
 
     // associazione della porta rei con il cliente
     public long? CustomerId { get; set; }

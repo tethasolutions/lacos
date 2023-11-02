@@ -8,6 +8,7 @@ public class ActivityReadModel
     public int Number { get; set; }
     public long JobId { get; set; }
     public string? JobCode { get; set; }
+    public bool? JobHasHighPriority { get; set; }
     public string? Description { get; set; }
     public ActivityStatus Status { get; set; }
     public string? CustomerAddress { get; set; }

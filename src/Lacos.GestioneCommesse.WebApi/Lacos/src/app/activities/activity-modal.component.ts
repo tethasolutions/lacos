@@ -10,7 +10,7 @@ import { MessageBoxService } from '../services/common/message-box.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { JobsService } from '../services/jobs/jobs.service';
 import { State } from '@progress/kendo-data-query';
-import { IJobReadModel } from '../services/jobs/models';
+import { IJobReadModel, Job } from '../services/jobs/models';
 import { listEnum } from '../services/common/functions';
 
 @Component({
@@ -27,9 +27,11 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     jobs: SelectableJob[];
     jobReadonly: boolean;
     status: ActivityStatus;
-
+    selectedActivityType: ActivityTypeModel;
+    selectedJob: SelectableJob;
+        
     readonly states = listEnum<ActivityStatus>(ActivityStatus);
-
+  
     constructor(
         private readonly _activityTypesService: ActivityTypesService,
         private readonly _customersService: CustomerService,
@@ -49,6 +51,14 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         this._tryGetCustomer();
     }
 
+    onActivityTypeChange() {
+        this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
+        this.selectedJob = this.jobs.find(e => e.id == this.options.activity.jobId);
+        if (this.selectedActivityType.isInternal) {
+            this.options.activity.description = this.selectedJob.description;
+        }
+    }
+
     override open(options: ActivityModalOptions) {
         const result = super.open(options);
 
@@ -56,6 +66,8 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         this.customer = null;
         this.status = options.activity.status;
         this._getJobs();
+
+        this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId)
 
         return result;
     }
@@ -144,6 +156,7 @@ class SelectableJob {
     readonly code: string;
     readonly fullName: string;
     readonly customerId: number;
+    readonly description: string;
 
     constructor(
         job: IJobReadModel
@@ -153,6 +166,7 @@ class SelectableJob {
         this.code = job.code;
         this.fullName = `${job.code} - ${job.customer}`;
         this.customerId = job.customerId;
+        this.description = job.description;
     }
 
 }

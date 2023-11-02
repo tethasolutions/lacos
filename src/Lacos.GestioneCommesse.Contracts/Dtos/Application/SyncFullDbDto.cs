@@ -25,6 +25,8 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Application
         public List<SyncCheckListItemDto>  CheckListItems { get; set; }
         public List<SyncCustomerDto> Customers { get; set; }
         public List<SyncCustomerAddressDto> CustomerAddresses { get; set; }
+        public List<SyncSupplierDto> Suppliers { get; set; }
+        public List<SyncSupplierAddressDto> SupplierAddresses { get; set; }
         public List<SyncOperatorDocumentDto> OperatorDocuments { get; set; }
         public List<SyncProductDto> Products { get; set; }
         public List<SyncProductDocumentDto> ProductDocuments { get; set; }

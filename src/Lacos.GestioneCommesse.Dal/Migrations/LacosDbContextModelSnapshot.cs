@@ -70,7 +70,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
-                    b.Property<long>("CustomerAddressId")
+                    b.Property<long?>("CustomerAddressId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("DeletedBy")
@@ -700,6 +700,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
+                    b.Property<bool>("HasHighPriority")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -738,9 +741,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -765,20 +765,23 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
-                    b.Property<long?>("InterventionId")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<long?>("JobId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("JobId");
 
-                    b.HasIndex("InterventionId");
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("PurchaseOrders", "Docs");
                 });
@@ -1700,6 +1703,156 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("ProductTypes", "Registry");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Supplier", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telephone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Suppliers", "Registry");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.SupplierAddress", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMainAddress")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Telephone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("SupplierAddresses", "Registry");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Vehicle", b =>
                 {
                     b.Property<long>("Id")
@@ -1847,9 +2000,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                 {
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.CustomerAddress", "CustomerAddress")
                         .WithMany("Activities")
-                        .HasForeignKey("CustomerAddressId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerAddressId");
 
                     b.HasOne("Lacos.GestioneCommesse.Domain.Docs.Job", "Job")
                         .WithMany("Activities")
@@ -2027,19 +2178,19 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.PurchaseOrder", b =>
                 {
-                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Customer", "Customer")
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Docs.Job", "Job")
                         .WithMany("PurchaseOrders")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("JobId");
+
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Supplier", "Supplier")
+                        .WithMany("PurchaseOrders")
+                        .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
-                    b.HasOne("Lacos.GestioneCommesse.Domain.Docs.Intervention", "Intervention")
-                        .WithMany("PurchaseOrders")
-                        .HasForeignKey("InterventionId");
+                    b.Navigation("Job");
 
-                    b.Navigation("Customer");
-
-                    b.Navigation("Intervention");
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.PurchaseOrderItem", b =>
@@ -2207,6 +2358,17 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.SupplierAddress", b =>
+                {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Supplier", "Supplier")
+                        .WithMany("Addresses")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Activity", b =>
                 {
                     b.Navigation("ActivityProducts");
@@ -2227,8 +2389,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Navigation("Products");
 
-                    b.Navigation("PurchaseOrders");
-
                     b.Navigation("Tickets");
                 });
 
@@ -2247,6 +2407,8 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Job", b =>
                 {
                     b.Navigation("Activities");
+
+                    b.Navigation("PurchaseOrders");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.PurchaseOrder", b =>
@@ -2282,8 +2444,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Jobs");
 
                     b.Navigation("Products");
-
-                    b.Navigation("PurchaseOrders");
 
                     b.Navigation("Tickets");
                 });
@@ -2322,6 +2482,13 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("CheckLists");
 
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Supplier", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("PurchaseOrders");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Vehicle", b =>

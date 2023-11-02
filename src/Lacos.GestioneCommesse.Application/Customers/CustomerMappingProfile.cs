@@ -17,8 +17,7 @@ namespace Lacos.GestioneCommesse.Application.Customers
                 .Ignore(x => x.UserId)
                 .Ignore(x => x.Jobs)
                 .Ignore(x => x.Products)
-                .Ignore(x => x.Tickets)
-                .Ignore(x => x.PurchaseOrders);
+                .Ignore(x => x.Tickets);
         }
     }
 }

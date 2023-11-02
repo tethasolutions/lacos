@@ -8,6 +8,7 @@ public class JobDto : BaseEntityDto
     public int? Year { get; set; }
     public DateTimeOffset Date { get; set; }
     public string? Description { get; set; }
+    public bool HasHighPriority { get; set; }
     public JobStatusDto Status { get; set; }
 
     public long CustomerId { get; set; }

@@ -19,7 +19,6 @@ public class Customer : FullAuditedEntity
     public ICollection<Job> Jobs { get; set; }
     public ICollection<Product> Products { get; set; }
     public ICollection<Ticket> Tickets { get; set; }
-    public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
 
     public Customer()
     {
@@ -27,6 +26,5 @@ public class Customer : FullAuditedEntity
         Jobs = new List<Job>();
         Products = new List<Product>();
         Tickets = new List<Ticket>();
-        PurchaseOrders = new List<PurchaseOrder>();
     }
 }

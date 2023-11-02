@@ -1,0 +1,74 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false"[top]="100">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Indirizzo
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateUserForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options" class="redimensionModal">
+
+
+            <div class="row">
+                <div *ngIf="supplier.id !== null" class="col-md-4">
+                    <label>Fornitore</label>
+                    <div class="form-group">
+                        <input class="form-control" name="contactId" [disabled]="true" [value]="supplier.name"/>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Città</label>
+                    <div class="form-group">
+                        <input class="form-control" name="city" [(ngModel)]="options.city" required
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['city']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Indirizzo</label>
+                    <div class="form-group">
+                        <input class="form-control" name="streetAddress" [(ngModel)]="options.streetAddress" required
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['streetAddress']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Provincia</label>
+                    <div class="form-group">
+                        <input class="form-control" name="province" [(ngModel)]="options.province" required
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['province']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Zip Code</label>
+                    <div class="form-group">
+                        <input class="form-control" name="zipCode" [(ngModel)]="options.zipCode" required
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['zipCode']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Indirizzo principale</label>
+                    <div class="form-group">
+                        <kendo-switch name="isMainAddress" [(ngModel)]="options.isMainAddress" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['isMainAddress']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

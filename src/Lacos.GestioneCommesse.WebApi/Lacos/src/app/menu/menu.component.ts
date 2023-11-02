@@ -17,37 +17,33 @@ export class MenuComponent extends BaseComponent implements OnInit {
     readonly menu: Menu = new Menu(
         [
             new DropDownMenuEntry('Anagrafiche', [
-                new MenuEntry(['/users'], 'Utenti',
-                    e => e.startsWith('/users'),
-                    e => e.isAuthorized(Role.Administrator)
-                ),
                 new MenuEntry(['/customers'], 'Clienti',
                     e => e.startsWith('/customers'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
                 ),
-                new MenuEntry(['/operators'], 'Operatori',
-                    e => e.startsWith('/operators'),
-                    e => e.isAuthorized(Role.Administrator)
+                new MenuEntry(['/suppliers'], 'Fornitori',
+                    e => e.startsWith('/suppliers'),
+                    e => e.isAuthenticated()
                 ),
                 new MenuEntry(['/checklist'], 'Checklist',
                     e => e.startsWith('/checklist'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
                 ),
                 new MenuEntry(['/products'], 'Prodotti',
                     e => e.startsWith('/products'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
                 ),
                 new MenuEntry(['/vehicles'], 'Mezzi di trasporto',
                     e => e.startsWith('/vehicles'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
                 ),
                 new MenuEntry(['/activitytypes'], 'Tipologie Attività',
                     e => e.startsWith('/activitytypes'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
                 ),
                 new MenuEntry(['/producttypes'], 'Tipi Prodotto',
                     e => e.startsWith('/producttypes'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
                 )
             ]),
             new MenuEntry(['/tickets'], 'Tickets',
@@ -70,7 +66,17 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/interventions-list'], 'Elenco Interventi',
                     e => e.startsWith('/interventions-list'),
                     e => e.isAuthenticated()
+                )
+            ]),
+            new DropDownMenuEntry('Gestione', [
+                new MenuEntry(['/operators'], 'Operatori',
+                    e => e.startsWith('/operators'),
+                    e => e.isAuthorized(Role.Administrator)
                 ),
+                new MenuEntry(['/users'], 'Utenti',
+                    e => e.startsWith('/users'),
+                    e => e.isAuthorized(Role.Administrator)
+                )
             ]),
             new MenuEntry(['/logout'], 'Logout',
                 () => false,

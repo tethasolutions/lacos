@@ -1,0 +1,72 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>Fornitori</h3>
+    </div>
+    <div class="col-auto">
+        <button (click)="createSupplier()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<kendo-grid [data]="dataSuppliers" [pageSize]="stateGridSuppliers.take" 
+            [skip]="stateGridSuppliers.skip" [sort]="stateGridSuppliers.sort" 
+            [filter]="stateGridSuppliers.filter"
+            [group]="stateGridSuppliers.group" filterable="menu" 
+            [sortable]="true" [pageable]="true" scrollable="none"
+            (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column field="name" title="Nominativo"></kendo-grid-column>
+    <kendo-grid-column field="telephone" title="Telefono"></kendo-grid-column>
+    <kendo-grid-column field="mainAddress.fullAddress" title="Indirizzo"></kendo-grid-column>
+    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button (click)="editSupplier(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="deleteSupplier(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                <i class="fas fa-trash"></i>
+            </button>
+        </ng-template>
+    </kendo-grid-column>
+    <div *kendoGridDetailTemplate="let dataItem">
+        <div class="d-flex align-items-center master-detail-grid-header">
+            <div class="col"></div>
+            <div class="col-auto">
+                <button (click)="createAddress(dataItem)" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i>
+                    NUOVO INDIRIZZO
+                </button>
+            </div>
+        </div>
+        <kendo-grid [data]="dataItem.addresses" [sortable]="false" [pageable]="false" scrollable="none">
+            <kendo-grid-column field="city" title="Città"></kendo-grid-column>
+            <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
+            <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
+            <kendo-grid-column field="zipCode" title="CAP"></kendo-grid-column>
+            <kendo-grid-column field="isMainAddress" title="Principale">
+                <ng-template kendoGridCellTemplate let-dataItemAddress>
+                    {{dataItemAddress.isMainAddress | bool}}
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
+                <ng-template kendoGridCellTemplate let-dataItemAddress>
+                    <button (click)="editAddress(dataItemAddress, dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button *ngIf="!dataItemAddress.isMainAddress"
+                        (click)="setAddressAsMain(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Seleziona come principale">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button *ngIf="!dataItemAddress.isMainAddress"
+                        (click)="deleteAddress(dataItemAddress)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+    </div>
+</kendo-grid>
+
+<app-supplier-modal #supplierModal></app-supplier-modal>
+<app-address-supplier-modal [supplier]="supplierSelezionato" #addressSupplierModal></app-address-supplier-modal>

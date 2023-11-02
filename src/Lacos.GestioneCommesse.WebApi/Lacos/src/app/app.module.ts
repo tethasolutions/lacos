@@ -100,6 +100,12 @@ import { TicketStatus } from './services/tickets/models';
 import { TicketModalComponent } from './ticket/ticket-modal.component';
 import { TicketsService } from './services/tickets/tickets.service';
 import { TicketStatusPipe } from './shared/pipes/ticket-status.pipe';
+import { SupplierModalComponent } from './supplier-modal/supplier-modal.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
+import { SupplierService } from './services/supplier.service';
+import { AddressesSupplierService } from './services/addressesSupplier.service';
+import { AddressSupplierModalComponent } from './address-modal/address-supplier-modal.component';
+import { AddressesSupplierModalComponent } from './addresses-modal/addresses-supplier-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -119,6 +125,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         CustomerModalComponent,
         AddressModalComponent,
         AddressesModalComponent,
+        AddressSupplierModalComponent,
+        AddressesSupplierModalComponent,
         VehiclesComponent,
         VehicleModalComponent,
         OperatorsComponent,
@@ -158,7 +166,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         InterventionsListComponent,
         TicketsComponent,
         TicketStatusPipe,
-        TicketModalComponent
+        TicketModalComponent,
+        SupplierModalComponent,
+        SuppliersComponent
     ],
     imports: [
         BrowserModule,
@@ -202,7 +212,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         Clipboard,
         AuthGuard,
         CustomerService,
+        SupplierService,
         AddressesService,
+        AddressesSupplierService,
         OperatorsService,
         CheckListService,
         ProductsService,

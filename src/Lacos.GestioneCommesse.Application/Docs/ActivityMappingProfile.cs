@@ -10,7 +10,7 @@ public class ActivityMappingProfile : Profile
     public ActivityMappingProfile()
     {
         CreateMap<Activity, ActivityReadModel>()
-            .MapMember(x => x.CustomerAddress, y => y.CustomerAddress!.StreetAddress + ", " + y.CustomerAddress.City + " (" + y.CustomerAddress.Province + ")")
+            .MapMember(x => x.CustomerAddress, y => y.CustomerAddress != null ? y.CustomerAddress.StreetAddress + ", " + y.CustomerAddress.City + " (" + y.CustomerAddress.Province + ")" : "")
             .MapMember(x => x.Type, y => y.Type!.Name)
             .MapMember(x => x.Source, y =>
                 y.SourceTicket == null
@@ -25,6 +25,7 @@ public class ActivityMappingProfile : Profile
             )
             .MapMember(x => x.Number, y => y.RowNumber)
             .MapMember(x => x.JobCode, y => y.Job!.Year.ToString() + "/" + y.Job.Number.ToString())
+            .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
             .MapMember(x => x.Customer, y => y.Job!.Customer!.Name);
 
         CreateMap<ActivityDto, Activity>()
@@ -51,7 +52,7 @@ public class ActivityMappingProfile : Profile
             .MapMember(x => x.Job, y => y.Job!.Description)
             .MapMember(x => x.CustomerId, y => y.Job!.CustomerId)
             .MapMember(x => x.Customer, y => y.Job!.Customer!.Name)
-            .MapMember(x => x.CustomerAddress, y => y.CustomerAddress!.StreetAddress + ", " + y.CustomerAddress.City + " (" + y.CustomerAddress.Province + ")")
+            .MapMember(x => x.CustomerAddress, y => y.CustomerAddress != null ? y.CustomerAddress.StreetAddress + ", " + y.CustomerAddress.City + " (" + y.CustomerAddress.Province + ")" : "")
             .MapMember(x => x.Type, y => y.Type!.Name)
             .MapMember(x => x.Source, y =>
                 y.SourceTicket == null

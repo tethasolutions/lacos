@@ -33,7 +33,7 @@ public class Product : FullAuditedEntity
     public bool? HasPushBar { get; set; }
     public int? Year { get; set; }
     public string? VocType { get; set; }
-    public int? NumberOfDoors { get; set; }
+    public int? NumberOfDoors { get; set; } //ante
 
     public ICollection<PurchaseOrderItem> PurchaseOrderItems { get; set; }
     public ICollection<ActivityProduct> ActivityProducts { get; set; }

@@ -322,3 +322,15 @@ app-activities {
         @include striped-background(rgba(25, 135, 84, .3), rgba(25, 135, 84, .1));
     }
 }
+
+.add-customer-button, .add-address-button {
+    margin-left: 5px;
+}
+
+.customer-combobox, .address-combobox {
+    width: calc(100% - 45px);
+}
+
+.job-alert {
+    color: #dc3545;
+}

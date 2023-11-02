@@ -16,6 +16,12 @@
     scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback">
 
     <kendo-grid-column field="jobCode" title="Commessa" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="!dataItem.jobHasHighPriority">{{dataItem.jobCode}}</div>
+            <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
+                {{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </div>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="number" title="Num" [width]="1" filter="numeric" format="n0">
     </kendo-grid-column>

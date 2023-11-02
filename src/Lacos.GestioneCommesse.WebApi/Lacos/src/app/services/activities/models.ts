@@ -30,6 +30,7 @@ export interface IActivityReadModel {
     readonly source: string;
     readonly canBeRemoved: boolean;
     readonly jobCode: string;
+    readonly jobHasHighPriority: boolean;
     readonly customer: string;
     readonly expirationDate: Date | string;
 

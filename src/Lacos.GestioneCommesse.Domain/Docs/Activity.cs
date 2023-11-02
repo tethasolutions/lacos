@@ -10,7 +10,7 @@ public class Activity : FullAuditedEntity
 
     public string? Description { get; set; }
 
-    public long CustomerAddressId { get; set; }
+    public long? CustomerAddressId { get; set; }
     public CustomerAddress? CustomerAddress { get; set; }
 
     public long JobId { get; set; }

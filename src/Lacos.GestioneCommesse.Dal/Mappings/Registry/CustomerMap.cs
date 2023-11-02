@@ -21,6 +21,5 @@ public class CustomerMap : BaseEntityMapping<Customer>
         builder.OneToMany(e => e.Jobs, e => e.Customer, e => e.CustomerId);
         builder.OneToMany(e => e.Products, e => e.Customer, e => e.CustomerId);
         builder.OneToMany(e => e.Tickets, e => e.Customer, e => e.CustomerId);
-        builder.OneToMany(e => e.PurchaseOrders, e => e.Customer, e => e.CustomerId);
     }
 }

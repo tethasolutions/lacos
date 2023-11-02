@@ -59,7 +59,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const job = new Job(0, null, today.getFullYear(), today, null, JobStatus.Pending, null);
+        const job = new Job(0, null, today.getFullYear(), today, null, false, JobStatus.Pending, null);
 
         this._subscriptions.push(
             this.jobModal.open(job)

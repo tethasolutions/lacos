@@ -120,7 +120,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
                 filter(e => e),
                 switchMap(() => this._customerService.createCustomer(request)),
                 tap(e => {
-                  this.options.customerId = e;
+                  this.options.customerId = e.id;
                   this._messageBox.success(`Cliente ${request.name} creato`);
                 }),
                 tap(() => this._readCustomers(true))

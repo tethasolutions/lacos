@@ -33,7 +33,7 @@
                     <kendo-formfield class="form-group">
                         <label>Trasporto principale</label>
                         <kendo-combobox [data]="vehicles" [(ngModel)]="options.defaultVehicleId" name="defaultVehicleId"
-                            suggest="true" textField="description" [valuePrimitive]="true" valueField="id" required>
+                            suggest="true" textField="description" [valuePrimitive]="true" valueField="id">
                         </kendo-combobox>
                         <kendo-formerror>Trasporto principale è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>

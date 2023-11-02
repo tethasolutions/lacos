@@ -51,7 +51,7 @@ export class CustomerService {
 
     createCustomer(request: CustomerModel) {
         this.setCustomerTelephoneAndEmailInMainAddress(request);
-        return this._http.post<number>(`${this._baseUrl}/customer`, request)
+        return this._http.post<CustomerModel>(`${this._baseUrl}/customer`, request)
             .pipe(
                 map(e => {
                     return e;

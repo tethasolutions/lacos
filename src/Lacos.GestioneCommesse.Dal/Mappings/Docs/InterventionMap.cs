@@ -27,6 +27,5 @@ public class InterventionMap : BaseEntityMapping<Intervention>
         builder.OneToMany(e => e.Products, e => e.Intervention, e => e.InterventionId);
         builder.OneToMany(e => e.Disputes, e => e.Intervention, e => e.InterventionId);
         builder.OneToMany(e => e.Tickets, e => e.Intervention, e => e.InterventionId);
-        builder.OneToMany(e => e.PurchaseOrders, e => e.Intervention, e => e.InterventionId);
     }
 }

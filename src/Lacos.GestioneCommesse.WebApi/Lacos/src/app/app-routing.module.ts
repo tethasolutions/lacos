@@ -19,6 +19,7 @@ import { InterventionsComponent } from './interventions/interventions.component'
 import { InterventionsListComponent } from './interventions/interventions-list.component';
 import { TicketsComponent } from './ticket/tickets.component';
 import { ActivitiesComponent } from './activities/activities.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -28,6 +29,7 @@ const routes: Routes = [
     { path: 'users', component: UsersComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'vehicles', component: VehiclesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'suppliers', component: SuppliersComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'checklist', component: ChecklistComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'products', component: ProductsComponent, canActivate: [AuthGuard.asInjectableGuard] },

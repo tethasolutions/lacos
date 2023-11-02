@@ -34,6 +34,7 @@ export class AuthGuard {
                 return this._security.isAuthenticated();
             case url === '/users':
             case url === '/customers':
+            case url === '/suppliers':
             case url === '/operators':
             case url === '/vehicles':
             case url === '/checklist':

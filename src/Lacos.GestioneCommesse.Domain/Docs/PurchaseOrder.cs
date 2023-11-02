@@ -7,11 +7,11 @@ public class PurchaseOrder : FullAuditedEntity
     public string? Description { get; set; }
     public PurchaseOrderStatus Status { get; set; }
 
-    public long? InterventionId { get; set; }
-    public Intervention? Intervention { get; set; }
+    public long? JobId { get; set; }
+    public Job? Job { get; set; }
 
-    public long CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public long SupplierId { get; set; }
+    public Supplier? Supplier { get; set; }
 
     public ICollection<PurchaseOrderItem> Items { get; set; }
 

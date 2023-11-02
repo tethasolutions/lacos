@@ -21,6 +21,12 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="code" title="Codice" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="!dataItem.hasHighPriority">{{dataItem.code}}</div>
+            <div *ngIf="dataItem.hasHighPriority" class="job-alert">
+                {{dataItem.code}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </div>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric">
         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"

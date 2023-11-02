@@ -40,18 +40,30 @@
                         <div class="validation-message" [control]="form.controls['number']"></div>
                     </div>
                 </div>
+                <div class="col-md-2">
+                    <label>Priorità Alta</label>
+                    <div class="form-group">
+                        <kendo-switch name="hasHighPriority" [(ngModel)]="options.hasHighPriority" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['hasHighPriority']"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
                 <div class="col-md-7">
                     <label>Cliente</label>
-                    <div class="form-group">
+                    <kendo-formfield class="form-group">
                         <kendo-combobox [data]="customers" [valuePrimitive]="true" textField="name" valueField="id"
                             name="customerId" [(ngModel)]="options.customerId" required [suggest]="true"
-                            [allowCustom]="false" [disabled]="!!options.id">
+                            [allowCustom]="false" [disabled]="!!options.id" class="customer-combobox">
                         </kendo-combobox>
+                        <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button"
+                            title="Nuovo cliente">
+                            <i class="fa fa-plus"></i>
+                        </button>
                         <div class="validation-message" [control]="form.controls['customerId']"></div>
-                    </div>
+                    </kendo-formfield>
                 </div>
             </div>
 
@@ -77,3 +89,5 @@
         </form>
     </kendo-window>
 </div>
+
+<app-customer-modal #customerModal></app-customer-modal>

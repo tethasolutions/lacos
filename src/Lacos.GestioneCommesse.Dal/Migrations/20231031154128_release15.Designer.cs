@@ -1766,7 +1766,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("Suppliers", "Registry");
                 });
 
-            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.SupplierAddress", b =>
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Address", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1853,7 +1853,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("SupplierAddresses", "Registry");
+                    b.ToTable("Addresses", "Registry");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Vehicle", b =>
@@ -2361,7 +2361,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.SupplierAddress", b =>
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Address", b =>
                 {
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Supplier", "Supplier")
                         .WithMany("Addresses")

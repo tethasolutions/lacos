@@ -73,7 +73,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SupplierAddresses",
+                name: "Addresses",
                 schema: "Registry",
                 columns: table => new
                 {
@@ -102,9 +102,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SupplierAddresses", x => x.Id);
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SupplierAddresses_Suppliers_SupplierId",
+                        name: "FK_Addresses_Suppliers_SupplierId",
                         column: x => x.SupplierId,
                         principalSchema: "Registry",
                         principalTable: "Suppliers",
@@ -112,9 +112,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupplierAddresses_SupplierId",
+                name: "IX_Addresses_SupplierId",
                 schema: "Registry",
-                table: "SupplierAddresses",
+                table: "Addresses",
                 column: "SupplierId");
 
             migrationBuilder.AddForeignKey(
@@ -150,7 +150,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                 table: "PurchaseOrders");
 
             migrationBuilder.DropTable(
-                name: "SupplierAddresses",
+                name: "Addresses",
                 schema: "Registry");
 
             migrationBuilder.DropTable(

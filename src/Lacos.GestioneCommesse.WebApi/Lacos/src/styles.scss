@@ -265,21 +265,6 @@ kendo-scheduler .k-event .k-event-actions:first-child,
     margin: 0;
 }
 
-.dashboardBtn {
-    width: 90%;
-    padding: 15px;
-    min-height: 100px;
-}
-
-.dashboardBtn:hover {
-    background-color: #46a43e;
-    color: #FFF;
-}
-
-.dashboardBtn .title {
-    padding-bottom: 10px;
-}
-
 .lacos {
     color: #46a43e;
 }
@@ -334,3 +319,17 @@ app-activities {
 .job-alert {
     color: #dc3545;
 }
+
+.activity-color {
+    padding: 0;
+    position: relative !important;
+    &>div {
+        position: absolute;
+        top:0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px solid #FFF;
+    }
+}
+

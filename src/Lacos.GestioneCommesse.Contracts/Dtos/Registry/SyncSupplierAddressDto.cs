@@ -1,6 +1,6 @@
 ﻿namespace Lacos.GestioneCommesse.Contracts.Dtos.Registry
 {
-    public class SyncSupplierAddressDto:SyncBaseDto
+    public class SyncAddressDto:SyncBaseDto
     {
         public string? Description { get; set; }
         public string? City { get; set; }

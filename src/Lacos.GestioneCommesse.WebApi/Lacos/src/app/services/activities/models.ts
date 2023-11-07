@@ -26,7 +26,9 @@ export interface IActivityReadModel {
     readonly description: string;
     readonly status: ActivityStatus;
     readonly customerAddress: string;
+    readonly typeId: number;
     readonly type: string;
+    readonly activityColor: string;
     readonly source: string;
     readonly canBeRemoved: boolean;
     readonly jobCode: string;

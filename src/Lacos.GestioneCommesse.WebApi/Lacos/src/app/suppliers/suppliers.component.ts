@@ -24,7 +24,7 @@ export class SuppliersComponent extends BaseComponent implements OnInit {
   dataSuppliers: GridDataResult;
   stateGridSuppliers: State = {
       skip: 0,
-      take: 10,
+      take: 30,
       filter: {
           filters: [],
           logic: 'and'

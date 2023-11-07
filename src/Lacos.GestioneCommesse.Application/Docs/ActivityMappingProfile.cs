@@ -26,7 +26,8 @@ public class ActivityMappingProfile : Profile
             .MapMember(x => x.Number, y => y.RowNumber)
             .MapMember(x => x.JobCode, y => y.Job!.Year.ToString() + "/" + y.Job.Number.ToString())
             .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
-            .MapMember(x => x.Customer, y => y.Job!.Customer!.Name);
+            .MapMember(x => x.Customer, y => y.Job!.Customer!.Name)
+            .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex);
 
         CreateMap<ActivityDto, Activity>()
             .IgnoreCommonMembers()

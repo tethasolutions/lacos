@@ -9,9 +9,9 @@ namespace Lacos.GestioneCommesse.Application.Suppliers
     {
         public AddressMappingProfile()
         {
-            CreateMap<SupplierAddress, AddressDto>();
+            CreateMap<Address, AddressDto>();
 
-            CreateMap<AddressDto, SupplierAddress>()
+            CreateMap<AddressDto, Address>()
                 .IgnoreCommonMembers()
                 .Ignore(x => x.Notes)
                 .Ignore(x => x.Supplier);

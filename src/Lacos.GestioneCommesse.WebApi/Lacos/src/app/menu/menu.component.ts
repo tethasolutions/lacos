@@ -53,7 +53,8 @@ export class MenuComponent extends BaseComponent implements OnInit {
             new DropDownMenuEntry('Pianificazione', [
                 new MenuEntry(['/jobs'], 'Commesse',
                     e => e.startsWith('/jobs'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
+                    //e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/activities'], 'Attività',
                     e => e.startsWith('/activities'),
@@ -71,11 +72,11 @@ export class MenuComponent extends BaseComponent implements OnInit {
             new DropDownMenuEntry('Gestione', [
                 new MenuEntry(['/operators'], 'Operatori',
                     e => e.startsWith('/operators'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
                 ),
                 new MenuEntry(['/users'], 'Utenti',
                     e => e.startsWith('/users'),
-                    e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthenticated()
                 )
             ]),
             new MenuEntry(['/logout'], 'Logout',

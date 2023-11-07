@@ -24,7 +24,7 @@ export class ChecklistComponent extends BaseComponent implements OnInit {
 
   stateGridChecklists: State = {
       skip: 0,
-      take: 10,
+      take: 30,
       filter: {
           filters: [],
           logic: 'and'

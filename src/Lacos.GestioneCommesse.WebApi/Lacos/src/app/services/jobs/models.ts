@@ -22,6 +22,7 @@ export interface IJobReadModel {
     readonly code: string;
     readonly date: Date | string;
     readonly description: string;
+    readonly reference: string;
     readonly hasHighPriority: boolean;
     readonly status: JobStatus;
     readonly customerId: number,
@@ -44,6 +45,7 @@ export class Job {
         public year: number,
         date: Date | string,
         public description: string,
+        public reference: string,
         public hasHighPriority: boolean,
         readonly status: JobStatus,
         public customerId: number
@@ -52,7 +54,7 @@ export class Job {
     }
 
     static build(o: Job) {
-        return new Job(o.id, o.number, o.year, o.date, o.description, o.hasHighPriority, o.status, o.customerId);
+        return new Job(o.id, o.number, o.year, o.date, o.description, o.reference, o.hasHighPriority, o.status, o.customerId);
     }
 
 }

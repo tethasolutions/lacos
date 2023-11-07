@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    [Migration("20231031151943_release14")]
-    partial class release14
+    [Migration("20231106145257_release17")]
+    partial class release17
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("AddressId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -126,6 +129,8 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("CustomerAddressId");
 
@@ -666,6 +671,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("AddressId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -703,6 +711,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
+                    b.Property<bool>("HasHighPriority")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -713,10 +724,15 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("CustomerId");
 
@@ -1173,6 +1189,15 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<bool>("CanGenerateTickets")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Contact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactTelephone")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1834,7 +1859,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long>("SupplierId")
+                    b.Property<long?>("SupplierId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Telephone")
@@ -1998,6 +2023,10 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Activity", b =>
                 {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Address", "Address")
+                        .WithMany("Activities")
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.CustomerAddress", "CustomerAddress")
                         .WithMany("Activities")
                         .HasForeignKey("CustomerAddressId");
@@ -2021,6 +2050,8 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("CustomerAddress");
 
@@ -2167,11 +2198,17 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Job", b =>
                 {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Address", "Address")
+                        .WithMany("Jobs")
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Customer", "Customer")
                         .WithMany("Jobs")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("Customer");
                 });
@@ -2362,9 +2399,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                 {
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Supplier", "Supplier")
                         .WithMany("Addresses")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                        .HasForeignKey("SupplierId");
 
                     b.Navigation("Supplier");
                 });
@@ -2489,6 +2524,13 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("PurchaseOrders");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Address", b =>
+                {
+                    b.Navigation("Activities");
+
+                    b.Navigation("Jobs");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Vehicle", b =>

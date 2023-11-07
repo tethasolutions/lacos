@@ -23,9 +23,9 @@ public class AddressesSupplierController : LacosApiController
     }
 
     [HttpGet("address/customer/{id}")]
-    public async Task<ActionResult<AddressDto>> GetSupplierAddresses(long id)
+    public async Task<ActionResult<AddressDto>> GetAddresses(long id)
     {
-        var addresses = await addressSupplierService.GetSupplierAddresses(id);
+        var addresses = await addressSupplierService.GetAddresses(id);
 
         return Ok(addresses);
     }

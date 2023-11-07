@@ -164,7 +164,7 @@ class SelectableJob {
         this.id = job.id;
         this.customer = job.customer;
         this.code = job.code;
-        this.fullName = `${job.code} - ${job.customer}`;
+        this.fullName = `${job.code} - ${job.customer} - ${job.reference}`;
         this.customerId = job.customerId;
         this.description = job.description;
     }

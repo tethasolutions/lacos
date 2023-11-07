@@ -31,7 +31,6 @@ export class AuthGuard {
             case url === '/tickets':
             case url === '/orders':
             case url === '/activities':
-                return this._security.isAuthenticated();
             case url === '/users':
             case url === '/customers':
             case url === '/suppliers':
@@ -42,7 +41,8 @@ export class AuthGuard {
             case url === '/activitytypes':
             case url === '/producttypes':
             case url === '/jobs':
-                return this._security.isAuthorized(Role.Administrator);
+                return this._security.isAuthenticated();
+            //return this._security.isAuthorized(Role.Operator);
             default:
                 throw new Error(`Url ${url} sconosciuto`);
         }

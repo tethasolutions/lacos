@@ -23,17 +23,17 @@
                         <div class="validation-message" [control]="form.controls['number']"></div>
                     </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-7">
                     <label>Commessa</label>
                     <div class="form-group">
                         <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
-                            [(ngModel)]="options.activity.jobId" required [suggest]="true" [allowCustom]="false"
+                            [(ngModel)]="options.activity.jobId" required [suggest]="true" [allowCustom]="false" [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
                             [valuePrimitive]="true" (valueChange)="onJobChanged()" [readonly]="jobReadonly">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['jobId']"></div>
                     </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-3">
                     <label>Tipologia</label>
                     <div class="form-group">
                         <kendo-combobox [data]="activityTypes" [valuePrimitive]="true" textField="name" valueField="id"

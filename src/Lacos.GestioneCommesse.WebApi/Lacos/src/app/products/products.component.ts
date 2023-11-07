@@ -26,7 +26,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
 
   stateGridProducts: State = {
       skip: 0,
-      take: 10,
+      take: 30,
       filter: {
           filters: [],
           logic: 'and'

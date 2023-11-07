@@ -65,6 +65,14 @@
                         <div class="validation-message" [control]="form.controls['customerId']"></div>
                     </kendo-formfield>
                 </div>
+                <div class="col-md-5">
+                    <label>Riferimento Commessa</label>
+                    <div class="form-group">
+                        <input class="form-control" name="reference" [(ngModel)]="options.reference"
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['reference']"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">

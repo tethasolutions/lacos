@@ -13,7 +13,7 @@ public interface IAddressSupplierService
     Task<AddressDto> GetAddress(
         long id);
 
-    Task<IEnumerable<AddressDto>> GetSupplierAddresses(long supplierId);
+    Task<IEnumerable<AddressDto>> GetAddresses(long supplierId);
 
     Task<AddressDto> CreateAddress(
         AddressDto addressDto);
@@ -32,27 +32,27 @@ public interface IAddressSupplierService
 public class AddressSupplierService : IAddressSupplierService
 {
     private readonly IMapper mapper;
-    private readonly IRepository<SupplierAddress> supplierAddressRepository;
+    private readonly IRepository<Address> addressRepository;
     private readonly ILacosDbContext dbContext;
 
     public AddressSupplierService(
         IMapper mapper,
-        IRepository<SupplierAddress> supplierAddressRepository,
+        IRepository<Address> addressRepository,
         ILacosDbContext dbContext)
     {
         this.mapper = mapper;
-        this.supplierAddressRepository = supplierAddressRepository;
+        this.addressRepository = addressRepository;
         this.dbContext = dbContext;
     }
 
     public async Task<AddressDto> GetAddress(
         long id)
     {
-        var address = await supplierAddressRepository.Get(id);
+        var address = await addressRepository.Get(id);
 
         if (address == null)
         {
-            throw new NotFoundException(typeof(SupplierAddress), id);
+            throw new NotFoundException(typeof(Address), id);
         }
 
         return address.MapTo<AddressDto>(mapper);
@@ -61,12 +61,12 @@ public class AddressSupplierService : IAddressSupplierService
     public async Task<AddressDto> CreateAddress(
         AddressDto addressDto)
     {
-        var address = addressDto.MapTo<SupplierAddress>(mapper);
+        var address = addressDto.MapTo<Address>(mapper);
 
         if (address.IsMainAddress)
             ResetAddresses(address.SupplierId, null);
         
-        await supplierAddressRepository.Insert(address);
+        await addressRepository.Insert(address);
 
         await dbContext.SaveChanges();
 
@@ -77,11 +77,11 @@ public class AddressSupplierService : IAddressSupplierService
         long id,
         AddressDto addressDto)
     {
-        var address = await supplierAddressRepository.Get(id);
+        var address = await addressRepository.Get(id);
 
         if (address == null)
         {
-            throw new NotFoundException(typeof(SupplierAddress), id);
+            throw new NotFoundException(typeof(Address), id);
         }
 
         addressDto.MapTo(address, mapper);
@@ -94,25 +94,25 @@ public class AddressSupplierService : IAddressSupplierService
     public async Task DeleteAddress(
         long id)
     {
-        var address = await supplierAddressRepository.Get(id);
+        var address = await addressRepository.Get(id);
 
         if (address == null)
         {
-            throw new NotFoundException(typeof(SupplierAddress), id);
+            throw new NotFoundException(typeof(Address), id);
         }
 
         if (address.IsMainAddress)
         {
             ResetAddresses(address.SupplierId, address.Id);
             
-            var firstAddress = await supplierAddressRepository
+            var firstAddress = await addressRepository
                 .Query()
                 .FirstAsync(x => x.SupplierId == address.SupplierId && x.Id != address.Id);
 
             firstAddress.IsMainAddress = true;
         }
         
-        supplierAddressRepository.Delete(address);
+        addressRepository.Delete(address);
 
         await dbContext.SaveChanges();
     }
@@ -120,18 +120,18 @@ public class AddressSupplierService : IAddressSupplierService
     public async Task<AddressDto> SetMainAddress(
         long id)
     {
-        var address = await supplierAddressRepository.Get(id);
+        var address = await addressRepository.Get(id);
 
         if (address == null)
         {
-            throw new NotFoundException(typeof(SupplierAddress), id);
+            throw new NotFoundException(typeof(Address), id);
         }
 
         ResetAddresses(address.SupplierId, address.Id);
 
         address.IsMainAddress = true;
 
-        supplierAddressRepository.Update(address);
+        addressRepository.Update(address);
 
         await dbContext.SaveChanges();
 
@@ -139,10 +139,10 @@ public class AddressSupplierService : IAddressSupplierService
     }
     
     private void ResetAddresses(
-        long contactId,
+        long? contactId,
         long? addressId)
     {
-        var addresses = supplierAddressRepository
+        var addresses = addressRepository
             .Query()
             .Where(x => x.SupplierId == contactId && x.Id != addressId)
             .ToArray();
@@ -150,22 +150,22 @@ public class AddressSupplierService : IAddressSupplierService
         foreach (var a in addresses)
         {
             a.IsMainAddress = false;
-            supplierAddressRepository.Update(a);
+            addressRepository.Update(a);
         }
     }
 
-    public async Task<IEnumerable<AddressDto>> GetSupplierAddresses(
+    public async Task<IEnumerable<AddressDto>> GetAddresses(
         long supplierId)
     {
 
-        var addresses = supplierAddressRepository
+        var addresses = addressRepository
             .Query()
             .Where(x => x.SupplierId == supplierId)
             .ToArray();
 
         if (addresses == null)
         {
-            throw new NotFoundException(typeof(SupplierAddress), supplierId);
+            throw new NotFoundException(typeof(Address), supplierId);
         }
 
         return addresses.MapTo<IEnumerable<AddressDto>>(mapper);

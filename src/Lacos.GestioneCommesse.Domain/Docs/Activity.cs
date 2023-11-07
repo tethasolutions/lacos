@@ -19,6 +19,9 @@ public class Activity : FullAuditedEntity
     public long TypeId { get; set; }
     public ActivityType? Type { get; set; }
 
+    public long? AddressId { get; set; }
+    public Address? Address { get; set; }
+
     public long? SourceTicketId { get; set; }
     public Ticket? SourceTicket { get; set; }
 

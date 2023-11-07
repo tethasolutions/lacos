@@ -60,6 +60,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("AddressId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -123,6 +126,8 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("CustomerAddressId");
 
@@ -663,6 +668,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("AddressId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -713,10 +721,15 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("CustomerId");
 
@@ -1043,6 +1056,96 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("ActivityTypes", "Registry");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Address", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMainAddress")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<long?>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Telephone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("Addresses", "Registry");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.CheckList", b =>
                 {
                     b.Property<long>("Id")
@@ -1173,6 +1276,15 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<bool>("CanGenerateTickets")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Contact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactTelephone")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1763,96 +1875,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("Suppliers", "Registry");
                 });
 
-            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.SupplierAddress", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("CreatedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("DeletedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset?>("DeletedOn")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("EditedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("EditedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset?>("EditedOn")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMainAddress")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Province")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("StreetAddress")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<long>("SupplierId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Telephone")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("SupplierAddresses", "Registry");
-                });
-
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Vehicle", b =>
                 {
                     b.Property<long>("Id")
@@ -1998,6 +2020,10 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Activity", b =>
                 {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Address", "Address")
+                        .WithMany("Activities")
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.CustomerAddress", "CustomerAddress")
                         .WithMany("Activities")
                         .HasForeignKey("CustomerAddressId");
@@ -2021,6 +2047,8 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("CustomerAddress");
 
@@ -2167,11 +2195,17 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Job", b =>
                 {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Address", "Address")
+                        .WithMany("Jobs")
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Customer", "Customer")
                         .WithMany("Jobs")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("Customer");
                 });
@@ -2246,6 +2280,15 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .IsRequired();
 
                     b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Address", b =>
+                {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Supplier", "Supplier")
+                        .WithMany("Addresses")
+                        .HasForeignKey("SupplierId");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.CheckList", b =>
@@ -2358,17 +2401,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.SupplierAddress", b =>
-                {
-                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Supplier", "Supplier")
-                        .WithMany("Addresses")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.Navigation("Supplier");
-                });
-
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Activity", b =>
                 {
                     b.Navigation("ActivityProducts");
@@ -2430,6 +2462,13 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Activities");
 
                     b.Navigation("CheckLists");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Address", b =>
+                {
+                    b.Navigation("Activities");
+
+                    b.Navigation("Jobs");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.CheckList", b =>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    [Migration("20231031151943_release14")]
-    partial class release14
+    [Migration("20231102160233_release16")]
+    partial class release16
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -703,6 +703,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
+                    b.Property<bool>("HasHighPriority")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -712,6 +715,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -1173,6 +1179,15 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<bool>("CanGenerateTickets")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Contact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactTelephone")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");

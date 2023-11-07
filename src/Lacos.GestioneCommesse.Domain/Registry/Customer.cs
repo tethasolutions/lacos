@@ -12,6 +12,10 @@ public class Customer : FullAuditedEntity
     public string? Email { get; set; }
     public bool CanGenerateTickets { get; set; }
 
+    public string? Contact { get; set; }
+    public string? ContactTelephone { get; set; }
+    public string? ContactEmail { get; set; }
+
     public long? UserId { get; set; }
     public User? User { get; set; }
 

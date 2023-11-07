@@ -8,10 +8,14 @@ public class Job : FullAuditedEntity
     public int Year { get; set; }
     public DateTimeOffset JobDate { get; set; }
     public string? Description { get; set; }
+    public string? Reference { get; set; }
     public bool HasHighPriority { get; set; }
 
     public long CustomerId { get; set; }
     public Customer? Customer { get; set; }
+
+    public long? AddressId { get; set; }
+    public Address? Address { get; set; }
     
     public ICollection<Activity> Activities { get; set; }
     public ICollection<PurchaseOrder> PurchaseOrders { get; set; }

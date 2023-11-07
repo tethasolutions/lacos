@@ -26,7 +26,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     data: GridDataResult;
     gridState: State = {
         skip: 0,
-        take: 15,
+        take: 30,
         filter: {
             filters: [
                 {
@@ -63,7 +63,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null);
+        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null);
 
         this._subscriptions.push(
             this.ticketModal.open(ticket)

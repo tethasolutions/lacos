@@ -11,7 +11,7 @@ public class ActivityReadModel
     public bool? JobHasHighPriority { get; set; }
     public string? Description { get; set; }
     public ActivityStatus Status { get; set; }
-    public string? CustomerAddress { get; set; }
+    public string? Address { get; set; }
     public string? Customer { get; set; }
     public long TypeId { get; set; }
     public string? Type { get; set; }

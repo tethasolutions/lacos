@@ -1,4 +1,5 @@
-﻿using Lacos.GestioneCommesse.Domain.Registry;
+﻿using Lacos.GestioneCommesse.Application.Registry.DTOs;
+using Lacos.GestioneCommesse.Domain.Registry;
 
 namespace Lacos.GestioneCommesse.Application.Customers.DTOs
 {

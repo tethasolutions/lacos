@@ -17,9 +17,6 @@ public class TicketDto : BaseEntityDto
     public long CustomerId { get; set; }
     public string? CustomerName { get; set; }
 
-    public long CustomerAddressId { get; set; }
-    public string? CustomerFullAddress { get; set; }
-
     public ICollection<TicketPicture> Pictures { get; set; }
 
     public TicketDto()

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class AddressModel {
     id: number;
     customerId: number;
+    supplierId: number;
     description: string;
     city: string;
     streetAddress: string;
@@ -26,6 +27,7 @@ export class AddressModel {
     constructor() {
         this.id = null;
         this.customerId = null;
+        this.supplierId = null;
         this.description = '';
         this.city = null;
         this.streetAddress = null;

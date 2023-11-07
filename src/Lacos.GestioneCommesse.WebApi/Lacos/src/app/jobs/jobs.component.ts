@@ -31,7 +31,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
     data: GridDataResult;
     gridState: State = {
         skip: 0,
-        take: 15,
+        take: 30,
         filter: {
             filters: [
                 {

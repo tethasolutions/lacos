@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ApiUrls } from './common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
-import { AddressSupplierModel } from '../shared/models/address-supplier.model';
+import { AddressModel } from '../shared/models/address.model';
 import { SupplierModel } from '../shared/models/supplier.model';
 
 @Injectable()
@@ -28,15 +28,15 @@ export class SupplierService {
                         e.data.forEach(item => {
                             const supplier: SupplierModel = Object.assign(new SupplierModel(), item);
 
-                            const addresses: Array<AddressSupplierModel> = [];
+                            const addresses: Array<AddressModel> = [];
                             supplier.addresses.forEach(addressitem => {
-                                const address: AddressSupplierModel = Object.assign(new AddressSupplierModel(), addressitem);
+                                const address: AddressModel = Object.assign(new AddressModel(), addressitem);
                                 addresses.push(address);
                             });
                             supplier.addresses = addresses;
 
                             let mainAddress = addresses.find(x => x.isMainAddress);
-                            if (mainAddress == undefined) { mainAddress = new AddressSupplierModel(); }
+                            if (mainAddress == undefined) { mainAddress = new AddressModel(); }
                             supplier.mainAddress = mainAddress;
                             suppliers.push(supplier);
                         });
@@ -88,15 +88,15 @@ export class SupplierService {
                 map(e => {
                     const supplier: SupplierModel = Object.assign(new SupplierModel(), e);
 
-                    const addresses: Array<AddressSupplierModel> = [];
+                    const addresses: Array<AddressModel> = [];
                     supplier.addresses.forEach(item => {
-                        const address: AddressSupplierModel = Object.assign(new AddressSupplierModel(), item);
+                        const address: AddressModel = Object.assign(new AddressModel(), item);
                         addresses.push(address);
                     });
                     supplier.addresses = addresses;
 
                     let mainAddress = addresses.find(x => x.isMainAddress);
-                    if (mainAddress == undefined) { mainAddress = new AddressSupplierModel(); }
+                    if (mainAddress == undefined) { mainAddress = new AddressModel(); }
                     supplier.mainAddress = mainAddress;
 
                     supplier.telephone = mainAddress.telephone;
@@ -116,15 +116,15 @@ export class SupplierService {
                         e.forEach(item => {
                             const supplier: SupplierModel = Object.assign(new SupplierModel(), item);
 
-                            const addresses: Array<AddressSupplierModel> = [];
+                            const addresses: Array<AddressModel> = [];
                             supplier.addresses.forEach(addressitem => {
-                                const address: AddressSupplierModel = Object.assign(new AddressSupplierModel(), addressitem);
+                                const address: AddressModel = Object.assign(new AddressModel(), addressitem);
                                 addresses.push(address);
                             });
                             supplier.addresses = addresses;
 
                             let mainAddress = addresses.find(x => x.isMainAddress);
-                            if (mainAddress == undefined) { mainAddress = new AddressSupplierModel(); }
+                            if (mainAddress == undefined) { mainAddress = new AddressModel(); }
                             supplier.mainAddress = mainAddress;
                             suppliers.push(supplier);
                         });

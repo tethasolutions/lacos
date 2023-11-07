@@ -8,10 +8,9 @@ import { Role } from '../services/security/models';
 import { AddressesModalComponent } from '../addresses-modal/addresses-modal.component';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { SupplierService } from '../services/supplier.service';
-import { AddressSupplierModalComponent } from '../address-modal/address-supplier-modal.component';
-import { AddressSupplierModel } from '../shared/models/address-supplier.model';
-import { AddressesSupplierService } from '../services/addressesSupplier.service';
-import { AddressesSupplierModalComponent } from '../addresses-modal/addresses-supplier-modal.component';
+import { AddressesService } from '../services/addresses.service';
+import { AddressModalComponent } from '../address-modal/address-modal.component';
+import { AddressModel } from '../shared/models/address.model';
 
 @Component({
     selector: 'app-supplier-modal',
@@ -22,8 +21,8 @@ import { AddressesSupplierModalComponent } from '../addresses-modal/addresses-su
 export class SupplierModalComponent extends ModalComponent<SupplierModel> {
 
     @ViewChild('form') form: NgForm;
-    @ViewChild('addressSupplierModal', { static: true }) addressSupplierModal: AddressSupplierModalComponent;
-    @ViewChild('addressesSupplierModal', { static: true }) addressesSupplierModal: AddressesSupplierModalComponent;
+    @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
+    @ViewChild('addressesModal', { static: true }) addressesModal: AddressesModalComponent;
 
     readonly role = Role;
     
@@ -35,7 +34,7 @@ export class SupplierModalComponent extends ModalComponent<SupplierModel> {
     constructor(
         private readonly _messageBox: MessageBoxService,
         private readonly _supplierService: SupplierService,
-        private readonly _addressesService: AddressesSupplierService
+        private readonly _addressesService: AddressesService
     ) {
         super();
     }
@@ -50,19 +49,19 @@ export class SupplierModalComponent extends ModalComponent<SupplierModel> {
         return this.form.valid;
     }
 
-    mainAddressChanged(address: AddressSupplierModel) {
+    mainAddressChanged(address: AddressModel) {
         if (address === undefined) { return; }
-        this.options.addresses.forEach((item: AddressSupplierModel) => {
+        this.options.addresses.forEach((item: AddressModel) => {
             item.isMainAddress = item.tempId === address.tempId;
         });
     }
 
-    addNewAddress(address: AddressSupplierModel) {
+    addNewAddress(address: AddressModel) {
         if (this.options.id == null) {
             this.options.addresses.push(address);
             if (address.isMainAddress) {
                 this.options.mainAddress = address;
-                this.options.addresses.forEach((item: AddressSupplierModel) => {
+                this.options.addresses.forEach((item: AddressModel) => {
                     item.isMainAddress = item.tempId === address.tempId;
                 });
             }
@@ -94,10 +93,10 @@ export class SupplierModalComponent extends ModalComponent<SupplierModel> {
     }
 
     createAddress() {
-        const request = new AddressSupplierModel();
+        const request = new AddressModel();
         request.supplierId = this.options.id;
         this._subscriptions.push(
-            this.addressSupplierModal.open(request)
+            this.addressModal.open(request)
                 .pipe(
                     filter(e => e),
                     tap(() => {
@@ -110,7 +109,7 @@ export class SupplierModalComponent extends ModalComponent<SupplierModel> {
 
     editAddresses() {
         this._subscriptions.push(
-            this.addressesSupplierModal.open()
+            this.addressesModal.open()
                 .pipe(
                     filter(e => e),
                     tap(() => {

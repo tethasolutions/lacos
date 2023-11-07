@@ -17,7 +17,7 @@
         public long? CustomerId { get; set; }
 
         // associazione della porta rei con indirizzo del cliente
-        public long? CustomerAddressId { get; set; }
+        public long? AddressId { get; set; }
 
         public long? ProductTypeId { get; set; }
 

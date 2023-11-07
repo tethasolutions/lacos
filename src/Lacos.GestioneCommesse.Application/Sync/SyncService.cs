@@ -108,7 +108,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             syncFullDb.CheckLists = await GetAllModifiedRecord<CheckList, SyncCheckListDto>(date);
             syncFullDb.CheckListItems = await GetAllModifiedRecord<CheckListItem, SyncCheckListItemDto>(date);
             syncFullDb.Customers = await GetAllModifiedRecord<Customer, SyncCustomerDto>(date);
-            syncFullDb.CustomerAddresses = await GetAllModifiedRecord<CustomerAddress, SyncCustomerAddressDto>(date);
+            syncFullDb.Addresses = await GetAllModifiedRecord<Address, SyncAddressDto>(date);
             syncFullDb.OperatorDocuments = await GetAllModifiedRecord<OperatorDocument, SyncOperatorDocumentDto>(date);
             syncFullDb.Products = await GetAllModifiedRecord<Product, SyncProductDto>(date);
             syncFullDb.ProductDocuments = await GetAllModifiedRecord<ProductDocument, SyncProductDocumentDto>(date);

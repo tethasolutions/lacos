@@ -11,6 +11,7 @@
         public string? Email { get; set; }
         public bool? IsMainAddress { get; set; }
         public string? Notes { get; set; }
+        public long? CustomerId { get; set; }
         public long? SupplierId { get; set; }
     }
 }

@@ -36,6 +36,7 @@ public class JobMappingProfile : Profile
             .IgnoreCommonMembers()
             .Ignore(x => x.Activities)
             .Ignore(x => x.Customer)
+            .Ignore(x => x.Address)
             .Ignore(x => x.Number)
             .Ignore(x => x.Year)
             .Ignore(x => x.PurchaseOrders)

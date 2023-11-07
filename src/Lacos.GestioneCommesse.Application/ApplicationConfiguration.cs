@@ -25,7 +25,6 @@ public static class ApplicationConfiguration
             .AddScoped<ICustomerService, CustomerService>()
             .AddScoped<ISupplierService, SupplierService>()
             .AddScoped<IAddressService, AddressService>()
-            .AddScoped<IAddressSupplierService, AddressSupplierService>()
             .AddScoped<IActivityTypeService, ActivityTypeService>()
             .AddScoped<IProductTypeService, ProductTypeService>()
             .AddScoped<IVehicleService, VehicleService>()

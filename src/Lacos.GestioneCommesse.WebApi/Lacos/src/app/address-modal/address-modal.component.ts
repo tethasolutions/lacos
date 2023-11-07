@@ -6,6 +6,7 @@ import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { Role } from '../services/security/models';
 import { CustomerModel } from '../shared/models/customer.model';
+import { SupplierModel } from '../shared/models/supplier.model';
 
 @Component({
   selector: 'app-address-modal',
@@ -21,6 +22,7 @@ export class AddressModalComponent extends ModalComponent<AddressModel> {
   readonly role = Role;
 
   @Input() customer = new CustomerModel();
+  @Input() supplier = new SupplierModel();
 
   constructor(
       private readonly _messageBox: MessageBoxService

@@ -16,9 +16,6 @@ public class Ticket : FullAuditedEntity
     public long CustomerId { get; set; }
     public Customer? Customer { get; set; }
 
-    public long CustomerAddressId { get; set; }
-    public CustomerAddress? CustomerAddress { get; set; }
-
     public Activity? GeneratedActivity { get; set; }
 
     public ICollection<TicketPicture> Pictures { get; set; }

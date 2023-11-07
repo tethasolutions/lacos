@@ -68,4 +68,18 @@ export class AddressesService {
                 })
             );
     }
+    
+    getSupplierAddresses(supplierId: number) {      
+        return this._http.get<Array<AddressModel>>(`${this._baseUrl}/address/supplier/${supplierId}`)
+            .pipe(
+                map(result => {
+                    const addresses: Array<AddressModel> = [];
+                    result.forEach(item => {
+                        const address = Object.assign(new AddressModel(), item);
+                        addresses.push(address);
+                    });
+                    return addresses;
+                })
+            );
+    }
 }

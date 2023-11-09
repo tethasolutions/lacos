@@ -46,7 +46,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     }
 
     onJobChanged() {
-        this.options.activity.customerAddressId = null;
+        this.options.activity.addressId = null;
 
         this._tryGetCustomer();
     }
@@ -156,6 +156,7 @@ class SelectableJob {
     readonly code: string;
     readonly fullName: string;
     readonly customerId: number;
+    readonly addressId: number;
     readonly description: string;
 
     constructor(
@@ -164,8 +165,9 @@ class SelectableJob {
         this.id = job.id;
         this.customer = job.customer;
         this.code = job.code;
-        this.fullName = `${job.code} - ${job.customer} - ${job.reference}`;
+        this.fullName = `${job.code} - ${job.customer}` + ((job.reference)? ` - ${job.reference}` : ``);
         this.customerId = job.customerId;
+        this.addressId = job.addressId;
         this.description = job.description;
     }
 

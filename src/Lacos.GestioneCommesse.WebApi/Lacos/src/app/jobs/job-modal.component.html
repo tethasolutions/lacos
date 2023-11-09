@@ -43,7 +43,8 @@
                 <div class="col-md-2">
                     <label>Priorità Alta</label>
                     <div class="form-group">
-                        <kendo-switch name="hasHighPriority" [(ngModel)]="options.hasHighPriority" onLabel="Si" offLabel="No">
+                        <kendo-switch name="hasHighPriority" [(ngModel)]="options.hasHighPriority" onLabel="Si"
+                            offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['hasHighPriority']"></div>
                     </div>
@@ -51,7 +52,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-6">
                     <label>Cliente</label>
                     <kendo-formfield class="form-group">
                         <kendo-combobox [data]="customers" [valuePrimitive]="true" textField="name" valueField="id"
@@ -65,16 +66,31 @@
                         <div class="validation-message" [control]="form.controls['customerId']"></div>
                     </kendo-formfield>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
+                    <label>Indirizzo</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="customers?.addresses" [valuePrimitive]="true" textField="fullAddress"
+                            class="address-combobox" valueField="id" name="addressId"
+                            [(ngModel)]="options.job.addressId" [suggest]="true" [allowCustom]="false" [disabled]="!!options.job.id">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['customerAddressId']"></div>
+                        <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button"
+                            title="Nuovo indirizzo">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <label>Riferimento Commessa</label>
                     <div class="form-group">
-                        <input class="form-control" name="reference" [(ngModel)]="options.reference"
-                            maxlength="255" novalidate autocomplete="off" />
+                        <input class="form-control" name="reference" [(ngModel)]="options.reference" maxlength="255"
+                            novalidate autocomplete="off" />
                         <div class="validation-message" [control]="form.controls['reference']"></div>
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-12">
                     <label>Descrizione</label>

@@ -328,9 +328,9 @@ class SelectableActivity {
         activity: IActivityReadModel
     ) {
         this.id = activity.id;
-        this.customerAddress = activity.customerAddress;
+        this.customerAddress = activity.address;
         this.number = activity.number;
-        this.fullName = `${activity.number} - ${activity.customerAddress}`;
+        this.fullName = `${activity.number} - ${activity.address}`;
     }
 
 }

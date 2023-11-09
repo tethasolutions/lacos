@@ -27,7 +27,8 @@
                     <label>Commessa</label>
                     <div class="form-group">
                         <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
-                            [(ngModel)]="options.activity.jobId" required [suggest]="true" [allowCustom]="false" [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            [(ngModel)]="options.activity.jobId" required [suggest]="true" [allowCustom]="false" 
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
                             [valuePrimitive]="true" (valueChange)="onJobChanged()" [readonly]="jobReadonly">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['jobId']"></div>
@@ -38,6 +39,7 @@
                     <div class="form-group">
                         <kendo-combobox [data]="activityTypes" [valuePrimitive]="true" textField="name" valueField="id"
                             name="typeId" [(ngModel)]="options.activity.typeId" required [suggest]="true" (valueChange)="onActivityTypeChange()" 
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
                             [allowCustom]="false" [disabled]="options.activity.id" >
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['typeId']"></div>
@@ -49,11 +51,14 @@
                 <div class="col-md-6">
                     <label>Indirizzo</label>
                     <div class="form-group">
-                        <kendo-combobox [data]="customer?.addresses" [valuePrimitive]="true" textField="fullAddress"
-                            valueField="id" name="customerAddressId" [(ngModel)]="options.activity.customerAddressId"
+                        <kendo-combobox [data]="customer?.addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
+                            valueField="id" name="addressId" [(ngModel)]="options.activity.addressId"
                             [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false" [disabled]="!!options.activity.id">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['customerAddressId']"></div>
+                        <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
+                            <i class="fa fa-plus"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="col-md-3">

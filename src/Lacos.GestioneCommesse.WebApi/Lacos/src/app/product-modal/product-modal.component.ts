@@ -100,7 +100,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   }
 
   customerChanged(customerId: number) {
-    this.options.customerAddressId = null;
+    this.options.addressId = null;
     if (customerId == undefined) { 
       this.customerSelezionato = new CustomerModel();
       return; 
@@ -150,7 +150,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
           .pipe(
               map(e => e),
               tap(e => {
-                this.options.customerAddressId = e;
+                this.options.addressId = e;
                 address.id = e;
                 const customerSelezionato: CustomerModel = this.customers.find(x => x.id === this.options.customerId);
                 if (customerSelezionato != undefined) { 

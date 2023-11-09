@@ -11,5 +11,6 @@ public class JobReadModel
     public JobStatusDto Status { get; set; }
     public long CustomerId { get; set; }
     public string? Customer { get; set; }
+    public string? Address { get; set; }
     public bool CanBeRemoved { get; set; }
 }

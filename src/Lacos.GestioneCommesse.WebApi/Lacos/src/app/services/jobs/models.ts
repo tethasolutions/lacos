@@ -25,8 +25,10 @@ export interface IJobReadModel {
     readonly reference: string;
     readonly hasHighPriority: boolean;
     readonly status: JobStatus;
-    readonly customerId: number,
+    readonly customerId: number;
     readonly customer: string;
+    readonly addressId: number;
+    readonly address: string;
     readonly canBeRemoved: boolean;
 
 }
@@ -48,13 +50,14 @@ export class Job {
         public reference: string,
         public hasHighPriority: boolean,
         readonly status: JobStatus,
-        public customerId: number
+        public customerId: number,
+        public addressId: number
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: Job) {
-        return new Job(o.id, o.number, o.year, o.date, o.description, o.reference, o.hasHighPriority, o.status, o.customerId);
+        return new Job(o.id, o.number, o.year, o.date, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId);
     }
 
 }

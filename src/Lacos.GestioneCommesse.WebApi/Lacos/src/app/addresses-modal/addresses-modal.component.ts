@@ -11,6 +11,8 @@ import { AddressesService } from '../services/addresses.service';
 import { CustomerService } from '../services/customer.service';
 import { SupplierService } from '../services/supplier.service';
 import { SupplierModel } from '../shared/models/supplier.model';
+import { Job } from '../services/jobs/models';
+import { Activity } from '../services/activities/models';
 
 @Component({
   selector: 'app-addresses-modal',

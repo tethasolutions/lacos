@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Activity, ActivityStatus } from '../services/activities/models';
 import { ModalComponent } from '../shared/modal.component';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
-import { tap } from 'rxjs';
+import { filter, map, tap } from 'rxjs';
 import { ActivityTypesService } from '../services/activityTypes.service';
 import { CustomerService } from '../services/customer.service';
 import { NgForm } from '@angular/forms';
@@ -12,6 +12,9 @@ import { JobsService } from '../services/jobs/jobs.service';
 import { State } from '@progress/kendo-data-query';
 import { IJobReadModel, Job } from '../services/jobs/models';
 import { listEnum } from '../services/common/functions';
+import { AddressModel } from '../shared/models/address.model';
+import { AddressesService } from '../services/addresses.service';
+import { AddressModalComponent } from '../address-modal/address-modal.component';
 
 @Component({
     selector: 'app-activity-modal',
@@ -19,8 +22,8 @@ import { listEnum } from '../services/common/functions';
 })
 export class ActivityModalComponent extends ModalComponent<ActivityModalOptions> implements OnInit {
 
-    @ViewChild('form', { static: false })
-    form: NgForm;
+    @ViewChild('form', { static: false }) form: NgForm;
+    @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
 
     activityTypes: ActivityTypeModel[];
     customer: CustomerModel;
@@ -29,6 +32,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     status: ActivityStatus;
     selectedActivityType: ActivityTypeModel;
     selectedJob: SelectableJob;
+    addresses: AddressModel[];
         
     readonly states = listEnum<ActivityStatus>(ActivityStatus);
   
@@ -36,19 +40,21 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         private readonly _activityTypesService: ActivityTypesService,
         private readonly _customersService: CustomerService,
         private readonly _messageBox: MessageBoxService,
-        private readonly _jobsService: JobsService
+        private readonly _jobsService: JobsService,
+        private readonly _addressesService: AddressesService
     ) {
         super();
     }
 
     ngOnInit() {
         this._getActivityTypes();
+        this.readAddresses();
     }
 
     onJobChanged() {
         this.options.activity.addressId = null;
 
-        this._tryGetCustomer();
+        this._tryGetAddress();
     }
 
     onActivityTypeChange() {
@@ -113,31 +119,66 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
             this._jobsService.read(state)
                 .pipe(
                     tap(e => this.jobs = (e.data as IJobReadModel[]).map(e => new SelectableJob(e))),
-                    tap(() => this._tryGetCustomer())
+                    tap(() => this._tryGetAddress())
                 )
                 .subscribe()
         );
     }
 
-    private _tryGetCustomer() {
+    private _tryGetAddress() {
         if (!this.options.activity.jobId) {
-            this.customer = null;
+            this.options.activity.addressId = null;
             return;
         }
 
-        const customerId = this.jobs
+        const addressId = this.jobs
             .find(e => e.id === this.options.activity.jobId)
-            .customerId;
+            .addressId;
 
+        this.options.activity.addressId = addressId;
+    }
+
+    createAddress() {
+        const request = new AddressModel();
         this._subscriptions.push(
-            this._customersService.getCustomer(customerId)
+            this.addressModal.open(request)
                 .pipe(
-                    tap(e => this.customer = e)
+                    filter(e => e),
+                    tap(() => {
+                        this.addNewAddress(request);
+                    })
                 )
                 .subscribe()
         );
     }
 
+    addNewAddress(address: AddressModel) {
+        this._subscriptions.push(
+            this._addressesService.createAddress(address)
+                .pipe(
+                    map(e => e),
+                    tap(e => this._messageBox.success(`Indirizzo creato con successo`)),
+                    tap(() => {
+                        this.readAddresses();
+                        this.options.activity.addressId = address.id;
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    readAddresses() {
+        this._subscriptions.push(
+            this._addressesService.getAddresses()
+                .pipe(
+                    map(e => {
+                        this.addresses = e;
+                    }),
+                    tap(() => { })
+                )
+                .subscribe()
+        );
+    }
 }
 
 export class ActivityModalOptions {

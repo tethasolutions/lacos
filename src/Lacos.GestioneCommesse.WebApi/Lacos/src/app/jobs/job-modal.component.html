@@ -69,11 +69,11 @@
                 <div class="col-md-6">
                     <label>Indirizzo</label>
                     <div class="form-group">
-                        <kendo-combobox [data]="customers?.addresses" [valuePrimitive]="true" textField="fullAddress"
-                            class="address-combobox" valueField="id" name="addressId"
-                            [(ngModel)]="options.job.addressId" [suggest]="true" [allowCustom]="false" [disabled]="!!options.job.id">
+                        <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress"
+                            class="address-combobox" valueField="id" name="addressId" [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            [(ngModel)]="options.addressId" [suggest]="true" [allowCustom]="false" >
                         </kendo-combobox>
-                        <div class="validation-message" [control]="form.controls['customerAddressId']"></div>
+                        <div class="validation-message" [control]="form.controls['addressId']"></div>
                         <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button"
                             title="Nuovo indirizzo">
                             <i class="fa fa-plus"></i>
@@ -115,3 +115,4 @@
 </div>
 
 <app-customer-modal #customerModal></app-customer-modal>
+<app-address-modal #addressModal></app-address-modal>

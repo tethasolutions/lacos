@@ -2,12 +2,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { Job } from '../services/jobs/models';
-import { filter, switchMap, tap } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { refreshUserData } from '../services/security/security.service';
+import { AddressesService } from '../services/addresses.service';
+import { AddressModalComponent } from '../address-modal/address-modal.component';
+import { AddressModel } from '../shared/models/address.model';
 
 @Component({
     selector: 'app-job-modal',
@@ -15,23 +18,24 @@ import { refreshUserData } from '../services/security/security.service';
 })
 export class JobModalComponent extends ModalComponent<Job> implements OnInit {
 
-    @ViewChild('customerModal', { static: true }) 
-    customerModal: CustomerModalComponent;
-    
-    @ViewChild('form', { static: false })
-    form: NgForm;
+    @ViewChild('form', { static: false }) form: NgForm;
+    @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
+    @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
 
     customers: CustomerModel[];
+    addresses: AddressModel[];
 
     constructor(
         private readonly _customersService: CustomerService,
-        private readonly _messageBox: MessageBoxService
+        private readonly _messageBox: MessageBoxService,
+        private readonly _addressesService: AddressesService
     ) {
         super();
     }
 
     ngOnInit() {
         this._getData();
+        this.readAddresses();
     }
 
     onDateChange() {
@@ -65,7 +69,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     createCustomer() {
         const request = new CustomerModel();
         request.fiscalType = 1;
-    
+
         this._subscriptions.push(
             this.customerModal.open(request)
                 .pipe(
@@ -79,5 +83,47 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
                 )
                 .subscribe()
         );
-      }
+    }
+
+    createAddress() {
+        const request = new AddressModel();
+        this._subscriptions.push(
+            this.addressModal.open(request)
+                .pipe(
+                    filter(e => e),
+                    tap(() => {
+                        this.addNewAddress(request);
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    addNewAddress(address: AddressModel) {
+        this._subscriptions.push(
+            this._addressesService.createAddress(address)
+                .pipe(
+                    map(e => e),
+                    tap(e => this._messageBox.success(`Indirizzo creato con successo`)),
+                    tap(() => {
+                        this.readAddresses();
+                        this.options.addressId = address.id;
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    readAddresses() {
+        this._subscriptions.push(
+            this._addressesService.getAddresses()
+                .pipe(
+                    map(e => {
+                        this.addresses = e;
+                    }),
+                    tap(() => { })
+                )
+                .subscribe()
+        );
+    }
 }

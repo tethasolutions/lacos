@@ -51,9 +51,9 @@
                 <div class="col-md-6">
                     <label>Indirizzo</label>
                     <div class="form-group">
-                        <kendo-combobox [data]="customer?.addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
+                        <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
                             valueField="id" name="addressId" [(ngModel)]="options.activity.addressId"
-                            [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false" [disabled]="!!options.activity.id">
+                            [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['customerAddressId']"></div>
                         <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
@@ -109,3 +109,5 @@
         </form>
     </kendo-window>
 </div>
+
+<app-address-modal #addressModal></app-address-modal>

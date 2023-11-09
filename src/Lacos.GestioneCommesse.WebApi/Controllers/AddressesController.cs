@@ -38,6 +38,14 @@ public class AddressesController : LacosApiController
         return Ok(addresses);
     }
 
+    [HttpGet("addresses")]
+    public async Task<ActionResult<AddressDto>> GetAddresses()
+    {
+        var addresses = await addressService.GetAddresses();
+
+        return Ok(addresses);
+    }
+
     [HttpGet("address/{id}")]
     public async Task<ActionResult<AddressDto>> GetAddress(long id)
     {

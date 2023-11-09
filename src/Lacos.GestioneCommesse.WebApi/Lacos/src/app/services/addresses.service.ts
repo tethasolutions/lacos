@@ -82,4 +82,18 @@ export class AddressesService {
                 })
             );
     }
+
+    getAddresses() {      
+        return this._http.get<Array<AddressModel>>(`${this._baseUrl}/addresses`)
+            .pipe(
+                map(result => {
+                    const addresses: Array<AddressModel> = [];
+                    result.forEach(item => {
+                        const address = Object.assign(new AddressModel(), item);
+                        addresses.push(address);
+                    });
+                    return addresses;
+                })
+            );
+    }
 }

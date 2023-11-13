@@ -150,8 +150,8 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
           .pipe(
               map(e => e),
               tap(e => {
-                this.options.addressId = e;
-                address.id = e;
+                this.options.addressId = e.id;
+                address.id = e.id;
                 const customerSelezionato: CustomerModel = this.customers.find(x => x.id === this.options.customerId);
                 if (customerSelezionato != undefined) { 
                   customerSelezionato.addresses.push(address);

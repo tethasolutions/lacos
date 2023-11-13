@@ -31,7 +31,6 @@ public class AddressMap : BaseEntityMapping<Address>
             .HasMaxLength(200);
 
         builder.Property(e => e.ZipCode)
-            .IsRequired()
             .HasMaxLength(5);
 
         builder.Property(e => e.Telephone)

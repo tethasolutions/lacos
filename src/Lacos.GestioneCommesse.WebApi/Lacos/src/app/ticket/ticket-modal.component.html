@@ -53,6 +53,21 @@
                         <div class="validation-message" [control]="form.controls['customerId']"></div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <label>Stato</label>
+                    <div class="form-group">
+                        <kendo-dropdownlist [data]="states" [valuePrimitive]="true" name="status"
+                            [(ngModel)]="options.status" required>
+                            <ng-template kendoDropDownListValueTemplate let-dataItem>
+                                {{dataItem | ticketStatus}}
+                            </ng-template>
+                            <ng-template kendoDropDownListItemTemplate let-dataItem>
+                                {{dataItem | ticketStatus}}
+                            </ng-template>
+                        </kendo-dropdownlist>
+                        <div class="validation-message" [control]="form.controls['status']"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">

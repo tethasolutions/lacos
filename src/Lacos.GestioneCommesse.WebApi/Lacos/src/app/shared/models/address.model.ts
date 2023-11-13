@@ -17,10 +17,11 @@ export class AddressModel {
 
     get fullAddress(): string {
         let result = '';
+        if (this.description !== '') { result += `${this.description} - `; }
         if (this.streetAddress !== null) { result += `${this.streetAddress}, `; }
-        if (this.city !== null) { result += `${this.city}, `; }
-        if (this.province !== null) { result += `${this.province}, `; }
-        if (this.zipCode !== null) { result += `${this.zipCode}`; }
+        if (this.city !== null) { result += `${this.city} `; }
+        if (this.province !== null) { result += ` (${this.province}) `; }
+        if (this.zipCode !== null) { result += `, ${this.zipCode}`; }
         return result;
     }
 

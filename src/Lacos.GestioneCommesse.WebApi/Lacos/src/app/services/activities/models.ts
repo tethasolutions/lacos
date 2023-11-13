@@ -23,6 +23,7 @@ export interface IActivityReadModel {
     readonly id: number;
     readonly number: number;
     readonly jobId: number;
+    readonly customerId: number;
     readonly description: string;
     readonly status: ActivityStatus;
     readonly address: string;

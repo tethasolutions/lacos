@@ -28,14 +28,15 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     activityTypes: ActivityTypeModel[];
     customer: CustomerModel;
     jobs: SelectableJob[];
+    job: Job;
     jobReadonly: boolean;
     status: ActivityStatus;
     selectedActivityType: ActivityTypeModel;
     selectedJob: SelectableJob;
     addresses: AddressModel[];
-        
+
     readonly states = listEnum<ActivityStatus>(ActivityStatus);
-  
+
     constructor(
         private readonly _activityTypesService: ActivityTypesService,
         private readonly _customersService: CustomerService,
@@ -48,7 +49,6 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     ngOnInit() {
         this._getActivityTypes();
-        this.readAddresses();
     }
 
     onJobChanged() {
@@ -61,6 +61,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
         this.selectedJob = this.jobs.find(e => e.id == this.options.activity.jobId);
         if (this.selectedActivityType.isInternal) {
+            if (!this.options.activity.id) this.options.activity.addressId = null;
             this.options.activity.description = this.selectedJob.description;
         }
     }
@@ -68,12 +69,25 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     override open(options: ActivityModalOptions) {
         const result = super.open(options);
 
+        if (this.options.activity.jobId){
+        this._subscriptions.push(
+            this._jobsService.get(this.options.activity.jobId)
+                .pipe(
+                    tap(e => {
+                        this.job = e;
+                        this.readAddresses()
+                    })
+                )
+                .subscribe()
+        );
+    }
+
         this.jobReadonly = !!options.activity.jobId;
         this.customer = null;
         this.status = options.activity.status;
         this._getJobs();
 
-        this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId)
+        this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
 
         return result;
     }
@@ -131,6 +145,8 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
             return;
         }
 
+        if (this.options.activity.addressId) return;
+
         const addressId = this.jobs
             .find(e => e.id === this.options.activity.jobId)
             .addressId;
@@ -153,14 +169,15 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     }
 
     addNewAddress(address: AddressModel) {
+        if (this.job.customerId !== null) address.customerId = this.job.customerId;
         this._subscriptions.push(
             this._addressesService.createAddress(address)
                 .pipe(
                     map(e => e),
-                    tap(e => this._messageBox.success(`Indirizzo creato con successo`)),
-                    tap(() => {
+                    tap(e => {
                         this.readAddresses();
-                        this.options.activity.addressId = address.id;
+                        this.options.activity.addressId = e.id;
+                        this._messageBox.success(`Indirizzo creato con successo`);
                     })
                 )
                 .subscribe()
@@ -169,7 +186,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     readAddresses() {
         this._subscriptions.push(
-            this._addressesService.getAddresses()
+            this._addressesService.getCustomerAddresses(this.job.customerId)
                 .pipe(
                     map(e => {
                         this.addresses = e;
@@ -206,7 +223,7 @@ class SelectableJob {
         this.id = job.id;
         this.customer = job.customer;
         this.code = job.code;
-        this.fullName = `${job.code} - ${job.customer}` + ((job.reference)? ` - ${job.reference}` : ``);
+        this.fullName = `${job.code} - ${job.customer}` + ((job.reference) ? ` - ${job.reference}` : ``);
         this.customerId = job.customerId;
         this.addressId = job.addressId;
         this.description = job.description;

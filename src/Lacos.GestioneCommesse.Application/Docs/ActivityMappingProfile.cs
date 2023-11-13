@@ -10,7 +10,7 @@ public class ActivityMappingProfile : Profile
     public ActivityMappingProfile()
     {
         CreateMap<Activity, ActivityReadModel>()
-            .MapMember(x => x.Address, y => y.Address != null ? y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
+            .MapMember(x => x.Address, y => y.Address != null ? (y.Address.Description != "" ? y.Address.Description + " - " : "") + y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
             .MapMember(x => x.Type, y => y.Type!.Name)
             .MapMember(x => x.Source, y =>
                 y.SourceTicket == null
@@ -32,7 +32,6 @@ public class ActivityMappingProfile : Profile
         CreateMap<ActivityDto, Activity>()
             .IgnoreCommonMembers()
             .Ignore(x => x.RowNumber)
-            .MapMember(x => x.AddressId, (x, y) => y.IsTransient() ? x.AddressId : y.AddressId)
             .Ignore(x => x.Address)
             .MapMember(x => x.JobId, (x, y) => y.IsTransient() ? x.JobId : y.JobId)
             .Ignore(x => x.Job)

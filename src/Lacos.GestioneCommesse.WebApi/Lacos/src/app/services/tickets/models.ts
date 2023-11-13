@@ -26,6 +26,7 @@ export interface ITicketReadModel {
     readonly interventionId: number;
     readonly customerId: number;
     readonly customerName: string;
+    //readonly canBeRemoved: boolean;
 
 }
 

@@ -35,11 +35,16 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
 
     ngOnInit() {
         this._getData();
-        this.readAddresses();
     }
 
     onDateChange() {
         this.options.year = this.options.date?.getFullYear();
+    }
+
+    override open(job: Job) {
+        const result = super.open(job);
+        this.readAddresses();
+        return result;
     }
 
     protected override _canClose() {
@@ -100,14 +105,14 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     }
 
     addNewAddress(address: AddressModel) {
+        if (this.options.customerId !== null) address.customerId = this.options.customerId;
         this._subscriptions.push(
             this._addressesService.createAddress(address)
                 .pipe(
-                    map(e => e),
-                    tap(e => this._messageBox.success(`Indirizzo creato con successo`)),
-                    tap(() => {
+                    tap(e => {
                         this.readAddresses();
-                        this.options.addressId = address.id;
+                        this.options.addressId = e.id;
+                        this._messageBox.success(`Indirizzo creato con successo`);
                     })
                 )
                 .subscribe()
@@ -115,15 +120,15 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     }
 
     readAddresses() {
-        this._subscriptions.push(
-            this._addressesService.getAddresses()
-                .pipe(
-                    map(e => {
-                        this.addresses = e;
-                    }),
-                    tap(() => { })
-                )
-                .subscribe()
-        );
+            this._subscriptions.push(
+                this._addressesService.getCustomerAddresses(this.options.customerId)
+                    .pipe(
+                        map(e => {
+                            this.addresses = e;
+                        }),
+                        tap(() => { })
+                    )
+                    .subscribe()
+            );
     }
 }

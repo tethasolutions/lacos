@@ -20,6 +20,7 @@ export class AddressModalComponent extends ModalComponent<AddressModel> {
   form: NgForm;
 
   readonly role = Role;
+  addressesTypes: Array<string> = ['Cantiere','Consegna','Fornitore'];
 
   @Input() customer = new CustomerModel();
   @Input() supplier = new SupplierModel();

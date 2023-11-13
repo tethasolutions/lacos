@@ -52,10 +52,11 @@
                     <label>Indirizzo</label>
                     <div class="form-group">
                         <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
-                            valueField="id" name="addressId" [(ngModel)]="options.activity.addressId"
+                            valueField="id" name="addressId" [(ngModel)]="options.activity.addressId" 
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
                             [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false">
                         </kendo-combobox>
-                        <div class="validation-message" [control]="form.controls['customerAddressId']"></div>
+                        <div class="validation-message" [control]="form.controls['addressId']"></div>
                         <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
                             <i class="fa fa-plus"></i>
                         </button>

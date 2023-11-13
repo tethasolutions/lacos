@@ -12,10 +12,27 @@
 
 
             <div class="row">
-                <div *ngIf="customer.id !== null" class="col-md-4">
+                <div *ngIf="customer.id !== null" class="col-md-6">
                     <label>Cliente</label>
                     <div class="form-group">
-                        <input class="form-control" name="contactId" [disabled]="true" [value]="customer.name"/>
+                        <input class="form-control" name="customerId" [disabled]="true" [value]="customer.name"/>
+                    </div>
+                </div>
+                <div *ngIf="supplier.id !== null" class="col-md-6">
+                    <label>Fornitore</label>
+                    <div class="form-group">
+                        <input class="form-control" name="supplierId" [disabled]="true" [value]="supplier.name"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div *ngIf="customer.id == null && supplier.id == null" class="col-md-4">
+                    <label>Tipo indirizzo</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="addressesTypes" name="description" [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            [(ngModel)]="options.description" [suggest]="true" [allowCustom]="true" >
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['description']"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -47,12 +64,12 @@
                 <div class="col-md-4">
                     <label>Zip Code</label>
                     <div class="form-group">
-                        <input class="form-control" name="zipCode" [(ngModel)]="options.zipCode" required
+                        <input class="form-control" name="zipCode" [(ngModel)]="options.zipCode"
                             maxlength="255" novalidate autocomplete="off" />
                         <div class="validation-message" [control]="form.controls['zipCode']"></div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3" *ngIf="customer.id !== null || supplier.id !== null">
                     <label>Indirizzo principale</label>
                     <div class="form-group">
                         <kendo-switch name="isMainAddress" [(ngModel)]="options.isMainAddress" onLabel="Si" offLabel="No">

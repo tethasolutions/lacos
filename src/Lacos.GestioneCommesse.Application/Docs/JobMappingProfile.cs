@@ -41,6 +41,7 @@ public class JobMappingProfile : Profile
             .Ignore(x => x.Number)
             .Ignore(x => x.Year)
             .Ignore(x => x.PurchaseOrders)
+            .Ignore(x => x.Tickets)
             .MapMember(x => x.JobDate, (x, y) => y.IsTransient() ? x.Date : y.JobDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId);
 

@@ -37,7 +37,6 @@ public class InterventionMappingProfile : Profile
             .Ignore(x => x.Operators)
             .Ignore(x => x.Notes)
             .Ignore(x => x.Products)
-            .Ignore(x => x.Disputes)
-            .Ignore(x => x.Tickets);
+            .Ignore(x => x.Disputes);
     }
 }

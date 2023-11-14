@@ -19,6 +19,7 @@ public class Job : FullAuditedEntity
     
     public ICollection<Activity> Activities { get; set; }
     public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
+    public ICollection<Ticket> Tickets { get; set; }
 
     public Job()
     {

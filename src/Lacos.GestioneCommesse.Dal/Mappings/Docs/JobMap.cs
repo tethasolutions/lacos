@@ -17,5 +17,7 @@ public class JobMap : BaseEntityMapping<Job>
             .IsRequired();
 
         builder.OneToMany(e => e.Activities, e => e.Job, e => e.JobId);
+        builder.OneToMany(e => e.Tickets, e => e.Job, e => e.JobId);
+
     }
 }

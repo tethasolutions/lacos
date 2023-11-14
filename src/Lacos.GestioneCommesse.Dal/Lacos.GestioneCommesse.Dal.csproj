@@ -21,4 +21,10 @@
     <ProjectReference Include="..\Lacos.GestioneCommesse.Framework\Lacos.GestioneCommesse.Framework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

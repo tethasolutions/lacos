@@ -26,7 +26,7 @@ export class ActivityTypesComponent extends BaseComponent implements OnInit {
   dataActivityTypes: GridDataResult;
   stateGridActivityTypes: State = {
       skip: 0,
-      take: 20,
+      take: 30,
       filter: {
           filters: [],
           logic: 'and'

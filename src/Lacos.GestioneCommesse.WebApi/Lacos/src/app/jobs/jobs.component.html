@@ -21,6 +21,12 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="code" title="Codice" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="!dataItem.hasHighPriority">{{dataItem.code}}</div>
+            <div *ngIf="dataItem.hasHighPriority" class="job-alert">
+                {{dataItem.code}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </div>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric">
         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
@@ -37,6 +43,8 @@
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
     </kendo-grid-column>
+    <kendo-grid-column field="reference" title="Riferimento">
+    </kendo-grid-column>
     <kendo-grid-column field="description" title="Descrizione">
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
@@ -45,7 +53,10 @@
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                     <i class="fas fa-edit"></i>
                 </button>
-                <a class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities']"
+                <button class="btn btn-primary btn-sm" title="Aggiungi nuova attività" (click)="createActivity(dataItem)">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']"
                     [queryParams]="{jobId: dataItem.id}">
                     <i class="fas fa-external-link"></i>
                 </a>
@@ -60,3 +71,4 @@
 </kendo-grid>
 
 <app-job-modal #jobModal></app-job-modal>
+<app-activity-modal #activityModal></app-activity-modal>

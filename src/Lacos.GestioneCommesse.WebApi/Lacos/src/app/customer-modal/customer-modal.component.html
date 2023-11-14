@@ -3,8 +3,7 @@
 <div class="k-window-wrapper" *ngIf="opened">
     <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
         <kendo-window-titlebar>
-            <div *ngIf="options.type == 0" class="k-window-title">Cliente</div>
-            <div *ngIf="options.type == 1" class="k-window-title">Fornitore</div>
+            <div class="k-window-title">Cliente</div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
         <form name="updateUserForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options" class="redimensionModal">
@@ -54,6 +53,30 @@
                         <kendo-switch name="canGenerateTickets" [(ngModel)]="options.canGenerateTickets" onLabel="Si" offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['canGenerateTickets']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Contatto</label>
+                    <div class="form-group">
+                        <input class="form-control" name="contact" [(ngModel)]="options.contact"
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['contact']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Telefono Contatto</label>
+                    <div class="form-group">
+                        <input class="form-control" name="contactTelephone" [(ngModel)]="options.contactTelephone"
+                            maxlength="255" novalidate autocomplete="off" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Email Contatto</label>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="contactEmail" [(ngModel)]="options.contactEmail"
+                            maxlength="255" novalidate autocomplete="off" />
                     </div>
                 </div>
             </div>

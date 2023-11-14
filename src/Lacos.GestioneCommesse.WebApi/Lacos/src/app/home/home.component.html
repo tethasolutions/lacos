@@ -10,14 +10,14 @@
         </div>
         <div class="row">
             <div *ngFor="let activityType of activitiesCounters" class="col-md-2">
-                <a class="btn btn-light dashboardBtn" routerLink="/activities"
+                <a class="btn btn-light dashboardBtn" [routerLink]="['/activities']" [queryParams]="{typeId: activityType.activityId}"
                     [style.background-color]="activityType.activityColor || '#3485fd'" routerLinkActive="active">
                     <div class="row">
-                        <div class="col-md-9 title">{{activityType.activityName}}</div>
-                        <div class="col-md-3">
+                        <div class="title col-8">{{activityType.activityName}}</div>
+                        <div class="col-4">
                             <div class="green-number bage-number">{{activityType.active}}</div>
-                            <div class="red-number bage-number">{{activityType.expired}}</div>
-                        </div>
+                            <div class="red-number bage-number">{{activityType.expired}}</div>    
+                        </div>                    
                     </div>
                 </a>
             </div>

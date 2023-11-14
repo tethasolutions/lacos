@@ -13,21 +13,18 @@ public class TicketMappingProfile : Profile
         CreateMap<Ticket, TicketReadModel>()
             .MapMember(x => x.Code, y => y.Year.ToString() + "/" + y.Number.ToString())
             .MapMember(x => x.Date, y => y.TicketDate)
-            .MapMember(x => x.CustomerName, y => y.Customer.Name)
-            .MapMember(x => x.CustomerFullAddress, y => y.CustomerAddress.City + " - " + y.CustomerAddress.StreetAddress);
+            .MapMember(x => x.CustomerName, y => y.Customer!.Name);
 
         CreateMap<TicketDto, Ticket>()
             .IgnoreCommonMembers()
             .Ignore(x => x.Intervention)
             .Ignore(x => x.GeneratedActivity)
             .Ignore(x => x.Customer)
-            .Ignore(x => x.CustomerAddress)
             .MapMember(x => x.TicketDate, (x, y) => y.IsTransient() ? x.Date : y.TicketDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId);
 
         CreateMap<Ticket, TicketDto>()
             .MapMember(x => x.Date, y => y.TicketDate)
-            .MapMember(x => x.CustomerName, y => y.Customer.Name)
-            .MapMember(x => x.CustomerFullAddress, y => y.CustomerAddress.City + " - " + y.CustomerAddress.StreetAddress);
+            .MapMember(x => x.CustomerName, y => y.Customer!.Name);
     }
 }

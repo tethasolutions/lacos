@@ -96,10 +96,12 @@ import { InterventionStatusPipe } from './shared/pipes/intervention-status.pipe'
 import { InterventionsListComponent } from './interventions/interventions-list.component';
 import { BarcodesModule } from '@progress/kendo-angular-barcodes';
 import { TicketsComponent } from './ticket/tickets.component';
-import { TicketStatus } from './services/tickets/models';
 import { TicketModalComponent } from './ticket/ticket-modal.component';
 import { TicketsService } from './services/tickets/tickets.service';
 import { TicketStatusPipe } from './shared/pipes/ticket-status.pipe';
+import { SupplierModalComponent } from './supplier-modal/supplier-modal.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
+import { SupplierService } from './services/supplier.service';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -158,7 +160,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         InterventionsListComponent,
         TicketsComponent,
         TicketStatusPipe,
-        TicketModalComponent
+        TicketModalComponent,
+        SuppliersComponent,
+        SupplierModalComponent
     ],
     imports: [
         BrowserModule,
@@ -202,6 +206,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         Clipboard,
         AuthGuard,
         CustomerService,
+        SupplierService,
         AddressesService,
         OperatorsService,
         CheckListService,
@@ -212,7 +217,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ActivitiesService,
         ActivityProductsService,
         InterventionsService,
-        TicketsService
+        TicketsService,
+        SupplierService
     ],
     bootstrap: [AppComponent]
 })

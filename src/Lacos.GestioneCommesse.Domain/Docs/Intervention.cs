@@ -27,7 +27,6 @@ public class Intervention : FullAuditedEntity
     public ICollection<InterventionProduct> Products { get; set; }
     public ICollection<InterventionDispute> Disputes { get; set; }
     public ICollection<Ticket> Tickets { get; set; }
-    public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
 
     public Intervention()
     {
@@ -36,7 +35,6 @@ public class Intervention : FullAuditedEntity
         Products = new List<InterventionProduct>();
         Disputes = new List<InterventionDispute>();
         Tickets = new List<Ticket>();
-        PurchaseOrders = new List<PurchaseOrder>();
     }
 
     public bool IsCompleted()

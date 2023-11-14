@@ -11,6 +11,6 @@ public class ActivityDto
     public DateTimeOffset? ExpirationDate { get; set; }
 
     public long JobId { get; set; }
-    public long CustomerAddressId { get; set; }
+    public long? AddressId { get; set; }
     public long TypeId { get; set; }
 }

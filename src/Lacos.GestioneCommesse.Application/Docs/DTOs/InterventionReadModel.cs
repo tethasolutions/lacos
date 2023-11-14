@@ -9,7 +9,7 @@ public class InterventionReadModel
     public DateTimeOffset Start { get; set; }
     public DateTimeOffset End { get; set; }
     public string? Customer { get; set; }
-    public string? CustomerAddress { get; set; }
+    public string? Address { get; set; }
     public string? Description { get; set; }
     public IEnumerable<InterventionOperatorReadModel> Operators { get; set; }
     public string? ActivityTypeId { get; set; }

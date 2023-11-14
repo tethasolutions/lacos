@@ -26,8 +26,7 @@ export interface ITicketReadModel {
     readonly interventionId: number;
     readonly customerId: number;
     readonly customerName: string;
-    readonly customerAddressId: number,
-    readonly customerFullAddress: string;
+    //readonly canBeRemoved: boolean;
 
 }
 
@@ -46,14 +45,13 @@ export class Ticket {
         date: Date | string,
         public description: string,
         readonly status: TicketStatus,
-        public customerId: number,        
-        public customerAddressId: number
+        public customerId: number
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: Ticket) {
-        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.customerAddressId);
+        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId);
     }
 
 }

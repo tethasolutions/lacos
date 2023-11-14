@@ -12,8 +12,8 @@ public class ActivityDetailDto
     public string? Job { get; set; }
     public long CustomerId { get; set; }
     public string? Customer { get; set; }
-    public long CustomerAddressId { get; set; }
-    public string? CustomerAddress { get; set; }
+    public long AddressId { get; set; }
+    public string? Address { get; set; }
     public long TypeId { get; set; }
     public string? Type { get; set; }
     public string? Source { get; set; }

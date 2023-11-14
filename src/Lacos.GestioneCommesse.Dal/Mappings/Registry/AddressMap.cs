@@ -1,17 +1,18 @@
 ﻿using Lacos.GestioneCommesse.Dal.Extensions;
+using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lacos.GestioneCommesse.Dal.Mappings.Registry;
 
-public class CustomerAddressMap : BaseEntityMapping<CustomerAddress>
+public class AddressMap : BaseEntityMapping<Address>
 {
-    public override void Configure(EntityTypeBuilder<CustomerAddress> builder)
+    public override void Configure(EntityTypeBuilder<Address> builder)
     {
         base.Configure(builder);
 
-        builder.ToTable("CustomerAddresses", "Registry");
+        builder.ToTable("Addresses", "Registry");
 
         builder.Property(e => e.Description)
             .IsRequired()
@@ -30,7 +31,6 @@ public class CustomerAddressMap : BaseEntityMapping<CustomerAddress>
             .HasMaxLength(200);
 
         builder.Property(e => e.ZipCode)
-            .IsRequired()
             .HasMaxLength(5);
 
         builder.Property(e => e.Telephone)
@@ -39,8 +39,7 @@ public class CustomerAddressMap : BaseEntityMapping<CustomerAddress>
         builder.Property(e => e.Email)
             .HasMaxLength(200);
 
-        builder.OneToMany(e => e.Activities, e => e.CustomerAddress, e => e.CustomerAddressId);
-        builder.OneToMany(e => e.Products, e => e.CustomerAddress, e => e.CustomerAddressId);
-        builder.OneToMany(e => e.Tickets, e => e.CustomerAddress, e => e.CustomerAddressId);
+        builder.OneToMany(e => e.Jobs, e => e.Address, e => e.AddressId);
+        builder.OneToMany(e => e.Activities, e => e.Address, e => e.AddressId);
     }
 }

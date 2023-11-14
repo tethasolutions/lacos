@@ -22,7 +22,7 @@ export class OperatorsComponent extends BaseComponent implements OnInit {
   dataOperators: GridDataResult;
   stateGridOperators: State = {
       skip: 0,
-      take: 20,
+      take: 30,
       filter: {
           filters: [],
           logic: 'and'

@@ -8,6 +8,9 @@ export class CustomerModel {
     canGenerateTickets: boolean;
     telephone: string;
     email: string;
+    contact: string;
+    contactTelephone: string;
+    contactEmail: string;
     addresses: AddressModel[];
 
     mainAddress: AddressModel;
@@ -24,6 +27,9 @@ export class CustomerModel {
         this.canGenerateTickets = false;
         this.telephone = null;
         this.email = null;
+        this.contact = null;
+        this.contactTelephone = null;
+        this.contactEmail = null;
         this.addresses = [];
 
         this.mainAddress = null;

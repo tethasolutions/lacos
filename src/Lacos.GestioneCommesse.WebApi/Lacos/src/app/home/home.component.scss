@@ -1,17 +1,38 @@
 
+.dashboardBtn {
+    width: 95%;
+    padding: 15px;
+    min-height: 100px;
+    margin-bottom: 15px;
+}
+
+.dashboardBtn:hover {
+    background-color: #46a43e;
+    color: #FFF;
+}
+
+.dashboardBtn .title {
+    padding-bottom: 10px;
+}
+
 .bage-number {
     float: right;
     padding: 2px 8px;
-    border-radius: 15px;
-    margin: 0 1px;
+    border-radius: 5px;
+    margin: 2px;
     color: white;
     font-weight: bold;
+    font-size: 1.2em;
 }
 
 .green-number {
     background-color: #46a43e;
+    color: #FFF;
+    border: 1px solid #FFF;
 }
 
 .red-number {
     background-color: #dc3545;
+    color: #FFF;
+    border: 1px solid #FFF;
 }

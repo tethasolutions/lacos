@@ -15,7 +15,18 @@
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
     scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback">
 
+    <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div [style.background-color]="dataItem.activityColor">&nbsp;</div>
+        </ng-template>>
+    </kendo-grid-column>
     <kendo-grid-column field="jobCode" title="Commessa" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="!dataItem.jobHasHighPriority">{{dataItem.jobCode}}</div>
+            <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
+                {{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </div>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="number" title="Num" [width]="1" filter="numeric" format="n0">
     </kendo-grid-column>
@@ -50,7 +61,7 @@
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
     </kendo-grid-column>
-    <kendo-grid-column field="customerAddress" title="Indirizzo">
+    <kendo-grid-column field="address" title="Indirizzo">
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>

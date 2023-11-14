@@ -77,7 +77,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
 
     createActivityProduct() {
         const product = new ActivityProduct(this.activity.id, null);
-        const options = new ActivityProductModalOptions(this.activity.customerAddressId, product);
+        const options = new ActivityProductModalOptions(this.activity.addressId, product);
 
         this._subscriptions.push(
             this.activityProductModal.open(options)
@@ -111,7 +111,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     }
 
     assignAllCustomerProducts() {
-        const text = 'Sei sicuro di voler associare all\'attività tutti i prodotti di ' + this.activity.customer + ' in ' + this.activity.customerAddress + '?';
+        const text = 'Sei sicuro di voler associare all\'attività tutti i prodotti di ' + this.activity.customer + ' in ' + this.activity.address + '?';
 
         this._subscriptions.push(
             this._messageBox.confirm(text)

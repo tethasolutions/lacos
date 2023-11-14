@@ -16,12 +16,7 @@ export class AddressesService {
     ) {}
 
     createAddress(request: AddressModel) {
-        return this._http.post<number>(`${this._baseUrl}/address`, request)
-            .pipe(
-                map(e => {
-                    return e;
-                })
-            );
+        return this._http.post<AddressModel>(`${this._baseUrl}/address`, request);
     }
 
     updateAddress(request: AddressModel, id: number) {
@@ -57,6 +52,34 @@ export class AddressesService {
     
     getCustomerAddresses(customerId: number) {      
         return this._http.get<Array<AddressModel>>(`${this._baseUrl}/address/customer/${customerId}`)
+            .pipe(
+                map(result => {
+                    const addresses: Array<AddressModel> = [];
+                    result.forEach(item => {
+                        const address = Object.assign(new AddressModel(), item);
+                        addresses.push(address);
+                    });
+                    return addresses;
+                })
+            );
+    }
+    
+    getSupplierAddresses(supplierId: number) {      
+        return this._http.get<Array<AddressModel>>(`${this._baseUrl}/address/supplier/${supplierId}`)
+            .pipe(
+                map(result => {
+                    const addresses: Array<AddressModel> = [];
+                    result.forEach(item => {
+                        const address = Object.assign(new AddressModel(), item);
+                        addresses.push(address);
+                    });
+                    return addresses;
+                })
+            );
+    }
+
+    getAddresses() {      
+        return this._http.get<Array<AddressModel>>(`${this._baseUrl}/addresses`)
             .pipe(
                 map(result => {
                     const addresses: Array<AddressModel> = [];

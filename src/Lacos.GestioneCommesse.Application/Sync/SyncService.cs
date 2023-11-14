@@ -15,7 +15,6 @@ using Lacos.GestioneCommesse.Domain;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Domain.Security;
-using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -28,30 +27,28 @@ namespace Lacos.GestioneCommesse.Application.Sync
         private readonly IMapper mapper;
         private readonly IServiceProvider serviceProvider;
         private readonly ILacosDbContext dbContext;
-        private readonly ILacosConfiguration configuration;
 
 
         public SyncService(
             IMapper mapper,
-           IServiceProvider serviceProvider, ILacosDbContext dbContext, ILacosConfiguration configuration)
+           IServiceProvider serviceProvider, ILacosDbContext dbContext)
         {
             this.mapper = mapper;
             this.serviceProvider = serviceProvider;
             this.dbContext = dbContext;
-            this.configuration = configuration;
         }
-
+        
         public async Task<List<SyncUserDto>> SyncFromDBToApp_Users()
         {
             var userRepository = serviceProvider.GetRequiredService<IRepository<User>>();
-
+            
 
             var users = await dbContext.ExecuteWithDisabledQueryFilters(() =>
                 userRepository.Query()
                     .Where(x => x.Role == Role.Operator)
                     .Include(x => x.Operator)
                     .ToListAsync()
-            , QueryFilter.SoftDelete); ;
+            , QueryFilter.SoftDelete);;
 
             var ret = users.MapTo<List<SyncUserDto>>(mapper);
             return ret;
@@ -63,7 +60,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
             var operators = await dbContext.ExecuteWithDisabledQueryFilters(() =>
                     operatorRepository.Query()
-                        .Include(x => x.User)
+                        .Include(x=>x.User)
                         .ToListAsync()
                 , QueryFilter.SoftDelete);
 
@@ -84,120 +81,40 @@ namespace Lacos.GestioneCommesse.Application.Sync
             return ret;
         }
 
-        public async Task<SyncLocalDbChanges> SyncFromAppToDB_LocalChanges(SyncLocalDbChanges syncLocalDbChanges)
-        {
-            SyncLocalDbChanges syncLocalDbChangesRemote = new SyncLocalDbChanges();
-            try
-            {
-                await using (var transaction = await dbContext.BeginTransaction())
-                {
-                    syncLocalDbChangesRemote.Interventions = await InsertUpdateAllModified<SyncInterventionDto, Intervention>(syncLocalDbChanges.Interventions);
-                    syncLocalDbChangesRemote.InterventionNotes = await InsertUpdateAllModified<SyncInterventionNoteDto, InterventionNote>(syncLocalDbChanges.InterventionNotes);
-                    syncLocalDbChangesRemote.InterventionDisputes = await InsertUpdateAllModified<SyncInterventionDisputeDto, InterventionDispute>(syncLocalDbChanges.InterventionDisputes);
-                    syncLocalDbChangesRemote.InterventionProducts = await InsertUpdateAllModified<SyncInterventionProductDto, InterventionProduct>(syncLocalDbChanges.InterventionProducts);
-                    syncLocalDbChangesRemote.InterventionProductPictures = await InsertUpdateAllModified<SyncInterventionProductPictureDto, InterventionProductPicture>(syncLocalDbChanges.InterventionProductPictures);
-
-                    syncLocalDbChangesRemote.InterventionProductCheckLists = await InsertUpdateAllModifiedInterventionProductCheckList(syncLocalDbChanges.InterventionProductCheckLists, syncLocalDbChanges.InterventionProductCheckListItems);
-                    syncLocalDbChangesRemote.InterventionProductCheckListItems = await InsertUpdateAllModified<SyncInterventionProductCheckListItemDto, InterventionProductCheckListItem>(syncLocalDbChanges.InterventionProductCheckListItems);
-
-                    syncLocalDbChangesRemote.Tickets = await InsertUpdateAllModifiedTicket(syncLocalDbChanges.Tickets, syncLocalDbChanges.TicketPictures);
-                    syncLocalDbChangesRemote.TicketPictures = await InsertUpdateAllModified<SyncTicketPictureDto, TicketPicture>(syncLocalDbChanges.TicketPictures);
-
-                    syncLocalDbChangesRemote.PurchaseOrders = await InsertUpdateAllModifiedPurchaseOrder(syncLocalDbChanges.PurchaseOrders, syncLocalDbChanges.PurchaseOrderItems);
-                    syncLocalDbChangesRemote.PurchaseOrderItems = await InsertUpdateAllModified<SyncPurchaseOrderItemDto, PurchaseOrderItem>(syncLocalDbChanges.PurchaseOrderItems);
-
-                    await transaction.CommitAsync();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            return syncLocalDbChangesRemote;
-        }
-        public async Task SyncFromAppToDB_LocalImage(SyncImageDto syncLocalImage)
-        {
-            try
-            {
-                if (syncLocalImage.Content is null)
-                    throw new ArgumentException("Manca il contenuto dell'immagine");
-
-                await using Stream streamOriginalImage = new MemoryStream(syncLocalImage.Content);
-                var folder = configuration.AttachmentsPath;
-                Directory.CreateDirectory(folder);
-                var path = Path.Combine(folder, syncLocalImage.Filename);
-                if (!File.Exists(path))
-                {
-                    await using Stream stremNewImage = File.Create(path);
-                    await streamOriginalImage.CopyToAsync(stremNewImage);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        public async Task<SyncImageDto> SyncFromDBToApp_RemoteImage(SyncImageDto syncRemoteImage)
-        {
-            try
-            {
-                var folder = configuration.AttachmentsPath;
-                var path = Path.Combine(folder, syncRemoteImage.Filename);
-                if (File.Exists(path))
-                {
-                    syncRemoteImage.Content = await File.ReadAllBytesAsync(path);
-
-                }
-                return syncRemoteImage;
-                //else
-                //{
-                //    throw new Exception("Immagine inesistente");
-                //}
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-
-                throw;
-            }
-        }
-
-        public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb(DateTimeOffset date)
+        public async Task<SyncFullDbDto>  SyncFromDBToApp_FullDb(DateTime date)
         {
             try
             {
                 SyncFullDbDto syncFullDb = new SyncFullDbDto();
 
-                syncFullDb.Activities = await GetAllModifiedRecord<Activity, SyncActivityDto>(date);
-                syncFullDb.ActivityProducts = await GetAllModifiedRecord<ActivityProduct, SyncActivityProductDto>(date);
-                syncFullDb.InterventionDisputes = await GetAllModifiedRecord<InterventionDispute, SyncInterventionDisputeDto>(date);
-                syncFullDb.InterventionNotes = await GetAllModifiedRecord<InterventionNote, SyncInterventionNoteDto>(date);
-                syncFullDb.InterventionProducts = await GetAllModifiedRecord<InterventionProduct, SyncInterventionProductDto>(date);
-                syncFullDb.InterventionProductCheckLists = await GetAllModifiedRecord<InterventionProductCheckList, SyncInterventionProductCheckListDto>(date);
-                syncFullDb.InterventionProductCheckListItems = await GetAllModifiedRecord<InterventionProductCheckListItem, SyncInterventionProductCheckListItemDto>(date);
-                syncFullDb.InterventionProductPictures = await GetAllModifiedRecord<InterventionProductPicture, SyncInterventionProductPictureDto>(date);
-                syncFullDb.Jobs = await GetAllModifiedRecord<Job, SyncJobDto>(date);
-                syncFullDb.PurchaseOrders = await GetAllModifiedRecord<PurchaseOrder, SyncPurchaseOrderDto>(date);
-                syncFullDb.PurchaseOrderItems = await GetAllModifiedRecord<PurchaseOrderItem, SyncPurchaseOrderItemDto>(date);
-                syncFullDb.Tickets = await GetAllModifiedRecord<Ticket, SyncTicketDto>(date);
-                syncFullDb.TicketPictures = await GetAllModifiedRecord<TicketPicture, SyncTicketPictureDto>(date);
-                syncFullDb.CheckLists = await GetAllModifiedRecord<CheckList, SyncCheckListDto>(date);
-                syncFullDb.CheckListItems = await GetAllModifiedRecord<CheckListItem, SyncCheckListItemDto>(date);
-                syncFullDb.Customers = await GetAllModifiedRecord<Customer, SyncCustomerDto>(date);
-                syncFullDb.CustomerAddresses = await GetAllModifiedRecord<CustomerAddress, SyncCustomerAddressDto>(date);
-                syncFullDb.OperatorDocuments = await GetAllModifiedRecord<OperatorDocument, SyncOperatorDocumentDto>(date);
-                syncFullDb.Products = await GetAllModifiedRecord<Product, SyncProductDto>(date);
-                syncFullDb.ProductDocuments = await GetAllModifiedRecord<ProductDocument, SyncProductDocumentDto>(date);
-                syncFullDb.ProductTypes = await GetAllModifiedRecord<ProductType, SyncProductTypeDto>(date);
+            syncFullDb.Activities = await GetAllModifiedRecord<Activity, SyncActivityDto>(date);
+            syncFullDb.ActivityProducts = await GetAllModifiedRecord<ActivityProduct, SyncActivityProductDto>(date);
+            syncFullDb.Interventions = await GetAllModifiedRecord<Intervention, SyncInterventionDto>(date);
+            syncFullDb.InterventionDisputes = await GetAllModifiedRecord<InterventionDispute, SyncInterventionDisputeDto>(date);
+            syncFullDb.InterventionNotes = await GetAllModifiedRecord<InterventionNote, SyncInterventionNoteDto>(date);
+            syncFullDb.InterventionProducts = await GetAllModifiedRecord<InterventionProduct, SyncInterventionProductDto>(date);
+            syncFullDb.InterventionProductCheckLists = await GetAllModifiedRecord<InterventionProductCheckList, SyncInterventionProductCheckListDto>(date);
+            syncFullDb.InterventionProductCheckListItems = await GetAllModifiedRecord<InterventionProductCheckListItem, SyncInterventionProductCheckListItemDto>(date);
+            syncFullDb.InterventionProductPictures = await GetAllModifiedRecord<InterventionProductPicture, SyncInterventionProductPictureDto>(date);
+            syncFullDb.Jobs = await GetAllModifiedRecord<Job, SyncJobDto>(date);
+            syncFullDb.PurchaseOrders = await GetAllModifiedRecord<PurchaseOrder, SyncPurchaseOrderDto>(date);
+            syncFullDb.PurchaseOrderItems = await GetAllModifiedRecord<PurchaseOrderItem, SyncPurchaseOrderItemDto>(date);
 
-                syncFullDb.ActivityTypes = await GetAllActivityTypeModifiedRecord(date);
-                syncFullDb.Interventions = await GetAllInterventionModifiedRecord(date);
-
-
-                return syncFullDb;
+            //syncFullDb.Tickets = await GetAllModifiedRecord<Ticket, SyncTicketDto>(date);
+            syncFullDb.Tickets = new List<SyncTicketDto>();
+                
+            syncFullDb.TicketPictures = await GetAllModifiedRecord<TicketPicture, SyncTicketPictureDto>(date);
+            syncFullDb.ActivityTypes = await GetAllModifiedRecord<ActivityType, SyncActivityTypeDto>(date);
+            syncFullDb.CheckLists = await GetAllModifiedRecord<CheckList, SyncCheckListDto>(date);
+            syncFullDb.CheckListItems = await GetAllModifiedRecord<CheckListItem, SyncCheckListItemDto>(date);
+            syncFullDb.Customers = await GetAllModifiedRecord<Customer, SyncCustomerDto>(date);
+            syncFullDb.Addresses = await GetAllModifiedRecord<Address, SyncAddressDto>(date);
+            syncFullDb.OperatorDocuments = await GetAllModifiedRecord<OperatorDocument, SyncOperatorDocumentDto>(date);
+            syncFullDb.Products = await GetAllModifiedRecord<Product, SyncProductDto>(date);
+            syncFullDb.ProductDocuments = await GetAllModifiedRecord<ProductDocument, SyncProductDocumentDto>(date);
+            syncFullDb.ProductTypes= await GetAllModifiedRecord<ProductType, SyncProductTypeDto>(date);
+            syncFullDb.Vehicles = await GetAllModifiedRecord<Vehicle, SyncVehicleDto>(date);
+            return syncFullDb;
             }
             catch (Exception e)
             {
@@ -205,219 +122,22 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 throw;
             }
 
-
+            
         }
 
-        private async Task<List<TDto>> InsertUpdateAllModified<TDto, TEntity>(List<TDto> tdoModels) where TEntity : FullAuditedEntity where TDto : SyncBaseDto
+        private async Task<List<TDto>> GetAllModifiedRecord<TRepository,TDto>(DateTime date) where  TRepository:FullAuditedEntity where TDto:SyncBaseDto
         {
-            var repository = serviceProvider.GetRequiredService<IRepository<TEntity>>();
-            List<TDto> list = new List<TDto>();
+            var repository = serviceProvider.GetRequiredService<IRepository<TRepository>>();
+            DateTimeOffset dto = new DateTimeOffset(date,TimeSpan.Zero);
 
-            foreach (var model in tdoModels)
-            {
-                var entity = await
-                    repository
-                        .Query()
-                        .Where(x => x.Id == model.Id)
-                        .SingleOrDefaultAsync();
+            var list = await dbContext.ExecuteWithDisabledQueryFilters(() =>
+                    repository.Query()
+                        .AsNoTracking()
+                        .Where(x=>x.CreatedOn > dto || x.EditedOn.Value > dto || x.DeletedOn.Value > dto)
+                        .ToListAsync()
+                , QueryFilter.SoftDelete);
 
-                if (entity != null)
-                {
-                    model.MapTo(entity, mapper);
-                    repository.Update(entity);
-                    await dbContext.SaveChanges();
-                }
-                else
-                {
-                    var newEntity = model.MapTo<TEntity>(mapper);
-                    await repository.Insert(newEntity);
-                    await dbContext.SaveChanges();
-                    list.Add(newEntity.MapTo<TDto>(mapper));
-                }
-            }
-
-            return list;
-        }
-
-        private async Task<List<SyncInterventionProductCheckListDto>> InsertUpdateAllModifiedInterventionProductCheckList(List<SyncInterventionProductCheckListDto> tdoModels, List<SyncInterventionProductCheckListItemDto> tdoChild)
-        {
-            var repository = serviceProvider.GetRequiredService<IRepository<InterventionProductCheckList>>();
-            List<SyncInterventionProductCheckListDto> list = new List<SyncInterventionProductCheckListDto>();
-
-            foreach (var model in tdoModels)
-            {
-                var entity = await
-                    repository
-                        .Query()
-                        .Where(x => x.Id == model.Id)
-                        .SingleOrDefaultAsync();
-
-                if (entity != null)
-                {
-                    model.MapTo(entity, mapper);
-                    repository.Update(entity);
-                    await dbContext.SaveChanges();
-                }
-                else
-                {
-                    var oldId = model.Id;
-
-                    var newEntity = model.MapTo<InterventionProductCheckList>(mapper);
-                    await repository.Insert(newEntity);
-                    await dbContext.SaveChanges();
-                    list.Add(newEntity.MapTo<SyncInterventionProductCheckListDto>(mapper));
-
-                    if (tdoChild != null)
-                    {
-                        tdoChild.ForEach(x => x.CheckListId = (x.CheckListId == oldId ? newEntity.Id : x.CheckListId));
-                    }
-                }
-            }
-            return list;
-        }
-
-        private async Task<List<SyncTicketDto>> InsertUpdateAllModifiedTicket(List<SyncTicketDto> tdoModels, List<SyncTicketPictureDto> tdoChild)
-        {
-            var repository = serviceProvider.GetRequiredService<IRepository<Ticket>>();
-            List<SyncTicketDto> list = new List<SyncTicketDto>();
-            foreach (var model in tdoModels)
-            {
-                var entity = await
-                    repository
-                        .Query()
-                        .Where(x => x.Id == model.Id)
-                        .SingleOrDefaultAsync();
-
-                if (entity != null)
-                {
-                    model.MapTo(entity, mapper);
-                    repository.Update(entity);
-                    await dbContext.SaveChanges();
-                }
-                else
-                {
-                    var oldId = model.Id;
-
-                    var newEntity = model.MapTo<Ticket>(mapper);
-                    await repository.Insert(newEntity);
-                    await dbContext.SaveChanges();
-                    list.Add(newEntity.MapTo<SyncTicketDto>(mapper));
-                    if (tdoChild != null)
-                    {
-                        tdoChild.ForEach(x => x.TicketId = (x.TicketId == oldId ? newEntity.Id : x.TicketId));
-                    }
-                }
-            }
-            return list;
-        }
-
-        private async Task<List<SyncPurchaseOrderDto>> InsertUpdateAllModifiedPurchaseOrder(List<SyncPurchaseOrderDto> tdoModels, List<SyncPurchaseOrderItemDto> tdoChild)
-        {
-            var repository = serviceProvider.GetRequiredService<IRepository<PurchaseOrder>>();
-            List<SyncPurchaseOrderDto> list = new List<SyncPurchaseOrderDto>();
-            foreach (var model in tdoModels)
-            {
-                var entity = await
-                    repository
-                        .Query()
-                        .Where(x => x.Id == model.Id)
-                        .SingleOrDefaultAsync();
-
-                if (entity != null)
-                {
-                    model.MapTo(entity, mapper);
-                    repository.Update(entity);
-                    await dbContext.SaveChanges();
-
-                }
-                else
-                {
-                    var oldId = model.Id;
-
-                    var newEntity = model.MapTo<PurchaseOrder>(mapper);
-                    await repository.Insert(newEntity);
-                    await dbContext.SaveChanges();
-                    list.Add(newEntity.MapTo<SyncPurchaseOrderDto>(mapper));
-                    if (tdoChild != null)
-                    {
-                        tdoChild.ForEach(x => x.PurchaseOrderId = (x.PurchaseOrderId == oldId ? newEntity.Id : x.PurchaseOrderId));
-                    }
-                }
-            }
-            return list;
-        }
-
-
-        private async Task<List<TDto>> GetAllModifiedRecord<TEntity, TDto>(DateTimeOffset date) where TEntity : FullAuditedEntity where TDto : SyncBaseDto
-        {
-            try
-            {
-                var repository = serviceProvider.GetRequiredService<IRepository<TEntity>>();
-
-                var list = await dbContext.ExecuteWithDisabledQueryFilters(() =>
-                        repository.Query()
-                            .AsNoTracking()
-                            .Where(x => x.CreatedOn >= date || (x.EditedOn ?? DateTimeOffset.MinValue) >= date || (x.DeletedOn ?? DateTimeOffset.MinValue) >= date)
-                            .ToListAsync()
-                    , QueryFilter.SoftDelete);
-
-                return list.MapTo<List<TDto>>(mapper);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        private async Task<List<SyncInterventionDto>> GetAllInterventionModifiedRecord(DateTimeOffset date)
-        {
-            try
-            {
-                var repository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
-
-                var list = await dbContext.ExecuteWithDisabledQueryFilters(() =>
-                        repository.Query()
-                            .AsNoTracking()
-                            .Include(x => x.Operators)
-                            .Where(x => x.CreatedOn >= date || (x.EditedOn ?? DateTimeOffset.MinValue) >= date || (x.DeletedOn ?? DateTimeOffset.MinValue) >= date)
-                            .ToListAsync()
-                    , QueryFilter.SoftDelete);
-                var listDto = list.MapTo<List<SyncInterventionDto>>(mapper);
-
-                return listDto;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
-        }
-
-        private async Task<List<SyncActivityTypeDto>> GetAllActivityTypeModifiedRecord(DateTimeOffset date)
-        {
-            try
-            {
-                var repository = serviceProvider.GetRequiredService<IRepository<ActivityType>>();
-
-                var list = await dbContext.ExecuteWithDisabledQueryFilters(() =>
-                        repository.Query()
-                            .AsNoTracking()
-                            .Include(x => x.Operators)
-                            .Where(x => x.CreatedOn >= date || (x.EditedOn ?? DateTimeOffset.MinValue) >= date || (x.DeletedOn ?? DateTimeOffset.MinValue) >= date)
-                            .ToListAsync()
-                    , QueryFilter.SoftDelete);
-                var listDto = list.MapTo<List<SyncActivityTypeDto>>(mapper);
-
-                return listDto;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
+            return list.MapTo<List<TDto>>(mapper);
         }
 
     }

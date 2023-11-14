@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
-import { Ticket } from '../services/tickets/models';
+import { Ticket, TicketStatus } from '../services/tickets/models';
 import { tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { MessageBoxService } from '../services/common/message-box.service';
+import { listEnum } from '../services/common/functions';
 
 @Component({
     selector: 'app-ticket-modal',
@@ -17,6 +18,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     form: NgForm;
 
     customers: CustomerModel[];
+    readonly states = listEnum<TicketStatus>(TicketStatus);
 
     constructor(
         private readonly _customersService: CustomerService,

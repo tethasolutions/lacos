@@ -22,6 +22,7 @@ public class JobMappingProfile : Profile
     public JobMappingProfile()
     {
         CreateMap<Job, JobReadModel>()
+            .MapMember(x => x.Address, y => y.Address != null ? y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
             .MapMember(x => x.Code, y => y.Year.ToString() + "/" + y.Number.ToString())
             .MapMember(x => x.Date, y => y.JobDate)
             .MapMember(x => x.Customer, y => y.Customer!.Name)
@@ -36,8 +37,10 @@ public class JobMappingProfile : Profile
             .IgnoreCommonMembers()
             .Ignore(x => x.Activities)
             .Ignore(x => x.Customer)
+            .Ignore(x => x.Address)
             .Ignore(x => x.Number)
             .Ignore(x => x.Year)
+            .Ignore(x => x.PurchaseOrders)
             .MapMember(x => x.JobDate, (x, y) => y.IsTransient() ? x.Date : y.JobDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId);
 

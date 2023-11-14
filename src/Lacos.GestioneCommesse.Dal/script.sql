@@ -1677,22 +1677,454 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231026084953_Modify_Product_QrCodeNumber_int_to_string')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031135701_release13')
 BEGIN
     DECLARE @var17 sysname;
     SELECT @var17 = [d].[name]
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
-    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Registry].[Products]') AND [c].[name] = N'QrCodeNumber');
-    IF @var17 IS NOT NULL EXEC(N'ALTER TABLE [Registry].[Products] DROP CONSTRAINT [' + @var17 + '];');
-    ALTER TABLE [Registry].[Products] ALTER COLUMN [QrCodeNumber] nvarchar(10) NULL;
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Docs].[Activities]') AND [c].[name] = N'CustomerAddressId');
+    IF @var17 IS NOT NULL EXEC(N'ALTER TABLE [Docs].[Activities] DROP CONSTRAINT [' + @var17 + '];');
+    ALTER TABLE [Docs].[Activities] ALTER COLUMN [CustomerAddressId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231026084953_Modify_Product_QrCodeNumber_int_to_string')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031135701_release13')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231026084953_Modify_Product_QrCodeNumber_int_to_string', N'7.0.10');
+    VALUES (N'20231031135701_release13', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] DROP CONSTRAINT [FK_PurchaseOrders_Customers_CustomerId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] DROP CONSTRAINT [FK_PurchaseOrders_Interventions_InterventionId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    EXEC sp_rename N'[Docs].[PurchaseOrders].[InterventionId]', N'JobId', N'COLUMN';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    EXEC sp_rename N'[Docs].[PurchaseOrders].[CustomerId]', N'SupplierId', N'COLUMN';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    EXEC sp_rename N'[Docs].[PurchaseOrders].[IX_PurchaseOrders_InterventionId]', N'IX_PurchaseOrders_JobId', N'INDEX';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    EXEC sp_rename N'[Docs].[PurchaseOrders].[IX_PurchaseOrders_CustomerId]', N'IX_PurchaseOrders_SupplierId', N'INDEX';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    CREATE TABLE [Registry].[Suppliers] (
+        [Id] bigint NOT NULL IDENTITY,
+        [Name] nvarchar(200) NOT NULL,
+        [Notes] nvarchar(max) NULL,
+        [Telephone] nvarchar(max) NULL,
+        [Email] nvarchar(max) NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_Suppliers] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    CREATE TABLE [Registry].[Addresses] (
+        [Id] bigint NOT NULL IDENTITY,
+        [Description] nvarchar(200) NOT NULL,
+        [City] nvarchar(200) NOT NULL,
+        [StreetAddress] nvarchar(200) NOT NULL,
+        [Province] nvarchar(200) NOT NULL,
+        [ZipCode] nvarchar(5) NOT NULL,
+        [Telephone] nvarchar(20) NULL,
+        [Email] nvarchar(200) NULL,
+        [IsMainAddress] bit NOT NULL,
+        [Notes] nvarchar(max) NULL,
+        [SupplierId] bigint NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_Addresses] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Addresses_Suppliers_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Registry].[Suppliers] ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    CREATE INDEX [IX_Addresses_SupplierId] ON [Registry].[Addresses] ([SupplierId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_Jobs_JobId] FOREIGN KEY ([JobId]) REFERENCES [Docs].[Jobs] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_Suppliers_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Registry].[Suppliers] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231031151943_release14', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031154128_release15')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [HasHighPriority] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031154128_release15')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231031154128_release15', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [Reference] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+BEGIN
+    ALTER TABLE [Registry].[Customers] ADD [Contact] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+BEGIN
+    ALTER TABLE [Registry].[Customers] ADD [ContactEmail] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+BEGIN
+    ALTER TABLE [Registry].[Customers] ADD [ContactTelephone] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231102160233_release16', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] DROP CONSTRAINT [FK_Addresses_Suppliers_SupplierId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] DROP CONSTRAINT [PK_Addresses];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    EXEC sp_rename N'[Registry].[Addresses].[IX_Addresses_SupplierId]', N'IX_Addresses_SupplierId', N'INDEX';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [AddressId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [AddressId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    DECLARE @var18 sysname;
+    SELECT @var18 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Registry].[Addresses]') AND [c].[name] = N'SupplierId');
+    IF @var18 IS NOT NULL EXEC(N'ALTER TABLE [Registry].[Addresses] DROP CONSTRAINT [' + @var18 + '];');
+    ALTER TABLE [Registry].[Addresses] ALTER COLUMN [SupplierId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD CONSTRAINT [PK_Addresses] PRIMARY KEY ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    CREATE INDEX [IX_Jobs_AddressId] ON [Docs].[Jobs] ([AddressId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    CREATE INDEX [IX_Activities_AddressId] ON [Docs].[Activities] ([AddressId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD CONSTRAINT [FK_Activities_Addresses_AddressId] FOREIGN KEY ([AddressId]) REFERENCES [Registry].[Addresses] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD CONSTRAINT [FK_Addresses_Suppliers_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Registry].[Suppliers] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD CONSTRAINT [FK_Jobs_Addresses_AddressId] FOREIGN KEY ([AddressId]) REFERENCES [Registry].[Addresses] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231106145257_release17', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    ALTER TABLE [Docs].[Activities] DROP CONSTRAINT [FK_Activities_CustomerAddresses_CustomerAddressId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    ALTER TABLE [Registry].[Products] DROP CONSTRAINT [FK_Products_CustomerAddresses_CustomerAddressId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] DROP CONSTRAINT [FK_Tickets_CustomerAddresses_CustomerAddressId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    DROP TABLE [Registry].[CustomerAddresses];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    DROP INDEX [IX_Tickets_CustomerAddressId] ON [Docs].[Tickets];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    DROP INDEX [IX_Activities_CustomerAddressId] ON [Docs].[Activities];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    DECLARE @var19 sysname;
+    SELECT @var19 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Docs].[Tickets]') AND [c].[name] = N'CustomerAddressId');
+    IF @var19 IS NOT NULL EXEC(N'ALTER TABLE [Docs].[Tickets] DROP CONSTRAINT [' + @var19 + '];');
+    ALTER TABLE [Docs].[Tickets] DROP COLUMN [CustomerAddressId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    DECLARE @var20 sysname;
+    SELECT @var20 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Docs].[Activities]') AND [c].[name] = N'CustomerAddressId');
+    IF @var20 IS NOT NULL EXEC(N'ALTER TABLE [Docs].[Activities] DROP CONSTRAINT [' + @var20 + '];');
+    ALTER TABLE [Docs].[Activities] DROP COLUMN [CustomerAddressId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    EXEC sp_rename N'[Registry].[Products].[CustomerAddressId]', N'AddressId', N'COLUMN';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    EXEC sp_rename N'[Registry].[Products].[IX_Products_CustomerAddressId]', N'IX_Products_AddressId', N'INDEX';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD [CustomerId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    CREATE INDEX [IX_Addresses_CustomerId] ON [Registry].[Addresses] ([CustomerId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD CONSTRAINT [FK_Addresses_Customers_CustomerId] FOREIGN KEY ([CustomerId]) REFERENCES [Registry].[Customers] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD CONSTRAINT [FK_Products_Addresses_AddressId] FOREIGN KEY ([AddressId]) REFERENCES [Registry].[Addresses] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231107102344_release18', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113131318_release19')
+BEGIN
+    DECLARE @var21 sysname;
+    SELECT @var21 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Registry].[Addresses]') AND [c].[name] = N'ZipCode');
+    IF @var21 IS NOT NULL EXEC(N'ALTER TABLE [Registry].[Addresses] DROP CONSTRAINT [' + @var21 + '];');
+    ALTER TABLE [Registry].[Addresses] ALTER COLUMN [ZipCode] nvarchar(5) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113131318_release19')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231113131318_release19', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113153114_release20')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD [Date] datetimeoffset(3) NOT NULL DEFAULT '0001-01-01T00:00:00.000+00:00';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113153114_release20')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD [Number] int NOT NULL DEFAULT 0;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113153114_release20')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD [Year] int NOT NULL DEFAULT 0;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113153114_release20')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231113153114_release20', N'7.0.10');
 END;
 GO
 

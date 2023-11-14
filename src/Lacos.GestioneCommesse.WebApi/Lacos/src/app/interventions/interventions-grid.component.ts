@@ -31,7 +31,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
     data: GridDataResult;
     gridState: State = {
         skip: 0,
-        take: 20,
+        take: 30,
         filter: {
             filters: [
                 this._buildActivityIdFilter()

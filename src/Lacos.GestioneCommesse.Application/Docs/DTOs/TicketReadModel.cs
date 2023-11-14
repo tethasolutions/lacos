@@ -16,8 +16,6 @@ public class TicketReadModel : BaseEntityDto
 
     public long CustomerId { get; set; }
     public string? CustomerName { get; set; }
-
-    public long CustomerAddressId { get; set; }
-    public string? CustomerFullAddress { get; set; }
+    //public bool CanBeRemoved { get; set; }
 
 }

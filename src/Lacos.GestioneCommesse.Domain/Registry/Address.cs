@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Registry;
 
-public class CustomerAddress : FullAuditedEntity
+public class Address : FullAuditedEntity
 {
     public string? Description { get; set; }
     public string? City { get; set; }
@@ -14,17 +14,12 @@ public class CustomerAddress : FullAuditedEntity
     public bool IsMainAddress { get; set; }
     public string? Notes { get; set; }
 
-    public long CustomerId { get; set; }
+    public long? CustomerId { get; set; }
     public Customer? Customer { get; set; }
 
-    public ICollection<Activity> Activities { get; set; }
-    public ICollection<Product> Products { get; set; }
-    public ICollection<Ticket> Tickets { get; set; }
+    public long? SupplierId { get; set; }
+    public Supplier? Supplier { get; set; }
 
-    public CustomerAddress()
-    {
-        Activities = new List<Activity>();
-        Products = new List<Product>();
-        Tickets = new List<Ticket>();
-    }
+    public ICollection<Job> Jobs { get; set; }
+    public ICollection<Activity> Activities { get; set; }
 }

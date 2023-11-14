@@ -100,7 +100,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   }
 
   customerChanged(customerId: number) {
-    this.options.customerAddressId = null;
+    this.options.addressId = null;
     if (customerId == undefined) { 
       this.customerSelezionato = new CustomerModel();
       return; 
@@ -120,7 +120,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
                 filter(e => e),
                 switchMap(() => this._customerService.createCustomer(request)),
                 tap(e => {
-                  this.options.customerId = e;
+                  this.options.customerId = e.id;
                   this._messageBox.success(`Cliente ${request.name} creato`);
                 }),
                 tap(() => this._readCustomers(true))
@@ -150,8 +150,8 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
           .pipe(
               map(e => e),
               tap(e => {
-                this.options.customerAddressId = e;
-                address.id = e;
+                this.options.addressId = e.id;
+                address.id = e.id;
                 const customerSelezionato: CustomerModel = this.customers.find(x => x.id === this.options.customerId);
                 if (customerSelezionato != undefined) { 
                   customerSelezionato.addresses.push(address);

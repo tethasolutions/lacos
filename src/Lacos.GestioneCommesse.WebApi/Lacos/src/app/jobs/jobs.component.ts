@@ -8,6 +8,10 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 import { JobModalComponent } from './job-modal.component';
 import { IJobReadModel, Job, JobStatus, jobStatusNames } from '../services/jobs/models';
 import { getToday } from '../services/common/functions';
+import { ActivityModalComponent, ActivityModalOptions } from '../activities/activity-modal.component';
+import { Activity, ActivityStatus } from '../services/activities/models';
+import { ActivitiesService } from '../services/activities/activities.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-jobs',
@@ -18,13 +22,16 @@ export class JobsComponent extends BaseComponent implements OnInit {
     @ViewChild('jobModal', { static: true })
     jobModal: JobModalComponent;
 
+    @ViewChild('activityModal', { static: true })
+    activityModal: ActivityModalComponent;
+    
     @ViewChild('grid', { static: true })
     grid: GridComponent;
 
     data: GridDataResult;
     gridState: State = {
         skip: 0,
-        take: 15,
+        take: 30,
         filter: {
             filters: [
                 {
@@ -43,7 +50,9 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     constructor(
         private readonly _service: JobsService,
-        private readonly _messageBox: MessageBoxService
+        private readonly _serviceActivity: ActivitiesService,
+        private readonly _messageBox: MessageBoxService,
+        private router: Router
     ) {
         super();
     }
@@ -59,7 +68,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const job = new Job(0, null, today.getFullYear(), today, null, JobStatus.Pending, null);
+        const job = new Job(0, null, today.getFullYear(), today, null, null, false, JobStatus.Pending, null, null);
 
         this._subscriptions.push(
             this.jobModal.open(job)
@@ -83,6 +92,27 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+
+    createActivity(job: IJobReadModel) {
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, job.id, null, null, null);
+        const options = new ActivityModalOptions(activity);
+
+        this._subscriptions.push(
+            this.activityModal.open(options)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._serviceActivity.create(activity)),
+                    tap(() => this._afterActivityCreated(job.id)),
+                    
+                )
+                .subscribe()
+        );
+    }
+
+    private _afterActivityCreated(id: number) {
+        this._messageBox.success('Attività creata.');
+        this.router.navigate(["/activities?jobId=" + id.toString()]);
     }
 
     askRemove(job: IJobReadModel) {

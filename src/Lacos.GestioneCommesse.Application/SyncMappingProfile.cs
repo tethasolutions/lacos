@@ -35,7 +35,7 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<CheckList, SyncCheckListDto>();
             CreateMap<CheckListItem, SyncCheckListItemDto>();
             CreateMap<Customer, SyncCustomerDto>();
-            CreateMap<CustomerAddress, SyncCustomerAddressDto>();
+            CreateMap<Address, SyncAddressDto>();
             CreateMap<Product, SyncProductDto>();
             CreateMap<ProductType, SyncProductTypeDto>();
             CreateMap<ProductDocument, SyncProductDocumentDto>();

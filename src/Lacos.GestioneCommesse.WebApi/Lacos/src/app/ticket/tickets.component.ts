@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridComponent, GridDataResult } from '@progress/kendo-angular-grid';
+import { GridComponent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { TicketsService } from '../services/tickets/tickets.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -8,8 +8,6 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 import { TicketModalComponent } from './ticket-modal.component';
 import { ITicketReadModel, Ticket, TicketStatus, ticketStatusNames } from '../services/tickets/models';
 import { getToday } from '../services/common/functions';
-import { Activity, ActivityStatus } from '../services/activities/models';
-import { ActivitiesService } from '../services/activities/activities.service';
 
 @Component({
     selector: 'app-tickets',
@@ -26,7 +24,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     data: GridDataResult;
     gridState: State = {
         skip: 0,
-        take: 15,
+        take: 30,
         filter: {
             filters: [
                 {
@@ -46,7 +44,6 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     constructor(
         private readonly _service: TicketsService,
-        private readonly _activitiesService: ActivitiesService,
         private readonly _messageBox: MessageBoxService
     ) {
         super();
@@ -63,7 +60,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null);
+        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null);
 
         this._subscriptions.push(
             this.ticketModal.open(ticket)
@@ -130,15 +127,22 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
         this._read();
     }
+    
+    readonly rowCallback = (context: RowClassArgs) => {
+        const ticket = context.dataItem as ITicketReadModel;
 
-    private _afterActivityCreated(ticket: ITicketReadModel, activity: Activity) {
-        this._messageBox.success(`Attività ${activity.number} creata per il ticket ${ticket.code}.`);
-
-        if (this.expandedDetailKeys.indexOf(ticket.id) < 0) {
-            this.expandedDetailKeys = this.expandedDetailKeys.concat(ticket.id);
+        switch (true) {
+            case ticket.status === TicketStatus.Canceled:
+                return { 'ticket-canceled': true };
+            case ticket.status === TicketStatus.InProgress:
+                return { 'ticket-inprogress': true };
+            case ticket.status === TicketStatus.Opened:
+                return { 'ticket-opened': true };
+            case ticket.status === TicketStatus.Resolved:
+                return { 'ticket-resolved': true };
+            default:
+                return {};
         }
-
-        this._read();
-    }
+    };
 
 }

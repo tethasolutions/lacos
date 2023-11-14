@@ -15,7 +15,7 @@ export class ProductModel {
     productType: ProductTypeModel;
 
     customerId: number;
-    customerAddressId: number;
+    addressId: number;
     location: string;
     serialNumber: string;
     reiType: string;
@@ -38,7 +38,7 @@ export class ProductModel {
         this.productTypeId = null;
         this.productType = new ProductTypeModel();
         this.customerId = null;
-        this.customerAddressId = null;
+        this.addressId = null;
         this.location = null;
         this.serialNumber = null;
         this.reiType = null;
@@ -60,6 +60,6 @@ export interface ProductReadModel {
     readonly pictureFileName: string;
     readonly qrCode: string;
     readonly productType: string;
-    readonly customerAddressId: number;
+    readonly addressId: number;
     readonly productTypeId: number;
 }

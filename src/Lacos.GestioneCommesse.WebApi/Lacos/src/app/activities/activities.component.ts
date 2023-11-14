@@ -6,9 +6,8 @@ import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { Activity, ActivityStatus, IActivityReadModel, activityStatusNames } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { ActivityModalComponent, ActivityModalOptions } from './activity-modal.component';
-import { Job } from '../services/jobs/models';
 import { JobsService } from '../services/jobs/jobs.service';
 import { of } from 'rxjs';
 
@@ -24,7 +23,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     data: GridDataResult;
     gridState: State = {
         skip: 0,
-        take: 20,
+        take: 30,
         filter: {
             filters: [
                 {
@@ -32,7 +31,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                         .map(e => ({ field: 'status', operator: 'eq', value: e })),
                     logic: 'or'
                 },
-                this._buildJobIdFilter()
+                this._buildJobIdFilter(),
+                this._buildTypeIdFilter()
             ],
             logic: 'and'
         },
@@ -40,7 +40,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         sort: [{ field: 'number', dir: 'asc' }]
     };
 
-    private _job: Job;
+    private _jobId: number;
+    private _typeId: number;
 
     readonly activityStatusNames = activityStatusNames;
 
@@ -48,7 +49,6 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         private readonly _service: ActivitiesService,
         private readonly _messageBox: MessageBoxService,
         private readonly _route: ActivatedRoute,
-        private readonly _jobsService: JobsService
     ) {
         super();
     }
@@ -77,7 +77,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     create() {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, this._job?.id, null, null, null);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, this._jobId, null, null, null);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -149,12 +149,12 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     private _subscribeRouteParams() {
         this._route.queryParams
             .pipe(
-                switchMap(e =>
-                    +e['jobId']
-                        ? this._jobsService.get(+e['jobId'])
-                        : of(void 0)
-                ),
-                tap(e => this._setJob(e))
+                // switchMap(e =>
+                //     +e['jobId']
+                //         ? this._jobsService.get(+e['jobId'])
+                //         : of(void 0)
+                // ),                
+                tap(e => this._setParams(e))
             )
             .subscribe();
     }
@@ -173,19 +173,35 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         return {
             field: 'jobId',
             get operator() {
-                return that._job
+                return that._jobId
                     ? 'eq'
                     : 'isnotnull'
             },
             get value() {
-                return that._job?.id;
+                return that._jobId;
             }
         };
     }
 
-    private _setJob(job: Job) {
-        this._job = job;
+    private _buildTypeIdFilter() {
+        const that = this;
 
+        return {
+            field: 'typeId',
+            get operator() {
+                return that._typeId
+                    ? 'eq'
+                    : 'isnotnull'
+            },
+            get value() {
+                return that._typeId;
+            }
+        };
+    }
+
+    private _setParams(params: Params) {
+        this._jobId = isNaN(+params['jobId'])? null : +params['jobId'];
+        this._typeId = isNaN(+params['typeId'])? null : +params['typeId'];
         this._read();
     }
 

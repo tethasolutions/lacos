@@ -9,6 +9,10 @@ import { AddressModalComponent } from '../address-modal/address-modal.component'
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { AddressesService } from '../services/addresses.service';
 import { CustomerService } from '../services/customer.service';
+import { SupplierService } from '../services/supplier.service';
+import { SupplierModel } from '../shared/models/supplier.model';
+import { Job } from '../services/jobs/models';
+import { Activity } from '../services/activities/models';
 
 @Component({
   selector: 'app-addresses-modal',
@@ -24,12 +28,14 @@ export class AddressesModalComponent extends BaseComponent {
   private _oveflow: string;
 
   @Input() customer = new CustomerModel();
+  @Input() supplier = new SupplierModel();
   @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
 
   constructor(
       private readonly _messageBox: MessageBoxService,
       private readonly _addressesService: AddressesService,
-      private readonly _customerService: CustomerService
+      private readonly _customerService: CustomerService,
+      private readonly _supplierService: SupplierService
   ) {
       super();
   }
@@ -88,6 +94,37 @@ export class AddressesModalComponent extends BaseComponent {
                 .subscribe()
         );
     }
+    if (this.supplier.id === null) {
+        this._subscriptions.push(
+            this.addressModal.open(request)
+                .pipe(
+                    filter(e => e),
+                    tap(e => {
+                        this.supplier.addresses.push(request);
+                        if (request.isMainAddress) {
+                            this.supplier.mainAddress = request;
+                            this.supplier.addresses.forEach((item: AddressModel) => {
+                                item.isMainAddress = item.tempId === request.tempId;
+                            });
+                        }
+                        this._messageBox.success(`Indirizzo creato con successo`);
+                    })
+                )
+                .subscribe()
+        );
+    } else {
+        request.supplierId = this.supplier.id;
+        this._subscriptions.push(
+            this.addressModal.open(request)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._addressesService.createAddress(request)),
+                    tap(e => this._messageBox.success(`Indirizzo creato con successo`)),
+                    tap(() => this.readAddresses())
+                )
+                .subscribe()
+        );
+    }
     
   }
 
@@ -105,6 +142,28 @@ export class AddressesModalComponent extends BaseComponent {
                             if (request.isMainAddress) {
                                 this.customer.mainAddress = request;
                                 this.customer.addresses.forEach((item: AddressModel) => {
+                                    item.isMainAddress = item.tempId === request.tempId;
+                                });
+                            }
+                            this._messageBox.success(`Indirizzo modificato con successo`);
+                        }
+                    })
+                )
+                .subscribe()
+        );
+    } else if (this.supplier.id === null) {
+        const request: AddressModel = Object.assign(new AddressModel(), JSON.parse(JSON.stringify(address)));
+        this._subscriptions.push(
+            this.addressModal.open(request)
+                .pipe(
+                    filter(e => e),
+                    tap(e => {
+                        const indexAddressToEdit = this.supplier.addresses.findIndex(x => x.tempId === request.tempId);
+                        if (indexAddressToEdit >= 0) {
+                            this.supplier.addresses[indexAddressToEdit] = request;
+                            if (request.isMainAddress) {
+                                this.supplier.mainAddress = request;
+                                this.supplier.addresses.forEach((item: AddressModel) => {
                                     item.isMainAddress = item.tempId === request.tempId;
                                 });
                             }
@@ -144,6 +203,14 @@ export class AddressesModalComponent extends BaseComponent {
                 this._messageBox.success(`L\'indirizzo cancellato con successo`);
             }
         });
+    } else if (this.supplier.id === null) {
+        this._messageBox.confirm(`Sei sicuro di voler cancellare l\'indirizzo?`, 'Conferma l\'azione').subscribe(result => {
+            if (result == true) {
+                if (address.isMainAddress) { this.supplier.mainAddress = null; }
+                this.supplier.addresses = this.supplier.addresses.filter(x => x.tempId !== address.tempId);
+                this._messageBox.success(`L\'indirizzo cancellato con successo`);
+            }
+        });
     } else {
         this._messageBox.confirm(`Sei sicuro di voler cancellare l\'indirizzo?`, 'Conferma l\'azione').subscribe(result => {
             if (result == true) {
@@ -165,6 +232,10 @@ export class AddressesModalComponent extends BaseComponent {
       if (result == true) {
         if (this.customer.id === null){
             this.customer.addresses.forEach((item: AddressModel) => {
+                item.isMainAddress = item.tempId === address.tempId;
+            });
+        } else if (this.supplier.id === null){
+            this.supplier.addresses.forEach((item: AddressModel) => {
                 item.isMainAddress = item.tempId === address.tempId;
             });
         } else {
@@ -193,5 +264,16 @@ export class AddressesModalComponent extends BaseComponent {
         )
       .subscribe()
     );
+    this._subscriptions.push(
+        this._supplierService.getSupplier(this.supplier.id)
+          .pipe(
+              map(e => {
+                const result = Object.assign(new SupplierModel(), e);
+                this.supplier.addresses = result.addresses;
+              }),
+              tap(() => {})
+          )
+        .subscribe()
+      );
   }
 }

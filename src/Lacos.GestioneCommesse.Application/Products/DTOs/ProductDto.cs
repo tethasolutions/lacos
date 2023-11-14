@@ -11,7 +11,7 @@
         public string? QrCodePrefix { get; set; }
         public string? QrCodeNumber { get; set; }
         public long? CustomerId { get; set; }
-        public long? CustomerAddressId { get; set; }
+        public long? AddressId { get; set; }
         public long? ProductTypeId { get; set; }
 
         public string? Location { get; set; }

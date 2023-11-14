@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class AddressModel {
     id: number;
     customerId: number;
+    supplierId: number;
     description: string;
     city: string;
     streetAddress: string;
@@ -16,16 +17,18 @@ export class AddressModel {
 
     get fullAddress(): string {
         let result = '';
+        if (this.description !== '') { result += `${this.description} - `; }
         if (this.streetAddress !== null) { result += `${this.streetAddress}, `; }
-        if (this.city !== null) { result += `${this.city}, `; }
-        if (this.province !== null) { result += `${this.province}, `; }
-        if (this.zipCode !== null) { result += `${this.zipCode}`; }
+        if (this.city !== null) { result += `${this.city} `; }
+        if (this.province !== null) { result += ` (${this.province}) `; }
+        if (this.zipCode !== null) { result += `, ${this.zipCode}`; }
         return result;
     }
 
     constructor() {
         this.id = null;
         this.customerId = null;
+        this.supplierId = null;
         this.description = '';
         this.city = null;
         this.streetAddress = null;

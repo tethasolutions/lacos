@@ -265,22 +265,6 @@ kendo-scheduler .k-event .k-event-actions:first-child,
     margin: 0;
 }
 
-.dashboardBtn {
-    width: 90%;
-    padding: 15px;
-    min-height: 100px;
-    margin: 7px;
-}
-
-.dashboardBtn:hover {
-    background-color: #46a43e;
-    color: #FFF;
-}
-
-.dashboardBtn .title {
-    padding-bottom: 10px;
-}
-
 .lacos {
     color: #46a43e;
 }
@@ -323,3 +307,49 @@ app-activities {
         @include striped-background(rgba(25, 135, 84, .3), rgba(25, 135, 84, .1));
     }
 }
+
+app-tickets {
+
+    .ticket-canceled .ticket-status {
+        @include striped-background(rgba(220, 53, 69, .3), rgba(220, 53, 69, .1));
+    }
+
+    .ticket-resolved .ticket-status {
+        @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
+    }
+
+    .ticket-opened .ticket-status {
+        @include striped-background(rgba(255, 193, 7, .3), rgba(255, 193, 7, .1));
+    }
+
+    .ticket-inprogress .ticket-status {
+        @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
+    }
+
+}
+
+.add-customer-button, .add-address-button {
+    margin-left: 5px;
+}
+
+.customer-combobox, .address-combobox {
+    width: calc(100% - 45px);
+}
+
+.job-alert {
+    color: #dc3545;
+}
+
+.activity-color {
+    padding: 0;
+    position: relative !important;
+    &>div {
+        position: absolute;
+        top:0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px solid #FFF;
+    }
+}
+

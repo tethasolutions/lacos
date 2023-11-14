@@ -1,6 +1,4 @@
-﻿using Lacos.GestioneCommesse.Application.Customers.DTOs;
-using Lacos.GestioneCommesse.Application.Customers.Services;
-using Lacos.GestioneCommesse.Application.Security;
+﻿using Lacos.GestioneCommesse.Application.Security;
 using Lacos.GestioneCommesse.Application.Security.DTOs;
 using Lacos.GestioneCommesse.WebApi.Auth;
 using Lacos.GestioneCommesse.WebApi.Models.Security;
@@ -8,6 +6,8 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Lacos.GestioneCommesse.Application.Registry.DTOs;
+using Lacos.GestioneCommesse.Application.Registry.Services;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -26,6 +26,22 @@ public class AddressesController : LacosApiController
     public async Task<ActionResult<AddressDto>> GetCustomerAddresses(long id)
     {
         var addresses = await addressService.GetCustomerAddresses(id);
+
+        return Ok(addresses);
+    }
+
+    [HttpGet("address/supplier/{id}")]
+    public async Task<ActionResult<AddressDto>> GetSupplierAddresses(long id)
+    {
+        var addresses = await addressService.GetSupplierAddresses(id);
+
+        return Ok(addresses);
+    }
+
+    [HttpGet("addresses")]
+    public async Task<ActionResult<AddressDto>> GetAddresses()
+    {
+        var addresses = await addressService.GetAddresses();
 
         return Ok(addresses);
     }

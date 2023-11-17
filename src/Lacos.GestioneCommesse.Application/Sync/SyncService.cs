@@ -137,6 +137,45 @@ namespace Lacos.GestioneCommesse.Application.Sync
             }
         }
 
+         public async Task SyncFromAppToDB_SignIntervention(SyncSignDto signDto)
+         {
+             try
+             {
+                 var repository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
+                 var entity = await
+                     repository
+                         .Query()
+                         .Where(x=>x.Id == signDto.InterventionId)
+                         .SingleOrDefaultAsync();
+                 if (entity == null)
+                     throw new NotFoundException("Intervention not found");
+
+                 entity.FinalNotes = signDto.FinalNotes;
+                 entity.CustomerSignatureFileName = signDto.Filename;
+                 //entity. = signDto.NameSurname;
+                 repository.Update(entity);
+                 await dbContext.SaveChanges();
+
+                 await using Stream streamOriginalImage = new MemoryStream(signDto.Content);
+                 var folder = configuration.AttachmentsPath;
+                 Directory.CreateDirectory(folder);
+                 var path = Path.Combine(folder, signDto.Filename);
+                 if (!File.Exists(path))
+                 {
+                     await using Stream stremNewImage = File.Create(path);
+                     await streamOriginalImage.CopyToAsync(stremNewImage);
+                 }
+
+
+             }
+             catch (Exception e)
+             {
+                 Console.WriteLine(e);
+                 throw;
+             }
+         }
+
+
          public async Task<SyncImageDto> SyncFromDBToApp_RemoteImage(SyncImageDto syncRemoteImage)
          {
              try

@@ -82,6 +82,22 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         {
                return await service.SyncFromDBToApp_RemoteImage(syncLocalImage);
         }
+
+        [AllowAnonymous]
+        [HttpPost("SignIntervention")]
+        public async Task<IActionResult> SyncFromAppToDB_SignIntervention([FromBody] SyncSignDto signDto)
+        {
+            try
+            {
+                await service.SyncFromAppToDB_SignIntervention(signDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+           
+        }
     }
     
 }

@@ -24,6 +24,9 @@ namespace Lacos.GestioneCommesse.Application.Sync
         Task<SyncLocalDbChanges> SyncFromAppToDB_LocalChanges(SyncLocalDbChanges syncLocalDbChanges);
 
         Task SyncFromAppToDB_LocalImage(SyncImageDto syncLocalImage);
+
+        Task SyncFromAppToDB_SignIntervention(SyncSignDto signDto);
+
         Task<SyncImageDto> SyncFromDBToApp_RemoteImage(SyncImageDto syncLocalImage);
     }
 }

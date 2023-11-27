@@ -47,6 +47,10 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
         return result;
     }
 
+    onCustomerChange(){
+        this.addresses = this.customers.find(e => e.id == this.options.customerId)?.addresses ?? [];
+    }
+
     protected override _canClose() {
         this.form.markAsDirty();
 

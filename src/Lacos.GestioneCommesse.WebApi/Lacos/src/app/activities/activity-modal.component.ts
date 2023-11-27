@@ -75,7 +75,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 .pipe(
                     tap(e => {
                         this.job = e;
-                        this.readAddresses()
+                        this.readAddresses(this.job.customerId)
                     })
                 )
                 .subscribe()
@@ -141,6 +141,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     private _tryGetAddress() {
         if (!this.options.activity.jobId) {
+            this.addresses = [];
             this.options.activity.addressId = null;
             return;
         }
@@ -148,9 +149,12 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         if (this.options.activity.addressId) return;
 
         const addressId = this.jobs
-            .find(e => e.id === this.options.activity.jobId)
-            .addressId;
+            .find(e => e.id === this.options.activity.jobId).addressId;
 
+        const customerId = this.jobs
+            .find(e => e.id === this.options.activity.jobId).customerId;
+
+        this.readAddresses(customerId);
         this.options.activity.addressId = addressId;
     }
 
@@ -175,7 +179,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 .pipe(
                     map(e => e),
                     tap(e => {
-                        this.readAddresses();
+                        this.readAddresses(this.job.customerId);
                         this.options.activity.addressId = e.id;
                         this._messageBox.success(`Indirizzo creato con successo`);
                     })
@@ -184,9 +188,9 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         );
     }
 
-    readAddresses() {
+    readAddresses(customerId: number) {
         this._subscriptions.push(
-            this._addressesService.getCustomerAddresses(this.job.customerId)
+            this._addressesService.getCustomerAddresses(customerId)
                 .pipe(
                     map(e => {
                         this.addresses = e;

@@ -57,7 +57,7 @@
                     <kendo-formfield class="form-group">
                         <kendo-combobox [data]="customers" [valuePrimitive]="true" textField="name" valueField="id"
                             name="customerId" [(ngModel)]="options.customerId" required [suggest]="true"
-                            [allowCustom]="false" [disabled]="!!options.id" class="customer-combobox">
+                            [allowCustom]="false" [disabled]="!!options.id" class="customer-combobox" (valueChange)="onCustomerChange()">
                         </kendo-combobox>
                         <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button"
                             title="Nuovo cliente">

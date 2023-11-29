@@ -22,6 +22,12 @@ public class JobsController : LacosApiController
             .ToDataSourceResultAsync(request);
     }
 
+    [HttpGet("getTicketJob/{customerId}")]
+    public Task<JobDto> GetTicketJob(long CustomerId)
+    {
+        return service.GetTicketJob(CustomerId);
+    }
+
     [HttpGet("{id}")]
     public Task<JobDto> Get(long id)
     {
@@ -47,4 +53,5 @@ public class JobsController : LacosApiController
     {
         return service.Delete(id);
     }
+
 }

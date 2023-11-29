@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127175605_descrizione nullable")]
+    partial class descrizionenullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,68 +141,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.HasIndex("TypeId");
 
                     b.ToTable("Activities", "Docs");
-                });
-
-            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.ActivityAttachment", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("ActivityId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("CreatedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("DeletedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset?>("DeletedOn")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("EditedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("EditedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset?>("EditedOn")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId")
-                        .IsUnique();
-
-                    b.ToTable("ActivityAttachments", "Docs");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.ActivityProduct", b =>
@@ -767,9 +708,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsInternalJob")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset>("JobDate")
@@ -2033,17 +1971,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.ActivityAttachment", b =>
-                {
-                    b.HasOne("Lacos.GestioneCommesse.Domain.Docs.Activity", "Activity")
-                        .WithOne("Attachment")
-                        .HasForeignKey("Lacos.GestioneCommesse.Domain.Docs.ActivityAttachment", "ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
-                });
-
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.ActivityProduct", b =>
                 {
                     b.HasOne("Lacos.GestioneCommesse.Domain.Docs.Activity", "Activity")
@@ -2374,8 +2301,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Activity", b =>
                 {
                     b.Navigation("ActivityProducts");
-
-                    b.Navigation("Attachment");
 
                     b.Navigation("Interventions");
                 });

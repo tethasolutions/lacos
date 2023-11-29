@@ -16,6 +16,8 @@ public class ActivityDetailDto
     public string? Address { get; set; }
     public long TypeId { get; set; }
     public string? Type { get; set; }
+    public string? AttachmentFileName { get; set; }
+    public string? AttachmentDisplayName { get; set; }
     public string? Source { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
 }

@@ -36,6 +36,7 @@ export interface IActivityReadModel {
     readonly jobHasHighPriority: boolean;
     readonly customer: string;
     readonly expirationDate: Date | string;
+    readonly lastOperator: string;
 
 }
 
@@ -51,6 +52,8 @@ export class Activity {
         public jobId: number,
         public addressId: number,
         public typeId: number,
+        public attachmentDisplayName: string,
+        public attachmentFileName: string,
         expirationDate: Date | string
     ) {
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
@@ -69,7 +72,8 @@ export class Activity {
     }
 
     static build(o: Activity) {
-        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.addressId, o.typeId, o.expirationDate);
+        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.addressId, o.typeId, o.attachmentDisplayName,
+            o.attachmentFileName, o.expirationDate);
     }
 
 }
@@ -91,6 +95,8 @@ export class ActivityDetail {
         readonly address: string,
         readonly typeId: number,
         readonly type: string,
+        readonly attachmentDisplayName: string,
+        readonly attachmentFileName: string,
         readonly source: string,
         expirationDate: Date | string
     ) {
@@ -99,12 +105,12 @@ export class ActivityDetail {
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.description, this.jobId,
-            this.addressId, this.typeId, this.expirationDate);
+            this.addressId, this.typeId, this.attachmentDisplayName, this.attachmentFileName, this.expirationDate);
     }
 
     static build(o: ActivityDetail) {
         return new ActivityDetail(o.id, o.status, o.number, o.description, o.jobId, o.job, o.customerId,
-            o.customer, o.addressId, o.address, o.typeId, o.type, o.source, o.expirationDate);
+            o.customer, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName, o.source, o.expirationDate);
     }
 
 }

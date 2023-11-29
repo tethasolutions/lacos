@@ -8,7 +8,7 @@
         </kendo-window-titlebar>
         <form name="updateUserForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options" class="redimensionModal">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-8">
                     <label>Nominativo</label>
                     <div class="form-group">
                         <input class="form-control" name="name" [(ngModel)]="options.name" required

@@ -28,7 +28,38 @@ public class JobsService : IJobsService
     public IQueryable<JobReadModel> Query()
     {
         return repository.Query()
+            //.Where(e => !e.IsInternalJob)
             .Project<JobReadModel>(mapper);
+    }
+
+    public async Task<JobDto> GetTicketJob(long CustomerId)
+    {
+        var jobDto = await repository.Query()
+            .Where(e => e.IsInternalJob && e.Year == DateTime.Now.Year && e.CustomerId == CustomerId)
+            .Project<JobDto>(mapper)
+            .FirstOrDefaultAsync();
+
+        if (jobDto == null)
+        {
+            jobDto = new JobDto();
+            jobDto.CustomerId = CustomerId;
+            jobDto.Year = DateTime.Now.Year;
+            jobDto.Reference = "Ticket " + DateTime.Now.Year.ToString();
+            jobDto.Date = DateTime.Now;
+            jobDto.Status = JobStatusDto.Pending;
+
+            var job = jobDto.MapTo<Job>(mapper);
+            job.IsInternalJob= true;
+            var number = await GetNextNumber(job.JobDate.Year);
+            job.SetCode(job.JobDate.Year, number);
+
+            await repository.Insert(job);
+
+            await dbContext.SaveChanges();
+            return await Get(job.Id);
+        }
+        else
+            return jobDto;
     }
 
     public async Task<JobDto> Get(long id)
@@ -45,6 +76,7 @@ public class JobsService : IJobsService
 
         return jobDto;
     }
+
 
     public async Task<JobDto> Create(JobDto jobDto)
     {

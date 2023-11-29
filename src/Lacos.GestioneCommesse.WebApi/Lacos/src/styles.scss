@@ -201,6 +201,7 @@ textarea {
 kendo-scheduler .k-event,
 .k-event {
     padding-right: 0px !important;
+    color: #212529 !important;
 }
 
 .k-file-size {
@@ -292,7 +293,7 @@ app-activities {
     }
 
     .activity-completed .activity-status {
-        @include striped-background(rgba(13, 110, 253, .3), rgba(13, 110, 253, .1));
+        @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
     }
 
     .activity-pending .activity-status {
@@ -323,6 +324,22 @@ app-tickets {
     }
 
     .ticket-inprogress .ticket-status {
+        @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
+    }
+
+}
+
+app-jobs {
+
+    .job-completed .job-status {
+        @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
+    }
+
+    .job-pending .job-status {
+        @include striped-background(rgba(255, 193, 7, .3), rgba(255, 193, 7, .1));
+    }
+
+    .job-inprogress .job-status {
         @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
     }
 

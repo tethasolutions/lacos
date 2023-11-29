@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231128102609_activity attachments")]
+    partial class activityattachments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,8 +199,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActivityId")
-                        .IsUnique();
+                    b.HasIndex("ActivityId");
 
                     b.ToTable("ActivityAttachments", "Docs");
                 });
@@ -767,9 +769,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsInternalJob")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset>("JobDate")
@@ -2036,8 +2035,8 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.ActivityAttachment", b =>
                 {
                     b.HasOne("Lacos.GestioneCommesse.Domain.Docs.Activity", "Activity")
-                        .WithOne("Attachment")
-                        .HasForeignKey("Lacos.GestioneCommesse.Domain.Docs.ActivityAttachment", "ActivityId")
+                        .WithMany()
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2374,8 +2373,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.Activity", b =>
                 {
                     b.Navigation("ActivityProducts");
-
-                    b.Navigation("Attachment");
 
                     b.Navigation("Interventions");
                 });

@@ -13,4 +13,6 @@ public class ActivityDto
     public long JobId { get; set; }
     public long? AddressId { get; set; }
     public long TypeId { get; set; }
+    public string? AttachmentFileName { get; set; }
+    public string? AttachmentDisplayName { get; set; }
 }

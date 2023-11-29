@@ -22,12 +22,6 @@
     </div>
 </div>
 
-<p>
-    <i>
-        {{activity.description}}
-    </i>
-</p>
-
 <div class="row mb-4">
     <div class="col-3">
         <b>
@@ -69,13 +63,19 @@
             {{activity.source}}
         </p>
     </div>
-    <div class="col-12">
+    <div class="col-3">
         <b>
             Commessa
         </b>
         <p>
             {{activity.job}}
         </p>
+    </div>
+    <div class="col-9">
+        <b>
+            Note
+        </b>
+        <div [innerHTML]="activity.description"></div>
     </div>
 </div>
 

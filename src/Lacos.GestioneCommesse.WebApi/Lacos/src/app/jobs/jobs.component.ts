@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridComponent, GridDataResult } from '@progress/kendo-angular-grid';
+import { GridComponent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { JobsService } from '../services/jobs/jobs.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -43,7 +43,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'code', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'desc' }]
     };
 
     readonly jobStatusNames = jobStatusNames;
@@ -95,7 +95,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
     }
 
     createActivity(job: IJobReadModel) {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, job.id, null, null, null);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, job.id, null, null, null, null, null);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -153,4 +153,18 @@ export class JobsComponent extends BaseComponent implements OnInit {
         this._read();
     }
 
+    readonly rowCallback = (context: RowClassArgs) => {
+        const job = context.dataItem as IJobReadModel;
+
+        switch (true) {
+            case job.status === JobStatus.Completed:
+                return { 'job-completed': true };
+            case job.status === JobStatus.InProgress:
+                return { 'job-inprogress': true };
+            case job.status === JobStatus.Pending:
+                return { 'job-pending': true };
+            default:
+                return {};
+        }
+    };
 }

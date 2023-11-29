@@ -37,7 +37,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'number', dir: 'asc' }]
+        sort: [{ field: 'expirationDate', dir: 'desc' }]
     };
 
     private _jobId: number;
@@ -77,7 +77,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     create() {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, this._jobId, null, null, null);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, this._jobId, null, null, null, null, null);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -109,8 +109,6 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         const activity = context.dataItem as IActivityReadModel;
 
         switch (true) {
-            case !!activity.expirationDate && new Date(activity.expirationDate).addDays(1).isPast():
-                return { 'activity-expired': true };
             case activity.status === ActivityStatus.Completed:
                 return { 'activity-completed': true };
             case activity.status === ActivityStatus.Pending:
@@ -119,6 +117,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                 return { 'activity-ready-for-completion': true };
             case activity.status === ActivityStatus.InProgress:
                 return { 'activity-in-progress': true };
+            case activity.status != ActivityStatus.Completed && !!activity.expirationDate && new Date(activity.expirationDate).addDays(1).isPast():
+                return { 'activity-expired': true };
             default:
                 return {};
         }
@@ -200,8 +200,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     private _setParams(params: Params) {
-        this._jobId = isNaN(+params['jobId'])? null : +params['jobId'];
-        this._typeId = isNaN(+params['typeId'])? null : +params['typeId'];
+        this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
+        this._typeId = isNaN(+params['typeId']) ? null : +params['typeId'];
         this._read();
     }
 

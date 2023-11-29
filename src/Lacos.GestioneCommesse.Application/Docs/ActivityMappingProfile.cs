@@ -27,7 +27,8 @@ public class ActivityMappingProfile : Profile
             .MapMember(x => x.JobCode, y => y.Job!.Year.ToString() + "/" + y.Job.Number.ToString())
             .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
             .MapMember(x => x.Customer, y => y.Job!.Customer!.Name)
-            .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex);
+            .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex)
+            .MapMember(x => x.LastOperator, y => y.EditedBy);
 
         CreateMap<ActivityDto, Activity>()
             .IgnoreCommonMembers()
@@ -42,7 +43,8 @@ public class ActivityMappingProfile : Profile
             .Ignore(x => x.SourcePuchaseOrderId)
             .Ignore(x => x.SourcePurchaseOrder)
             .Ignore(x => x.Interventions)
-            .Ignore(x => x.ActivityProducts);
+            .Ignore(x => x.ActivityProducts)
+            .Ignore(x => x.Attachment);
 
         CreateMap<Activity, ActivityDto>()
             .MapMember(x => x.Number, y => y.RowNumber);
@@ -62,5 +64,14 @@ public class ActivityMappingProfile : Profile
                     : y.SourceTicket.Description
             );
 
+        CreateMap<ActivityDto, ActivityAttachment>()
+            .Ignore(x => x.Activity)
+            .Ignore(x => x.ActivityId)
+            .Ignore(x => x.Id)
+            .MapMember(x => x.FileName, y => y.AttachmentFileName)
+            .MapMember(x => x.DisplayName, y => y.AttachmentDisplayName)
+            .IgnoreCommonMembers();
+
+        CreateMap<ActivityAttachment, ActivityAttachmentReadModel>();
     }
 }

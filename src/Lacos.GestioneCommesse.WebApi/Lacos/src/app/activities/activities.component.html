@@ -57,11 +57,16 @@
             </span>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="description" title="Descrizione">
+    <kendo-grid-column field="description" title="Note">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div [innerHTML]="dataItem.description"></div>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
     </kendo-grid-column>
     <kendo-grid-column field="address" title="Indirizzo">
+    </kendo-grid-column>
+    <kendo-grid-column field="lastOperator" title="Operatore">
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>

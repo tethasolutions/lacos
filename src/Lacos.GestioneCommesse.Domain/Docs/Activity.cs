@@ -29,6 +29,7 @@ public class Activity : FullAuditedEntity
 
     public ICollection<Intervention> Interventions { get; set; }
     public ICollection<ActivityProduct> ActivityProducts { get; set; }
+    public ActivityAttachment? Attachment { get; set; }
 
     public Activity()
     {

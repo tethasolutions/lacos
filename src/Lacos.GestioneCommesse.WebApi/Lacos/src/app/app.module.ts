@@ -23,6 +23,7 @@ import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { NotificationModule } from '@progress/kendo-angular-notification';
+import { EditorModule } from '@progress/kendo-angular-editor';
 import { IntlModule } from '@progress/kendo-angular-intl';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -102,6 +103,8 @@ import { TicketStatusPipe } from './shared/pipes/ticket-status.pipe';
 import { SupplierModalComponent } from './supplier-modal/supplier-modal.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { SupplierService } from './services/supplier.service';
+import { UploadModule } from "@progress/kendo-angular-upload";
+import { UploadInterceptor } from './services/interceptors/upload.iterceptor';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -187,7 +190,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         UploadsModule,
         SchedulerModule,
         LayoutModule,
-        BarcodesModule
+        BarcodesModule,
+        EditorModule,
+        UploadModule
     ],
     providers: [
         {
@@ -203,6 +208,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true, deps: [Router, UserService, MessageBoxService] },
         LoaderService,
         { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true, deps: [LoaderService] },
+        
+        { provide: HTTP_INTERCEPTORS, useClass: UploadInterceptor, multi: true },
         Clipboard,
         AuthGuard,
         CustomerService,

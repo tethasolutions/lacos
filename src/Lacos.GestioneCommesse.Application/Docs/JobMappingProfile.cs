@@ -9,7 +9,12 @@ namespace Lacos.GestioneCommesse.Application.Docs;
 public class JobMappingProfile : Profile
 {
     private static readonly Expression<Func<Job, JobStatusDto>> StatusExpression = j =>
-        !j.Activities
+    j.Activities
+    .Any() &&
+    j.Activities.All(a => a.Status == ActivityStatus.Completed)
+    ?
+        JobStatusDto.Completed
+    : !j.Activities
             .SelectMany(a => a.Interventions)
             .Any()
             ? JobStatusDto.Pending
@@ -42,6 +47,7 @@ public class JobMappingProfile : Profile
             .Ignore(x => x.Year)
             .Ignore(x => x.PurchaseOrders)
             .Ignore(x => x.Tickets)
+            .Ignore(x => x.IsInternalJob)
             .MapMember(x => x.JobDate, (x, y) => y.IsTransient() ? x.Date : y.JobDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId);
 

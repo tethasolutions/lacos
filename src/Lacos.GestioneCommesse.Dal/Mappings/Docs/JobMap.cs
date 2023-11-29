@@ -13,9 +13,6 @@ public class JobMap : BaseEntityMapping<Job>
 
         builder.ToTable("Jobs", "Docs");
 
-        builder.Property(e => e.Description)
-            .IsRequired();
-
         builder.OneToMany(e => e.Activities, e => e.Job, e => e.JobId);
         builder.OneToMany(e => e.Tickets, e => e.Job, e => e.JobId);
 

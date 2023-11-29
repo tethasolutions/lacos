@@ -13,9 +13,6 @@ public class ActivityMap : BaseEntityMapping<Activity>
 
         builder.ToTable("Activities", "Docs");
 
-        builder.Property(e => e.Description)
-            .IsRequired();
-
         builder.OneToMany(e => e.Interventions, e => e.Activity, e => e.ActivityId);
         builder.OneToMany(e => e.ActivityProducts, e => e.Activity, e => e.ActivityId);
     }

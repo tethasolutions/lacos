@@ -19,6 +19,7 @@ public class ActivitiesService : IActivitiesService
     private readonly IRepository<Activity> repository;
     private readonly ILacosDbContext dbContext;
     private readonly IRepository<ActivityProduct> activityProductRepository;
+    private readonly IRepository<ActivityAttachment> activityAttachmentRepository;
     private readonly IRepository<Product> productRepository;
     private readonly ILacosSession session;
 
@@ -28,13 +29,15 @@ public class ActivitiesService : IActivitiesService
         ILacosDbContext dbContext,
         IRepository<ActivityProduct> activityProductRepository,
         IRepository<Product> productRepository,
-        ILacosSession session
+        ILacosSession session, 
+        IRepository<ActivityAttachment> activityAttachmentRepository
     )
     {
         this.mapper = mapper;
         this.repository = repository;
         this.dbContext = dbContext;
         this.activityProductRepository = activityProductRepository;
+        this.activityAttachmentRepository= activityAttachmentRepository;
         this.productRepository = productRepository;
         this.session = session;
     }
@@ -105,7 +108,11 @@ public class ActivitiesService : IActivitiesService
 
     public async Task<ActivityDto> Update(ActivityDto activityDto)
     {
-        var activity = await repository.Get(activityDto.Id);
+        var activity = await repository
+            .Query()
+            .Where(x => x.Id == activityDto.Id)
+            .Include(x => x.Attachment)
+            .SingleOrDefaultAsync();
 
         if (activity == null)
         {
@@ -115,6 +122,31 @@ public class ActivitiesService : IActivitiesService
         activity = activityDto.MapTo(activity, mapper);
 
         repository.Update(activity);
+
+        if (!string.IsNullOrEmpty(activityDto.AttachmentFileName) && !string.IsNullOrEmpty(activityDto.AttachmentDisplayName))
+        {
+            var activityAttachment = activity.Attachment;
+            if (activityAttachment == null)
+            {
+                activityAttachment = new ActivityAttachment();
+                activityAttachment.ActivityId = activity.Id;
+                activityAttachment.Activity = activity;
+                activityAttachment.DisplayName = activityDto.AttachmentDisplayName;
+                activityAttachment.FileName = activityDto.AttachmentFileName;
+                await activityAttachmentRepository.Insert(activityAttachment);
+
+            }
+            else
+            {
+                activityAttachment.DisplayName = activityDto.AttachmentDisplayName;
+                activityAttachment.FileName = activityDto.AttachmentFileName;
+            }
+        }
+
+        if (activity.Attachment != null && string.IsNullOrEmpty(activityDto.AttachmentFileName) && string.IsNullOrEmpty(activityDto.AttachmentDisplayName))
+        {
+            activity.Attachment = null;
+        }
 
         await dbContext.SaveChanges();
 
@@ -211,5 +243,68 @@ public class ActivitiesService : IActivitiesService
 
         return await query;
 
+    }
+
+    // --------------------------------------------------------------------------------------------------------------
+    public async Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long activityId)
+    {
+        var activityAttachments = await activityAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.ActivityId == activityId)
+            .OrderBy(x => x.CreatedOn)
+            .ToArrayAsync();
+
+        return activityAttachments.MapTo<IEnumerable<ActivityAttachmentReadModel>>(mapper);
+    }
+
+    public async Task<ActivityAttachmentReadModel> GetActivityAttachmentDetail(long attachmentId)
+    {
+        var activityAttachment = await activityAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.Id == attachmentId)
+            .SingleOrDefaultAsync();
+
+        return activityAttachment.MapTo<ActivityAttachmentReadModel>(mapper);
+    }
+
+    public async Task<ActivityAttachmentReadModel> DownloadActivityAttachment(string filename)
+    {
+        var activityAttachment = await activityAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.FileName == filename)
+            .SingleOrDefaultAsync();
+
+        return activityAttachment.MapTo<ActivityAttachmentReadModel>(mapper);
+    }
+
+    public async Task<ActivityAttachmentDto> UpdateActivityAttachment(long id, ActivityAttachmentDto attachmentDto)
+    {
+        var attachment = await activityAttachmentRepository.Get(id);
+
+        if (attachment == null)
+        {
+            throw new NotFoundException("Errore allegato");
+        }
+        attachmentDto.MapTo(attachment, mapper);
+
+        activityAttachmentRepository.Update(attachment);
+
+        await dbContext.SaveChanges();
+
+        return attachment.MapTo<ActivityAttachmentDto>(mapper);
+    }
+
+    public async Task<ActivityAttachmentDto> CreateActivityAttachment(ActivityAttachmentDto attachmentDto)
+    {
+        var attachment = attachmentDto.MapTo<ActivityAttachment>(mapper);
+
+        await activityAttachmentRepository.Insert(attachment);
+
+        await dbContext.SaveChanges();
+
+        return attachment.MapTo<ActivityAttachmentDto>(mapper);
     }
 }

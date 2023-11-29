@@ -29,6 +29,13 @@ export class JobsService {
             );
     }
 
+    getTicketJob(customerId: number) {
+        return this._http.get<Job>(`${this._baseUrl}/getTicketJob/${customerId}`)
+            .pipe(
+                map(e => Job.build(e))
+            );
+    }
+
     create(job: Job) {
         return this._http.post<Job>(this._baseUrl, job)
             .pipe(

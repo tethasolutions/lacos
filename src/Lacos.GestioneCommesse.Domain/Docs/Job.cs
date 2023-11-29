@@ -17,6 +17,9 @@ public class Job : FullAuditedEntity
     public long? AddressId { get; set; }
     public Address? Address { get; set; }
     
+    //InternalJob for ticket issues
+    public bool IsInternalJob { get; set; }
+
     public ICollection<Activity> Activities { get; set; }
     public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     public ICollection<Ticket> Tickets { get; set; }

@@ -15,6 +15,9 @@ import { listEnum } from '../services/common/functions';
 import { AddressModel } from '../shared/models/address.model';
 import { AddressesService } from '../services/addresses.service';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
+import { ApiUrls } from '../services/common/api-urls';
+import { ActivityAttachmentUploadFileModel } from '../services/activities/activity-attachment-upload-file.model';
+import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 
 @Component({
     selector: 'app-activity-modal',
@@ -34,6 +37,13 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     selectedActivityType: ActivityTypeModel;
     selectedJob: SelectableJob;
     addresses: AddressModel[];
+
+    isUploaded:boolean;
+    attachments:Array<FileInfo>= [];
+  
+    private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
+    uploadSaveUrl = `${this._baseUrl}/activity-attachment/upload-file`;
+    uploadRemoveUrl = `${this._baseUrl}/activity-attachment/remove-file`; 
 
     readonly states = listEnum<ActivityStatus>(ActivityStatus);
 
@@ -68,6 +78,14 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     override open(options: ActivityModalOptions) {
         const result = super.open(options);
+
+        this.attachments = [];
+        this.isUploaded = false;
+        if(this.options.activity.attachmentDisplayName != null && this.options.activity.attachmentDisplayName != "")   
+        {
+          this.attachments = [{name: this.options.activity.attachmentDisplayName}];
+          this.isUploaded = true;
+        }
 
         if (this.options.activity.jobId){
         this._subscriptions.push(
@@ -200,6 +218,30 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 .subscribe()
         );
     }
+    
+  public CreateUrl () : string
+  {
+     return `${this._baseUrl}/activity-attachment/download-file/${this.options.activity.attachmentFileName}/${this.options.activity.attachmentDisplayName}`;
+  }
+ 
+  public AttachmentExecutionSuccess(e: SuccessEvent): void
+  {
+    const body = e.response.body;
+    if(body != null)
+    {
+      const uploadedFile = body as ActivityAttachmentUploadFileModel
+      this.options.activity.attachmentDisplayName = uploadedFile.originalFileName;
+      this.options.activity.attachmentFileName = uploadedFile.fileName;
+      this.isUploaded = true;
+    }
+    else
+    {
+      this.options.activity.attachmentDisplayName = "";
+      this.options.activity.attachmentFileName = "";
+      this.isUploaded = false;
+    }
+
+  }
 }
 
 export class ActivityModalOptions {

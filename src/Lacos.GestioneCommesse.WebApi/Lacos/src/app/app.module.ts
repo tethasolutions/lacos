@@ -105,6 +105,8 @@ import { SuppliersComponent } from './suppliers/suppliers.component';
 import { SupplierService } from './services/supplier.service';
 import { UploadModule } from "@progress/kendo-angular-upload";
 import { UploadInterceptor } from './services/interceptors/upload.iterceptor';
+import { InterventionsProductsGridComponent } from './interventions/interventions-products-grid.component';
+import { InterventionProductChecklistItemsModalComponent } from './interventions/intervention-product-checklist-items-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -161,6 +163,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         InterventionsGridComponent,
         InterventionStatusPipe,
         InterventionsListComponent,
+        InterventionsProductsGridComponent,
+        InterventionProductChecklistItemsModalComponent,
         TicketsComponent,
         TicketStatusPipe,
         TicketModalComponent,

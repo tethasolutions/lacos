@@ -6,6 +6,7 @@ using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Framework.Exceptions;
+using Lacos.GestioneCommesse.Domain.Docs;
 
 namespace Lacos.GestioneCommesse.Application.Products.Service
 {
@@ -27,13 +28,16 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
         private readonly IRepository<Product> productRepository;
         private readonly IRepository<ProductType> productTypeRepository;
         private readonly IRepository<ProductDocument> productDocumentRepository;
-        public ProductService(IRepository<Product> productRepository, IMapper mapper, ILacosDbContext dbContext, IRepository<ProductType> productTypeRepository, IRepository<ProductDocument> productDocumentRepository)
+        private readonly IRepository<InterventionProduct> interventionProductRepository;
+
+        public ProductService(IRepository<Product> productRepository, IMapper mapper, ILacosDbContext dbContext, IRepository<ProductType> productTypeRepository, IRepository<ProductDocument> productDocumentRepository, IRepository<InterventionProduct> interventionProductRepository)
         {
             this.productRepository = productRepository;
             this.mapper = mapper;
             this.dbContext = dbContext;
             this.productTypeRepository = productTypeRepository;
             this.productDocumentRepository = productDocumentRepository;
+            this.interventionProductRepository = interventionProductRepository;
         }
 
         public IQueryable<ProductReadModel> GetProducts()

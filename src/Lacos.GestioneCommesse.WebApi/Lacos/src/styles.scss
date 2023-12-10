@@ -345,11 +345,13 @@ app-jobs {
 
 }
 
-.add-customer-button, .add-address-button {
+.add-customer-button,
+.add-address-button {
     margin-left: 5px;
 }
 
-.customer-combobox, .address-combobox {
+.customer-combobox,
+.address-combobox {
     width: calc(100% - 45px);
 }
 
@@ -360,9 +362,10 @@ app-jobs {
 .activity-color {
     padding: 0;
     position: relative !important;
+
     &>div {
         position: absolute;
-        top:0;
+        top: 0;
         left: 0;
         right: 0;
         bottom: 0;
@@ -370,3 +373,48 @@ app-jobs {
     }
 }
 
+.border-green {
+    border-bottom: 2px solid #46a43e;
+}
+
+.k-tabstrip-items-wrapper .k-item {
+    color: #46a43e;
+}
+
+.k-tabstrip-items .k-link {
+    border: 1px solid #46a43e;
+}
+
+.k-tabstrip-items-wrapper .k-item:hover,
+.k-tabstrip-items-wrapper .k-item.k-hover,
+.k-tabstrip-items-wrapper .k-item:active,
+.k-tabstrip-items-wrapper .k-item.k-active,
+.k-tabstrip-items-wrapper .k-item.k-selected {
+    color: #FFF;
+    background-color: #46a43e;
+}
+
+.k-tabstrip {
+    border: 1px solid #46a43e41;
+}
+
+/* Checklist outcome */
+/* Success Icon */
+.Positive-icon {
+    color: #4CAF50;
+}
+
+/* Failure Icon */
+.Unknown-icon {
+    color: #585858;
+}
+
+/* Error Icon */
+.Negative-icon {
+    color: #F44336;
+}
+
+.checklist-row {
+    padding-top: 5px;
+    border-bottom: 1px solid #585858;
+}

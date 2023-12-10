@@ -1,0 +1,50 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="600" [top]="200">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Voce checklist
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateOperatorForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()"
+            *ngIf="options">
+            <div class="row riga-form border-green">
+                <div class="col-12">
+                    <b>Checklist</b>
+                    <p>{{interventionProductCheckList.description}}</p>
+                </div>
+                <div class="col-12" *ngIf="interventionProductCheckList.notes">
+                    <b>Note</b>
+                    <p>{{interventionProductCheckList.notes}}</p>
+                </div>
+            </div>
+            <div class="row riga-form">
+                <div class="row checklist-row">
+                    <div class="col-10">
+                        <b>Voce</b>
+                    </div>
+                    <div class="col-2">
+                        <b>Esito</b>
+                    </div>
+                </div>
+                <div *ngFor="let item of interventionProductCheckList.items" class="col-12">
+                    <div class="row checklist-row">
+                        <div class="col-10">
+                            <p>{{item.description}}</p>
+                        </div>
+                        <div class="col-2">
+                            <i class="{{item.outcome}}-icon fa fa-2x fa-square-check" alt="{{item.outcome}}"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    CHIUDI
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

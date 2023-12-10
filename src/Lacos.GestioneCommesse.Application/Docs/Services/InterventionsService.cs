@@ -18,6 +18,7 @@ public class InterventionsService : IInterventionsService
     private readonly IRepository<Operator> operatorRepository;
     private readonly IRepository<ActivityProduct> activityProductRepository;
     private readonly IRepository<Activity> activityRepository;
+    private readonly IRepository<InterventionProductCheckList> productCheckListRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
@@ -28,6 +29,7 @@ public class InterventionsService : IInterventionsService
         ILacosDbContext dbContext,
         IRepository<ActivityProduct> activityProductRepository,
         IRepository<Activity> activityRepository,
+        IRepository<InterventionProductCheckList> productCheckListRepository,
         ILacosSession session
     )
     {
@@ -37,6 +39,7 @@ public class InterventionsService : IInterventionsService
         this.dbContext = dbContext;
         this.activityProductRepository = activityProductRepository;
         this.activityRepository = activityRepository;
+        this.productCheckListRepository = productCheckListRepository;
         this.session = session;
     }
 
@@ -245,5 +248,34 @@ public class InterventionsService : IInterventionsService
         await activityRepository.Update(id, e => e.Status = activity.Status);
 
         await dbContext.SaveChanges();
+    }
+
+    public IQueryable<InterventionProductReadModel> GetProductsByIntervention(long id)
+    {
+        var products = repository
+            .Query()
+            .AsNoTracking()
+            .Where(e => e.Id == id)
+            .SelectMany(e => e.Products)
+            .Project<InterventionProductReadModel>(mapper);
+        return products;
+    }
+
+    public async Task<InterventionProductCheckListDto> GetInterventionProductCheckList(long interventionProductId)
+    {
+        var productCheckList = await productCheckListRepository
+            .Query()
+            .AsNoTracking()
+            .Where(e => e.InterventionProductId == interventionProductId)
+            .Include(e => e.Items)
+            .Project<InterventionProductCheckListDto>(mapper)
+            .FirstOrDefaultAsync();
+
+        if (productCheckList == null)
+        {
+            throw new NotFoundException($"Prodotto con Id {interventionProductId} non trovato.");
+        }
+
+        return productCheckList;
     }
 }

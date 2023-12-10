@@ -16,6 +16,7 @@ import { InterventionsService } from '../services/interventions/interventions.se
 import { Intervention, InterventionStatus } from '../services/interventions/models';
 import { InterventionsCalendarComponent } from '../interventions/interventions-calendar.component';
 import { InterventionsGridComponent } from '../interventions/interventions-grid.component';
+import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
     selector: 'app-activity',
@@ -44,6 +45,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     @ViewChild('interventionModal', { static: true })
     interventionModal: InterventionModalComponent;
 
+    private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
     activity: ActivityDetail;
 
     constructor(
@@ -175,4 +177,8 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         );
     }
 
+    public CreateUrl () : string
+    {
+       return `${this._baseUrl}/activity-attachment/download-file/${this.activity.attachmentFileName}/${this.activity.attachmentDisplayName}`;
+    }
 }

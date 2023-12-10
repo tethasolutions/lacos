@@ -7,22 +7,18 @@
             <span class="fa fa-edit"></span>
             Modifica attività
         </a>
-        <a class="btn btn-primary btn-sm" (click)="createActivityProduct()">
-            <span class="fa fa-plus"></span>
-            Associa prodotto
-        </a>
-        <a class="btn btn-primary btn-sm" (click)="assignAllCustomerProducts()">
-            <span class="fa fa-plus"></span>
-            Associa tutti i prodotti dell'indirizzo del cliente
-        </a>
-        <a class="btn btn-primary btn-sm" (click)="createIntervention()">
-            <span class="fa fa-calendar-plus"></span>
-            Programma intervento
-        </a>
     </div>
 </div>
 
-<div class="row mb-4">
+<div class="row mb-4 border-green">
+    <div class="col-2">
+        <b>
+            Commessa
+        </b>
+        <p>
+            {{activity.job}}
+        </p>
+    </div>
     <div class="col-3">
         <b>
             Cliente
@@ -55,23 +51,15 @@
             {{activity.expirationDate | date:'dd/MM/yyyy'}}
         </p>
     </div>
-    <div *ngIf="activity.source" class="col-2">
+    <div class="col-2">
         <b>
-            Sorgente
+            Allegato
         </b>
         <p>
-            {{activity.source}}
+            <a [href]="CreateUrl()" target="_blank" >{{ activity.attachmentDisplayName }}</a>
         </p>
     </div>
-    <div class="col-3">
-        <b>
-            Commessa
-        </b>
-        <p>
-            {{activity.job}}
-        </p>
-    </div>
-    <div class="col-9">
+    <div class="col-10">
         <b>
             Note
         </b>
@@ -82,17 +70,39 @@
 <kendo-tabstrip>
     <kendo-tabstrip-tab [selected]="true">
         <ng-template kendoTabTitle>
-            <h4>Prodotti</h4>
+            <strong>Prodotti</strong>
         </ng-template>
         <ng-template kendoTabContent>
+            <div class="row">
+                <div class="col-12 d-flex gap-1">
+                    <a class="btn btn-primary btn-sm" (click)="createActivityProduct()">
+                        <span class="fa fa-plus"></span>
+                        Associa prodotto
+                    </a>
+                    <a class="btn btn-primary btn-sm" (click)="assignAllCustomerProducts()">
+                        <span class="fa fa-plus"></span>
+                        Associa tutti i prodotti dell'indirizzo del cliente
+                    </a>
+                </div>
+                <p></p>
+            </div>
             <app-activity-products #activityProducts [activityId]="activity.id"></app-activity-products>
         </ng-template>
     </kendo-tabstrip-tab>
     <kendo-tabstrip-tab>
         <ng-template kendoTabTitle>
-            <h4>Pianificazione</h4>
+            <strong>Pianificazione</strong>
         </ng-template>
         <ng-template kendoTabContent>
+            <div class="row">
+                <div class="col-12 d-flex gap-1">
+                    <a class="btn btn-primary btn-sm" (click)="createIntervention()">
+                        <span class="fa fa-calendar-plus"></span>
+                        Programma intervento
+                    </a>
+                </div>
+                <p></p>
+            </div>
             <app-interventions-calendar #interventionsCalendar [interventionModal]="interventionModal"
                 [jobId]="activity.jobId" [activityId]="activity.id" (interventionUpdated)="onInterventionsChanged()"
                 (interventionCreated)="onInterventionsChanged()" (interventionRemoved)="onInterventionsChanged()">
@@ -101,9 +111,18 @@
     </kendo-tabstrip-tab>
     <kendo-tabstrip-tab>
         <ng-template kendoTabTitle>
-            <h4>Interventi</h4>
+            <strong>Interventi</strong>
         </ng-template>
         <ng-template kendoTabContent>
+            <div class="row">
+                <div class="col-12 d-flex gap-1">
+                    <a class="btn btn-primary btn-sm" (click)="createIntervention()">
+                        <span class="fa fa-calendar-plus"></span>
+                        Programma intervento
+                    </a>
+                </div>
+                <p></p>
+            </div>
             <app-interventions-grid #interventionsGrid [interventionModal]="interventionModal"
                 [activityId]="activity.id" (interventionUpdated)="onInterventionsChanged()"
                 (interventionRemoved)="onInterventionsChanged()">

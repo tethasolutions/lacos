@@ -1,3 +1,4 @@
+import { ActivityProduct } from '../activity-products/models';
 import { Dictionary } from '../common/models';
 
 export enum InterventionStatus {
@@ -70,4 +71,47 @@ export interface IInterventionOperatorReadModel {
     readonly name: string;
     readonly colorHex: string;
 
+}
+
+export interface IInterventionProductReadModel {
+
+    readonly interventionProductId: number;
+    readonly code: string;
+    readonly name: string;
+    readonly description: string;
+    readonly pictureFileName: string;
+    readonly qrCode: string;
+    readonly productType: string;
+
+}
+
+export class InterventionProductCheckList {
+
+
+    constructor(
+        readonly interventionProductId: number,
+        readonly description: string,
+        readonly customerSignatureFileName: string,
+        readonly notes: string,
+        readonly items: InterventionProductCheckListItem[]
+    )
+    {}
+
+    static build(o: InterventionProductCheckList) {
+        return new InterventionProductCheckList(o.interventionProductId, o.description, o.customerSignatureFileName, o.notes, o.items);
+    }
+}
+
+export class InterventionProductCheckListItem {
+
+    constructor(
+        readonly description: string,
+        readonly outcome: string,
+        readonly notes: string,
+        readonly operatorName: string
+        ) {}
+
+    static build(o: InterventionProductCheckListItem) {
+        return new InterventionProductCheckListItem(o.description, o.outcome, o.notes, o.operatorName);
+    }
 }

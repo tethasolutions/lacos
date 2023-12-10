@@ -2,6 +2,7 @@
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
+using Lacos.GestioneCommesse.Application.Products.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
@@ -46,5 +47,18 @@ public class InterventionsController : LacosApiController
     public Task Delete(long id)
     {
         return service.Delete(id);
+    }
+
+    [HttpGet("intervention-checklist-by-product/{id}")]
+    public Task<InterventionProductCheckListDto> GetCheckListItemsByProduct(long id)
+    {
+        return service.GetInterventionProductCheckList(id);
+    }
+
+    [HttpGet("intervention-products-by-intervention/{id}")]
+    public async Task<DataSourceResult> GetInterventionProductsByIntervention([DataSourceRequest] DataSourceRequest request, long id)
+    {
+        var products = (service.GetProductsByIntervention(id));
+        return await products.ToDataSourceResultAsync(request);
     }
 }

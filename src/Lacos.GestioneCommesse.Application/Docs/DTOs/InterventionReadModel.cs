@@ -1,4 +1,5 @@
-﻿using Lacos.GestioneCommesse.Domain.Docs;
+﻿using Lacos.GestioneCommesse.Application.Registry.DTOs;
+using Lacos.GestioneCommesse.Domain.Docs;
 
 namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
 

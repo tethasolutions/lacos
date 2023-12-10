@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
-import { State } from '@progress/kendo-data-query';
-import { Intervention } from './models';
+import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
+import { Intervention, InterventionProductCheckList} from './models';
 import { readData } from '../common/functions';
+import { GridDataResult } from '@progress/kendo-angular-grid';
 
 @Injectable()
 export class InterventionsService {
@@ -27,6 +28,7 @@ export class InterventionsService {
             .pipe(
                 map(e => Intervention.build(e))
             );
+            
     }
 
     create(intervention: Intervention) {
@@ -49,4 +51,28 @@ export class InterventionsService {
                 map(() => { })
             );
     }
+    
+    readProductsByIntervention(state: State, interventionId: number) {
+        const params = toDataSourceRequestString(state);
+        const hasGroups = state.group && state.group.length;
+
+        return this._http.get<GridDataResult>(`${this._baseUrl}/intervention-products-by-intervention/${interventionId}?${params}`)
+            .pipe(
+                map(e =>
+                    <GridDataResult>{
+                        data: hasGroups ? translateDataSourceResultGroups(e.data) : e.data,
+                        total: e.total
+                    }
+                )
+            );
+    }
+
+    readProductCheckListByProductId(interventionProductId: number) {
+        return this._http.get<InterventionProductCheckList>(`${this._baseUrl}/intervention-checklist-by-product/${interventionProductId}`)
+            .pipe(
+                map(e => InterventionProductCheckList.build(e))
+            );
+            
+    }
+    
 }

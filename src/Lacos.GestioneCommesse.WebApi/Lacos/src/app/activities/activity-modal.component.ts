@@ -4,7 +4,6 @@ import { ModalComponent } from '../shared/modal.component';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 import { filter, map, tap } from 'rxjs';
 import { ActivityTypesService } from '../services/activityTypes.service';
-import { CustomerService } from '../services/customer.service';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { CustomerModel } from '../shared/models/customer.model';
@@ -49,7 +48,6 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     constructor(
         private readonly _activityTypesService: ActivityTypesService,
-        private readonly _customersService: CustomerService,
         private readonly _messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _addressesService: AddressesService

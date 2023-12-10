@@ -53,4 +53,7 @@
         </ng-template>
     </kendo-grid-column>
 
+    <div *kendoGridDetailTemplate="let dataItem">
+        <app-interventions-products-grid [interventionId]="dataItem.id"></app-interventions-products-grid>
+    </div>
 </kendo-grid>

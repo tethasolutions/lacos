@@ -38,5 +38,21 @@ public class InterventionMappingProfile : Profile
             .Ignore(x => x.Notes)
             .Ignore(x => x.Products)
             .Ignore(x => x.Disputes);
+
+        CreateMap<InterventionProduct, InterventionProductReadModel>()
+            .MapMember(x => x.InterventionProductId, y => y.Id)
+            .MapMember(x => x.Code, y => y.ActivityProduct.Product.Code)
+            .MapMember(x => x.Name, y => y.ActivityProduct.Product.Name)
+            .MapMember(x => x.Description, y => y.ActivityProduct.Product.Description)
+            .MapMember(x => x.PictureFileName, y => y.ActivityProduct.Product.PictureFileName)
+            .MapMember(x => x.QrCode, y => (y.ActivityProduct.Product.QrCodePrefix ?? "") + (y.ActivityProduct.Product.QrCodeNumber ?? ""))
+            .MapMember(x => x.ProductType, y => y.ActivityProduct.Product.ProductType.Name);
+
+        CreateMap<InterventionProductCheckList, InterventionProductCheckListDto>();
+
+        CreateMap<InterventionProductCheckListItem, InterventionProductCheckListItemDto>()
+            .MapMember(x => x.Outcome, y => y.Outcome.Value)
+            .MapMember(x => x.OperatorName, y => y.Operator.Name);
+
     }
 }

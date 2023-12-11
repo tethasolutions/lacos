@@ -19,7 +19,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
         Task<List<SyncVehicleDto>> SyncFromDBToApp_Vehicles();
 
-        Task<SyncFullDbDto> SyncFromDBToApp_FullDb(DateTimeOffset date);
+        Task<SyncRemoteFullDbDto> SyncFromDBToApp_FullDb(DateTimeOffset date);
 
         Task<SyncLocalDbChanges> SyncFromAppToDB_LocalChanges(SyncLocalDbChanges syncLocalDbChanges);
 

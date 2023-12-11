@@ -48,7 +48,7 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         
         [AllowAnonymous]
         [HttpPost("Db")]
-        public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb([FromBody] SyncDbDate dbDate)
+        public async Task<SyncRemoteFullDbDto> SyncFromDBToApp_FullDb([FromBody] SyncDbDate dbDate)
         {
             var result = await service.SyncFromDBToApp_FullDb(dbDate.Date);
             return result;

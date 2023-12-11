@@ -201,14 +201,15 @@ namespace Lacos.GestioneCommesse.Application.Sync
              return null;
          }
 
-        public async Task<SyncFullDbDto> SyncFromDBToApp_FullDb(DateTimeOffset date)
+        public async Task<SyncRemoteFullDbDto> SyncFromDBToApp_FullDb(DateTimeOffset date)
         {
             try
             {
-                SyncFullDbDto syncFullDb = new SyncFullDbDto();
+                SyncRemoteFullDbDto syncFullDb = new SyncRemoteFullDbDto();
 
                 syncFullDb.Activities = await GetAllModifiedRecord<Activity, SyncActivityDto>(date);
                 syncFullDb.ActivityProducts = await GetAllModifiedRecord<ActivityProduct, SyncActivityProductDto>(date);
+                syncFullDb.ActivityAttachments = await GetAllModifiedRecord<ActivityAttachment, SyncActivityAttachmentsDto>(date);
                 syncFullDb.InterventionDisputes = await GetAllModifiedRecord<InterventionDispute, SyncInterventionDisputeDto>(date);
                 syncFullDb.InterventionNotes = await GetAllModifiedRecord<InterventionNote, SyncInterventionNoteDto>(date);
                 syncFullDb.InterventionProducts = await GetAllModifiedRecord<InterventionProduct, SyncInterventionProductDto>(date);

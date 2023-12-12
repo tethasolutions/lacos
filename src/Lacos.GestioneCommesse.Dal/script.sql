@@ -2303,3 +2303,34 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231211202048_supplier in activity')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [SupplierId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231211202048_supplier in activity')
+BEGIN
+    CREATE INDEX [IX_Activities_SupplierId] ON [Docs].[Activities] ([SupplierId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231211202048_supplier in activity')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD CONSTRAINT [FK_Activities_Suppliers_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Registry].[Suppliers] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231211202048_supplier in activity')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231211202048_supplier in activity', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

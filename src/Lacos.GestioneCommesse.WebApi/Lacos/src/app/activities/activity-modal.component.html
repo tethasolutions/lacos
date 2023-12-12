@@ -49,17 +49,47 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label>Indirizzo</label>
-                    <div class="form-group">
-                        <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
-                            valueField="id" name="addressId" [(ngModel)]="options.activity.addressId" 
-                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
-                            [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false">
-                        </kendo-combobox>
-                        <div class="validation-message" [control]="form.controls['addressId']"></div>
-                        <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
-                            <i class="fa fa-plus"></i>
-                        </button>
+                    <div class="row" *ngIf="selectedActivityType?.isInternal">
+                        <div class="col-md-12">
+                            <label>Fornitore</label>
+                            <kendo-formfield class="form-group">
+                                <kendo-combobox [data]="suppliers" [valuePrimitive]="true" textField="name" valueField="id"
+                                    name="supplierId" [(ngModel)]="options.activity.supplierId" [suggest]="true"
+                                    [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                                    [allowCustom]="false" [disabled]="!!options.id"
+                                    (valueChange)="onSupplierChange()">
+                                </kendo-combobox>
+                                <div class="validation-message" [control]="form.controls['supplierId']"></div>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-12">
+                            <label>Indirizzo</label>
+                            <div class="form-group">
+                                <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
+                                    valueField="id" name="addressId"
+                                    [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                                    [(ngModel)]="options.activity.addressId" [suggest]="true" [allowCustom]="false">
+                                </kendo-combobox>
+                                <div class="validation-message" [control]="form.controls['addressId']"></div>      
+                                <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo" *ngIf="!options.activity.supplierId">
+                                    <i class="fa fa-plus"></i>
+                                </button>                          
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!selectedActivityType?.isInternal">
+                        <label>Indirizzo</label>
+                        <div class="form-group">
+                            <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
+                                valueField="id" name="addressId" [(ngModel)]="options.activity.addressId" 
+                                [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                                [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false">
+                            </kendo-combobox>
+                            <div class="validation-message" [control]="form.controls['addressId']"></div>
+                            <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3">

@@ -17,6 +17,8 @@ import { AddressModalComponent } from '../address-modal/address-modal.component'
 import { ApiUrls } from '../services/common/api-urls';
 import { ActivityAttachmentUploadFileModel } from '../services/activities/activity-attachment-upload-file.model';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
+import { SupplierModel } from '../shared/models/supplier.model';
+import { SupplierService } from '../services/supplier.service';
 
 @Component({
     selector: 'app-activity-modal',
@@ -35,14 +37,15 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     status: ActivityStatus;
     selectedActivityType: ActivityTypeModel;
     selectedJob: SelectableJob;
+    suppliers: SupplierModel[];
     addresses: AddressModel[];
 
-    isUploaded:boolean;
-    attachments:Array<FileInfo>= [];
-  
+    isUploaded: boolean;
+    attachments: Array<FileInfo> = [];
+
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
     uploadSaveUrl = `${this._baseUrl}/activity-attachment/upload-file`;
-    uploadRemoveUrl = `${this._baseUrl}/activity-attachment/remove-file`; 
+    uploadRemoveUrl = `${this._baseUrl}/activity-attachment/remove-file`;
 
     readonly states = listEnum<ActivityStatus>(ActivityStatus);
 
@@ -50,6 +53,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         private readonly _activityTypesService: ActivityTypesService,
         private readonly _messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
+        private readonly _suppliersService: SupplierService,
         private readonly _addressesService: AddressesService
     ) {
         super();
@@ -57,6 +61,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     ngOnInit() {
         this._getActivityTypes();
+        this._getSuppliers();
     }
 
     onJobChanged() {
@@ -69,9 +74,24 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
         this.selectedJob = this.jobs.find(e => e.id == this.options.activity.jobId);
         if (this.selectedActivityType.isInternal) {
-            if (!this.options.activity.id) this.options.activity.addressId = null;
+            this.onSupplierChange();
+            if (!this.options.activity.supplierId) {
+                this.options.activity.addressId = null;
+                const customerId = this.jobs
+                    .find(e => e.id === this.options.activity.jobId).customerId;
+                this.readAddresses(customerId);
+            }
             this.options.activity.description = this.selectedJob.description;
         }
+        else {
+            const customerId = this.jobs
+                .find(e => e.id === this.options.activity.jobId).customerId;
+            this.readAddresses(customerId);
+        }
+    }
+
+    onSupplierChange() {
+        this.addresses = this.suppliers.find(e => e.id == this.options.activity.supplierId)?.addresses ?? [];
     }
 
     override open(options: ActivityModalOptions) {
@@ -79,24 +99,22 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
         this.attachments = [];
         this.isUploaded = false;
-        if(this.options.activity.attachmentDisplayName != null && this.options.activity.attachmentDisplayName != "")   
-        {
-          this.attachments = [{name: this.options.activity.attachmentDisplayName}];
-          this.isUploaded = true;
+        if (this.options.activity.attachmentDisplayName != null && this.options.activity.attachmentDisplayName != "") {
+            this.attachments = [{ name: this.options.activity.attachmentDisplayName }];
+            this.isUploaded = true;
         }
 
-        if (this.options.activity.jobId){
-        this._subscriptions.push(
-            this._jobsService.get(this.options.activity.jobId)
-                .pipe(
-                    tap(e => {
-                        this.job = e;
-                        this.readAddresses(this.job.customerId)
-                    })
-                )
-                .subscribe()
-        );
-    }
+        if (this.options.activity.jobId) {
+            this._subscriptions.push(
+                this._jobsService.get(this.options.activity.jobId)
+                    .pipe(
+                        tap(e => {
+                            this.job = e;
+                        })
+                    )
+                    .subscribe()
+            );
+        }
 
         this.jobReadonly = !!options.activity.jobId;
         this.customer = null;
@@ -104,6 +122,9 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         this._getJobs();
 
         this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
+        if (this.selectedActivityType.isInternal && this.options.activity.supplierId) {
+            this.onSupplierChange();
+        }
 
         return result;
     }
@@ -126,6 +147,20 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 )
                 .subscribe()
         );
+    }
+
+    private _getSuppliers() {
+        this._subscriptions.push(
+            this._suppliersService.getSuppliersList()
+                .pipe(
+                    tap(e => this._setData(e))
+                )
+                .subscribe()
+        );
+    }
+
+    private _setData(suppliers: SupplierModel[]) {
+        this.suppliers = suppliers;
     }
 
     private _getJobs() {
@@ -216,30 +251,26 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 .subscribe()
         );
     }
-    
-  public CreateUrl () : string
-  {
-     return `${this._baseUrl}/activity-attachment/download-file/${this.options.activity.attachmentFileName}/${this.options.activity.attachmentDisplayName}`;
-  }
- 
-  public AttachmentExecutionSuccess(e: SuccessEvent): void
-  {
-    const body = e.response.body;
-    if(body != null)
-    {
-      const uploadedFile = body as ActivityAttachmentUploadFileModel
-      this.options.activity.attachmentDisplayName = uploadedFile.originalFileName;
-      this.options.activity.attachmentFileName = uploadedFile.fileName;
-      this.isUploaded = true;
-    }
-    else
-    {
-      this.options.activity.attachmentDisplayName = "";
-      this.options.activity.attachmentFileName = "";
-      this.isUploaded = false;
+
+    public CreateUrl(): string {
+        return `${this._baseUrl}/activity-attachment/download-file/${this.options.activity.attachmentFileName}/${this.options.activity.attachmentDisplayName}`;
     }
 
-  }
+    public AttachmentExecutionSuccess(e: SuccessEvent): void {
+        const body = e.response.body;
+        if (body != null) {
+            const uploadedFile = body as ActivityAttachmentUploadFileModel
+            this.options.activity.attachmentDisplayName = uploadedFile.originalFileName;
+            this.options.activity.attachmentFileName = uploadedFile.fileName;
+            this.isUploaded = true;
+        }
+        else {
+            this.options.activity.attachmentDisplayName = "";
+            this.options.activity.attachmentFileName = "";
+            this.isUploaded = false;
+        }
+
+    }
 }
 
 export class ActivityModalOptions {

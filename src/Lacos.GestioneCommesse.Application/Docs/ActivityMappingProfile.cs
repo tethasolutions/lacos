@@ -33,6 +33,7 @@ public class ActivityMappingProfile : Profile
         CreateMap<ActivityDto, Activity>()
             .IgnoreCommonMembers()
             .Ignore(x => x.RowNumber)
+            .Ignore(x => x.Supplier)
             .Ignore(x => x.Address)
             .MapMember(x => x.JobId, (x, y) => y.IsTransient() ? x.JobId : y.JobId)
             .Ignore(x => x.Job)

@@ -50,6 +50,7 @@ export class Activity {
         readonly number: number,
         public description: string,
         public jobId: number,
+        public supplierId: number,
         public addressId: number,
         public typeId: number,
         public attachmentDisplayName: string,
@@ -72,7 +73,7 @@ export class Activity {
     }
 
     static build(o: Activity) {
-        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.addressId, o.typeId, o.attachmentDisplayName,
+        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.supplierId, o.addressId, o.typeId, o.attachmentDisplayName,
             o.attachmentFileName, o.expirationDate);
     }
 
@@ -91,6 +92,7 @@ export class ActivityDetail {
         readonly job: number,
         readonly customerId: number,
         readonly customer: string,
+        readonly supplierId: number,
         readonly addressId: number,
         readonly address: string,
         readonly typeId: number,
@@ -104,13 +106,13 @@ export class ActivityDetail {
     }
 
     asActivity() {
-        return new Activity(this.id, this.status, this.number, this.description, this.jobId,
+        return new Activity(this.id, this.status, this.number, this.description, this.jobId, this.supplierId,
             this.addressId, this.typeId, this.attachmentDisplayName, this.attachmentFileName, this.expirationDate);
     }
 
     static build(o: ActivityDetail) {
         return new ActivityDetail(o.id, o.status, o.number, o.description, o.jobId, o.job, o.customerId,
-            o.customer, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName, o.source, o.expirationDate);
+            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName, o.source, o.expirationDate);
     }
 
 }

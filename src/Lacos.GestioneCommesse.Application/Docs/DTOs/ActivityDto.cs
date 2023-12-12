@@ -11,6 +11,7 @@ public class ActivityDto
     public DateTimeOffset? ExpirationDate { get; set; }
 
     public long JobId { get; set; }
+    public long? SupplierId { get; set; }
     public long? AddressId { get; set; }
     public long TypeId { get; set; }
     public string? AttachmentFileName { get; set; }

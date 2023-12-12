@@ -63,8 +63,8 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
                 filters: [
                     {
                         filters: [
-                            { field: 'customerAddressId', operator: 'isnull' },
-                            { field: 'customerAddressId', operator: 'eq', value: this.options.customerAddressId }
+                            { field: 'addressId', operator: 'isnull' },
+                            { field: 'addressId', operator: 'eq', value: this.options.addressId }
                         ],
                         logic: 'or'
                     },
@@ -113,7 +113,7 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
 export class ActivityProductModalOptions {
 
     constructor(
-        readonly customerAddressId: number,
+        readonly addressId: number,
         readonly product: ActivityProduct
     ) {
     }

@@ -121,9 +121,11 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         this.status = options.activity.status;
         this._getJobs();
 
-        this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
-        if (this.selectedActivityType.isInternal && this.options.activity.supplierId) {
-            this.onSupplierChange();
+        if (this.options.activity.typeId) {
+            this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
+            if (this.selectedActivityType.isInternal && this.options.activity.supplierId) {
+                this.onSupplierChange();
+            }
         }
 
         return result;

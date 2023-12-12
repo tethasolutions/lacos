@@ -96,7 +96,7 @@
                             <kendo-formfield class="form-group">
                                 <label>Indirizzo</label>
                                 <kendo-combobox [data]="customerSelezionato.addresses" class="address-combobox"
-                                    [(ngModel)]="options.customerAddressId" name="customerAddressId" suggest="true"
+                                    [(ngModel)]="options.addressId" name="addressId" suggest="true"
                                     class="customer-combobox" textField="fullAddress" [valuePrimitive]="true"
                                     [disabled]="options.customerId == null" valueField="id" required>
                                 </kendo-combobox>

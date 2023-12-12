@@ -7,6 +7,8 @@ import { filter, switchMap, tap } from 'rxjs';
 import { IInterventionReadModel, Intervention, interventionStatusNames } from '../services/interventions/models';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { InterventionModalComponent } from './intervention-modal.component';
+import { ApiUrls } from '../services/common/api-urls';
+import { UserService } from '../services/security/user.service';
 
 @Component({
     selector: 'app-interventions-grid',
@@ -44,7 +46,8 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
     constructor(
         private readonly _service: InterventionsService,
-        private readonly _messageBox: MessageBoxService
+        private readonly _messageBox: MessageBoxService,
+        private readonly _userService: UserService
     ) {
         super();
     }
@@ -97,6 +100,11 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
                 )
                 .subscribe()
         );
+    }
+
+    downloadReport(interventionId: number) {
+        const user = this._userService.getUser();
+        window.open(`${ApiUrls.baseApiUrl}/interventions/download-report/${interventionId}?access_token=${user.accessToken}`,"_blank");
     }
 
     protected _read() {

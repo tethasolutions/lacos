@@ -8,6 +8,9 @@ using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
+using Telerik.Reporting.Processing;
+using Telerik.Reporting;
+using Parameter = Telerik.Reporting.Parameter;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -277,5 +280,25 @@ public class InterventionsService : IInterventionsService
         }
 
         return productCheckList;
+    }
+
+    public Task<ReportDto> GenerateReport(long interventionId)
+    {
+        var parameters = new[] { new Parameter("InterventionId", interventionId) };
+        var content = Report("Intervento.trdp", parameters);
+
+        return Task.FromResult(new ReportDto(content, "intervento.pdf"));
+    }
+
+    private static byte[] Report(string reportName, params Parameter[] parameters)
+    {
+        var processor = new ReportProcessor();
+        var src = new UriReportSource { Uri = $@"Reports\{reportName}" };
+
+        src.Parameters.AddRange(parameters);
+
+        var result = processor.RenderReport("PDF", src, null);
+
+        return result.DocumentBytes;
     }
 }

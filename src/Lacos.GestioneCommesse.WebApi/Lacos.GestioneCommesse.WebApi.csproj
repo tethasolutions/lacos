@@ -31,4 +31,13 @@
     <ProjectReference Include="..\Lacos.GestioneCommesse.Framework\Lacos.GestioneCommesse.Framework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Reports\CheckListItems.trdp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\Intervento.trdp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

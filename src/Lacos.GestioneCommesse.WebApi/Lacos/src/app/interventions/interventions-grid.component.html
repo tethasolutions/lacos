@@ -42,6 +42,9 @@
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">
+                <button class="btn btn-primary btn-sm" title="Modifica" (click)="downloadReport(dataItem.id)">
+                    <i class="fas fa-file"></i>
+                </button>
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                     <i class="fas fa-edit"></i>
                 </button>

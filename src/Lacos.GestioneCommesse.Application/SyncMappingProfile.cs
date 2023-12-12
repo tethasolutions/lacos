@@ -17,6 +17,8 @@ namespace Lacos.GestioneCommesse.Application
         {
             CreateMap<Activity, SyncActivityDto>();
             CreateMap<ActivityProduct, SyncActivityProductDto>();
+            CreateMap<ActivityAttachment, SyncActivityAttachmentsDto>();
+
             CreateMap<Intervention, SyncInterventionDto>()
                 .MapMember(x=>x.OperatorIds,y=>y.Operators.Select(x=>x.Id).ToList());
             CreateMap<InterventionDispute, SyncInterventionDisputeDto>();

@@ -3,11 +3,12 @@ using Lacos.GestioneCommesse.Contracts.Dtos.Registry;
 
 namespace Lacos.GestioneCommesse.Contracts.Dtos.Application
 {
-    public class SyncFullDbDto
+    public class SyncRemoteFullDbDto
     {
 
         public List<SyncActivityDto> Activities { get; set; }
         public List<SyncActivityProductDto> ActivityProducts { get; set; }
+        public List<SyncActivityAttachmentsDto> ActivityAttachments{ get; set; }
         public List<SyncInterventionDto> Interventions { get; set; }
         public List<SyncInterventionDisputeDto> InterventionDisputes { get; set; }
         public List<SyncInterventionNoteDto> InterventionNotes { get; set; }

@@ -2334,3 +2334,59 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214133753_modifiche 12 dic')
+BEGIN
+    ALTER TABLE [Docs].[Interventions] ADD [CustomerSignatureName] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214133753_modifiche 12 dic')
+BEGIN
+    ALTER TABLE [Docs].[InterventionProductCheckListItems] ADD [AttachmentFileName] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214133753_modifiche 12 dic')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [StartDate] datetimeoffset(3) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214133753_modifiche 12 dic')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231214133753_modifiche 12 dic', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214134227_rimozione firma da checklist')
+BEGIN
+    DECLARE @var25 sysname;
+    SELECT @var25 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Docs].[InterventionProductCheckLists]') AND [c].[name] = N'CustomerSignatureFileName');
+    IF @var25 IS NOT NULL EXEC(N'ALTER TABLE [Docs].[InterventionProductCheckLists] DROP CONSTRAINT [' + @var25 + '];');
+    ALTER TABLE [Docs].[InterventionProductCheckLists] DROP COLUMN [CustomerSignatureFileName];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214134227_rimozione firma da checklist')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231214134227_rimozione firma da checklist', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

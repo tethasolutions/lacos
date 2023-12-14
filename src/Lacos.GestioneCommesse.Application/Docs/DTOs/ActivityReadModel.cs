@@ -8,6 +8,7 @@ public class ActivityReadModel
     public int Number { get; set; }
     public long JobId { get; set; }
     public string? JobCode { get; set; }
+    public string? JobReference { get; set; }
     public bool? JobHasHighPriority { get; set; }
     public string? Description { get; set; }
     public ActivityStatus Status { get; set; }
@@ -18,6 +19,7 @@ public class ActivityReadModel
     public string? ActivityColor { get; set; }
     public string? Source { get; set; }
     public bool CanBeRemoved { get; set; }
+    public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
     public string? LastOperator { get; set; }
 }

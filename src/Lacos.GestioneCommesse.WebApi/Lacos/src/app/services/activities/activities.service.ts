@@ -124,7 +124,7 @@ export class ActivitiesService {
             .pipe(
                 map(response => {
                    const activityAttachment: ActivityDetail = Object.assign(
-                        new ActivityDetail(0, ActivityStatus.Pending, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, null), response);
+                        new ActivityDetail(0, ActivityStatus.Pending, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, null, null), response);
                     return activityAttachment;
                 })
             );

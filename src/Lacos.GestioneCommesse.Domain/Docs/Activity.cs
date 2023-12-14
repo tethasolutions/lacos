@@ -4,6 +4,7 @@ namespace Lacos.GestioneCommesse.Domain.Docs;
 
 public class Activity : FullAuditedEntity
 {
+    public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
 
     public int RowNumber { get; set; }

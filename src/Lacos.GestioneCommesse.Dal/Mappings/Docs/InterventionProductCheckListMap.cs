@@ -13,9 +13,6 @@ public class InterventionProductCheckListMap : BaseEntityMapping<InterventionPro
 
         builder.ToTable("InterventionProductCheckLists", "Docs");
 
-        builder.Property(e => e.CustomerSignatureFileName)
-            .HasMaxLength(50);
-
         builder.Property(e => e.Description)
             .HasMaxLength(500)
             .IsRequired();

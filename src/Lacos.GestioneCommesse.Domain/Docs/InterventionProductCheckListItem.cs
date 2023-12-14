@@ -7,6 +7,7 @@ public class InterventionProductCheckListItem : FullAuditedEntity
     public string? Description { get; set; }
     public InterventionProductCheckListItemOutcome? Outcome { get; set; }
     public string? Notes { get; set; }
+    public string? AttachmentFileName { get; set; }
 
     public long? OperatorId { get; set; }
     public Operator? Operator { get; set; }

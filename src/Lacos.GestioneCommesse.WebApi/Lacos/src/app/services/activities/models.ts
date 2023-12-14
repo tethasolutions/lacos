@@ -33,8 +33,10 @@ export interface IActivityReadModel {
     readonly source: string;
     readonly canBeRemoved: boolean;
     readonly jobCode: string;
+    readonly jobReference: string;
     readonly jobHasHighPriority: boolean;
     readonly customer: string;
+    readonly startDate: Date | string;
     readonly expirationDate: Date | string;
     readonly lastOperator: string;
 
@@ -42,6 +44,7 @@ export interface IActivityReadModel {
 
 export class Activity {
 
+    startDate: Date;
     expirationDate: Date;
 
     constructor(
@@ -55,8 +58,10 @@ export class Activity {
         public typeId: number,
         public attachmentDisplayName: string,
         public attachmentFileName: string,
+        startDate: Date | string,
         expirationDate: Date | string
     ) {
+        this.startDate = startDate ? new Date(startDate) : null;
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
     }
 
@@ -65,6 +70,9 @@ export class Activity {
             ...this
         };
 
+        result.startDate = result.startDate
+            ? result.startDate.toOffsetString() as any
+            : null;
         result.expirationDate = result.expirationDate
             ? result.expirationDate.toOffsetString() as any
             : null;
@@ -74,13 +82,14 @@ export class Activity {
 
     static build(o: Activity) {
         return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.supplierId, o.addressId, o.typeId, o.attachmentDisplayName,
-            o.attachmentFileName, o.expirationDate);
+            o.attachmentFileName, o.startDate, o.expirationDate);
     }
 
 }
 
 export class ActivityDetail {
 
+    readonly startDate: Date | string;
     readonly expirationDate: Date | string;
 
     constructor(
@@ -100,19 +109,21 @@ export class ActivityDetail {
         readonly attachmentDisplayName: string,
         readonly attachmentFileName: string,
         readonly source: string,
+        startDate: Date | string,
         expirationDate: Date | string
     ) {
+        this.startDate = startDate ? new Date(startDate) : null;
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
     }
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.description, this.jobId, this.supplierId,
-            this.addressId, this.typeId, this.attachmentDisplayName, this.attachmentFileName, this.expirationDate);
+            this.addressId, this.typeId, this.attachmentDisplayName, this.attachmentFileName, this.startDate, this.expirationDate);
     }
 
     static build(o: ActivityDetail) {
         return new ActivityDetail(o.id, o.status, o.number, o.description, o.jobId, o.job, o.customerId,
-            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName, o.source, o.expirationDate);
+            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName, o.source, o.startDate, o.expirationDate);
     }
 
 }

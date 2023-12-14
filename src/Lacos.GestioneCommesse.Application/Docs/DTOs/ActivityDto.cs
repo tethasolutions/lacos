@@ -8,6 +8,7 @@ public class ActivityDto
     public ActivityStatus Status { get; set; }
     public int? Number { get; set; }
     public string? Description { get; set; }
+    public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
 
     public long JobId { get; set; }

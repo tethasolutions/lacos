@@ -28,7 +28,7 @@
             </div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="number" title="Num" [width]="1" filter="numeric" format="n0">
+    <kendo-grid-column field="number" title="N." [width]="1" filter="numeric" format="n0">
     </kendo-grid-column>
     <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="activity-status">
         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
@@ -42,6 +42,8 @@
                 {{dataItem.status | activityStatus}}
             </span>
         </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="jobReference" title="Rifer." >
     </kendo-grid-column>
     <kendo-grid-column field="type" title="Tipologia" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>

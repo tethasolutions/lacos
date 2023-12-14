@@ -14,6 +14,7 @@ public class Intervention : FullAuditedEntity
 
     public string? ReportFileName { get; set; }
     public DateTimeOffset? ReportGeneratedOn { get; set; }
+    public string? CustomerSignatureName { get; set; }
     public string? CustomerSignatureFileName { get; set; }
 
     public long? VehicleId { get; set; }

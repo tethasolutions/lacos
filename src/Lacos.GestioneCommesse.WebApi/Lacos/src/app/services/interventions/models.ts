@@ -91,14 +91,13 @@ export class InterventionProductCheckList {
     constructor(
         readonly interventionProductId: number,
         readonly description: string,
-        readonly customerSignatureFileName: string,
         readonly notes: string,
         readonly items: InterventionProductCheckListItem[]
     )
     {}
 
     static build(o: InterventionProductCheckList) {
-        return new InterventionProductCheckList(o.interventionProductId, o.description, o.customerSignatureFileName, o.notes, o.items);
+        return new InterventionProductCheckList(o.interventionProductId, o.description, o.notes, o.items);
     }
 }
 

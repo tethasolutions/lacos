@@ -31,6 +31,7 @@ public class InterventionMappingProfile : Profile
             .Ignore(x => x.FinalNotes)
             .Ignore(x => x.ReportFileName)
             .Ignore(x => x.ReportGeneratedOn)
+            .Ignore(x => x.CustomerSignatureName)
             .Ignore(x => x.CustomerSignatureFileName)
             .Ignore(x => x.Vehicle)
             .Ignore(x => x.Activity)

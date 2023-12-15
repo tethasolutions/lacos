@@ -15,6 +15,13 @@
     </kendo-grid-column>
     <kendo-grid-column field="name" title="Nome">
     </kendo-grid-column>
+    <kendo-grid-column field="description" title="Descrizione">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div [innerHTML]="dataItem.description"></div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="location" title="Locazione">
+    </kendo-grid-column>
 
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>

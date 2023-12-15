@@ -1,7 +1,7 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="600" [top]="200">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="800" [top]="150">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Voce checklist
@@ -22,20 +22,35 @@
             </div>
             <div class="row riga-form">
                 <div class="row checklist-row">
-                    <div class="col-10">
+                    <div class="col-5">
                         <b>Voce</b>
                     </div>
                     <div class="col-2">
                         <b>Esito</b>
                     </div>
+                    <div class="col-4">
+                        <b>Note</b>
+                    </div>
+                    <div class="col-1">
+                        <b> </b>
+                    </div>
                 </div>
                 <div *ngFor="let item of interventionProductCheckList.items" class="col-12">
                     <div class="row checklist-row">
-                        <div class="col-10">
+                        <div class="col-5">
                             <p>{{item.description}}</p>
                         </div>
                         <div class="col-2">
                             <i class="{{item.outcome}}-icon fa fa-2x fa-square-check" alt="{{item.outcome}}"></i>
+                        </div>
+                        <div class="col-4">
+                            <p>{{item.notes}}</p>
+                        </div>
+                        <div class="col-1" *ngIf="item.attachmentFileName">
+                            <button class="btn btn-primary btn-sm" title="Allegato"
+                                (click)="downloadAttachment(item.attachmentFileName)">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
                         </div>
                     </div>
                 </div>

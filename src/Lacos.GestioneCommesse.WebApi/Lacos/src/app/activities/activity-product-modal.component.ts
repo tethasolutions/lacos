@@ -86,6 +86,7 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
 
     onProductChange() {
         this.options.product.productId = this.product?.id;
+        this.options.product.description = this.product?.description;
     }
 
     protected override _canClose() {
@@ -145,6 +146,7 @@ class SelectableProduct {
     readonly name: string;
     readonly fullName: string;
     readonly pictureFileName: string;
+    readonly description: string;
 
     constructor(
         product: ProductReadModel
@@ -154,6 +156,7 @@ class SelectableProduct {
         this.name = product.name;
         this.fullName = `${product.code} - ${product.name}`;
         this.pictureFileName = product.pictureFileName;
+        this.description = product.description;
     }
 
 }

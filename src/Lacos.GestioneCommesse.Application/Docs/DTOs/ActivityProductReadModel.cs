@@ -9,5 +9,7 @@ public class ActivityProductReadModel
     public string? PictureFileName { get; set; }
     public string? QrCode { get; set; }
     public long ActivityId { get; set; }
+    public string? Description { get; set; }
+    public string? Location { get; set; }
     public bool CanBeRemoved { get; set; }
 }

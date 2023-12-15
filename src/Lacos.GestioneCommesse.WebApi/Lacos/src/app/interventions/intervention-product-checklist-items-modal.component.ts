@@ -7,6 +7,7 @@ import { Role } from '../services/security/models';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { InterventionProductCheckList } from '../services/interventions/models';
 import { tap } from 'rxjs';
+import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
   selector: 'app-intervention-product-checklist-items-modal',
@@ -16,6 +17,8 @@ export class InterventionProductChecklistItemsModalComponent extends ModalCompon
 
   @ViewChild('form') form: NgForm;
   readonly role = Role;
+  readonly imagesUrl = `${ApiUrls.baseUrl}/`;
+
   interventionProductCheckList: InterventionProductCheckList;
 
   constructor(
@@ -35,6 +38,10 @@ export class InterventionProductChecklistItemsModalComponent extends ModalCompon
       .subscribe();
 
     return result;
+  }
+
+  downloadAttachment(attachmentFileName: string) {
+    window.open(`${this.imagesUrl}/${attachmentFileName}`, "_blank");
   }
 
   protected _canClose() {

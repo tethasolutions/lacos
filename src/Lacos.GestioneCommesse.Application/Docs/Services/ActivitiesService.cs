@@ -99,6 +99,26 @@ public class ActivitiesService : IActivitiesService
 
         activity.SetNumber(number);
 
+        if (!string.IsNullOrEmpty(activityDto.AttachmentFileName) && !string.IsNullOrEmpty(activityDto.AttachmentDisplayName))
+        {
+            var activityAttachment = activity.Attachment;
+            if (activityAttachment == null)
+            {
+                activityAttachment = new ActivityAttachment();
+                activityAttachment.ActivityId = activity.Id;
+                activityAttachment.Activity = activity;
+                activityAttachment.DisplayName = activityDto.AttachmentDisplayName;
+                activityAttachment.FileName = activityDto.AttachmentFileName;
+                await activityAttachmentRepository.Insert(activityAttachment);
+
+            }
+            else
+            {
+                activityAttachment.DisplayName = activityDto.AttachmentDisplayName;
+                activityAttachment.FileName = activityDto.AttachmentFileName;
+            }
+        }
+
         await repository.Insert(activity);
 
         await dbContext.SaveChanges();

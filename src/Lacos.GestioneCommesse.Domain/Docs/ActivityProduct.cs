@@ -6,6 +6,8 @@ public class ActivityProduct : FullAuditedEntity
 {
     public long ProductId { get; set; }
     public Product? Product { get; set; }
+    public string? Description { get; set; }
+    public string? Location { get; set; }
 
     public long ActivityId { get; set; }
     public Activity? Activity { get; set; }

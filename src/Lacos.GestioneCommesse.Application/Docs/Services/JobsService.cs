@@ -47,6 +47,7 @@ public class JobsService : IJobsService
             jobDto.Reference = "Ticket " + DateTime.Now.Year.ToString();
             jobDto.Date = DateTime.Now;
             jobDto.Status = JobStatusDto.Pending;
+            jobDto.Description = " ";
 
             var job = jobDto.MapTo<Job>(mapper);
             job.IsInternalJob= true;

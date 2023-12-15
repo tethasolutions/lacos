@@ -81,7 +81,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                     .find(e => e.id === this.options.activity.jobId).customerId;
                 this.readAddresses(customerId);
             }
-            this.options.activity.description = this.selectedJob.description;
+            //this.options.activity.description = this.selectedJob.description;
         }
         else {
             const customerId = this.jobs
@@ -199,15 +199,15 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
             return;
         }
 
-        if (this.options.activity.addressId) return;
-
-        const addressId = this.jobs
-            .find(e => e.id === this.options.activity.jobId).addressId;
-
         const customerId = this.jobs
             .find(e => e.id === this.options.activity.jobId).customerId;
 
         this.readAddresses(customerId);
+
+        if (this.options.activity.addressId) return;
+
+        const addressId = this.jobs
+            .find(e => e.id === this.options.activity.jobId).addressId;
         this.options.activity.addressId = addressId;
     }
 

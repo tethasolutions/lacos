@@ -3,9 +3,17 @@
         Attività {{activity.number}} &bull; {{activity.status | activityStatus}}
     </h3>
     <div class="d-flex gap-1">
+        <a class="btn btn-primary btn-sm" (click)="editJob(activity.jobId)">
+            <span class="fa fa-edit"></span>
+            Modifica commessa
+        </a>
         <a class="btn btn-primary btn-sm" (click)="edit()">
             <span class="fa fa-edit"></span>
             Modifica attività
+        </a>
+        <a class="btn btn-primary btn-sm" [routerLink]="['/','activities']" [queryParams]="{jobId:activity.jobId}">
+            <span class="fa fa-rotate-left"></span>
+            Torna alla commessa
         </a>
     </div>
 </div>
@@ -15,9 +23,8 @@
         <b>
             Commessa
         </b>
-        <p>
-            {{activity.job}}
-        </p>
+        <div [innerHTML]="activity.job">
+        </div>
     </div>
     <div class="col-3">
         <b>
@@ -56,7 +63,7 @@
             Allegato
         </b>
         <p>
-            <a [href]="CreateUrl()" target="_blank" >{{ activity.attachmentDisplayName }}</a>
+            <a (click)="downloadAttachment()" >{{ activity.attachmentDisplayName }}</a>
         </p>
     </div>
     <div class="col-10">
@@ -131,6 +138,7 @@
     </kendo-tabstrip-tab>
 </kendo-tabstrip>
 
+<app-job-modal #jobModal></app-job-modal>
 <app-activity-modal #activityModal></app-activity-modal>
 <app-activity-product-modal #activityProductModal></app-activity-product-modal>
 <app-intervention-modal #interventionModal></app-intervention-modal>

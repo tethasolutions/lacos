@@ -163,9 +163,9 @@ public static class WebApiConfiguration
             default:
                 response.ContentType = "text/plain";
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                var text = environment.IsProduction()
-                    ? "Si è verificato un errore imprevisto."
-                    : error?.ToString() ?? "Si è verificato un errore imprevisto.";
+                //var text = environment.IsProduction()
+                  //  ? "Si è verificato un errore imprevisto."
+                var text = error?.ToString() ?? "Si è verificato un errore imprevisto.";
                 await response.WriteAsync(text);
                 break;
         }

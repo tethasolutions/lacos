@@ -2390,3 +2390,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti')
+BEGIN
+    ALTER TABLE [Docs].[ActivityProducts] ADD [Description] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti')
+BEGIN
+    ALTER TABLE [Docs].[ActivityProducts] ADD [Location] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20231214155014_aggiunta dettagli prodotti', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -17,6 +17,8 @@ import { Intervention, InterventionStatus } from '../services/interventions/mode
 import { InterventionsCalendarComponent } from '../interventions/interventions-calendar.component';
 import { InterventionsGridComponent } from '../interventions/interventions-grid.component';
 import { ApiUrls } from '../services/common/api-urls';
+import { JobModalComponent } from '../jobs/job-modal.component';
+import { JobsService } from '../services/jobs/jobs.service';
 
 @Component({
     selector: 'app-activity',
@@ -27,6 +29,9 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     @ViewChild('form', { static: false })
     form: NgForm;
 
+    @ViewChild('jobModal', { static: true })
+    jobModal: JobModalComponent;
+    
     @ViewChild('activityModal', { static: true })
     activityModal: ActivityModalComponent;
 
@@ -51,6 +56,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     constructor(
         private readonly _route: ActivatedRoute,
         private readonly _service: ActivitiesService,
+        private readonly _jobService: JobsService,
         private readonly _messageBox: MessageBoxService,
         private readonly _activityProductsService: ActivityProductsService,
         private readonly _interventionsService: InterventionsService
@@ -77,8 +83,21 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         );
     }
 
+    editJob(jobId: number) {
+        this._subscriptions.push(
+            this._jobService.get(jobId)
+                .pipe(
+                    switchMap(e => this.jobModal.open(e)),
+                    filter(e => e),
+                    switchMap(() => this._jobService.update(this.jobModal.options)),
+                    tap(e => location.reload())
+                )
+                .subscribe()
+        );
+    }
+
     createActivityProduct() {
-        const product = new ActivityProduct(this.activity.id, null);
+        const product = new ActivityProduct(this.activity.id, null, null, null);
         const options = new ActivityProductModalOptions(this.activity.addressId, product);
 
         this._subscriptions.push(
@@ -177,8 +196,8 @@ export class ActivityComponent extends BaseComponent implements OnInit {
         );
     }
 
-    public CreateUrl () : string
+    public downloadAttachment ()
     {
-       return `${this._baseUrl}/activity-attachment/download-file/${this.activity.attachmentFileName}/${this.activity.attachmentDisplayName}`;
+       window.open(`${this._baseUrl}/activity-attachment/download-file/${this.activity.attachmentFileName}/${this.activity.attachmentDisplayName}`,'_blank');
     }
 }

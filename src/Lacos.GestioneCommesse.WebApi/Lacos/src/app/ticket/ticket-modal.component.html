@@ -115,7 +115,7 @@
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">
                     Annulla
                 </button>
-                <button *ngIf="options.id != null" type="button" class="btn btn-primary" title="Genera Attività" (click)="createActivity(options)">
+                <button *ngIf="options.id" type="button" class="btn btn-primary" title="Genera Attività" (click)="createActivity(options)">
                     <i class="fa fa-plus"></i> Genera Attività
                 </button>
                 <button type="submit" class="btn btn-primary">

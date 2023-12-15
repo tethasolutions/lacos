@@ -11,6 +11,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public long? TypeId { get; set; }
         public long? SourceTicketId { get; set; }
         public long? SourcePuchaseOrderId { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? ExpirationDate { get; set; }
         public ActivityStatus? Status { get; set; }
         public long? SupplierId { get; set; }

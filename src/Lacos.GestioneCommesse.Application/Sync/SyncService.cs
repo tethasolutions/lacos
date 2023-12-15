@@ -150,6 +150,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                  if (entity == null)
                      throw new NotFoundException("Intervention not found");
 
+                 entity.CustomerSignatureName = signDto.NameSurname;
                  entity.FinalNotes = signDto.FinalNotes;
                  entity.CustomerSignatureFileName = signDto.Filename;
                  //entity. = signDto.NameSurname;

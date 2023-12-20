@@ -94,7 +94,7 @@ public class TicketsService : ITicketsService
         await dbContext.SaveChanges();
     }
 
-    private async Task<int> GetNextNumber(int year)
+    public async Task<int> GetNextNumber(int year)
     {
         var maxNumber = await repository.Query()
             .Where(e => e.Year == year)

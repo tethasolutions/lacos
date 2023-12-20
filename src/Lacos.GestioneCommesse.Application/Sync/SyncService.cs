@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using Lacos.GestioneCommesse.Application.Docs.Services;
 using Lacos.GestioneCommesse.Contracts.Dtos;
 using Lacos.GestioneCommesse.Contracts.Dtos.Application;
 using Lacos.GestioneCommesse.Contracts.Dtos.Docs;
@@ -317,6 +318,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
         private async Task<List<SyncTicketDto>> InsertUpdateAllModifiedTicket(List<SyncTicketDto> tdoModels,List<SyncTicketPictureDto> tdoChild) 
         {
             var repository = serviceProvider.GetRequiredService<IRepository<Ticket>>();
+            var ticketsService = serviceProvider.GetRequiredService<ITicketsService>();
             List<SyncTicketDto>  list = new List<SyncTicketDto>();
             foreach (var model in tdoModels)
             {
@@ -328,6 +330,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
                 if (entity != null)
                 {
+                    
                     model.MapTo(entity, mapper);
                     repository.Update(entity);
                     await dbContext.SaveChanges();
@@ -335,7 +338,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 else
                 { 
                     var oldId = model.Id;
-
+                    model.Number =  await ticketsService.GetNextNumber(model.Year.Value);
                     var newEntity = model.MapTo<Ticket>(mapper);
                     await repository.Insert(newEntity);
                     await dbContext.SaveChanges();

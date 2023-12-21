@@ -8,7 +8,7 @@ import { MessageBoxService } from '../services/common/message-box.service';
 import { NgForm } from '@angular/forms';
 import { ActivityModalComponent, ActivityModalOptions } from './activity-modal.component';
 import { ActivityProductModalComponent, ActivityProductModalOptions } from './activity-product-modal.component';
-import { ActivityProduct } from '../services/activity-products/models';
+import { ActivityProduct, IActivityProductReadModel } from '../services/activity-products/models';
 import { ActivityProductsService } from '../services/activity-products/activity-products.service';
 import { ActivityProductsComponent } from './activity-products.component';
 import { InterventionModalComponent } from '../interventions/intervention-modal.component';
@@ -97,8 +97,8 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     }
 
     createActivityProduct() {
-        const product = new ActivityProduct(this.activity.id, null, null, null);
-        const options = new ActivityProductModalOptions(this.activity.addressId, product);
+        const product = new ActivityProduct(0,this.activity.id, null, null, null, null);
+        const options = new ActivityProductModalOptions(product);
 
         this._subscriptions.push(
             this.activityProductModal.open(options)
@@ -106,6 +106,19 @@ export class ActivityComponent extends BaseComponent implements OnInit {
                     filter(e => e),
                     switchMap(() => this._activityProductsService.create(product)),
                     tap(() => this._afterActivityProductCreated(this.activityProductModal.product.name))
+                )
+                .subscribe()
+        );
+    }
+
+    editActivityProduct(product: IActivityProductReadModel) {
+        this._subscriptions.push(
+            this._activityProductsService.get(product.id)
+                .pipe(
+                    switchMap(e => this.activityProductModal.open(new ActivityProductModalOptions(e))),
+                    filter(e => e),
+                    switchMap(() => this._activityProductsService.update(this.activityProductModal.options.product)),
+                    tap(() => this.activityProducts.refresh())
                 )
                 .subscribe()
         );

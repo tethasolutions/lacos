@@ -63,7 +63,7 @@
             Allegato
         </b>
         <p>
-            <a (click)="downloadAttachment()" >{{ activity.attachmentDisplayName }}</a>
+            <a (click)="downloadAttachment()">{{ activity.attachmentDisplayName }}</a>
         </p>
     </div>
     <div class="col-10">
@@ -80,20 +80,18 @@
             <strong>Prodotti</strong>
         </ng-template>
         <ng-template kendoTabContent>
-            <div class="row">
-                <div class="col-12 d-flex gap-1">
-                    <a class="btn btn-primary btn-sm" (click)="createActivityProduct()">
-                        <span class="fa fa-plus"></span>
-                        Associa prodotto
-                    </a>
-                    <a class="btn btn-primary btn-sm" (click)="assignAllCustomerProducts()">
-                        <span class="fa fa-plus"></span>
-                        Associa tutti i prodotti dell'indirizzo del cliente
-                    </a>
-                </div>
-                <p></p>
+            <div class="d-flex gap-1">
+                <a class="btn btn-primary btn-sm" (click)="createActivityProduct()">
+                    <span class="fa fa-plus"></span>
+                    Associa prodotto
+                </a>
+                <a class="btn btn-primary btn-sm" (click)="assignAllCustomerProducts()">
+                    <span class="fa fa-plus"></span>
+                    Associa tutti i prodotti dell'indirizzo del cliente
+                </a>
             </div>
-            <app-activity-products #activityProducts [activityId]="activity.id"></app-activity-products>
+            <app-activity-products #activityProducts [activityId]="activity.id"
+                (edit)="editActivityProduct($event)"></app-activity-products>
         </ng-template>
     </kendo-tabstrip-tab>
     <kendo-tabstrip-tab>
@@ -101,14 +99,11 @@
             <strong>Pianificazione</strong>
         </ng-template>
         <ng-template kendoTabContent>
-            <div class="row">
-                <div class="col-12 d-flex gap-1">
-                    <a class="btn btn-primary btn-sm" (click)="createIntervention()">
-                        <span class="fa fa-calendar-plus"></span>
-                        Programma intervento
-                    </a>
-                </div>
-                <p></p>
+            <div class="d-flex gap-1">
+                <a class="btn btn-primary btn-sm" (click)="createIntervention()">
+                    <span class="fa fa-calendar-plus"></span>
+                    Programma intervento
+                </a>
             </div>
             <app-interventions-calendar #interventionsCalendar [interventionModal]="interventionModal"
                 [jobId]="activity.jobId" [activityId]="activity.id" (interventionUpdated)="onInterventionsChanged()"
@@ -121,14 +116,11 @@
             <strong>Interventi</strong>
         </ng-template>
         <ng-template kendoTabContent>
-            <div class="row">
-                <div class="col-12 d-flex gap-1">
-                    <a class="btn btn-primary btn-sm" (click)="createIntervention()">
-                        <span class="fa fa-calendar-plus"></span>
-                        Programma intervento
-                    </a>
-                </div>
-                <p></p>
+            <div class="d-flex gap-1">
+                <a class="btn btn-primary btn-sm" (click)="createIntervention()">
+                    <span class="fa fa-calendar-plus"></span>
+                    Programma intervento
+                </a>
             </div>
             <app-interventions-grid #interventionsGrid [interventionModal]="interventionModal"
                 [activityId]="activity.id" (interventionUpdated)="onInterventionsChanged()"

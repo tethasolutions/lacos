@@ -6,6 +6,8 @@ public interface IActivityProductsService
 {
     public IQueryable<ActivityProductReadModel> Query();
     Task Create(ActivityProductDto activityProductDto);
+    Task<ActivityProductDto> Get(long id);
+    Task<ActivityProductDto> Update(ActivityProductDto activityProductDto);
     Task Delete(long id);
     Task Duplicate(long id);
 }

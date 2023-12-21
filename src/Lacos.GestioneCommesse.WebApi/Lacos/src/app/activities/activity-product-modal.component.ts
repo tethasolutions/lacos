@@ -7,7 +7,7 @@ import { ActivityProduct } from '../services/activity-products/models';
 import { ProductTypesService } from '../services/productTypes.service';
 import { ProductTypeModel } from '../shared/models/product-type.model';
 import { ProductsService } from '../services/products.service';
-import { ProductReadModel } from '../shared/models/product.model';
+import { ProductModel, ProductReadModel } from '../shared/models/product.model';
 import { State } from '@progress/kendo-data-query';
 import { ApiUrls } from '../services/common/api-urls';
 
@@ -40,18 +40,23 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
     }
 
     override open(options: ActivityProductModalOptions) {
-        const result = super.open(options);
-
-        this.productType = null;
+        this.productType = this.productTypes.find(e => e.id === options.product.productTypeId);
         this.products = [];
         this.product = null;
+
+        const result = super.open(options);
+
+        if (this.productType) {
+            this.onProductTypeChanged(this.options.product.productId);
+        }
 
         return result;
     }
 
-    onProductTypeChanged() {
+    onProductTypeChanged(productId: number = null) {
+        this.options.product.productTypeId = this.productType?.id;
         this.product = null;
-        this.options.product.productId = this.product?.id;
+        this.options.product.productId = null;
 
         if (!this.productType) {
             this.products = [];
@@ -61,13 +66,6 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
         const state: State = {
             filter: {
                 filters: [
-                    {
-                        filters: [
-                            { field: 'addressId', operator: 'isnull' },
-                            { field: 'addressId', operator: 'eq', value: this.options.addressId }
-                        ],
-                        logic: 'or'
-                    },
                     { field: 'productTypeId', operator: 'eq', value: this.productType.id }
                 ],
                 logic: 'and'
@@ -78,7 +76,8 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
         this._subscriptions.push(
             this._productsService.readProducts(state)
                 .pipe(
-                    tap(e => this.products = (e.data as ProductReadModel[]).map(ee => new SelectableProduct(ee)))
+                    tap(e => this.products = (e.data as ProductReadModel[]).map(ee => new SelectableProduct(ee))),
+                    tap(() => this.options.product.productId = (this.product = this.products.find(e => e.id === productId))?.id)
                 )
                 .subscribe()
         );
@@ -114,7 +113,6 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
 export class ActivityProductModalOptions {
 
     constructor(
-        readonly addressId: number,
         readonly product: ActivityProduct
     ) {
     }

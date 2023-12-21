@@ -20,12 +20,15 @@
             <div [innerHTML]="dataItem.description"></div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="location" title="Locazione">
+    <kendo-grid-column field="location" title="Ubicazione">
     </kendo-grid-column>
 
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">
+                <button class="btn btn-primary btn-sm" title="Modifica" (click)="editActivityProduct(dataItem)">
+                    <i class="fas fa-edit"></i>
+                </button>
                 <button class="btn btn-primary btn-sm" title="Duplica" (click)="askDuplicate(dataItem)">
                     <i class="fas fa-copy"></i>
                 </button>

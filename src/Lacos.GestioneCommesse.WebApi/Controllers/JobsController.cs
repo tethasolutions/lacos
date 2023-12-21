@@ -54,4 +54,9 @@ public class JobsController : LacosApiController
         return service.Delete(id);
     }
 
+    [HttpPut("copyJob")]
+    public async Task<int> CopyJob(JobCopyDto jobCopyDto)
+    {
+        return await service.CopyJob(jobCopyDto);
+    }
 }

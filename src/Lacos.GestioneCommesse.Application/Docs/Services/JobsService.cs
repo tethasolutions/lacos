@@ -148,4 +148,9 @@ public class JobsService : IJobsService
 
         return (maxNumber ?? 0) + 1;
     }
+
+    public async Task<int> CopyJob(JobCopyDto jobCopyDto)
+    {
+        throw new NotImplementedException();
+    }
 }

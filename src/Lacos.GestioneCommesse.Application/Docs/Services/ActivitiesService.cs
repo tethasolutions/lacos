@@ -91,7 +91,7 @@ public class ActivitiesService : IActivitiesService
 
         return activityDto;
     }
-
+    
     public async Task<ActivityDto> Create(ActivityDto activityDto)
     {
         var activity = activityDto.MapTo<Activity>(mapper);

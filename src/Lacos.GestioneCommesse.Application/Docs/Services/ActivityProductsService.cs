@@ -85,4 +85,37 @@ public class ActivityProductsService : IActivityProductsService
 
         await dbContext.SaveChanges();
     }
+
+    public async Task<ActivityProductDto> Get(long id)
+    {
+        var activityProductDto = await repository.Query()
+            .Where(e => e.Id == id)
+            .Project<ActivityProductDto>(mapper)
+            .FirstOrDefaultAsync();
+
+        if (activityProductDto == null)
+        {
+            throw new NotFoundException($"Commessa con Id {id} non trovata.");
+        }
+
+        return activityProductDto;
+    }
+
+    public async Task<ActivityProductDto> Update(ActivityProductDto activityProductDto)
+    {
+        var activityProduct = await repository.Get(activityProductDto.Id);
+
+        if (activityProduct == null)
+        {
+            throw new NotFoundException($"Commessa con Id {activityProductDto.Id} non trovata.");
+        }
+
+        activityProduct = activityProductDto.MapTo(activityProduct, mapper);
+
+        repository.Update(activityProduct);
+
+        await dbContext.SaveChanges();
+
+        return await Get(activityProduct.Id);
+    }
 }

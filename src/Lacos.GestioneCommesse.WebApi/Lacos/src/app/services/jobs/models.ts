@@ -61,3 +61,24 @@ export class Job {
     }
 
 }
+
+export class JobCopy {
+
+    date: Date;
+
+    constructor(
+        readonly id: number,
+        date: Date | string,
+        public description: string,
+        public reference: string,
+        public customerId: number,
+        public addressId: number
+    ) {
+        this.date = date ? new Date(date) : null;
+    }
+    
+    static build(o: JobCopy) {
+        return new JobCopy(o.id, o.date, o.description, o.reference, o.customerId, o.addressId);
+    }
+
+}

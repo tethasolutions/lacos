@@ -10,4 +10,5 @@ public interface IJobsService
     Task<JobDto> Create(JobDto jobDto);
     Task<JobDto> Update(JobDto jobDto);
     Task Delete(long id);
+    Task<int> CopyJob(JobCopyDto jobCopyDto);
 }

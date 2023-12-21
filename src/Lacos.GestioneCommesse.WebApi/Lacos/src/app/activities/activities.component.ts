@@ -26,11 +26,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         take: 30,
         filter: {
             filters: [
-                {
-                    filters: [ActivityStatus.Pending, ActivityStatus.InProgress, ActivityStatus.ReadyForCompletion]
-                        .map(e => ({ field: 'status', operator: 'eq', value: e })),
-                    logic: 'or'
-                },
+                this._buildStatusFilter(),
                 this._buildJobIdFilter(),
                 this._buildTypeIdFilter()
             ],
@@ -196,6 +192,30 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             get value() {
                 return that._typeId;
             }
+        };
+    }
+
+    private _buildStatusFilter() {
+        const that = this;
+
+        return {
+            get field() {
+                return that._jobId
+                    ? 'id'
+                    : undefined
+            },
+            get operator() {
+                return that._jobId
+                    ? 'isnotnull'
+                    : undefined
+            },
+            get filters() {
+                return that._jobId
+                    ? undefined
+                    : [ActivityStatus.Pending, ActivityStatus.InProgress, ActivityStatus.ReadyForCompletion]
+                        .map(e => ({ field: 'status', operator: 'eq', value: e }))
+            },
+            logic: 'or'
         };
     }
 

@@ -29,6 +29,20 @@ export class ActivityProductsService {
             );
     }
 
+    get(id: number) {
+        return this._http.get<ActivityProduct>(`${this._baseUrl}/${id}`)
+            .pipe(
+                map(e => ActivityProduct.build(e))
+            );
+    }
+    
+    update(activityProduct: ActivityProduct) {
+        return this._http.put<ActivityProduct>(`${this._baseUrl}/${activityProduct.id}`, activityProduct)
+            .pipe(
+                map(e => ActivityProduct.build(e))
+            );
+    }
+
     duplicate(id: number) {
         return this._http.post<void>(`${this._baseUrl}/${id}/duplicate`, null)
             .pipe(

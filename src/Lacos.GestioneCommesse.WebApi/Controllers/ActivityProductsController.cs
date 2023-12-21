@@ -30,6 +30,20 @@ public class ActivityProductsController : LacosApiController
         return service.Create(activityProductDto);
     }
 
+    [HttpGet("{id}")]
+    public Task<ActivityProductDto> Get(long id)
+    {
+        return service.Get(id);
+    }
+
+    [HttpPut("{id}")]
+    public Task<ActivityProductDto> Update(long id, ActivityProductDto activityProductDto)
+    {
+        activityProductDto.Id = id;
+
+        return service.Update(activityProductDto);
+    }
+
     [HttpPost("{id}/duplicate")]
     public Task Duplicate(long id)
     {

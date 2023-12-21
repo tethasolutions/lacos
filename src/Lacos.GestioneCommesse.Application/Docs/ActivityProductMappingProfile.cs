@@ -29,5 +29,8 @@ public class ActivityProductMappingProfile : Profile
             .Ignore(x => x.Product)
             .Ignore(x => x.Activity)
             .Ignore(x => x.InterventionProducts);
+
+        CreateMap<ActivityProduct, ActivityProductDto>()
+            .MapMember(x => x.ProductTypeId , y => y.Product.ProductTypeId);
     }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
@@ -7,6 +7,7 @@ import { filter, switchMap, tap } from 'rxjs';
 import { IActivityProductReadModel } from '../services/activity-products/models';
 import { ApiUrls } from '../services/common/api-urls';
 import { ActivityProductsService } from '../services/activity-products/activity-products.service';
+import { outputAst } from '@angular/compiler';
 
 @Component({
     selector: 'app-activity-products',
@@ -16,6 +17,9 @@ export class ActivityProductsComponent extends BaseComponent implements OnChange
 
     @Input()
     activityId: number;
+
+    @Output() 
+    readonly edit = new EventEmitter<IActivityProductReadModel>();
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
 
@@ -63,6 +67,10 @@ export class ActivityProductsComponent extends BaseComponent implements OnChange
                 )
                 .subscribe()
         );
+    }
+
+    editActivityProduct(product: IActivityProductReadModel) {
+        this.edit.emit(product);
     }
 
     askRemove(product: IActivityProductReadModel) {

@@ -107,6 +107,7 @@ import { UploadModule } from "@progress/kendo-angular-upload";
 import { UploadInterceptor } from './services/interceptors/upload.iterceptor';
 import { InterventionsProductsGridComponent } from './interventions/interventions-products-grid.component';
 import { InterventionProductChecklistItemsModalComponent } from './interventions/intervention-product-checklist-items-modal.component';
+import { JobCopyModalComponent } from './jobs/job-copy-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -146,6 +147,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ActivityStatusPipe,
         JobsComponent,
         JobModalComponent,
+        JobCopyModalComponent,
         JobStatusPipe,
         DropdownlistGridColumnFilterComponent,
         MultiselectGridColumnFilterComponent,

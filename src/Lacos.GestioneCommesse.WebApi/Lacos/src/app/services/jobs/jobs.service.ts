@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
-import { Job } from './models';
+import { Job, JobCopy } from './models';
 import { readData } from '../common/functions';
 
 @Injectable()
@@ -47,6 +47,13 @@ export class JobsService {
         return this._http.put<Job>(`${this._baseUrl}/${job.id}`, job)
             .pipe(
                 map(e => Job.build(e))
+            );
+    }
+    
+    copyJob(jobCopy: JobCopy) {
+        return this._http.post<number>(`${this._baseUrl}/copyJob`, jobCopy)
+            .pipe(
+                tap(e => window.open(`${this._baseUrl}/activities?jobId=${e}`))
             );
     }
 

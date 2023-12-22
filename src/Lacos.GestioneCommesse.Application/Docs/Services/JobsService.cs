@@ -149,8 +149,39 @@ public class JobsService : IJobsService
         return (maxNumber ?? 0) + 1;
     }
 
-    public async Task<int> CopyJob(JobCopyDto jobCopyDto)
+    public async Task<long> CopyJob(JobCopyDto jobCopyDto)
     {
-        throw new NotImplementedException();
+        var newJob = await repository.Query()
+            .AsNoTracking()
+            .Where(e => e.Id == jobCopyDto.OriginalId)
+            .Include(e => e.Activities)
+            .FirstOrDefaultAsync();
+
+        DateTime originalDate = newJob.JobDate.Date;
+        newJob.Id = 0;
+        newJob.JobDate = jobCopyDto.Date;
+        newJob.Year = jobCopyDto.Date.Year;
+        newJob.CustomerId = jobCopyDto.CustomerId;
+        newJob.AddressId = jobCopyDto.AddressId;
+        newJob.Reference = jobCopyDto?.Reference;
+        newJob.Description= jobCopyDto?.Description;
+        var number = await GetNextNumber(newJob.JobDate.Year);
+        newJob.SetCode(newJob.JobDate.Year, number);
+
+        foreach (var activity in newJob.Activities)
+        {
+            activity.Id = 0;
+            if (activity.ExpirationDate!= null)
+            {
+                var dateDiff = activity.ExpirationDate - originalDate;
+                activity.ExpirationDate = newJob.JobDate + dateDiff;
+            }
+        }
+
+        await repository.Insert(newJob);
+
+        await dbContext.SaveChanges();
+
+        return newJob.Id;
     }
 }

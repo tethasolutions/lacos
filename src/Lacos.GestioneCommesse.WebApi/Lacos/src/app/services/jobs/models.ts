@@ -67,7 +67,7 @@ export class JobCopy {
     date: Date;
 
     constructor(
-        readonly id: number,
+        readonly originalId: number,
         date: Date | string,
         public description: string,
         public reference: string,
@@ -78,7 +78,7 @@ export class JobCopy {
     }
     
     static build(o: JobCopy) {
-        return new JobCopy(o.id, o.date, o.description, o.reference, o.customerId, o.addressId);
+        return new JobCopy(o.originalId, o.date, o.description, o.reference, o.customerId, o.addressId);
     }
 
 }

@@ -6,12 +6,14 @@ import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { JobModalComponent } from './job-modal.component';
-import { IJobReadModel, Job, JobStatus, jobStatusNames } from '../services/jobs/models';
+import { IJobReadModel, Job, JobCopy, JobStatus, jobStatusNames } from '../services/jobs/models';
 import { getToday } from '../services/common/functions';
 import { ActivityModalComponent, ActivityModalOptions } from '../activities/activity-modal.component';
 import { Activity, ActivityStatus } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { Router } from '@angular/router';
+import { JobCopyModalComponent } from './job-copy-modal.component';
+import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
     selector: 'app-jobs',
@@ -21,6 +23,9 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     @ViewChild('jobModal', { static: true })
     jobModal: JobModalComponent;
+
+    @ViewChild('jobCopyModal', { static: true })
+    jobCopyModal: JobCopyModalComponent;
 
     @ViewChild('activityModal', { static: true })
     activityModal: ActivityModalComponent;
@@ -89,6 +94,20 @@ export class JobsComponent extends BaseComponent implements OnInit {
                     filter(e => e),
                     switchMap(() => this._service.update(this.jobModal.options)),
                     tap(e => this._afterSaved(e))
+                )
+                .subscribe()
+        );
+    }
+
+    copyJob(job: IJobReadModel) {
+        const jobCopy = new JobCopy(job.id,job.date,job.description,job.reference,job.customerId,job.addressId);
+
+        this._subscriptions.push(
+            this.jobCopyModal.open(jobCopy)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._service.copyJob(this.jobCopyModal.options)),
+                    tap(e => window.open(`${ApiUrls.baseUrl}/activities?jobId=${e}`))
                 )
                 .subscribe()
         );

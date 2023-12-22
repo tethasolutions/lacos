@@ -63,6 +63,9 @@
                     [queryParams]="{jobId: dataItem.id}">
                     <i class="fas fa-external-link"></i>
                 </a>
+                <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
+                    <i class="fas fa-copy"></i>
+                </button>
                 <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
                     (click)="askRemove(dataItem)">
                     <i class="fas fa-trash"></i>
@@ -75,3 +78,4 @@
 
 <app-job-modal #jobModal></app-job-modal>
 <app-activity-modal #activityModal></app-activity-modal>
+<app-job-copy-modal #jobCopyModal></app-job-copy-modal>

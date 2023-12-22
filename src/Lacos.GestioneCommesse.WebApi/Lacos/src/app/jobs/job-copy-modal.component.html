@@ -1,0 +1,119 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Copia commessa
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="job-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+            class="redimensionModal">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Data</label>
+                    <div class="form-group">
+                        <kendo-datepicker format="dd/MM/yyyy" name="date" [(ngModel)]="options.date" required
+                            [disabled]="!!options.id">
+                        </kendo-datepicker>
+                        <div class="validation-message" [control]="form.controls['date']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Cliente</label>
+                    <kendo-formfield class="form-group">
+                        <kendo-combobox [data]="customers" [valuePrimitive]="true" textField="name" valueField="id"
+                            name="customerId" [(ngModel)]="options.customerId" required [suggest]="true"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            [allowCustom]="false" [disabled]="!!options.id" class="customer-combobox"
+                            (valueChange)="onCustomerChange()">
+                        </kendo-combobox>
+                        <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button"
+                            title="Nuovo cliente">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <div class="validation-message" [control]="form.controls['customerId']"></div>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <label>Indirizzo</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress"
+                            class="address-combobox" valueField="id" name="addressId"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            [(ngModel)]="options.addressId" [suggest]="true" [allowCustom]="false">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['addressId']"></div>
+                        <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button"
+                            title="Nuovo indirizzo">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Riferimento Commessa</label>
+                    <div class="form-group">
+                        <input class="form-control" name="reference" [(ngModel)]="options.reference" maxlength="255"
+                            novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['reference']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Note</label>
+                    <div class="form-group">
+                        <kendo-editor name="description" [(ngModel)]="options.description">
+                            <kendo-toolbar>
+                                <kendo-toolbar-button kendoEditorSelectAllButton></kendo-toolbar-button>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorUndoButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorRedoButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorStrikethroughButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorAlignLeftButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorAlignCenterButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorAlignRightButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorAlignJustifyButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorInsertOrderedListButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorOutdentButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                            </kendo-toolbar>
+                        </kendo-editor>
+                        <div class="validation-message" [control]="form.controls['description']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                    Annulla
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    Salva
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>
+
+<app-customer-modal #customerModal></app-customer-modal>
+<app-address-modal #addressModal></app-address-modal>

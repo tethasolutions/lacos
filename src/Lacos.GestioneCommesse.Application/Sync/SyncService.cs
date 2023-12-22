@@ -162,11 +162,10 @@ namespace Lacos.GestioneCommesse.Application.Sync
                  var folder = configuration.AttachmentsPath;
                  Directory.CreateDirectory(folder);
                  var path = Path.Combine(folder, signDto.Filename);
-                 if (!File.Exists(path))
-                 {
-                     await using Stream stremNewImage = File.Create(path);
-                     await streamOriginalImage.CopyToAsync(stremNewImage);
-                 }
+                
+                 await using Stream stremNewImage = File.Create(path);
+                 await streamOriginalImage.CopyToAsync(stremNewImage);
+                 
 
 
              }

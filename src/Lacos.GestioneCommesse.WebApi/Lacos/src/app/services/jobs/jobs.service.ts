@@ -51,10 +51,7 @@ export class JobsService {
     }
     
     copyJob(jobCopy: JobCopy) {
-        return this._http.post<number>(`${this._baseUrl}/copyJob`, jobCopy)
-            .pipe(
-                tap(e => window.open(`${this._baseUrl}/activities?jobId=${e}`))
-            );
+        return this._http.post<number>(`${this._baseUrl}/copyJob`, jobCopy);
     }
 
     delete(id: number) {

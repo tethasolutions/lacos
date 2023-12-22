@@ -107,7 +107,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._service.copyJob(this.jobCopyModal.options)),
-                    tap(e => window.open(`${ApiUrls.baseUrl}/activities?jobId=${e}`))
+                    tap(e => this._afterActivityCreated(e))
                 )
                 .subscribe()
         );
@@ -131,7 +131,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     private _afterActivityCreated(id: number) {
         this._messageBox.success('Attività creata.');
-        this.router.navigate(["/activities?jobId=" + id.toString()]);
+        this.router.navigate(["/activities"],{queryParams: {jobId:id}});
     }
 
     askRemove(job: IJobReadModel) {

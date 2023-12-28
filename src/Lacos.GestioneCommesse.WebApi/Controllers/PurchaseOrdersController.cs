@@ -29,18 +29,32 @@ public class PurchaseOrdersController : LacosApiController
         return service.Get(id);
     }
 
-    [HttpPost]
-    public Task<PurchaseOrderDto> Create(PurchaseOrderDto ticketDto)
+    [HttpGet("purchase-order-item/{id}")]
+    public Task<PurchaseOrderItemDto> GetItem(long id)
     {
-        return service.Create(ticketDto);
+        return service.GetItem(id);
+    }
+
+    [HttpPost]
+    public Task<PurchaseOrderDto> Create(PurchaseOrderDto purchaseOrderDto)
+    {
+        return service.Create(purchaseOrderDto);
     }
 
     [HttpPut("{id}")]
-    public Task<PurchaseOrderDto> Update(long id, PurchaseOrderDto ticketDto)
+    public Task<PurchaseOrderDto> Update(long id, PurchaseOrderDto purchaseOrderDto)
     {
-        ticketDto.Id = id;
+        purchaseOrderDto.Id = id;
 
-        return service.Update(ticketDto);
+        return service.Update(purchaseOrderDto);
+    }
+
+    [HttpPut("purchase-order-item/{id}")]
+    public Task<PurchaseOrderItemDto> UpdateItem(long id, PurchaseOrderItemDto item)
+    {
+        item.Id = id;
+
+        return service.UpdateItem(item);
     }
 
     [HttpDelete("{id}")]

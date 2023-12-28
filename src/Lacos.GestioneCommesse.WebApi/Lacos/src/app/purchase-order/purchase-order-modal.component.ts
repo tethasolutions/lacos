@@ -9,11 +9,11 @@ import { listEnum } from '../services/common/functions';
 import { ApiUrls } from '../services/common/api-urls';
 import { SupplierModel } from '../shared/models/supplier.model';
 import { SupplierService } from '../services/supplier.service';
-import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/models';
+import { PurchaseOrder, PurchaseOrderItem, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { CustomerModel } from '../shared/models/customer.model';
 import { PurchaseOrderItemModalComponent } from './purchase-order-item-modal.component';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
-import { tap } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -22,7 +22,7 @@ import { tap } from 'rxjs';
 export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderModalOptions> implements OnInit {
 
     @ViewChild('form', { static: false }) form: NgForm;
-    @ViewChild('purchaseOrderItemModal', { static: true }) addressModal: PurchaseOrderItemModalComponent;
+    @ViewChild('purchaseOrderItemModal', { static: true }) purchaseOrderItemModal: PurchaseOrderItemModalComponent;
 
     jobs: SelectableJob[];
     job: Job;
@@ -30,8 +30,14 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     status: PurchaseOrderStatus;
     selectedJob: SelectableJob;
     suppliers: SupplierModel[];
+    gridState: State = {
+        skip: 0,
+        take: 30,
+        sort: [{ field: 'productName', dir: 'asc' }]
+    };
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-order`;
+    readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
 
     readonly states = listEnum<PurchaseOrderStatus>(PurchaseOrderStatus);
 
@@ -113,6 +119,48 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
             this._jobsService.read(state)
                 .pipe(
                     tap(e => this.jobs = (e.data as IJobReadModel[]).map(e => new SelectableJob(e)))
+                )
+                .subscribe()
+        );
+    }
+
+    protected addProduct() {
+        const request = new PurchaseOrderItem(0, this.options.purchaseOrder.id, null, null, null, 1);
+        //if (this.options.purchaseOrder.id == null) {
+            this.purchaseOrderItemModal.open(request)
+                .pipe(
+                    filter(e => e),
+                    tap(e => {
+                        this.options.purchaseOrder.items.push(request);
+                        this._messageBox.success(`Prodotto aggiunto`);
+                    })
+                )
+                .subscribe()
+        //}
+        //   else {
+        //     request.checkListId = this.options.id;
+        //     this._subscriptions.push(
+        //         this.checklistItemModal.open(request)
+        //             .pipe(
+        //                 filter(e => e),
+        //                 switchMap(() => this._checkListService.createCheckListItem(request)),
+        //                 tap(e => {
+        //                   this._messageBox.success(`Voce checklist creata`);
+        //                 }),
+        //                 tap(() => this._readCheckListItems())
+        //             )
+        //             .subscribe()
+        //     );
+        //   }
+    }
+
+    edit(item: PurchaseOrderItem) {
+        this._subscriptions.push(
+            this._service.getItem(item.id)
+                .pipe(
+                    map(e => this.purchaseOrderItemModal.open(e)),
+                    switchMap(() => this._service.updateItem(this.purchaseOrderItemModal.options)),
+                    //tap(() => this._afterPurchaseOrderUpdated())
                 )
                 .subscribe()
         );

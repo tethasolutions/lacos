@@ -1,7 +1,7 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="50">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Aggiungi prodotto
@@ -30,11 +30,11 @@
                         <div class="validation-message" [control]="form.controls['product']"></div>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-2">
                     <label>Quantità</label>
                     <div class="form-group">
                         <input class="form-control" name="number" [(ngModel)]="options.quantity" novalidate
-                            autocomplete="off" disabled />
+                            autocomplete="off" />
                         <div class="validation-message" [control]="form.controls['number']"></div>
                     </div>
                 </div>

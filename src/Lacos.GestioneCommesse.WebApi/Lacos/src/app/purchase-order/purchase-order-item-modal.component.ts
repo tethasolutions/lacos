@@ -14,7 +14,7 @@ import { PurchaseOrderItem } from '../services/purchase-orders/models';
     selector: 'app-purchase-order-item-modal',
     templateUrl: 'purchase-order-item-modal.component.html'
 })
-export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrderItemModalOptions> implements OnInit {
+export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrderItem> implements OnInit {
 
     @ViewChild('form', { static: false })
     form: NgForm;
@@ -58,19 +58,10 @@ export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrde
         );
     }
 
-    override open(options: PurchaseOrderItemModalOptions) {
+    override open(options: PurchaseOrderItem) {
         const result = super.open(options);
 
         return result;
-    }
-
-}
-
-export class PurchaseOrderItemModalOptions {
-
-    constructor(
-        readonly item: PurchaseOrderItem
-    ) {
     }
 
 }

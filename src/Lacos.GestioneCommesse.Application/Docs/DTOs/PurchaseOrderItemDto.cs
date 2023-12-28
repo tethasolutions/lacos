@@ -7,6 +7,8 @@ namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
 public class PurchaseOrderItemDto : BaseEntityDto
 {
     public long ProductId { get; set; }
+    public string? ProductImage { get; set; }
+    public string? ProductName { get; set; }
 
     public decimal Quantity { get; set; }
 

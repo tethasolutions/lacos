@@ -21,11 +21,9 @@ public class PurchaseOrderMappingProfile : Profile
             .IgnoreCommonMembers()
             .Ignore(x => x.GeneratedActivity)
             .Ignore(x => x.Job)
-            .Ignore(x => x.Supplier)
-            .Ignore(x => x.Items);
+            .Ignore(x => x.Supplier);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()
-            .Ignore(x => x.Items)
             .MapMember(x => x.SupplierName, y => y.Supplier!.Name);
 
         CreateMap<PurchaseOrderItemDto, PurchaseOrderItem>()
@@ -33,7 +31,8 @@ public class PurchaseOrderMappingProfile : Profile
             .Ignore(x => x.Product)
             .Ignore(x => x.PurchaseOrder);
 
-        CreateMap<PurchaseOrderItem, PurchaseOrderItemReadModel>()
-            .MapMember(x => x.ProductName, y => y.Product!.Code + " - " + y.Product!.Name);
+        CreateMap<PurchaseOrderItem, PurchaseOrderItemDto>()
+            .MapMember(x => x.ProductName, y => y.Product!.Code + " - " + y.Product!.Name)
+            .MapMember(x => x.ProductImage, y => y.Product!.PictureFileName);
     }
 }

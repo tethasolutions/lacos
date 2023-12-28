@@ -12,16 +12,19 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 {
     private readonly IMapper mapper;
     private readonly IRepository<PurchaseOrder> repository;
+    private readonly IRepository<PurchaseOrderItem> repositoryItem;
     private readonly ILacosDbContext dbContext;
 
     public PurchaseOrdersService(
         IMapper mapper,
         IRepository<PurchaseOrder> repository,
+        IRepository<PurchaseOrderItem> repositoryItem,
         ILacosDbContext dbContext
     )
     {
         this.mapper = mapper;
         this.repository = repository;
+        this.repositoryItem = repositoryItem;
         this.dbContext = dbContext;
     }
 
@@ -45,6 +48,20 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         return purchaseOrderDto;
     }
+    public async Task<PurchaseOrderItemDto> GetItem(long id)
+    {
+        var purchaseOrderItemDto = await repositoryItem.Query()
+            .Where(e => e.Id == id)
+            .Project<PurchaseOrderItemDto>(mapper)
+            .FirstOrDefaultAsync();
+
+        if (purchaseOrderItemDto == null)
+        {
+            throw new NotFoundException($"Ordine con Id {id} non trovato.");
+        }
+
+        return purchaseOrderItemDto;
+    }
 
     public async Task<PurchaseOrderDto> Create(PurchaseOrderDto purchaseOrderDto)
     {
@@ -66,7 +83,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         if (purchaseOrder == null)
         {
-            throw new NotFoundException($"Commessa con Id {purchaseOrderDto.Id} non trovata.");
+            throw new NotFoundException($"Ordine con Id {purchaseOrderDto.Id} non trovato.");
         }
 
         purchaseOrder = purchaseOrderDto.MapTo(purchaseOrder, mapper);
@@ -76,6 +93,23 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         await dbContext.SaveChanges();
 
         return await Get(purchaseOrder.Id);
+    }
+    public async Task<PurchaseOrderItemDto> UpdateItem(PurchaseOrderItemDto item)
+    {
+        var purchaseOrderItem = await repositoryItem.Get(item.Id);
+
+        if (purchaseOrderItem == null)
+        {
+            throw new NotFoundException($"Ordine con Id {item.Id} non trovato.");
+        }
+
+        purchaseOrderItem = item.MapTo(purchaseOrderItem, mapper);
+
+        repositoryItem.Update(purchaseOrderItem);
+
+        await dbContext.SaveChanges();
+
+        return await GetItem(purchaseOrderItem.Id);
     }
 
     public async Task Delete(long id)

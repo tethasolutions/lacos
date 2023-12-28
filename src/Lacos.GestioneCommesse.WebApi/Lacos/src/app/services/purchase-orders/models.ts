@@ -47,13 +47,14 @@ export class PurchaseOrder {
         public status: PurchaseOrderStatus,
         public jobId: number,
         public supplierId: number,
-        public supplierName: string
+        public supplierName: string,        
+        public items: PurchaseOrderItem[]
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: PurchaseOrder) {
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.description, o.status, o.jobId, o.supplierId, o.supplierName);
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.items);
     }
 
 }
@@ -64,21 +65,13 @@ export class PurchaseOrderItem {
         readonly id: number,
         readonly purchaseOrderId: number,
         public productId: number,
+        readonly productName: string,
+        readonly productImage: string,
         public quantity: number
     ) {
     }
 
     static build(o: PurchaseOrderItem) {
-        return new PurchaseOrderItem(o.id, o.purchaseOrderId, o.productId, o.quantity);
+        return new PurchaseOrderItem(o.id, o.purchaseOrderId, o.productId, o.productName, o.productImage, o.quantity);
     }
-}
-
-export interface IPurchaseOrderItemReadModel {
-
-    readonly id: number;
-    readonly purchaseOrderId: number;
-    readonly productId: number;
-    readonly productName: string;
-    readonly quantity: number;
-
 }

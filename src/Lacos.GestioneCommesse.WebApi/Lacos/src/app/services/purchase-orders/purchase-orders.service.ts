@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
-import { PurchaseOrder } from './models';
+import { PurchaseOrder, PurchaseOrderItem } from './models';
 import { readData } from '../common/functions';
 
 @Injectable()
@@ -20,6 +20,13 @@ export class PurchaseOrdersService {
         const url = `${this._baseUrl}/read`
 
         return readData(this._http, state, url);
+    }
+
+    getItem(id: number) {
+        return this._http.get<PurchaseOrderItem>(`${this._baseUrl}/purchase-order-item/${id}`)
+            .pipe(
+                map(e => PurchaseOrderItem.build(e))
+            );
     }
 
     get(id: number) {
@@ -40,6 +47,13 @@ export class PurchaseOrdersService {
         return this._http.put<PurchaseOrder>(`${this._baseUrl}/${purchaseOrder.id}`, purchaseOrder)
             .pipe(
                 map(e => PurchaseOrder.build(e))
+            );
+    }
+
+    updateItem(item: PurchaseOrderItem) {
+        return this._http.put<PurchaseOrderItem>(`${this._baseUrl}/purchase-order-item/${item.id}`, item)
+            .pipe(
+                map(e => PurchaseOrderItem.build(e))
             );
     }
 

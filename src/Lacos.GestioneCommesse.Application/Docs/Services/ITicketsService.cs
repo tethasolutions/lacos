@@ -10,4 +10,5 @@ public interface ITicketsService
     Task<TicketDto> Update(TicketDto jobDto);
     Task Delete(long id);
     Task<int> GetNextNumber(int year);
+    Task<TicketCounterDto> GetTicketsCounters();
 }

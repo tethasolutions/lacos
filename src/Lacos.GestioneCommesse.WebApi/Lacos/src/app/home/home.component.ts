@@ -5,6 +5,8 @@ import { Role } from '../services/security/models';
 import { tap } from 'rxjs';
 import { ActivityCounter } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
+import { TicketCounter } from '../services/tickets/models';
+import { TicketsService } from '../services/tickets/tickets.service';
 
 @Component({
     selector: 'lacos-home',
@@ -14,13 +16,15 @@ import { ActivitiesService } from '../services/activities/activities.service';
 export class HomeComponent extends BaseComponent {
 
     activitiesCounters: ActivityCounter[];
+    ticketsCounters: TicketCounter;
 
     readonly isAdmin: boolean;
     readonly isOperator: boolean;
 
     constructor(
         security: SecurityService,
-        private readonly _activityService: ActivitiesService
+        private readonly _activityService: ActivitiesService,
+        private readonly _ticketService: TicketsService
     ) {
         super();
 
@@ -30,16 +34,29 @@ export class HomeComponent extends BaseComponent {
 
     ngOnInit() {
         this._getActivityTypes();
+        this._getTicketsCounters();
     }
 
     private _getActivityTypes() {
         this._subscriptions.push(
             this._activityService.readActivityTypesCounters()
-            .pipe(
-                tap(e => {
-                  this.activitiesCounters = e;
-                })
-            )
+                .pipe(
+                    tap(e => {
+                        this.activitiesCounters = e;
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    private _getTicketsCounters() {
+        this._subscriptions.push(
+            this._ticketService.readTicketsCounters()
+                .pipe(
+                    tap(e => {
+                        this.ticketsCounters = e;
+                    })
+                )
                 .subscribe()
         );
     }

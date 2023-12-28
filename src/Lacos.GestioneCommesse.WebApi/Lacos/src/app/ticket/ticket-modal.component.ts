@@ -82,12 +82,15 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
                 this._job.id, null, null,null, null, null, null, null);
         const options = new ActivityModalOptions(activity);
 
+        ticket.status = TicketStatus.InProgress;
+
         this._subscriptions.push(
             this.activityModal.open(options)
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._serviceActivity.create(activity)),
-                    tap(() => this.close())                    
+                    tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
+                    tap(() => this.close())
                 )
                 .subscribe()
         );

@@ -52,6 +52,7 @@ public class TicketsService : ITicketsService
         var number = await GetNextNumber(Ticket.TicketDate.Year);
 
         Ticket.SetCode(Ticket.TicketDate.Year, number);
+        Ticket.IsNew= true;
 
         await repository.Insert(Ticket);
 
@@ -70,6 +71,8 @@ public class TicketsService : ITicketsService
         }
 
         Ticket = TicketDto.MapTo(Ticket, mapper);
+
+        Ticket.IsNew = false;
 
         repository.Update(Ticket);
 
@@ -102,5 +105,23 @@ public class TicketsService : ITicketsService
             .MaxAsync();
 
         return (maxNumber ?? 0) + 1;
+    }
+
+    public async Task<TicketCounterDto> GetTicketsCounters()
+    {
+        var query = repository.Query()
+            .AsNoTracking()
+            .Where(e => e.Status == TicketStatus.Opened)
+            .GroupBy(e => e.Status)
+            .Select(group => new TicketCounterDto
+            {
+                OpenedTickets = group.Where(e => !e.IsNew).Count(),
+                NewTickets = group.Where(e => e.IsNew).Count()
+            })
+            //.Project<ActivityCounterDto>(mapper)
+            .FirstOrDefaultAsync();
+
+        return await query;
+
     }
 }

@@ -44,7 +44,7 @@ export class Ticket {
         public year: number,
         date: Date | string,
         public description: string,
-        readonly status: TicketStatus,
+        public status: TicketStatus,
         public customerId: number
     ) {
         this.date = date ? new Date(date) : null;
@@ -54,4 +54,15 @@ export class Ticket {
         return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId);
     }
 
+}
+
+export class TicketCounter {    
+    constructor(
+        readonly openedTickets: number,
+        readonly newTickets: number
+    ){}
+
+    static build(o: TicketCounter) {
+        return new TicketCounter(o.openedTickets, o.newTickets);
+    }
 }

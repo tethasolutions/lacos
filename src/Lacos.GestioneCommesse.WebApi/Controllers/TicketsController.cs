@@ -47,4 +47,10 @@ public class TicketsController : LacosApiController
     {
         return service.Delete(id);
     }
+
+    [HttpGet("tickets-counters")]
+    public async Task<TicketCounterDto> GetTicketsCounters()
+    {
+        return await service.GetTicketsCounters();
+    }
 }

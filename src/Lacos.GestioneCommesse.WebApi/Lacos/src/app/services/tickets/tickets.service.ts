@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
-import { Ticket } from './models';
+import { Ticket, TicketCounter } from './models';
 import { readData } from '../common/functions';
 
 @Injectable()
@@ -47,6 +47,13 @@ export class TicketsService {
         return this._http.delete<void>(`${this._baseUrl}/${id}`)
             .pipe(
                 map(() => { })
+            );
+    }
+    
+    readTicketsCounters() {
+        return this._http.get<TicketCounter>(`${this._baseUrl}/tickets-counters`)
+            .pipe(
+                map(e => TicketCounter.build(e))
             );
     }
 }

@@ -12,9 +12,10 @@ public class PurchaseOrderReadModel : BaseEntityDto
     public string? Description { get; set; }
     public PurchaseOrderStatus Status { get; set; }
 
-    public long? JobId { get; set; }
+    public string? JobCode { get; set; }
+    public string? JobReference { get; set; }
+    public bool? JobHasHighPriority { get; set; }
 
-    public long SupplierId { get; set; }
     public string? SupplierName { get; set; }
 
 }

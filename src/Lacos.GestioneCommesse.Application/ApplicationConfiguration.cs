@@ -36,7 +36,8 @@ public static class ApplicationConfiguration
             .AddScoped<IActivitiesService, ActivitiesService>()
             .AddScoped<IActivityProductsService, ActivityProductsService>()
             .AddScoped<IInterventionsService, InterventionsService>()
-            .AddScoped<ITicketsService, TicketsService>();
+            .AddScoped<ITicketsService, TicketsService>()
+            .AddScoped<IPurchaseOrdersService, PurchaseOrdersService>();
 
         return services;
     }

@@ -108,6 +108,11 @@ import { UploadInterceptor } from './services/interceptors/upload.iterceptor';
 import { InterventionsProductsGridComponent } from './interventions/interventions-products-grid.component';
 import { InterventionProductChecklistItemsModalComponent } from './interventions/intervention-product-checklist-items-modal.component';
 import { JobCopyModalComponent } from './jobs/job-copy-modal.component';
+import { PurchaseOrdersComponent } from './purchase-order/purchase-orders.component';
+import { PurchaseOrderModalComponent } from './purchase-order/purchase-order-modal.component';
+import { PurchaseOrderItemModalComponent } from './purchase-order/purchase-order-item-modal.component';
+import { PurchaseOrdersService } from './services/purchase-orders/purchase-orders.service';
+import { PurchaseOrderStatusPipe } from './shared/pipes/purchase-order-status.pipe';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -171,7 +176,11 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         TicketStatusPipe,
         TicketModalComponent,
         SuppliersComponent,
-        SupplierModalComponent
+        SupplierModalComponent,
+        PurchaseOrdersComponent,
+        PurchaseOrderModalComponent,
+        PurchaseOrderItemModalComponent,
+        PurchaseOrderStatusPipe
     ],
     imports: [
         BrowserModule,
@@ -231,7 +240,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ActivityProductsService,
         InterventionsService,
         TicketsService,
-        SupplierService
+        SupplierService,
+        PurchaseOrdersService
     ],
     bootstrap: [AppComponent]
 })

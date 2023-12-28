@@ -33,6 +33,7 @@ export class HomeComponent extends BaseComponent {
     }
 
     ngOnInit() {
+        this.ticketsCounters = new TicketCounter(0,0);
         this._getActivityTypes();
         this._getTicketsCounters();
     }

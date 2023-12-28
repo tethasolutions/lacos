@@ -24,4 +24,9 @@ public class PurchaseOrder : FullAuditedEntity
     {
         Items = new List<PurchaseOrderItem>();
     }
+    public void SetCode(int year, int number)
+    {
+        Year = year;
+        Number = number;
+    }
 }

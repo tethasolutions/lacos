@@ -72,6 +72,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                     e => e.isAuthenticated()
                 )
             ]),
+            new MenuEntry(['/purchase-orders'], 'Ordini Acquisto',
+                e => e.startsWith('/purchase-orders'),
+                e => e.isAuthenticated()
+            ),
             new DropDownMenuEntry('Gestione', [
                 new MenuEntry(['/operators'], 'Operatori',
                     e => e.startsWith('/operators'),
@@ -106,6 +110,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.ticketsCounters = new TicketCounter(0,0);
         this.user = this._user.getUser();
         this._subscribeRouterEvents();
         this._subscribeSecurityEvents();

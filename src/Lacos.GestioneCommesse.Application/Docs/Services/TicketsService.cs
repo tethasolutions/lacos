@@ -40,7 +40,7 @@ public class TicketsService : ITicketsService
 
         if (TicketDto == null)
         {
-            throw new NotFoundException($"Commessa con Id {id} non trovata.");
+            throw new NotFoundException($"Ticket con Id {id} non trovato.");
         }
 
         return TicketDto;

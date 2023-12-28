@@ -1,0 +1,53 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Aggiungi prodotto
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="activity-product-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+            class="redimensionModal">
+
+            <div class="row">
+                <div class="col-md-8">
+                    <label>Prodotto</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="products" textField="fullName" valueField="id" name="product"
+                            [(ngModel)]="product" required [suggest]="true" [allowCustom]="false">
+                            <ng-template kendoComboBoxItemTemplate let-dataItem>
+                                <div class="d-flex align-items-center gap-1">
+                                    <img *ngIf="dataItem.pictureFileName" [src]="imagesUrl + dataItem.pictureFileName"
+                                        class="thumbnail-xs">
+                                    <span>
+                                        {{dataItem.fullName}}
+                                    </span>
+                                </div>
+                            </ng-template>
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['product']"></div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <label>Quantità</label>
+                    <div class="form-group">
+                        <input class="form-control" name="number" [(ngModel)]="options.quantity" novalidate
+                            autocomplete="off" disabled />
+                        <div class="validation-message" [control]="form.controls['number']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                    Annulla
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    Salva
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

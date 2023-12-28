@@ -13,6 +13,7 @@
                         <a class="nav-link" [class.dropdown-toggle]="entry.isDropDown" [routerLink]="entry.urlCommands"
                             (click)="entry.isDropDown && toggle(entry)">
                             {{entry.name}}
+                            <div class="red-number bage-number" *ngIf="(entry.name == 'Tickets') && (ticketsCounters.newTickets > 0)">{{ticketsCounters.newTickets}}</div>
                         </a>
 
                         <div class="dropdown-menu" [class.show]="entry.isOpen" *ngIf="entry.isDropDown">

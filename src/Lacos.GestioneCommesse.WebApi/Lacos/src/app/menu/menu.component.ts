@@ -6,10 +6,13 @@ import { SecurityService } from '../services/security/security.service';
 import { UserService } from '../services/security/user.service';
 import { Role, User } from '../services/security/models';
 import { fromEvent } from 'rxjs';
+import { TicketsService } from '../services/tickets/tickets.service';
+import { TicketCounter } from '../services/tickets/models';
 
 @Component({
     selector: 'lacos-menu',
-    templateUrl: 'menu.component.html'
+    templateUrl: 'menu.component.html',
+    styleUrls: ['menu.component.scss']
 })
 export class MenuComponent extends BaseComponent implements OnInit {
 
@@ -91,11 +94,13 @@ export class MenuComponent extends BaseComponent implements OnInit {
     );
 
     user: User;
+    ticketsCounters: TicketCounter;
 
     constructor(
         private readonly _router: Router,
         private readonly _security: SecurityService,
-        private readonly _user: UserService
+        private readonly _user: UserService,
+        private readonly _ticketService: TicketsService
     ) {
         super();
     }
@@ -104,6 +109,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
         this.user = this._user.getUser();
         this._subscribeRouterEvents();
         this._subscribeSecurityEvents();
+        this._getTicketsCounters();
     }
 
     toggle(dropDown: DropDownMenuEntry) {
@@ -148,6 +154,17 @@ export class MenuComponent extends BaseComponent implements OnInit {
         );
     }
 
+    private _getTicketsCounters() {
+        this._subscriptions.push(
+            this._ticketService.readTicketsCounters()
+                .pipe(
+                    tap(e => {
+                        this.ticketsCounters = e;
+                    })
+                )
+                .subscribe()
+        );
+    }
 }
 
 export class Menu {

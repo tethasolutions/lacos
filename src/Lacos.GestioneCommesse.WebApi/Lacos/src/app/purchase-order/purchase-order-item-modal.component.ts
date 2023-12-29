@@ -31,7 +31,7 @@ export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrde
     }
 
     ngOnInit() {
-        this._readProducts();
+        this._readSpareParts();
     }
 
     protected override _canClose() {
@@ -44,13 +44,13 @@ export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrde
         return this.form.valid;
     }
 
-    private _readProducts() {        
+    private _readSpareParts() {
         const state: State = {
             sort: [{ field: 'name', dir: 'asc' }]
         };
 
         this._subscriptions.push(
-            this._productsService.readProducts(state)
+            this._productsService.readSpareParts(state)
                 .pipe(
                     tap(e => this.products = (e.data as ProductReadModel[]).map(ee => new SelectableProduct(ee)))
                 )

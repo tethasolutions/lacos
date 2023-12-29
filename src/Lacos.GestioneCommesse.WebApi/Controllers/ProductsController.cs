@@ -40,6 +40,13 @@ public class ProductsController : LacosApiController
         return await products.ToDataSourceResultAsync(request);
     }
 
+    [HttpGet("products/spare-parts")]
+    public async Task<DataSourceResult> GetSpareParts([DataSourceRequest] DataSourceRequest request)
+    {
+        var products = (productService.GetSpareParts());
+        return await products.ToDataSourceResultAsync(request);
+    }
+
     [HttpGet("product-detail/{productId}")]
     public async Task<ProductDto> GetProductDetail(long productId)
     {

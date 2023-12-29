@@ -13,7 +13,8 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
      public interface IProductService
      {
          IQueryable<ProductReadModel> GetProducts();
-         Task<ProductDto> GetProductDetail(long productId);
+        IQueryable<ProductReadModel> GetSpareParts();
+        Task<ProductDto> GetProductDetail(long productId);
          Task UpdateProduct(long id, ProductDto productDto);
          Task<ProductDto> CreateProduct(ProductDto productDto);
          Task DeleteProduct(long productId);
@@ -45,6 +46,16 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
             var products = productRepository
                 .Query()
                 .AsNoTracking()
+                .Project<ProductReadModel>(mapper);
+            return products;
+        }
+
+        public IQueryable<ProductReadModel> GetSpareParts()
+        {
+            var products = productRepository
+                .Query()
+                .AsNoTracking()
+                .Where(e => e.ProductType.IsSparePart)
                 .Project<ProductReadModel>(mapper);
             return products;
         }

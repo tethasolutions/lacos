@@ -20,6 +20,8 @@
             {{dataItem.date | date:'dd/MM/yyyy'}}
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="customer" title="Cliente">
+    </kendo-grid-column>
     <kendo-grid-column field="code" title="Codice" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="!dataItem.hasHighPriority">{{dataItem.code}}</div>
@@ -41,8 +43,6 @@
             </span>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="customer" title="Cliente">
-    </kendo-grid-column>
     <kendo-grid-column field="reference" title="Riferimento">
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Note">
@@ -52,24 +52,33 @@
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <div class="d-flex text-nowrap gap-1">
-                <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-primary btn-sm" title="Aggiungi nuova attività" (click)="createActivity(dataItem)">
-                    <i class="fa fa-plus"></i>
-                </button>
-                <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']"
-                    [queryParams]="{jobId: dataItem.id}">
-                    <i class="fas fa-external-link"></i>
-                </a>
-                <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
-                    <i class="fas fa-copy"></i>
-                </button>
-                <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
-                    (click)="askRemove(dataItem)">
-                    <i class="fas fa-trash"></i>
-                </button>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex text-nowrap justify-content-center gap-1">
+                    <button class="btn btn-primary btn-sm" title="Aggiungi nuovo ordine d'acquisto"
+                        (click)="createPurchaseOrder(dataItem)">
+                        <i class="fa fa-file-circle-plus"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm" title="Aggiungi nuova attività"
+                        (click)="createActivity(dataItem)">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']"
+                        [queryParams]="{jobId: dataItem.id}">
+                        <i class="fas fa-external-link"></i>
+                    </a>
+                </div>
+                <div class="d-flex text-nowrap justify-content-center gap-1">
+                    <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
+                        (click)="askRemove(dataItem)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </div>
         </ng-template>
     </kendo-grid-column>
@@ -79,3 +88,4 @@
 <app-job-modal #jobModal></app-job-modal>
 <app-activity-modal #activityModal></app-activity-modal>
 <app-job-copy-modal #jobCopyModal></app-job-copy-modal>
+<app-purchase-order-modal #purchaseOrderModal></app-purchase-order-modal>

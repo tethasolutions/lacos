@@ -17,7 +17,6 @@ public class TicketMappingProfile : Profile
 
         CreateMap<TicketDto, Ticket>()
             .IgnoreCommonMembers()
-            .Ignore(x => x.GeneratedActivity)
             .Ignore(x => x.Customer)
             .Ignore(x => x.Job)
             .Ignore(x => x.IsNew)

@@ -14,6 +14,9 @@ import { ActivitiesService } from '../services/activities/activities.service';
 import { Router } from '@angular/router';
 import { JobCopyModalComponent } from './job-copy-modal.component';
 import { ApiUrls } from '../services/common/api-urls';
+import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/models';
+import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
+import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 
 @Component({
     selector: 'app-jobs',
@@ -29,7 +32,10 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     @ViewChild('activityModal', { static: true })
     activityModal: ActivityModalComponent;
-    
+
+    @ViewChild('purchaseOrderModal', { static: true })
+    purchaseOrderModal: PurchaseOrderModalComponent;
+
     @ViewChild('grid', { static: true })
     grid: GridComponent;
 
@@ -56,6 +62,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
     constructor(
         private readonly _service: JobsService,
         private readonly _serviceActivity: ActivitiesService,
+        private readonly _purchaseOrdersService: PurchaseOrdersService,
         private readonly _messageBox: MessageBoxService,
         private router: Router
     ) {
@@ -100,7 +107,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
     }
 
     copyJob(job: IJobReadModel) {
-        const jobCopy = new JobCopy(job.id,job.date,job.description,job.reference,job.customerId,job.addressId);
+        const jobCopy = new JobCopy(job.id, job.date, job.description, job.reference, job.customerId, job.addressId);
 
         this._subscriptions.push(
             this.jobCopyModal.open(jobCopy)
@@ -123,15 +130,10 @@ export class JobsComponent extends BaseComponent implements OnInit {
                     filter(e => e),
                     switchMap(() => this._serviceActivity.create(activity)),
                     tap(() => this._afterActivityCreated(job.id)),
-                    
+
                 )
                 .subscribe()
         );
-    }
-
-    private _afterActivityCreated(id: number) {
-        this._messageBox.success('Attività creata.');
-        this.router.navigate(["/activities"],{queryParams: {jobId:id}});
     }
 
     askRemove(job: IJobReadModel) {
@@ -146,6 +148,34 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+
+    createPurchaseOrder(job: IJobReadModel) {
+        const today = getToday();
+        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, PurchaseOrderStatus.Pending, job.id, null, null, []);
+        const options = new PurchaseOrderModalOptions(order);
+
+        this._subscriptions.push(
+            this.purchaseOrderModal.open(options)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._purchaseOrdersService.create(order)),
+                    tap(() => this._afterPurchaseOrderCreated(job.id)),
+
+                )
+                .subscribe()
+        );
+    }
+
+    private _afterActivityCreated(jobId: number) {
+        this._messageBox.success('Attività creata.');
+        this.router.navigate(['/activities'], { queryParams: { jobId: jobId } });
+    }
+
+    private _afterPurchaseOrderCreated(jobId: number) {
+        this._messageBox.success('Ordine d\'acquisto creato');
+
+        this.router.navigate(['/purchase-orders'], { queryParams: { jobId: jobId } });
     }
 
     protected _read() {

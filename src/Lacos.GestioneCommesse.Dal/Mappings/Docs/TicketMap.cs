@@ -16,7 +16,6 @@ public class TicketMap : BaseEntityMapping<Ticket>
         builder.Property(e => e.Description)
             .IsRequired();
 
-        builder.OneToOne(e => e.GeneratedActivity, e => e.SourceTicket, e => e.SourceTicketId);
         builder.OneToMany(e => e.Pictures, e => e.Ticket, e => e.TicketId);
     }
 }

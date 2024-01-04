@@ -4,7 +4,7 @@ using Lacos.GestioneCommesse.Domain.Registry;
 
 namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
 
-public class PurchaseOrderReadModel : BaseEntityDto
+public class PurchaseOrderReadModel
 {
     public long Id { get; set; }
     public string? Code { get; set; }
@@ -17,5 +17,7 @@ public class PurchaseOrderReadModel : BaseEntityDto
     public bool? JobHasHighPriority { get; set; }
 
     public string? SupplierName { get; set; }
+
+    public long? JobId { get; set; }
 
 }

@@ -29,12 +29,6 @@ public class PurchaseOrdersController : LacosApiController
         return service.Get(id);
     }
 
-    [HttpGet("purchase-order-item/{id}")]
-    public Task<PurchaseOrderItemDto> GetItem(long id)
-    {
-        return service.GetItem(id);
-    }
-
     [HttpPost]
     public Task<PurchaseOrderDto> Create(PurchaseOrderDto purchaseOrderDto)
     {
@@ -47,14 +41,6 @@ public class PurchaseOrdersController : LacosApiController
         purchaseOrderDto.Id = id;
 
         return service.Update(purchaseOrderDto);
-    }
-
-    [HttpPut("purchase-order-item/{id}")]
-    public Task<PurchaseOrderItemDto> UpdateItem(long id, PurchaseOrderItemDto item)
-    {
-        item.Id = id;
-
-        return service.UpdateItem(item);
     }
 
     [HttpDelete("{id}")]

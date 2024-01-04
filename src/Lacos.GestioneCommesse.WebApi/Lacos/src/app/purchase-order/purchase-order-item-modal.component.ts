@@ -3,9 +3,8 @@ import { ModalComponent } from '../shared/modal.component';
 import { tap } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
-import { ProductTypesService } from '../services/productTypes.service';
 import { ProductsService } from '../services/products.service';
-import { ProductModel, ProductReadModel } from '../shared/models/product.model';
+import { ProductReadModel } from '../shared/models/product.model';
 import { State } from '@progress/kendo-data-query';
 import { ApiUrls } from '../services/common/api-urls';
 import { PurchaseOrderItem } from '../services/purchase-orders/models';
@@ -20,7 +19,7 @@ export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrde
     form: NgForm;
 
     products: SelectableProduct[];
-    
+
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
 
     constructor(
@@ -32,6 +31,14 @@ export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrde
 
     ngOnInit() {
         this._readSpareParts();
+    }
+
+    onProductChange() {
+        const product = this.products
+            .find(e => e.id === this.options.productId);
+
+        this.options.productName = product?.name;
+        this.options.productImage = product?.pictureFileName;
     }
 
     protected override _canClose() {
@@ -56,12 +63,6 @@ export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrde
                 )
                 .subscribe()
         );
-    }
-
-    override open(options: PurchaseOrderItem) {
-        const result = super.open(options);
-
-        return result;
     }
 
 }

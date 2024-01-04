@@ -4,11 +4,11 @@ import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { ActivatedRoute, Params } from '@angular/router';
 import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from './purchase-order-modal.component';
 import { IPurchaseOrderReadModel, PurchaseOrder, PurchaseOrderStatus, purchaseOrderStatusNames } from '../services/purchase-orders/models';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 import { getToday } from '../services/common/functions';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
     selector: 'app-purchase-orders',
@@ -29,7 +29,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                     filters: [PurchaseOrderStatus.Pending, PurchaseOrderStatus.Ordered]
                         .map(e => ({ field: 'status', operator: 'eq', value: e })),
                     logic: 'or'
-                }
+                },
+                this._buildJobIdFilter()
             ],
             logic: 'and'
         },
@@ -43,13 +44,14 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     constructor(
         private readonly _service: PurchaseOrdersService,
-        private readonly _messageBox: MessageBoxService
+        private readonly _messageBox: MessageBoxService,
+        private readonly _route: ActivatedRoute
     ) {
         super();
     }
 
     ngOnInit() {
-        this._read();        
+        this._subscribeRouteParams();
     }
 
     dataStateChange(state: State) {
@@ -73,7 +75,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const purchaseOrder = new PurchaseOrder(0, null,today.getFullYear(),today, null, PurchaseOrderStatus.Pending, this._jobId, null, null, null);
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, PurchaseOrderStatus.Pending, this._jobId, null, null, []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         this._subscriptions.push(
@@ -145,6 +147,35 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
         this._messageBox.success(text);
 
+        this._read();
+    }
+
+    private _buildJobIdFilter() {
+        const that = this;
+
+        return {
+            field: 'jobId',
+            get operator() {
+                return that._jobId
+                    ? 'eq'
+                    : 'isnotnull'
+            },
+            get value() {
+                return that._jobId;
+            }
+        };
+    }
+
+    private _subscribeRouteParams() {
+        this._route.queryParams
+            .pipe(
+                tap(e => this._setParams(e))
+            )
+            .subscribe();
+    }
+
+    private _setParams(params: Params) {
+        this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
         this._read();
     }
 

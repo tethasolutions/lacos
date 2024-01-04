@@ -22,13 +22,7 @@ public class Activity : FullAuditedEntity
 
     public long? AddressId { get; set; }
     public Address? Address { get; set; }
-
-    public long? SourceTicketId { get; set; }
-    public Ticket? SourceTicket { get; set; }
-
-    public long? SourcePuchaseOrderId { get; set; }
-    public PurchaseOrder? SourcePurchaseOrder { get; set; }
-
+    
     public ActivityStatus Status { get; set; }
 
     public ICollection<Intervention> Interventions { get; set; }

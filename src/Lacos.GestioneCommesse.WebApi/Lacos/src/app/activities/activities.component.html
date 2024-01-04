@@ -18,7 +18,9 @@
     <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div [style.background-color]="dataItem.activityColor">&nbsp;</div>
-        </ng-template>>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="customer" title="Cliente">
     </kendo-grid-column>
     <kendo-grid-column field="jobCode" title="Commessa" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -63,8 +65,6 @@
         <ng-template kendoGridCellTemplate let-dataItem>
             <div [innerHTML]="dataItem.description"></div>
         </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="customer" title="Cliente">
     </kendo-grid-column>
     <kendo-grid-column field="address" title="Indirizzo">
     </kendo-grid-column>

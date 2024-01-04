@@ -18,12 +18,11 @@ public class PurchaseOrder : FullAuditedEntity
 
     public ICollection<PurchaseOrderItem> Items { get; set; }
 
-    public Activity? GeneratedActivity { get; set; }
-
     public PurchaseOrder()
     {
         Items = new List<PurchaseOrderItem>();
     }
+
     public void SetCode(int year, int number)
     {
         Year = year;

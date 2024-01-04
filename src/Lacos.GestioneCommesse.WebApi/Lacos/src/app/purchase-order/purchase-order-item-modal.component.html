@@ -8,7 +8,7 @@
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="activity-product-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+        <form name="purchase-order-item-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
             class="redimensionModal">
 
             <div class="row">
@@ -16,7 +16,8 @@
                     <label>Prodotto</label>
                     <div class="form-group">
                         <kendo-combobox [data]="products" textField="fullName" valueField="id" name="product"
-                            [(ngModel)]="product" required [suggest]="true" [allowCustom]="false">
+                            [valuePrimitive]="true" [(ngModel)]="options.productId" required [suggest]="true"
+                            [allowCustom]="false" (valueChange)="onProductChange()">
                             <ng-template kendoComboBoxItemTemplate let-dataItem>
                                 <div class="d-flex align-items-center gap-1">
                                     <img *ngIf="dataItem.pictureFileName" [src]="imagesUrl + dataItem.pictureFileName"
@@ -27,15 +28,16 @@
                                 </div>
                             </ng-template>
                         </kendo-combobox>
-                        <div class="validation-message" [control]="form.controls['product']"></div>
+                        <div class="validation-message" [control]="form.controls['productId']"></div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <label>Quantità</label>
                     <div class="form-group">
-                        <input class="form-control" name="number" [(ngModel)]="options.quantity" novalidate
-                            autocomplete="off" />
-                        <div class="validation-message" [control]="form.controls['number']"></div>
+                        <kendo-numerictextbox name="quantity" [(ngModel)]="options.quantity" [min]="0.01" required
+                            format="0.00" [decimals]="2">
+                        </kendo-numerictextbox>
+                        <div class="validation-message" [control]="form.controls['quantity']"></div>
                     </div>
                 </div>
             </div>
@@ -45,7 +47,7 @@
                     Annulla
                 </button>
                 <button type="submit" class="btn btn-primary">
-                    Salva
+                    Conferma
                 </button>
             </div>
         </form>

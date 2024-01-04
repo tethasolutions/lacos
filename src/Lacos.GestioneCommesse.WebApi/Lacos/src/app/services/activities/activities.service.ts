@@ -93,13 +93,13 @@ export class ActivitiesService {
 
     createActivityAttachment(request: ActivityAttachmentModel) {
         return this._http.post<ActivityAttachmentModel>(`${this._baseUrl}/create-attachment`, request)
-            .pipe(               
+            .pipe(
             );
     }
 
     updateActivityAttachment(request: ActivityAttachmentModel, id: number) {
         return this._http.put<void>(`${this._baseUrl}/update-attachment/${id}`, request)
-            .pipe(              
+            .pipe(
             );
             }
 
@@ -124,7 +124,7 @@ export class ActivitiesService {
             .pipe(
                 map(response => {
                    const activityAttachment: ActivityDetail = Object.assign(
-                        new ActivityDetail(0, ActivityStatus.Pending, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, null, null), response);
+                        new ActivityDetail(0, ActivityStatus.Pending, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, null), response);
                     return activityAttachment;
                 })
             );
@@ -149,7 +149,7 @@ export class ActivitiesService {
                 map(e => new ActivityAttachmentUploadFileModel(e.fileName, e.originalFileName))
             );
     }
-    
+
     deleteActivity(id: number) {
         return this._http.delete<void>(`${this._baseUrl}/activity/${id}`)
             .pipe(

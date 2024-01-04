@@ -10,15 +10,12 @@ public class ActivityMappingProfile : Profile
     public ActivityMappingProfile()
     {
         CreateMap<Activity, ActivityReadModel>()
-            .MapMember(x => x.Address, y => y.Address != null ? (y.Address.Description != "" ? y.Address.Description + " - " : "") + y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
-            .MapMember(x => x.Type, y => y.Type!.Name)
-            .MapMember(x => x.Source, y =>
-                y.SourceTicket == null
-                    ? y.SourcePurchaseOrder == null
-                        ? null
-                        : y.SourcePurchaseOrder.Description
-                    : y.SourceTicket.Description
+            .MapMember(x => x.Address, y =>
+                y.Address == null
+                    ? ""
+                    : (string.IsNullOrEmpty(y.Address.Description) ? "" : y.Address.Description + " - ") + y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")"
             )
+            .MapMember(x => x.Type, y => y.Type!.Name)
             .MapMember(x => x.CanBeRemoved, y =>
                 y.Interventions
                     .All(i => i.Status == InterventionStatus.Scheduled)
@@ -40,10 +37,6 @@ public class ActivityMappingProfile : Profile
             .Ignore(x => x.Job)
             .MapMember(x => x.TypeId, (x, y) => y.IsTransient() ? x.TypeId : y.TypeId)
             .Ignore(x => x.Type)
-            .Ignore(x => x.SourceTicketId)
-            .Ignore(x => x.SourceTicket)
-            .Ignore(x => x.SourcePuchaseOrderId)
-            .Ignore(x => x.SourcePurchaseOrder)
             .Ignore(x => x.Interventions)
             .Ignore(x => x.ActivityProducts)
             .Ignore(x => x.Attachment);
@@ -57,14 +50,7 @@ public class ActivityMappingProfile : Profile
             .MapMember(x => x.CustomerId, y => y.Job!.CustomerId)
             .MapMember(x => x.Customer, y => y.Job!.Customer!.Name)
             .MapMember(x => x.Address, y => y.Address != null ? y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
-            .MapMember(x => x.Type, y => y.Type!.Name)
-            .MapMember(x => x.Source, y =>
-                y.SourceTicket == null
-                    ? y.SourcePurchaseOrder == null
-                        ? null
-                        : y.SourcePurchaseOrder.Description
-                    : y.SourceTicket.Description
-            );
+            .MapMember(x => x.Type, y => y.Type!.Name);
 
         CreateMap<ActivityDto, ActivityAttachment>()
             .Ignore(x => x.Activity)

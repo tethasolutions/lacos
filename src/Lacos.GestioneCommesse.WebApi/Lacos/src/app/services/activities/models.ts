@@ -30,7 +30,6 @@ export interface IActivityReadModel {
     readonly typeId: number;
     readonly type: string;
     readonly activityColor: string;
-    readonly source: string;
     readonly canBeRemoved: boolean;
     readonly jobCode: string;
     readonly jobReference: string;
@@ -108,7 +107,6 @@ export class ActivityDetail {
         readonly type: string,
         readonly attachmentDisplayName: string,
         readonly attachmentFileName: string,
-        readonly source: string,
         startDate: Date | string,
         expirationDate: Date | string
     ) {
@@ -123,7 +121,8 @@ export class ActivityDetail {
 
     static build(o: ActivityDetail) {
         return new ActivityDetail(o.id, o.status, o.number, o.description, o.jobId, o.job, o.customerId,
-            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName, o.source, o.startDate, o.expirationDate);
+            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName,
+            o.startDate, o.expirationDate);
     }
 
 }
@@ -134,7 +133,7 @@ export class ActivityCounter {
     readonly name: string;
     readonly active: number;
     readonly expired: number;
-    
+
     constructor() {
         this.id = null;
         this.colorHex = null;

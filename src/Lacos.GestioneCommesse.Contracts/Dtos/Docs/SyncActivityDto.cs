@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
 {
-    public class SyncActivityDto:SyncBaseDto
+    public class SyncActivityDto : SyncBaseDto
     {
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? ExpirationDate { get; set; }
@@ -12,9 +12,6 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public long? SupplierId { get; set; }
         public long? AddressId { get; set; }
         public long? JobId { get; set; }
-        public long? SourceTicketId { get; set; }
-        public long? SourcePuchaseOrderId { get; set; }
         public ActivityStatus? Status { get; set; }
-       
     }
 }

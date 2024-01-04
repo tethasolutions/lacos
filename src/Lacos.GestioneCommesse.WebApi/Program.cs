@@ -3,8 +3,8 @@ using Lacos.GestioneCommesse.WebApi;
 var builder = WebApplication.CreateBuilder(args);
 #if DEBUG 
 //builder.WebHost.UseKestrel();
-builder.WebHost.UseIIS();
-builder.WebHost.UseUrls("http://*:37998");
+//builder.WebHost.UseIIS();
+//builder.WebHost.UseUrls("http://*:37998");
 #else
 #endif
 

@@ -22,13 +22,6 @@ export class PurchaseOrdersService {
         return readData(this._http, state, url);
     }
 
-    getItem(id: number) {
-        return this._http.get<PurchaseOrderItem>(`${this._baseUrl}/purchase-order-item/${id}`)
-            .pipe(
-                map(e => PurchaseOrderItem.build(e))
-            );
-    }
-
     get(id: number) {
         return this._http.get<PurchaseOrder>(`${this._baseUrl}/${id}`)
             .pipe(
@@ -50,18 +43,11 @@ export class PurchaseOrdersService {
             );
     }
 
-    updateItem(item: PurchaseOrderItem) {
-        return this._http.put<PurchaseOrderItem>(`${this._baseUrl}/purchase-order-item/${item.id}`, item)
-            .pipe(
-                map(e => PurchaseOrderItem.build(e))
-            );
-    }
-
     delete(id: number) {
         return this._http.delete<void>(`${this._baseUrl}/${id}`)
             .pipe(
                 map(() => { })
             );
     }
-    
+
 }

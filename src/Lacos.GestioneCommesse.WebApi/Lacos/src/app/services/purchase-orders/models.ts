@@ -47,14 +47,16 @@ export class PurchaseOrder {
         public status: PurchaseOrderStatus,
         public jobId: number,
         public supplierId: number,
-        public supplierName: string,        
+        public supplierName: string,
         public items: PurchaseOrderItem[]
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: PurchaseOrder) {
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.items);
+        const items = o.items.map(e => PurchaseOrderItem.build(e));
+
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.description, o.status, o.jobId, o.supplierId, o.supplierName, items);
     }
 
 }
@@ -65,10 +67,14 @@ export class PurchaseOrderItem {
         readonly id: number,
         readonly purchaseOrderId: number,
         public productId: number,
-        readonly productName: string,
-        readonly productImage: string,
+        public productName: string,
+        public productImage: string,
         public quantity: number
     ) {
+    }
+
+    clone() {
+        return new PurchaseOrderItem(this.id, this.purchaseOrderId, this.productId, this.productName, this.productImage, this.quantity);
     }
 
     static build(o: PurchaseOrderItem) {

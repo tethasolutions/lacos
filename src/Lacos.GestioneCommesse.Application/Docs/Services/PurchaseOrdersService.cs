@@ -48,20 +48,6 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         return purchaseOrderDto;
     }
-    public async Task<PurchaseOrderItemDto> GetItem(long id)
-    {
-        var purchaseOrderItemDto = await repositoryItem.Query()
-            .Where(e => e.Id == id)
-            .Project<PurchaseOrderItemDto>(mapper)
-            .FirstOrDefaultAsync();
-
-        if (purchaseOrderItemDto == null)
-        {
-            throw new NotFoundException($"Ordine con Id {id} non trovato.");
-        }
-
-        return purchaseOrderItemDto;
-    }
 
     public async Task<PurchaseOrderDto> Create(PurchaseOrderDto purchaseOrderDto)
     {
@@ -79,7 +65,9 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
     public async Task<PurchaseOrderDto> Update(PurchaseOrderDto purchaseOrderDto)
     {
-        var purchaseOrder = await repository.Get(purchaseOrderDto.Id);
+        var purchaseOrder = await repository.Query()
+            .Include(e => e.Items)
+            .FirstOrDefaultAsync(e => e.Id == purchaseOrderDto.Id);
 
         if (purchaseOrder == null)
         {
@@ -94,37 +82,20 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         return await Get(purchaseOrder.Id);
     }
-    public async Task<PurchaseOrderItemDto> UpdateItem(PurchaseOrderItemDto item)
-    {
-        var purchaseOrderItem = await repositoryItem.Get(item.Id);
-
-        if (purchaseOrderItem == null)
-        {
-            throw new NotFoundException($"Ordine con Id {item.Id} non trovato.");
-        }
-
-        purchaseOrderItem = item.MapTo(purchaseOrderItem, mapper);
-
-        repositoryItem.Update(purchaseOrderItem);
-
-        await dbContext.SaveChanges();
-
-        return await GetItem(purchaseOrderItem.Id);
-    }
 
     public async Task Delete(long id)
     {
-        var Ticket = await repository.Query()
-            .AsSplitQuery()
+        var purchaseOrder = await repository.Query()
+            .Include(e => e.Items)
             .FirstOrDefaultAsync(e => e.Id == id);
 
-        if (Ticket == null)
+        if (purchaseOrder == null)
         {
             return;
         }
 
-        repository.Delete(Ticket);
-        
+        repository.Delete(purchaseOrder);
+
         await dbContext.SaveChanges();
     }
 
@@ -137,5 +108,4 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         return (maxNumber ?? 0) + 1;
     }
-
 }

@@ -3,17 +3,16 @@ import { ModalComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { JobsService } from '../services/jobs/jobs.service';
-import { State } from '@progress/kendo-data-query';
+import { State, process } from '@progress/kendo-data-query';
 import { IJobReadModel, Job } from '../services/jobs/models';
 import { listEnum } from '../services/common/functions';
 import { ApiUrls } from '../services/common/api-urls';
 import { SupplierModel } from '../shared/models/supplier.model';
 import { SupplierService } from '../services/supplier.service';
 import { PurchaseOrder, PurchaseOrderItem, PurchaseOrderStatus } from '../services/purchase-orders/models';
-import { CustomerModel } from '../shared/models/customer.model';
 import { PurchaseOrderItemModalComponent } from './purchase-order-item-modal.component';
-import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { filter, tap } from 'rxjs';
+import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -21,8 +20,11 @@ import { filter, map, switchMap, tap } from 'rxjs';
 })
 export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderModalOptions> implements OnInit {
 
-    @ViewChild('form', { static: false }) form: NgForm;
-    @ViewChild('purchaseOrderItemModal', { static: true }) purchaseOrderItemModal: PurchaseOrderItemModalComponent;
+    @ViewChild('form', { static: false })
+    form: NgForm;
+
+    @ViewChild('purchaseOrderItemModal', { static: true })
+    purchaseOrderItemModal: PurchaseOrderItemModalComponent;
 
     jobs: SelectableJob[];
     job: Job;
@@ -33,16 +35,17 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     gridState: State = {
         skip: 0,
         take: 30,
-        sort: [{ field: 'productName', dir: 'asc' }]
+        sort: [
+            { field: 'productName', dir: 'asc' }
+        ]
     };
+    gridData: GridDataResult;
 
-    private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-order`;
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
 
     readonly states = listEnum<PurchaseOrderStatus>(PurchaseOrderStatus);
 
     constructor(
-        private readonly _service: PurchaseOrdersService,
         private readonly _messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _suppliersService: SupplierService
@@ -59,23 +62,59 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         this.options.purchaseOrder.supplierName = this.suppliers.find(e => e.id == this.options.purchaseOrder.supplierId)?.name ?? '';
     }
 
+    addProduct() {
+        const item = new PurchaseOrderItem(0, this.options.purchaseOrder.id, null, null, null, 1);
+
+        this._subscriptions.push(
+            this.purchaseOrderItemModal.open(item)
+                .pipe(
+                    filter(e => e),
+                    tap(() => this._afterProductAdded(item))
+                )
+                .subscribe()
+        );
+    }
+
+    edit(item: PurchaseOrderItem) {
+        const updatedItem = item.clone();
+
+        this._subscriptions.push(
+            this.purchaseOrderItemModal.open(updatedItem)
+                .pipe(
+                    filter(e => e),
+                    tap(() => this._afterProductUpdated(item, updatedItem))
+                )
+                .subscribe()
+        );
+    }
+
+    askRemove(item: PurchaseOrderItem) {
+        this._subscriptions.push(
+            this._messageBox.confirm(`Sei sicuro di voler rimuovere il prodotto ${item.productName}?`)
+                .pipe(
+                    filter(e => e),
+                    tap(() => this._afterProductRemoved(item))
+                )
+                .subscribe()
+        );
+    }
+
+    onDataStateChange(state: DataStateChangeEvent | State) {
+        this.gridState = state;
+        this.console.log(state);
+        this.gridData = process(this.options.purchaseOrder.items, this.gridState);
+    }
+
     override open(options: PurchaseOrderModalOptions) {
         const result = super.open(options);
 
         if (this.options.purchaseOrder.jobId) {
-            this._subscriptions.push(
-                this._jobsService.get(this.options.purchaseOrder.jobId)
-                    .pipe(
-                        tap(e => {
-                            this.job = e;
-                        })
-                    )
-                    .subscribe()
-            );
+            this._getJob(this.options.purchaseOrder.jobId);
         }
 
         this.jobReadonly = !!options.purchaseOrder.jobId;
         this.status = options.purchaseOrder.status;
+        this.onDataStateChange(this.gridState);
 
         return result;
     }
@@ -88,6 +127,16 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         }
 
         return this.form.valid;
+    }
+
+    private _getJob(id: number) {
+        this._subscriptions.push(
+            this._jobsService.get(id)
+                .pipe(
+                    tap(e => this.job = e)
+                )
+                .subscribe()
+        );
     }
 
     private _getSuppliers() {
@@ -124,46 +173,25 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         );
     }
 
-    protected addProduct() {
-        const request = new PurchaseOrderItem(0, this.options.purchaseOrder.id, null, null, null, 1);
-        //if (this.options.purchaseOrder.id == null) {
-            this.purchaseOrderItemModal.open(request)
-                .pipe(
-                    filter(e => e),
-                    tap(e => {
-                        this.options.purchaseOrder.items.push(request);
-                        this._messageBox.success(`Prodotto aggiunto`);
-                    })
-                )
-                .subscribe()
-        //}
-        //   else {
-        //     request.checkListId = this.options.id;
-        //     this._subscriptions.push(
-        //         this.checklistItemModal.open(request)
-        //             .pipe(
-        //                 filter(e => e),
-        //                 switchMap(() => this._checkListService.createCheckListItem(request)),
-        //                 tap(e => {
-        //                   this._messageBox.success(`Voce checklist creata`);
-        //                 }),
-        //                 tap(() => this._readCheckListItems())
-        //             )
-        //             .subscribe()
-        //     );
-        //   }
+    private _afterProductAdded(item: PurchaseOrderItem) {
+        this.options.purchaseOrder.items.push(item);
+        this.onDataStateChange(this.gridState);
+
+        this._messageBox.success(`Prodotto aggiunto`);
     }
 
-    edit(item: PurchaseOrderItem) {
-        this._subscriptions.push(
-            this._service.getItem(item.id)
-                .pipe(
-                    map(e => this.purchaseOrderItemModal.open(e)),
-                    switchMap(() => this._service.updateItem(this.purchaseOrderItemModal.options)),
-                    //tap(() => this._afterPurchaseOrderUpdated())
-                )
-                .subscribe()
-        );
+    private _afterProductUpdated(originalItem: PurchaseOrderItem, updatedItem: PurchaseOrderItem) {
+        this.options.purchaseOrder.items.replace(originalItem, updatedItem);
+        this.onDataStateChange(this.gridState);
+
+        this._messageBox.success(`Prodotto aggiornato`);
+    }
+
+    private _afterProductRemoved(item: PurchaseOrderItem) {
+        this.options.purchaseOrder.items.remove(item);
+        this.onDataStateChange(this.gridState);
+
+        this._messageBox.success(`Prodotto rimosso`);
     }
 
 }

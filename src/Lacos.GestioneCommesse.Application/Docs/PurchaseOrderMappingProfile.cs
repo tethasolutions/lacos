@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Extensions;
@@ -21,7 +20,9 @@ public class PurchaseOrderMappingProfile : Profile
             .IgnoreCommonMembers()
             .Ignore(x => x.GeneratedActivity)
             .Ignore(x => x.Job)
-            .Ignore(x => x.Supplier);
+            .Ignore(x => x.Supplier)
+            .Ignore(x => x.Items)
+            .AfterMap(AfterMap);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()
             .MapMember(x => x.SupplierName, y => y.Supplier!.Name);
@@ -34,5 +35,10 @@ public class PurchaseOrderMappingProfile : Profile
         CreateMap<PurchaseOrderItem, PurchaseOrderItemDto>()
             .MapMember(x => x.ProductName, y => y.Product!.Code + " - " + y.Product!.Name)
             .MapMember(x => x.ProductImage, y => y.Product!.PictureFileName);
+    }
+
+    private static void AfterMap(PurchaseOrderDto orderDto, PurchaseOrder order, ResolutionContext context)
+    {
+        orderDto.Items.Merge(order.Items, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
     }
 }

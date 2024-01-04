@@ -4,7 +4,6 @@ import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { ActivatedRoute, Params } from '@angular/router';
 import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from './purchase-order-modal.component';
 import { IPurchaseOrderReadModel, PurchaseOrder, PurchaseOrderStatus, purchaseOrderStatusNames } from '../services/purchase-orders/models';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
@@ -49,7 +48,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._read();        
+        this._read();
     }
 
     dataStateChange(state: State) {
@@ -73,7 +72,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const purchaseOrder = new PurchaseOrder(0, null,today.getFullYear(),today, null, PurchaseOrderStatus.Pending, this._jobId, null, null, null);
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, PurchaseOrderStatus.Pending, this._jobId, null, null, []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         this._subscriptions.push(

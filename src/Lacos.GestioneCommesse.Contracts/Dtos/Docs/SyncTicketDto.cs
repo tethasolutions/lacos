@@ -10,6 +10,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public string? Description { get; set; }
         public TicketStatus? Status { get; set; }
         public long? JobId { get; set; }
+        public bool? IsNew { get; set; }
         public long? CustomerId { get; set; }
         
     }

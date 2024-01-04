@@ -20,6 +20,8 @@
             {{dataItem.date | date:'dd/MM/yyyy'}}
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="customer" title="Cliente">
+    </kendo-grid-column>
     <kendo-grid-column field="code" title="Codice" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="!dataItem.hasHighPriority">{{dataItem.code}}</div>
@@ -40,8 +42,6 @@
                 {{dataItem.status | jobStatus}}
             </span>
         </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="customer" title="Cliente">
     </kendo-grid-column>
     <kendo-grid-column field="reference" title="Riferimento">
     </kendo-grid-column>

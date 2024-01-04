@@ -17,7 +17,6 @@ public class ActivityReadModel
     public long TypeId { get; set; }
     public string? Type { get; set; }
     public string? ActivityColor { get; set; }
-    public string? Source { get; set; }
     public bool CanBeRemoved { get; set; }
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }

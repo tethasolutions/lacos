@@ -18,7 +18,6 @@ public class PurchaseOrderMappingProfile : Profile
 
         CreateMap<PurchaseOrderDto, PurchaseOrder>()
             .IgnoreCommonMembers()
-            .Ignore(x => x.GeneratedActivity)
             .Ignore(x => x.Job)
             .Ignore(x => x.Supplier)
             .Ignore(x => x.Items)

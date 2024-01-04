@@ -17,8 +17,6 @@ public class Ticket : FullAuditedEntity
     public Customer? Customer { get; set; }
     public bool IsNew { get; set; }
 
-    public Activity? GeneratedActivity { get; set; }
-
     public ICollection<TicketPicture> Pictures { get; set; }
 
     public Ticket()

@@ -305,7 +305,7 @@ app-activities {
     }
 
     .activity-in-progress .activity-status {
-        @include striped-background(rgba(25, 135, 84, .3), rgba(25, 135, 84, .1));
+        @include striped-background(rgba(136, 215, 39, 0.3), rgba(147, 211, 9, 0.1));
     }
 }
 

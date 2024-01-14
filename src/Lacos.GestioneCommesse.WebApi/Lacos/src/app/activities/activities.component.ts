@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
+import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
@@ -38,6 +38,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
 
     private _jobId: number;
     private _typeId: number;
+    private cellArgs: CellClickEvent;
 
     readonly activityStatusNames = activityStatusNames;
 
@@ -99,6 +100,26 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+
+    onDblClick(): void {
+        if (!this.cellArgs.isEdited) {
+            this._subscriptions.push(
+                this._service.get(this.cellArgs.dataItem.id)
+                    .pipe(
+                        map(e => new ActivityModalOptions(e)),
+                        switchMap(e => this.activityModal.open(e)),
+                        filter(e => e),
+                        switchMap(() => this._service.update(this.activityModal.options.activity)),
+                        tap(() => this._afterActivityUpdated())
+                    )
+                    .subscribe()
+            )
+        }
+    }
+
+    cellClickHandler(args: CellClickEvent): void {
+        this.cellArgs = args;
     }
 
     readonly rowCallback = (context: RowClassArgs) => {

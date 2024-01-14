@@ -10,6 +10,10 @@ public class Supplier : FullAuditedEntity
     public string? Telephone { get; set; }
     public string? Email { get; set; }
 
+    public string? Contact { get; set; }
+    public string? ContactTelephone { get; set; }
+    public string? ContactEmail { get; set; }
+
     public ICollection<Address> Addresses { get; set; }
     public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
 

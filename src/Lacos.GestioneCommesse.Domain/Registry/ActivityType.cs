@@ -8,6 +8,7 @@ public class ActivityType : FullAuditedEntity
 
     public bool PictureRequired { get; set; }
     public bool IsInternal { get; set; }
+    public bool IsExternal { get; set; }
     public string? ColorHex { get; set; }
 
     public ICollection<Activity> Activities { get; set; }

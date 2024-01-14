@@ -1,7 +1,7 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
+    <kendo-window (close)="dismiss()" [resizable]="true" [draggable]="true" [top]="30" [(state)]="windowState">
         <kendo-window-titlebar>
             <div *ngIf="!!options.id" class="k-window-title">
                 Commessa {{options.code}} &bull; {{options.status | jobStatus}}
@@ -9,10 +9,12 @@
             <div *ngIf="!options.id" class="k-window-title">
                 Nuova commessa
             </div>
+            <button kendoWindowMinimizeAction></button>
+            <button kendoWindowRestoreAction></button>
+            <button kendoWindowMaximizeAction></button>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="job-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
-            class="redimensionModal">
+        <form name="job-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()">
 
             <div class="row">
                 <div class="col-md-3">
@@ -25,19 +27,19 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <label>Anno</label>
-                    <div class="form-group">
-                        <input class="form-control" name="year" [(ngModel)]="options.year" novalidate autocomplete="off"
-                            disabled />
-                        <div class="validation-message" [control]="form.controls['year']"></div>
-                    </div>
-                </div>
-                <div class="col-md-2">
                     <label>Numero</label>
                     <div class="form-group">
                         <input class="form-control" name="number" [(ngModel)]="options.number" novalidate
                             autocomplete="off" disabled />
                         <div class="validation-message" [control]="form.controls['number']"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label>Anno</label>
+                    <div class="form-group">
+                        <input class="form-control" name="year" [(ngModel)]="options.year" novalidate autocomplete="off"
+                            disabled />
+                        <div class="validation-message" [control]="form.controls['year']"></div>
                     </div>
                 </div>
                 <div class="col-md-2">

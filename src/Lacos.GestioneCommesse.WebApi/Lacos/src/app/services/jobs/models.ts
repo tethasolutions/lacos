@@ -10,9 +10,10 @@ export enum JobStatus {
 
 export const jobStatusNames: Dictionary<JobStatus, string> = {
 
-    [JobStatus.Pending]: 'In attesa',
+    [JobStatus.Pending]: 'Attiva',
     [JobStatus.InProgress]: 'In corso',
-    [JobStatus.Completed]: 'Completata'
+    [JobStatus.Completed]: 'Completata',
+    
 
 };
 
@@ -38,7 +39,7 @@ export class Job {
     date: Date;
 
     get code() {
-        return `${this.year}/${this.number}`;
+        return `${this.number.toString().padStart(3, '0')}/${this.year}`;
     }
 
     constructor(

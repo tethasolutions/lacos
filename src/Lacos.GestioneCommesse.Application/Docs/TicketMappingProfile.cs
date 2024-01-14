@@ -11,7 +11,7 @@ public class TicketMappingProfile : Profile
     public TicketMappingProfile()
     {
         CreateMap<Ticket, TicketReadModel>()
-            .MapMember(x => x.Code, y => y.Year.ToString() + "/" + y.Number.ToString())
+            .MapMember(x => x.Code, y => y.Number.ToString() + "/" + y.Year.ToString())
             .MapMember(x => x.Date, y => y.TicketDate)
             .MapMember(x => x.CustomerName, y => y.Customer!.Name);
 

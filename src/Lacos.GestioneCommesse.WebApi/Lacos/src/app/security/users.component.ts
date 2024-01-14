@@ -21,14 +21,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
     state: State = {
         skip: 0,
         take: 30,
-        filter: {
-            filters: [{
-                field: 'role',
-                operator: 'neq',
-                value: Role.Administrator
-            }],
-            logic: 'and'
-        },
         group: [],
         sort: []
     };

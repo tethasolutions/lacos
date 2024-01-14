@@ -11,6 +11,7 @@ import { refreshUserData } from '../services/security/security.service';
 import { AddressesService } from '../services/addresses.service';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
 import { AddressModel } from '../shared/models/address.model';
+import { WindowState } from '@progress/kendo-angular-dialog';
 
 @Component({
     selector: 'app-job-modal',
@@ -24,6 +25,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
 
     customers: CustomerModel[];
     addresses: AddressModel[];
+    public windowState: WindowState = "default";
 
     constructor(
         private readonly _customersService: CustomerService,
@@ -48,7 +50,14 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     }
 
     onCustomerChange(){
-        this.addresses = this.customers.find(e => e.id == this.options.customerId)?.addresses ?? [];
+        const selectedCustomer = this.customers.find(e => e.id == this.options.customerId);
+        this.addresses = selectedCustomer?.addresses ?? [];
+        if (selectedCustomer != undefined) {
+        const selectedAddress: AddressModel = selectedCustomer.addresses.find(x => x.isMainAddress == true);
+            if (selectedAddress != undefined) {
+            this.options.addressId = selectedAddress.id;
+            }
+        }
     }
 
     protected override _canClose() {

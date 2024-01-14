@@ -12,7 +12,7 @@ public class PurchaseOrderMappingProfile : Profile
         CreateMap<PurchaseOrder, PurchaseOrderReadModel>()
             .MapMember(x => x.Code, y => y.Year.ToString() + "/" + y.Number.ToString())
             .MapMember(x => x.SupplierName, y => y.Supplier!.Name)
-            .MapMember(x => x.JobCode, y => y.Job!.Year.ToString() + "/" + y.Job.Number.ToString())
+            .MapMember(x => x.JobCode, y => y.Job!.Number.ToString("000") + "/" + y.Job!.Year.ToString())
             .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
             .MapMember(x => x.JobReference, y => y.Job!.Reference);
 

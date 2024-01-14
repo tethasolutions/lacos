@@ -113,12 +113,15 @@ import { PurchaseOrderModalComponent } from './purchase-order/purchase-order-mod
 import { PurchaseOrderItemModalComponent } from './purchase-order/purchase-order-item-modal.component';
 import { PurchaseOrdersService } from './services/purchase-orders/purchase-orders.service';
 import { PurchaseOrderStatusPipe } from './shared/pipes/purchase-order-status.pipe';
+import { Role } from './services/security/models';
+import { RolePipe } from './pipes/role.pipe';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
 @NgModule({
     declarations: [
         BooleanPipe,
+        RolePipe,
         AppComponent,
         LoaderComponent,
         ValidationMessageComponent,

@@ -91,7 +91,14 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     }
 
     onSupplierChange() {
-        this.addresses = this.suppliers.find(e => e.id == this.options.activity.supplierId)?.addresses ?? [];
+        const selectedSupplier = this.suppliers.find(e => e.id == this.options.activity.supplierId);
+        this.addresses = selectedSupplier?.addresses ?? [];
+        if (selectedSupplier != undefined) {
+        const selectedAddress: AddressModel = selectedSupplier.addresses.find(x => x.isMainAddress == true);
+            if (selectedAddress != undefined) {
+            this.options.activity.addressId = selectedAddress.id;
+            }
+        }
     }
 
     override open(options: ActivityModalOptions) {

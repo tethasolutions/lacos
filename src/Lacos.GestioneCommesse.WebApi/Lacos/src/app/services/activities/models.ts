@@ -14,7 +14,7 @@ export const activityStatusNames: Dictionary<ActivityStatus, string> = {
     [ActivityStatus.Pending]: 'In attesa',
     [ActivityStatus.InProgress]: 'In corso',
     [ActivityStatus.ReadyForCompletion]: 'Pronta da evadere',
-    [ActivityStatus.Completed]: 'Evasa'
+    [ActivityStatus.Completed]: 'Completata'
 
 };
 

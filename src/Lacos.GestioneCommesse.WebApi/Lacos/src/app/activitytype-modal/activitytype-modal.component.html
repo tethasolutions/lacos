@@ -37,12 +37,20 @@
                         <div class="validation-message" [control]="form.controls['pictureRequired']"></div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label>Attività Interna</label>
                     <div class="form-group">
                         <kendo-switch name="isInternal" [(ngModel)]="options.isInternal" onLabel="Si" offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['isInternal']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Attività Fornitore</label>
+                    <div class="form-group">
+                        <kendo-switch name="isExternal" [(ngModel)]="options.isExternal" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['isExternal']"></div>
                     </div>
                 </div>
             </div>

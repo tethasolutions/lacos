@@ -28,7 +28,7 @@ public class JobMappingProfile : Profile
     {
         CreateMap<Job, JobReadModel>()
             .MapMember(x => x.Address, y => y.Address != null ? y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
-            .MapMember(x => x.Code, y => y.Year.ToString() + "/" + y.Number.ToString())
+            .MapMember(x => x.Code, y => y.Number.ToString() + "/" + y.Year.ToString())
             .MapMember(x => x.Date, y => y.JobDate)
             .MapMember(x => x.Customer, y => y.Customer!.Name)
             .MapMember(x => x.Status, StatusExpression)

@@ -1,7 +1,7 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
+    <kendo-window (close)="dismiss()" [resizable]="true" [draggable]="true" [top]="30">
         <kendo-window-titlebar>
             <div *ngIf="!!options.activity.id" class="k-window-title">
                 Attività {{options.activity.number}} &bull; {{status | activityStatus}}
@@ -9,10 +9,12 @@
             <div *ngIf="!options.activity.id" class="k-window-title">
                 Nuova attività
             </div>
+            <button kendoWindowMinimizeAction></button>
+            <button kendoWindowRestoreAction></button>
+            <button kendoWindowMaximizeAction></button>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="activity-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
-            class="redimensionModal">
+        <form name="activity-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()">
 
             <div class="row">
                 <div class="col-md-2">
@@ -27,9 +29,9 @@
                     <label>Commessa</label>
                     <div class="form-group">
                         <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
-                            [(ngModel)]="options.activity.jobId" required [suggest]="true" [allowCustom]="false" 
-                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
-                            [valuePrimitive]="true" (valueChange)="onJobChanged()" [readonly]="jobReadonly">
+                            [(ngModel)]="options.activity.jobId" required [suggest]="true" [allowCustom]="false"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [valuePrimitive]="true"
+                            (valueChange)="onJobChanged()" [readonly]="jobReadonly">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['jobId']"></div>
                     </div>
@@ -38,9 +40,10 @@
                     <label>Tipologia</label>
                     <div class="form-group">
                         <kendo-combobox [data]="activityTypes" [valuePrimitive]="true" textField="name" valueField="id"
-                            name="typeId" [(ngModel)]="options.activity.typeId" required [suggest]="true" (valueChange)="onActivityTypeChange()" 
-                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
-                            [allowCustom]="false" [disabled]="options.activity.id" >
+                            name="typeId" [(ngModel)]="options.activity.typeId" required [suggest]="true"
+                            (valueChange)="onActivityTypeChange()"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [allowCustom]="false"
+                            [disabled]="options.activity.id">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['typeId']"></div>
                     </div>
@@ -49,15 +52,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="row" *ngIf="selectedActivityType?.isInternal">
+                    <div class="row" *ngIf="selectedActivityType?.isExternal">
                         <div class="col-md-12">
                             <label>Fornitore</label>
                             <kendo-formfield class="form-group">
-                                <kendo-combobox [data]="suppliers" [valuePrimitive]="true" textField="name" valueField="id"
-                                    name="supplierId" [(ngModel)]="options.activity.supplierId" [suggest]="true"
-                                    [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
-                                    [allowCustom]="false" [disabled]="!!options.id"
-                                    (valueChange)="onSupplierChange()">
+                                <kendo-combobox [data]="suppliers" [valuePrimitive]="true" textField="name"
+                                    valueField="id" name="supplierId" [(ngModel)]="options.activity.supplierId"
+                                    [suggest]="true" [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                                    [allowCustom]="false" [disabled]="!!options.id" (valueChange)="onSupplierChange()">
                                 </kendo-combobox>
                                 <div class="validation-message" [control]="form.controls['supplierId']"></div>
                             </kendo-formfield>
@@ -65,28 +67,32 @@
                         <div class="col-md-12">
                             <label>Indirizzo</label>
                             <div class="form-group">
-                                <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
-                                    valueField="id" name="addressId"
+                                <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress"
+                                    class="address-combobox" valueField="id" name="addressId"
                                     [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
                                     [(ngModel)]="options.activity.addressId" [suggest]="true" [allowCustom]="false">
                                 </kendo-combobox>
-                                <div class="validation-message" [control]="form.controls['addressId']"></div>      
-                                <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo" *ngIf="!options.activity.supplierId">
+                                <div class="validation-message" [control]="form.controls['addressId']"></div>
+                                <button (click)="createAddress()" type="button"
+                                    class="btn btn-primary add-address-button" title="Nuovo indirizzo"
+                                    *ngIf="!options.activity.supplierId">
                                     <i class="fa fa-plus"></i>
-                                </button>                          
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="!selectedActivityType?.isInternal">
+                    <div *ngIf="!selectedActivityType?.isExternal && !selectedActivityType?.isInternal">
                         <label>Indirizzo</label>
                         <div class="form-group">
-                            <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress" class="address-combobox"
-                                valueField="id" name="addressId" [(ngModel)]="options.activity.addressId" 
+                            <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress"
+                                class="address-combobox" valueField="id" name="addressId"
+                                [(ngModel)]="options.activity.addressId"
                                 [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
                                 [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false">
                             </kendo-combobox>
                             <div class="validation-message" [control]="form.controls['addressId']"></div>
-                            <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button" title="Nuovo indirizzo">
+                            <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button"
+                                title="Nuovo indirizzo">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
@@ -95,8 +101,8 @@
                 <div class="col-md-3">
                     <label>Scadenza</label>
                     <div class="form-group">
-                        <kendo-datepicker name="expirationDate" [(ngModel)]="options.activity.expirationDate" format="dd/MM/yyyy"
-                        [required]="selectedActivityType?.isInternal">
+                        <kendo-datepicker name="expirationDate" [(ngModel)]="options.activity.expirationDate"
+                            format="dd/MM/yyyy" [required]="selectedActivityType?.isInternal">
                         </kendo-datepicker>
                         <div class="validation-message" [control]="form.controls['expirationDate']"></div>
                     </div>
@@ -148,20 +154,25 @@
                                     <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
                                     <kendo-toolbar-button kendoEditorOutdentButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorUnlinkButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-button kendoEditorInsertImageButton></kendo-toolbar-button>
+                                <kendo-toolbar-button kendoEditorViewSourceButton></kendo-toolbar-button>
                             </kendo-toolbar>
                         </kendo-editor>
                         <div class="validation-message" [control]="form.controls['description']"></div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-md-12">
                     <kendo-formfield class="form-group">
                         <label>Allegato</label>
                         <kendo-upload [(ngModel)]="this.attachments" (success)="AttachmentExecutionSuccess($event)"
-                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="false"
-                            name="myUpload">
+                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="false" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
                                 <span *ngIf="!isUploaded">{{ files[0].name }}</span>
                                 <a [href]="CreateUrl()" target="_blank" *ngIf="isUploaded">{{ files[0].name }}</a>

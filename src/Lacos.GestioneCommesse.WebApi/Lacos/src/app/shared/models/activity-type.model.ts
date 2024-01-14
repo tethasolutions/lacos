@@ -3,6 +3,7 @@ export class ActivityTypeModel {
     name: string;
     pictureRequired: boolean;
     isInternal: boolean;
+    isExternal: boolean;
     colorHex: string;
 
     constructor() {
@@ -10,6 +11,7 @@ export class ActivityTypeModel {
         this.name = null;
         this.pictureRequired = false;
         this.isInternal = false;
+        this.isExternal = false;
         this.colorHex = null;
     }
 }

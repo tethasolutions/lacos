@@ -58,6 +58,8 @@ public class ActivitiesService : IActivitiesService
                 );
         }
 
+        var cont = query.Where(e => e.TypeId == 18).Count();
+
         return query
             .Project<ActivityReadModel>(mapper);
     }
@@ -245,23 +247,48 @@ public class ActivitiesService : IActivitiesService
     }
     public async Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters()
     {
-        var query = repository.Query()
-            .AsNoTracking()
-            .Where(e => e.Status != ActivityStatus.Completed)
-            .GroupBy(e => e.TypeId)
-            .Select(group => new ActivityCounterDto
-            {
-                ActivityId = group.Key,
-                ActivityName = group.First().Type.Name,
-                ActivityColor = group.First().Type.ColorHex,
-                Active = group.Where(e => e.ExpirationDate >= DateTimeOffset.UtcNow.Date).Count(),
-                Expired = group.Where(e => e.ExpirationDate < DateTimeOffset.UtcNow.Date).Count()
-            })
-            //.Project<ActivityCounterDto>(mapper)
-            .OrderBy(e => e.ActivityName)
-            .ToListAsync();
+        if (!(session.IsAuthenticated())) return null;
+        
+        var user = session.CurrentUser!;
 
-        return await query;
+        if (user.Role == Role.Administrator)
+        {
+            var query = repository.Query()
+                .AsNoTracking()
+                .Where(e => e.Status != ActivityStatus.Completed)
+                .GroupBy(e => e.TypeId)
+                .Select(group => new ActivityCounterDto
+                {
+                    ActivityId = group.Key,
+                    ActivityName = group.First().Type.Name,
+                    ActivityColor = group.First().Type.ColorHex,
+                    Active = group.Where(e => e.ExpirationDate >= DateTimeOffset.UtcNow.Date).Count(),
+                    Expired = group.Where(e => e.ExpirationDate < DateTimeOffset.UtcNow.Date).Count()
+                })
+                //.Project<ActivityCounterDto>(mapper)
+                .OrderBy(e => e.ActivityName)
+                .ToListAsync();
+            return await query;
+        }
+        else
+        {
+            var query = repository.Query()
+                .AsNoTracking()
+                .Where(e => e.Status != ActivityStatus.Completed && e.Type!.Operators.Any(o => o.Id == user.OperatorId))
+                .GroupBy(e => e.TypeId)
+                .Select(group => new ActivityCounterDto
+                {
+                    ActivityId = group.Key,
+                    ActivityName = group.First().Type.Name,
+                    ActivityColor = group.First().Type.ColorHex,
+                    Active = group.Where(e => e.ExpirationDate >= DateTimeOffset.UtcNow.Date).Count(),
+                    Expired = group.Where(e => e.ExpirationDate < DateTimeOffset.UtcNow.Date).Count()
+                })
+                //.Project<ActivityCounterDto>(mapper)
+                .OrderBy(e => e.ActivityName)
+                .ToListAsync();
+            return await query;
+        }
 
     }
 

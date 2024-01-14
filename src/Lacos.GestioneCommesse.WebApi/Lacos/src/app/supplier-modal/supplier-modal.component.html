@@ -34,6 +34,30 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-4">
+                    <label>Contatto</label>
+                    <div class="form-group">
+                        <input class="form-control" name="contact" [(ngModel)]="options.contact"
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['contact']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Telefono Contatto</label>
+                    <div class="form-group">
+                        <input class="form-control" name="contactTelephone" [(ngModel)]="options.contactTelephone"
+                            maxlength="255" novalidate autocomplete="off" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Email Contatto</label>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="contactEmail" [(ngModel)]="options.contactEmail"
+                            maxlength="255" novalidate autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-8">
                     <label>Indirizzo</label>
                     <div class="form-group">

@@ -17,36 +17,36 @@ import { TicketCounter } from '../services/tickets/models';
 export class MenuComponent extends BaseComponent implements OnInit {
 
     readonly dropDownMenuEntry = DropDownMenuEntry;
-    readonly menu: Menu = new Menu(
+    readonly menu: Menu = new Menu( 
         [
             new DropDownMenuEntry('Anagrafiche', [
                 new MenuEntry(['/customers'], 'Clienti',
                     e => e.startsWith('/customers'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/suppliers'], 'Fornitori',
                     e => e.startsWith('/suppliers'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/checklist'], 'Checklist',
                     e => e.startsWith('/checklist'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/products'], 'Prodotti',
                     e => e.startsWith('/products'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/vehicles'], 'Mezzi di trasporto',
                     e => e.startsWith('/vehicles'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/activitytypes'], 'Tipologie Attività',
                     e => e.startsWith('/activitytypes'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/producttypes'], 'Tipi Prodotto',
                     e => e.startsWith('/producttypes'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new MenuEntry(['/tickets'], 'Tickets',
@@ -56,8 +56,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
             new DropDownMenuEntry('Pianificazione', [
                 new MenuEntry(['/jobs'], 'Commesse',
                     e => e.startsWith('/jobs'),
-                    e => e.isAuthenticated()
-                    //e => e.isAuthorized(Role.Administrator)
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/activities'], 'Attività',
                     e => e.startsWith('/activities'),
@@ -65,25 +64,25 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 ),
                 new MenuEntry(['/interventions'], 'Calendario',
                     e => e === '/interventions',
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/interventions-list'], 'Elenco Interventi',
                     e => e.startsWith('/interventions-list'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new MenuEntry(['/purchase-orders'], 'Ordini Acquisto',
                 e => e.startsWith('/purchase-orders'),
-                e => e.isAuthenticated()
+                e => e.isAuthorized(Role.Administrator)
             ),
             new DropDownMenuEntry('Gestione', [
                 new MenuEntry(['/operators'], 'Operatori',
                     e => e.startsWith('/operators'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 ),
                 new MenuEntry(['/users'], 'Utenti',
                     e => e.startsWith('/users'),
-                    e => e.isAuthenticated()
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new MenuEntry(['/logout'], 'Logout',

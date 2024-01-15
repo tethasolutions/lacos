@@ -5,6 +5,8 @@ using Lacos.GestioneCommesse.Domain;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Lacos.GestioneCommesse.Dal;
@@ -162,6 +164,7 @@ public class LacosDbContext : DbContext, ILacosDbContext
     {
         ApplyConfigurations(modelBuilder);
         ConfigureQueryFilters(modelBuilder);
+        ConfigureDbFunctions(modelBuilder);
 
         base.OnModelCreating(modelBuilder);
     }
@@ -169,6 +172,31 @@ public class LacosDbContext : DbContext, ILacosDbContext
     private static void ApplyConfigurations(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LacosDbContext).Assembly);
+    }
+
+    private static void ConfigureDbFunctions(ModelBuilder modelBuilder)
+    {
+        // CONCAT(REPLICATE(0, length - LEN(Number)), Number, '/', Year)
+        modelBuilder.HasDbFunction(typeof(CustomDbFunctions).GetMethod(nameof(CustomDbFunctions.FormatCode))!)
+            .HasTranslation(args =>
+            {
+                var stringType = new StringTypeMapping("nvarchar", DbType.String);
+                var intType = new IntTypeMapping("int");
+                // LEN(number)
+                var numberLen = new SqlFunctionExpression("LEN", new[] { args[0] }, false, new[] { false }, typeof(int), intType);
+                // length - LEN(number)
+                var zeroCount = new SqlBinaryExpression(ExpressionType.Subtract, args[2], numberLen, typeof(int), intType);
+                // 0
+                var zero = new SqlConstantExpression(Expression.Constant(0), intType);
+                // REPLICATE(0, 3 - LEN(number))
+                var replicate = new SqlFunctionExpression("REPLICATE", new SqlExpression[] { zero, zeroCount }, false, new[] { false, false }, typeof(string), stringType);
+                // '/'
+                var slash = new SqlConstantExpression(Expression.Constant("/"), stringType);
+                // CONCAT(REPLICATE(0, 3 - LEN(Number)), Number, '/', Year)
+                var concat = new SqlFunctionExpression("CONCAT", new [] { replicate, args[0], slash, args[1] }, false, new[] { false, false, false, false }, typeof(string), stringType);
+
+                return concat;
+            });
     }
 
     private void ConfigureQueryFilters(ModelBuilder modelBuilder)
@@ -338,5 +366,13 @@ public class LacosDbContext : DbContext, ILacosDbContext
         {
             return node == oldValue ? newValue : base.Visit(node);
         }
+    }
+}
+
+public static class CustomDbFunctions
+{
+    public static string FormatCode(int number, int year, [NotParameterized] int length)
+    {
+        throw new NotSupportedException();
     }
 }

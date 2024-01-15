@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Extensions;
 
@@ -28,7 +29,7 @@ public class JobMappingProfile : Profile
     {
         CreateMap<Job, JobReadModel>()
             .MapMember(x => x.Address, y => y.Address != null ? y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
-            .MapMember(x => x.Code, y => y.Number.ToString() + "/" + y.Year.ToString())
+            .MapMember(x => x.Code, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3))
             .MapMember(x => x.Date, y => y.JobDate)
             .MapMember(x => x.Customer, y => y.Customer!.Name)
             .MapMember(x => x.Status, StatusExpression)

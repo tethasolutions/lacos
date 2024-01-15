@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Extensions;
 
@@ -21,10 +22,10 @@ public class ActivityMappingProfile : Profile
                     .All(i => i.Status == InterventionStatus.Scheduled)
             )
             .MapMember(x => x.Number, y => y.RowNumber)
-            .MapMember(x => x.JobCode, y => y.Job!.Number.ToString("000") + "/" + y.Job!.Year.ToString())
+            .MapMember(x => x.JobCode, y => CustomDbFunctions.FormatCode(y.Job!.Number, y.Job.Year, 3))
             .MapMember(x => x.JobReference, y => y.Job!.Reference)
             .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
-            .MapMember(x => x.Customer, y => (y.Job!.Customer == null) ? null : y.Job!.Customer.Name)
+            .MapMember(x => x.Customer, y => y.Job!.Customer == null ? null : y.Job.Customer.Name)
             .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex)
             .MapMember(x => x.LastOperator, y => y.EditedBy);
 

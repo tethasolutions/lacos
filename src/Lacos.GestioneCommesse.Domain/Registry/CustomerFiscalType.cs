@@ -3,5 +3,7 @@
 public enum CustomerFiscalType
 {
     PrivatePerson,
-    Company
+    Company,
+    PublicAdministration,
+    Foreign
 }

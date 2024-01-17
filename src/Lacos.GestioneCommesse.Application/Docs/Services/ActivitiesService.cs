@@ -10,6 +10,7 @@ using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq.Expressions;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -21,6 +22,7 @@ public class ActivitiesService : IActivitiesService
     private readonly IRepository<ActivityProduct> activityProductRepository;
     private readonly IRepository<ActivityAttachment> activityAttachmentRepository;
     private readonly IRepository<Product> productRepository;
+    private readonly IRepository<Job> jobRepository;
     private readonly ILacosSession session;
 
     public ActivitiesService(
@@ -29,6 +31,7 @@ public class ActivitiesService : IActivitiesService
         ILacosDbContext dbContext,
         IRepository<ActivityProduct> activityProductRepository,
         IRepository<Product> productRepository,
+        IRepository<Job> jobRepository,
         ILacosSession session, 
         IRepository<ActivityAttachment> activityAttachmentRepository
     )
@@ -39,6 +42,7 @@ public class ActivitiesService : IActivitiesService
         this.activityProductRepository = activityProductRepository;
         this.activityAttachmentRepository= activityAttachmentRepository;
         this.productRepository = productRepository;
+        this.jobRepository = jobRepository;
         this.session = session;
     }
 
@@ -57,8 +61,6 @@ public class ActivitiesService : IActivitiesService
                     e.Interventions.Any(i => i.Operators.Any(o => o.Id == user.OperatorId))
                 );
         }
-
-        var cont = query.Where(e => e.TypeId == 18).Count();
 
         return query
             .Project<ActivityReadModel>(mapper);
@@ -168,6 +170,40 @@ public class ActivitiesService : IActivitiesService
         if (activity.Attachment != null && string.IsNullOrEmpty(activityDto.AttachmentFileName) && string.IsNullOrEmpty(activityDto.AttachmentDisplayName))
         {
             activity.Attachment = null;
+        }
+
+        await dbContext.SaveChanges();
+
+        var job  = await jobRepository.Query()
+            .Where(x => x.Id == activity.JobId)
+            .SingleOrDefaultAsync();
+
+        if (job != null && job.Status != JobStatus.Completed)
+        {
+            var status = await jobRepository.Query()
+            .Where(x => x.Id == activity.JobId)
+            .Select(j => j.Activities.Any() &&
+                j.Activities.All(a => a.Status == ActivityStatus.Completed)
+                ?
+                    JobStatus.Billing
+                : j.Activities.Any(a => a.Status == ActivityStatus.InProgress)
+                    ?
+                    JobStatus.InProgress
+                    :
+                    !j.Activities
+                        .SelectMany(a => a.Interventions)
+                        .Any()
+                        ? JobStatus.Pending
+                        : j.Activities
+                            .SelectMany(a => a.Interventions)
+                            .Any(i => i.Status == InterventionStatus.Scheduled)
+                            ? JobStatus.InProgress
+                            : JobStatus.Billing)
+            .SingleAsync(); 
+
+            job.Status = status;
+
+            jobRepository.Update(job);
         }
 
         await dbContext.SaveChanges();

@@ -51,8 +51,8 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
-                    <div class="row" *ngIf="selectedActivityType?.isExternal">
+                <div class="col-md-6" *ngIf="selectedActivityType?.isExternal">
+                    <div class="row">
                         <div class="col-md-12">
                             <label>Fornitore</label>
                             <kendo-formfield class="form-group">
@@ -128,7 +128,7 @@
                 <div class="col-md-12">
                     <label>Note</label>
                     <div class="form-group">
-                        <kendo-editor name="description" [(ngModel)]="options.activity.description">
+                        <kendo-editor name="description" [(ngModel)]="options.activity.description" [resizable]="true">
                             <kendo-toolbar>
                                 <kendo-toolbar-button kendoEditorSelectAllButton></kendo-toolbar-button>
                                 <kendo-toolbar-buttongroup>

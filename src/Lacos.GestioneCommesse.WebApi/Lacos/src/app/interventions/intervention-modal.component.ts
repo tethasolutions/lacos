@@ -180,7 +180,7 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
                 logic: 'and'
             },
             sort: [
-                { field: 'code', dir: 'desc' }
+                { field: 'date', dir: 'asc' }
             ]
         };
 
@@ -246,7 +246,7 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
                 logic: 'and'
             },
             sort: [
-                { field: 'code', dir: 'asc' },
+                { field: 'date', dir: 'asc' },
                 { field: 'name', dir: 'asc' }
             ]
         };

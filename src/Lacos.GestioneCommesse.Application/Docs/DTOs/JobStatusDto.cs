@@ -4,5 +4,6 @@ public enum JobStatusDto
 {
     Pending,
     InProgress,
-    Completed
+    Completed,
+    Billing
 }

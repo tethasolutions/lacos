@@ -16,6 +16,8 @@ public class Job : FullAuditedEntity
 
     public long? AddressId { get; set; }
     public Address? Address { get; set; }
+
+    public JobStatus Status { get; set; }
     
     //InternalJob for ticket issues
     public bool IsInternalJob { get; set; }

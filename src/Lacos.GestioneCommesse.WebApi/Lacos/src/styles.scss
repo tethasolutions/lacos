@@ -343,6 +343,9 @@ app-jobs {
         @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
     }
 
+    .job-billing .job-status {
+        @include striped-background(rgba(150, 85, 164, 0.384), rgba(125, 58, 232, 0.203));
+    }
 }
 
 app-purchase-orders {

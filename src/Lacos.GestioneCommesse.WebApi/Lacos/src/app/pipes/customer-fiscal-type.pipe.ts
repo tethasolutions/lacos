@@ -13,6 +13,10 @@ export class CustomerFiscalTypePipe extends BaseComponent implements PipeTransfo
                 return 'Azienda';
             case CustomerFiscalTypeEnum.PrivatePerson:
                 return 'Privato';
+            case CustomerFiscalTypeEnum.PublicAdministration:
+                return 'Pubblica Amministrazione';
+            case CustomerFiscalTypeEnum.Foreign:
+                return 'Estero';
             default:
                 return value;
         }

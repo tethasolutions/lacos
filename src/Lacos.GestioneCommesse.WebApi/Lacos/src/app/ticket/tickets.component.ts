@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridComponent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
+import { CellClickEvent, GridComponent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { TicketsService } from '../services/tickets/tickets.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -36,11 +36,12 @@ export class TicketsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'code', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'asc' }]
     };
     expandedDetailKeys = new Array<number>();
 
     readonly ticketStatusNames = ticketStatusNames;
+    private cellArgs: CellClickEvent;
 
     constructor(
         private readonly _service: TicketsService,
@@ -84,6 +85,25 @@ export class TicketsComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+
+    onDblClick(): void {
+        if (!this.cellArgs.isEdited) {
+            this._subscriptions.push(
+                this._service.get(this.cellArgs.dataItem.id)
+                    .pipe(
+                        switchMap(e => this.ticketModal.open(e)),
+                        filter(e => e),
+                        switchMap(() => this._service.update(this.ticketModal.options)),
+                        tap(e => this._afterSaved(e))
+                    )
+                    .subscribe()
+            );
+        }
+    }
+    
+    cellClickHandler(args: CellClickEvent): void {
+        this.cellArgs = args;
     }
 
     askRemove(ticket: ITicketReadModel) {

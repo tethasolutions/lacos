@@ -46,7 +46,7 @@ public class JobsService : IJobsService
             jobDto.Year = DateTime.Now.Year;
             jobDto.Reference = "Ticket " + DateTime.Now.Year.ToString();
             jobDto.Date = DateTime.Now;
-            jobDto.Status = JobStatusDto.Pending;
+            jobDto.Status = JobStatus.Pending;
             jobDto.Description = " ";
 
             var job = jobDto.MapTo<Job>(mapper);
@@ -85,6 +85,7 @@ public class JobsService : IJobsService
         var number = await GetNextNumber(job.JobDate.Year);
 
         job.SetCode(job.JobDate.Year, number);
+        if (job.Description == null) job.Description = " ";
 
         await repository.Insert(job);
 

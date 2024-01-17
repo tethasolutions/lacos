@@ -160,7 +160,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
                 logic: 'and'
             },
             sort: [
-                { field: 'code', dir: 'desc' }
+                { field: 'date', dir: 'asc' }
             ]
         };
 

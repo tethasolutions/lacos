@@ -1,4 +1,6 @@
-﻿namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
+﻿using Lacos.GestioneCommesse.Domain.Docs;
+
+namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
 
 public class JobReadModel
 {
@@ -8,7 +10,7 @@ public class JobReadModel
     public string? Description { get; set; }
     public string? Reference { get; set; }
     public bool HasHighPriority { get; set; }
-    public JobStatusDto Status { get; set; }
+    public JobStatus Status { get; set; }
     public long CustomerId { get; set; }
     public string? Customer { get; set; }
     public long? AddressId { get; set; }

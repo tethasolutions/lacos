@@ -32,7 +32,7 @@ public class JobMappingProfile : Profile
             .MapMember(x => x.Code, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3))
             .MapMember(x => x.Date, y => y.JobDate)
             .MapMember(x => x.Customer, y => y.Customer!.Name)
-            .MapMember(x => x.Status, StatusExpression)
+            //.MapMember(x => x.Status, StatusExpression)
             .MapMember(x => x.CanBeRemoved, y =>
                 y.Activities
                     .SelectMany(a => a.Interventions)

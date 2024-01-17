@@ -13,7 +13,7 @@
 
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-    scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback">
+    scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()">
 
     <kendo-grid-column field="date" title="Data" filter="date" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -54,10 +54,6 @@
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex flex-column gap-2">
                 <div class="d-flex text-nowrap justify-content-center gap-1">
-                    <button class="btn btn-primary btn-sm" title="Aggiungi nuovo ordine d'acquisto"
-                        (click)="createPurchaseOrder(dataItem)">
-                        <i class="fa fa-file-circle-plus"></i>
-                    </button>
                     <button class="btn btn-primary btn-sm" title="Aggiungi nuova attività"
                         (click)="createActivity(dataItem)">
                         <i class="fa fa-plus"></i>
@@ -66,18 +62,25 @@
                         [queryParams]="{jobId: dataItem.id}">
                         <i class="fas fa-external-link"></i>
                     </a>
+                    <button class="btn btn-primary btn-sm" title="Aggiungi nuovo ordine d'acquisto"
+                        (click)="createPurchaseOrder(dataItem)">
+                        <i class="fa fa-file-circle-plus"></i>
+                    </button>
                 </div>
                 <div class="d-flex text-nowrap justify-content-center gap-1">
+                    <button class="btn btn-secondary btn-sm" title="Visualizza allegati" (click)="openAttachments(dataItem)">
+                        <i class="fa fa-paperclip"></i>
+                    </button>
                     <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
                         <i class="fas fa-copy"></i>
                     </button>
                     <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
+                    <!-- <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
                         (click)="askRemove(dataItem)">
                         <i class="fas fa-trash"></i>
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </ng-template>

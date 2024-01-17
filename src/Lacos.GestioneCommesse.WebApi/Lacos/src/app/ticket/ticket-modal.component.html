@@ -78,7 +78,7 @@
                 <div class="col-md-12">
                     <label>Note</label>
                     <div class="form-group">
-                        <kendo-editor name="description" [(ngModel)]="options.description" required>
+                        <kendo-editor name="description" [(ngModel)]="options.description" required [resizable]="true">
                             <kendo-toolbar>
                                 <kendo-toolbar-button kendoEditorSelectAllButton></kendo-toolbar-button>
                                 <kendo-toolbar-buttongroup>

@@ -51,6 +51,21 @@
                         <div class="validation-message" [control]="form.controls['hasHighPriority']"></div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <label>Stato</label>
+                    <div class="form-group">
+                        <kendo-dropdownlist [data]="states" [valuePrimitive]="true" name="status"
+                            [(ngModel)]="options.status" required>
+                            <ng-template kendoDropDownListValueTemplate let-dataItem>
+                                {{dataItem | jobStatus}}
+                            </ng-template>
+                            <ng-template kendoDropDownListItemTemplate let-dataItem>
+                                {{dataItem | jobStatus}}
+                            </ng-template>
+                        </kendo-dropdownlist>
+                        <div class="validation-message" [control]="form.controls['status']"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -100,7 +115,7 @@
                 <div class="col-md-12">
                     <label>Note</label>
                     <div class="form-group">
-                        <kendo-editor name="description" [(ngModel)]="options.description">
+                        <kendo-editor name="description" [(ngModel)]="options.description" [resizable]="true">
                             <kendo-toolbar>
                                 <kendo-toolbar-button kendoEditorSelectAllButton></kendo-toolbar-button>
                                 <kendo-toolbar-buttongroup>
@@ -136,6 +151,9 @@
             <div class="d-flex justify-content-end gap-2 mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">
                     Annulla
+                </button>
+                <button *ngIf="options.id != null" type="button" class="btn btn-danger me-2" title="Elimina" (click)="deleteJob()">
+                    <i class="fas fa-trash"></i>
                 </button>
                 <button type="submit" class="btn btn-primary">
                     Salva

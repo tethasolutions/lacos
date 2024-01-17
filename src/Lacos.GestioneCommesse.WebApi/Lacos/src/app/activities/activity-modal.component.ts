@@ -179,7 +179,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 logic: 'and'
             },
             sort: [
-                { field: 'code', dir: 'desc' }
+                { field: 'date', dir: 'asc' }
             ]
         };
 

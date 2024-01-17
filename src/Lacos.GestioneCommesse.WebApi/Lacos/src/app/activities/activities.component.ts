@@ -33,7 +33,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'expirationDate', dir: 'desc' }]
+        sort: [{ field: 'expirationDate', dir: 'asc' }]
     };
 
     private _jobId: number;

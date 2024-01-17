@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
-import { Job } from '../services/jobs/models';
+import { Job, JobStatus } from '../services/jobs/models';
 import { filter, map, switchMap, tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
@@ -12,6 +12,8 @@ import { AddressesService } from '../services/addresses.service';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
 import { AddressModel } from '../shared/models/address.model';
 import { WindowState } from '@progress/kendo-angular-dialog';
+import { JobsService } from '../services/jobs/jobs.service';
+import { listEnum } from '../services/common/functions';
 
 @Component({
     selector: 'app-job-modal',
@@ -27,8 +29,11 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     addresses: AddressModel[];
     public windowState: WindowState = "default";
 
+    readonly states = listEnum<JobStatus>(JobStatus);
+
     constructor(
         private readonly _customersService: CustomerService,
+        private readonly _service: JobsService,
         private readonly _messageBox: MessageBoxService,
         private readonly _addressesService: AddressesService
     ) {
@@ -144,4 +149,20 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
                     .subscribe()
             );
     }
+    
+    deleteJob() {
+        this._messageBox.confirm(`Sei sicuro di voler cancellare la commessa?`, 'Conferma l\'azione').subscribe(result => {
+          if (result == true) {
+            this._subscriptions.push(
+              this._service.delete(this.options.id)
+                .pipe(
+                  tap(e => this._messageBox.success(`Commessa cancellata con successo`)),
+                  tap(() => this.dismiss())
+                )
+                .subscribe()
+            );
+          }
+        });
+      }
+
 }

@@ -4,12 +4,6 @@
             Utenti
         </h3>
     </div>
-    <div class="col-auto">
-        <button (click)="create()" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i>
-            NUOVO
-        </button>
-    </div>
 </div>
 
 <kendo-grid [data]="data" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"

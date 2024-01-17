@@ -1,4 +1,6 @@
 export enum CustomerFiscalTypeEnum {
     PrivatePerson,
-    Company
+    Company,
+    PublicAdministration,
+    Foreign
 }

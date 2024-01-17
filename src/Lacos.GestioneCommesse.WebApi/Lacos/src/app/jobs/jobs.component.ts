@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridComponent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
+import { CellClickEvent, GridComponent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { JobsService } from '../services/jobs/jobs.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -54,10 +54,11 @@ export class JobsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'asc' }]
     };
 
     readonly jobStatusNames = jobStatusNames;
+    private cellArgs: CellClickEvent;
 
     constructor(
         private readonly _service: JobsService,
@@ -98,12 +99,33 @@ export class JobsComponent extends BaseComponent implements OnInit {
             this._service.get(job.id)
                 .pipe(
                     switchMap(e => this.jobModal.open(e)),
+                    tap(e => !e && this._read()),
                     filter(e => e),
                     switchMap(() => this._service.update(this.jobModal.options)),
                     tap(e => this._afterSaved(e))
                 )
                 .subscribe()
         );
+    }
+
+    onDblClick(): void {
+        if (!this.cellArgs.isEdited) {
+            this._subscriptions.push(
+                this._service.get(this.cellArgs.dataItem.id)
+                    .pipe(
+                        switchMap(e => this.jobModal.open(e)),
+                        tap(e => !e && this._read()),
+                        filter(e => e),
+                        switchMap(() => this._service.update(this.jobModal.options)),
+                        tap(e => this._afterSaved(e))
+                    )
+                    .subscribe()
+            );
+        }
+    }
+
+    cellClickHandler(args: CellClickEvent): void {
+        this.cellArgs = args;
     }
 
     copyJob(job: IJobReadModel) {
@@ -167,6 +189,10 @@ export class JobsComponent extends BaseComponent implements OnInit {
         );
     }
 
+    openAttachments(job: IJobReadModel) {
+
+    }
+
     private _afterActivityCreated(jobId: number) {
         this._messageBox.success('Attività creata.');
         this.router.navigate(['/activities'], { queryParams: { jobId: jobId } });
@@ -212,6 +238,8 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 return { 'job-inprogress': true };
             case job.status === JobStatus.Pending:
                 return { 'job-pending': true };
+            case job.status === JobStatus.Billing:
+                return { 'job-billing': true };
             default:
                 return {};
         }

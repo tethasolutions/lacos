@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
+import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
@@ -35,10 +35,11 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'code', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'asc' }]
     };
 
     private _jobId: number;
+    private cellArgs: CellClickEvent;
 
     readonly purchaseOrderStatusNames = purchaseOrderStatusNames;
 
@@ -101,6 +102,26 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+
+    onDblClick(): void {
+        if (!this.cellArgs.isEdited) {
+            this._subscriptions.push(
+                this._service.get(this.cellArgs.dataItem.id)
+                    .pipe(
+                        map(e => new PurchaseOrderModalOptions(e)),
+                        switchMap(e => this.purchaseOrderModal.open(e)),
+                        filter(e => e),
+                        switchMap(() => this._service.update(this.purchaseOrderModal.options.purchaseOrder)),
+                        tap(() => this._afterPurchaseOrderUpdated())
+                    )
+                    .subscribe()
+            );
+        }
+    }
+    
+    cellClickHandler(args: CellClickEvent): void {
+        this.cellArgs = args;
     }
 
     readonly rowCallback = (context: RowClassArgs) => {

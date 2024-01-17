@@ -27,7 +27,6 @@ public class InterventionMappingProfile : Profile
 
         CreateMap<InterventionDto, Intervention>()
             .IgnoreCommonMembers()
-            .Ignore(x => x.Status)
             .Ignore(x => x.FinalNotes)
             .Ignore(x => x.ReportFileName)
             .Ignore(x => x.ReportGeneratedOn)

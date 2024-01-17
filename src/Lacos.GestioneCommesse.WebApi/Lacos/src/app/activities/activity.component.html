@@ -60,13 +60,21 @@
     </div>
     <div class="col-2">
         <b>
+            Referente
+        </b>
+        <p>
+            {{activity.referent}}
+        </p>
+    </div>
+    <div class="col-2">
+        <b>
             Allegato
         </b>
         <p>
             <a (click)="downloadAttachment()">{{ activity.attachmentDisplayName }}</a>
         </p>
     </div>
-    <div class="col-10">
+    <div class="col-8">
         <b>
             Note
         </b>

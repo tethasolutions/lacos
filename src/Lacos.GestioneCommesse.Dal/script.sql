@@ -2545,3 +2545,72 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240116135246_job status')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [Status] int NOT NULL DEFAULT 0;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240116135246_job status')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240116135246_job status', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117154213_activity referent')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [ReferentId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117154213_activity referent')
+BEGIN
+    CREATE INDEX [IX_Activities_ReferentId] ON [Docs].[Activities] ([ReferentId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117154213_activity referent')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD CONSTRAINT [FK_Activities_Operators_ReferentId] FOREIGN KEY ([ReferentId]) REFERENCES [Registry].[Operators] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117154213_activity referent')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240117154213_activity referent', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117161709_update activity status')
+BEGIN
+    UPDATE [Docs].[Activities] SET Status = 1 WHERE Status = 2; UPDATE [Docs].[Activities] SET Status = 2 WHERE Status = 3; 
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117161709_update activity status')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240117161709_update activity status', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

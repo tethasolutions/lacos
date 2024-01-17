@@ -300,12 +300,8 @@ app-activities {
         @include striped-background(rgba(255, 193, 7, .3), rgba(255, 193, 7, .1));
     }
 
-    .activity-ready-for-completion .activity-status {
-        @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
-    }
-
     .activity-in-progress .activity-status {
-        @include striped-background(rgba(136, 215, 39, 0.3), rgba(147, 211, 9, 0.1));
+        @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
     }
 }
 

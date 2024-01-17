@@ -19,6 +19,8 @@ import { ActivityAttachmentUploadFileModel } from '../services/activities/activi
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { SupplierModel } from '../shared/models/supplier.model';
 import { SupplierService } from '../services/supplier.service';
+import { OperatorModel } from '../shared/models/operator.model';
+import { OperatorsService } from '../services/operators.service';
 
 @Component({
     selector: 'app-activity-modal',
@@ -39,6 +41,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     selectedJob: SelectableJob;
     suppliers: SupplierModel[];
     addresses: AddressModel[];
+    operators: OperatorModel[];
 
     isUploaded: boolean;
     attachments: Array<FileInfo> = [];
@@ -54,7 +57,8 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         private readonly _messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _suppliersService: SupplierService,
-        private readonly _addressesService: AddressesService
+        private readonly _addressesService: AddressesService,
+        private readonly _operatorsService: OperatorsService
     ) {
         super();
     }
@@ -62,6 +66,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     ngOnInit() {
         this._getActivityTypes();
         this._getSuppliers();
+        this._getOperators();
     }
 
     onJobChanged() {
@@ -166,6 +171,22 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 )
                 .subscribe()
         );
+    }
+
+    private _getOperators() {
+        const state: State = {
+            sort: [
+                { field: 'name', dir: 'asc' }
+            ]
+        };
+
+        this._subscriptions.push(
+            this._operatorsService.readOperators(state)
+                .pipe(
+                    tap(e => this.operators = e.data as OperatorModel[])
+                )
+                .subscribe()
+        )
     }
 
     private _setData(suppliers: SupplierModel[]) {

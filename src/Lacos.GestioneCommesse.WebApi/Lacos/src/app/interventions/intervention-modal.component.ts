@@ -16,6 +16,7 @@ import { OperatorModel } from '../shared/models/operator.model';
 import { ApiUrls } from '../services/common/api-urls';
 import { IActivityProductReadModel } from '../services/activity-products/models';
 import { ActivityProductsService } from '../services/activity-products/activity-products.service';
+import { listEnum } from '../services/common/functions';
 
 @Component({
     selector: 'app-intervention-modal',
@@ -40,6 +41,8 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
 
     private readonly _searchProductsValueChange = new Subject<string>();
     private readonly _onSearchProductsValueChange = this._searchProductsValueChange.asObservable();
+    
+    readonly states = listEnum<InterventionStatus>(InterventionStatus);
 
     constructor(
         private readonly _jobsService: JobsService,
@@ -246,7 +249,6 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
                 logic: 'and'
             },
             sort: [
-                { field: 'date', dir: 'asc' },
                 { field: 'name', dir: 'asc' }
             ]
         };
@@ -284,7 +286,7 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
     private _getOperators() {
         const state: State = {
             sort: [
-                { field: 'name', dir: 'desc' }
+                { field: 'name', dir: 'asc' }
             ]
         };
 

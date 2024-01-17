@@ -130,8 +130,6 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                 return { 'activity-completed': true };
             case activity.status === ActivityStatus.Pending:
                 return { 'activity-pending': true };
-            case activity.status === ActivityStatus.ReadyForCompletion:
-                return { 'activity-ready-for-completion': true };
             case activity.status === ActivityStatus.InProgress:
                 return { 'activity-in-progress': true };
             case activity.status != ActivityStatus.Completed && !!activity.expirationDate && new Date(activity.expirationDate).addDays(1).isPast():
@@ -233,7 +231,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             get filters() {
                 return that._jobId
                     ? undefined
-                    : [ActivityStatus.Pending, ActivityStatus.InProgress, ActivityStatus.ReadyForCompletion]
+                    : [ActivityStatus.Pending, ActivityStatus.InProgress]
                         .map(e => ({ field: 'status', operator: 'eq', value: e }))
             },
             logic: 'or'

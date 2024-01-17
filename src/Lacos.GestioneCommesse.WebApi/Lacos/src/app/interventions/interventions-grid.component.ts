@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
-import { GridDataResult } from '@progress/kendo-angular-grid';
+import { CellClickEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { filter, switchMap, tap } from 'rxjs';
@@ -29,6 +29,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
     readonly interventionRemoved = new EventEmitter<number>();
 
     readonly interventionStatusNames = interventionStatusNames;
+    private cellArgs: CellClickEvent;
 
     data: GridDataResult;
     gridState: State = {
@@ -102,9 +103,28 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
         );
     }
 
+    onDblClick(): void {
+        if (!this.cellArgs.isEdited) {
+            this._subscriptions.push(
+                this._service.get(this.cellArgs.dataItem.id)
+                    .pipe(
+                        switchMap(e => this.interventionModal.open(e)),
+                        filter(e => e),
+                        switchMap(() => this._service.update(this.interventionModal.options)),
+                        tap(e => this._afterUpdated(e))
+                    )
+                    .subscribe()
+            )
+        }
+    }
+
+    cellClickHandler(args: CellClickEvent): void {
+        this.cellArgs = args;
+    }
+
     downloadReport(interventionId: number) {
         const user = this._userService.getUser();
-        window.open(`${ApiUrls.baseApiUrl}/interventions/download-report/${interventionId}?access_token=${user.accessToken}`,"_blank");
+        window.open(`${ApiUrls.baseApiUrl}/interventions/download-report/${interventionId}?access_token=${user.accessToken}`, "_blank");
     }
 
     protected _read() {

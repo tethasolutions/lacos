@@ -18,7 +18,7 @@ export class InterventionsComponent extends BaseComponent {
 
     @ViewChild('interventionModal', { static: true })
     interventionModal: InterventionModalComponent;
-
+    
     constructor(
         private readonly _service: InterventionsService,
         private readonly _messageBox: MessageBoxService

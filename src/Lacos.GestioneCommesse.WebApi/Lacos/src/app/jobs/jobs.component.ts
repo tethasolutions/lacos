@@ -46,7 +46,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
         filter: {
             filters: [
                 {
-                    filters: [JobStatus.Pending, JobStatus.InProgress]
+                    filters: [JobStatus.Pending, JobStatus.InProgress, JobStatus.Billing]
                         .map(e => ({ field: 'status', operator: 'eq', value: e })),
                     logic: 'or'
                 }

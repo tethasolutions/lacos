@@ -85,4 +85,20 @@ export class ActivityTypesService {
                 )
             );
     }
+
+    readActivityTypesListCalendar() {
+        return this._http.get<Array<ActivityTypeModel>>(`${this._baseUrl}/activitytypes-list-calendar`)
+            .pipe(
+                map(e =>
+                    {
+                        const activityTypes: Array<ActivityTypeModel> = [];
+                        e.forEach(item => {
+                            const activityType: ActivityTypeModel = Object.assign(new ActivityTypeModel(), item);
+                            activityTypes.push(activityType);
+                        });
+                        return activityTypes;
+                    }
+                )
+            );
+    }
 }

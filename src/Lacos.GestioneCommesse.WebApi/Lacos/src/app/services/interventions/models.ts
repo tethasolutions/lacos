@@ -26,7 +26,7 @@ export class Intervention {
         readonly id: number,
         start: string | Date,
         end: string | Date,
-        readonly status: InterventionStatus,
+        public status: InterventionStatus,
         public description: string,
         public vehicleId: number,
         public activityId: number,

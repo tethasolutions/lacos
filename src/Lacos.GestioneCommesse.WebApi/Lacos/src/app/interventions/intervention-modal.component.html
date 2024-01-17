@@ -1,11 +1,14 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="30">
+    <kendo-window (close)="dismiss()" [resizable]="true" [draggable]="true" [top]="30">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Intervento
             </div>
+            <button kendoWindowMinimizeAction></button>
+            <button kendoWindowRestoreAction></button>
+            <button kendoWindowMaximizeAction></button>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
         <form name="intervention-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="trySave()"
@@ -35,7 +38,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Inizio</label>
                     <div class="form-group">
                         <kendo-datetimepicker name="start" [(ngModel)]="options.start" required [steps]="{minute:15}"
@@ -44,13 +47,28 @@
                         <div class="validation-message" [control]="form.controls['start']"></div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Fine</label>
                     <div class="form-group">
                         <kendo-datetimepicker name="end" [(ngModel)]="options.end" required [min]="options.start"
                             [steps]="{minute:15}" [readonly]="readonly">
                         </kendo-datetimepicker>
                         <div class="validation-message" [control]="form.controls['end']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Stato</label>
+                    <div class="form-group">
+                        <kendo-dropdownlist [data]="states" [valuePrimitive]="true" name="status"
+                            [(ngModel)]="options.status" required>
+                            <ng-template kendoDropDownListValueTemplate let-dataItem>
+                                {{dataItem | interventionStatus}}
+                            </ng-template>
+                            <ng-template kendoDropDownListItemTemplate let-dataItem>
+                                {{dataItem | interventionStatus}}
+                            </ng-template>
+                        </kendo-dropdownlist>
+                        <div class="validation-message" [control]="form.controls['status']"></div>
                     </div>
                 </div>
             </div>

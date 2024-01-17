@@ -17,7 +17,7 @@
         <form name="activity-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()">
 
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <label>Numero</label>
                     <div class="form-group">
                         <input class="form-control" name="number" [ngModel]="options.activity.number" novalidate
@@ -36,7 +36,7 @@
                         <div class="validation-message" [control]="form.controls['jobId']"></div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label>Tipologia</label>
                     <div class="form-group">
                         <kendo-combobox [data]="activityTypes" [valuePrimitive]="true" textField="name" valueField="id"
@@ -50,53 +50,61 @@
                 </div>
             </div>
 
+            <div class="row" *ngIf="selectedActivityType?.isExternal">
+                <div class="col-md-6">
+                    <label>Fornitore</label>
+                    <kendo-formfield class="form-group">
+                        <kendo-combobox [data]="suppliers" [valuePrimitive]="true" textField="name" valueField="id"
+                            name="supplierId" [(ngModel)]="options.activity.supplierId" [suggest]="true"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [allowCustom]="false"
+                            [disabled]="!!options.id" (valueChange)="onSupplierChange()">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['supplierId']"></div>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <label>Indirizzo</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress"
+                            class="address-combobox" valueField="id" name="addressId"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            [(ngModel)]="options.activity.addressId" [suggest]="true" [allowCustom]="false">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['addressId']"></div>
+                        <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button"
+                            title="Nuovo indirizzo" *ngIf="!options.activity.supplierId">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="!selectedActivityType?.isExternal && !selectedActivityType?.isInternal">
+                <div class="col-md-6">
+                    <label>Indirizzo</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress"
+                            class="address-combobox" valueField="id" name="addressId"
+                            [(ngModel)]="options.activity.addressId"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['addressId']"></div>
+                        <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button"
+                            title="Nuovo indirizzo">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
-                <div class="col-md-6" *ngIf="selectedActivityType?.isExternal">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label>Fornitore</label>
-                            <kendo-formfield class="form-group">
-                                <kendo-combobox [data]="suppliers" [valuePrimitive]="true" textField="name"
-                                    valueField="id" name="supplierId" [(ngModel)]="options.activity.supplierId"
-                                    [suggest]="true" [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
-                                    [allowCustom]="false" [disabled]="!!options.id" (valueChange)="onSupplierChange()">
-                                </kendo-combobox>
-                                <div class="validation-message" [control]="form.controls['supplierId']"></div>
-                            </kendo-formfield>
-                        </div>
-                        <div class="col-md-12">
-                            <label>Indirizzo</label>
-                            <div class="form-group">
-                                <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress"
-                                    class="address-combobox" valueField="id" name="addressId"
-                                    [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
-                                    [(ngModel)]="options.activity.addressId" [suggest]="true" [allowCustom]="false">
-                                </kendo-combobox>
-                                <div class="validation-message" [control]="form.controls['addressId']"></div>
-                                <button (click)="createAddress()" type="button"
-                                    class="btn btn-primary add-address-button" title="Nuovo indirizzo"
-                                    *ngIf="!options.activity.supplierId">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="!selectedActivityType?.isExternal && !selectedActivityType?.isInternal">
-                        <label>Indirizzo</label>
-                        <div class="form-group">
-                            <kendo-combobox [data]="addresses" [valuePrimitive]="true" textField="fullAddress"
-                                class="address-combobox" valueField="id" name="addressId"
-                                [(ngModel)]="options.activity.addressId"
-                                [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
-                                [required]="!selectedActivityType?.isInternal" [suggest]="true" [allowCustom]="false">
-                            </kendo-combobox>
-                            <div class="validation-message" [control]="form.controls['addressId']"></div>
-                            <button (click)="createAddress()" type="button" class="btn btn-primary add-address-button"
-                                title="Nuovo indirizzo">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
+                <div class="col-md-6">
+                    <label>Referente</label>
+                    <kendo-combobox [data]="operators" [valuePrimitive]="true" textField="name" valueField="id"
+                        name="referentId" [(ngModel)]="options.activity.referentId" required [suggest]="true"
+                        [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [allowCustom]="false"
+                        [disabled]="!selectedActivityType?.isExternal && !selectedActivityType?.isInternal">
+                    </kendo-combobox>
                 </div>
                 <div class="col-md-3">
                     <label>Scadenza</label>

@@ -21,4 +21,6 @@ public class ActivityReadModel
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
     public string? LastOperator { get; set; }
+    public long? ReferentId { get; set; }
+    public string? ReferentName { get;set; }
 }

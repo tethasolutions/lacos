@@ -78,15 +78,14 @@ export class ActivitiesService {
     readActivityTypesCounters() {
         return this._http.get<Array<ActivityCounter>>(`${this._baseUrl}/activities-counters`)
             .pipe(
-                map(e =>
-                    {
-                        const activityTypes: Array<ActivityCounter> = [];
-                        e.forEach(item => {
-                            const activityType: ActivityCounter = Object.assign(new ActivityCounter(), item);
-                            activityTypes.push(activityType);
-                        });
-                        return activityTypes;
-                    }
+                map(e => {
+                    const activityTypes: Array<ActivityCounter> = [];
+                    e.forEach(item => {
+                        const activityType: ActivityCounter = Object.assign(new ActivityCounter(), item);
+                        activityTypes.push(activityType);
+                    });
+                    return activityTypes;
+                }
                 )
             );
     }
@@ -94,27 +93,26 @@ export class ActivitiesService {
     createActivityAttachment(request: ActivityAttachmentModel) {
         return this._http.post<ActivityAttachmentModel>(`${this._baseUrl}/create-attachment`, request)
             .pipe(
-            );
+        );
     }
 
     updateActivityAttachment(request: ActivityAttachmentModel, id: number) {
         return this._http.put<void>(`${this._baseUrl}/update-attachment/${id}`, request)
             .pipe(
-            );
-            }
+        );
+    }
 
-    getActivityAttachments( id: number) {
+    getActivityAttachments(id: number) {
         return this._http.get<Array<ActivityAttachmentModel>>(`${this._baseUrl}/${id}/all-attachments`)
             .pipe(
-                map(result =>
-                    {
-                        const activityAttachments: Array<ActivityAttachmentModel> = [];
-                        result.forEach(item => {
-                            const activity: ActivityAttachmentModel = Object.assign(new ActivityAttachmentModel(), item);
-                            activityAttachments.push(activity);
-                        });
-                        return activityAttachments;
-                    }
+                map(result => {
+                    const activityAttachments: Array<ActivityAttachmentModel> = [];
+                    result.forEach(item => {
+                        const activity: ActivityAttachmentModel = Object.assign(new ActivityAttachmentModel(), item);
+                        activityAttachments.push(activity);
+                    });
+                    return activityAttachments;
+                }
                 )
             );
     }
@@ -123,8 +121,8 @@ export class ActivitiesService {
         return this._http.get<ActivityDetail>(`${this._baseUrl}/attachment-detail/${id}`)
             .pipe(
                 map(response => {
-                   const activityAttachment: ActivityDetail = Object.assign(
-                        new ActivityDetail(0, ActivityStatus.Pending, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, null), response);
+                    const activityAttachment: ActivityDetail = Object.assign(
+                        new ActivityDetail(0, ActivityStatus.Pending, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, null, null, null), response);
                     return activityAttachment;
                 })
             );

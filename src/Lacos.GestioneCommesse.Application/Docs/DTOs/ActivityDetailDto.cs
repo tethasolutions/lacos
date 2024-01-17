@@ -21,4 +21,6 @@ public class ActivityDetailDto
     public string? AttachmentDisplayName { get; set; }
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
+    public long? ReferentId { get; set; }
+    public string? Referent { get; set; }
 }

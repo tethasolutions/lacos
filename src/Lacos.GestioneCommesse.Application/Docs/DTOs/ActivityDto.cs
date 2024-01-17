@@ -17,4 +17,5 @@ public class ActivityDto
     public long TypeId { get; set; }
     public string? AttachmentFileName { get; set; }
     public string? AttachmentDisplayName { get; set; }
+    public long? ReferentId { get; set; }
 }

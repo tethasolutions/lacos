@@ -22,6 +22,9 @@ public class Activity : FullAuditedEntity
 
     public long? AddressId { get; set; }
     public Address? Address { get; set; }
+
+    public long? ReferentId { get; set; }
+    public Operator Referent { get; set; }
     
     public ActivityStatus Status { get; set; }
 

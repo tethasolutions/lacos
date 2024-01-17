@@ -27,7 +27,8 @@ public class ActivityMappingProfile : Profile
             .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
             .MapMember(x => x.Customer, y => y.Job!.Customer == null ? null : y.Job.Customer.Name)
             .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex)
-            .MapMember(x => x.LastOperator, y => y.EditedBy);
+            .MapMember(x => x.LastOperator, y => y.EditedBy)
+            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "");
 
         CreateMap<ActivityDto, Activity>()
             .IgnoreCommonMembers()
@@ -40,7 +41,8 @@ public class ActivityMappingProfile : Profile
             .Ignore(x => x.Type)
             .Ignore(x => x.Interventions)
             .Ignore(x => x.ActivityProducts)
-            .Ignore(x => x.Attachment);
+            .Ignore(x => x.Attachment)
+            .Ignore(x => x.Referent);
 
         CreateMap<Activity, ActivityDto>()
             .MapMember(x => x.Number, y => y.RowNumber);

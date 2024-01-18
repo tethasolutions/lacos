@@ -75,6 +75,7 @@ namespace Lacos.GestioneCommesse.Application
                 .IgnoreNavigationPropertyEntity();
             CreateMap<SyncTicketDto, Ticket>()
                 .Ignore(e => e.IsNew)
+                .Ignore(e => e.ActivityId)
                 .IgnoreCommonMembers()
                 .IgnoreNavigationPropertyEntity();
             CreateMap<SyncTicketPictureDto, TicketPicture>()

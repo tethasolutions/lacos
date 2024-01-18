@@ -67,7 +67,7 @@ public class TicketsService : ITicketsService
 
         if (Ticket == null)
         {
-            throw new NotFoundException($"Commessa con Id {TicketDto.Id} non trovata.");
+            throw new NotFoundException($"Ticket con Id {TicketDto.Id} non trovato.");
         }
 
         Ticket = TicketDto.MapTo(Ticket, mapper);

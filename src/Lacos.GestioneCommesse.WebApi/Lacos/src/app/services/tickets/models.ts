@@ -45,13 +45,14 @@ export class Ticket {
         date: Date | string,
         public description: string,
         public status: TicketStatus,
-        public customerId: number
+        public customerId: number,
+        public activityId: number
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: Ticket) {
-        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId);
+        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.activityId);
     }
 
 }

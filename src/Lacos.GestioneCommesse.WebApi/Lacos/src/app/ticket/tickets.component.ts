@@ -8,6 +8,7 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 import { TicketModalComponent } from './ticket-modal.component';
 import { ITicketReadModel, Ticket, TicketStatus, ticketStatusNames } from '../services/tickets/models';
 import { getToday } from '../services/common/functions';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-tickets',
@@ -45,7 +46,8 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     constructor(
         private readonly _service: TicketsService,
-        private readonly _messageBox: MessageBoxService
+        private readonly _messageBox: MessageBoxService,
+        private router: Router
     ) {
         super();
     }
@@ -61,7 +63,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null);
+        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null);
 
         this._subscriptions.push(
             this.ticketModal.open(ticket)
@@ -136,6 +138,10 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     private _afterSaved(ticket: Ticket) {
         this._messageBox.success(`Ticket ${ticket.code} salvata.`);
+
+        if (ticket.activityId != null) {
+            this.router.navigate(['/activities/' + ticket.activityId]);
+        }
 
         this._read();
     }

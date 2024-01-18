@@ -89,6 +89,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._serviceActivity.create(activity)),
+                    tap(e => ticket.activityId = e.id),
                     tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
                     tap(() => this.close())
                 )

@@ -20,6 +20,7 @@ public class TicketMappingProfile : Profile
             .IgnoreCommonMembers()
             .Ignore(x => x.Customer)
             .Ignore(x => x.Job)
+            .Ignore(x => x.Activity)
             .Ignore(x => x.IsNew)
             .MapMember(x => x.TicketDate, (x, y) => y.IsTransient() ? x.Date : y.TicketDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId);

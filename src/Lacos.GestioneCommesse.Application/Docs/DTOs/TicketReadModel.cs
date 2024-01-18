@@ -12,6 +12,7 @@ public class TicketReadModel : BaseEntityDto
     public string? Description { get; set; }
     public TicketStatus Status { get; set; }
     public long? JobId { get; set; }
+    public long? ActivityId { get; set; }
     public long CustomerId { get; set; }
     public string? CustomerName { get; set; }
     //public bool CanBeRemoved { get; set; }

@@ -9,9 +9,9 @@
 
     public enum InterventionProductCheckListItemOutcome
     {
-        Positive,
-        Negative,
-        Unknown
+        Positivo,
+        Negativo,
+        Indefinito
     }
 
     public enum InterventionProductPictureType
@@ -41,6 +41,14 @@
         Company
     }
 
+    public enum SyncState
+    {
+        None,
+        InProgress,
+        Success,
+        Failed,
+        Offline
+    }
     public enum ActivityStatus
     {
         Pending,
@@ -48,4 +56,13 @@
         ReadyForCompletion,
         Completed
     }
+
+    public enum JobStatus
+    {
+        Pending,
+        InProgress,
+        Completed,
+        Billing
+    }
+
 }

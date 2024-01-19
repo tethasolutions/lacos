@@ -1,7 +1,11 @@
-﻿namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
+﻿using Lacos.GestioneCommesse.Contracts.Dtos.Enums;
+
+namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
 {
+
     public class SyncJobDto:SyncBaseDto
     {
+
         public int? Number { get; set; }
         public int? Year { get; set; }
         public DateTimeOffset? JobDate { get; set; }
@@ -11,5 +15,8 @@
         public long? CustomerId { get; set; }
         public long? AddressId { get; set; }
         public bool? IsInternalJob { get; set; }
+        public JobStatus? Status { get; set; }
+
     }
+
 }

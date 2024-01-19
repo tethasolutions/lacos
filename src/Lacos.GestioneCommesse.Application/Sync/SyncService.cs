@@ -49,7 +49,6 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
             var users = await dbContext.ExecuteWithDisabledQueryFilters(() =>
                 userRepository.Query()
-                    .Where(x => x.Role == Role.Operator)
                     .Include(x => x.Operator)
                     .ToListAsync()
             , QueryFilter.SoftDelete); ;

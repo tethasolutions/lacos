@@ -10,6 +10,7 @@ using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
@@ -103,27 +104,18 @@ public class ActivitiesService : IActivitiesService
 
         activity.SetNumber(number);
 
-        if (!string.IsNullOrEmpty(activityDto.AttachmentFileName) && !string.IsNullOrEmpty(activityDto.AttachmentDisplayName))
-        {
-            var activityAttachment = activity.Attachment;
-            if (activityAttachment == null)
-            {
-                activityAttachment = new ActivityAttachment();
-                activityAttachment.ActivityId = activity.Id;
-                activityAttachment.Activity = activity;
-                activityAttachment.DisplayName = activityDto.AttachmentDisplayName;
-                activityAttachment.FileName = activityDto.AttachmentFileName;
-                await activityAttachmentRepository.Insert(activityAttachment);
-
-            }
-            else
-            {
-                activityAttachment.DisplayName = activityDto.AttachmentDisplayName;
-                activityAttachment.FileName = activityDto.AttachmentFileName;
-            }
-        }
-
         await repository.Insert(activity);
+
+        foreach (var file in activity.Attachments)
+        {
+            var activityAttachment = file.MapTo<ActivityAttachment>(mapper);
+            activityAttachment.ActivityId = activity.Id;
+            activityAttachment.Activity = activity;
+            activityAttachment.DisplayName = file.DisplayName;
+            activityAttachment.FileName = file.FileName;
+
+            await activityAttachmentRepository.Insert(activityAttachment);
+        }
 
         await dbContext.SaveChanges();
 
@@ -135,7 +127,7 @@ public class ActivitiesService : IActivitiesService
         var activity = await repository
             .Query()
             .Where(x => x.Id == activityDto.Id)
-            .Include(x => x.Attachment)
+            .Include(x => x.Attachments)
             .SingleOrDefaultAsync();
 
         if (activity == null)
@@ -146,69 +138,10 @@ public class ActivitiesService : IActivitiesService
         activity = activityDto.MapTo(activity, mapper);
 
         repository.Update(activity);
-
-        if (!string.IsNullOrEmpty(activityDto.AttachmentFileName) && !string.IsNullOrEmpty(activityDto.AttachmentDisplayName))
-        {
-            var activityAttachment = activity.Attachment;
-            if (activityAttachment == null)
-            {
-                activityAttachment = new ActivityAttachment();
-                activityAttachment.ActivityId = activity.Id;
-                activityAttachment.Activity = activity;
-                activityAttachment.DisplayName = activityDto.AttachmentDisplayName;
-                activityAttachment.FileName = activityDto.AttachmentFileName;
-                await activityAttachmentRepository.Insert(activityAttachment);
-
-            }
-            else
-            {
-                activityAttachment.DisplayName = activityDto.AttachmentDisplayName;
-                activityAttachment.FileName = activityDto.AttachmentFileName;
-            }
-        }
-
-        if (activity.Attachment != null && string.IsNullOrEmpty(activityDto.AttachmentFileName) && string.IsNullOrEmpty(activityDto.AttachmentDisplayName))
-        {
-            activity.Attachment = null;
-        }
-
-        await dbContext.SaveChanges();
-
-        var job  = await jobRepository.Query()
-            .Where(x => x.Id == activity.JobId)
-            .SingleOrDefaultAsync();
-
-        if (job != null && job.Status != JobStatus.Completed)
-        {
-            var status = await jobRepository.Query()
-            .Where(x => x.Id == activity.JobId)
-            .Select(j => j.Activities.Any() &&
-                j.Activities.All(a => a.Status == ActivityStatus.Completed)
-                ?
-                    JobStatus.Completed
-                : j.Activities.Any(a => a.Status == ActivityStatus.InProgress)
-                    ?
-                    JobStatus.InProgress
-                    :
-                    !j.Activities
-                        .SelectMany(a => a.Interventions)
-                        .Any()
-                        ? JobStatus.Pending
-                        : j.Activities
-                            .SelectMany(a => a.Interventions)
-                            .Any(i => i.Status == InterventionStatus.Scheduled)
-                            ? JobStatus.InProgress
-                            : JobStatus.Completed)
-            .SingleAsync(); 
-
-            job.Status = status;
-
-            jobRepository.Update(job);
-        }
-
         await dbContext.SaveChanges();
 
         return await Get(activity.Id);
+
     }
 
     public async Task Delete(long id)
@@ -329,12 +262,12 @@ public class ActivitiesService : IActivitiesService
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    public async Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long activityId)
+    public async Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long jobId)
     {
         var activityAttachments = await activityAttachmentRepository
             .Query()
             .AsNoTracking()
-            .Where(x => x.ActivityId == activityId)
+            .Where(x => x.Activity.JobId == jobId)
             .OrderBy(x => x.CreatedOn)
             .ToArrayAsync();
 

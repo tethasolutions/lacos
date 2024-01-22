@@ -1,4 +1,5 @@
 import { Dictionary } from '../common/models';
+import { ActivityAttachmentModel } from './activity-attachment.model';
 
 export enum ActivityStatus {
 
@@ -59,7 +60,8 @@ export class Activity {
         public attachmentFileName: string,
         public referentId: number,
         startDate: Date | string,
-        expirationDate: Date | string
+        expirationDate: Date | string,
+        public attachments: ActivityAttachmentModel[]
     ) {
         this.startDate = startDate ? new Date(startDate) : null;
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
@@ -82,7 +84,7 @@ export class Activity {
 
     static build(o: Activity) {
         return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.supplierId, o.addressId, o.typeId, o.attachmentDisplayName,
-            o.attachmentFileName, o.referentId, o.startDate, o.expirationDate);
+            o.attachmentFileName, o.referentId, o.startDate, o.expirationDate, o.attachments);
     }
 
 }
@@ -111,7 +113,8 @@ export class ActivityDetail {
         startDate: Date | string,
         expirationDate: Date | string,
         readonly referentId: number,
-        readonly referent: string
+        readonly referent: string,
+        public attachments: ActivityAttachmentModel[]
     ) {
         this.startDate = startDate ? new Date(startDate) : null;
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
@@ -119,13 +122,13 @@ export class ActivityDetail {
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.description, this.jobId, this.supplierId,
-            this.addressId, this.typeId, this.attachmentDisplayName, this.attachmentFileName, this.referentId, this.startDate, this.expirationDate);
+            this.addressId, this.typeId, this.attachmentDisplayName, this.attachmentFileName, this.referentId, this.startDate, this.expirationDate, this.attachments);
     }
 
     static build(o: ActivityDetail) {
         return new ActivityDetail(o.id, o.status, o.number, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName,
-            o.startDate, o.expirationDate, o.referentId, o.referent);
+            o.startDate, o.expirationDate, o.referentId, o.referent, o.attachments);
     }
 
 }

@@ -23,4 +23,5 @@ public class ActivityReadModel
     public string? LastOperator { get; set; }
     public long? ReferentId { get; set; }
     public string? ReferentName { get;set; }
+    public bool HasAttachments { get; set; }
 }

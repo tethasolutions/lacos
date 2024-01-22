@@ -38,7 +38,8 @@ public class JobMappingProfile : Profile
                     .SelectMany(a => a.Interventions)
                     .All(i => i.Status == InterventionStatus.Scheduled)
             )
-            .MapMember(x => x.HasAttachments, y => y.Activities.Any())
+            .MapMember(x => x.HasActivities, y => y.Activities.Any())
+            .MapMember(x => x.HasAttachments, y => y.Activities.Where(a => a.Attachments.Any()).Any())
             .MapMember(x => x.HasPurchaseOrders, y => y.PurchaseOrders.Any());
 
         CreateMap<JobDto, Job>()

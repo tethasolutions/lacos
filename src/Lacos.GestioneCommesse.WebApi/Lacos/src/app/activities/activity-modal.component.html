@@ -180,7 +180,7 @@
                     <kendo-formfield class="form-group">
                         <label>Allegato</label>
                         <kendo-upload [(ngModel)]="this.attachments" (success)="AttachmentExecutionSuccess($event)"
-                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="false" name="myUpload">
+                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
                                 <span *ngIf="!isUploaded">{{ files[0].name }}</span>
                                 <a [href]="CreateUrl()" target="_blank" *ngIf="isUploaded">{{ files[0].name }}</a>

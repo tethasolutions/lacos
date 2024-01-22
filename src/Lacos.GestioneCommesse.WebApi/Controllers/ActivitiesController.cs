@@ -104,7 +104,7 @@ public class ActivitiesController : LacosApiController
         return Ok();
     }
 
-    [HttpGet("/{id}/all-attachments")]
+    [HttpGet("{id}/all-attachments")]
     public async Task<List<ActivityAttachmentReadModel>> GetActivityAttachments(long id)
     {
         List<ActivityAttachmentReadModel> activitysAttachment = (await service.GetActivityAttachments(id)).ToList();
@@ -112,7 +112,7 @@ public class ActivitiesController : LacosApiController
     }
 
     [AllowAnonymous]
-    [HttpGet("activity-attachment/download-file/{fileName}/{orginalFileName}")]
+    [HttpGet("activity-attachment/download-file/{fileName}/{originalFileName}")]
     public async Task<FileResult> DownloadAttachment(string fileName, string originalFileName)
     {
         fileName = Uri.UnescapeDataString(fileName);

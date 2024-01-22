@@ -30,12 +30,13 @@ public class Activity : FullAuditedEntity
 
     public ICollection<Intervention> Interventions { get; set; }
     public ICollection<ActivityProduct> ActivityProducts { get; set; }
-    public ActivityAttachment? Attachment { get; set; }
+    public ICollection<ActivityAttachment> Attachments { get; set; }
 
     public Activity()
     {
         Interventions = new List<Intervention>();
         ActivityProducts = new List<ActivityProduct>();
+        Attachments = new List<ActivityAttachment>();
     }
 
     public void SetNumber(int number)

@@ -28,7 +28,8 @@ public class ActivityMappingProfile : Profile
             .MapMember(x => x.Customer, y => y.Job!.Customer == null ? null : y.Job.Customer.Name)
             .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex)
             .MapMember(x => x.LastOperator, y => y.EditedBy)
-            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "");
+            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
+            .MapMember(x => x.HasAttachments, y => y.Attachments.Any());
 
         CreateMap<ActivityDto, Activity>()
             .IgnoreCommonMembers()
@@ -41,8 +42,9 @@ public class ActivityMappingProfile : Profile
             .Ignore(x => x.Type)
             .Ignore(x => x.Interventions)
             .Ignore(x => x.ActivityProducts)
-            .Ignore(x => x.Attachment)
-            .Ignore(x => x.Referent);
+            .Ignore(x => x.Referent)
+            .Ignore(x => x.Attachments)
+            .AfterMap(AfterMap);
 
         CreateMap<Activity, ActivityDto>()
             .MapMember(x => x.Number, y => y.RowNumber);
@@ -56,14 +58,19 @@ public class ActivityMappingProfile : Profile
             .MapMember(x => x.Type, y => y.Type!.Name)
             .MapMember(x => x.Referent, y => (y.Referent != null) ? y.Referent.Name : "");
 
-        CreateMap<ActivityDto, ActivityAttachment>()
+        CreateMap<ActivityAttachment, ActivityAttachmentReadModel>();
+        CreateMap<ActivityAttachmentReadModel, ActivityAttachment>()
             .Ignore(x => x.Activity)
             .Ignore(x => x.ActivityId)
-            .Ignore(x => x.Id)
-            .MapMember(x => x.FileName, y => y.AttachmentFileName)
-            .MapMember(x => x.DisplayName, y => y.AttachmentDisplayName)
             .IgnoreCommonMembers();
 
-        CreateMap<ActivityAttachment, ActivityAttachmentReadModel>();
+        CreateMap<ActivityAttachment, ActivityAttachmentDto>();
+        CreateMap<ActivityAttachmentDto, ActivityAttachment>()
+            .Ignore(x => x.Activity)
+            .IgnoreCommonMembers();
+    }
+    private static void AfterMap(ActivityDto activityDto, Activity activity, ResolutionContext context)
+    {
+        activityDto.Attachments.Merge(activity.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.ActivityId = activity.Id, context);
     }
 }

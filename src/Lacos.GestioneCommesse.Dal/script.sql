@@ -2645,3 +2645,40 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+BEGIN
+    ALTER TABLE [Docs].[ActivityAttachments] DROP CONSTRAINT [FK_ActivityAttachments_Activities_ActivityId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+BEGIN
+    DROP INDEX [IX_ActivityAttachments_ActivityId] ON [Docs].[ActivityAttachments];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+BEGIN
+    CREATE INDEX [IX_ActivityAttachments_ActivityId] ON [Docs].[ActivityAttachments] ([ActivityId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+BEGIN
+    ALTER TABLE [Docs].[ActivityAttachments] ADD CONSTRAINT [FK_ActivityAttachments_Activities_ActivityId] FOREIGN KEY ([ActivityId]) REFERENCES [Docs].[Activities] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240122155620_attachments', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

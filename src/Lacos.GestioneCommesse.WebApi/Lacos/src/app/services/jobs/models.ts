@@ -34,6 +34,7 @@ export interface IJobReadModel {
     readonly addressId: number;
     readonly address: string;
     readonly canBeRemoved: boolean;
+    readonly hasActivities: boolean;
     readonly hasAttachments: boolean;
     readonly hasPurchseOrders: boolean;
 

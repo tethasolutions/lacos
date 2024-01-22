@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
+import { ActivitiesAttachmentsModalComponent } from '../activities/activities-attachments-modal.component';
 
 @Component({
     selector: 'app-jobs-completed',
@@ -34,6 +35,9 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     @ViewChild('grid', { static: true })
     grid: GridComponent;
 
+    @ViewChild('activitiesAttachmentsModal', { static: true })
+    activitiesAttachmentsModal: ActivitiesAttachmentsModalComponent;
+    
     data: GridDataResult;
     gridState: State = {
         skip: 0,
@@ -124,7 +128,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     }
 
     createActivity(job: IJobReadModel) {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, job.id, null, null, null, null, null, null, null, null);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, job.id, null, null, null, null, null, null, null, null, null);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -171,7 +175,13 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     }
 
     openAttachments(job: IJobReadModel) {
-
+        this._subscriptions.push(
+            this.activitiesAttachmentsModal.open(job.id)
+                .pipe(
+                    filter(e => e)
+                )
+                .subscribe()
+        );
     }
 
     private _afterActivityCreated(jobId: number) {

@@ -15,7 +15,6 @@ public class ActivityDto
     public long? SupplierId { get; set; }
     public long? AddressId { get; set; }
     public long TypeId { get; set; }
-    public string? AttachmentFileName { get; set; }
-    public string? AttachmentDisplayName { get; set; }
     public long? ReferentId { get; set; }
+    public IEnumerable<ActivityAttachmentDto>? Attachments { get; set; }
 }

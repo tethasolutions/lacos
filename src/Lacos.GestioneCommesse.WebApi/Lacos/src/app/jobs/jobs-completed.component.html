@@ -58,11 +58,11 @@
                         (click)="createActivity(dataItem)">
                         <i class="fa fa-plus"></i>
                     </button>
-                    <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']"
+                    <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']" *ngIf="dataItem.hasActivities"
                         [queryParams]="{jobId: dataItem.id}">
                         <i class="fas fa-external-link"></i>
                     </a>
-                    <button class="btn btn-secondary btn-sm" title="Visualizza allegati" (click)="openAttachments(dataItem)">
+                    <button class="btn btn-secondary btn-sm" title="Visualizza allegati" (click)="openAttachments(dataItem)" *ngIf="dataItem.hasAttachments">
                         <i class="fa fa-paperclip"></i>
                     </button>
                 </div>
@@ -71,10 +71,10 @@
                         (click)="createPurchaseOrder(dataItem)">
                         <i class="fa fa-cart-shopping"></i>
                     </button>
-                    <button class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto"
-                        (click)="openPurchaseOrder(dataItem)">
+                    <a class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto" *ngIf="dataItem.hasPurchaseOrders"
+                        [routerLink]="['/purchase-orders']" [queryParams]="{jobId: dataItem.id}">
                         <i class="fa fa-bag-shopping"></i>
-                    </button>
+                    </a>
                     <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
                         <i class="fas fa-copy"></i>
                     </button>
@@ -95,3 +95,4 @@
 <app-job-modal #jobModal></app-job-modal>
 <app-activity-modal #activityModal></app-activity-modal>
 <app-purchase-order-modal #purchaseOrderModal></app-purchase-order-modal>
+<app-activities-attachments-modal #activitiesAttachmentsModal></app-activities-attachments-modal>

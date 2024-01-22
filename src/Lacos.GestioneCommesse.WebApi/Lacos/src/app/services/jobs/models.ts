@@ -5,7 +5,8 @@ export enum JobStatus {
     Pending,
     InProgress,
     Completed,
-    Billing
+    Billing,
+    Billed
 
 }
 
@@ -14,7 +15,8 @@ export const jobStatusNames: Dictionary<JobStatus, string> = {
     [JobStatus.Pending]: 'Attiva',
     [JobStatus.InProgress]: 'In corso',
     [JobStatus.Completed]: 'Completata',
-    [JobStatus.Billing]: 'Da Fatturare'
+    [JobStatus.Billing]: 'Da Fatturare',
+    [JobStatus.Billed]: 'Fatturata'
 
 };
 
@@ -32,6 +34,8 @@ export interface IJobReadModel {
     readonly addressId: number;
     readonly address: string;
     readonly canBeRemoved: boolean;
+    readonly hasAttachments: boolean;
+    readonly hasPurchseOrders: boolean;
 
 }
 

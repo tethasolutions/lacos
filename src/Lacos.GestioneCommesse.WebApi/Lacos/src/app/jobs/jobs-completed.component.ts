@@ -12,23 +12,18 @@ import { ActivityModalComponent, ActivityModalOptions } from '../activities/acti
 import { Activity, ActivityStatus } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { Router } from '@angular/router';
-import { JobCopyModalComponent } from './job-copy-modal.component';
-import { ApiUrls } from '../services/common/api-urls';
 import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 
 @Component({
-    selector: 'app-jobs',
-    templateUrl: 'jobs.component.html'
+    selector: 'app-jobs-completed',
+    templateUrl: 'jobs-completed.component.html'
 })
-export class JobsComponent extends BaseComponent implements OnInit {
+export class JobsCompletedComponent extends BaseComponent implements OnInit {
 
     @ViewChild('jobModal', { static: true })
     jobModal: JobModalComponent;
-
-    @ViewChild('jobCopyModal', { static: true })
-    jobCopyModal: JobCopyModalComponent;
 
     @ViewChild('activityModal', { static: true })
     activityModal: ActivityModalComponent;
@@ -46,7 +41,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
         filter: {
             filters: [
                 {
-                    filters: [JobStatus.Pending, JobStatus.InProgress]
+                    filters: [JobStatus.Billing, JobStatus.Completed, JobStatus.Billed]
                         .map(e => ({ field: 'status', operator: 'eq', value: e })),
                     logic: 'or'
                 }
@@ -126,20 +121,6 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     cellClickHandler(args: CellClickEvent): void {
         this.cellArgs = args;
-    }
-
-    copyJob(job: IJobReadModel) {
-        const jobCopy = new JobCopy(job.id, job.date, job.description, job.reference, job.customerId, job.addressId);
-
-        this._subscriptions.push(
-            this.jobCopyModal.open(jobCopy)
-                .pipe(
-                    filter(e => e),
-                    switchMap(() => this._service.copyJob(this.jobCopyModal.options)),
-                    tap(e => this._afterActivityCreated(e))
-                )
-                .subscribe()
-        );
     }
 
     createActivity(job: IJobReadModel) {

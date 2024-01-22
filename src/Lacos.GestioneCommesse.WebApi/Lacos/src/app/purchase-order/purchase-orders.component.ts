@@ -25,11 +25,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         take: 30,
         filter: {
             filters: [
-                {
-                    filters: [PurchaseOrderStatus.Pending, PurchaseOrderStatus.Ordered]
-                        .map(e => ({ field: 'status', operator: 'eq', value: e })),
-                    logic: 'or'
-                },
+                this._buildStatusFilter(),
                 this._buildJobIdFilter()
             ],
             logic: 'and'
@@ -119,7 +115,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
             );
         }
     }
-    
+
     cellClickHandler(args: CellClickEvent): void {
         this.cellArgs = args;
     }
@@ -170,7 +166,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
         this._read();
     }
-
+    
     private _buildJobIdFilter() {
         const that = this;
 
@@ -187,6 +183,30 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         };
     }
 
+    private _buildStatusFilter() {
+        const that = this;
+
+        return {
+            get field() {
+                return that._jobId
+                    ? 'id'
+                    : undefined
+            },
+            get operator() {
+                return that._jobId
+                    ? 'isnotnull'
+                    : undefined
+            },
+            get filters() {
+                return that._jobId
+                    ? undefined
+                    : [PurchaseOrderStatus.Pending, PurchaseOrderStatus.Ordered]
+                        .map(e => ({ field: 'status', operator: 'eq', value: e }))
+            },
+            logic: 'or'
+        };
+    }
+
     private _subscribeRouteParams() {
         this._route.queryParams
             .pipe(
@@ -199,5 +219,6 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
         this._read();
     }
+
 
 }

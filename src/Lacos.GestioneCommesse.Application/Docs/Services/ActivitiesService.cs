@@ -185,7 +185,7 @@ public class ActivitiesService : IActivitiesService
             .Select(j => j.Activities.Any() &&
                 j.Activities.All(a => a.Status == ActivityStatus.Completed)
                 ?
-                    JobStatus.Billing
+                    JobStatus.Completed
                 : j.Activities.Any(a => a.Status == ActivityStatus.InProgress)
                     ?
                     JobStatus.InProgress
@@ -198,7 +198,7 @@ public class ActivitiesService : IActivitiesService
                             .SelectMany(a => a.Interventions)
                             .Any(i => i.Status == InterventionStatus.Scheduled)
                             ? JobStatus.InProgress
-                            : JobStatus.Billing)
+                            : JobStatus.Completed)
             .SingleAsync(); 
 
             job.Status = status;

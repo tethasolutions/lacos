@@ -21,6 +21,7 @@ import { TicketsComponent } from './ticket/tickets.component';
 import { ActivitiesComponent } from './activities/activities.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { PurchaseOrdersComponent } from './purchase-order/purchase-orders.component';
+import { JobsCompletedComponent } from './jobs/jobs-completed.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -37,6 +38,7 @@ const routes: Routes = [
     { path: 'activitytypes', component: ActivityTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'producttypes', component: ProductTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs', component: JobsComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'jobs-completed', component: JobsCompletedComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'tickets', component: TicketsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities', component: ActivitiesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities/:activityId', component: ActivityComponent, canActivate: [AuthGuard.asInjectableGuard], resolve: { activity: ActivitiesService.asActivityDetailResolver } },

@@ -340,7 +340,34 @@ app-jobs {
     }
 
     .job-billing .job-status {
-        @include striped-background(rgba(150, 85, 164, 0.384), rgba(125, 58, 232, 0.203));
+        @include striped-background(rgba(191, 84, 77, 0.384), rgba(242, 52, 39, 0.26));
+    }
+
+    .job-billed .job-status {
+        @include striped-background(rgba(138, 245, 229, 0.384), rgba(117, 186, 221, 0.433));
+    }
+}
+
+app-jobs-completed {
+
+    .job-completed .job-status {
+        @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
+    }
+
+    .job-pending .job-status {
+        @include striped-background(rgba(255, 193, 7, .3), rgba(255, 193, 7, .1));
+    }
+
+    .job-inprogress .job-status {
+        @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
+    }
+
+    .job-billing .job-status {
+        @include striped-background(rgba(191, 84, 77, 0.384), rgba(242, 52, 39, 0.26));
+    }
+    
+    .job-billed .job-status {
+        @include striped-background(rgba(138, 245, 229, 0.384), rgba(117, 186, 221, 0.433));
     }
 }
 

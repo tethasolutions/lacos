@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h3>Commesse</h3>
+        <h3>Commesse Completate</h3>
     </div>
 
     <div class="col-auto">
@@ -13,8 +13,7 @@
 
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-    scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback"
-    (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()">
+    scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()">
 
     <kendo-grid-column field="date" title="Data" filter="date" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -22,7 +21,7 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
-    </kendo-grid-column>
+    </kendo-grid-column>    
     <kendo-grid-column field="code" title="Codice" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="!dataItem.hasHighPriority">{{dataItem.code}}</div>
@@ -63,8 +62,7 @@
                         [queryParams]="{jobId: dataItem.id}">
                         <i class="fas fa-external-link"></i>
                     </a>
-                    <button class="btn btn-secondary btn-sm" title="Visualizza allegati"
-                        (click)="openAttachments(dataItem)">
+                    <button class="btn btn-secondary btn-sm" title="Visualizza allegati" (click)="openAttachments(dataItem)">
                         <i class="fa fa-paperclip"></i>
                     </button>
                 </div>
@@ -73,10 +71,10 @@
                         (click)="createPurchaseOrder(dataItem)">
                         <i class="fa fa-cart-shopping"></i>
                     </button>
-                    <a class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto" *ngIf="dataItem.hasPurchaseOrders"
-                        [routerLink]="['/purchase-orders']" [queryParams]="{jobId: dataItem.id}">
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto"
+                        (click)="openPurchaseOrder(dataItem)">
                         <i class="fa fa-bag-shopping"></i>
-                    </a>
+                    </button>
                     <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
                         <i class="fas fa-copy"></i>
                     </button>
@@ -96,5 +94,4 @@
 
 <app-job-modal #jobModal></app-job-modal>
 <app-activity-modal #activityModal></app-activity-modal>
-<app-job-copy-modal #jobCopyModal></app-job-copy-modal>
 <app-purchase-order-modal #purchaseOrderModal></app-purchase-order-modal>

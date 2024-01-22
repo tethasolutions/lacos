@@ -115,6 +115,7 @@ import { PurchaseOrdersService } from './services/purchase-orders/purchase-order
 import { PurchaseOrderStatusPipe } from './shared/pipes/purchase-order-status.pipe';
 import { Role } from './services/security/models';
 import { RolePipe } from './pipes/role.pipe';
+import { JobsCompletedComponent } from './jobs/jobs-completed.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -154,6 +155,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         CustomerFiscalTypePipe,
         ActivityStatusPipe,
         JobsComponent,
+        JobsCompletedComponent,
         JobModalComponent,
         JobCopyModalComponent,
         JobStatusPipe,

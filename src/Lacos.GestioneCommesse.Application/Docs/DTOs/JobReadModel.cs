@@ -16,4 +16,6 @@ public class JobReadModel
     public long? AddressId { get; set; }
     public string? Address { get; set; }
     public bool CanBeRemoved { get; set; }
+    public bool HasAttachments { get; set; }
+    public bool HasPurchaseOrders { get; set; }
 }

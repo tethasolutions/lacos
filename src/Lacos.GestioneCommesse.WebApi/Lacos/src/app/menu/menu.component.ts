@@ -71,6 +71,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                     e => e.isAuthorized(Role.Administrator)
                 )
             ]),
+            new MenuEntry(['/jobs-completed'], 'Commesse Completate',
+                e => e.startsWith('/jobs-completed'),
+                e => e.isAuthorized(Role.Administrator)
+            ),
             new MenuEntry(['/purchase-orders'], 'Ordini Acquisto',
                 e => e.startsWith('/purchase-orders'),
                 e => e.isAuthorized(Role.Administrator)

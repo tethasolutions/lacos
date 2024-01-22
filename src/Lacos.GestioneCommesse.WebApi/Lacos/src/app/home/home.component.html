@@ -36,6 +36,12 @@
                     <span><i class="fa fa-3x fa-door-open"></i></span>
                 </a>
             </div>
+            <div *ngIf="isAdmin" class="col-md-2">
+                <a class="btn btn-light dashboardBtn" routerLink="/jobs-completed" routerLinkActive="active">
+                    <div class="title">Commesse Complete</div>
+                    <span><i class="fa fa-3x fa-coins"></i></span>
+                </a>
+            </div>
             <div class="col-md-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/activities" routerLinkActive="active">
                     <div class="title">Attività</div>

@@ -71,6 +71,9 @@ public class ActivityMappingProfile : Profile
     }
     private static void AfterMap(ActivityDto activityDto, Activity activity, ResolutionContext context)
     {
-        activityDto.Attachments.Merge(activity.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.ActivityId = activity.Id, context);
+        if (activityDto.Attachments != null)
+        {
+            activityDto.Attachments.Merge(activity.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.ActivityId = activity.Id, context);
+        }
     }
 }

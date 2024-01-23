@@ -74,7 +74,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     create() {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, this._jobId, null, null, null, null, null, null, null, null, null);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, this._jobId, null, null, null, null, null, null, []);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(

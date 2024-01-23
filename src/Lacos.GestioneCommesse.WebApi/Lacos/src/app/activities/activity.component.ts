@@ -208,9 +208,4 @@ export class ActivityComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
-
-    public downloadAttachment ()
-    {
-       window.open(`${this._baseUrl}/activity-attachment/download-file/${this.activity.attachmentFileName}/${this.activity.attachmentDisplayName}`,'_blank');
-    }
 }

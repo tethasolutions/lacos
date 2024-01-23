@@ -105,26 +105,14 @@ export class ActivitiesService {
     getActivityAttachments(id: number) {
         return this._http.get<Array<ActivityAttachmentModel>>(`${this._baseUrl}/${id}/all-attachments`)
             .pipe(
-                map(result => {
-                    const activityAttachments: Array<ActivityAttachmentModel> = [];
-                    result.forEach(item => {
-                        const activity: ActivityAttachmentModel = Object.assign(new ActivityAttachmentModel(), item);
-                        activityAttachments.push(activity);
-                    });
-                    return activityAttachments;
-                }
-                )
+                map(e => e.map(ee => ActivityAttachmentModel.build(ee)))
             );
     }
 
     getActivityAttachmentDetail(id: number) {
         return this._http.get<ActivityDetail>(`${this._baseUrl}/attachment-detail/${id}`)
             .pipe(
-                map(response => {
-                    const activityAttachment: ActivityDetail = Object.assign(
-                        new ActivityDetail(0, ActivityStatus.Pending, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null), response);
-                    return activityAttachment;
-                })
+                map(e => ActivityDetail.build(e))
             );
     }
 

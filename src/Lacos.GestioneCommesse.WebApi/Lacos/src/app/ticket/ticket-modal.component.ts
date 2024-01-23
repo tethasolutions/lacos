@@ -78,8 +78,8 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     }
 
     private _newActivity(ticket: Ticket) {
-        const activity = new Activity(0, ActivityStatus.Pending, null, 'Rif. Ticket: ' + ticket.code + '<br/>' + ticket.description, 
-                this._job.id, null, null,null, null, null, null, null, null, null);
+        const activity = new Activity(0, ActivityStatus.Pending, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`,
+            this._job.id, null, null, null, null, null, null, []);
         const options = new ActivityModalOptions(activity);
 
         ticket.status = TicketStatus.InProgress;

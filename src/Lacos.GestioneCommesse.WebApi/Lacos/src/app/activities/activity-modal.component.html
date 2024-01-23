@@ -182,8 +182,9 @@
                         <kendo-upload [(ngModel)]="this.attachments" (success)="AttachmentExecutionSuccess($event)"
                             [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
-                                <span *ngIf="!isUploaded">{{ files[0].name }}</span>
-                                <a [href]="CreateUrl()" target="_blank" *ngIf="isUploaded">{{ files[0].name }}</a>
+                                <a (click)="downloadAttachment(files[0].name)" class="pointer">
+                                    {{ files[0].name }}
+                                </a>
                             </ng-template>
                         </kendo-upload>
                     </kendo-formfield>

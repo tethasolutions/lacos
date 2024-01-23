@@ -56,8 +56,6 @@ export class Activity {
         public supplierId: number,
         public addressId: number,
         public typeId: number,
-        public attachmentDisplayName: string,
-        public attachmentFileName: string,
         public referentId: number,
         startDate: Date | string,
         expirationDate: Date | string,
@@ -83,8 +81,10 @@ export class Activity {
     }
 
     static build(o: Activity) {
-        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.supplierId, o.addressId, o.typeId, o.attachmentDisplayName,
-            o.attachmentFileName, o.referentId, o.startDate, o.expirationDate, o.attachments);
+        const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
+
+        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.supplierId, o.addressId,
+            o.typeId, o.referentId, o.startDate, o.expirationDate, attachments);
     }
 
 }
@@ -108,8 +108,6 @@ export class ActivityDetail {
         readonly address: string,
         readonly typeId: number,
         readonly type: string,
-        readonly attachmentDisplayName: string,
-        readonly attachmentFileName: string,
         startDate: Date | string,
         expirationDate: Date | string,
         readonly referentId: number,
@@ -122,13 +120,15 @@ export class ActivityDetail {
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.description, this.jobId, this.supplierId,
-            this.addressId, this.typeId, this.attachmentDisplayName, this.attachmentFileName, this.referentId, this.startDate, this.expirationDate, this.attachments);
+            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.attachments);
     }
 
     static build(o: ActivityDetail) {
+        const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
+
         return new ActivityDetail(o.id, o.status, o.number, o.description, o.jobId, o.job, o.customerId,
-            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.attachmentDisplayName, o.attachmentFileName,
-            o.startDate, o.expirationDate, o.referentId, o.referent, o.attachments);
+            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate,
+            o.referentId, o.referent, attachments);
     }
 
 }

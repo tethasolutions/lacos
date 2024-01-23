@@ -116,17 +116,24 @@ public class ActivitiesController : LacosApiController
     public async Task<FileResult> DownloadAttachment(string fileName, string originalFileName)
     {
         fileName = Uri.UnescapeDataString(fileName);
-        ActivityAttachmentReadModel activityAttachment = (await service.DownloadActivityAttachment(fileName));
+        originalFileName = Uri.UnescapeDataString(originalFileName);
 
-        string downloadFileName = activityAttachment == null ? originalFileName : activityAttachment.FileName;
+        var activityAttachment = await service.DownloadActivityAttachment(fileName);
+        var downloadFileName = activityAttachment == null 
+            ? originalFileName
+            : activityAttachment.DisplayName;
+        var folder = configuration.AttachmentsPath!;
 
-
-        var folder = configuration.AttachmentsPath;
-        Directory.CreateDirectory(folder);
+        if (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+        
         var path = Path.Combine(folder, fileName);
+        var mimeType = mimeTypeProvider.Provide(fileName);
+        var stream = System.IO.File.OpenRead(path);
 
-        Stream stream = System.IO.File.OpenRead(path);
-        return File(stream, mimeTypeProvider.Provide(fileName), downloadFileName);
+        return File(stream, mimeType, downloadFileName);
     }
 
     [HttpPost("activity-attachment/upload-file")]

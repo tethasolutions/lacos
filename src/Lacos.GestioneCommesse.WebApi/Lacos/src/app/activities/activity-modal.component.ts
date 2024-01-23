@@ -44,14 +44,11 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     addresses: AddressModel[];
     operators: OperatorModel[];
 
-    allegati: Array<ActivityAttachmentModel> = [];
-    isUploaded: Array<boolean> = [];
     attachments: Array<FileInfo> = [];
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
     uploadSaveUrl = `${this._baseUrl}/activity-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/activity-attachment/remove-file`;
-    attachmentsUploads: Array<ActivityAttachmentUploadFileModel> = [];
 
     readonly states = listEnum<ActivityStatus>(ActivityStatus);
 
@@ -113,15 +110,10 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         const result = super.open(options);
 
         this.attachments = [];
-        this.isUploaded = [];
-        this.allegati = this.options.activity.attachments;
         if (options.activity.attachments != null) {
             this.options.activity.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {
-                    const noteAttachment = new ActivityAttachmentUploadFileModel(element.fileName, element.displayName);
-                    this.attachmentsUploads.push(noteAttachment);
                     this.attachments.push({ name: element.displayName });
-                    this.isUploaded.push(true);
                 }
             });
         }
@@ -291,32 +283,22 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         );
     }
 
-    public CreateUrl(): string {
-        return `${this._baseUrl}/activity-attachment/download-file/${this.options.activity.attachmentFileName}/${this.options.activity.attachmentDisplayName}`;
+    downloadAttachment(fileName: string) {
+        const attachment = this.options.activity.attachments
+            .find(e => e.displayName === fileName);
+        const url = `${this._baseUrl}/activity-attachment/download-file/${attachment.fileName}/${attachment.displayName}`;
+
+        window.open(url);
     }
 
     public AttachmentExecutionSuccess(e: SuccessEvent): void {
-        const body = e.response.body;
-        if (body != null) {
-            const uploadedFile = body as ActivityAttachmentUploadFileModel;
-            const activityAttachment = new ActivityAttachmentUploadFileModel(uploadedFile.fileName, uploadedFile.originalFileName);
-            this.attachmentsUploads.push(activityAttachment);
-            let activityAttachmentModal = new ActivityAttachmentModel();
-            activityAttachmentModal.id = 0;
-            activityAttachmentModal.activityId = 0;
-            activityAttachmentModal.fileName = uploadedFile.fileName;
-            activityAttachmentModal.displayName = uploadedFile.originalFileName;
+        const file = e.response.body as ActivityAttachmentUploadFileModel;
+        if (file != null) {
+            let activityAttachmentModal = new ActivityAttachmentModel(0, file.originalFileName, file.fileName, this.options.activity.id);
             this.options.activity.attachments.push(activityAttachmentModal);
-            this.isUploaded.push(true);
-        }
-        else {
+        } else {
             const deletedFile = e.files[0].name;
-            const index = this.attachmentsUploads.findIndex(x => x.originalFileName == deletedFile);
-            if (index > -1) {
-                this.attachmentsUploads.splice(index, 1);
-                this.options.activity.attachments.splice(index, 1);
-                this.isUploaded.pop();
-            }
+            this.options.activity.attachments.findAndRemove(e => e.displayName === deletedFile);
         }
     }
 }

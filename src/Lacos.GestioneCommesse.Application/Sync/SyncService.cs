@@ -367,12 +367,12 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     model.MapTo(entity, mapper);
                     repository.Update(entity);
                     await dbContext.SaveChanges();
-
                 }
                 else
                 { 
                     var oldId = model.Id;
-
+                    var number = await GetNextNumber(entity.Year);
+                    entity.Number = number;
                     var newEntity = model.MapTo<PurchaseOrder>(mapper);
                     await repository.Insert(newEntity);
                     await dbContext.SaveChanges();
@@ -386,7 +386,16 @@ namespace Lacos.GestioneCommesse.Application.Sync
             return list;
         }
 
+        private async Task<int> GetNextNumber(int year)
+        {
+            var repository = serviceProvider.GetRequiredService<IRepository<PurchaseOrder>>();
+            var maxNumber = await repository.Query()
+                .Where(e => e.Year == year)
+                .Select(e => (int?)e.Number)
+                .MaxAsync();
 
+            return (maxNumber ?? 0) + 1;
+        }
         private async Task<List<TDto>> GetAllModifiedRecord<TEntity, TDto>(DateTimeOffset date) where TEntity : FullAuditedEntity where TDto : SyncBaseDto
         {
             try

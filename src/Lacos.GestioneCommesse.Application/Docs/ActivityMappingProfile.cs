@@ -45,6 +45,7 @@ public class ActivityMappingProfile : Profile
            .Ignore(x => x.ActivityProducts)
            .Ignore(x => x.Referent)
            .Ignore(x => x.Attachments)
+           .Ignore(x => x.IsNewReferent)
            .AfterMap(AfterMap);
 
         CreateMap<Activity, ActivityDto>()

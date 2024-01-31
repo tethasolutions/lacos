@@ -25,7 +25,8 @@ public class Activity : FullAuditedEntity
 
     public long? ReferentId { get; set; }
     public Operator Referent { get; set; }
-    
+    public bool IsNewReferent { get; set; }
+
     public ActivityStatus Status { get; set; }
 
     public ICollection<Intervention> Interventions { get; set; }

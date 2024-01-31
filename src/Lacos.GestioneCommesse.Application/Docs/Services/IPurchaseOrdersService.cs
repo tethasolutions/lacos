@@ -10,4 +10,8 @@ public interface IPurchaseOrdersService
     Task<PurchaseOrderDto> Update(PurchaseOrderDto purchaseOrderDto);
     Task Delete(long id);
     Task<int> GetNextNumber(int year);
+    Task<PurchaseOrderAttachmentReadModel> GetPurchaseOrderAttachmentDetail(long attachmentId);
+    Task<PurchaseOrderAttachmentReadModel> DownloadPurchaseOrderAttachment(string filename);
+    Task<PurchaseOrderAttachmentDto> UpdatePurchaseOrderAttachment(long id, PurchaseOrderAttachmentDto attachmentDto);
+    Task<PurchaseOrderAttachmentDto> CreatePurchaseOrderAttachment(PurchaseOrderAttachmentDto attachmentDto);
 }

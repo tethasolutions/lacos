@@ -12,16 +12,19 @@ public class JobsService : IJobsService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Job> repository;
+    private readonly IRepository<JobAttachment> jobAttachmentRepository;
     private readonly ILacosDbContext dbContext;
 
     public JobsService(
         IMapper mapper,
         IRepository<Job> repository,
+        IRepository<JobAttachment> jobAttachmentRepository,
         ILacosDbContext dbContext
     )
     {
         this.mapper = mapper;
         this.repository = repository;
+        this.jobAttachmentRepository = jobAttachmentRepository;
         this.dbContext = dbContext;
     }
 
@@ -185,4 +188,57 @@ public class JobsService : IJobsService
 
         return newJob.Id;
     }
+
+    // --------------------------------------------------------------------------------------------------------------
+
+    public async Task<JobAttachmentReadModel> GetJobAttachmentDetail(long attachmentId)
+    {
+        var jobAttachment = await jobAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.Id == attachmentId)
+            .SingleOrDefaultAsync();
+
+        return jobAttachment.MapTo<JobAttachmentReadModel>(mapper);
+    }
+
+    public async Task<JobAttachmentReadModel> DownloadJobAttachment(string filename)
+    {
+        var jobAttachment = await jobAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.FileName == filename)
+            .SingleOrDefaultAsync();
+
+        return jobAttachment.MapTo<JobAttachmentReadModel>(mapper);
+    }
+
+    public async Task<JobAttachmentDto> UpdateJobAttachment(long id, JobAttachmentDto attachmentDto)
+    {
+        var attachment = await jobAttachmentRepository.Get(id);
+
+        if (attachment == null)
+        {
+            throw new NotFoundException("Errore allegato");
+        }
+        attachmentDto.MapTo(attachment, mapper);
+
+        jobAttachmentRepository.Update(attachment);
+
+        await dbContext.SaveChanges();
+
+        return attachment.MapTo<JobAttachmentDto>(mapper);
+    }
+
+    public async Task<JobAttachmentDto> CreateJobAttachment(JobAttachmentDto attachmentDto)
+    {
+        var attachment = attachmentDto.MapTo<JobAttachment>(mapper);
+
+        await jobAttachmentRepository.Insert(attachment);
+
+        await dbContext.SaveChanges();
+
+        return attachment.MapTo<JobAttachmentDto>(mapper);
+    }
+    //------------------------------------------------------------------------------------------------------------
 }

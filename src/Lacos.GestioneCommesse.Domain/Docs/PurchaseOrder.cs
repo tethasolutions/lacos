@@ -17,10 +17,12 @@ public class PurchaseOrder : FullAuditedEntity
     public Supplier? Supplier { get; set; }
 
     public ICollection<PurchaseOrderItem> Items { get; set; }
+    public ICollection<PurchaseOrderAttachment> Attachments { get; set; }
 
     public PurchaseOrder()
     {
         Items = new List<PurchaseOrderItem>();
+        Attachments = new List<PurchaseOrderAttachment>();
     }
 
     public void SetCode(int year, int number)

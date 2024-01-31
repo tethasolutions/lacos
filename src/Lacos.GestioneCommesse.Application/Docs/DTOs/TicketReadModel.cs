@@ -15,6 +15,7 @@ public class TicketReadModel : BaseEntityDto
     public long? ActivityId { get; set; }
     public long CustomerId { get; set; }
     public string? CustomerName { get; set; }
+    public string? OperatorName { get; set; }
     //public bool CanBeRemoved { get; set; }
 
 }

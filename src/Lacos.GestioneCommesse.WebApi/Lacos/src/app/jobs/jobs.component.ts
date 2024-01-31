@@ -58,7 +58,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'asc' }]
+        sort: [{ field: 'date', dir: 'desc' }]
     };
 
     readonly jobStatusNames = jobStatusNames;

@@ -16,6 +16,7 @@ public class PurchaseOrderDto : BaseEntityDto
 
     public long SupplierId { get; set; }
     public string? SupplierName { get; set; }
+    public IEnumerable<PurchaseOrderAttachmentDto>? Attachments { get; set; }
 
     public IEnumerable<PurchaseOrderItemDto> Items { get; set; }
     public PurchaseOrderDto()

@@ -103,6 +103,7 @@ public class ActivitiesService : IActivitiesService
         var number = await GetNextNumber(activityDto.JobId);
 
         activity.SetNumber(number);
+        activity.IsNewReferent = true;
 
         await repository.Insert(activity);
 
@@ -135,7 +136,12 @@ public class ActivitiesService : IActivitiesService
             throw new NotFoundException($"Attività con Id {activityDto.Id} non trovata.");
         }
 
+        bool IsReferentChanged = activity.ReferentId == activityDto.ReferentId;
+
         activity = activityDto.MapTo(activity, mapper);
+
+        //reset isNewReferent flag
+        activity.IsNewReferent = IsReferentChanged;
 
         repository.Update(activity);
         await dbContext.SaveChanges();
@@ -322,5 +328,26 @@ public class ActivitiesService : IActivitiesService
         await dbContext.SaveChanges();
 
         return attachment.MapTo<ActivityAttachmentDto>(mapper);
+    }
+    //------------------------------------------------------------------------------------------------------------
+
+    public async Task<ActivityCounterNewDto> GetNewActivitiesCounter()
+    {
+        var user = session.CurrentUser!;
+
+        var query = repository.Query()
+            .AsNoTracking()
+                .AsNoTracking()
+                .Where(e => e.ReferentId == user.OperatorId)
+            .GroupBy(e => e.ReferentId)
+            .Select(group => new ActivityCounterNewDto
+            {
+                NewActivities = group.Where(e => e.IsNewReferent).Count()
+            })
+            //.Project<ActivityCounterDto>(mapper)
+            .FirstOrDefaultAsync();
+
+        return await query;
+
     }
 }

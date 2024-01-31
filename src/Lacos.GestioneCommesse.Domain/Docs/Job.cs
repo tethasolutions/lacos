@@ -25,11 +25,13 @@ public class Job : FullAuditedEntity
     public ICollection<Activity> Activities { get; set; }
     public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     public ICollection<Ticket> Tickets { get; set; }
+    public ICollection<JobAttachment> Attachments { get; set; }
 
     public Job()
     {
         Activities = new List<Activity>();
         PurchaseOrders = new List<PurchaseOrder>();
+        Attachments = new List<JobAttachment>();
     }
 
     public void SetCode(int year, int number)

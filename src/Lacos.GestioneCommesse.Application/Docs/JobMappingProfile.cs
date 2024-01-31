@@ -53,10 +53,26 @@ public class JobMappingProfile : Profile
             .Ignore(x => x.Tickets)
             .Ignore(x => x.IsInternalJob)
             .MapMember(x => x.JobDate, (x, y) => y.IsTransient() ? x.Date : y.JobDate)
-            .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId);
+            .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId)
+            .AfterMap(AfterMap);
 
         CreateMap<Job, JobDto>()
             .MapMember(x => x.Date, y => y.JobDate)
             .MapMember(x => x.Status, StatusExpression);
+
+        CreateMap<JobAttachment, JobAttachmentReadModel>();
+        CreateMap<JobAttachmentReadModel, JobAttachment>()
+           .Ignore(x => x.Job)
+           .Ignore(x => x.JobId)
+           .IgnoreCommonMembers();
+
+        CreateMap<JobAttachment, JobAttachmentDto>();
+        CreateMap<JobAttachmentDto, JobAttachment>()
+           .Ignore(x => x.Job)
+           .IgnoreCommonMembers();
+    }
+    private static void AfterMap(JobDto jobDto, Job job, ResolutionContext context)
+    {
+        jobDto.Attachments.Merge(job.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.JobId = job.Id, context);
     }
 }

@@ -2682,3 +2682,80 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [IsNewReferent] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+BEGIN
+    CREATE TABLE [Docs].[JobAttachments] (
+        [Id] bigint NOT NULL IDENTITY,
+        [DisplayName] nvarchar(256) NOT NULL,
+        [FileName] nvarchar(64) NOT NULL,
+        [JobId] bigint NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_JobAttachments] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_JobAttachments_Jobs_JobId] FOREIGN KEY ([JobId]) REFERENCES [Docs].[Jobs] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+BEGIN
+    CREATE TABLE [Docs].[PurchaseOrderAttachments] (
+        [Id] bigint NOT NULL IDENTITY,
+        [DisplayName] nvarchar(256) NOT NULL,
+        [FileName] nvarchar(64) NOT NULL,
+        [PurchaseOrderId] bigint NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_PurchaseOrderAttachments] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_PurchaseOrderAttachments_PurchaseOrders_PurchaseOrderId] FOREIGN KEY ([PurchaseOrderId]) REFERENCES [Docs].[PurchaseOrders] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+BEGIN
+    CREATE INDEX [IX_JobAttachments_JobId] ON [Docs].[JobAttachments] ([JobId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+BEGIN
+    CREATE INDEX [IX_PurchaseOrderAttachments_PurchaseOrderId] ON [Docs].[PurchaseOrderAttachments] ([PurchaseOrderId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240131103838_allegati job e purchase order - flag nuove attività', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

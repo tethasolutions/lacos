@@ -14,7 +14,8 @@ public class TicketMappingProfile : Profile
         CreateMap<Ticket, TicketReadModel>()
             .MapMember(x => x.Code, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3))
             .MapMember(x => x.Date, y => y.TicketDate)
-            .MapMember(x => x.CustomerName, y => y.Customer!.Name);
+            .MapMember(x => x.CustomerName, y => y.Customer!.Name)
+            .MapMember(x => x.OperatorName, y => y.CreatedBy);
 
         CreateMap<TicketDto, Ticket>()
             .IgnoreCommonMembers()

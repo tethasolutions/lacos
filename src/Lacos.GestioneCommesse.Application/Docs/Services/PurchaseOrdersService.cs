@@ -13,18 +13,21 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     private readonly IMapper mapper;
     private readonly IRepository<PurchaseOrder> repository;
     private readonly IRepository<PurchaseOrderItem> repositoryItem;
+    private readonly IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository;
     private readonly ILacosDbContext dbContext;
 
     public PurchaseOrdersService(
         IMapper mapper,
         IRepository<PurchaseOrder> repository,
         IRepository<PurchaseOrderItem> repositoryItem,
+        IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository,
         ILacosDbContext dbContext
     )
     {
         this.mapper = mapper;
         this.repository = repository;
         this.repositoryItem = repositoryItem;
+        this.purchaseOrderAttachmentRepository = purchaseOrderAttachmentRepository;
         this.dbContext = dbContext;
     }
 
@@ -108,4 +111,56 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         return (maxNumber ?? 0) + 1;
     }
+
+    // --------------------------------------------------------------------------------------------------------------
+        public async Task<PurchaseOrderAttachmentReadModel> GetPurchaseOrderAttachmentDetail(long attachmentId)
+    {
+        var purchaseOrderAttachment = await purchaseOrderAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.Id == attachmentId)
+            .SingleOrDefaultAsync();
+
+        return purchaseOrderAttachment.MapTo<PurchaseOrderAttachmentReadModel>(mapper);
+    }
+
+    public async Task<PurchaseOrderAttachmentReadModel> DownloadPurchaseOrderAttachment(string filename)
+    {
+        var purchaseOrderAttachment = await purchaseOrderAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.FileName == filename)
+            .SingleOrDefaultAsync();
+
+        return purchaseOrderAttachment.MapTo<PurchaseOrderAttachmentReadModel>(mapper);
+    }
+
+    public async Task<PurchaseOrderAttachmentDto> UpdatePurchaseOrderAttachment(long id, PurchaseOrderAttachmentDto attachmentDto)
+    {
+        var attachment = await purchaseOrderAttachmentRepository.Get(id);
+
+        if (attachment == null)
+        {
+            throw new NotFoundException("Errore allegato");
+        }
+        attachmentDto.MapTo(attachment, mapper);
+
+        purchaseOrderAttachmentRepository.Update(attachment);
+
+        await dbContext.SaveChanges();
+
+        return attachment.MapTo<PurchaseOrderAttachmentDto>(mapper);
+    }
+
+    public async Task<PurchaseOrderAttachmentDto> CreatePurchaseOrderAttachment(PurchaseOrderAttachmentDto attachmentDto)
+    {
+        var attachment = attachmentDto.MapTo<PurchaseOrderAttachment>(mapper);
+
+        await purchaseOrderAttachmentRepository.Insert(attachment);
+
+        await dbContext.SaveChanges();
+
+        return attachment.MapTo<PurchaseOrderAttachmentDto>(mapper);
+    }
+    //------------------------------------------------------------------------------------------------------------
 }

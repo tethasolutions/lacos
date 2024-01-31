@@ -35,10 +35,22 @@ public class PurchaseOrderMappingProfile : Profile
         CreateMap<PurchaseOrderItem, PurchaseOrderItemDto>()
             .MapMember(x => x.ProductName, y => y.Product!.Code + " - " + y.Product!.Name)
             .MapMember(x => x.ProductImage, y => y.Product!.PictureFileName);
+
+        CreateMap<PurchaseOrderAttachment, PurchaseOrderAttachmentReadModel>();
+        CreateMap<PurchaseOrderAttachmentReadModel, PurchaseOrderAttachment>()
+           .Ignore(x => x.PurchaseOrder)
+           .Ignore(x => x.PurchaseOrderId)
+           .IgnoreCommonMembers();
+
+        CreateMap<PurchaseOrderAttachment, PurchaseOrderAttachmentDto>();
+        CreateMap<PurchaseOrderAttachmentDto, PurchaseOrderAttachment>()
+           .Ignore(x => x.PurchaseOrder)
+           .IgnoreCommonMembers();
     }
 
     private static void AfterMap(PurchaseOrderDto orderDto, PurchaseOrder order, ResolutionContext context)
     {
         orderDto.Items.Merge(order.Items, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
+        orderDto.Attachments.Merge(order.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
     }
 }

@@ -20,5 +20,31 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Application
         public List<SyncPurchaseOrderItemDto> PurchaseOrderItems { get; set;}
         public List<SyncTicketDto> Tickets { get; set; }
         public List<SyncTicketPictureDto> TicketPictures { get; set; }
+
+        public bool ChangesHaveRecord =>
+            (InterventionProductPictures.Any()) ||
+            (InterventionDisputes.Any() ) ||
+            (InterventionNotes.Any() ) ||
+            (InterventionProducts.Any()) ||
+            (InterventionProductCheckLists.Any()) ||
+            (InterventionProductCheckListItems.Any()) ||
+            (InterventionProductPictures.Any()) ||
+            (PurchaseOrders.Any()) ||
+            (PurchaseOrderItems.Any()) ||
+            (Tickets.Any()) ||
+            (TicketPictures.Any());
+
+        public bool ChangesHaveNewRecord => ChangesHaveRecord && 
+                                            (InterventionProductPictures.Any(x => x.Id < 0)) ||
+                                            (InterventionDisputes.Any(x => x.Id < 0)) ||
+                                            (InterventionNotes.Any(x => x.Id < 0)) ||
+                                            (InterventionProducts.Any(x => x.Id < 0)) ||
+                                            (InterventionProductCheckLists.Any(x => x.Id < 0)) ||
+                                            (InterventionProductCheckListItems.Any(x => x.Id < 0)) ||
+                                            (InterventionProductPictures.Any(x => x.Id < 0)) ||
+                                            (PurchaseOrders.Any(x => x.Id < 0)) ||
+                                            (PurchaseOrderItems.Any(x => x.Id < 0)) ||
+                                            (Tickets.Any(x => x.Id < 0)) ||
+                                            (TicketPictures.Any(x => x.Id < 0));
     }
 }

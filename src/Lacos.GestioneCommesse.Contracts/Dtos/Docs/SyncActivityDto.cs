@@ -14,6 +14,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public long? JobId { get; set; }
         public ActivityStatus? Status { get; set; }
         public long? ReferentId { get; set; }
+        public bool? IsNewReferent { get; set; }
        
     }
 }

@@ -2759,3 +2759,34 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240205145345_job referentid')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [ReferentId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240205145345_job referentid')
+BEGIN
+    CREATE INDEX [IX_Jobs_ReferentId] ON [Docs].[Jobs] ([ReferentId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240205145345_job referentid')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD CONSTRAINT [FK_Jobs_Operators_ReferentId] FOREIGN KEY ([ReferentId]) REFERENCES [Registry].[Operators] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240205145345_job referentid')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240205145345_job referentid', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

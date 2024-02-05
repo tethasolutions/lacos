@@ -102,13 +102,20 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <label>Riferimento Commessa</label>
                     <div class="form-group">
                         <input class="form-control" name="reference" [(ngModel)]="options.reference" maxlength="255"
                             novalidate autocomplete="off" />
                         <div class="validation-message" [control]="form.controls['reference']"></div>
                     </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Responsabile Comm.</label>
+                    <kendo-combobox [data]="operators" [valuePrimitive]="true" textField="name" valueField="id"
+                        name="referentId" [(ngModel)]="options.referentId" required [suggest]="true"
+                        [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [allowCustom]="false">
+                    </kendo-combobox>
                 </div>
             </div>
             <div class="row">

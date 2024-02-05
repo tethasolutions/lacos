@@ -10,6 +10,8 @@ import { TicketsService } from '../services/tickets/tickets.service';
 import { TicketCounter } from '../services/tickets/models';
 import { NewActivityCounter } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
+import { OperatorModel } from '../shared/models/operator.model';
+import { OperatorsService } from '../services/operators.service';
 
 @Component({
     selector: 'lacos-menu',
@@ -105,13 +107,15 @@ export class MenuComponent extends BaseComponent implements OnInit {
     user: User;
     ticketsCounters: TicketCounter;
     newActivitiesCounter: NewActivityCounter;
+    currentOperator: OperatorModel;
 
     constructor(
         private readonly _router: Router,
         private readonly _security: SecurityService,
         private readonly _user: UserService,
         private readonly _activityService: ActivitiesService,
-        private readonly _ticketService: TicketsService
+        private readonly _ticketService: TicketsService,
+        private readonly _operatorsService: OperatorsService
     ) {
         super();
     }
@@ -123,6 +127,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
         this._subscribeSecurityEvents();
         this._getTicketsCounters();
         this._getNewActivitiesCounter();
+        this._getCurrentOperator(this.user.id);
     }
 
     toggle(dropDown: DropDownMenuEntry) {
@@ -186,6 +191,16 @@ export class MenuComponent extends BaseComponent implements OnInit {
                     tap(e => {
                         this.newActivitiesCounter = e;
                     })
+                )
+                .subscribe()
+        );
+    }
+    
+    protected _getCurrentOperator(userId: number) {
+        this._subscriptions.push(
+            this._operatorsService.getOperatorByUserId(userId)
+                .pipe(
+                    tap(e => this.currentOperator = e)
                 )
                 .subscribe()
         );

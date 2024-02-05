@@ -13,6 +13,10 @@ import { ActivityModalComponent, ActivityModalOptions } from '../activities/acti
 import { ActivitiesService } from '../services/activities/activities.service';
 import { JobsService } from '../services/jobs/jobs.service';
 import { Job } from '../services/jobs/models';
+import { TicketAttachmentModel } from '../services/tickets/ticket-attachment.model';
+import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
+import { TicketAttachmentUploadFileModel } from '../services/tickets/ticket-attachment-upload-file.model';
+import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
     selector: 'app-ticket-modal',
@@ -26,6 +30,12 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
 
     customers: CustomerModel[];
     _job: Job;
+    attachments: Array<FileInfo> = [];
+    
+    private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
+    uploadSaveUrl = `${this._baseUrl}/ticket-attachment/upload-file`;
+    uploadRemoveUrl = `${this._baseUrl}/ticket-attachment/remove-file`;
+    
     readonly states = listEnum<TicketStatus>(TicketStatus);
 
     constructor(
@@ -39,6 +49,21 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
 
     ngOnInit() {
         this._getData();
+    }
+
+    override open(ticket: Ticket) {
+        const result = super.open(ticket);
+        
+        this.attachments = [];
+        if (ticket.pictures != null) {
+            this.options.pictures.forEach(element => {
+                if (element.description != null && element.fileName != null) {
+                    this.attachments.push({ name: element.description });
+                }
+            });
+        }
+
+        return result;
     }
 
     onDateChange() {
@@ -121,4 +146,22 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
         this.customers = customers;
     }
 
+    downloadAttachment(fileName: string) {
+        const attachment = this.options.pictures
+            .find(e => e.description === fileName);
+        const url = `${this._baseUrl}/ticket-attachment/download-file/${attachment.fileName}/${attachment.description}`;
+
+        window.open(url);
+    }
+
+    public AttachmentExecutionSuccess(e: SuccessEvent): void {
+        const file = e.response.body as TicketAttachmentUploadFileModel;
+        if (file != null) {
+            let ticketAttachmentModal = new TicketAttachmentModel(0, file.originalFileName, file.fileName, this.options.id);
+            this.options.pictures.push(ticketAttachmentModal);
+        } else {
+            const deletedFile = e.files[0].name;
+            this.options.pictures.findAndRemove(e => e.description === deletedFile);
+        }
+    }
 }

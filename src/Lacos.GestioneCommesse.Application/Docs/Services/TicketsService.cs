@@ -12,16 +12,19 @@ public class TicketsService : ITicketsService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Ticket> repository;
+    private readonly IRepository<TicketPicture> ticketAttachmentRepository;
     private readonly ILacosDbContext dbContext;
 
     public TicketsService(
         IMapper mapper,
         IRepository<Ticket> repository,
+        IRepository<TicketPicture> ticketAttachmentRepository,
         ILacosDbContext dbContext
     )
     {
         this.mapper = mapper;
         this.repository = repository;
+        this.ticketAttachmentRepository = ticketAttachmentRepository;
         this.dbContext = dbContext;
     }
 
@@ -56,6 +59,17 @@ public class TicketsService : ITicketsService
 
         await repository.Insert(Ticket);
 
+        foreach (var file in Ticket.Pictures)
+        {
+            var ticketAttachment = file.MapTo<TicketPicture>(mapper);
+            ticketAttachment.TicketId = Ticket.Id;
+            ticketAttachment.Ticket = Ticket;
+            ticketAttachment.Description = file.Description;
+            ticketAttachment.FileName = file.FileName;
+
+            await ticketAttachmentRepository.Insert(ticketAttachment);
+        }
+
         await dbContext.SaveChanges();
 
         return await Get(Ticket.Id);
@@ -65,8 +79,9 @@ public class TicketsService : ITicketsService
     {
         var Ticket = await repository.Query()
             .AsNoTracking()
-            .Include(e => e.Activity)
             .Where(e => e.Id == TicketDto.Id)
+            .Include(e => e.Activity)
+            .Include(e => e.Pictures)
             .FirstOrDefaultAsync();
 
         if (Ticket == null)
@@ -133,4 +148,57 @@ public class TicketsService : ITicketsService
         return await query;
 
     }
+
+    // --------------------------------------------------------------------------------------------------------------
+
+    public async Task<TicketAttachmentReadModel> GetTicketAttachmentDetail(long attachmentId)
+    {
+        var ticketAttachment = await ticketAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.Id == attachmentId)
+            .SingleOrDefaultAsync();
+
+        return ticketAttachment.MapTo<TicketAttachmentReadModel>(mapper);
+    }
+
+    public async Task<TicketAttachmentReadModel> DownloadTicketAttachment(string filename)
+    {
+        var ticketAttachment = await ticketAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.FileName == filename)
+            .SingleOrDefaultAsync();
+
+        return ticketAttachment.MapTo<TicketAttachmentReadModel>(mapper);
+    }
+
+    public async Task<TicketAttachmentDto> UpdateTicketAttachment(long id, TicketAttachmentDto attachmentDto)
+    {
+        var attachment = await ticketAttachmentRepository.Get(id);
+
+        if (attachment == null)
+        {
+            throw new NotFoundException("Errore allegato");
+        }
+        attachmentDto.MapTo(attachment, mapper);
+
+        ticketAttachmentRepository.Update(attachment);
+
+        await dbContext.SaveChanges();
+
+        return attachment.MapTo<TicketAttachmentDto>(mapper);
+    }
+
+    public async Task<TicketAttachmentDto> CreateTicketAttachment(TicketAttachmentDto attachmentDto)
+    {
+        var attachment = attachmentDto.MapTo<TicketPicture>(mapper);
+
+        await ticketAttachmentRepository.Insert(attachment);
+
+        await dbContext.SaveChanges();
+
+        return attachment.MapTo<TicketAttachmentDto>(mapper);
+    }
+    //------------------------------------------------------------------------------------------------------------
 }

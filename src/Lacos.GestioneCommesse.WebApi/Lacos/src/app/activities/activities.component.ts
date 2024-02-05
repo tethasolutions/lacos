@@ -32,16 +32,18 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             filters: [
                 this._buildStatusFilter(),
                 this._buildJobIdFilter(),
-                this._buildTypeIdFilter()
+                this._buildTypeIdFilter(),
+                this._buildReferentIdFilter()
             ],
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'startDate', dir: 'desc' },{ field: 'expirationDate', dir: 'desc' }]
+        sort: [{ field: 'startDate', dir: 'asc' },{ field: 'expirationDate', dir: 'asc' }]
     };
 
     private _jobId: number;
     private _typeId: number;
+    private _referentId: number;
     private cellArgs: CellClickEvent;
     user: User;
     currentOperator: OperatorModel;
@@ -234,6 +236,22 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         };
     }
 
+    private _buildReferentIdFilter() {
+        const that = this;
+
+        return {
+            field: 'referentId',
+            get operator() {
+                return that._referentId
+                    ? 'eq'
+                    : 'isnotnull'
+            },
+            get value() {
+                return that._referentId;
+            }
+        };
+    }
+
     private _buildStatusFilter() {
         const that = this;
 
@@ -261,6 +279,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     private _setParams(params: Params) {
         this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
         this._typeId = isNaN(+params['typeId']) ? null : +params['typeId'];
+        this._referentId = isNaN(+params['referentId']) ? null : +params['referentId'];
         this._read();
     }
 

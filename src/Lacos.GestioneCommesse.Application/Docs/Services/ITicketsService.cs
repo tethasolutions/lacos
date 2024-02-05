@@ -11,4 +11,9 @@ public interface ITicketsService
     Task Delete(long id);
     Task<int> GetNextNumber(int year);
     Task<TicketCounterDto> GetTicketsCounters();
+
+    Task<TicketAttachmentReadModel> GetTicketAttachmentDetail(long attachmentId);
+    Task<TicketAttachmentReadModel> DownloadTicketAttachment(string filename);
+    Task<TicketAttachmentDto> UpdateTicketAttachment(long id, TicketAttachmentDto attachmentDto);
+    Task<TicketAttachmentDto> CreateTicketAttachment(TicketAttachmentDto attachmentDto);
 }

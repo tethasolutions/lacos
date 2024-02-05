@@ -18,6 +18,9 @@ import { ApiUrls } from '../services/common/api-urls';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { JobAttachmentUploadFileModel } from '../services/jobs/job-attachment-upload-file.model';
 import { JobAttachmentModel } from '../services/jobs/job-attachment.model';
+import { State } from '@progress/kendo-data-query';
+import { OperatorModel } from '../shared/models/operator.model';
+import { OperatorsService } from '../services/operators.service';
 
 @Component({
     selector: 'app-job-modal',
@@ -31,6 +34,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
 
     customers: CustomerModel[];
     addresses: AddressModel[];
+    operators: OperatorModel[];
     public windowState: WindowState = "default";
 
     attachments: Array<FileInfo> = [];
@@ -45,13 +49,15 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
         private readonly _customersService: CustomerService,
         private readonly _service: JobsService,
         private readonly _messageBox: MessageBoxService,
-        private readonly _addressesService: AddressesService
+        private readonly _addressesService: AddressesService,
+        private readonly _operatorsService: OperatorsService
     ) {
         super();
     }
 
     ngOnInit() {
         this._getData();
+        this._getOperators();
     }
 
     onDateChange() {
@@ -202,5 +208,21 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
             const deletedFile = e.files[0].name;
             this.options.attachments.findAndRemove(e => e.displayName === deletedFile);
         }
+    }
+    
+    private _getOperators() {
+        const state: State = {
+            sort: [
+                { field: 'name', dir: 'asc' }
+            ]
+        };
+
+        this._subscriptions.push(
+            this._operatorsService.readOperators(state)
+                .pipe(
+                    tap(e => this.operators = e.data as OperatorModel[])
+                )
+                .subscribe()
+        )
     }
 }

@@ -2,6 +2,7 @@
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +14,21 @@ public class JobsService : IJobsService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Job> repository;
+    private readonly IRepository<Operator> operatorRepository;
     private readonly IRepository<JobAttachment> jobAttachmentRepository;
     private readonly ILacosDbContext dbContext;
 
     public JobsService(
         IMapper mapper,
         IRepository<Job> repository,
+        IRepository<Operator> operatorRepository,
         IRepository<JobAttachment> jobAttachmentRepository,
         ILacosDbContext dbContext
     )
     {
         this.mapper = mapper;
         this.repository = repository;
+        this.operatorRepository = operatorRepository;
         this.jobAttachmentRepository = jobAttachmentRepository;
         this.dbContext = dbContext;
     }
@@ -33,6 +37,7 @@ public class JobsService : IJobsService
     {
         return repository.Query()
             //.Where(e => !e.IsInternalJob)
+            .Include(e => e.Referent)
             .Project<JobReadModel>(mapper);
     }
 
@@ -62,6 +67,18 @@ public class JobsService : IJobsService
             await repository.Insert(job);
 
             await dbContext.SaveChanges();
+
+            var operatorJob = await operatorRepository.Query()
+                .Where(e => e.UserId == job.CreatedById)
+                .FirstOrDefaultAsync();
+
+            if (operatorJob != null)
+            {
+                job.ReferentId = operatorJob.Id;
+                repository.Update(job);
+                await dbContext.SaveChanges();
+            }
+
             return await Get(job.Id);
         }
         else

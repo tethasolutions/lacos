@@ -15,10 +15,10 @@ public class TicketDto : BaseEntityDto
     public long CustomerId { get; set; }
     public string? CustomerName { get; set; }
 
-    public ICollection<TicketPicture> Pictures { get; set; }
+    public ICollection<TicketAttachmentDto> Pictures { get; set; }
 
     public TicketDto()
     {
-        Pictures = new List<TicketPicture>();
+        Pictures = new List<TicketAttachmentDto>();
     }
 } 

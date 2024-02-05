@@ -58,7 +58,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'desc' },{ field: 'code', dir: 'desc' }]
     };
 
     readonly jobStatusNames = jobStatusNames;
@@ -85,7 +85,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const job = new Job(0, null, today.getFullYear(), today, null, null, false, JobStatus.Pending, null, null, []);
+        const job = new Job(0, null, today.getFullYear(), today, null, null, false, JobStatus.Pending, null, null, null, []);
 
         this._subscriptions.push(
             this.jobModal.open(job)
@@ -133,7 +133,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
     }
 
     copyJob(job: IJobReadModel) {
-        const jobCopy = new JobCopy(job.id, job.date, job.description, job.reference, job.customerId, job.addressId);
+        const jobCopy = new JobCopy(job.id, job.date, job.description, job.reference, job.customerId, job.addressId, job.referentId);
 
         this._subscriptions.push(
             this.jobCopyModal.open(jobCopy)
@@ -202,7 +202,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
-
+    
     private _afterActivityCreated(jobId: number) {
         this._messageBox.success('Attività creata.');
         this.router.navigate(['/activities'], { queryParams: { jobId: jobId } });

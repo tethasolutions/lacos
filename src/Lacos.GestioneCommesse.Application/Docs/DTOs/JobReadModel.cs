@@ -13,6 +13,7 @@ public class JobReadModel
     public JobStatus Status { get; set; }
     public long CustomerId { get; set; }
     public string? Customer { get; set; }
+    public string? CustomerContacts { get; set; }
     public long? AddressId { get; set; }
     public string? Address { get; set; }
     public bool CanBeRemoved { get; set; }

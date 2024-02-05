@@ -24,7 +24,7 @@
                                 </a>
                                 <div class="dropdown-divider" *ngIf="subEntry.divider"></div>
                             </ng-container>
-                        </div>
+                        </div>  
 
                     </li>
 
@@ -33,7 +33,8 @@
             <span class="navbar-text" *ngIf="user">
                 Benvenuto, <b>{{user.userName}}</b>! 
                 
-                <a routerLink="/activities" routerLinkActive="active" class="red-number bage-number" *ngIf="newActivitiesCounter.newActivities> 0">{{newActivitiesCounter.newActivities}}</a>
+                <a [routerLink]="['/activities']" [queryParams]="{referentId: currentOperator.id}" routerLinkActive="active"
+                class="red-number bage-number" *ngIf="newActivitiesCounter.newActivities> 0">{{newActivitiesCounter.newActivities}}</a>
             </span>
         </div>
     </div>

@@ -1,4 +1,5 @@
 import { Dictionary } from '../common/models';
+import { TicketAttachmentModel } from './ticket-attachment.model';
 
 export enum TicketStatus {
     Opened,
@@ -47,13 +48,14 @@ export class Ticket {
         public description: string,
         public status: TicketStatus,
         public customerId: number,
-        public activityId: number
+        public activityId: number,
+        public pictures: TicketAttachmentModel[]
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: Ticket) {
-        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.activityId);
+        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.activityId, o.pictures);
     }
 
 }

@@ -63,7 +63,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null);
+        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null,[]);
 
         this._subscriptions.push(
             this.ticketModal.open(ticket)

@@ -24,4 +24,5 @@ public class ActivityReadModel
     public long? ReferentId { get; set; }
     public string? ReferentName { get;set; }
     public bool HasAttachments { get; set; }
+    public bool IsNewReferent { get; set; }
 }

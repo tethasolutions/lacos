@@ -5,6 +5,7 @@ using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -51,6 +52,7 @@ public class JobsService : IJobsService
             jobDto.Date = DateTime.Now;
             jobDto.Status = JobStatus.Pending;
             jobDto.Description = " ";
+            jobDto.Attachments = Enumerable.Empty<JobAttachmentDto>();
 
             var job = jobDto.MapTo<Job>(mapper);
             job.IsInternalJob= true;
@@ -92,6 +94,17 @@ public class JobsService : IJobsService
 
         await repository.Insert(job);
 
+        foreach (var file in job.Attachments)
+        {
+            var jobAttachment = file.MapTo<JobAttachment>(mapper);
+            jobAttachment.JobId = job.Id;
+            jobAttachment.Job = job;
+            jobAttachment.DisplayName = file.DisplayName;
+            jobAttachment.FileName = file.FileName;
+
+            await jobAttachmentRepository.Insert(jobAttachment);
+        }
+
         await dbContext.SaveChanges();
 
         return await Get(job.Id);
@@ -99,7 +112,11 @@ public class JobsService : IJobsService
 
     public async Task<JobDto> Update(JobDto jobDto)
     {
-        var job = await repository.Get(jobDto.Id);
+        var job = await repository
+            .Query()
+            .Where(x => x.Id == jobDto.Id)
+            .Include(x => x.Attachments)
+            .SingleOrDefaultAsync();
 
         if (job == null)
         {

@@ -42,10 +42,24 @@
                     <span><i class="fa fa-3x fa-coins"></i></span>
                 </a>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" *ngIf="newActivitiesCounter.newActivities>0">
+                <a class="btn btn-light dashboardBtn" routerLink="/activities" routerLinkActive="active"
+                    [ngStyle]="newActivitiesCounter.newActivities>0 ? {'background-color':'#ffbcbc'} : ''">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="title">Attività</div>
+                            <span><i class="fa fa-3x fa-tag"></i></span>
+                        </div>
+                        <div class="col-4">
+                            <div class="red-number bage-number">{{newActivitiesCounter.newActivities}}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2" *ngIf="newActivitiesCounter.newActivities==0">
                 <a class="btn btn-light dashboardBtn" routerLink="/activities" routerLinkActive="active">
                     <div class="title">Attività</div>
-                    <span><i class="fa fa-3x fa-list-check"></i></span>
+                    <span><i class="fa fa-3x fa-tag"></i></span>
                 </a>
             </div>
             <div *ngIf="isAdmin" class="col-md-2">

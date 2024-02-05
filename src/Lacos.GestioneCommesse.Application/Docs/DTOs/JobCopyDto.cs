@@ -11,4 +11,5 @@ public class JobCopyDto : BaseEntityDto
     public string? Reference { get; set; }
     public long CustomerId { get; set; }
     public long? AddressId { get; set; }
+    public long? ReferentId { get; set; }
 }

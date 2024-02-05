@@ -3,7 +3,7 @@ import { BaseComponent } from '../shared/base.component';
 import { SecurityService } from '../services/security/security.service';
 import { Role } from '../services/security/models';
 import { tap } from 'rxjs';
-import { ActivityCounter } from '../services/activities/models';
+import { ActivityCounter, NewActivityCounter } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { TicketCounter } from '../services/tickets/models';
 import { TicketsService } from '../services/tickets/tickets.service';
@@ -17,6 +17,7 @@ export class HomeComponent extends BaseComponent {
 
     activitiesCounters: ActivityCounter[];
     ticketsCounters: TicketCounter;
+    newActivitiesCounter: NewActivityCounter;
 
     readonly isAdmin: boolean;
     readonly isOperator: boolean;
@@ -36,6 +37,7 @@ export class HomeComponent extends BaseComponent {
         this.ticketsCounters = new TicketCounter(0,0);
         this._getActivityTypes();
         this._getTicketsCounters();
+        this._getNewActivitiesCounter();
     }
 
     private _getActivityTypes() {
@@ -56,6 +58,18 @@ export class HomeComponent extends BaseComponent {
                 .pipe(
                     tap(e => {
                         this.ticketsCounters = e;
+                    })
+                )
+                .subscribe()
+        );
+    }
+    
+    private _getNewActivitiesCounter() {
+        this._subscriptions.push(
+            this._activityService.readNewActivitiesCounter()
+                .pipe(
+                    tap(e => {
+                        this.newActivitiesCounter = e;
                     })
                 )
                 .subscribe()

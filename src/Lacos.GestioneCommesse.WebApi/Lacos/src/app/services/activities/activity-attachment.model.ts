@@ -1,9 +1,5 @@
-import { Activity } from "./models";
-
 
 export class ActivityAttachmentModel {
-
-    //activity: Activity;
 
     constructor(
         public id: number,

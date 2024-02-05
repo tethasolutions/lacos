@@ -3,7 +3,7 @@ import { HttpClient, HttpEventType, HttpRequest, HttpResponse } from '@angular/c
 import { filter, map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
-import { Activity, ActivityCounter, ActivityDetail, ActivityStatus } from './models';
+import { Activity, ActivityCounter, ActivityDetail, ActivityStatus, NewActivityCounter } from './models';
 import { readData } from '../common/functions';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 import { ActivityAttachmentModel } from './activity-attachment.model';
@@ -87,6 +87,13 @@ export class ActivitiesService {
                     return activityTypes;
                 }
                 )
+            );
+    }
+
+    readNewActivitiesCounter() {
+        return this._http.get<NewActivityCounter>(`${this._baseUrl}/new-activities-counter`)
+            .pipe(
+                map(e => NewActivityCounter.build(e))
             );
     }
 

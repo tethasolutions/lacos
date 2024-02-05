@@ -28,10 +28,10 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
            .MapMember(x => x.Customer, y => y.Job!.Customer == null ? null : y.Job.Customer.Name)
            .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex)
-           .MapMember(x => x.LastOperator, y => y.EditedBy)
+           .MapMember(x => x.LastOperator, y => y.CreatedBy)
            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
            .MapMember(x => x.HasAttachments, y => y.Attachments.Any());
-
+         
         CreateMap<ActivityDto, Activity>()
            .IgnoreCommonMembers()
            .Ignore(x => x.RowNumber)
@@ -74,6 +74,6 @@ public class ActivityMappingProfile : Profile
 
     private static void AfterMap(ActivityDto activityDto, Activity activity, ResolutionContext context)
     {
-        activityDto.Attachments.Merge(activity.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.ActivityId = activity.Id, context);
+        if (activityDto.Attachments != null) activityDto.Attachments.Merge(activity.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.ActivityId = activity.Id, context);
     }
 }

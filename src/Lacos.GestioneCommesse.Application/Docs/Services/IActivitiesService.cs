@@ -12,6 +12,7 @@ public interface IActivitiesService
     Task Delete(long id);
     Task AssignAllCustomerProducts(long id);
     Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters();
+    Task<ActivityCounterNewDto> GetNewActivitiesCounter();
 
     Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long quotationId);
     Task<ActivityAttachmentReadModel> GetActivityAttachmentDetail(long attachmentId);

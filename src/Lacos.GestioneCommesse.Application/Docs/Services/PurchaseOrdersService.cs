@@ -5,6 +5,7 @@ using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -61,6 +62,17 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         await repository.Insert(purchaseOrder);
 
+        foreach (var file in purchaseOrder.Attachments)
+        {
+            var purchaseOrderAttachment = file.MapTo<PurchaseOrderAttachment>(mapper);
+            purchaseOrderAttachment.PurchaseOrderId = purchaseOrder.Id;
+            purchaseOrderAttachment.PurchaseOrder = purchaseOrder;
+            purchaseOrderAttachment.DisplayName = file.DisplayName;
+            purchaseOrderAttachment.FileName = file.FileName;
+
+            await purchaseOrderAttachmentRepository.Insert(purchaseOrderAttachment);
+        }
+
         await dbContext.SaveChanges();
 
         return await Get(purchaseOrder.Id);
@@ -69,8 +81,10 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     public async Task<PurchaseOrderDto> Update(PurchaseOrderDto purchaseOrderDto)
     {
         var purchaseOrder = await repository.Query()
+            .Where(e => e.Id == purchaseOrderDto.Id)
             .Include(e => e.Items)
-            .FirstOrDefaultAsync(e => e.Id == purchaseOrderDto.Id);
+            .Include(x => x.Attachments)
+            .FirstOrDefaultAsync();
 
         if (purchaseOrder == null)
         {

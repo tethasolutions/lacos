@@ -1,4 +1,5 @@
 import { Dictionary } from '../common/models';
+import { PurchaseOrderAttachmentModel } from './purchase-order-attachment.model';
 
 export enum PurchaseOrderStatus {
     Pending,
@@ -48,15 +49,17 @@ export class PurchaseOrder {
         public jobId: number,
         public supplierId: number,
         public supplierName: string,
-        public items: PurchaseOrderItem[]
+        public items: PurchaseOrderItem[],
+        public attachments: PurchaseOrderAttachmentModel[]
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: PurchaseOrder) {
         const items = o.items.map(e => PurchaseOrderItem.build(e));
+        const attachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e));
 
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.description, o.status, o.jobId, o.supplierId, o.supplierName, items);
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.description, o.status, o.jobId, o.supplierId, o.supplierName, items, attachments);
     }
 
 }

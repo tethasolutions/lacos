@@ -85,7 +85,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const job = new Job(0, null, today.getFullYear(), today, null, null, false, JobStatus.Pending, null, null);
+        const job = new Job(0, null, today.getFullYear(), today, null, null, false, JobStatus.Pending, null, null, []);
 
         this._subscriptions.push(
             this.jobModal.open(job)
@@ -178,7 +178,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     createPurchaseOrder(job: IJobReadModel) {
         const today = getToday();
-        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, PurchaseOrderStatus.Pending, job.id, null, null, []);
+        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, PurchaseOrderStatus.Pending, job.id, null, null, [], []);
         const options = new PurchaseOrderModalOptions(order);
 
         this._subscriptions.push(

@@ -17,6 +17,7 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
     {
         IQueryable<OperatorReadModel> GetOperators();
         Task<OperatorDto> GetOperator(long id);
+        Task<OperatorDto> GetOperatorByUserId(long userId);
         Task UpdateOperator(OperatorDto operatorDto);
         Task DeleteOperator(long id);
         Task<OperatorDto> CreateOperator(OperatorDto operatorDto);
@@ -73,6 +74,22 @@ namespace Lacos.GestioneCommesse.Application.Operators.Services
             if (@operator == null)
             {
                 throw new LacosException($"Impossibile trovare l'operatore con id {id}");
+            }
+
+            return @operator.MapTo<OperatorDto>(mapper);
+        }
+
+        public async Task<OperatorDto> GetOperatorByUserId(long userId)
+        {
+            var @operator = await operatorRepository.Query()
+                .AsNoTracking()
+                .Include(e => e.User)
+                .Where(x => x.UserId == userId)
+                .SingleOrDefaultAsync();
+
+            if (@operator == null)
+            {
+                throw new LacosException($"Impossibile trovare l'operatore con id utente {userId}");
             }
 
             return @operator.MapTo<OperatorDto>(mapper);

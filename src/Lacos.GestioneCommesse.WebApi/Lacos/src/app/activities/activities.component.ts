@@ -10,6 +10,10 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { ActivityModalComponent, ActivityModalOptions } from './activity-modal.component';
 import { JobsService } from '../services/jobs/jobs.service';
 import { of } from 'rxjs';
+import { OperatorsService } from '../services/operators.service';
+import { OperatorModel } from '../shared/models/operator.model';
+import { UserService } from '../services/security/user.service';
+import { User } from '../services/security/models';
 
 @Component({
     selector: 'app-activities',
@@ -33,12 +37,14 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'expirationDate', dir: 'asc' }]
+        sort: [{ field: 'startDate', dir: 'desc' },{ field: 'expirationDate', dir: 'desc' }]
     };
 
     private _jobId: number;
     private _typeId: number;
     private cellArgs: CellClickEvent;
+    user: User;
+    currentOperator: OperatorModel;
 
     readonly activityStatusNames = activityStatusNames;
 
@@ -46,12 +52,16 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         private readonly _service: ActivitiesService,
         private readonly _messageBox: MessageBoxService,
         private readonly _route: ActivatedRoute,
+        private readonly _user: UserService,
+        private readonly _operatorsService: OperatorsService
     ) {
         super();
     }
 
     ngOnInit() {
         this._subscribeRouteParams();
+        this.user = this._user.getUser();
+        this._getCurrentOperator(this.user.id);
     }
 
     dataStateChange(state: State) {
@@ -144,6 +154,16 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             this._service.read(this.gridState)
                 .pipe(
                     tap(e => this.data = e)
+                )
+                .subscribe()
+        );
+    }
+
+    protected _getCurrentOperator(userId: number) {
+        this._subscriptions.push(
+            this._operatorsService.getOperatorByUserId(userId)
+                .pipe(
+                    tap(e => this.currentOperator = e)
                 )
                 .subscribe()
         );

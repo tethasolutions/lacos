@@ -88,6 +88,17 @@ export class OperatorsService {
             );
     }
 
+    getOperatorByUserId(userId: number) {
+        return this._http.get<OperatorModel>(`${this._baseUrl}/operator-byuserid/${userId}`)
+            .pipe(
+                map(e => {
+                    const operator = Object.assign(new OperatorModel(), e);
+                    operator.defaultVehicle = Object.assign(new VehicleModel(), operator.defaultVehicle);
+                    return operator;
+                })
+            );
+    }
+
     getOperatorDocument(id: number) {
         return this._http.get<OperatorDocumentModel>(`${this._baseUrl}/operator-document/${id}`)
             .pipe(

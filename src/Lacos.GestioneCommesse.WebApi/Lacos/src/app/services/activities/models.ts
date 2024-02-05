@@ -39,6 +39,7 @@ export interface IActivityReadModel {
     readonly lastOperator: string;
     readonly referentId: number;
     readonly referentName: string;
+    readonly isNewReferent: boolean;
 
 }
 
@@ -148,4 +149,14 @@ export class ActivityCounter {
         this.expired = null;
     }
 
+}
+
+export class NewActivityCounter {    
+    constructor(
+        readonly newActivities: number
+    ){}
+
+    static build(o: NewActivityCounter) {
+        return new NewActivityCounter(o.newActivities);
+    }
 }

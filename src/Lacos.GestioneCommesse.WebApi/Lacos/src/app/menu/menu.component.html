@@ -10,7 +10,7 @@
                 <ng-container *ngFor="let entry of menu.entries">
                     <li class="nav-item" [class.dropdown]="entry.isDropDown" [class.active]="entry.active"
                         [class.show]="entry.isOpen" *ngIf="entry.enabled">
-                        <a class="nav-link" [class.dropdown-toggle]="entry.isDropDown" [routerLink]="entry.urlCommands"
+                        <a class="nav-link" [class.dropdown-toggle]="entry.isDropDown" [routerLink]="entry.urlCommands" 
                             (click)="entry.isDropDown && toggle(entry)">
                             {{entry.name}}
                             <div class="red-number bage-number" *ngIf="(entry.name == 'Tickets') && (ticketsCounters.newTickets > 0)">{{ticketsCounters.newTickets}}</div>
@@ -31,7 +31,9 @@
                 </ng-container>
             </ul>
             <span class="navbar-text" *ngIf="user">
-                Benvenuto, <b>{{user.userName}}</b>!
+                Benvenuto, <b>{{user.userName}}</b>! 
+                
+                <a routerLink="/activities" routerLinkActive="active" class="red-number bage-number" *ngIf="newActivitiesCounter.newActivities> 0">{{newActivitiesCounter.newActivities}}</a>
             </span>
         </div>
     </div>

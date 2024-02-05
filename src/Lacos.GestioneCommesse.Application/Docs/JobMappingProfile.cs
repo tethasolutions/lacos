@@ -40,6 +40,7 @@ public class JobMappingProfile : Profile
             )
             .MapMember(x => x.HasActivities, y => y.Activities.Any())
             .MapMember(x => x.HasAttachments, y => y.Activities.Where(a => a.Attachments.Any()).Any())
+            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
             .MapMember(x => x.HasPurchaseOrders, y => y.PurchaseOrders.Any());
 
         CreateMap<JobDto, Job>()
@@ -51,6 +52,8 @@ public class JobMappingProfile : Profile
             .Ignore(x => x.Year)
             .Ignore(x => x.PurchaseOrders)
             .Ignore(x => x.Tickets)
+            .Ignore(x => x.Attachments)
+            .Ignore(x => x.Referent)
             .Ignore(x => x.IsInternalJob)
             .MapMember(x => x.JobDate, (x, y) => y.IsTransient() ? x.Date : y.JobDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId)

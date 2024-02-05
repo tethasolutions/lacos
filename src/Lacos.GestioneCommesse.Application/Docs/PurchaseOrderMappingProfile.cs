@@ -22,6 +22,7 @@ public class PurchaseOrderMappingProfile : Profile
             .Ignore(x => x.Job)
             .Ignore(x => x.Supplier)
             .Ignore(x => x.Items)
+            .Ignore(x => x.Attachments)
             .AfterMap(AfterMap);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()

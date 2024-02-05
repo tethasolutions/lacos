@@ -1,4 +1,5 @@
 import { Dictionary } from '../common/models';
+import { JobAttachmentModel } from './job-attachment.model';
 
 export enum JobStatus {
 
@@ -58,13 +59,15 @@ export class Job {
         public hasHighPriority: boolean,
         readonly status: JobStatus,
         public customerId: number,
-        public addressId: number
+        public addressId: number,
+        public attachments: JobAttachmentModel[]
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: Job) {
-        return new Job(o.id, o.number, o.year, o.date, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId);
+        const attachments = o.attachments.map(e => JobAttachmentModel.build(e));
+        return new Job(o.id, o.number, o.year, o.date, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId, attachments);
     }
 
 }

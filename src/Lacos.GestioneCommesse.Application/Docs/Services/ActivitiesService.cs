@@ -136,7 +136,7 @@ public class ActivitiesService : IActivitiesService
             throw new NotFoundException($"Attività con Id {activityDto.Id} non trovata.");
         }
 
-        bool IsReferentChanged = activity.ReferentId == activityDto.ReferentId;
+        bool IsReferentChanged = activity.ReferentId != activityDto.ReferentId;
 
         activity = activityDto.MapTo(activity, mapper);
 

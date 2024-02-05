@@ -21,6 +21,8 @@ public class Job : FullAuditedEntity
     
     //InternalJob for ticket issues
     public bool IsInternalJob { get; set; }
+    public long? ReferentId { get; set; }
+    public Operator Referent { get; set; }
 
     public ICollection<Activity> Activities { get; set; }
     public ICollection<PurchaseOrder> PurchaseOrders { get; set; }

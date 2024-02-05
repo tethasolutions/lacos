@@ -38,6 +38,12 @@ public class OperatorsController : LacosApiController
         return operatorService.GetOperator(operatorId);
     }
 
+    [HttpGet("operator-byuserid/{userId}")]
+    public Task<OperatorDto> GetOperatorByUserId(long userId)
+    {
+        return operatorService.GetOperatorByUserId(userId);
+    }
+
     [HttpPut("operator/{id}")]
     public Task UpdateOperator(long id, OperatorDto operatorDto)
     {

@@ -8,6 +8,8 @@ import { Role, User } from '../services/security/models';
 import { fromEvent } from 'rxjs';
 import { TicketsService } from '../services/tickets/tickets.service';
 import { TicketCounter } from '../services/tickets/models';
+import { NewActivityCounter } from '../services/activities/models';
+import { ActivitiesService } from '../services/activities/activities.service';
 
 @Component({
     selector: 'lacos-menu',
@@ -102,11 +104,13 @@ export class MenuComponent extends BaseComponent implements OnInit {
 
     user: User;
     ticketsCounters: TicketCounter;
+    newActivitiesCounter: NewActivityCounter;
 
     constructor(
         private readonly _router: Router,
         private readonly _security: SecurityService,
         private readonly _user: UserService,
+        private readonly _activityService: ActivitiesService,
         private readonly _ticketService: TicketsService
     ) {
         super();
@@ -118,6 +122,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
         this._subscribeRouterEvents();
         this._subscribeSecurityEvents();
         this._getTicketsCounters();
+        this._getNewActivitiesCounter();
     }
 
     toggle(dropDown: DropDownMenuEntry) {
@@ -168,6 +173,18 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 .pipe(
                     tap(e => {
                         this.ticketsCounters = e;
+                    })
+                )
+                .subscribe()
+        );
+    }
+    
+    private _getNewActivitiesCounter() {
+        this._subscriptions.push(
+            this._activityService.readNewActivitiesCounter()
+                .pipe(
+                    tap(e => {
+                        this.newActivitiesCounter = e;
                     })
                 )
                 .subscribe()

@@ -75,6 +75,12 @@ public class ActivitiesController : LacosApiController
         return await service.GetActivitiesCounters();
     }
 
+    [HttpGet("new-activities-counter")]
+    public async Task<ActivityCounterNewDto> GetNewActivitiesCounters()
+    {
+        return await service.GetNewActivitiesCounter();
+    }
+
     [HttpGet("attachment-detail/{id}")]
     public async Task<ActivityAttachmentReadModel> GetAttachmentDetail(long id)
     {

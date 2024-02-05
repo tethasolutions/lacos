@@ -68,6 +68,12 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="referentName" title="Referente">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="!dataItem.isNewReferent || dataItem.referentId != currentOperator.id">{{dataItem.referentName}}</div>
+            <div *ngIf="dataItem.isNewReferent && dataItem.referentId == currentOperator.id" class="job-alert">
+                {{dataItem.referentName}} <i class="fa fa-bell" aria-hidden="true"></i>
+            </div>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="lastOperator" title="Operatore">
     </kendo-grid-column>

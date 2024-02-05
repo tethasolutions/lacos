@@ -16,5 +16,6 @@ public class JobDto : BaseEntityDto
 
     public long CustomerId { get; set; }
     public long? AddressId { get; set; }
+    public long? ReferentId { get; set; }
     public IEnumerable<JobAttachmentDto>? Attachments { get; set; }
 }

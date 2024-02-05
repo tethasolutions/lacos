@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { HttpClient, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
+import { filter, map, tap } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
 import { Job, JobCopy } from './models';
 import { readData } from '../common/functions';
+import { JobAttachmentModel } from './job-attachment.model';
+import { JobAttachmentUploadFileModel } from './job-attachment-upload-file.model';
 
 @Injectable()
 export class JobsService {
@@ -58,6 +60,45 @@ export class JobsService {
         return this._http.delete<void>(`${this._baseUrl}/${id}`)
             .pipe(
                 map(() => { })
+            );
+    }
+    
+    createJobAttachment(request: JobAttachmentModel) {
+        return this._http.post<JobAttachmentModel>(`${this._baseUrl}/create-attachment`, request)
+            .pipe(
+        );
+    }
+
+    updateJobAttachment(request: JobAttachmentModel, id: number) {
+        return this._http.put<void>(`${this._baseUrl}/update-attachment/${id}`, request)
+            .pipe(
+        );
+    }
+
+    getJobAttachments(id: number) {
+        return this._http.get<Array<JobAttachmentModel>>(`${this._baseUrl}/${id}/all-attachments`)
+            .pipe(
+                map(e => e.map(ee => JobAttachmentModel.build(ee)))
+            );
+    }
+
+    uploadJobAttachmentFile(file: File) {
+        const formData = new FormData();
+
+        formData.append(file.name, file);
+
+        const uploadReq = new HttpRequest("POST",
+            `${this._baseUrl}/job-attachment/upload-file`,
+            formData,
+            {
+                reportProgress: false
+            });
+
+        return this._http.request(uploadReq)
+            .pipe(
+                filter(e => e.type === HttpEventType.Response),
+                map(e => (e as HttpResponse<JobAttachmentUploadFileModel>).body),
+                map(e => new JobAttachmentUploadFileModel(e.fileName, e.originalFileName))
             );
     }
 }

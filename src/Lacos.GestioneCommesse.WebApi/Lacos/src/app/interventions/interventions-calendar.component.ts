@@ -232,8 +232,9 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
     }
 
     private _createIntervention(start: Date) {
-        const intervention = new Intervention(0, start, start.addHours(1), InterventionStatus.Scheduled,
-            null, null, this.activityId, this.jobId, [], []);
+        const intervention = new Intervention(0, new Date(new Date(new Date().setMinutes(0)).setSeconds(0)),
+        new Date(new Date(new Date().setMinutes(0)).setSeconds(0)).addHours(1), InterventionStatus.Scheduled,
+        null, null, null, null, [], []);
 
         this._subscriptions.push(
             this.interventionModal.open(intervention)

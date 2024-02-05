@@ -63,7 +63,11 @@ public class TicketsService : ITicketsService
 
     public async Task<TicketDto> Update(TicketDto TicketDto)
     {
-        var Ticket = await repository.Get(TicketDto.Id);
+        var Ticket = await repository.Query()
+            .AsNoTracking()
+            .Include(e => e.Activity)
+            .Where(e => e.Id == TicketDto.Id)
+            .FirstOrDefaultAsync();
 
         if (Ticket == null)
         {
@@ -73,6 +77,11 @@ public class TicketsService : ITicketsService
         Ticket = TicketDto.MapTo(Ticket, mapper);
 
         Ticket.IsNew = false;
+
+        if (Ticket.Status == TicketStatus.Resolved)
+        {
+            if (Ticket.Activity != null) Ticket.Activity.Status = ActivityStatus.Completed;
+        }
 
         repository.Update(Ticket);
 

@@ -168,6 +168,23 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <kendo-formfield class="form-group">
+                        <label>Allegato</label>
+                        <kendo-upload [(ngModel)]="this.attachments" (success)="AttachmentExecutionSuccess($event)"
+                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
+                            <ng-template kendoUploadFileInfoTemplate let-files>
+                                <a (click)="downloadAttachment(files[0].name)" class="pointer">
+                                    {{ files[0].name }}
+                                </a>
+                            </ng-template>
+                        </kendo-upload>
+                    </kendo-formfield>
+                </div>
+            </div>
+            
             <div class="d-flex justify-content-end gap-2 mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">
                     Annulla

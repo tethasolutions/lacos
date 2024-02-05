@@ -13,6 +13,9 @@ import { PurchaseOrder, PurchaseOrderItem, PurchaseOrderStatus } from '../servic
 import { PurchaseOrderItemModalComponent } from './purchase-order-item-modal.component';
 import { filter, tap } from 'rxjs';
 import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
+import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
+import { PurchaseOrderAttachmentUploadFileModel } from '../services/purchase-orders/purchage-order-attachment-upload-file.model';
+import { PurchaseOrderAttachmentModel } from '../services/purchase-orders/purchase-order-attachment.model';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -40,8 +43,13 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         ]
     };
     gridData: GridDataResult;
+    
+    attachments: Array<FileInfo> = [];
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
+    private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
+    uploadSaveUrl = `${this._baseUrl}/purchase-order-attachment/upload-file`;
+    uploadRemoveUrl = `${this._baseUrl}/purchase-order-attachment/remove-file`;
 
     readonly states = listEnum<PurchaseOrderStatus>(PurchaseOrderStatus);
 
@@ -107,6 +115,15 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
 
     override open(options: PurchaseOrderModalOptions) {
         const result = super.open(options);
+
+        this.attachments = [];
+        if (options.purchaseOrder.attachments != null) {
+            this.options.purchaseOrder.attachments.forEach(element => {
+                if (element.displayName != null && element.fileName != null) {
+                    this.attachments.push({ name: element.displayName });
+                }
+            });
+        }
 
         if (this.options.purchaseOrder.jobId) {
             this._getJob(this.options.purchaseOrder.jobId);
@@ -194,6 +211,24 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         this._messageBox.success(`Prodotto rimosso`);
     }
 
+    downloadAttachment(fileName: string) {
+        const attachment = this.options.purchaseOrder.attachments
+            .find(e => e.displayName === fileName);
+        const url = `${this._baseUrl}/purchase-orders/download-file/${attachment.fileName}/${attachment.displayName}`;
+
+        window.open(url);
+    }
+
+    public AttachmentExecutionSuccess(e: SuccessEvent): void {
+        const file = e.response.body as PurchaseOrderAttachmentUploadFileModel;
+        if (file != null) {
+            let purchaseOrderAttachmentModal = new PurchaseOrderAttachmentModel(0, file.originalFileName, file.fileName, this.options.purchaseOrder.id);
+            this.options.purchaseOrder.attachments.push(purchaseOrderAttachmentModal);
+        } else {
+            const deletedFile = e.files[0].name;
+            this.options.purchaseOrder.attachments.findAndRemove(e => e.displayName === deletedFile);
+        }
+    }
 }
 
 export class PurchaseOrderModalOptions {

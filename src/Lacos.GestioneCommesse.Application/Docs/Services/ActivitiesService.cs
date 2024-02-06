@@ -335,7 +335,7 @@ public class ActivitiesService : IActivitiesService
     {
         var user = session.CurrentUser!;
 
-        var query = repository.Query()
+        var query = await repository.Query()
             .AsNoTracking()
                 .AsNoTracking()
                 .Where(e => e.ReferentId == user.OperatorId)
@@ -344,10 +344,9 @@ public class ActivitiesService : IActivitiesService
             {
                 NewActivities = group.Where(e => e.IsNewReferent).Count()
             })
-            //.Project<ActivityCounterDto>(mapper)
             .FirstOrDefaultAsync();
 
-        return await query;
+        return query ?? new ActivityCounterNewDto();
 
     }
 }

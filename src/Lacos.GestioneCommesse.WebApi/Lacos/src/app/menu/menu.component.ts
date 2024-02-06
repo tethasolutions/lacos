@@ -106,7 +106,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
 
     user: User;
     ticketsCounters: TicketCounter;
-    newActivitiesCounter: NewActivityCounter;
+    newActivitiesCounter = new NewActivityCounter(0);
     currentOperator: OperatorModel;
 
     constructor(

@@ -17,7 +17,7 @@ export class HomeComponent extends BaseComponent {
 
     activitiesCounters: ActivityCounter[];
     ticketsCounters: TicketCounter;
-    newActivitiesCounter: NewActivityCounter;
+    newActivitiesCounter = new NewActivityCounter(0);
 
     readonly isAdmin: boolean;
     readonly isOperator: boolean;

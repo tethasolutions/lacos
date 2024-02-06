@@ -32,8 +32,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             filters: [
                 this._buildStatusFilter(),
                 this._buildJobIdFilter(),
-                this._buildTypeIdFilter()
-                //this._buildReferentIdFilter()
+                this._buildTypeIdFilter(),
+                this._buildReferentIdFilter()
             ],
             logic: 'and'
         },
@@ -243,9 +243,15 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         
         return {
             field: 'referentId',
-            operator: 'eq',
+            get operator() {
+                return that._referentId
+                    ? 'eq'
+                    : 'neq'
+            },
             get value() {
-                return that._referentId;
+                return that._referentId
+                    ? that._referentId
+                    : 0;
             }
         };
     }

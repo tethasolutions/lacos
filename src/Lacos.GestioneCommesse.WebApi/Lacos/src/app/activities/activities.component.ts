@@ -32,8 +32,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             filters: [
                 this._buildStatusFilter(),
                 this._buildJobIdFilter(),
-                this._buildTypeIdFilter(),
-                this._buildReferentIdFilter()
+                this._buildTypeIdFilter()
+                //this._buildReferentIdFilter()
             ],
             logic: 'and'
         },
@@ -239,13 +239,11 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     private _buildReferentIdFilter() {
         const that = this;
 
+        //if (that._referentId == null) return {};
+        
         return {
             field: 'referentId',
-            get operator() {
-                return that._referentId
-                    ? 'eq'
-                    : 'isnotnull'
-            },
+            operator: 'eq',
             get value() {
                 return that._referentId;
             }

@@ -37,7 +37,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'asc' }]
+        sort: [{ field: 'date', dir: 'desc' }]
     };
     expandedDetailKeys = new Array<number>();
 

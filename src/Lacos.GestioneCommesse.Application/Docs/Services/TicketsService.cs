@@ -4,7 +4,10 @@ using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -13,18 +16,35 @@ public class TicketsService : ITicketsService
     private readonly IMapper mapper;
     private readonly IRepository<Ticket> repository;
     private readonly IRepository<TicketPicture> ticketAttachmentRepository;
+    private readonly IRepository<Job> jobRepository;
     private readonly ILacosDbContext dbContext;
+
+    private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
+    j.Activities
+    .Any() &&
+    j.Activities.All(a => a.Status == ActivityStatus.Completed)
+    ?
+        JobStatus.Completed
+    : j.Activities
+            .Any(a => a.Status == ActivityStatus.InProgress)
+            ? JobStatus.InProgress
+            : j.Activities
+                .Any(a => a.Status == ActivityStatus.Pending)
+                ? JobStatus.Pending
+                : j.Status;
 
     public TicketsService(
         IMapper mapper,
         IRepository<Ticket> repository,
         IRepository<TicketPicture> ticketAttachmentRepository,
+        IRepository<Job> jobRepository,
         ILacosDbContext dbContext
     )
     {
         this.mapper = mapper;
         this.repository = repository;
         this.ticketAttachmentRepository = ticketAttachmentRepository;
+        this.jobRepository = jobRepository;
         this.dbContext = dbContext;
     }
 
@@ -101,6 +121,24 @@ public class TicketsService : ITicketsService
         repository.Update(Ticket);
 
         await dbContext.SaveChanges();
+
+        if (Ticket.Activity != null)
+        {
+            if (Ticket.Activity.JobId != null)
+            {
+                Job job = await jobRepository.Query()
+                    .Where(e => e.Id == Ticket.Activity.JobId)
+                    .Include(e => e.Activities)
+                    .FirstOrDefaultAsync();
+                if (job != null)
+                {
+                    Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                    job.Status = statusDelegate(job);
+                    jobRepository.Update(job);
+                    await dbContext.SaveChanges();
+                }
+            }
+        }
 
         return await Get(Ticket.Id);
     }

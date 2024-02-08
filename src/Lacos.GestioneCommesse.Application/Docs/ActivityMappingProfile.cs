@@ -30,7 +30,8 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex)
            .MapMember(x => x.LastOperator, y => y.CreatedBy)
            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
-           .MapMember(x => x.HasAttachments, y => y.Attachments.Any());
+           .MapMember(x => x.HasAttachments, y => y.Attachments.Any())
+           .MapMember(x => x.IsExpired, y => (y.ExpirationDate != null) ? (y.ExpirationDate < DateTime.Now.Date) : false);
          
         CreateMap<ActivityDto, Activity>()
            .IgnoreCommonMembers()

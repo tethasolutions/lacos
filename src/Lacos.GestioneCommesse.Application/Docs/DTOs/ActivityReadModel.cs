@@ -25,4 +25,5 @@ public class ActivityReadModel
     public string? ReferentName { get;set; }
     public bool HasAttachments { get; set; }
     public bool IsNewReferent { get; set; }
+    public bool IsExpired { get; set; }
 }

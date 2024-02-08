@@ -9,22 +9,6 @@ namespace Lacos.GestioneCommesse.Application.Docs;
 
 public class JobMappingProfile : Profile
 {
-    private static readonly Expression<Func<Job, JobStatusDto>> StatusExpression = j =>
-    j.Activities
-    .Any() &&
-    j.Activities.All(a => a.Status == ActivityStatus.Completed)
-    ?
-        JobStatusDto.Completed
-    : !j.Activities
-            .SelectMany(a => a.Interventions)
-            .Any()
-            ? JobStatusDto.Pending
-            : j.Activities
-                .SelectMany(a => a.Interventions)
-                .Any(i => i.Status == InterventionStatus.Scheduled)
-                ? JobStatusDto.InProgress
-                : JobStatusDto.Completed;
-
     public JobMappingProfile()
     {
         CreateMap<Job, JobReadModel>()
@@ -32,8 +16,7 @@ public class JobMappingProfile : Profile
             .MapMember(x => x.Code, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3))
             .MapMember(x => x.Date, y => y.JobDate)
             .MapMember(x => x.Customer, y => y.Customer!.Name)
-            .MapMember(x => x.CustomerContacts, y => y.Customer!.Telephone)
-            //.MapMember(x => x.Status, StatusExpression)
+            .MapMember(x => x.CustomerContacts, y => (y.Customer!.Telephone != null) ? "Tel: " + y.Customer!.Telephone : "")
             .MapMember(x => x.CanBeRemoved, y =>
                 y.Activities
                     .SelectMany(a => a.Interventions)
@@ -61,8 +44,7 @@ public class JobMappingProfile : Profile
             .AfterMap(AfterMap);
 
         CreateMap<Job, JobDto>()
-            .MapMember(x => x.Date, y => y.JobDate)
-            .MapMember(x => x.Status, StatusExpression);
+            .MapMember(x => x.Date, y => y.JobDate);
 
         CreateMap<JobAttachment, JobAttachmentReadModel>();
         CreateMap<JobAttachmentReadModel, JobAttachment>()

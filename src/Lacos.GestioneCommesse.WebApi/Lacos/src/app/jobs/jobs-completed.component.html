@@ -21,7 +21,11 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
-    </kendo-grid-column>    
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.customer}}<br/>
+            <i>{{dataItem.customerContacts}}</i>
+        </ng-template>
+    </kendo-grid-column>   
     <kendo-grid-column field="code" title="Codice" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="!dataItem.hasHighPriority">{{dataItem.code}}</div>

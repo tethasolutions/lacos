@@ -50,16 +50,17 @@
     </kendo-grid-column>
     <kendo-grid-column field="type" title="Tipologia" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <span class="text-nowrap">
-                {{dataItem.type}}
-            </span>
+            <span class="text-nowrap">{{dataItem.type}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="expirationDate" title="Scadenza" filter="date" format="dd/MM/yyyy" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <span class="text-nowrap">
+            <div class="text-nowrap job-alert" *ngIf="dataItem.isExpired">
                 {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
-            </span>
+            </div>
+            <div class="text-nowrap" *ngIf="!dataItem.isExpired">
+                {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
+            </div>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Note" [width]="250">
@@ -67,7 +68,7 @@
             <div [innerHTML]="dataItem.description"></div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="referentName" title="Referente">
+    <kendo-grid-column field="referentName" title="Operatore">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="!dataItem.isNewReferent || dataItem.referentId != currentOperator.id">{{dataItem.referentName}}</div>
             <div *ngIf="dataItem.isNewReferent && dataItem.referentId == currentOperator.id" class="job-alert">
@@ -75,7 +76,7 @@
             </div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="lastOperator" title="Operatore">
+    <kendo-grid-column field="lastOperator" title="Inserito Da">
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>

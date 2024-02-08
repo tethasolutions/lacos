@@ -50,7 +50,7 @@
             {{activity.type}}
         </p>
     </div>
-    <div *ngIf="activity.expirationDate" class="col-2">
+    <div *ngIf="activity.expirationDate" class="col-1">
         <b>
             Scadenza
         </b>
@@ -58,9 +58,9 @@
             {{activity.expirationDate | date:'dd/MM/yyyy'}}
         </p>
     </div>
-    <div class="col-2">
+    <div class="col-1">
         <b>
-            Referente
+            Operatore
         </b>
         <p>
             {{activity.referent}}

@@ -5,14 +5,16 @@ export enum PurchaseOrderStatus {
     Pending,
     Ordered,
     Completed,
+    Withdrawn,
     Canceled
 }
 
 export const purchaseOrderStatusNames: Dictionary<PurchaseOrderStatus, string> = {
 
-    [PurchaseOrderStatus.Pending]: 'In attesa',
+    [PurchaseOrderStatus.Pending]: 'Da ordinare',
     [PurchaseOrderStatus.Ordered]: 'Ordinato',
-    [PurchaseOrderStatus.Completed]: 'Evaso',
+    [PurchaseOrderStatus.Completed]: 'Consegnato',
+    [PurchaseOrderStatus.Withdrawn]: 'Ritirato',
     [PurchaseOrderStatus.Canceled]: 'Annullato'
 
 };

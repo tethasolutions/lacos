@@ -130,6 +130,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                 return { 'purchase-order-pending': true };
             case purchaseOrder.status === PurchaseOrderStatus.Ordered:
                 return { 'purchase-order-ordered': true };
+            case purchaseOrder.status === PurchaseOrderStatus.Withdrawn:
+                return { 'purchase-order-withdrawn': true };
             case purchaseOrder.status === PurchaseOrderStatus.Canceled:
                 return { 'purchase-order-canceled': true };
             default:
@@ -166,7 +168,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
         this._read();
     }
-    
+
     private _buildJobIdFilter() {
         const that = this;
 

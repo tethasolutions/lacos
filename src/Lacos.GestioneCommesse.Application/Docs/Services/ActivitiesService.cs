@@ -26,6 +26,20 @@ public class ActivitiesService : IActivitiesService
     private readonly IRepository<Job> jobRepository;
     private readonly ILacosSession session;
 
+    private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
+    j.Activities
+    .Any() &&
+    j.Activities.All(a => a.Status == ActivityStatus.Completed)
+    ?
+        JobStatus.Completed
+    : j.Activities
+            .Any(a => a.Status == ActivityStatus.InProgress)
+            ? JobStatus.InProgress
+            : j.Activities
+                .Any(a => a.Status == ActivityStatus.Pending)
+                ? JobStatus.Pending
+                : j.Status;
+
     public ActivitiesService(
         IMapper mapper,
         IRepository<Activity> repository,
@@ -105,6 +119,7 @@ public class ActivitiesService : IActivitiesService
         activity.SetNumber(number);
         activity.IsNewReferent = true;
 
+
         await repository.Insert(activity);
 
         foreach (var file in activity.Attachments)
@@ -119,6 +134,21 @@ public class ActivitiesService : IActivitiesService
         }
 
         await dbContext.SaveChanges();
+
+        if (activity.JobId != null)
+        {
+            Job job = await jobRepository.Query()
+                .Where(e => e.Id == activity.JobId)
+                .Include(e => e.Activities)
+                .FirstOrDefaultAsync();
+            if (job != null)
+            {
+                Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                job.Status = statusDelegate(job);
+                jobRepository.Update(job);
+            }
+            await dbContext.SaveChanges();
+        }
 
         return await Get(activity.Id);
     }
@@ -145,6 +175,21 @@ public class ActivitiesService : IActivitiesService
 
         repository.Update(activity);
         await dbContext.SaveChanges();
+
+        if (activity.JobId != null)
+        {
+            Job job = await jobRepository.Query()
+                .Where(e => e.Id == activity.JobId)
+                .Include(e => e.Activities)
+                .FirstOrDefaultAsync();
+            if (job != null)
+            {
+                Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                job.Status = statusDelegate(job);
+                jobRepository.Update(job);
+            }
+            await dbContext.SaveChanges();
+        }
 
         return await Get(activity.Id);
 

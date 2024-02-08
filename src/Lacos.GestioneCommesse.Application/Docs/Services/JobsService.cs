@@ -7,6 +7,7 @@ using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -98,8 +99,7 @@ public class JobsService : IJobsService
         }
 
         return jobDto;
-    }
-
+    }  
 
     public async Task<JobDto> Create(JobDto jobDto)
     {

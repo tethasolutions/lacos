@@ -40,6 +40,7 @@ export interface IActivityReadModel {
     readonly referentId: number;
     readonly referentName: string;
     readonly isNewReferent: boolean;
+    readonly isExpired: boolean;
 
 }
 

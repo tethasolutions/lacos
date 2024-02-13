@@ -16,7 +16,7 @@ public class Operator : FullAuditedEntity
     public User? User { get; set; }
 
     public ICollection<ActivityType> ActivityTypes { get; set; }
-
+    public ICollection<Job> Jobs { get; set; }
     public ICollection<OperatorDocument> Documents { get; set; }
     public ICollection<Intervention> Interventions { get; set; }
     public ICollection<InterventionProductPicture> InterventionProductPictures { get; set; }

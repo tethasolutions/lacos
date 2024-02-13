@@ -26,6 +26,7 @@ public class OperatorMappingProfile : Profile
             .Ignore(x => x.User)
             .Ignore(x => x.ActivityTypes)
             .Ignore(x => x.Documents)
+            .Ignore(x => x.Jobs)
             .AfterMap(AfterMap);
 
         CreateMap<Operator, OperatorReadModel>()

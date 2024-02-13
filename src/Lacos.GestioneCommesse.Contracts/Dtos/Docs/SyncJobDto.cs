@@ -16,6 +16,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public long? AddressId { get; set; }
         public bool? IsInternalJob { get; set; }
         public JobStatus? Status { get; set; }
+        public long? ReferentId { get; set; }
 
     }
 

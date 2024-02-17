@@ -54,6 +54,32 @@
                     </div>
                 </div>
             </div>
+            <div class="row riga-form">
+                <div class="col-md-4">
+                    <label>Etichetta Stato "In attesa"</label>
+                    <div class="form-group">
+                        <kendo-textbox [(ngModel)]="options.statusLabel0" name="statusLabel0" required>
+                        </kendo-textbox>
+                        <div class="validation-message" [control]="form.controls['statusLabel0']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Etichetta Stato "In corso"</label>
+                    <div class="form-group">
+                        <kendo-textbox [(ngModel)]="options.statusLabel1" name="statusLabel1" required>
+                        </kendo-textbox>
+                        <div class="validation-message" [control]="form.controls['statusLabel1']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Etichetta Stato "Completata"</label>
+                    <div class="form-group">
+                        <kendo-textbox [(ngModel)]="options.statusLabel2" name="statusLabel2" required>
+                        </kendo-textbox>
+                        <div class="validation-message" [control]="form.controls['statusLabel2']"></div>
+                    </div>
+                </div>
+            </div>
             <div class="text-right mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
                     ANNULLA

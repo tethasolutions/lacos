@@ -9,6 +9,8 @@ public class Activity : FullAuditedEntity
 
     public int RowNumber { get; set; }
 
+    public string? ShortDescription { get; set; }
+    public string? Informations { get; set; }
     public string? Description { get; set; }
 
     public long JobId { get; set; }

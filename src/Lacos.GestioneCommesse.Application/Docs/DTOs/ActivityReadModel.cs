@@ -10,7 +10,7 @@ public class ActivityReadModel
     public string? JobCode { get; set; }
     public string? JobReference { get; set; }
     public bool? JobHasHighPriority { get; set; }
-    public string? Description { get; set; }
+    public string? ShortDescription { get; set; }
     public ActivityStatus Status { get; set; }
     public string? Address { get; set; }
     public string? Customer { get; set; }

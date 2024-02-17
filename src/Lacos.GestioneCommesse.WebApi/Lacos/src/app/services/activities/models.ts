@@ -23,7 +23,7 @@ export interface IActivityReadModel {
     readonly number: number;
     readonly jobId: number;
     readonly customerId: number;
-    readonly description: string;
+    readonly shortDescription: string;
     readonly status: ActivityStatus;
     readonly address: string;
     readonly typeId: number;
@@ -53,6 +53,8 @@ export class Activity {
         readonly id: number,
         public status: ActivityStatus,
         readonly number: number,
+        public shortDescription: string,
+        public informations: string,
         public description: string,
         public jobId: number,
         public supplierId: number,
@@ -85,7 +87,7 @@ export class Activity {
     static build(o: Activity) {
         const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
 
-        return new Activity(o.id, o.status, o.number, o.description, o.jobId, o.supplierId, o.addressId,
+        return new Activity(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.supplierId, o.addressId,
             o.typeId, o.referentId, o.startDate, o.expirationDate, attachments);
     }
 
@@ -100,6 +102,8 @@ export class ActivityDetail {
         readonly id: number,
         readonly status: ActivityStatus,
         readonly number: number,
+        public shortDescription: string,
+        public informations: string,
         readonly description: string,
         readonly jobId: number,
         readonly job: number,
@@ -121,14 +125,14 @@ export class ActivityDetail {
     }
 
     asActivity() {
-        return new Activity(this.id, this.status, this.number, this.description, this.jobId, this.supplierId,
+        return new Activity(this.id, this.status, this.number, this.shortDescription, this.informations, this.description, this.jobId, this.supplierId,
             this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.attachments);
     }
 
     static build(o: ActivityDetail) {
         const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
 
-        return new ActivityDetail(o.id, o.status, o.number, o.description, o.jobId, o.job, o.customerId,
+        return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate,
             o.referentId, o.referent, attachments);
     }

@@ -6,6 +6,10 @@ export class ActivityTypeModel {
     isExternal: boolean;
     colorHex: string;
 
+    statusLabel0: string;
+    statusLabel1: string;
+    statusLabel2: string;
+
     constructor() {
         this.id = null;
         this.name = null;
@@ -13,6 +17,9 @@ export class ActivityTypeModel {
         this.isInternal = false;
         this.isExternal = false;
         this.colorHex = null;
+        this.statusLabel0 = "In attesa";
+        this.statusLabel1 = "In corso";        
+        this.statusLabel2 = "Completata";
     }
 }
 

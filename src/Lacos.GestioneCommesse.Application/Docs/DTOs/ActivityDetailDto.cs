@@ -7,6 +7,8 @@ public class ActivityDetailDto
     public long Id { get; set; }
     public ActivityStatus Status { get; set; }
     public int Number { get; set; }
+    public string? ShortDescription { get; set; }
+    public string? Informations { get; set; }
     public string? Description { get; set; }
     public long JobId { get; set; }
     public string? Job { get; set; }

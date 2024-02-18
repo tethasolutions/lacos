@@ -2790,3 +2790,46 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [StatusLabel0] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [StatusLabel1] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [StatusLabel2] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [Informations] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [ShortDescription] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240216134743_nuovi campi attività', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -189,7 +189,7 @@ textarea {
 }
 
 .redimensionModal {
-    width: 1000px !important;
+    min-width: 980px !important;
 }
 
 @media (max-width: 800px) {
@@ -486,10 +486,15 @@ app-purchase-orders {
 .checklist-row {
     padding-top: 5px;
     border-bottom: 1px solid #585858;
+    margin: 0 20px;
 }
 
 .k-expander-title {
     color:#212529 !important;
     text-transform: none;
     font-weight: normal;
+}
+
+.ProseMirror > p {
+    margin: 0 !important;
 }

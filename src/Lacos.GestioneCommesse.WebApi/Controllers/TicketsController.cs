@@ -146,4 +146,11 @@ public class TicketsController : LacosApiController
         }
         return fileName;
     }
+
+    [HttpGet("{id}/all-attachments")]
+    public async Task<List<TicketAttachmentReadModel>> GetTicketAttachments(long id)
+    {
+        List<TicketAttachmentReadModel> ticketsAttachment = (await service.GetTicketAttachments(id)).ToList();
+        return ticketsAttachment;
+    }
 }

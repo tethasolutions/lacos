@@ -188,6 +188,18 @@ public class TicketsService : ITicketsService
     }
 
     // --------------------------------------------------------------------------------------------------------------
+    public async Task<IEnumerable<TicketAttachmentReadModel>> GetTicketAttachments(long jobId)
+    {
+        var ticketAttachments = await ticketAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Include(x => x.Ticket)
+            .Where(x => x.Ticket.Activity.JobId == jobId)
+            .OrderBy(x => x.CreatedOn)
+            .ToArrayAsync();
+
+        return ticketAttachments.MapTo<IEnumerable<TicketAttachmentReadModel>>(mapper);
+    }
 
     public async Task<TicketAttachmentReadModel> GetTicketAttachmentDetail(long attachmentId)
     {

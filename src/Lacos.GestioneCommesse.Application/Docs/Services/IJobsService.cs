@@ -15,6 +15,7 @@ public interface IJobsService
     Task<JobDto> Update(JobDto jobDto);
     Task Delete(long id);
     Task<long> CopyJob(JobCopyDto jobCopyDto);
+    Task<IEnumerable<JobAttachmentReadModel>> GetJobAttachments(long jobId);
     Task<JobAttachmentReadModel> GetJobAttachmentDetail(long attachmentId);
     Task<JobAttachmentReadModel> DownloadJobAttachment(string filename);
     Task<JobAttachmentDto> UpdateJobAttachment(long id, JobAttachmentDto attachmentDto);

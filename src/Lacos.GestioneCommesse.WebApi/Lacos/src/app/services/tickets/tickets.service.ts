@@ -71,8 +71,8 @@ export class TicketsService {
         );
     }
 
-    getTicketAttachments(id: number) {
-        return this._http.get<Array<TicketAttachmentModel>>(`${this._baseUrl}/${id}/all-attachments`)
+    getTicketAttachments(jobId: number) {
+        return this._http.get<Array<TicketAttachmentModel>>(`${this._baseUrl}/${jobId}/all-attachments`)
             .pipe(
                 map(e => e.map(ee => TicketAttachmentModel.build(ee)))
             );

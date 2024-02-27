@@ -14,7 +14,7 @@ public interface IActivitiesService
     Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters();
     Task<ActivityCounterNewDto> GetNewActivitiesCounter();
 
-    Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long quotationId);
+    Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long jobId);
     Task<ActivityAttachmentReadModel> GetActivityAttachmentDetail(long attachmentId);
     Task<ActivityAttachmentDto> UpdateActivityAttachment(long id, ActivityAttachmentDto attachmentDto);
     Task<ActivityAttachmentDto> CreateActivityAttachment(ActivityAttachmentDto attachmentDto);

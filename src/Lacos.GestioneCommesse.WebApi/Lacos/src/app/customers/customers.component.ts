@@ -10,6 +10,7 @@ import { CustomerModalComponent } from '../customer-modal/customer-modal.compone
 import { CustomerModel } from '../shared/models/customer.model';
 import { AddressModel } from '../shared/models/address.model';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
+import { StorageService } from '../services/common/storage.service';
 
 @Component({
   selector: 'app-customers',
@@ -23,42 +24,55 @@ export class CustomersComponent extends BaseComponent implements OnInit {
 
   dataCustomers: GridDataResult;
   stateGridCustomers: State = {
-      skip: 0,
-      take: 30,
-      filter: {
-          filters: [],
-          logic: 'and'
-      },
-      group: [],
-      sort: []
+    skip: 0,
+    take: 30,
+    filter: {
+      filters: [],
+      logic: 'and'
+    },
+    group: [],
+    sort: []
   };
 
   customerSelezionato = new CustomerModel();
 
   constructor(
-      private readonly _customerService: CustomerService,
-      private readonly _addressesService: AddressesService,
-      private readonly _messageBox: MessageBoxService,
+    private readonly _customerService: CustomerService,
+    private readonly _addressesService: AddressesService,
+    private readonly _messageBox: MessageBoxService,
+    private readonly _storageService: StorageService
   ) {
-      super();
+    super();
   }
 
   ngOnInit() {
-      this._readCustomers();
+    this._resumeState();
+    this._readCustomers();
   }
 
   dataStateChange(state: State) {
-      this.stateGridCustomers = state;
-      this._readCustomers();
+    this.stateGridCustomers = state;
+    this._saveState();
+    this._readCustomers();
+  }
+
+  private _resumeState() {
+    const savedState = this._storageService.get<State>(window.location.hash, true);
+    if (savedState == null) return;
+    this.stateGridCustomers = savedState;
+  }
+
+  private _saveState() {
+    this._storageService.save(this.stateGridCustomers, window.location.hash, true);
   }
 
   protected _readCustomers() {
     this._subscriptions.push(
       this._customerService.readCustomers(this.stateGridCustomers)
         .pipe(
-            tap(e => {
-              this.dataCustomers = e;
-            })
+          tap(e => {
+            this.dataCustomers = e;
+          })
         )
         .subscribe()
     );
@@ -68,16 +82,16 @@ export class CustomersComponent extends BaseComponent implements OnInit {
     const request = new CustomerModel();
 
     this._subscriptions.push(
-        this.customerModal.open(request)
-            .pipe(
-                filter(e => e),
-                switchMap(() => this._customerService.createCustomer(request)),
-                tap(e => {
-                    this._messageBox.success(`Cliente ${request.name} creato`);
-                }),
-                tap(() => this._readCustomers())
-            )
-            .subscribe()
+      this.customerModal.open(request)
+        .pipe(
+          filter(e => e),
+          switchMap(() => this._customerService.createCustomer(request)),
+          tap(e => {
+            this._messageBox.success(`Cliente ${request.name} creato`);
+          }),
+          tap(() => this._readCustomers())
+        )
+        .subscribe()
     );
   }
 
@@ -85,18 +99,18 @@ export class CustomersComponent extends BaseComponent implements OnInit {
     this._subscriptions.push(
       this._customerService.getCustomer(customer.id)
         .pipe(
-            map(e => {
-              return Object.assign(new CustomerModel(), e);
-            }),
-            switchMap(e => this.customerModal.open(e)),
-            filter(e => e),
-            map(() => this.customerModal.options),
-            switchMap(e => this._customerService.updateCustomer(e, customer.id)),
-            map(() => this.customerModal.options),
-            tap(e => this._messageBox.success(`Cliente ${e.name} aggiornato`)),
-            tap(() => this._readCustomers())
+          map(e => {
+            return Object.assign(new CustomerModel(), e);
+          }),
+          switchMap(e => this.customerModal.open(e)),
+          filter(e => e),
+          map(() => this.customerModal.options),
+          switchMap(e => this._customerService.updateCustomer(e, customer.id)),
+          map(() => this.customerModal.options),
+          tap(e => this._messageBox.success(`Cliente ${e.name} aggiornato`)),
+          tap(() => this._readCustomers())
         )
-      .subscribe()
+        .subscribe()
     );
   }
 
@@ -109,7 +123,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
               tap(e => this._messageBox.success(`Cliente ${customer.name} cancellato con successo`)),
               tap(() => this._readCustomers())
             )
-          .subscribe()
+            .subscribe()
         );
       }
     });
@@ -120,14 +134,14 @@ export class CustomersComponent extends BaseComponent implements OnInit {
     const request = new AddressModel();
     request.customerId = customer.id;
     this._subscriptions.push(
-        this.addressModal.open(request)
-            .pipe(
-                filter(e => e),
-                switchMap(() => this._addressesService.createAddress(request)),
-                tap(e => this._messageBox.success(`Indirizzo creato con successo`)),
-                tap(() => this._readCustomers())
-            )
-            .subscribe()
+      this.addressModal.open(request)
+        .pipe(
+          filter(e => e),
+          switchMap(() => this._addressesService.createAddress(request)),
+          tap(e => this._messageBox.success(`Indirizzo creato con successo`)),
+          tap(() => this._readCustomers())
+        )
+        .subscribe()
     );
   }
 
@@ -136,18 +150,18 @@ export class CustomersComponent extends BaseComponent implements OnInit {
     this._subscriptions.push(
       this._addressesService.getAddress(address.id)
         .pipe(
-            map(e => {
-              return Object.assign(new AddressModel(), e);
-            }),
-            switchMap(e => this.addressModal.open(e)),
-            filter(e => e),
-            map(() => this.addressModal.options),
-            switchMap(e => this._addressesService.updateAddress(e, address.id)),
-            map(() => this.addressModal.options),
-            tap(e => this._messageBox.success(`Indirizzo aggiornato con successo`)),
-            tap(() => this._readCustomers())
+          map(e => {
+            return Object.assign(new AddressModel(), e);
+          }),
+          switchMap(e => this.addressModal.open(e)),
+          filter(e => e),
+          map(() => this.addressModal.options),
+          switchMap(e => this._addressesService.updateAddress(e, address.id)),
+          map(() => this.addressModal.options),
+          tap(e => this._messageBox.success(`Indirizzo aggiornato con successo`)),
+          tap(() => this._readCustomers())
         )
-      .subscribe()
+        .subscribe()
     );
   }
 
@@ -160,7 +174,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
               tap(e => this._messageBox.success(`L\'indirizzo cancellato con successo`)),
               tap(() => this._readCustomers())
             )
-          .subscribe()
+            .subscribe()
         );
       }
     });
@@ -175,7 +189,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
               tap(e => this._messageBox.success(`L\'indirizzo selezionato come principale con successo`)),
               tap(() => this._readCustomers())
             )
-          .subscribe()
+            .subscribe()
         );
       }
     });

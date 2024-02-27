@@ -14,6 +14,10 @@ import { OperatorsService } from '../services/operators.service';
 import { OperatorModel } from '../shared/models/operator.model';
 import { UserService } from '../services/security/user.service';
 import { User } from '../services/security/models';
+import { CustomerService } from '../services/customer.service';
+import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
+import { CustomerModel } from '../shared/models/customer.model';
+import { StorageService } from '../services/common/storage.service';
 
 @Component({
     selector: 'app-activities',
@@ -21,8 +25,8 @@ import { User } from '../services/security/models';
 })
 export class ActivitiesComponent extends BaseComponent implements OnInit {
 
-    @ViewChild('activityModal', { static: true })
-    activityModal: ActivityModalComponent;
+    @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
+    @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
 
     data: GridDataResult;
     gridState: State = {
@@ -38,7 +42,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'startDate', dir: 'asc' },{ field: 'expirationDate', dir: 'asc' }]
+        sort: [{ field: 'startDate', dir: 'asc' }, { field: 'expirationDate', dir: 'asc' }]
     };
 
     private _jobId: number;
@@ -55,19 +59,33 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         private readonly _messageBox: MessageBoxService,
         private readonly _route: ActivatedRoute,
         private readonly _user: UserService,
-        private readonly _operatorsService: OperatorsService
+        private readonly _customerService: CustomerService,
+        private readonly _operatorsService: OperatorsService,
+        private readonly _storageService: StorageService
     ) {
         super();
     }
 
     ngOnInit() {
+        this._resumeState();
         this._subscribeRouteParams();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
     }
 
+    private _resumeState() {
+        const savedState = this._storageService.get<State>(window.location.hash, true);
+        if (savedState == null) return;
+        this.gridState = savedState;
+    }
+
+    private _saveState() {
+        this._storageService.save(this.gridState,window.location.hash,true);
+    }
+
     dataStateChange(state: State) {
         this.gridState = state;
+        this._saveState();
         this._read();
     }
 
@@ -86,7 +104,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     create() {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null, []);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null, "In attesa", "In corso", "Completata", []);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -128,6 +146,25 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                     .subscribe()
             )
         }
+    }
+
+    openCustomer(customerId: number): void {
+        this._subscriptions.push(
+            this._customerService.getCustomer(customerId)
+                .pipe(
+                    map(e => {
+                        return Object.assign(new CustomerModel(), e);
+                    }),
+                    switchMap(e => this.customerModal.open(e)),
+                    filter(e => e),
+                    map(() => this.customerModal.options),
+                    switchMap(e => this._customerService.updateCustomer(e, customerId)),
+                    map(() => this.customerModal.options),
+                    tap(e => this._messageBox.success(`Cliente ${e.name} aggiornato`)),
+                    tap(() => this._afterActivityUpdated())
+                )
+                .subscribe()
+        );
     }
 
     cellClickHandler(args: CellClickEvent): void {
@@ -240,7 +277,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         const that = this;
 
         //if (that._referentId == null) return {};
-        
+
         return {
             field: 'referentId',
             get operator() {

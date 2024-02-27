@@ -152,4 +152,11 @@ public class JobsController : LacosApiController
         }
         return fileName;
     }
+
+    [HttpGet("{id}/all-attachments")]
+    public async Task<List<JobAttachmentReadModel>> GetJobAttachments(long id)
+    {
+        List<JobAttachmentReadModel> jobsAttachment = (await service.GetJobAttachments(id)).ToList();
+        return jobsAttachment;
+    }
 }

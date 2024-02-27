@@ -12,6 +12,7 @@ import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { CustomerService } from '../services/customer.service';
 import { AddressesService } from '../services/addresses.service';
 import { CustomerFiscalTypeEnum } from '../shared/enums/customer-fiscal-type.enum';
+import { SecurityService } from '../services/security/security.service';
 
 @Component({
     selector: 'app-customer-modal',
@@ -26,6 +27,7 @@ export class CustomerModalComponent extends ModalComponent<CustomerModel> {
     @ViewChild('addressesModal', { static: true }) addressesModal: AddressesModalComponent;
 
     readonly role = Role;
+    readonly isOperator: boolean;
     
     fiscalTypes = listEnum<CustomerFiscalTypeEnum>(CustomerFiscalTypeEnum);
 
@@ -35,11 +37,13 @@ export class CustomerModalComponent extends ModalComponent<CustomerModel> {
     }
 
     constructor(
+        security: SecurityService,
         private readonly _messageBox: MessageBoxService,
         private readonly _customerService: CustomerService,
         private readonly _addressesService: AddressesService
     ) {
         super();
+        this.isOperator = security.isAuthorized(Role.Operator);
     }
 
     protected _canClose() {

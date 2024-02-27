@@ -116,7 +116,7 @@ import { PurchaseOrderStatusPipe } from './shared/pipes/purchase-order-status.pi
 import { Role } from './services/security/models';
 import { RolePipe } from './pipes/role.pipe';
 import { JobsCompletedComponent } from './jobs/jobs-completed.component';
-import { ActivitiesAttachmentsModalComponent } from './activities/activities-attachments-modal.component';
+import { JobsAttachmentsModalComponent } from './jobs/jobs-attachments-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -167,7 +167,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ActivityComponent,
         ActivityModalComponent,
         ActivityProductsComponent,
-        ActivitiesAttachmentsModalComponent,
+        JobsAttachmentsModalComponent,
         StringsPipe,
         ActivityProductModalComponent,
         InterventionModalComponent,

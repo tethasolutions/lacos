@@ -12,6 +12,7 @@ public interface ITicketsService
     Task<int> GetNextNumber(int year);
     Task<TicketCounterDto> GetTicketsCounters();
 
+    Task<IEnumerable<TicketAttachmentReadModel>> GetTicketAttachments(long jobId);
     Task<TicketAttachmentReadModel> GetTicketAttachmentDetail(long attachmentId);
     Task<TicketAttachmentReadModel> DownloadTicketAttachment(string filename);
     Task<TicketAttachmentDto> UpdateTicketAttachment(long id, TicketAttachmentDto attachmentDto);

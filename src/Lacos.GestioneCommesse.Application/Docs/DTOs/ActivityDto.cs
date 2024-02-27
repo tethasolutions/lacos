@@ -18,5 +18,10 @@ public class ActivityDto
     public long? AddressId { get; set; }
     public long TypeId { get; set; }
     public long? ReferentId { get; set; }
+
+    public string? StatusLabel0 { get; set; }
+    public string? StatusLabel1 { get; set; }
+    public string? StatusLabel2 { get; set; }
+
     public IEnumerable<ActivityAttachmentDto>? Attachments { get; set; }
 }

@@ -64,8 +64,8 @@ export class PurchaseOrdersService {
         );
     }
 
-    getPurchaseOrderAttachments(id: number) {
-        return this._http.get<Array<PurchaseOrderAttachmentModel>>(`${this._baseUrl}/${id}/all-attachments`)
+    getPurchaseOrderAttachments(jobId: number) {
+        return this._http.get<Array<PurchaseOrderAttachmentModel>>(`${this._baseUrl}/${jobId}/all-attachments`)
             .pipe(
                 map(e => e.map(ee => PurchaseOrderAttachmentModel.build(ee)))
             );

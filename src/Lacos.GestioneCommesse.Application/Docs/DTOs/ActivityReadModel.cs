@@ -13,6 +13,7 @@ public class ActivityReadModel
     public string? ShortDescription { get; set; }
     public ActivityStatus Status { get; set; }
     public string? Address { get; set; }
+    public long? CustomerId { get; set; }
     public string? Customer { get; set; }
     public long TypeId { get; set; }
     public string? Type { get; set; }
@@ -26,4 +27,8 @@ public class ActivityReadModel
     public bool HasAttachments { get; set; }
     public bool IsNewReferent { get; set; }
     public bool IsExpired { get; set; }
+
+    public string? StatusLabel0 { get; set; }
+    public string? StatusLabel1 { get; set; }
+    public string? StatusLabel2 { get; set; }
 }

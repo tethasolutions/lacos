@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center gap-3 mb-2">
     <h3>
-        Attività {{activity.number}} &bull; {{activity.status | activityStatus}}
+        Attività {{activity.number}} &bull; {{activity | activityStatus}}
     </h3>
     <div class="d-flex gap-1">
         <a class="btn btn-primary btn-sm" (click)="editJob(activity.jobId)">

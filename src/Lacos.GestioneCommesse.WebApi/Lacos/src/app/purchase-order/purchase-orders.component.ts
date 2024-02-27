@@ -9,6 +9,7 @@ import { IPurchaseOrderReadModel, PurchaseOrder, PurchaseOrderStatus, purchaseOr
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 import { getToday } from '../services/common/functions';
 import { ActivatedRoute, Params } from '@angular/router';
+import { StorageService } from '../services/common/storage.service';
 
 @Component({
     selector: 'app-purchase-orders',
@@ -42,20 +43,33 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     constructor(
         private readonly _service: PurchaseOrdersService,
         private readonly _messageBox: MessageBoxService,
-        private readonly _route: ActivatedRoute
+        private readonly _route: ActivatedRoute,
+        private readonly _storageService: StorageService
     ) {
         super();
     }
 
     ngOnInit() {
+        this._resumeState();
         this._subscribeRouteParams();
     }
 
     dataStateChange(state: State) {
         this.gridState = state;
+        this._saveState();
         this._read();
     }
 
+    private _resumeState() {
+        const savedState = this._storageService.get<State>(window.location.hash, true);
+        if (savedState == null) return;
+        this.gridState = savedState;
+    }
+
+    private _saveState() {
+        this._storageService.save(this.gridState,window.location.hash,true);
+    }
+    
     askRemove(purchaseOrder: IPurchaseOrderReadModel) {
         const text = `Sei sicuro di voler rimuovere l'ordine ${purchaseOrder.code}?`;
 

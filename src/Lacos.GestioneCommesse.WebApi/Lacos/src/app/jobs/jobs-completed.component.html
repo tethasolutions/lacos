@@ -22,7 +22,7 @@
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.customer}}<br/>
+            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;"><i class="fas fa-user"></i> {{dataItem.customer}}</a><br/>
             <i>{{dataItem.customerContacts}}</i>
         </ng-template>
     </kendo-grid-column>   
@@ -99,4 +99,6 @@
 <app-job-modal #jobModal></app-job-modal>
 <app-activity-modal #activityModal></app-activity-modal>
 <app-purchase-order-modal #purchaseOrderModal></app-purchase-order-modal>
-<app-activities-attachments-modal #activitiesAttachmentsModal></app-activities-attachments-modal>
+<app-jobs-attachments-modal #jobsAttachmentsModal></app-jobs-attachments-modal>
+<app-activity-modal #activityModal></app-activity-modal>
+<app-customer-modal #customerModal></app-customer-modal>

@@ -41,6 +41,9 @@ export interface IActivityReadModel {
     readonly referentName: string;
     readonly isNewReferent: boolean;
     readonly isExpired: boolean;
+    readonly statusLabel0: string;
+    readonly statusLabel1: string;
+    readonly statusLabel2: string;
 
 }
 
@@ -63,6 +66,9 @@ export class Activity {
         public referentId: number,
         startDate: Date | string,
         expirationDate: Date | string,
+        public statusLabel0: string,
+        public statusLabel1: string,
+        public statusLabel2: string,
         public attachments: ActivityAttachmentModel[]
     ) {
         this.startDate = startDate ? new Date(startDate) : null;
@@ -88,7 +94,7 @@ export class Activity {
         const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
 
         return new Activity(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.supplierId, o.addressId,
-            o.typeId, o.referentId, o.startDate, o.expirationDate, attachments);
+            o.typeId, o.referentId, o.startDate, o.expirationDate, o.statusLabel0, o.statusLabel1, o.statusLabel2, attachments);
     }
 
 }
@@ -118,6 +124,9 @@ export class ActivityDetail {
         expirationDate: Date | string,
         readonly referentId: number,
         readonly referent: string,
+        readonly statusLabel0: string,
+        readonly statusLabel1: string,
+        readonly statusLabel2: string,
         public attachments: ActivityAttachmentModel[]
     ) {
         this.startDate = startDate ? new Date(startDate) : null;
@@ -126,7 +135,7 @@ export class ActivityDetail {
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.shortDescription, this.informations, this.description, this.jobId, this.supplierId,
-            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.attachments);
+            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.statusLabel0, this.statusLabel1, this.statusLabel2, this.attachments);
     }
 
     static build(o: ActivityDetail) {
@@ -134,7 +143,7 @@ export class ActivityDetail {
 
         return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate,
-            o.referentId, o.referent, attachments);
+            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, attachments);
     }
 
 }

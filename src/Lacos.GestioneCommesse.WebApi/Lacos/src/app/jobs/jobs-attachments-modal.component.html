@@ -1,0 +1,80 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="600" [top]="110">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Allegati
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <kendo-panelbar>
+            <kendo-panelbar-item title="Allegati Commesse ({{attachments.length}})" *ngIf="attachments.length > 0">
+                <ng-template kendoPanelBarContent>
+                    <div *ngFor="let item of attachments" class="col-12">
+                        <div class="row checklist-row">
+                            <div class="col-10">
+                                <p>{{item.displayName}}</p>
+                            </div>
+                            <div class="col-2" *ngIf="item.fileName" style="text-align: right;">
+                                <a [href]="CreateUrl(item.fileName,item.displayName)" target="_blank"><i
+                                        class="fas fa-paperclip"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-panelbar-item>
+            <kendo-panelbar-item title="Allegati Attività ({{activityAttachments.length}})" *ngIf="activityAttachments.length > 0">
+                <ng-template kendoPanelBarContent>
+                    <div *ngFor="let item of activityAttachments" class="col-12">
+                        <div class="row checklist-row">
+                            <div class="col-10">
+                                <p>{{item.displayName}}</p>
+                            </div>
+                            <div class="col-2" *ngIf="item.fileName" style="text-align: right;">
+                                <a [href]="CreateUrl(item.fileName,item.displayName)" target="_blank"><i
+                                        class="fas fa-paperclip"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-panelbar-item>
+            <kendo-panelbar-item title="Allegati Ordini ({{purchaseOrderAttachments.length}})" *ngIf="purchaseOrderAttachments.length > 0">
+                <ng-template kendoPanelBarContent>
+                    <div *ngFor="let item of purchaseOrderAttachments" class="col-12">
+                        <div class="row checklist-row">
+                            <div class="col-10">
+                                <p>{{item.displayName}}</p>
+                            </div>
+                            <div class="col-2" *ngIf="item.fileName" style="text-align: right;">
+                                <a [href]="CreateUrl(item.fileName,item.displayName)" target="_blank"><i
+                                        class="fas fa-paperclip"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-panelbar-item>
+            <kendo-panelbar-item title="Allegati Ticket ({{ticketAttachments.length}})" *ngIf="ticketAttachments.length > 0">
+                <ng-template kendoPanelBarContent>
+                    <div *ngFor="let item of ticketAttachments" class="col-12">
+                        <div class="row checklist-row">
+                            <div class="col-10">
+                                <p>{{item.description}}</p>
+                            </div>
+                            <div class="col-2" *ngIf="item.fileName" style="text-align: right;">
+                                <a [href]="CreateUrl(item.fileName,item.description)" target="_blank"><i
+                                        class="fas fa-paperclip"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-panelbar-item>
+        </kendo-panelbar>
+
+        <div class="text-right mt-5">
+            <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                CHIUDI
+            </button>
+        </div>
+    </kendo-window>
+</div>

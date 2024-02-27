@@ -21,7 +21,7 @@ import { OperatorsService } from '../services/operators.service';
 export class MenuComponent extends BaseComponent implements OnInit {
 
     readonly dropDownMenuEntry = DropDownMenuEntry;
-    readonly menu: Menu = new Menu( 
+    readonly menu: Menu = new Menu(
         [
             new DropDownMenuEntry('Anagrafiche', [
                 new MenuEntry(['/customers'], 'Clienti',
@@ -81,7 +81,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
             ),
             new MenuEntry(['/purchase-orders'], 'Ordini Acquisto',
                 e => e.startsWith('/purchase-orders'),
-                e => e.isAuthorized(Role.Administrator)
+                e => e.isAuthenticated()
             ),
             new DropDownMenuEntry('Gestione', [
                 new MenuEntry(['/operators'], 'Operatori',
@@ -108,6 +108,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
     ticketsCounters: TicketCounter;
     newActivitiesCounter = new NewActivityCounter(0);
     currentOperator: OperatorModel;
+    private intervalId: number;
 
     constructor(
         private readonly _router: Router,
@@ -121,13 +122,21 @@ export class MenuComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.ticketsCounters = new TicketCounter(0,0);
+        this.ticketsCounters = new TicketCounter(0, 0);
         this.user = this._user.getUser();
         this._subscribeRouterEvents();
         this._subscribeSecurityEvents();
-        this._getTicketsCounters();
-        this._getNewActivitiesCounter();
+        this.intervalId = window.setInterval(() => {
+            this._getTicketsCounters();
+            this._getNewActivitiesCounter();
+        }, 300000); // 300000 ms = 5 minuti
         this._getCurrentOperator(this.user.id);
+    }
+
+    override ngOnDestroy(): void {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+        }
     }
 
     toggle(dropDown: DropDownMenuEntry) {
@@ -183,7 +192,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
-    
+
     private _getNewActivitiesCounter() {
         this._subscriptions.push(
             this._activityService.readNewActivitiesCounter()
@@ -195,7 +204,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
-    
+
     protected _getCurrentOperator(userId: number) {
         this._subscriptions.push(
             this._operatorsService.getOperatorByUserId(userId)

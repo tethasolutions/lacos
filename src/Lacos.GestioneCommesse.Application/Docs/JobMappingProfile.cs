@@ -23,7 +23,12 @@ public class JobMappingProfile : Profile
                     .All(i => i.Status == InterventionStatus.Scheduled)
             )
             .MapMember(x => x.HasActivities, y => y.Activities.Any())
-            .MapMember(x => x.HasAttachments, y => y.Activities.Where(a => a.Attachments.Any()).Any())
+            .MapMember(x => x.HasAttachments, y => 
+                y.Activities.Where(a => a.Attachments.Any()).Any() ||
+                y.Tickets.Where(t => t.Pictures.Any()).Any() ||
+                y.PurchaseOrders.Where(p => p.Attachments.Any()).Any() ||
+                y.Attachments.Any()
+            )
             .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
             .MapMember(x => x.HasPurchaseOrders, y => y.PurchaseOrders.Any());
 

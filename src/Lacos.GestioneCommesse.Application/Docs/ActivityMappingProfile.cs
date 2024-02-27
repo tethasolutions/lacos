@@ -26,12 +26,16 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.JobCode, y => CustomDbFunctions.FormatCode(y.Job!.Number, y.Job.Year, 3))
            .MapMember(x => x.JobReference, y => y.Job!.Reference)
            .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
+           .MapMember(x => x.CustomerId, y => y.Job!.CustomerId)
            .MapMember(x => x.Customer, y => y.Job!.Customer == null ? null : y.Job.Customer.Name)
            .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex)
            .MapMember(x => x.LastOperator, y => y.CreatedBy)
            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
            .MapMember(x => x.HasAttachments, y => y.Attachments.Any())
-           .MapMember(x => x.IsExpired, y => (y.ExpirationDate != null) ? (y.ExpirationDate < DateTime.Now.Date) : false);
+           .MapMember(x => x.IsExpired, y => (y.ExpirationDate != null) ? (y.ExpirationDate < DateTime.Now.Date) : false)
+           .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
+           .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
+           .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2);
          
         CreateMap<ActivityDto, Activity>()
            .IgnoreCommonMembers()
@@ -50,7 +54,10 @@ public class ActivityMappingProfile : Profile
            .AfterMap(AfterMap);
 
         CreateMap<Activity, ActivityDto>()
-           .MapMember(x => x.Number, y => y.RowNumber);
+           .MapMember(x => x.Number, y => y.RowNumber)
+           .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
+           .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
+           .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2);
 
         CreateMap<Activity, ActivityDetailDto>()
            .MapMember(x => x.Number, y => y.RowNumber)
@@ -59,7 +66,10 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.Customer, y => y.Job!.Customer!.Name)
            .MapMember(x => x.Address, y => y.Address != null ? y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
            .MapMember(x => x.Type, y => y.Type!.Name)
-           .MapMember(x => x.Referent, y => (y.Referent != null) ? y.Referent.Name : "");
+           .MapMember(x => x.Referent, y => (y.Referent != null) ? y.Referent.Name : "")
+           .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
+           .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
+           .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2);
 
         CreateMap<ActivityAttachment, ActivityAttachmentReadModel>();
         CreateMap<ActivityAttachmentReadModel, ActivityAttachment>()

@@ -4,7 +4,7 @@ import { JobsService } from '../services/jobs/jobs.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { JobModalComponent } from './job-modal.component';
 import { IJobReadModel, Job, JobCopy, JobStatus, jobStatusNames } from '../services/jobs/models';
 import { getToday } from '../services/common/functions';
@@ -15,7 +15,11 @@ import { Router } from '@angular/router';
 import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
-import { ActivitiesAttachmentsModalComponent } from '../activities/activities-attachments-modal.component';
+import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.component';
+import { StorageService } from '../services/common/storage.service';
+import { CustomerService } from '../services/customer.service';
+import { CustomerModel } from '../shared/models/customer.model';
+import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 
 @Component({
     selector: 'app-jobs-completed',
@@ -35,8 +39,10 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     @ViewChild('grid', { static: true })
     grid: GridComponent;
 
-    @ViewChild('activitiesAttachmentsModal', { static: true })
-    activitiesAttachmentsModal: ActivitiesAttachmentsModalComponent;
+    @ViewChild('jobsAttachmentsModal', { static: true })
+    jobsAttachmentsModal: JobsAttachmentsModalComponent;
+    
+    @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     
     data: GridDataResult;
     gridState: State = {
@@ -63,21 +69,35 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
         private readonly _service: JobsService,
         private readonly _serviceActivity: ActivitiesService,
         private readonly _purchaseOrdersService: PurchaseOrdersService,
+        private readonly _customerService: CustomerService,
         private readonly _messageBox: MessageBoxService,
-        private router: Router
+        private router: Router,
+        private readonly _storageService: StorageService
     ) {
         super();
     }
 
     ngOnInit() {
+        this._resumeState();
         this._read();
     }
 
     dataStateChange(state: State) {
         this.gridState = state;
+        this._saveState();
         this._read();
     }
 
+    private _resumeState() {
+        const savedState = this._storageService.get<State>(window.location.hash, true);
+        if (savedState == null) return;
+        this.gridState = savedState;
+    }
+
+    private _saveState() {
+        this._storageService.save(this.gridState,window.location.hash,true);
+    }
+    
     create() {
         const today = getToday();
         const job = new Job(0, null, today.getFullYear(), today, null, null, false, JobStatus.Pending, null, null, null, []);
@@ -128,7 +148,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     }
 
     createActivity(job: IJobReadModel) {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, []);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", []);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -138,6 +158,25 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
                     switchMap(() => this._serviceActivity.create(activity)),
                     tap(() => this._afterActivityCreated(job.id)),
 
+                )
+                .subscribe()
+        );
+    }
+
+    openCustomer(customerId: number): void {
+        this._subscriptions.push(
+            this._customerService.getCustomer(customerId)
+                .pipe(
+                    map(e => {
+                        return Object.assign(new CustomerModel(), e);
+                    }),
+                    switchMap(e => this.customerModal.open(e)),
+                    filter(e => e),
+                    map(() => this.customerModal.options),
+                    switchMap(e => this._customerService.updateCustomer(e, customerId)),
+                    map(() => this.customerModal.options),
+                    tap(e => this._messageBox.success(`Cliente ${e.name} aggiornato`)),
+                    tap(() => this._read())
                 )
                 .subscribe()
         );
@@ -176,7 +215,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
 
     openAttachments(job: IJobReadModel) {
         this._subscriptions.push(
-            this.activitiesAttachmentsModal.open(job.id)
+            this.jobsAttachmentsModal.open(job.id)
                 .pipe(
                     filter(e => e)
                 )

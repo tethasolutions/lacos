@@ -141,4 +141,11 @@ public class PurchaseOrdersController : LacosApiController
         }
         return fileName;
     }
+
+    [HttpGet("{id}/all-attachments")]
+    public async Task<List<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAttachments(long id)
+    {
+        List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(id)).ToList();
+        return purchaseOrdersAttachment;
+    }
 }

@@ -23,5 +23,10 @@ public class ActivityDetailDto
     public DateTimeOffset? ExpirationDate { get; set; }
     public long? ReferentId { get; set; }
     public string? Referent { get; set; }
+
+    public string? StatusLabel0 { get; set; }
+    public string? StatusLabel1 { get; set; }
+    public string? StatusLabel2 { get; set; }
+
     public IEnumerable<ActivityAttachmentDto>? Attachments { get; set; }
 }

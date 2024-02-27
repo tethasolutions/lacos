@@ -224,6 +224,17 @@ public class JobsService : IJobsService
     }
 
     // --------------------------------------------------------------------------------------------------------------
+    public async Task<IEnumerable<JobAttachmentReadModel>> GetJobAttachments(long jobId)
+    {
+        var jobAttachments = await jobAttachmentRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.JobId == jobId)
+            .OrderBy(x => x.CreatedOn)
+            .ToArrayAsync();
+
+        return jobAttachments.MapTo<IEnumerable<JobAttachmentReadModel>>(mapper);
+    }
 
     public async Task<JobAttachmentReadModel> GetJobAttachmentDetail(long attachmentId)
     {

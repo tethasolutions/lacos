@@ -9,6 +9,7 @@ import { TicketModalComponent } from './ticket-modal.component';
 import { ITicketReadModel, Ticket, TicketStatus, ticketStatusNames } from '../services/tickets/models';
 import { getToday } from '../services/common/functions';
 import { Router } from '@angular/router';
+import { StorageService } from '../services/common/storage.service';
 
 @Component({
     selector: 'app-tickets',
@@ -47,20 +48,33 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     constructor(
         private readonly _service: TicketsService,
         private readonly _messageBox: MessageBoxService,
-        private router: Router
+        private router: Router,
+        private readonly _storageService: StorageService
     ) {
         super();
     }
 
     ngOnInit() {
+        this._resumeState();
         this._read();
     }
 
     dataStateChange(state: State) {
         this.gridState = state;
+        this._saveState();
         this._read();
     }
 
+    private _resumeState() {
+        const savedState = this._storageService.get<State>(window.location.hash, true);
+        if (savedState == null) return;
+        this.gridState = savedState;
+    }
+
+    private _saveState() {
+        this._storageService.save(this.gridState,window.location.hash,true);
+    }
+    
     create() {
         const today = getToday();
         const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null,[]);

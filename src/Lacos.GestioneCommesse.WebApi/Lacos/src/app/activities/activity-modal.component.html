@@ -58,8 +58,12 @@
                         <kendo-combobox [data]="suppliers" [valuePrimitive]="true" textField="name" valueField="id"
                             name="supplierId" [(ngModel)]="options.activity.supplierId" [suggest]="true"
                             [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [allowCustom]="false"
-                            [disabled]="!!options.id" (valueChange)="onSupplierChange()">
+                            [disabled]="!!options.id" (valueChange)="onSupplierChange()" class="customer-combobox">
                         </kendo-combobox>
+                        <button (click)="createSupplier()" type="button" class="btn btn-primary add-customer-button"
+                            title="Nuovo fornitore">
+                            <i class="fa fa-plus"></i>
+                        </button>
                         <div class="validation-message" [control]="form.controls['supplierId']"></div>
                     </kendo-formfield>
                 </div>
@@ -253,3 +257,4 @@
 </div>
 
 <app-address-modal #addressModal></app-address-modal>
+<app-supplier-modal #supplierModal></app-supplier-modal>

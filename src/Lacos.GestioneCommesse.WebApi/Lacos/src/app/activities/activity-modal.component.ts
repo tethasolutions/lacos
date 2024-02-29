@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Activity, ActivityStatus } from '../services/activities/models';
 import { ModalComponent } from '../shared/modal.component';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
-import { filter, map, tap } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs';
 import { ActivityTypesService } from '../services/activityTypes.service';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -22,6 +22,7 @@ import { SupplierService } from '../services/supplier.service';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { ActivityAttachmentModel } from '../services/activities/activity-attachment.model';
+import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
 
 @Component({
     selector: 'app-activity-modal',
@@ -31,6 +32,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
+    @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
 
     activityTypes: ActivityTypeModel[];
     customer: CustomerModel;
@@ -93,6 +95,25 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 .find(e => e.id === this.options.activity.jobId).customerId;
             this.readAddresses(customerId);
         }
+    }
+
+    createSupplier() {
+        const request = new SupplierModel();
+
+        this._subscriptions.push(
+            this.supplierModal.open(request)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._suppliersService.createSupplier(request)),
+                    tap(e => {
+                        this.options.activity.supplierId = e.id;
+                        this._messageBox.success(`Fornitore ${request.name} creato`);
+                    }),
+                    tap(() => this._getSuppliers()),
+                    tap(() => this.onSupplierChange())
+                )
+                .subscribe()
+        );
     }
 
     onSupplierChange() {

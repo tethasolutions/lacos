@@ -23,7 +23,6 @@
     <kendo-grid-column field="customer" title="Cliente">
         <ng-template kendoGridCellTemplate let-dataItem>
             <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;"><i class="fas fa-user"></i> {{dataItem.customer}}</a><br/>
-            <i>{{dataItem.customerContacts}}</i>
         </ng-template>
     </kendo-grid-column>   
     <kendo-grid-column field="code" title="Codice" [width]="1">

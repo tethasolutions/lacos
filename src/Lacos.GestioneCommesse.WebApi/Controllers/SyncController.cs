@@ -62,12 +62,12 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("LocalImage")]
-        public async Task<IActionResult> SyncFromAppToDb_LocalImage([FromBody] SyncImageDto syncLocalImage)
+        [HttpPost("LocalDocument")]
+        public async Task<IActionResult> SyncFromAppToDb_LocalDocument([FromBody] SyncDocumentDto syncLocalDocument)
         {
             try
             {
-                await service.SyncFromAppToDB_LocalImage(syncLocalImage);
+                await service.SyncFromAppToDB_LocalDocument(syncLocalDocument);
                 return Ok();
             }
             catch (Exception ex)
@@ -77,10 +77,10 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("RemoteImage")]
-        public async Task<SyncImageDto> SyncFromAppToDb_RemoteImage([FromBody] SyncImageDto syncLocalImage)
+        [HttpPost("RemoteDocument")]
+        public async Task<SyncDocumentDto> SyncFromAppToDb_RemoteImage([FromBody] SyncDocumentDto syncLocalDocument)
         {
-               return await service.SyncFromDBToApp_RemoteImage(syncLocalImage);
+               return await service.SyncFromDBToApp_RemoteDocument(syncLocalDocument);
         }
 
         [AllowAnonymous]

@@ -116,18 +116,18 @@ namespace Lacos.GestioneCommesse.Application.Sync
             }
             return syncLocalDbChangesRemote;
         }
-         public async Task SyncFromAppToDB_LocalImage(SyncImageDto syncLocalImage)
+         public async Task SyncFromAppToDB_LocalDocument(SyncDocumentDto syncLocalDocument)
         {
             try
             {
-                    await using Stream streamOriginalImage = new MemoryStream(syncLocalImage.Content);
+                    await using Stream streamOriginalDocument = new MemoryStream(syncLocalDocument.Content);
                     var folder = configuration.AttachmentsPath;
                     Directory.CreateDirectory(folder);
-                    var path = Path.Combine(folder, syncLocalImage.Filename);
+                    var path = Path.Combine(folder, syncLocalDocument.Filename);
                     if (!File.Exists(path))
                     {
-                        await using Stream stremNewImage = File.Create(path);
-                        await streamOriginalImage.CopyToAsync(stremNewImage);
+                        await using Stream stremNewDocument = File.Create(path);
+                        await streamOriginalDocument.CopyToAsync(stremNewDocument);
                     }
             }
             catch (Exception e)
@@ -176,16 +176,16 @@ namespace Lacos.GestioneCommesse.Application.Sync
          }
 
 
-         public async Task<SyncImageDto> SyncFromDBToApp_RemoteImage(SyncImageDto syncRemoteImage)
+         public async Task<SyncDocumentDto> SyncFromDBToApp_RemoteDocument(SyncDocumentDto syncLocalDocument)
          {
              try
              {
                  var folder = configuration.AttachmentsPath;
-                 var path = Path.Combine(folder, syncRemoteImage.Filename);
+                 var path = Path.Combine(folder, syncLocalDocument.Filename);
                  if (File.Exists(path))
                  {
-                     syncRemoteImage.Content = await File.ReadAllBytesAsync(path);
-                    return syncRemoteImage;
+                     syncLocalDocument.Content = await File.ReadAllBytesAsync(path);
+                    return syncLocalDocument;
                  }
                  //else
                  //{

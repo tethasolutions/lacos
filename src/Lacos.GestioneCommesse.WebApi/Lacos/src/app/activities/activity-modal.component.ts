@@ -109,8 +109,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                         this.options.activity.supplierId = e.id;
                         this._messageBox.success(`Fornitore ${request.name} creato`);
                     }),
-                    tap(() => this._getSuppliers()),
-                    tap(() => this.onSupplierChange())
+                    tap(() => this._getSuppliers())
                 )
                 .subscribe()
         );
@@ -189,7 +188,12 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         this._subscriptions.push(
             this._suppliersService.getSuppliersList()
                 .pipe(
-                    tap(e => this._setData(e))
+                    tap(e => this._setData(e)),
+                    tap(() => {
+                        if (this.selectedActivityType.isInternal && this.options.activity.supplierId) {
+                            this.onSupplierChange();
+                        }})
+                    
                 )
                 .subscribe()
         );

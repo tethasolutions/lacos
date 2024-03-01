@@ -14,10 +14,12 @@ public class InterventionDto
     public long JobId { get; set; }
     public IEnumerable<long> Operators { get; set; }
     public IEnumerable<long> ActivityProducts { get; set; }
+    public IEnumerable<InterventionNoteDto>? Notes { get; set; }
 
     public InterventionDto()
     {
         Operators = new List<long>();
         ActivityProducts = new List<long>();
+        Notes = new List<InterventionNoteDto>();
     }
 }

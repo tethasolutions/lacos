@@ -3,8 +3,12 @@ using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
 using Lacos.GestioneCommesse.Application.Products.Service;
+using Lacos.GestioneCommesse.Framework.Configuration;
+using Lacos.GestioneCommesse.Framework.IO;
 using Lacos.GestioneCommesse.WebApi.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Configuration;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -12,10 +16,14 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers;
 public class InterventionsController : LacosApiController
 {
     private readonly IInterventionsService service;
+    private readonly ILacosConfiguration configuration;
+    private readonly IMimeTypeProvider mimeTypeProvider;
 
-    public InterventionsController(IInterventionsService service)
+    public InterventionsController(IInterventionsService service, ILacosConfiguration configuration, IMimeTypeProvider mimeTypeProvider)
     {
         this.service = service;
+        this.configuration = configuration;
+        this.mimeTypeProvider = mimeTypeProvider;
     }
 
     [HttpGet("read")]
@@ -69,5 +77,29 @@ public class InterventionsController : LacosApiController
     {
         var report = await service.GenerateReport(interventionId);
         return File(report.Content, "application/pdf", report.FileName);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("intervention-note/download-file/{fileName}")]
+    public async Task<FileResult> DownloadAttachment(string fileName)
+    {
+        fileName = Uri.UnescapeDataString(fileName);
+
+        var activityAttachment = await service.DownloadInterventionNote(fileName);
+        var downloadFileName = activityAttachment == null
+            ? fileName
+            : activityAttachment.PictureFileName;
+        var folder = configuration.AttachmentsPath!;
+
+        if (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+
+        var path = Path.Combine(folder, fileName);
+        var mimeType = mimeTypeProvider.Provide(fileName);
+        var stream = System.IO.File.OpenRead(path);
+
+        return File(stream, mimeType, downloadFileName);
     }
 }

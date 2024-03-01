@@ -17,6 +17,8 @@ import { ApiUrls } from '../services/common/api-urls';
 import { IActivityProductReadModel } from '../services/activity-products/models';
 import { ActivityProductsService } from '../services/activity-products/activity-products.service';
 import { listEnum } from '../services/common/functions';
+import { NumericFilterCellComponent } from '@progress/kendo-angular-grid';
+import { InterventionNotesModalComponent } from './intervention-notes-modal.component';
 
 @Component({
     selector: 'app-intervention-modal',
@@ -24,8 +26,8 @@ import { listEnum } from '../services/common/functions';
 })
 export class InterventionModalComponent extends ModalComponent<Intervention> implements OnInit {
 
-    @ViewChild('form', { static: false })
-    form: NgForm;
+    @ViewChild('form', { static: false }) form: NgForm;
+    @ViewChild('interventionNotesModal', { static: true }) interventionNotesModal: InterventionNotesModalComponent;
 
     jobs: SelectableJob[];
     activities: SelectableActivity[];
@@ -299,6 +301,13 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         )
     }
 
+    openNotes() {        
+        this._subscriptions.push(
+            this.interventionNotesModal.open(this.options)
+                .subscribe()
+        );
+    }
+    
 }
 
 class SelectableJob {

@@ -22,6 +22,7 @@ public class InterventionsService : IInterventionsService
     private readonly IRepository<ActivityProduct> activityProductRepository;
     private readonly IRepository<Activity> activityRepository;
     private readonly IRepository<InterventionProductCheckList> productCheckListRepository;
+    private readonly IRepository<InterventionNote> noteRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
@@ -33,6 +34,7 @@ public class InterventionsService : IInterventionsService
         IRepository<ActivityProduct> activityProductRepository,
         IRepository<Activity> activityRepository,
         IRepository<InterventionProductCheckList> productCheckListRepository,
+        IRepository<InterventionNote> noteRepository,
         ILacosSession session
     )
     {
@@ -43,6 +45,7 @@ public class InterventionsService : IInterventionsService
         this.activityProductRepository = activityProductRepository;
         this.activityRepository = activityRepository;
         this.productCheckListRepository = productCheckListRepository;
+        this.noteRepository = noteRepository;
         this.session = session;
     }
 
@@ -300,5 +303,22 @@ public class InterventionsService : IInterventionsService
         var result = processor.RenderReport("PDF", src, null);
 
         return result.DocumentBytes;
+    }
+
+    public async Task<InterventionNoteDto> DownloadInterventionNote(string filename)
+    {
+        var interventionNote = await noteRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.PictureFileName == filename)
+            .Project<InterventionNoteDto>(mapper)
+            .SingleOrDefaultAsync();
+
+        if (interventionNote == null)
+        {
+            throw new NotFoundException($"Nota con Id {filename} non trovata.");
+        }
+
+        return interventionNote;
     }
 }

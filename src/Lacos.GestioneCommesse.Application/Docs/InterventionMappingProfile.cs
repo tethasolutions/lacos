@@ -54,5 +54,13 @@ public class InterventionMappingProfile : Profile
             .MapMember(x => x.Outcome, y => y.Outcome.Value)
             .MapMember(x => x.OperatorName, y => y.Operator.Name);
 
+        CreateMap<InterventionNote, InterventionNoteDto>()
+            .MapMember(x => x.OperatorName, y => y.Operator != null ? y.Operator.Name : "");
+
+        CreateMap<InterventionNoteDto, InterventionNote>()
+           .Ignore(x => x.OperatorId)
+           .Ignore(x => x.Operator)
+           .Ignore(x => x.Intervention)
+           .IgnoreCommonMembers();
     }
 }

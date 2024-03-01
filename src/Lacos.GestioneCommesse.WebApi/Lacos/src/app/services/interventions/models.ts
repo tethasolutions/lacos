@@ -32,15 +32,17 @@ export class Intervention {
         public activityId: number,
         public jobId: number,
         public operators: number[],
-        public activityProducts: number[]
+        public activityProducts: number[],
+        public notes: InterventionNote[]
     ) {
         this.start = new Date(start);
         this.end = new Date(end);
     }
 
     static build(o: Intervention) {
+        const notes = o.notes.map(e => InterventionNote.build(e));
         return new Intervention(o.id, o.start, o.end, o.status, o.description, o.vehicleId,
-            o.activityId, o.jobId, o.operators, o.activityProducts);
+            o.activityId, o.jobId, o.operators, o.activityProducts, notes);
     }
 
 }
@@ -93,8 +95,7 @@ export class InterventionProductCheckList {
         readonly description: string,
         readonly notes: string,
         readonly items: InterventionProductCheckListItem[]
-    )
-    {}
+    ) { }
 
     static build(o: InterventionProductCheckList) {
         return new InterventionProductCheckList(o.interventionProductId, o.description, o.notes, o.items);
@@ -109,9 +110,23 @@ export class InterventionProductCheckListItem {
         readonly notes: string,
         readonly attachmentFileName: string,
         readonly operatorName: string
-        ) {}
+    ) { }
 
     static build(o: InterventionProductCheckListItem) {
         return new InterventionProductCheckListItem(o.description, o.outcome, o.notes, o.operatorName, o.attachmentFileName);
+    }
+}
+
+export class InterventionNote {
+
+    constructor(
+        readonly id: number,
+        readonly pictureFileName: string,
+        readonly notes: string,
+        readonly operatorName: string,
+        readonly interventionId: number
+    ) { }
+    static build(o: InterventionNote) {
+        return new InterventionNote(o.id, o.pictureFileName, o.notes, o.operatorName, o.interventionId);
     }
 }

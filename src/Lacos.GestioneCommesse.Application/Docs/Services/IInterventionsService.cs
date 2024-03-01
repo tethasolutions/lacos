@@ -14,4 +14,5 @@ public interface IInterventionsService
     Task<InterventionProductCheckListDto> GetInterventionProductCheckList(long interventionProductId);
     
     Task<ReportDto> GenerateReport(long interventionId);
+    Task<InterventionNoteDto> DownloadInterventionNote(string filename);
 }

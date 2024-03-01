@@ -163,6 +163,9 @@
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">
                     Annulla
                 </button>
+                <button type="button" (click)="openNotes()" class="btn btn-primary">
+                    Note
+                </button>
                 <button type="submit" class="btn btn-primary" [disabled]="readonly">
                     Salva
                 </button>
@@ -170,3 +173,5 @@
         </form>
     </kendo-window>
 </div>
+
+<app-intervention-notes-modal #interventionNotesModal></app-intervention-notes-modal>

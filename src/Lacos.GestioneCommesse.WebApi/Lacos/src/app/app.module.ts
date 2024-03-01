@@ -117,6 +117,7 @@ import { Role } from './services/security/models';
 import { RolePipe } from './pipes/role.pipe';
 import { JobsCompletedComponent } from './jobs/jobs-completed.component';
 import { JobsAttachmentsModalComponent } from './jobs/jobs-attachments-modal.component';
+import { InterventionNotesModalComponent } from './interventions/intervention-notes-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -171,6 +172,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         StringsPipe,
         ActivityProductModalComponent,
         InterventionModalComponent,
+        InterventionNotesModalComponent,
         InterventionsCalendarComponent,
         OperatorAvatarComponent,
         InterventionsComponent,

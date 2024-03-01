@@ -42,7 +42,7 @@ public class JobsService : IJobsService
             .Project<JobReadModel>(mapper);
     }
 
-    public async Task<JobDto> GetTicketJob(long CustomerId)
+    public async Task<JobDto> GetTicketJob(long CustomerId, string TicketCode)
     {
         var jobDto = await repository.Query()
             .Where(e => e.IsInternalJob && e.Year == DateTime.Now.Year && e.CustomerId == CustomerId)
@@ -54,7 +54,7 @@ public class JobsService : IJobsService
             jobDto = new JobDto();
             jobDto.CustomerId = CustomerId;
             jobDto.Year = DateTime.Now.Year;
-            jobDto.Reference = "Ticket " + DateTime.Now.Year.ToString();
+            jobDto.Reference = "Ticket " + TicketCode;
             jobDto.Date = DateTime.Now;
             jobDto.Status = JobStatus.Pending;
             jobDto.Description = " ";

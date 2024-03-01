@@ -92,7 +92,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     createActivity(ticket: Ticket) {
 
         this._subscriptions.push(
-            this._serviceJob.getTicketJob(ticket.customerId)
+            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/","-"))
                 .pipe(
                     tap(e => this._job = e),
                     tap(() => this._newActivity(ticket))

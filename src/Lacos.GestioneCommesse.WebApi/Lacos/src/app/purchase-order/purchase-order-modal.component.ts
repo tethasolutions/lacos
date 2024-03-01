@@ -11,11 +11,12 @@ import { SupplierModel } from '../shared/models/supplier.model';
 import { SupplierService } from '../services/supplier.service';
 import { PurchaseOrder, PurchaseOrderItem, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderItemModalComponent } from './purchase-order-item-modal.component';
-import { filter, tap } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs';
 import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { PurchaseOrderAttachmentUploadFileModel } from '../services/purchase-orders/purchage-order-attachment-upload-file.model';
 import { PurchaseOrderAttachmentModel } from '../services/purchase-orders/purchase-order-attachment.model';
+import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -26,8 +27,8 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     @ViewChild('form', { static: false })
     form: NgForm;
 
-    @ViewChild('purchaseOrderItemModal', { static: true })
-    purchaseOrderItemModal: PurchaseOrderItemModalComponent;
+    @ViewChild('purchaseOrderItemModal', { static: true }) purchaseOrderItemModal: PurchaseOrderItemModalComponent;
+    @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
 
     jobs: SelectableJob[];
     job: Job;
@@ -156,11 +157,33 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         );
     }
 
+    createSupplier() {
+        const request = new SupplierModel();
+
+        this._subscriptions.push(
+            this.supplierModal.open(request)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._suppliersService.createSupplier(request)),
+                    tap(e => {
+                        this.options.purchaseOrder.supplierId = e.id;
+                        this._messageBox.success(`Fornitore ${request.name} creato`);
+                    }),
+                    tap(() => this._getSuppliers())
+                )
+                .subscribe()
+        );
+    }
+
     private _getSuppliers() {
         this._subscriptions.push(
             this._suppliersService.getSuppliersList()
                 .pipe(
-                    tap(e => this._setData(e))
+                    tap(e => this._setData(e)),
+                    tap(() => {
+                        if (this.options.purchaseOrder.supplierId) {
+                            this.onSupplierChange();
+                        }})
                 )
                 .subscribe()
         );

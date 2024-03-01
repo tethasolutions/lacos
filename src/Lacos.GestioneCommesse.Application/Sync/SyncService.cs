@@ -371,9 +371,9 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 else
                 { 
                     var oldId = model.Id;
-                    var number = await GetNextNumber(entity.Year);
-                    entity.Number = number;
+                    var number = await GetNextNumber(model.Year.Value);
                     var newEntity = model.MapTo<PurchaseOrder>(mapper);
+                    newEntity.Number = number;
                     await repository.Insert(newEntity);
                     await dbContext.SaveChanges();
                     list.Add(newEntity.MapTo<SyncPurchaseOrderDto>(mapper));

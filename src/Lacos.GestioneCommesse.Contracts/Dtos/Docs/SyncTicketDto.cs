@@ -13,6 +13,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public bool? IsNew { get; set; }
         public long? CustomerId { get; set; }
         public long? ActivityId { get; set; }
+        public long? OperatorId { get; set;}
         
     }
 

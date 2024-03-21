@@ -15,7 +15,7 @@ public class TicketMappingProfile : Profile
             .MapMember(x => x.Code, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3))
             .MapMember(x => x.Date, y => y.TicketDate)
             .MapMember(x => x.CustomerName, y => y.Customer!.Name)
-            .MapMember(x => x.OperatorName, y => y.CreatedBy);
+            .MapMember(x => x.OperatorName, y => y.Operator!.Name);
 
         CreateMap<TicketDto, Ticket>()
             .IgnoreCommonMembers()
@@ -24,6 +24,7 @@ public class TicketMappingProfile : Profile
             .Ignore(x => x.Activity)
             .Ignore(x => x.Pictures)
             .Ignore(x => x.IsNew)
+            .Ignore(x => x.Operator)
             .MapMember(x => x.TicketDate, (x, y) => y.IsTransient() ? x.Date : y.TicketDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId)
             .AfterMap(AfterMap);

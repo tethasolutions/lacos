@@ -49,6 +49,8 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     attachments: Array<FileInfo> = [];
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
+
+    pathImage = `${ApiUrls.baseUrl}/attachments/`;
     uploadSaveUrl = `${this._baseUrl}/activity-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/activity-attachment/remove-file`;
 
@@ -190,10 +192,13 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 .pipe(
                     tap(e => this._setData(e)),
                     tap(() => {
-                        if (this.selectedActivityType.isInternal && this.options.activity.supplierId) {
-                            this.onSupplierChange();
-                        }})
-                    
+                        if (this.selectedActivityType) {
+                            if (this.selectedActivityType.isInternal && this.options.activity.supplierId) {
+                                this.onSupplierChange();
+                            }
+                        }
+                    })
+
                 )
                 .subscribe()
         );

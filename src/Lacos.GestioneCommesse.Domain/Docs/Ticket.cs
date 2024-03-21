@@ -19,6 +19,9 @@ public class Ticket : FullAuditedEntity
     public Customer? Customer { get; set; }
     public bool IsNew { get; set; }
 
+    public long? OperatorId { get; set; }
+    public Operator? Operator { get; set; }
+
     public ICollection<TicketPicture> Pictures { get; set; }
 
     public Ticket()

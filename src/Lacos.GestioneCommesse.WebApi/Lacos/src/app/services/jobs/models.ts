@@ -13,11 +13,11 @@ export enum JobStatus {
 
 export const jobStatusNames: Dictionary<JobStatus, string> = {
 
-    [JobStatus.Pending]: 'Attiva',
-    [JobStatus.InProgress]: 'In corso',
-    [JobStatus.Completed]: 'Completata',
-    [JobStatus.Billing]: 'Da Fatturare',
-    [JobStatus.Billed]: 'Fatturata'
+    [JobStatus.Pending]: 'ATTIVA',
+    [JobStatus.InProgress]: 'IN CORSO',
+    [JobStatus.Completed]: 'COMPLETATA',
+    [JobStatus.Billing]: 'DA FATTURARE',
+    [JobStatus.Billed]: 'FATTURATA'
 
 };
 

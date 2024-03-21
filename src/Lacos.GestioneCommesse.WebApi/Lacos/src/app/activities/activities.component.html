@@ -23,7 +23,7 @@
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;"><i class="fas fa-user"></i> {{dataItem.customer}}</a>
+            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="jobCode" title="Comm." [width]="1">
@@ -80,7 +80,7 @@
                     <i class="fas fa-edit"></i>
                 </button>
                 <a class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', dataItem.id]">
-                    <i class="fas fa-external-link"></i>
+                    <i class="fas fa-gear"></i>
                 </a>
                 <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
                     (click)="askRemove(dataItem)">

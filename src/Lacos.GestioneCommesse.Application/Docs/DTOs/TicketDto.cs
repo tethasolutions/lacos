@@ -14,6 +14,7 @@ public class TicketDto : BaseEntityDto
     public long? ActivityId { get; set; }
     public long CustomerId { get; set; }
     public string? CustomerName { get; set; }
+    public long? OperatorId { get; set; }
 
     public ICollection<TicketAttachmentDto> Pictures { get; set; }
 

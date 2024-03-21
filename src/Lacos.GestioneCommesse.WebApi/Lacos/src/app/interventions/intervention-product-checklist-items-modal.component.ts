@@ -17,7 +17,7 @@ export class InterventionProductChecklistItemsModalComponent extends ModalCompon
 
   @ViewChild('form') form: NgForm;
   readonly role = Role;
-  readonly imagesUrl = `${ApiUrls.baseUrl}/`;
+  readonly imagesUrl = `${ApiUrls.baseUrl}/attachments`;
 
   interventionProductCheckList: InterventionProductCheckList;
 

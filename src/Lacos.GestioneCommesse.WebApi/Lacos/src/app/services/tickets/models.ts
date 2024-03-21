@@ -10,10 +10,10 @@ export enum TicketStatus {
 
 export const ticketStatusNames: Dictionary<TicketStatus, string> = {
 
-    [TicketStatus.Opened]: 'Aperto',
-    [TicketStatus.InProgress]: 'In corso',
-    [TicketStatus.Resolved]: 'Evaso',
-    [TicketStatus.Canceled]: 'Annullato'
+    [TicketStatus.Opened]: 'APERTO',
+    [TicketStatus.InProgress]: 'IN CORSO',
+    [TicketStatus.Resolved]: 'EVASO',
+    [TicketStatus.Canceled]: 'ANNULLATO'
 
 };
 

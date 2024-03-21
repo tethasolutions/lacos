@@ -35,7 +35,7 @@ export class OperatorAvatarComponent extends BaseComponent implements OnChanges 
     }
 
     private _getContent(name: string) {
-        const words = name?.trim().split(' ');
+        const words = name?.trim().split(' ').filter(e => e);
 
         if (!words) {
             return '';
@@ -44,7 +44,7 @@ export class OperatorAvatarComponent extends BaseComponent implements OnChanges 
         if (words.length === 1) {
             return words[0][0].toUpperCase();
         }
-
+        
         return words[0][0].toUpperCase() + words[1][0].toUpperCase();
     }
 

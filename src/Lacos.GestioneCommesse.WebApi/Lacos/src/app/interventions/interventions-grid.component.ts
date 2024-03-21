@@ -42,7 +42,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
             logic: 'and'
         },
         group: [],
-        sort: []
+        sort: [{ field: 'start', dir: 'desc' }]
     };
 
     constructor(

@@ -139,7 +139,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <label>Descrizione Attività</label>
+                    <label>Attività</label>
                     <div class="form-group">
                         <input class="form-control" name="shortDescription"
                             [(ngModel)]="options.activity.shortDescription" maxlength="255" novalidate
@@ -152,7 +152,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Info</label>
+                        <label>Descrizione</label>
                         <kendo-editor name="informations" [(ngModel)]="options.activity.informations"
                             [resizable]="true" [iframe]="false">
                             <kendo-toolbar>
@@ -227,6 +227,14 @@
                     </div>
                 </div>
             </div>
+
+            <!-- <div class="row">
+                <div class="col-md-12">
+                    <div *ngFor="let item of options.activity.attachments" class="col-12">
+                        <p><a [href]="pathImage + item.fileName" target="_blank"><img [src]="pathImage + item.fileName" width="100px" [title]="item.displayName" /></a></p>
+                    </div>
+                </div>
+            </div>   -->
 
             <div class="row">
                 <div class="col-md-12">

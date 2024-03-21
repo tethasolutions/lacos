@@ -23,7 +23,7 @@
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;"><i class="fas fa-user"></i> {{dataItem.customer}}</a><br/>
+            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a><br/>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="code" title="Codice" [width]="1">
@@ -66,7 +66,7 @@
                     </button>
                     <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']" *ngIf="dataItem.hasActivities"
                         [queryParams]="{jobId: dataItem.id}">
-                        <i class="fas fa-external-link"></i>
+                        <i class="fas fa-gear"></i>
                     </a>
                     <button class="btn btn-secondary btn-sm" title="Visualizza allegati" *ngIf="dataItem.hasAttachments"
                         (click)="openAttachments(dataItem)">

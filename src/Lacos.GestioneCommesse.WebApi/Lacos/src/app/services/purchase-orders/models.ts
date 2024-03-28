@@ -24,18 +24,21 @@ export interface IPurchaseOrderReadModel {
     readonly id: number;
     readonly code: string;
     readonly date: Date | string;
+    readonly expectedDate: Date | string;
     readonly description: string;
     readonly status: PurchaseOrderStatus;
     readonly jobId: number;
     readonly jobReference: string;
     readonly jobHasHighPriority: boolean;
     readonly supplierName: string;
+    readonly operatorName: string;
 
 }
 
 export class PurchaseOrder {
 
     date: Date;
+    expectedDate: Date;
 
     get code() {
         return `${this.year}/${this.number}`;
@@ -46,22 +49,26 @@ export class PurchaseOrder {
         readonly number: number,
         public year: number,
         date: Date | string,
+        expectedDate: Date | string,
         public description: string,
         public status: PurchaseOrderStatus,
         public jobId: number,
         public supplierId: number,
         public supplierName: string,
+        public operatorId: number,
+        public operatorName: string,
         public items: PurchaseOrderItem[],
         public attachments: PurchaseOrderAttachmentModel[]
     ) {
         this.date = date ? new Date(date) : null;
+        this.expectedDate = expectedDate ? new Date(expectedDate) : null;
     }
 
     static build(o: PurchaseOrder) {
         const items = o.items.map(e => PurchaseOrderItem.build(e));
         const attachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e));
 
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.description, o.status, o.jobId, o.supplierId, o.supplierName, items, attachments);
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, o.operatorName, items, attachments);
     }
 
 }

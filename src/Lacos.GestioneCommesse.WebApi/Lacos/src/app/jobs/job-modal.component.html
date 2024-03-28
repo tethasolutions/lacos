@@ -17,6 +17,22 @@
         <form name="job-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()">
 
             <div class="row">
+                <div class="col-md-1">
+                    <label>Numero</label>
+                    <div class="form-group">
+                        <input class="form-control" name="number" [(ngModel)]="options.number" novalidate
+                            autocomplete="off" disabled />
+                        <div class="validation-message" [control]="form.controls['number']"></div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <label>Anno</label>
+                    <div class="form-group">
+                        <input class="form-control" name="year" [(ngModel)]="options.year" novalidate autocomplete="off"
+                            disabled />
+                        <div class="validation-message" [control]="form.controls['year']"></div>
+                    </div>
+                </div>
                 <div class="col-md-3">
                     <label>Data</label>
                     <div class="form-group">
@@ -26,20 +42,12 @@
                         <div class="validation-message" [control]="form.controls['date']"></div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <label>Numero</label>
+                <div class="col-md-3">
+                    <label>Data Scadenza</label>
                     <div class="form-group">
-                        <input class="form-control" name="number" [(ngModel)]="options.number" novalidate
-                            autocomplete="off" disabled />
-                        <div class="validation-message" [control]="form.controls['number']"></div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <label>Anno</label>
-                    <div class="form-group">
-                        <input class="form-control" name="year" [(ngModel)]="options.year" novalidate autocomplete="off"
-                            disabled />
-                        <div class="validation-message" [control]="form.controls['year']"></div>
+                        <kendo-datepicker format="dd/MM/yyyy" name="expirationDate" [(ngModel)]="options.expirationDate" [min]="options.date">
+                        </kendo-datepicker>
+                        <div class="validation-message" [control]="form.controls['expirationDate']"></div>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -51,7 +59,7 @@
                         <div class="validation-message" [control]="form.controls['hasHighPriority']"></div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Stato</label>
                     <div class="form-group">
                         <kendo-dropdownlist [data]="states" [valuePrimitive]="true" name="status"
@@ -125,26 +133,13 @@
                         <kendo-editor name="description" [(ngModel)]="options.description" [resizable]="true" [iframe]="false">
                             <kendo-toolbar>
                                 <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorUndoButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorRedoButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
-                                <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
                                     <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
                                     <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorStrikethroughButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
-                                <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorAlignLeftButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorAlignCenterButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorAlignRightButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorAlignJustifyButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorInsertOrderedListButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorOutdentButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
@@ -158,9 +153,9 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-3">
                     <kendo-formfield class="form-group">
-                        <label>Allegato</label>
+                        <label>Allegati</label>
                         <kendo-upload [(ngModel)]="this.attachments" (success)="AttachmentExecutionSuccess($event)"
                             [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
@@ -168,11 +163,22 @@
                                     {{ files[0].name }}
                                 </a>
                             </ng-template>
+                            <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
                         </kendo-upload>
                     </kendo-formfield>
                 </div>
+                <div class="col-md-9">
+                    <div class="row">
+                    <div *ngFor="let item of options.attachments"class="col-2">
+                            <a [href]="pathImage + item.fileName" target="_blank">
+                                <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName" *ngIf="item.isImage" />
+                                <img src="assets/document.jpg" width="90%" [title]="item.displayName" *ngIf="!item.isImage" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
+                        
             <div class="d-flex justify-content-end gap-2 mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">
                     Annulla

@@ -26,6 +26,7 @@ export interface IJobReadModel {
     readonly id: number;
     readonly code: string;
     readonly date: Date | string;
+    readonly expirationDate: Date | string;
     readonly description: string;
     readonly reference: string;
     readonly hasHighPriority: boolean;
@@ -47,6 +48,7 @@ export interface IJobReadModel {
 export class Job {
 
     date: Date;
+    expirationDate: Date;
 
     get code() {
         return `${this.number.toString().padStart(3, '0')}/${this.year}`;
@@ -57,6 +59,7 @@ export class Job {
         readonly number: number,
         public year: number,
         date: Date | string,
+        expirationDate: Date | string,
         public description: string,
         public reference: string,
         public hasHighPriority: boolean,
@@ -66,12 +69,13 @@ export class Job {
         public referentId: number,
         public attachments: JobAttachmentModel[]
     ) {
-        this.date = date ? new Date(date) : null;
+        this.date = date ? new Date(date) : null;        
+        this.expirationDate = expirationDate ? new Date(expirationDate) : null;
     }
 
     static build(o: Job) {
         const attachments = o.attachments.map(e => JobAttachmentModel.build(e));
-        return new Job(o.id, o.number, o.year, o.date, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId, o.referentId, attachments);
+        return new Job(o.id, o.number, o.year, o.date, o.expirationDate, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId, o.referentId, attachments);
     }
 
 }

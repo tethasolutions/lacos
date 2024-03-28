@@ -131,6 +131,12 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
         }
     }
 
+    onStartChange() {
+        if (this.options.end < this.options.start) {
+            this.options.end = this.options.start.addHours(1);
+        }
+    }
+
     selectAllProducts() {
         for (const product of this.products) {
             if (product.selected) {

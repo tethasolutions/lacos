@@ -49,6 +49,7 @@
                         <label>Immagine</label>
                         <kendo-upload [(ngModel)]="this.attachmentsFileInfo" (success)="AttachmentExecutionSuccess($event)" 
                             [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" name="myUpload">
+                            <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
                         </kendo-upload>
                     </kendo-formfield>
                     <!-- <kendo-formfield>

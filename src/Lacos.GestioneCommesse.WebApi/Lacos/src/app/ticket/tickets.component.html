@@ -51,9 +51,9 @@
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                     <i class="fas fa-edit"></i>
                 </button>
-                <a *ngIf="dataItem.activityId != null" class="btn btn-primary btn-sm" title="Apri attività" [routerLink]="['/activities', dataItem.activityId]">
+                <button [disabled]="dataItem.activityId == null" class="btn btn-primary btn-sm" title="Apri attività" [routerLink]="['/activities', dataItem.activityId]">
                     <i class="fas fa-gear"></i>
-                </a>
+                </button>
                 <button class="btn btn-danger btn-sm" title="Rimuovi" (click)="askRemove(dataItem)">
                     <i class="fas fa-trash"></i>
                 </button>

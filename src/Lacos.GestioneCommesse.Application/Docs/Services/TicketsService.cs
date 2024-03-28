@@ -75,6 +75,7 @@ public class TicketsService : ITicketsService
         var number = await GetNextNumber(Ticket.TicketDate.Year);
 
         Ticket.SetCode(Ticket.TicketDate.Year, number);
+
         Ticket.IsNew= true;
 
         await repository.Insert(Ticket);

@@ -40,6 +40,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     attachments: Array<FileInfo> = [];
     
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
+    pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     uploadSaveUrl = `${this._baseUrl}/job-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/job-attachment/remove-file`;
 
@@ -126,6 +127,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
                     switchMap(() => this._customersService.createCustomer(request)),
                     tap(e => {
                         this.options.customerId = e.id;
+                        this.readAddresses();
                         this._messageBox.success(`Cliente ${request.name} creato`);
                     }),
                     tap(() => this._getData())

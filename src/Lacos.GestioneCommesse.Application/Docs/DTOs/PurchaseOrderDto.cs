@@ -9,6 +9,7 @@ public class PurchaseOrderDto : BaseEntityDto
     public int? Number { get; set; }
     public int Year { get; set; }
     public DateTimeOffset Date { get; set; }
+    public DateTimeOffset? ExpectedDate { get; set; }
     public string? Description { get; set; }
     public PurchaseOrderStatus Status { get; set; }
 
@@ -16,6 +17,10 @@ public class PurchaseOrderDto : BaseEntityDto
 
     public long SupplierId { get; set; }
     public string? SupplierName { get; set; }
+
+    public long? OperatorId { get; set; }
+    public string? OperatorName { get; set; }
+
     public IEnumerable<PurchaseOrderAttachmentDto>? Attachments { get; set; }
 
     public IEnumerable<PurchaseOrderItemDto> Items { get; set; }

@@ -15,7 +15,8 @@ public class PurchaseOrderMappingProfile : Profile
             .MapMember(x => x.SupplierName, y => y.Supplier!.Name)
             .MapMember(x => x.JobCode, y => CustomDbFunctions.FormatCode(y.Job!.Number, y.Job.Year, 3))
             .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
-            .MapMember(x => x.JobReference, y => y.Job!.Reference);
+            .MapMember(x => x.JobReference, y => y.Job!.Reference)
+            .MapMember(x => x.OperatorName, y => y.Operator!.Name);
 
         CreateMap<PurchaseOrderDto, PurchaseOrder>()
             .IgnoreCommonMembers()
@@ -23,10 +24,12 @@ public class PurchaseOrderMappingProfile : Profile
             .Ignore(x => x.Supplier)
             .Ignore(x => x.Items)
             .Ignore(x => x.Attachments)
+            .Ignore(x => x.Operator)
             .AfterMap(AfterMap);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()
-            .MapMember(x => x.SupplierName, y => y.Supplier!.Name);
+            .MapMember(x => x.SupplierName, y => y.Supplier!.Name)
+            .MapMember(x => x.OperatorName, y => y.Operator!.Name);
 
         CreateMap<PurchaseOrderItemDto, PurchaseOrderItem>()
             .IgnoreCommonMembers()

@@ -10,6 +10,10 @@ import { ITicketReadModel, Ticket, TicketStatus, ticketStatusNames } from '../se
 import { getToday } from '../services/common/functions';
 import { Router } from '@angular/router';
 import { StorageService } from '../services/common/storage.service';
+import { OperatorModel } from '../shared/models/operator.model';
+import { OperatorsService } from '../services/operators.service';
+import { User } from '../services/security/models';
+import { UserService } from '../services/security/user.service';
 
 @Component({
     selector: 'app-tickets',
@@ -44,11 +48,15 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     readonly ticketStatusNames = ticketStatusNames;
     private cellArgs: CellClickEvent;
+    user: User;
+    currentOperator: OperatorModel;
 
     constructor(
         private readonly _service: TicketsService,
         private readonly _messageBox: MessageBoxService,
         private router: Router,
+        private readonly _user: UserService,
+        private readonly _operatorsService: OperatorsService,
         private readonly _storageService: StorageService
     ) {
         super();
@@ -57,6 +65,8 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     ngOnInit() {
         this._resumeState();
         this._read();
+        this.user = this._user.getUser();
+        this._getCurrentOperator(this.user.id);
     }
 
     dataStateChange(state: State) {
@@ -77,7 +87,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     
     create() {
         const today = getToday();
-        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null,[]);
+        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null,this.currentOperator.id,[]);
 
         this._subscriptions.push(
             this.ticketModal.open(ticket)
@@ -185,4 +195,13 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         }
     };
 
+    protected _getCurrentOperator(userId: number) {
+        this._subscriptions.push(
+            this._operatorsService.getOperatorByUserId(userId)
+                .pipe(
+                    tap(e => this.currentOperator = e)
+                )
+                .subscribe()
+        );
+    }
 }

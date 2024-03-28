@@ -20,12 +20,17 @@
             {{dataItem.date | date:'dd/MM/yyyy'}}
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="expirationDate" title="Data Scad." filter="expirationDate" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">
         <ng-template kendoGridCellTemplate let-dataItem>
             <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a><br/>
         </ng-template>
     </kendo-grid-column>   
-    <kendo-grid-column field="code" title="Codice" [width]="1">
+    <kendo-grid-column field="code" title="Cod." [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="!dataItem.hasHighPriority">{{dataItem.code}}</div>
             <div *ngIf="dataItem.hasHighPriority" class="job-alert">
@@ -57,15 +62,18 @@
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex flex-column gap-2">
                 <div class="d-flex text-nowrap justify-content-center gap-1">
+                    <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
+                        <i class="fas fa-edit"></i>
+                    </button>
                     <button class="btn btn-primary btn-sm" title="Aggiungi nuova attività"
                         (click)="createActivity(dataItem)">
                         <i class="fa fa-plus"></i>
                     </button>
-                    <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']" *ngIf="dataItem.hasActivities"
+                    <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']" [disabled]="!dataItem.hasActivities"
                         [queryParams]="{jobId: dataItem.id}">
                         <i class="fas fa-gear"></i>
                     </a>
-                    <button class="btn btn-secondary btn-sm" title="Visualizza allegati" (click)="openAttachments(dataItem)" *ngIf="dataItem.hasAttachments">
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati" (click)="openAttachments(dataItem)" [disabled]="!dataItem.hasAttachments">
                         <i class="fa fa-paperclip"></i>
                     </button>
                 </div>
@@ -74,15 +82,15 @@
                         (click)="createPurchaseOrder(dataItem)">
                         <i class="fa fa-cart-shopping"></i>
                     </button>
-                    <a class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto" *ngIf="dataItem.hasPurchaseOrders"
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto" [disabled]="!dataItem.hasPurchaseOrders"
                         [routerLink]="['/purchase-orders']" [queryParams]="{jobId: dataItem.id}">
                         <i class="fa fa-bag-shopping"></i>
-                    </a>
+                    </button>
                     <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
                         <i class="fas fa-copy"></i>
                     </button>
-                    <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
-                        <i class="fas fa-edit"></i>
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza tickets" disabled >
+                        <i class="fa fa-tag"></i>
                     </button>
                     <!-- <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
                         (click)="askRemove(dataItem)">

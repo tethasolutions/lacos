@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240328103906_expiration date job")]
+    partial class expirationdatejob
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -929,10 +932,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
-                    b.Property<DateTimeOffset?>("ExpectedDate")
-                        .HasPrecision(3)
-                        .HasColumnType("datetimeoffset(3)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -941,9 +940,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
-
-                    b.Property<long?>("OperatorId")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -957,8 +953,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("JobId");
-
-                    b.HasIndex("OperatorId");
 
                     b.HasIndex("SupplierId");
 
@@ -2409,10 +2403,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .WithMany("PurchaseOrders")
                         .HasForeignKey("JobId");
 
-                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Operator", "Operator")
-                        .WithMany()
-                        .HasForeignKey("OperatorId");
-
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Supplier", "Supplier")
                         .WithMany("PurchaseOrders")
                         .HasForeignKey("SupplierId")
@@ -2420,8 +2410,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .IsRequired();
 
                     b.Navigation("Job");
-
-                    b.Navigation("Operator");
 
                     b.Navigation("Supplier");
                 });

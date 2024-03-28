@@ -32,7 +32,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'asc' }]
+        sort: [{ field: 'date', dir: 'desc' }]
     };
 
     private _jobId: number;
@@ -86,7 +86,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, PurchaseOrderStatus.Pending, this._jobId, null, null, [], []);
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, this._jobId, null, null, null, null, [], []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         this._subscriptions.push(

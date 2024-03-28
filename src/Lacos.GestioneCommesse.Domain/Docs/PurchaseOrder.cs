@@ -7,6 +7,7 @@ public class PurchaseOrder : FullAuditedEntity
     public int Number { get; set; }
     public int Year { get; set; }
     public DateTimeOffset Date { get; set; }
+    public DateTimeOffset? ExpectedDate { get; set; }
     public string? Description { get; set; }
     public PurchaseOrderStatus Status { get; set; }
 
@@ -15,6 +16,9 @@ public class PurchaseOrder : FullAuditedEntity
 
     public long SupplierId { get; set; }
     public Supplier? Supplier { get; set; }
+
+    public long? OperatorId { get; set; }
+    public Operator? Operator { get; set; }
 
     public ICollection<PurchaseOrderItem> Items { get; set; }
     public ICollection<PurchaseOrderAttachment> Attachments { get; set; }

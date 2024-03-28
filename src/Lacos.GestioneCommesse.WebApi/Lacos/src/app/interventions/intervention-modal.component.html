@@ -42,7 +42,7 @@
                     <label>Inizio</label>
                     <div class="form-group">
                         <kendo-datetimepicker name="start" [(ngModel)]="options.start" required [steps]="{minute:15}"
-                            [readonly]="readonly">
+                            [readonly]="readonly" (valueChange)="onStartChange()">
                         </kendo-datetimepicker>
                         <div class="validation-message" [control]="form.controls['start']"></div>
                     </div>
@@ -152,7 +152,7 @@
                     <label>Note</label>
                     <div class="form-group">
                         <textarea class="form-control" name="description" [(ngModel)]="options.description" novalidate
-                            autocomplete="off" maxlength="500" required rows="3" [readonly]="readonly">
+                            autocomplete="off" maxlength="500" rows="3" [readonly]="readonly">
                         </textarea>
                         <div class="validation-message" [control]="form.controls['description']"></div>
                     </div>

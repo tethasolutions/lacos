@@ -49,13 +49,14 @@ export class Ticket {
         public status: TicketStatus,
         public customerId: number,
         public activityId: number,
+        public operatorId: number,
         public pictures: TicketAttachmentModel[]
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: Ticket) {
-        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.activityId, o.pictures);
+        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.activityId, o.operatorId, o.pictures);
     }
 
 }

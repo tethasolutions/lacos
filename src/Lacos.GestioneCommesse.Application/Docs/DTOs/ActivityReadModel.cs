@@ -27,6 +27,7 @@ public class ActivityReadModel
     public bool HasAttachments { get; set; }
     public bool IsNewReferent { get; set; }
     public bool IsExpired { get; set; }
+    public bool IsInternal { get; set; }
 
     public string? StatusLabel0 { get; set; }
     public string? StatusLabel1 { get; set; }

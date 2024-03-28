@@ -237,7 +237,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     downloadAttachment(fileName: string) {
         const attachment = this.options.purchaseOrder.attachments
             .find(e => e.displayName === fileName);
-        const url = `${this._baseUrl}/purchase-orders/download-file/${attachment.fileName}/${attachment.displayName}`;
+        const url = `${this._baseUrl}/purchase-order-attachment/download-file/${attachment.fileName}/${attachment.displayName}`;
 
         window.open(url);
     }

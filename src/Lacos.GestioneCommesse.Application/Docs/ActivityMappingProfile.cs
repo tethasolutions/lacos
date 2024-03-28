@@ -33,6 +33,7 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
            .MapMember(x => x.HasAttachments, y => y.Attachments.Any())
            .MapMember(x => x.IsExpired, y => (y.ExpirationDate != null) ? (y.ExpirationDate < DateTime.Now.Date) : false)
+           .MapMember(x => x.IsInternal, y => y.Type!.IsInternal)
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2);

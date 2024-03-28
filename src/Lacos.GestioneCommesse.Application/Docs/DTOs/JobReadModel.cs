@@ -7,6 +7,7 @@ public class JobReadModel
     public long Id { get; set; }
     public string? Code { get; set; }
     public DateTimeOffset Date { get; set; }
+    public DateTimeOffset? ExpirationDate { get; set; }
     public string? Description { get; set; }
     public string? Reference { get; set; }
     public bool HasHighPriority { get; set; }

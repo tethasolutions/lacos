@@ -33,6 +33,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     attachments: Array<FileInfo> = [];
     
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
+    pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     uploadSaveUrl = `${this._baseUrl}/ticket-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/ticket-attachment/remove-file`;
     
@@ -103,7 +104,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     }
 
     private _newActivity(ticket: Ticket) {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`,
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, null,
             this._job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", []);
         const options = new ActivityModalOptions(activity);
 

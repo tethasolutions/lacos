@@ -2833,3 +2833,90 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240321114245_operator ticket')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD [OperatorId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240321114245_operator ticket')
+BEGIN
+    CREATE INDEX [IX_Tickets_OperatorId] ON [Docs].[Tickets] ([OperatorId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240321114245_operator ticket')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD CONSTRAINT [FK_Tickets_Operators_OperatorId] FOREIGN KEY ([OperatorId]) REFERENCES [Registry].[Operators] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240321114245_operator ticket')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240321114245_operator ticket', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328103906_expiration date job')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [ExpirationDate] datetimeoffset(3) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328103906_expiration date job')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240328103906_expiration date job', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD [ExpectedDate] datetimeoffset(3) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD [OperatorId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+BEGIN
+    CREATE INDEX [IX_PurchaseOrders_OperatorId] ON [Docs].[PurchaseOrders] ([OperatorId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_Operators_OperatorId] FOREIGN KEY ([OperatorId]) REFERENCES [Registry].[Operators] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240328121331_purchase new fields', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

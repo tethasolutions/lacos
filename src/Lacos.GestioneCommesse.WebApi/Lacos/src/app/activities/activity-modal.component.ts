@@ -50,7 +50,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
 
-    pathImage = `${ApiUrls.baseUrl}/attachments/`;
+    pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     uploadSaveUrl = `${this._baseUrl}/activity-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/activity-attachment/remove-file`;
 

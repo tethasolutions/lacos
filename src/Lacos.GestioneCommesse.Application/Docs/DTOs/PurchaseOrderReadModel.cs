@@ -9,6 +9,7 @@ public class PurchaseOrderReadModel
     public long Id { get; set; }
     public string? Code { get; set; }
     public DateTimeOffset Date { get; set; }
+    public DateTimeOffset? ExpectedDate { get; set; }
     public string? Description { get; set; }
     public PurchaseOrderStatus Status { get; set; }
 
@@ -17,6 +18,7 @@ public class PurchaseOrderReadModel
     public bool? JobHasHighPriority { get; set; }
 
     public string? SupplierName { get; set; }
+    public string? OperatorName { get; set; }
 
     public long? JobId { get; set; }
 

@@ -59,7 +59,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'asc' }]
+        sort: [{ field: 'expirationDate', dir: 'desc' },{ field: 'date', dir: 'desc' }]
     };
 
     readonly jobStatusNames = jobStatusNames;
@@ -100,7 +100,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     
     create() {
         const today = getToday();
-        const job = new Job(0, null, today.getFullYear(), today, null, null, false, JobStatus.Pending, null, null, null, []);
+        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, []);
 
         this._subscriptions.push(
             this.jobModal.open(job)
@@ -198,7 +198,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
 
     createPurchaseOrder(job: IJobReadModel) {
         const today = getToday();
-        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, PurchaseOrderStatus.Pending, job.id, null, null, [], []);
+        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, job.id, null, null, null, null, [], []);
         const options = new PurchaseOrderModalOptions(order);
 
         this._subscriptions.push(

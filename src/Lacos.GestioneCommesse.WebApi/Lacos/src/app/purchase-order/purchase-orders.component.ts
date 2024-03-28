@@ -10,6 +10,10 @@ import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orde
 import { getToday } from '../services/common/functions';
 import { ActivatedRoute, Params } from '@angular/router';
 import { StorageService } from '../services/common/storage.service';
+import { OperatorModel } from '../shared/models/operator.model';
+import { User } from '../services/security/models';
+import { UserService } from '../services/security/user.service';
+import { OperatorsService } from '../services/operators.service';
 
 @Component({
     selector: 'app-purchase-orders',
@@ -19,6 +23,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     @ViewChild('purchaseOrderModal', { static: true })
     purchaseOrderModal: PurchaseOrderModalComponent;
+    user: User;
+    currentOperator: OperatorModel;
 
     data: GridDataResult;
     gridState: State = {
@@ -44,6 +50,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         private readonly _service: PurchaseOrdersService,
         private readonly _messageBox: MessageBoxService,
         private readonly _route: ActivatedRoute,
+        private readonly _user: UserService,
+        private readonly _operatorsService: OperatorsService,
         private readonly _storageService: StorageService
     ) {
         super();
@@ -52,6 +60,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     ngOnInit() {
         this._resumeState();
         this._subscribeRouteParams();
+        this.user = this._user.getUser();
+        this._getCurrentOperator(this.user.id);
     }
 
     dataStateChange(state: State) {
@@ -86,7 +96,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, this._jobId, null, null, null, null, [], []);
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, this._jobId, null, null, this.currentOperator.id, [], []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         this._subscriptions.push(
@@ -236,5 +246,13 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         this._read();
     }
 
-
+    protected _getCurrentOperator(userId: number) {
+        this._subscriptions.push(
+            this._operatorsService.getOperatorByUserId(userId)
+                .pipe(
+                    tap(e => this.currentOperator = e)
+                )
+                .subscribe()
+        );
+    }
 }

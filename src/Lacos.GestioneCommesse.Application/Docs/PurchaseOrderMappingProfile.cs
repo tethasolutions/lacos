@@ -28,8 +28,7 @@ public class PurchaseOrderMappingProfile : Profile
             .AfterMap(AfterMap);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()
-            .MapMember(x => x.SupplierName, y => y.Supplier!.Name)
-            .MapMember(x => x.OperatorName, y => y.Operator!.Name);
+            .MapMember(x => x.SupplierName, y => y.Supplier!.Name);
 
         CreateMap<PurchaseOrderItemDto, PurchaseOrderItem>()
             .IgnoreCommonMembers()

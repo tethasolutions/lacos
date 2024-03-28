@@ -52,6 +52,8 @@
             <div [innerHTML]="dataItem.description"></div>
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="operatorName" title="Inserito da">
+    </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">

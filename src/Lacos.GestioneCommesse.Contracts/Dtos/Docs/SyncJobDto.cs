@@ -9,6 +9,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public int? Number { get; set; }
         public int? Year { get; set; }
         public DateTimeOffset? JobDate { get; set; }
+        public DateTimeOffset? ExpirationDate { get; set; }
         public string? Description { get; set; }
         public string? Reference { get; set; }
         public bool HasHighPriority { get; set; }

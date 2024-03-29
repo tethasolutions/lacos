@@ -19,7 +19,6 @@ public class PurchaseOrderDto : BaseEntityDto
     public string? SupplierName { get; set; }
 
     public long? OperatorId { get; set; }
-    public string? OperatorName { get; set; }
 
     public IEnumerable<PurchaseOrderAttachmentDto>? Attachments { get; set; }
 

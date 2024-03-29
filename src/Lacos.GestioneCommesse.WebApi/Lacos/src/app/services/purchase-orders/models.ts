@@ -56,7 +56,6 @@ export class PurchaseOrder {
         public supplierId: number,
         public supplierName: string,
         public operatorId: number,
-        public operatorName: string,
         public items: PurchaseOrderItem[],
         public attachments: PurchaseOrderAttachmentModel[]
     ) {
@@ -68,7 +67,7 @@ export class PurchaseOrder {
         const items = o.items.map(e => PurchaseOrderItem.build(e));
         const attachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e));
 
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, o.operatorName, items, attachments);
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments);
     }
 
 }

@@ -103,6 +103,7 @@ public class TicketsService : ITicketsService
             .Where(e => e.Id == TicketDto.Id)
             .Include(e => e.Activity)
             .Include(e => e.Pictures)
+            .Include(x => x.Messages)
             .FirstOrDefaultAsync();
 
         if (Ticket == null)

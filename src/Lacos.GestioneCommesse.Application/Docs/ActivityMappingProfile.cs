@@ -52,6 +52,7 @@ public class ActivityMappingProfile : Profile
            .Ignore(x => x.Referent)
            .Ignore(x => x.Attachments)
            .Ignore(x => x.IsNewReferent)
+           .Ignore(x => x.Messages)
            .AfterMap(AfterMap);
 
         CreateMap<Activity, ActivityDto>()
@@ -87,5 +88,6 @@ public class ActivityMappingProfile : Profile
     private static void AfterMap(ActivityDto activityDto, Activity activity, ResolutionContext context)
     {
         if (activityDto.Attachments != null) activityDto.Attachments.Merge(activity.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.ActivityId = activity.Id, context);
+        if (activityDto.Messages != null) activityDto.Messages.Merge(activity.Messages, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.ActivityId = activity.Id, context);
     }
 }

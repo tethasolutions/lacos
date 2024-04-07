@@ -44,6 +44,7 @@ public class JobMappingProfile : Profile
             .Ignore(x => x.Attachments)
             .Ignore(x => x.Referent)
             .Ignore(x => x.IsInternalJob)
+            .Ignore(x => x.Messages)
             .MapMember(x => x.JobDate, (x, y) => y.IsTransient() ? x.Date : y.JobDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId)
             .AfterMap(AfterMap);
@@ -65,5 +66,6 @@ public class JobMappingProfile : Profile
     private static void AfterMap(JobDto jobDto, Job job, ResolutionContext context)
     {
         jobDto.Attachments.Merge(job.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.JobId = job.Id, context);
+        jobDto.Messages.Merge(job.Messages, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.JobId = job.Id, context);
     }
 }

@@ -111,7 +111,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     
     create() {
         const today = getToday();
-        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, []);
+        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, [], []);
 
         this._subscriptions.push(
             this.jobModal.open(job)
@@ -159,7 +159,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     }
 
     createActivity(job: IJobReadModel) {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", []);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", [], []);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -209,7 +209,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
 
     createPurchaseOrder(job: IJobReadModel) {
         const today = getToday();
-        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, job.id, null, null, this.currentOperator.id, [], []);
+        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, job.id, null, null, this.currentOperator.id, [], [], []);
         const options = new PurchaseOrderModalOptions(order);
 
         this._subscriptions.push(

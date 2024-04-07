@@ -15,6 +15,7 @@ public class JobMap : BaseEntityMapping<Job>
 
         builder.OneToMany(e => e.Activities, e => e.Job, e => e.JobId);
         builder.OneToMany(e => e.Tickets, e => e.Job, e => e.JobId);
+        builder.OneToMany(e => e.Messages, e => e.Job, e => e.JobId);
 
     }
 }

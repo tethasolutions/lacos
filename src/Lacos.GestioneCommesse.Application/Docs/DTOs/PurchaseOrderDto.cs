@@ -21,6 +21,7 @@ public class PurchaseOrderDto : BaseEntityDto
     public long? OperatorId { get; set; }
 
     public IEnumerable<PurchaseOrderAttachmentDto>? Attachments { get; set; }
+    public IEnumerable<MessageReadModel>? Messages { get; set; }
 
     public IEnumerable<PurchaseOrderItemDto> Items { get; set; }
     public PurchaseOrderDto()

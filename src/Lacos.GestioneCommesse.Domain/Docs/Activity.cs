@@ -34,12 +34,14 @@ public class Activity : FullAuditedEntity
     public ICollection<Intervention> Interventions { get; set; }
     public ICollection<ActivityProduct> ActivityProducts { get; set; }
     public ICollection<ActivityAttachment> Attachments { get; set; }
+    public ICollection<Message> Messages { get; set; }
 
     public Activity()
     {
         Interventions = new List<Intervention>();
         ActivityProducts = new List<ActivityProduct>();
         Attachments = new List<ActivityAttachment>();
+        Messages = new List<Message>();
     }
 
     public void SetNumber(int number)

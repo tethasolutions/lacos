@@ -16,5 +16,6 @@ public class ActivityMap : BaseEntityMapping<Activity>
         builder.OneToMany(e => e.Interventions, e => e.Activity, e => e.ActivityId);
         builder.OneToMany(e => e.ActivityProducts, e => e.Activity, e => e.ActivityId);
         builder.OneToMany(e => e.Attachments, e => e.Activity, e => e.ActivityId);
+        builder.OneToMany(e => e.Messages, e => e.Activity, e => e.ActivityId);
     }
 }

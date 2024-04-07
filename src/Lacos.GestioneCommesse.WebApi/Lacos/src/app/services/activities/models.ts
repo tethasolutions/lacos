@@ -1,4 +1,5 @@
 import { Dictionary } from '../common/models';
+import { MessageReadModel } from '../messages/models';
 import { ActivityAttachmentModel } from './activity-attachment.model';
 
 export enum ActivityStatus {
@@ -70,7 +71,8 @@ export class Activity {
         public statusLabel0: string,
         public statusLabel1: string,
         public statusLabel2: string,
-        public attachments: ActivityAttachmentModel[]
+        public attachments: ActivityAttachmentModel[],
+        public messages: MessageReadModel[]
     ) {
         this.startDate = startDate ? new Date(startDate) : null;
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
@@ -93,9 +95,10 @@ export class Activity {
 
     static build(o: Activity) {
         const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
+        const messages = o.messages.map(e => MessageReadModel.build(e));
 
         return new Activity(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.supplierId, o.addressId,
-            o.typeId, o.referentId, o.startDate, o.expirationDate, o.statusLabel0, o.statusLabel1, o.statusLabel2, attachments);
+            o.typeId, o.referentId, o.startDate, o.expirationDate, o.statusLabel0, o.statusLabel1, o.statusLabel2, attachments, messages);
     }
 
 }
@@ -128,7 +131,8 @@ export class ActivityDetail {
         readonly statusLabel0: string,
         readonly statusLabel1: string,
         readonly statusLabel2: string,
-        public attachments: ActivityAttachmentModel[]
+        public attachments: ActivityAttachmentModel[],
+        public messages: MessageReadModel[]
     ) {
         this.startDate = startDate ? new Date(startDate) : null;
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
@@ -136,15 +140,16 @@ export class ActivityDetail {
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.shortDescription, this.informations, this.description, this.jobId, this.supplierId,
-            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.statusLabel0, this.statusLabel1, this.statusLabel2, this.attachments);
+            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.statusLabel0, this.statusLabel1, this.statusLabel2, this.attachments, this.messages);
     }
 
     static build(o: ActivityDetail) {
         const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
+        const messages = o.messages.map(e => MessageReadModel.build(e));
 
         return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate,
-            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, attachments);
+            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, attachments, messages);
     }
 
 }

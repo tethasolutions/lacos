@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { Job, JobStatus } from '../services/jobs/models';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, filter, map, switchMap, tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -13,7 +13,7 @@ import { AddressModalComponent } from '../address-modal/address-modal.component'
 import { AddressModel } from '../shared/models/address.model';
 import { WindowState } from '@progress/kendo-angular-dialog';
 import { JobsService } from '../services/jobs/jobs.service';
-import { listEnum } from '../services/common/functions';
+import { getToday, listEnum } from '../services/common/functions';
 import { ApiUrls } from '../services/common/api-urls';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { JobAttachmentUploadFileModel } from '../services/jobs/job-attachment-upload-file.model';
@@ -21,6 +21,11 @@ import { JobAttachmentModel } from '../services/jobs/job-attachment.model';
 import { State } from '@progress/kendo-data-query';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
+import { MessageModel, MessageReadModel } from '../services/messages/models';
+import { MessagesService } from '../services/messages/messages.service';
+import { User } from '../services/security/models';
+import { UserService } from '../services/security/user.service';
+import { MessageModalComponent } from '../messages/message-modal.component';
 
 @Component({
     selector: 'app-job-modal',
@@ -31,14 +36,18 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
+    @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
+
+    public windowState: WindowState = "default";
 
     customers: CustomerModel[];
     addresses: AddressModel[];
     operators: OperatorModel[];
-    public windowState: WindowState = "default";
-
+    messages: MessageReadModel[];
     attachments: Array<FileInfo> = [];
-    
+    user: User;
+    currentOperator: OperatorModel;
+
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     uploadSaveUrl = `${this._baseUrl}/job-attachment/upload-file`;
@@ -46,12 +55,23 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
 
     readonly states = listEnum<JobStatus>(JobStatus);
 
+    // private messagesSubject = new BehaviorSubject<MessageReadModel[]>([]);
+    // messages$ = this.messagesSubject.asObservable();
+    // unreadMessagesCounter$: Observable<number> = this.messages$.pipe(
+    //     map(messages => messages.filter(message => !message.isRead).length)
+    // );
+    // private syncMessages() {
+    //     this.messagesSubject.next(this.options.messages);
+    // }
+
     constructor(
         private readonly _customersService: CustomerService,
         private readonly _service: JobsService,
         private readonly _messageBox: MessageBoxService,
         private readonly _addressesService: AddressesService,
-        private readonly _operatorsService: OperatorsService
+        private readonly _operatorsService: OperatorsService,
+        private readonly _user: UserService,
+        private readonly _messagesService: MessagesService
     ) {
         super();
     }
@@ -59,6 +79,8 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     ngOnInit() {
         this._getData();
         this._getOperators();
+        this.user = this._user.getUser();
+        this._getCurrentOperator(this.user.id);
     }
 
     onDateChange() {
@@ -67,7 +89,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
 
     override open(job: Job) {
         const result = super.open(job);
-        
+
         this.attachments = [];
         if (job.attachments != null) {
             this.options.attachments.forEach(element => {
@@ -211,7 +233,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
             this.options.attachments.findAndRemove(e => e.displayName === deletedFile);
         }
     }
-    
+
     private _getOperators() {
         const state: State = {
             sort: [
@@ -226,5 +248,64 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
                 )
                 .subscribe()
         )
+    }
+
+    protected _getCurrentOperator(userId: number) {
+        this._subscriptions.push(
+            this._operatorsService.getOperatorByUserId(userId)
+                .pipe(
+                    tap(e => this.currentOperator = e)
+                )
+                .subscribe()
+        );
+    }
+
+    createMessage() {
+        const today = getToday();
+        const message = new MessageModel(0, today, null, this.currentOperator.id, this.options.id, null, null, null);
+
+        this._subscriptions.push(
+            this.messageModal.open(message)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._messagesService.create(message)),
+                    tap(e => {
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true);
+                        this.options.messages.push(msg);
+                    }),
+                    tap(() => this._messageBox.success('Commento creato'))
+                )
+                .subscribe()
+        );
+    }
+
+    markAsRead(message: MessageReadModel) {
+        this._subscriptions.push(
+            this._messagesService.markAsRead(message.id, this.currentOperator.id)
+                .pipe(
+                    tap(() => {
+                        message.isRead = true;
+                        this._messageBox.success('Commento letto');
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    deleteMessage(message: MessageReadModel) {
+        this._messageBox.confirm(`Sei sicuro di voler cancellare il commento?`, 'Conferma l\'azione').subscribe(result => {
+            if (result == true) {
+                this._subscriptions.push(
+                    this._messagesService.delete(message.id)
+                        .pipe(
+                            tap(e => {
+                                this.options.messages.remove(message);
+                            }),
+                            tap(e => this._messageBox.success(`Commento cancellato con successo`))
+                        )
+                        .subscribe()
+                );
+            }
+        });
     }
 }

@@ -17,5 +17,6 @@ public class TicketMap : BaseEntityMapping<Ticket>
             .IsRequired();
 
         builder.OneToMany(e => e.Pictures, e => e.Ticket, e => e.TicketId);
+        builder.OneToMany(e => e.Messages, e => e.Ticket, e => e.TicketId);
     }
 }

@@ -118,6 +118,8 @@ import { RolePipe } from './pipes/role.pipe';
 import { JobsCompletedComponent } from './jobs/jobs-completed.component';
 import { JobsAttachmentsModalComponent } from './jobs/jobs-attachments-modal.component';
 import { InterventionNotesModalComponent } from './interventions/intervention-notes-modal.component';
+import { MessagesService } from './services/messages/messages.service';
+import { MessageModalComponent } from './messages/message-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -189,7 +191,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         PurchaseOrdersComponent,
         PurchaseOrderModalComponent,
         PurchaseOrderItemModalComponent,
-        PurchaseOrderStatusPipe
+        PurchaseOrderStatusPipe,
+        MessageModalComponent
     ],
     imports: [
         BrowserModule,
@@ -250,7 +253,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         InterventionsService,
         TicketsService,
         SupplierService,
-        PurchaseOrdersService
+        PurchaseOrdersService,
+        MessagesService
     ],
     bootstrap: [AppComponent]
 })

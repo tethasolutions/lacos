@@ -1,4 +1,5 @@
 import { Dictionary } from '../common/models';
+import { MessageReadModel } from '../messages/models';
 import { PurchaseOrderAttachmentModel } from './purchase-order-attachment.model';
 
 export enum PurchaseOrderStatus {
@@ -57,7 +58,8 @@ export class PurchaseOrder {
         public supplierName: string,
         public operatorId: number,
         public items: PurchaseOrderItem[],
-        public attachments: PurchaseOrderAttachmentModel[]
+        public attachments: PurchaseOrderAttachmentModel[],
+        public messages: MessageReadModel[]
     ) {
         this.date = date ? new Date(date) : null;
         this.expectedDate = expectedDate ? new Date(expectedDate) : null;
@@ -66,8 +68,8 @@ export class PurchaseOrder {
     static build(o: PurchaseOrder) {
         const items = o.items.map(e => PurchaseOrderItem.build(e));
         const attachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e));
-
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments);
+        const messages = o.messages.map(e => MessageReadModel.build(e));
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments, messages);
     }
 
 }

@@ -25,6 +25,7 @@ public class PurchaseOrderMappingProfile : Profile
             .Ignore(x => x.Items)
             .Ignore(x => x.Attachments)
             .Ignore(x => x.Operator)
+            .Ignore(x => x.Messages)
             .AfterMap(AfterMap);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()
@@ -55,5 +56,6 @@ public class PurchaseOrderMappingProfile : Profile
     {
         orderDto.Items.Merge(order.Items, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
         orderDto.Attachments.Merge(order.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
+        orderDto.Messages.Merge(order.Messages, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
     }
 }

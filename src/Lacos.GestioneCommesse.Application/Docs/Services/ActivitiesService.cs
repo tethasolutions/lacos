@@ -159,6 +159,7 @@ public class ActivitiesService : IActivitiesService
             .Query()
             .Where(x => x.Id == activityDto.Id)
             .Include(x => x.Attachments)
+            .Include(x => x.Messages)
             .SingleOrDefaultAsync();
 
         if (activity == null)

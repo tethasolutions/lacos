@@ -1,4 +1,5 @@
 import { Dictionary } from '../common/models';
+import { MessageReadModel } from '../messages/models';
 import { TicketAttachmentModel } from './ticket-attachment.model';
 
 export enum TicketStatus {
@@ -50,13 +51,15 @@ export class Ticket {
         public customerId: number,
         public activityId: number,
         public operatorId: number,
-        public pictures: TicketAttachmentModel[]
+        public pictures: TicketAttachmentModel[],
+        public messages: MessageReadModel[]
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: Ticket) {
-        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.activityId, o.operatorId, o.pictures);
+        const messages = o.messages.map(e => MessageReadModel.build(e));
+        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.activityId, o.operatorId, o.pictures, messages);
     }
 
 }

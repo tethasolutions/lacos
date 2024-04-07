@@ -17,6 +17,7 @@ public class TicketDto : BaseEntityDto
     public long? OperatorId { get; set; }
 
     public ICollection<TicketAttachmentDto> Pictures { get; set; }
+    public IEnumerable<MessageReadModel>? Messages { get; set; }
 
     public TicketDto()
     {

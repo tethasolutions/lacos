@@ -133,6 +133,7 @@ public class JobsService : IJobsService
             .Query()
             .Where(x => x.Id == jobDto.Id)
             .Include(x => x.Attachments)
+            .Include(x => x.Messages)
             .SingleOrDefaultAsync();
 
         if (job == null)

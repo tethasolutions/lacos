@@ -26,6 +26,7 @@ import { UserService } from '../services/security/user.service';
 import { OperatorsService } from '../services/operators.service';
 import { User } from '../services/security/models';
 import { OperatorModel } from '../shared/models/operator.model';
+import { MessageModel } from '../services/messages/models';
 
 @Component({
     selector: 'app-jobs',
@@ -44,10 +45,10 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     @ViewChild('purchaseOrderModal', { static: true })
     purchaseOrderModal: PurchaseOrderModalComponent;
-    
+
     @ViewChild('jobsAttachmentsModal', { static: true })
     jobsAttachmentsModal: JobsAttachmentsModalComponent;
-    
+
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
 
     @ViewChild('grid', { static: true })
@@ -70,7 +71,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'expirationDate', dir: 'desc' },{ field: 'date', dir: 'desc' }]
+        sort: [{ field: 'expirationDate', dir: 'desc' }, { field: 'date', dir: 'desc' }]
     };
 
     readonly jobStatusNames = jobStatusNames;
@@ -110,12 +111,12 @@ export class JobsComponent extends BaseComponent implements OnInit {
     }
 
     private _saveState() {
-        this._storageService.save(this.gridState,window.location.hash,true);
+        this._storageService.save(this.gridState, window.location.hash, true);
     }
-    
+
     create() {
         const today = getToday();
-        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, []);
+        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, [], []);
 
         this._subscriptions.push(
             this.jobModal.open(job)
@@ -177,7 +178,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
     }
 
     createActivity(job: IJobReadModel) {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", []);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", [], []);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -223,11 +224,11 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
-    } 
+    }
 
     createPurchaseOrder(job: IJobReadModel) {
         const today = getToday();
-        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, job.id, null, null, this.currentOperator.id, [], []);
+        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, job.id, null, null, this.currentOperator.id, [], [], []);
         const options = new PurchaseOrderModalOptions(order);
 
         this._subscriptions.push(
@@ -251,7 +252,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
-    
+
     private _afterActivityCreated(jobId: number) {
         this._messageBox.success('Attività creata.');
         this.router.navigate(['/activities'], { queryParams: { jobId: jobId } });
@@ -305,7 +306,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 return {};
         }
     };
-    
+
     protected _getCurrentOperator(userId: number) {
         this._subscriptions.push(
             this._operatorsService.getOperatorByUserId(userId)
@@ -315,4 +316,5 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
+
 }

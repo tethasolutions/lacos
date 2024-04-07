@@ -25,6 +25,7 @@ public class TicketMappingProfile : Profile
             .Ignore(x => x.Pictures)
             .Ignore(x => x.IsNew)
             .Ignore(x => x.Operator)
+            .Ignore(x => x.Messages)
             .MapMember(x => x.TicketDate, (x, y) => y.IsTransient() ? x.Date : y.TicketDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId)
             .AfterMap(AfterMap);
@@ -47,5 +48,6 @@ public class TicketMappingProfile : Profile
     private static void AfterMap(TicketDto ticketDto, Ticket ticket, ResolutionContext context)
     {
         ticketDto.Pictures.Merge(ticket.Pictures, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.TicketId = ticket.Id, context);
+        ticketDto.Messages.Merge(ticket.Messages, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.TicketId = ticket.Id, context);
     }
 }

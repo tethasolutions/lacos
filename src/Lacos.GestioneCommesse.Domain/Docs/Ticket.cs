@@ -23,10 +23,12 @@ public class Ticket : FullAuditedEntity
     public Operator? Operator { get; set; }
 
     public ICollection<TicketPicture> Pictures { get; set; }
+    public ICollection<Message> Messages { get; set; }
 
     public Ticket()
     {
         Pictures = new List<TicketPicture>();
+        Messages = new List<Message>();
     }
 
     public void SetCode(int year, int number)

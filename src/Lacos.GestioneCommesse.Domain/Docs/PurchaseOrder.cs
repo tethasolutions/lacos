@@ -22,11 +22,13 @@ public class PurchaseOrder : FullAuditedEntity
 
     public ICollection<PurchaseOrderItem> Items { get; set; }
     public ICollection<PurchaseOrderAttachment> Attachments { get; set; }
+    public ICollection<Message> Messages { get; set; }
 
     public PurchaseOrder()
     {
         Items = new List<PurchaseOrderItem>();
         Attachments = new List<PurchaseOrderAttachment>();
+        Messages = new List<Message>();
     }
 
     public void SetCode(int year, int number)

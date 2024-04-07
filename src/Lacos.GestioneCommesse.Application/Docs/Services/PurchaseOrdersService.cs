@@ -84,6 +84,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Where(e => e.Id == purchaseOrderDto.Id)
             .Include(e => e.Items)
             .Include(x => x.Attachments)
+            .Include(x => x.Messages)
             .FirstOrDefaultAsync();
 
         if (purchaseOrder == null)

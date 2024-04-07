@@ -2920,3 +2920,114 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE TABLE [Docs].[Messages] (
+        [Id] bigint NOT NULL IDENTITY,
+        [Date] datetimeoffset(3) NOT NULL,
+        [Note] nvarchar(max) NOT NULL,
+        [OperatorId] bigint NOT NULL,
+        [JobId] bigint NULL,
+        [ActivityId] bigint NULL,
+        [TicketId] bigint NULL,
+        [PurchaseOrderId] bigint NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_Messages] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Messages_Activities_ActivityId] FOREIGN KEY ([ActivityId]) REFERENCES [Docs].[Activities] ([Id]),
+        CONSTRAINT [FK_Messages_Jobs_JobId] FOREIGN KEY ([JobId]) REFERENCES [Docs].[Jobs] ([Id]),
+        CONSTRAINT [FK_Messages_Operators_OperatorId] FOREIGN KEY ([OperatorId]) REFERENCES [Registry].[Operators] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_Messages_PurchaseOrders_PurchaseOrderId] FOREIGN KEY ([PurchaseOrderId]) REFERENCES [Docs].[PurchaseOrders] ([Id]),
+        CONSTRAINT [FK_Messages_Tickets_TicketId] FOREIGN KEY ([TicketId]) REFERENCES [Docs].[Tickets] ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE TABLE [Docs].[MessageNotfications] (
+        [Id] bigint NOT NULL IDENTITY,
+        [MessageId] bigint NOT NULL,
+        [OperatorId] bigint NOT NULL,
+        [ReadDate] datetimeoffset(3) NULL,
+        [IsRead] bit NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_MessageNotfications] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_MessageNotfications_Messages_MessageId] FOREIGN KEY ([MessageId]) REFERENCES [Docs].[Messages] ([Id]),
+        CONSTRAINT [FK_MessageNotfications_Operators_OperatorId] FOREIGN KEY ([OperatorId]) REFERENCES [Registry].[Operators] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE INDEX [IX_MessageNotfications_MessageId] ON [Docs].[MessageNotfications] ([MessageId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE INDEX [IX_MessageNotfications_OperatorId] ON [Docs].[MessageNotfications] ([OperatorId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE INDEX [IX_Messages_ActivityId] ON [Docs].[Messages] ([ActivityId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE INDEX [IX_Messages_JobId] ON [Docs].[Messages] ([JobId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE INDEX [IX_Messages_OperatorId] ON [Docs].[Messages] ([OperatorId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE INDEX [IX_Messages_PurchaseOrderId] ON [Docs].[Messages] ([PurchaseOrderId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    CREATE INDEX [IX_Messages_TicketId] ON [Docs].[Messages] ([TicketId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240406082328_messages', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

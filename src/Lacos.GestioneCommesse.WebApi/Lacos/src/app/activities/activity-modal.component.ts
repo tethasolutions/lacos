@@ -10,7 +10,7 @@ import { CustomerModel } from '../shared/models/customer.model';
 import { JobsService } from '../services/jobs/jobs.service';
 import { State } from '@progress/kendo-data-query';
 import { IJobReadModel, Job } from '../services/jobs/models';
-import { listEnum } from '../services/common/functions';
+import { getToday, listEnum } from '../services/common/functions';
 import { AddressModel } from '../shared/models/address.model';
 import { AddressesService } from '../services/addresses.service';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
@@ -23,6 +23,11 @@ import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { ActivityAttachmentModel } from '../services/activities/activity-attachment.model';
 import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
+import { MessageModel, MessageReadModel } from '../services/messages/models';
+import { User } from '../services/security/models';
+import { UserService } from '../services/security/user.service';
+import { MessagesService } from '../services/messages/messages.service';
+import { MessageModalComponent } from '../messages/message-modal.component';
 
 @Component({
     selector: 'app-activity-modal',
@@ -33,6 +38,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
+    @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
 
     activityTypes: ActivityTypeModel[];
     customer: CustomerModel;
@@ -45,6 +51,9 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     suppliers: SupplierModel[];
     addresses: AddressModel[];
     operators: OperatorModel[];
+    messages: MessageReadModel[];
+    user: User;
+    currentOperator: OperatorModel;
 
     attachments: Array<FileInfo> = [];
 
@@ -62,7 +71,9 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         private readonly _jobsService: JobsService,
         private readonly _suppliersService: SupplierService,
         private readonly _addressesService: AddressesService,
-        private readonly _operatorsService: OperatorsService
+        private readonly _operatorsService: OperatorsService,
+        private readonly _user: UserService,
+        private readonly _messagesService: MessagesService
     ) {
         super();
     }
@@ -71,6 +82,8 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         this._getActivityTypes();
         this._getSuppliers();
         this._getOperators();
+        this.user = this._user.getUser();
+        this._getCurrentOperator(this.user.id);
     }
 
     onJobChanged() {
@@ -331,6 +344,67 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
             this.options.activity.attachments.findAndRemove(e => e.displayName === deletedFile);
         }
     }
+
+    
+    protected _getCurrentOperator(userId: number) {
+        this._subscriptions.push(
+            this._operatorsService.getOperatorByUserId(userId)
+                .pipe(
+                    tap(e => this.currentOperator = e)
+                )
+                .subscribe()
+        );
+    }
+
+    createMessage() {
+        const today = getToday();
+        const message = new MessageModel(0, today, null, this.currentOperator.id, null, this.options.activity.id, null, null);
+
+        this._subscriptions.push(
+            this.messageModal.open(message)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._messagesService.create(message)),
+                    tap(e => {
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true);
+                        this.options.activity.messages.push(msg);
+                    }),
+                    tap(() => this._messageBox.success('Commento creato'))
+                )
+                .subscribe()
+        );
+    }
+
+    markAsRead(message: MessageReadModel) {
+        this._subscriptions.push(
+            this._messagesService.markAsRead(message.id, this.currentOperator.id)
+                .pipe(
+                    tap(() => {
+                        message.isRead = true;
+                        this._messageBox.success('Commento letto');
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    deleteMessage(message: MessageReadModel) {
+        this._messageBox.confirm(`Sei sicuro di voler cancellare il commento?`, 'Conferma l\'azione').subscribe(result => {
+            if (result == true) {
+                this._subscriptions.push(
+                    this._messagesService.delete(message.id)
+                        .pipe(
+                            tap(e => {
+                                this.options.activity.messages.remove(message);
+                            }),
+                            tap(e => this._messageBox.success(`Commento cancellato con successo`))
+                        )
+                        .subscribe()
+                );
+            }
+        });
+    }
+
 }
 
 export class ActivityModalOptions {

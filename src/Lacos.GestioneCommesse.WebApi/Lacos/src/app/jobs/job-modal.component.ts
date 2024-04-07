@@ -43,8 +43,8 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     customers: CustomerModel[];
     addresses: AddressModel[];
     operators: OperatorModel[];
-    messages: MessageReadModel[];
     attachments: Array<FileInfo> = [];
+    messages: MessageReadModel[];
     user: User;
     currentOperator: OperatorModel;
 

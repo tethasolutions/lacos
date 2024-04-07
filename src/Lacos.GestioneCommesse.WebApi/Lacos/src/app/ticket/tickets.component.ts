@@ -4,7 +4,7 @@ import { TicketsService } from '../services/tickets/tickets.service';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { TicketModalComponent } from './ticket-modal.component';
 import { ITicketReadModel, Ticket, TicketStatus, ticketStatusNames } from '../services/tickets/models';
 import { getToday } from '../services/common/functions';
@@ -14,6 +14,9 @@ import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
+import { CustomerService } from '../services/customer.service';
+import { CustomerModel } from '../shared/models/customer.model';
+import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 
 @Component({
     selector: 'app-tickets',
@@ -26,6 +29,8 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     @ViewChild('grid', { static: true })
     grid: GridComponent;
+    
+    @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
 
     data: GridDataResult;
     gridState: State = {
@@ -57,6 +62,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         private router: Router,
         private readonly _user: UserService,
         private readonly _operatorsService: OperatorsService,
+        private readonly _customerService: CustomerService,
         private readonly _storageService: StorageService
     ) {
         super();
@@ -194,6 +200,25 @@ export class TicketsComponent extends BaseComponent implements OnInit {
                 return {};
         }
     };
+
+    openCustomer(customerId: number): void {
+        this._subscriptions.push(
+            this._customerService.getCustomer(customerId)
+                .pipe(
+                    map(e => {
+                        return Object.assign(new CustomerModel(), e);
+                    }),
+                    switchMap(e => this.customerModal.open(e)),
+                    filter(e => e),
+                    map(() => this.customerModal.options),
+                    switchMap(e => this._customerService.updateCustomer(e, customerId)),
+                    map(() => this.customerModal.options),
+                    tap(e => this._messageBox.success(`Cliente ${e.name} aggiornato`)),
+                    tap(() => this._read())
+                )
+                .subscribe()
+        );
+    }
 
     protected _getCurrentOperator(userId: number) {
         this._subscriptions.push(

@@ -5,7 +5,7 @@ import { MessageBoxService } from '../services/common/message-box.service';
 import { JobsService } from '../services/jobs/jobs.service';
 import { State, process } from '@progress/kendo-data-query';
 import { IJobReadModel, Job } from '../services/jobs/models';
-import { listEnum } from '../services/common/functions';
+import { getToday, listEnum } from '../services/common/functions';
 import { ApiUrls } from '../services/common/api-urls';
 import { SupplierModel } from '../shared/models/supplier.model';
 import { SupplierService } from '../services/supplier.service';
@@ -17,6 +17,13 @@ import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { PurchaseOrderAttachmentUploadFileModel } from '../services/purchase-orders/purchage-order-attachment-upload-file.model';
 import { PurchaseOrderAttachmentModel } from '../services/purchase-orders/purchase-order-attachment.model';
 import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
+import { MessageModalComponent } from '../messages/message-modal.component';
+import { MessageModel, MessageReadModel } from '../services/messages/models';
+import { User } from '../services/security/models';
+import { OperatorModel } from '../shared/models/operator.model';
+import { OperatorsService } from '../services/operators.service';
+import { UserService } from '../services/security/user.service';
+import { MessagesService } from '../services/messages/messages.service';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -29,6 +36,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
 
     @ViewChild('purchaseOrderItemModal', { static: true }) purchaseOrderItemModal: PurchaseOrderItemModalComponent;
     @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
+    @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
 
     jobs: SelectableJob[];
     job: Job;
@@ -46,6 +54,9 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     gridData: GridDataResult;
     
     attachments: Array<FileInfo> = [];
+    messages: MessageReadModel[];
+    user: User;
+    currentOperator: OperatorModel;
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
@@ -57,7 +68,10 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     constructor(
         private readonly _messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
-        private readonly _suppliersService: SupplierService
+        private readonly _suppliersService: SupplierService,
+        private readonly _operatorsService: OperatorsService,
+        private readonly _user: UserService,
+        private readonly _messagesService: MessagesService
     ) {
         super();
     }
@@ -65,6 +79,8 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     ngOnInit() {
         this._getSuppliers();
         this._getJobs();
+        this.user = this._user.getUser();
+        this._getCurrentOperator(this.user.id);
     }
 
     onSupplierChange() {
@@ -251,6 +267,66 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
             const deletedFile = e.files[0].name;
             this.options.purchaseOrder.attachments.findAndRemove(e => e.displayName === deletedFile);
         }
+    }
+
+    
+    protected _getCurrentOperator(userId: number) {
+        this._subscriptions.push(
+            this._operatorsService.getOperatorByUserId(userId)
+                .pipe(
+                    tap(e => this.currentOperator = e)
+                )
+                .subscribe()
+        );
+    }
+
+    createMessage() {
+        const today = getToday();
+        const message = new MessageModel(0, today, null, this.currentOperator.id, null, null, null, this.options.purchaseOrder.id);
+
+        this._subscriptions.push(
+            this.messageModal.open(message)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._messagesService.create(message)),
+                    tap(e => {
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true);
+                        this.options.purchaseOrder.messages.push(msg);
+                    }),
+                    tap(() => this._messageBox.success('Commento creato'))
+                )
+                .subscribe()
+        );
+    }
+
+    markAsRead(message: MessageReadModel) {
+        this._subscriptions.push(
+            this._messagesService.markAsRead(message.id, this.currentOperator.id)
+                .pipe(
+                    tap(() => {
+                        message.isRead = true;
+                        this._messageBox.success('Commento letto');
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    deleteMessage(message: MessageReadModel) {
+        this._messageBox.confirm(`Sei sicuro di voler cancellare il commento?`, 'Conferma l\'azione').subscribe(result => {
+            if (result == true) {
+                this._subscriptions.push(
+                    this._messagesService.delete(message.id)
+                        .pipe(
+                            tap(e => {
+                                this.options.purchaseOrder.messages.remove(message);
+                            }),
+                            tap(e => this._messageBox.success(`Commento cancellato con successo`))
+                        )
+                        .subscribe()
+                );
+            }
+        });
     }
 }
 

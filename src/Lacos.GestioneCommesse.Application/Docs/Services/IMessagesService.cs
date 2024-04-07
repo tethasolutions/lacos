@@ -13,7 +13,6 @@ public interface IMessagesService
     Task<MessageDto> Get(long id);
     Task<IEnumerable<MessageReadModel>> GetMessages(long jobId, long activityId, long ticketId, long purchaseOrderId);
     Task<MessageDto> Create(MessageDto jobDto);
-    Task CreateNotifications(long messageId);
     Task<MessageDto> Update(MessageDto jobDto);
     Task Delete(long id);
     Task ReadMessage(long messageId, long operatorId);

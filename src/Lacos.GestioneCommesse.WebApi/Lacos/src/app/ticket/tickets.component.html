@@ -37,6 +37,9 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="customerName" title="Cliente">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customerName}}</a><br/>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Note">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -64,3 +67,4 @@
 </kendo-grid>
 
 <app-ticket-modal #ticketModal></app-ticket-modal>
+<app-customer-modal #customerModal></app-customer-modal>

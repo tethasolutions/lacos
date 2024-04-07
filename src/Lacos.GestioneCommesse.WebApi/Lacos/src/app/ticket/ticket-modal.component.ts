@@ -6,7 +6,7 @@ import { filter, switchMap, tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { MessageBoxService } from '../services/common/message-box.service';
-import { listEnum } from '../services/common/functions';
+import { getToday, listEnum } from '../services/common/functions';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { Activity, ActivityStatus } from '../services/activities/models';
 import { ActivityModalComponent, ActivityModalOptions } from '../activities/activity-modal.component';
@@ -17,6 +17,13 @@ import { TicketAttachmentModel } from '../services/tickets/ticket-attachment.mod
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { TicketAttachmentUploadFileModel } from '../services/tickets/ticket-attachment-upload-file.model';
 import { ApiUrls } from '../services/common/api-urls';
+import { MessageModalComponent } from '../messages/message-modal.component';
+import { MessageModel, MessageReadModel } from '../services/messages/models';
+import { User } from '../services/security/models';
+import { OperatorModel } from '../shared/models/operator.model';
+import { OperatorsService } from '../services/operators.service';
+import { UserService } from '../services/security/user.service';
+import { MessagesService } from '../services/messages/messages.service';
 
 @Component({
     selector: 'app-ticket-modal',
@@ -27,10 +34,14 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
+    @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
 
     customers: CustomerModel[];
     _job: Job;
     attachments: Array<FileInfo> = [];
+    messages: MessageReadModel[];
+    user: User;
+    currentOperator: OperatorModel;
     
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -43,13 +54,18 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
         private readonly _customersService: CustomerService,
         private readonly _serviceJob: JobsService,
         private readonly _serviceActivity: ActivitiesService,
-        private readonly _messageBox: MessageBoxService
+        private readonly _messageBox: MessageBoxService,
+        private readonly _operatorsService: OperatorsService,
+        private readonly _user: UserService,
+        private readonly _messagesService: MessagesService
     ) {
         super();
     }
 
     ngOnInit() {
         this._getData();
+        this.user = this._user.getUser();
+        this._getCurrentOperator(this.user.id);
     }
 
     override open(ticket: Ticket) {
@@ -164,5 +180,64 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
             const deletedFile = e.files[0].name;
             this.options.pictures.findAndRemove(e => e.description === deletedFile);
         }
+    }
+    
+    protected _getCurrentOperator(userId: number) {
+        this._subscriptions.push(
+            this._operatorsService.getOperatorByUserId(userId)
+                .pipe(
+                    tap(e => this.currentOperator = e)
+                )
+                .subscribe()
+        );
+    }
+
+    createMessage() {
+        const today = getToday();
+        const message = new MessageModel(0, today, null, this.currentOperator.id, null, null, this.options.id, null);
+
+        this._subscriptions.push(
+            this.messageModal.open(message)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._messagesService.create(message)),
+                    tap(e => {
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true);
+                        this.options.messages.push(msg);
+                    }),
+                    tap(() => this._messageBox.success('Commento creato'))
+                )
+                .subscribe()
+        );
+    }
+
+    markAsRead(message: MessageReadModel) {
+        this._subscriptions.push(
+            this._messagesService.markAsRead(message.id, this.currentOperator.id)
+                .pipe(
+                    tap(() => {
+                        message.isRead = true;
+                        this._messageBox.success('Commento letto');
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    deleteMessage(message: MessageReadModel) {
+        this._messageBox.confirm(`Sei sicuro di voler cancellare il commento?`, 'Conferma l\'azione').subscribe(result => {
+            if (result == true) {
+                this._subscriptions.push(
+                    this._messagesService.delete(message.id)
+                        .pipe(
+                            tap(e => {
+                                this.options.messages.remove(message);
+                            }),
+                            tap(e => this._messageBox.success(`Commento cancellato con successo`))
+                        )
+                        .subscribe()
+                );
+            }
+        });
     }
 }

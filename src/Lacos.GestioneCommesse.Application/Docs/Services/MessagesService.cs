@@ -18,6 +18,7 @@ public class MessagesService : IMessagesService
     private readonly IRepository<Message> repository;
     private readonly IRepository<MessageNotification> notificationRepository;
     private readonly IRepository<Operator> operatorRepository;
+    private readonly IRepository<Domain.Docs.Activity> activityRepository;
     private readonly ILacosDbContext dbContext;
 
     public MessagesService(
@@ -25,6 +26,7 @@ public class MessagesService : IMessagesService
         IRepository<Message> repository,
         IRepository<MessageNotification> notificationRepository,
         IRepository<Operator> operatorRepository,
+        IRepository<Domain.Docs.Activity> activityRepository,
         ILacosDbContext dbContext
     )
     {
@@ -32,6 +34,7 @@ public class MessagesService : IMessagesService
         this.repository = repository;
         this.notificationRepository = notificationRepository;
         this.operatorRepository = operatorRepository;
+        this.activityRepository = activityRepository;
         this.dbContext = dbContext;
     }
 
@@ -75,6 +78,7 @@ public class MessagesService : IMessagesService
             .FirstOrDefaultAsync();
 
 
+        //---------JOB-------------------------------------------------------------------------------------
         if (message.JobId != null)
         {
             if (message.Job.ReferentId != null && message.Job.ReferentId != message.OperatorId)
@@ -84,6 +88,71 @@ public class MessagesService : IMessagesService
                     MessageId = message.Id,
                     IsRead = false,
                     OperatorId = (long)message.Job.ReferentId
+                };
+                await notificationRepository.Insert(MessageNotification);
+            }
+        }
+
+        //---------ACTIVITY-------------------------------------------------------------------------------------
+        if (message.ActivityId != null)
+        {
+            if (message.Activity.ReferentId != null && message.Activity.ReferentId != message.OperatorId)
+            {
+                var MessageNotification = new MessageNotification
+                {
+                    MessageId = message.Id,
+                    IsRead = false,
+                    OperatorId = (long)message.Activity.ReferentId
+                };
+                await notificationRepository.Insert(MessageNotification);
+            }
+
+            Domain.Docs.Activity activity = await activityRepository.Query()
+                .Where(e => e.Id == message.ActivityId)
+                .Include(e => e.Type)
+                .ThenInclude(e => e.Operators)
+                .FirstOrDefaultAsync();
+
+            if (activity.Type.Operators.Count() > 0)
+            {
+                foreach (Operator @operator in message.Activity.Type.Operators)
+                {
+                    var MessageNotification = new MessageNotification
+                    {
+                        MessageId = message.Id,
+                        IsRead = false,
+                        OperatorId = @operator.Id
+                    };
+                    await notificationRepository.Insert(MessageNotification);
+                }
+            }
+        }
+
+        //---------TICKET-------------------------------------------------------------------------------------
+        if (message.TicketId != null)
+        {
+            if (message.Ticket.OperatorId != null && message.Ticket.OperatorId != message.OperatorId)
+            {
+                var MessageNotification = new MessageNotification
+                {
+                    MessageId = message.Id,
+                    IsRead = false,
+                    OperatorId = (long)message.Ticket.OperatorId
+                };
+                await notificationRepository.Insert(MessageNotification);
+            }
+        }
+
+        //---------PURCHASE ORDER-------------------------------------------------------------------------------------
+        if (message.PurchaseOrderId != null)
+        {
+            if (message.PurchaseOrder.OperatorId != null && message.PurchaseOrder.OperatorId != message.OperatorId)
+            {
+                var MessageNotification = new MessageNotification
+                {
+                    MessageId = message.Id,
+                    IsRead = false,
+                    OperatorId = (long)message.PurchaseOrder.OperatorId
                 };
                 await notificationRepository.Insert(MessageNotification);
             }
@@ -91,35 +160,6 @@ public class MessagesService : IMessagesService
         await dbContext.SaveChanges();
 
         return await Get(Message.Id);
-    }
-
-    public async Task CreateNotifications(long messageId)
-    {
-        Message message = await repository.Query()
-            .Where(e => e.Id == messageId)
-            .Include(e => e.Job)
-            .Include(e => e.Ticket)
-            .Include(e => e.Activity)
-            .Include(e => e.PurchaseOrder)
-            .FirstOrDefaultAsync();
-
-        if (message.JobId != null)
-        {
-            if (message.Job.ReferentId != null && message.Job.ReferentId != message.OperatorId)
-            {
-                var MessageNotification = new MessageNotification
-                {
-                    MessageId = message.Id,
-                    IsRead = false,
-                    OperatorId = (long)message.Job.ReferentId
-                };
-                await notificationRepository.Insert(MessageNotification);
-            }
-        }
-
-        await dbContext.SaveChanges();
-
-        return;
     }
 
     public async Task<MessageDto> Update(MessageDto MessageDto)

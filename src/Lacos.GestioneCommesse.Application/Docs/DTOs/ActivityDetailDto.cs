@@ -29,4 +29,5 @@ public class ActivityDetailDto
     public string? StatusLabel2 { get; set; }
 
     public IEnumerable<ActivityAttachmentDto>? Attachments { get; set; }
+    public IEnumerable<MessageReadModel>? Messages { get; set; }
 }

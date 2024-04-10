@@ -77,6 +77,26 @@ public class MessagesService : IMessagesService
             .Include(e => e.PurchaseOrder)
             .FirstOrDefaultAsync();
 
+        var AdminOperators = await operatorRepository.Query()
+            .Where(e => e.User.Role == Domain.Security.Role.Administrator).ToListAsync();
+
+        //---------ADMIN OPERATORS ------------------------------------------------------------------------
+        if (AdminOperators.Any())
+        {
+            foreach (Operator @operator in AdminOperators)
+            {
+                if (message.OperatorId != @operator.Id)
+                {
+                    var MessageNotification = new MessageNotification
+                    {
+                        MessageId = message.Id,
+                        IsRead = false,
+                        OperatorId = @operator.Id
+                    };
+                    await notificationRepository.Insert(MessageNotification);
+                }
+            }
+        }
 
         //---------JOB-------------------------------------------------------------------------------------
         if (message.JobId != null)
@@ -117,13 +137,16 @@ public class MessagesService : IMessagesService
             {
                 foreach (Operator @operator in message.Activity.Type.Operators)
                 {
-                    var MessageNotification = new MessageNotification
+                    if (message.OperatorId != @operator.Id)
                     {
-                        MessageId = message.Id,
-                        IsRead = false,
-                        OperatorId = @operator.Id
-                    };
-                    await notificationRepository.Insert(MessageNotification);
+                        var MessageNotification = new MessageNotification
+                        {
+                            MessageId = message.Id,
+                            IsRead = false,
+                            OperatorId = @operator.Id
+                        };
+                        await notificationRepository.Insert(MessageNotification);
+                    }
                 }
             }
         }

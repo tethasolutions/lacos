@@ -16,7 +16,8 @@ public class PurchaseOrderMappingProfile : Profile
             .MapMember(x => x.JobCode, y => CustomDbFunctions.FormatCode(y.Job!.Number, y.Job.Year, 3))
             .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
             .MapMember(x => x.JobReference, y => y.Job!.Reference)
-            .MapMember(x => x.OperatorName, y => y.Operator!.Name);
+            .MapMember(x => x.OperatorName, y => y.Operator!.Name)
+            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead));
 
         CreateMap<PurchaseOrderDto, PurchaseOrder>()
             .IgnoreCommonMembers()

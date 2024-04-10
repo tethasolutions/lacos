@@ -17,5 +17,6 @@ public class TicketReadModel : BaseEntityDto
     public string? CustomerName { get; set; }
     public string? OperatorName { get; set; }
     //public bool CanBeRemoved { get; set; }
+    public int? UnreadMessages { get; set; }
 
 }

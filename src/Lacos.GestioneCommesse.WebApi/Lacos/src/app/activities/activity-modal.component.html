@@ -178,32 +178,50 @@
                 </div>
             </div>
 
+            <hr class="border-green"/>
+            <!--<kendo-expansionpanel title="Commenti ({{options.activity.messages.length}})" subtitle="Visualizza messaggi">-->
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Note</label>
-                        <kendo-editor name="description" [(ngModel)]="options.activity.description" [resizable]="true"
-                            [iframe]="false">
-                            <kendo-toolbar>
-                                <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
-                                <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
-                                <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
-                                <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorUnlinkButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
-                            </kendo-toolbar>
-                        </kendo-editor>
-                        <div class="validation-message" [control]="form.controls['description']"></div>
+                        <label>Commenti ({{options.activity.messages.length}}) <strong *ngIf="unreadMessages"
+                                style="padding-left: 15px;">Da leggere:
+                                {{unreadMessages}}</strong></label>
+                        <div class="row" style="margin-top:5px">
+                            <div class="col-md-1">
+                                <button class="btn btn-primary" title="Aggiungi nuovo commento" type="button"
+                                    (click)="createMessage()">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-11">
+                                <div *ngFor="let item of options.activity.messages" class="row messageTableRow">
+                                    <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
+                                        {{item.date | date:'dd/MM/yyyy'}}</div>
+                                    <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
+                                        {{item.operatorName}}</div>
+                                    <div class="col-md-6 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}"
+                                        [innerHTML]="item.note"></div>
+                                    <div class="col-md-2" style="text-align: right;">
+                                        <button class="btn btn-outline-primary me-2" type="button"
+                                            title="Segna come letto" [disabled]="item.isRead"
+                                            (click)="markAsRead(item)">
+                                            <i class="fa-regular fa-square-check" *ngIf="item.isRead"></i>
+                                            <i class="fa-regular fa-square" *ngIf="!item.isRead"></i>
+                                        </button>
+                                        <button [disabled]="item.operatorId != currentOperator.id" type="button"
+                                            class="btn btn-outline-danger" title="Elimina"
+                                            (click)="deleteMessage(item)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!--</kendo-expansionpanel>-->
+            <hr class="border-green"/>
 
             <div class="row">
                 <div class="col-md-3">
@@ -216,52 +234,23 @@
                                     {{ files[0].name }}
                                 </a>
                             </ng-template>
-                            <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
+                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
                         </kendo-upload>
                     </kendo-formfield>
                 </div>
                 <div class="col-md-9">
                     <div class="row">
-                    <div *ngFor="let item of options.activity.attachments"class="col-2">
+                        <div *ngFor="let item of options.activity.attachments" class="col-2">
                             <a [href]="pathImage + item.fileName" target="_blank">
-                                <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName" *ngIf="item.isImage" />
-                                <img src="assets/document.jpg" width="90%" [title]="item.displayName" *ngIf="!item.isImage" />
+                                <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName"
+                                    *ngIf="item.isImage" />
+                                <img src="assets/document.jpg" width="90%" [title]="item.displayName"
+                                    *ngIf="!item.isImage" />
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <kendo-expansionpanel title="Commenti ({{options.activity.messages.length}})" subtitle="Visualizza messaggi">
-                <div class="row">
-                    <div class="col-md-1">
-                        <button class="btn btn-primary" title="Aggiungi nuovo commento" type="button" (click)="createMessage()">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="col-md-11">
-                        <div *ngFor="let item of options.activity.messages" class="row messageTableRow">
-                            <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
-                                {{item.date | date:'dd/MM/yyyy'}}</div>
-                            <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
-                                {{item.operatorName}}</div>
-                            <div class="col-md-6 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
-                                {{item.note}}</div>
-                            <div class="col-md-2" style="text-align: right;">
-                                <button class="btn btn-outline-primary me-2" type="button" title="Segna come letto" [disabled]="item.isRead" 
-                                (click)="markAsRead(item)">
-                                    <i class="fa-regular fa-square-check" *ngIf="item.isRead"></i>
-                                    <i class="fa-regular fa-square" *ngIf="!item.isRead"></i>
-                                </button>
-                                <button [disabled]="item.operatorId != currentOperator.id" type="button" class="btn btn-outline-danger" title="Elimina"
-                                    (click)="deleteMessage(item)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </kendo-expansionpanel>
 
             <div class="d-flex justify-content-end gap-2 mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">

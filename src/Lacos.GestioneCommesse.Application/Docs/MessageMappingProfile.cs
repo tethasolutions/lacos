@@ -28,8 +28,7 @@ public class MessageMappingProfile : Profile
                     ((y.ActivityId != null) ? "Attività " + y.Activity.Type.Name :
                     ((y.TicketId != null) ? "Ticket " + CustomDbFunctions.FormatCode(y.Ticket.Number, y.Ticket.Year, 3) :
                     ((y.PurchaseOrderId != null) ? "Ordine " + CustomDbFunctions.FormatCode(y.PurchaseOrder.Number, y.PurchaseOrder.Year, 3) : null))))
-            .MapMember(x => x.IsRead, y => (y.MessageNotifications.Where(e => e.OperatorId == y.OperatorId).FirstOrDefault() != null) ?
-                      y.MessageNotifications.Where(e => e.OperatorId == y.OperatorId).FirstOrDefault().IsRead : true);
+            .MapMember(x => x.IsRead, y => (!y.MessageNotifications.Any() || y.MessageNotifications.All(e => e.IsRead)));
 
         CreateMap<MessageReadModel, Message>()
             .IgnoreCommonMembers()

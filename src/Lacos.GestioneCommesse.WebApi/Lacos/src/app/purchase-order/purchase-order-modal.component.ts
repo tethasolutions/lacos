@@ -57,6 +57,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     messages: MessageReadModel[];
     user: User;
     currentOperator: OperatorModel;
+    unreadMessages: number;
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
@@ -149,6 +150,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         this.jobReadonly = !!options.purchaseOrder.jobId;
         this.status = options.purchaseOrder.status;
         this.onDataStateChange(this.gridState);
+        this.updateUnreadCounter();
 
         return result;
     }
@@ -306,6 +308,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
                     tap(() => {
                         message.isRead = true;
                         this._messageBox.success('Commento letto');
+                        this.updateUnreadCounter();
                     })
                 )
                 .subscribe()
@@ -320,6 +323,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
                         .pipe(
                             tap(e => {
                                 this.options.purchaseOrder.messages.remove(message);
+                                this.updateUnreadCounter();
                             }),
                             tap(e => this._messageBox.success(`Commento cancellato con successo`))
                         )
@@ -327,6 +331,10 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
                 );
             }
         });
+    }
+    
+    updateUnreadCounter() {
+        this.unreadMessages = this.options.purchaseOrder.messages.count(e => !e.isRead);
     }
 }
 

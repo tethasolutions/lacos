@@ -23,4 +23,6 @@ public class JobReadModel
     public bool HasPurchaseOrders { get; set; }
     public long? ReferentId { get; set; }
     public string? ReferentName { get; set; }
+
+    public int? UnreadMessages { get; set; }
 }

@@ -25,8 +25,24 @@
                 <div class="col-md-12">
                     <label>Commento</label>
                     <div class="form-group">
-                        <input class="form-control" name="note" [(ngModel)]="options.note" maxlength="255"
-                            novalidate autocomplete="off" />
+                        <kendo-editor name="note" [(ngModel)]="options.note" [resizable]="true" style="height: 200px;"
+                            [iframe]="false" required>
+                            <kendo-toolbar>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorUnlinkButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                            </kendo-toolbar>
+                        </kendo-editor>
                         <div class="validation-message" [control]="form.controls['note']"></div>
                     </div>
                 </div>

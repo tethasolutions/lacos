@@ -47,6 +47,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     messages: MessageReadModel[];
     user: User;
     currentOperator: OperatorModel;
+    unreadMessages: number;
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -54,15 +55,6 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     uploadRemoveUrl = `${this._baseUrl}/job-attachment/remove-file`;
 
     readonly states = listEnum<JobStatus>(JobStatus);
-
-    // private messagesSubject = new BehaviorSubject<MessageReadModel[]>([]);
-    // messages$ = this.messagesSubject.asObservable();
-    // unreadMessagesCounter$: Observable<number> = this.messages$.pipe(
-    //     map(messages => messages.filter(message => !message.isRead).length)
-    // );
-    // private syncMessages() {
-    //     this.messagesSubject.next(this.options.messages);
-    // }
 
     constructor(
         private readonly _customersService: CustomerService,
@@ -99,6 +91,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
             });
         }
 
+        this.updateUnreadCounter();
         this.readAddresses();
         return result;
     }
@@ -285,6 +278,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
                 .pipe(
                     tap(() => {
                         message.isRead = true;
+                        this.updateUnreadCounter();
                         this._messageBox.success('Commento letto');
                     })
                 )
@@ -300,6 +294,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
                         .pipe(
                             tap(e => {
                                 this.options.messages.remove(message);
+                                this.updateUnreadCounter();
                             }),
                             tap(e => this._messageBox.success(`Commento cancellato con successo`))
                         )
@@ -307,5 +302,9 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
                 );
             }
         });
+    }
+    
+    updateUnreadCounter() {
+        this.unreadMessages = this.options.messages.count(e => !e.isRead);
     }
 }

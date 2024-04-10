@@ -25,7 +25,8 @@ public interface ILacosDbContext
 
 public enum QueryFilter
 {
-    SoftDelete
+    SoftDelete,
+    OperatorEntity
 }
 
 public class LacosDbContext : DbContext, ILacosDbContext
@@ -228,6 +229,15 @@ public class LacosDbContext : DbContext, ILacosDbContext
             expressions.Add(expr);
         }
 
+        if (typeof(IOperatorEntity).IsAssignableFrom(entityType))
+        {
+            Expression<Func<TEntity, bool>> expr = e =>
+                QueryFilters[QueryFilter.OperatorEntity] && ((IOperatorEntity)e).OperatorId == session.CurrentUser.OperatorId ||
+                !QueryFilters[QueryFilter.OperatorEntity];
+
+            expressions.Add(expr);
+        }
+
         if (expressions.Any())
         {
             var combinedExpressions = CombineExpressions(expressions);
@@ -347,7 +357,8 @@ public class LacosDbContext : DbContext, ILacosDbContext
     {
         return new Dictionary<QueryFilter, bool>
         {
-            { QueryFilter.SoftDelete, enabled }
+            { QueryFilter.SoftDelete, enabled },
+            { QueryFilter.OperatorEntity, enabled }
         };
     }
 

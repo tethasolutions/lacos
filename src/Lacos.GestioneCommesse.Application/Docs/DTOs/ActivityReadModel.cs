@@ -29,6 +29,8 @@ public class ActivityReadModel
     public bool IsExpired { get; set; }
     public bool IsInternal { get; set; }
 
+    public int? UnreadMessages { get; set; }
+
     public string? StatusLabel0 { get; set; }
     public string? StatusLabel1 { get; set; }
     public string? StatusLabel2 { get; set; }

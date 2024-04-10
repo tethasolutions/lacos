@@ -54,6 +54,11 @@
     </kendo-grid-column>
     <kendo-grid-column field="operatorName" title="Inserito da">
     </kendo-grid-column>
+    <kendo-grid-column field="unreadMessages" title="" filterable="false">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;"><a (click)="edit(dataItem)" style="cursor: pointer;"><i class="fa-regular fa-message job-alert"></i> <span class="job-alert"> {{dataItem.unreadMessages}}</span></a></div>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">

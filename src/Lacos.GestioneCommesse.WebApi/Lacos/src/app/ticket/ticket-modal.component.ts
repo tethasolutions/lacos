@@ -42,6 +42,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     messages: MessageReadModel[];
     user: User;
     currentOperator: OperatorModel;
+    unreadMessages: number;
     
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -80,6 +81,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
             });
         }
 
+        this.updateUnreadCounter();
         return result;
     }
 
@@ -218,6 +220,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
                     tap(() => {
                         message.isRead = true;
                         this._messageBox.success('Commento letto');
+                        this.updateUnreadCounter();
                     })
                 )
                 .subscribe()
@@ -232,6 +235,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
                         .pipe(
                             tap(e => {
                                 this.options.messages.remove(message);
+                                this.updateUnreadCounter();
                             }),
                             tap(e => this._messageBox.success(`Commento cancellato con successo`))
                         )
@@ -239,5 +243,9 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
                 );
             }
         });
+    }
+    
+    updateUnreadCounter() {
+        this.unreadMessages = this.options.messages.count(e => !e.isRead);
     }
 }

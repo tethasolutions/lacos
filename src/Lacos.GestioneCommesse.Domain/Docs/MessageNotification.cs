@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class MessageNotification : FullAuditedEntity
+public class MessageNotification : FullAuditedEntity, IOperatorEntity
 {
     public long MessageId { get; set; }
     public Message? Message { get; set; }

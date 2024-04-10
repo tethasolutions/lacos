@@ -43,6 +43,7 @@ export interface IJobReadModel {
     readonly hasPurchseOrders: boolean;
     readonly referentId: number;
     readonly referentName: string;
+    readonly unreadMessages: number;
 
 }
 

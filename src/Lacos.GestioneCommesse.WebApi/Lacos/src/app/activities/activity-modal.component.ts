@@ -54,6 +54,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     messages: MessageReadModel[];
     user: User;
     currentOperator: OperatorModel;
+    unreadMessages: number;
 
     attachments: Array<FileInfo> = [];
 
@@ -176,6 +177,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
             }
         }
 
+        this.updateUnreadCounter();
         return result;
     }
 
@@ -382,6 +384,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                     tap(() => {
                         message.isRead = true;
                         this._messageBox.success('Commento letto');
+                        this.updateUnreadCounter();
                     })
                 )
                 .subscribe()
@@ -396,6 +399,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                         .pipe(
                             tap(e => {
                                 this.options.activity.messages.remove(message);
+                                this.updateUnreadCounter();
                             }),
                             tap(e => this._messageBox.success(`Commento cancellato con successo`))
                         )
@@ -403,6 +407,10 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                 );
             }
         });
+    }
+
+    updateUnreadCounter() {
+        this.unreadMessages = this.options.activity.messages.count(e => !e.isRead);
     }
 
 }

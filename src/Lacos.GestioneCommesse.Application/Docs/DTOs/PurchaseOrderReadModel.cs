@@ -21,5 +21,6 @@ public class PurchaseOrderReadModel
     public string? OperatorName { get; set; }
 
     public long? JobId { get; set; }
+    public int? UnreadMessages { get; set; }
 
 }

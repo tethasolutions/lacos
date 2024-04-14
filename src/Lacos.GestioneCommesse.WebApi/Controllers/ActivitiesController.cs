@@ -110,10 +110,10 @@ public class ActivitiesController : LacosApiController
         return Ok();
     }
 
-    [HttpGet("{id}/all-attachments")]
-    public async Task<List<ActivityAttachmentReadModel>> GetActivityAttachments(long id)
+    [HttpGet("all-attachments/{jobId}/{activityId}")]
+    public async Task<List<ActivityAttachmentReadModel>> GetActivityAttachments(long jobId, long activityId)
     {
-        List<ActivityAttachmentReadModel> activitysAttachment = (await service.GetActivityAttachments(id)).ToList();
+        List<ActivityAttachmentReadModel> activitysAttachment = (await service.GetActivityAttachments(jobId, activityId)).ToList();
         return activitysAttachment;
     }
 

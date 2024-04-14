@@ -321,4 +321,28 @@ public class InterventionsService : IInterventionsService
 
         return interventionNote;
     }
+
+    public async Task<IEnumerable<InterventionNoteDto>> GetInterventionAttachments(long jobId, long activityId)
+    {
+        if (activityId != 0)
+        {
+            var interventionActivityAttachments = await noteRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.Intervention.Activity.Id == activityId)
+                .OrderBy(x => x.CreatedOn)
+                .ToArrayAsync();
+
+            return interventionActivityAttachments.MapTo<IEnumerable<InterventionNoteDto>>(mapper);
+        }
+
+        var interventionAttachments = await noteRepository
+            .Query()
+            .AsNoTracking()
+            .Where(x => x.Intervention.Activity.JobId == jobId)
+            .OrderBy(x => x.CreatedOn)
+            .ToArrayAsync();
+
+        return interventionAttachments.MapTo<IEnumerable<InterventionNoteDto>>(mapper);
+    }
 }

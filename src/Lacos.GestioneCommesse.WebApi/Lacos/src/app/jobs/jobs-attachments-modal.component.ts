@@ -12,13 +12,17 @@ import { TicketsService } from '../services/tickets/tickets.service';
 import { JobAttachmentModel } from '../services/jobs/job-attachment.model';
 import { PurchaseOrderAttachmentModel } from '../services/purchase-orders/purchase-order-attachment.model';
 import { TicketAttachmentModel } from '../services/tickets/ticket-attachment.model';
+import { InterventionsService } from '../services/interventions/interventions.service';
+import { InterventionNote } from '../services/interventions/models';
+import { SecurityService } from '../services/security/security.service';
+import { Role } from '../services/security/models';
 
 @Component({
     selector: 'app-jobs-attachments-modal',
     templateUrl: './jobs-attachments-modal.component.html'
 })
 
-export class JobsAttachmentsModalComponent extends ModalComponent<number> implements OnInit {
+export class JobsAttachmentsModalComponent extends ModalComponent<[number, number]> implements OnInit {
 
     @ViewChild('form', { static: false }) form: NgForm;
 
@@ -26,44 +30,62 @@ export class JobsAttachmentsModalComponent extends ModalComponent<number> implem
     attachments: JobAttachmentModel[];
     activityAttachments: ActivityAttachmentModel[];
     purchaseOrderAttachments: PurchaseOrderAttachmentModel[];
+    purchaseOrderAdminAttachments: PurchaseOrderAttachmentModel[];
     ticketAttachments: TicketAttachmentModel[];
+    interventionAttachments: InterventionNote[];
+    isAdmin: boolean;
 
     constructor(
+        private security: SecurityService,
         private readonly _messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _activitiesService: ActivitiesService,
         private readonly _purchaseOrdersService: PurchaseOrdersService,
-        private readonly _ticketsService: TicketsService
+        private readonly _ticketsService: TicketsService,
+        private readonly _interventionService: InterventionsService,
     ) {
         super();
+        this.isAdmin = security.isAuthorized(Role.Administrator);
     }
 
     ngOnInit() {
 
     }
 
-    override open(jobId: number) {
-        const result = super.open(jobId);
+    override open(data: [jobId: number, activityId: number]) {
+        const result = super.open(data);
 
-        this._jobsService.getJobAttachments(jobId)
-            .pipe(
-                tap(e => this.attachments = e)
-            )
-            .subscribe();
-
-        this._activitiesService.getActivityAttachments(jobId)
+        this._activitiesService.getActivityAttachments(data[0], data[1])
             .pipe(
                 tap(e => this.activityAttachments = e)
             )
             .subscribe();
 
-        this._purchaseOrdersService.getPurchaseOrderAttachments(jobId)
+        this._interventionService.getInterventionAttachments(data[0], data[1])
+            .pipe(
+                tap(e => this.interventionAttachments = e)
+            )
+            .subscribe();
+
+        this._jobsService.getJobAttachments(data[0])
+            .pipe(
+                tap(e => this.attachments = e)
+            )
+            .subscribe();
+
+        this._purchaseOrdersService.getPurchaseOrderAttachments(data[0])
             .pipe(
                 tap(e => this.purchaseOrderAttachments = e)
             )
             .subscribe();
 
-        this._ticketsService.getTicketAttachments(jobId)
+        this._purchaseOrdersService.getPurchaseOrderAdminAttachments(data[0])
+            .pipe(
+                tap(e => this.purchaseOrderAdminAttachments = e)
+            )
+            .subscribe();
+
+        this._ticketsService.getTicketAttachments(data[0])
             .pipe(
                 tap(e => this.ticketAttachments = e)
             )

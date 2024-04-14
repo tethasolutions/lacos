@@ -5,12 +5,13 @@ export class PurchaseOrderAttachmentModel {
         public id: number,
         public displayName: string,
         public fileName: string,
-        public purchaseOrderId: number
+        public purchaseOrderId: number,
+        public isAdminDocument: boolean
     ) {
     }
 
     static build(o: PurchaseOrderAttachmentModel) {
-        return new PurchaseOrderAttachmentModel(o.id, o.displayName, o.fileName, o.purchaseOrderId);
+        return new PurchaseOrderAttachmentModel(o.id, o.displayName, o.fileName, o.purchaseOrderId, o.isAdminDocument);
     }
     
     get isImage(): boolean {

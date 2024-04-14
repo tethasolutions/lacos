@@ -19,11 +19,12 @@ import { PurchaseOrderAttachmentModel } from '../services/purchase-orders/purcha
 import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
 import { MessageModalComponent } from '../messages/message-modal.component';
 import { MessageModel, MessageReadModel } from '../services/messages/models';
-import { User } from '../services/security/models';
+import { Role, User } from '../services/security/models';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { UserService } from '../services/security/user.service';
 import { MessagesService } from '../services/messages/messages.service';
+import { SecurityService } from '../services/security/security.service';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -54,10 +55,12 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     gridData: GridDataResult;
     
     attachments: Array<FileInfo> = [];
+    adminAttachments: Array<FileInfo> = [];
     messages: MessageReadModel[];
     user: User;
     currentOperator: OperatorModel;
     unreadMessages: number;
+    isAdmin: boolean;
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
@@ -67,6 +70,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     readonly states = listEnum<PurchaseOrderStatus>(PurchaseOrderStatus);
 
     constructor(
+        private security: SecurityService,
         private readonly _messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _suppliersService: SupplierService,
@@ -75,6 +79,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         private readonly _messagesService: MessagesService
     ) {
         super();
+        this.isAdmin = security.isAuthorized(Role.Administrator);
     }
 
     ngOnInit() {
@@ -139,6 +144,15 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
             this.options.purchaseOrder.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {
                     this.attachments.push({ name: element.displayName });
+                }
+            });
+        }
+
+        this.adminAttachments = [];
+        if (options.purchaseOrder.adminAttachments != null) {
+            this.options.purchaseOrder.adminAttachments.forEach(element => {
+                if (element.displayName != null && element.fileName != null) {
+                    this.adminAttachments.push({ name: element.displayName });
                 }
             });
         }
@@ -263,7 +277,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     public AttachmentExecutionSuccess(e: SuccessEvent): void {
         const file = e.response.body as PurchaseOrderAttachmentUploadFileModel;
         if (file != null) {
-            let purchaseOrderAttachmentModal = new PurchaseOrderAttachmentModel(0, file.originalFileName, file.fileName, this.options.purchaseOrder.id);
+            let purchaseOrderAttachmentModal = new PurchaseOrderAttachmentModel(0, file.originalFileName, file.fileName, this.options.purchaseOrder.id, false);
             this.options.purchaseOrder.attachments.push(purchaseOrderAttachmentModal);
         } else {
             const deletedFile = e.files[0].name;
@@ -271,6 +285,16 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         }
     }
 
+    public AttachmentExecutionSuccessAdmin(e: SuccessEvent): void {
+        const file = e.response.body as PurchaseOrderAttachmentUploadFileModel;
+        if (file != null) {
+            let purchaseOrderAttachmentModal = new PurchaseOrderAttachmentModel(0, file.originalFileName, file.fileName, this.options.purchaseOrder.id, true);
+            this.options.purchaseOrder.attachments.push(purchaseOrderAttachmentModal);
+        } else {
+            const deletedFile = e.files[0].name;
+            this.options.purchaseOrder.attachments.findAndRemove(e => e.displayName === deletedFile);
+        }
+    }
     
     protected _getCurrentOperator(userId: number) {
         this._subscriptions.push(

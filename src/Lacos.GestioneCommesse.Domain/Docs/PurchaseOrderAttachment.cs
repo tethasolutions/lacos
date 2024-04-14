@@ -9,4 +9,5 @@ public class PurchaseOrderAttachment : FullAuditedEntity
 
     public long PurchaseOrderId { get; set; }
     public PurchaseOrder? PurchaseOrder { get; set; }
+    public bool IsAdminDocument { get; set; }
 }

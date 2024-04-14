@@ -6,5 +6,6 @@
         public string? DisplayName { get; set; }
         public string? FileName { get; set; }
         public long PurchaseOrderId { get; set; }
+        public bool IsAdminDocument { get; set; }
     }
 }

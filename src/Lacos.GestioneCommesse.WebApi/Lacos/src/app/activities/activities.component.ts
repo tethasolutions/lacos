@@ -18,6 +18,7 @@ import { CustomerService } from '../services/customer.service';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { CustomerModel } from '../shared/models/customer.model';
 import { StorageService } from '../services/common/storage.service';
+import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.component';
 
 @Component({
     selector: 'app-activities',
@@ -27,6 +28,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
 
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
+    @ViewChild('jobsAttachmentsModal', { static: true }) jobsAttachmentsModal: JobsAttachmentsModalComponent;
 
     data: GridDataResult;
     gridState: State = {
@@ -162,6 +164,16 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                     map(() => this.customerModal.options),
                     tap(e => this._messageBox.success(`Cliente ${e.name} aggiornato`)),
                     tap(() => this._afterActivityUpdated())
+                )
+                .subscribe()
+        );
+    }
+
+    openAttachments(jobId: number, activityId: number) {
+        this._subscriptions.push(
+            this.jobsAttachmentsModal.open([0, activityId])
+                .pipe(
+                    filter(e => e)
                 )
                 .subscribe()
         );

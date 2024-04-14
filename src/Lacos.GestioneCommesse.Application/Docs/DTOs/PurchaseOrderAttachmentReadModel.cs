@@ -5,5 +5,6 @@
         public long Id { get; set; }
         public string? DisplayName { get; set; }
         public string? FileName { get; set; }
+        public bool IsAdminDocument { get; set; }
     }
 }

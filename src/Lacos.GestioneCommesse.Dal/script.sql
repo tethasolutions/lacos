@@ -3031,3 +3031,22 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240413135124_allegati admin ordini')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrderAttachments] ADD [IsAdminDocument] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240413135124_allegati admin ordini')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240413135124_allegati admin ordini', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

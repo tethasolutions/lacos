@@ -12,7 +12,8 @@ public interface IInterventionsService
 
     IQueryable<InterventionProductReadModel> GetProductsByIntervention(long id);
     Task<InterventionProductCheckListDto> GetInterventionProductCheckList(long interventionProductId);
-    
+    Task<IEnumerable<InterventionNoteDto>> GetInterventionAttachments(long jobId, long activityId);
+
     Task<ReportDto> GenerateReport(long interventionId);
     Task<InterventionNoteDto> DownloadInterventionNote(string filename);
 }

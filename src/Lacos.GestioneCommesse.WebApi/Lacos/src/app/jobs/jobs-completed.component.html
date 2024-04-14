@@ -76,7 +76,7 @@
                     </button>
                     <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']" [disabled]="!dataItem.hasActivities"
                         [queryParams]="{jobId: dataItem.id}">
-                        <i class="fas fa-gear"></i>
+                        <i class="fas fa-a"></i>
                     </a>
                     <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati" (click)="openAttachments(dataItem)" [disabled]="!dataItem.hasAttachments">
                         <i class="fa fa-paperclip"></i>

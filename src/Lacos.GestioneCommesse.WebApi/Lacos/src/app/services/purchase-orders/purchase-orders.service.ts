@@ -71,6 +71,13 @@ export class PurchaseOrdersService {
             );
     }
 
+    getPurchaseOrderAdminAttachments(jobId: number) {
+        return this._http.get<Array<PurchaseOrderAttachmentModel>>(`${this._baseUrl}/${jobId}/all-admin-attachments`)
+            .pipe(
+                map(e => e.map(ee => PurchaseOrderAttachmentModel.build(ee)))
+            );
+    }
+
     uploadPurchaseOrderAttachmentFile(file: File) {
         const formData = new FormData();
 

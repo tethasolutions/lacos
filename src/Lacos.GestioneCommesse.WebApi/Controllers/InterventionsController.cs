@@ -102,4 +102,11 @@ public class InterventionsController : LacosApiController
 
         return File(stream, mimeType, downloadFileName);
     }
+
+    [HttpGet("all-attachments/{jobId}/{activityId}")]
+    public async Task<List<InterventionNoteDto>> GetInterventionAttachments(long jobId, long activityId)
+    {
+        List<InterventionNoteDto> activitysAttachment = (await service.GetInterventionAttachments(jobId, activityId)).ToList();
+        return activitysAttachment;
+    }
 }

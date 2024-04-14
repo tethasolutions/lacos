@@ -109,8 +109,8 @@ export class ActivitiesService {
         );
     }
 
-    getActivityAttachments(id: number) {
-        return this._http.get<Array<ActivityAttachmentModel>>(`${this._baseUrl}/${id}/all-attachments`)
+    getActivityAttachments(jobId: number, activityId: number) {
+        return this._http.get<Array<ActivityAttachmentModel>>(`${this._baseUrl}/all-attachments/${jobId}/${activityId}`)
             .pipe(
                 map(e => e.map(ee => ActivityAttachmentModel.build(ee)))
             );

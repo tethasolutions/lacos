@@ -314,8 +314,20 @@ public class ActivitiesService : IActivitiesService
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    public async Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long jobId)
+    public async Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long jobId, long activityId)
     {
+        if (activityId != 0)
+        {
+            var activityAdminAttachments = await activityAttachmentRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.Activity.Id == activityId)
+                .OrderBy(x => x.CreatedOn)
+                .ToArrayAsync();
+
+            return activityAdminAttachments.MapTo<IEnumerable<ActivityAttachmentReadModel>>(mapper);
+        }
+
         var activityAttachments = await activityAttachmentRepository
             .Query()
             .AsNoTracking()

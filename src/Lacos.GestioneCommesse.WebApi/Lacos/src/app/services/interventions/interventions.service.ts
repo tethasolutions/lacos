@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
-import { Intervention, InterventionProductCheckList} from './models';
+import { Intervention, InterventionNote, InterventionProductCheckList} from './models';
 import { readData } from '../common/functions';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 
@@ -75,4 +75,10 @@ export class InterventionsService {
             
     }
     
+    getInterventionAttachments(jobId: number, activityId: number) {
+        return this._http.get<Array<InterventionNote>>(`${this._baseUrl}/all-attachments/${jobId}/${activityId}`)
+            .pipe(
+                map(e => e.map(ee => InterventionNote.build(ee)))
+            );
+    }
 }

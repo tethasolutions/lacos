@@ -87,7 +87,11 @@
                 <button class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', dataItem.id]" [disabled]="dataItem.isInternal">
                     <i class="fas fa-gear"></i>
                 </button>
-                <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
+                <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati" [disabled]="!dataItem.hasAttachments"
+                    (click)="openAttachments(dataItem.jobId, dataItem.id)">
+                    <i class="fa fa-paperclip"></i>
+                </button>
+                <button [disabled]="!dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
                     (click)="askRemove(dataItem)">
                     <i class="fas fa-trash"></i>
                 </button>
@@ -99,3 +103,4 @@
 
 <app-activity-modal #activityModal></app-activity-modal>
 <app-customer-modal #customerModal></app-customer-modal>
+<app-jobs-attachments-modal #jobsAttachmentsModal></app-jobs-attachments-modal>

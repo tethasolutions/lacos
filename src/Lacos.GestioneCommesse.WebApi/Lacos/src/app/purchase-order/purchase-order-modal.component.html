@@ -220,7 +220,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <kendo-formfield class="form-group">
-                        <label>Allegati</label>
+                        <label>Allegati</label> 
                         <kendo-upload [(ngModel)]="this.attachments" (success)="AttachmentExecutionSuccess($event)"
                             [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
@@ -235,6 +235,35 @@
                 <div class="col-md-9">
                     <div class="row">
                     <div *ngFor="let item of options.purchaseOrder.attachments"class="col-2">
+                            <a [href]="imagesUrl + item.fileName" target="_blank">
+                                <img [src]="imagesUrl + item.fileName" width="90%" [title]="item.displayName" *ngIf="item.isImage" />
+                                <img src="assets/document.jpg" width="90%" [title]="item.displayName" *ngIf="!item.isImage" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <hr *ngIf="isAdmin" class="border-green"/>
+
+            <div class="row" *ngIf="isAdmin">
+                <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label>Allegati Amministrazione</label>
+                        <kendo-upload [(ngModel)]="this.adminAttachments" (success)="AttachmentExecutionSuccessAdmin($event)"
+                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
+                            <ng-template kendoUploadFileInfoTemplate let-files>
+                                <a (click)="downloadAttachment(files[0].name)" class="pointer">
+                                    {{ files[0].name }}
+                                </a>
+                            </ng-template>
+                            <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
+                        </kendo-upload>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                    <div *ngFor="let item of options.purchaseOrder.adminAttachments"class="col-2">
                             <a [href]="imagesUrl + item.fileName" target="_blank">
                                 <img [src]="imagesUrl + item.fileName" width="90%" [title]="item.displayName" *ngIf="item.isImage" />
                                 <img src="assets/document.jpg" width="90%" [title]="item.displayName" *ngIf="!item.isImage" />

@@ -145,7 +145,14 @@ public class PurchaseOrdersController : LacosApiController
     [HttpGet("{id}/all-attachments")]
     public async Task<List<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAttachments(long id)
     {
-        List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(id)).ToList();
+        List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(id)).Where(e => !e.IsAdminDocument).ToList();
+        return purchaseOrdersAttachment;
+    }
+
+    [HttpGet("{id}/all-admin-attachments")]
+    public async Task<List<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAdminAttachments(long id)
+    {
+        List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(id)).Where(e => e.IsAdminDocument).ToList();
         return purchaseOrdersAttachment;
     }
 }

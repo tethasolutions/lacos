@@ -59,6 +59,7 @@ public class JobsService : IJobsService
             jobDto.Status = JobStatus.Pending;
             jobDto.Description = " ";
             jobDto.Attachments = Enumerable.Empty<JobAttachmentDto>();
+            jobDto.Messages = Enumerable.Empty<MessageReadModel>();
 
             var job = jobDto.MapTo<Job>(mapper);
             job.IsInternalJob= true;

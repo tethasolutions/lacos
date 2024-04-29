@@ -120,6 +120,7 @@ import { JobsAttachmentsModalComponent } from './jobs/jobs-attachments-modal.com
 import { InterventionNotesModalComponent } from './interventions/intervention-notes-modal.component';
 import { MessagesService } from './services/messages/messages.service';
 import { MessageModalComponent } from './messages/message-modal.component';
+import { JobDetailsComponent } from './jobs/job-details.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -163,6 +164,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         JobModalComponent,
         JobCopyModalComponent,
         JobStatusPipe,
+        JobDetailsComponent,
         DropdownlistGridColumnFilterComponent,
         MultiselectGridColumnFilterComponent,
         ActivityStatusPipe,

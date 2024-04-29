@@ -15,6 +15,8 @@ public class Operator : FullAuditedEntity
     public long? UserId { get; set; }
     public User? User { get; set; }
 
+    public string? SignatureFileName { get; set; }
+
     public ICollection<ActivityType> ActivityTypes { get; set; }
     public ICollection<Job> Jobs { get; set; }
     public ICollection<OperatorDocument> Documents { get; set; }

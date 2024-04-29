@@ -59,8 +59,9 @@
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button [disabled]="dataItem.activityId == null" class="btn btn-primary btn-sm" title="Apri attività" [routerLink]="['/activities', dataItem.activityId]">
-                    <i class="fas fa-gear"></i>
+                <button [disabled]="dataItem.jobId == null" class="btn btn-primary btn-sm" title="Apri attività" [routerLink]="['/activities']"
+                [queryParams]="{jobId: dataItem.jobId}">
+                    <i class="fas fa-a"></i>
                 </button>
                 <button class="btn btn-danger btn-sm" title="Rimuovi" (click)="askRemove(dataItem)">
                     <i class="fas fa-trash"></i>

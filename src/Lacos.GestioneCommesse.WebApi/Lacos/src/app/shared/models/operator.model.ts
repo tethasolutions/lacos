@@ -13,6 +13,7 @@ export class OperatorModel {
     password:string;
     documents: Array<OperatorDocumentModel>;
     activityTypes: number[];
+    signatureFileName:string;
 
     constructor() {
         this.id = null;
@@ -26,5 +27,6 @@ export class OperatorModel {
         this.defaultVehicle = new VehicleModel();
         this.documents = [];
         this.activityTypes = [];
+        this.signatureFileName = null;
     }
 }

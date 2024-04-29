@@ -128,16 +128,28 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     }
 
     // --------------------------------------------------------------------------------------------------------------
-    public async Task<IEnumerable<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAttachments(long jobId)
+    public async Task<IEnumerable<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAttachments(long jobId, long purchaseOrderId)
     {
-        var purchaseOrderAttachments = await purchaseOrderAttachmentRepository
+        if (purchaseOrderId != 0)
+        {
+            var purchaseOrderAttachments = await purchaseOrderAttachmentRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.PurchaseOrder.Id == purchaseOrderId)
+                .OrderBy(x => x.CreatedOn)
+                .ToArrayAsync();
+
+            return purchaseOrderAttachments.MapTo<IEnumerable<PurchaseOrderAttachmentReadModel>>(mapper);
+        }
+
+        var purchaseOrdersAttachments = await purchaseOrderAttachmentRepository
             .Query()
             .AsNoTracking()
             .Where(x => x.PurchaseOrder.JobId == jobId)
             .OrderBy(x => x.CreatedOn)
             .ToArrayAsync();
 
-        return purchaseOrderAttachments.MapTo<IEnumerable<PurchaseOrderAttachmentReadModel>>(mapper);
+        return purchaseOrdersAttachments.MapTo<IEnumerable<PurchaseOrderAttachmentReadModel>>(mapper);
     }
 
     public async Task<PurchaseOrderAttachmentReadModel> GetPurchaseOrderAttachmentDetail(long attachmentId)

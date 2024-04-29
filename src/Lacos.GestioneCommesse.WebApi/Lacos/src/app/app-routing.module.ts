@@ -22,6 +22,7 @@ import { ActivitiesComponent } from './activities/activities.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { PurchaseOrdersComponent } from './purchase-order/purchase-orders.component';
 import { JobsCompletedComponent } from './jobs/jobs-completed.component';
+import { JobDetailsComponent } from './jobs/job-details.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -44,7 +45,8 @@ const routes: Routes = [
     { path: 'activities/:activityId', component: ActivityComponent, canActivate: [AuthGuard.asInjectableGuard], resolve: { activity: ActivitiesService.asActivityDetailResolver } },
     { path: 'interventions-list', component: InterventionsListComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'interventions', component: InterventionsComponent, canActivate: [AuthGuard.asInjectableGuard] },
-    { path: 'purchase-orders', component: PurchaseOrdersComponent, canActivate: [AuthGuard.asInjectableGuard] }
+    { path: 'purchase-orders', component: PurchaseOrdersComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'job-details', component: JobDetailsComponent, canActivate: [AuthGuard.asInjectableGuard] },
 ];
 
 @NgModule({

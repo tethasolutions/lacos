@@ -245,7 +245,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     openAttachments(job: IJobReadModel) {
         this._subscriptions.push(
-            this.jobsAttachmentsModal.open([job.id, 0])
+            this.jobsAttachmentsModal.open([job.id, 0, 0])
                 .pipe(
                     filter(e => e)
                 )

@@ -28,6 +28,7 @@ export interface IPurchaseOrderReadModel {
     readonly expectedDate: Date | string;
     readonly description: string;
     readonly status: PurchaseOrderStatus;
+    readonly hasAttachments: boolean;
     readonly jobId: number;
     readonly jobReference: string;
     readonly jobHasHighPriority: boolean;

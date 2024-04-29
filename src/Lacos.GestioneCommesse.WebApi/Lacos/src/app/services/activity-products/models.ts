@@ -27,5 +27,6 @@ export interface IActivityProductReadModel {
     readonly description: string;
     readonly location: string;
     readonly canBeRemoved: boolean;
+    readonly colorHex: string;
 
 }

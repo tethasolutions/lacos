@@ -18,7 +18,32 @@
                 </button>
             </div>
         </div>
-        <kendo-grid [data]="customer.addresses" [sortable]="false" [pageable]="false" scrollable="none">
+        <kendo-grid [data]="customer.addresses" [sortable]="false" [pageable]="false" scrollable="none" *ngIf="customer.id != null">
+            <kendo-grid-column field="city" title="Città"></kendo-grid-column>
+            <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
+            <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
+            <kendo-grid-column field="zipCode" title="CAP"></kendo-grid-column>
+            <kendo-grid-column field="isMainAddress" title="Principale">
+                <ng-template kendoGridCellTemplate let-dataItemAddress>
+                    {{dataItemAddress.isMainAddress | bool}}
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
+                <ng-template kendoGridCellTemplate let-dataItemAddress>
+                    <button (click)="editAddress(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button *ngIf="!dataItemAddress.isMainAddress"
+                        (click)="setAddressAsMain(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Seleziona come principale">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button (click)="deleteAddress(dataItemAddress)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+        <kendo-grid [data]="supplier.addresses" [sortable]="false" [pageable]="false" scrollable="none" *ngIf="supplier.id != null">
             <kendo-grid-column field="city" title="Città"></kendo-grid-column>
             <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
             <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>

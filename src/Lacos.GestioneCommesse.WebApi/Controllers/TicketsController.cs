@@ -26,8 +26,9 @@ public class TicketsController : LacosApiController
     [HttpGet("read")]
     public Task<DataSourceResult> Read(DataSourceRequest request)
     {
-        return service.Query()
+        var result = service.Query()
             .ToDataSourceResultAsync(request);
+        return result;
     }
 
     [HttpGet("{id}")]

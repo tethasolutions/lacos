@@ -77,7 +77,7 @@
                         (click)="createActivity(dataItem)">
                         <i class="fa fa-plus"></i>
                     </button>
-                    <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/activities']" [disabled]="!dataItem.hasActivities"
+                    <a class="btn btn-primary btn-sm" title="Gestisci attività" [routerLink]="['/job-details']" [disabled]="!dataItem.hasActivities"
                         [queryParams]="{jobId: dataItem.id}">
                         <i class="fas fa-a"></i>
                     </a>

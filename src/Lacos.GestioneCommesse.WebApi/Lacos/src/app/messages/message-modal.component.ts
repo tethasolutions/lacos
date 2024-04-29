@@ -1,25 +1,17 @@
-import { Component, ViewChild, Input, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
-import { Role, User } from '../services/security/models';
-import { CustomerModel } from '../shared/models/customer.model';
-import { SupplierModel } from '../shared/models/supplier.model';
-import { MessageModel } from '../services/messages/models';
+import { MessageModalOptions, MessageModel } from '../services/messages/models';
 import { WindowState } from '@progress/kendo-angular-dialog';
-import { MessagesService } from '../services/messages/messages.service';
-import { UserService } from '../services/security/user.service';
-import { OperatorsService } from '../services/operators.service';
-import { OperatorModel } from '../shared/models/operator.model';
-import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-message-modal',
   templateUrl: './message-modal.component.html'
 })
 
-export class MessageModalComponent extends ModalComponent<MessageModel> implements OnInit {
+export class MessageModalComponent extends ModalComponent<MessageModalOptions> implements OnInit {
 
   @ViewChild('form') form: NgForm;
 
@@ -33,6 +25,11 @@ export class MessageModalComponent extends ModalComponent<MessageModel> implemen
 
   ngOnInit() {
     
+  }
+  
+  override open(options: MessageModalOptions) {
+      const result = super.open(options);
+      return result;
   }
 
   protected _canClose() {

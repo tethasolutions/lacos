@@ -33,7 +33,6 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.ProductTypeId)
                 .Ignore(x => x.PurchaseOrderItems)
                 .Ignore(x => x.ActivityProducts)
-                .Ignore(x => x.Location)
                 .Ignore(x => x.SerialNumber)
                 .Ignore(x => x.ReiType)
                 .Ignore(x => x.ConstructorName)

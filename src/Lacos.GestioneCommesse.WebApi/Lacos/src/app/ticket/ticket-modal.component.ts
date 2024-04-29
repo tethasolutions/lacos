@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { Ticket, TicketStatus } from '../services/tickets/models';
-import { filter, switchMap, tap } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -18,12 +18,15 @@ import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { TicketAttachmentUploadFileModel } from '../services/tickets/ticket-attachment-upload-file.model';
 import { ApiUrls } from '../services/common/api-urls';
 import { MessageModalComponent } from '../messages/message-modal.component';
-import { MessageModel, MessageReadModel } from '../services/messages/models';
+import { MessageModalOptions, MessageModel, MessageReadModel } from '../services/messages/models';
 import { User } from '../services/security/models';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { UserService } from '../services/security/user.service';
 import { MessagesService } from '../services/messages/messages.service';
+import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/models';
+import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
+import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 
 @Component({
     selector: 'app-ticket-modal',
@@ -34,6 +37,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
+    @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
 
     customers: CustomerModel[];
@@ -55,6 +59,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
         private readonly _customersService: CustomerService,
         private readonly _serviceJob: JobsService,
         private readonly _serviceActivity: ActivitiesService,
+        private readonly _servicePurchaseOrder: PurchaseOrdersService,
         private readonly _messageBox: MessageBoxService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
@@ -121,6 +126,40 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
 
     }
 
+    private _newPurchaseOrder(ticket: Ticket) {
+        const today = getToday();
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, 
+            this._job.id, null, null, this.currentOperator.id, [], [], [], []);
+        const options = new PurchaseOrderModalOptions(purchaseOrder);
+
+        ticket.status = TicketStatus.InProgress;
+
+        this._subscriptions.push(
+            this.purchaseOrderModal.open(options)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._servicePurchaseOrder.create(purchaseOrder)),
+                    tap(e => ticket.jobId = this._job.id),
+                    tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
+                    tap(() => this.close())
+                )
+                .subscribe()
+        );
+    }
+
+    createPurchaseOrder(ticket: Ticket) {
+
+        this._subscriptions.push(
+            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/","-"))
+                .pipe(
+                    tap(e => this._job = e),
+                    tap(() => this._newPurchaseOrder(ticket))
+                )
+                .subscribe()
+        );
+
+    }
+
     private _newActivity(ticket: Ticket) {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, null,
             this._job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", [], []);
@@ -134,6 +173,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
                     filter(e => e),
                     switchMap(() => this._serviceActivity.create(activity)),
                     tap(e => ticket.activityId = e.id),
+                    tap(e => ticket.jobId = this._job.id),
                     tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
                     tap(() => this.close())
                 )
@@ -197,9 +237,10 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     createMessage() {
         const today = getToday();
         const message = new MessageModel(0, today, null, this.currentOperator.id, null, null, this.options.id, null);
+        const options = new MessageModalOptions(message);
 
         this._subscriptions.push(
-            this.messageModal.open(message)
+            this.messageModal.open(options)
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message)),
@@ -222,6 +263,29 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
                         this._messageBox.success('Commento letto');
                         this.updateUnreadCounter();
                     })
+                )
+                .subscribe()
+        );
+    }
+
+    private _afterMessageUpdated(message: MessageModel) {
+        this._messageBox.success('Commento aggiornato.');
+        const originalMsg = this.options.messages.find(e => e.id == message.id);
+        originalMsg.date = message.date;
+        originalMsg.note = message.note;
+        this.updateUnreadCounter();
+        //this._read();
+    }
+    
+    editMessage(message: MessageReadModel) {
+        this._subscriptions.push(
+            this._messagesService.get(message.id)
+                .pipe(
+                    map(e => new MessageModalOptions(e)),
+                    switchMap(e => this.messageModal.open(e)),
+                    filter(e => e),
+                    switchMap(() => this._messagesService.update(this.messageModal.options.message)),
+                    tap(() => this._afterMessageUpdated(this.messageModal.options.message))
                 )
                 .subscribe()
         );

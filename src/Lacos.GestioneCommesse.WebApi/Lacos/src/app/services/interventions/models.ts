@@ -45,6 +45,16 @@ export class Intervention {
             o.activityId, o.jobId, o.operators, o.activityProducts, notes);
     }
 
+    toJSON() {
+        const result = {
+            ...this
+        };
+
+        result.start = result.start.toOffsetString() as any;
+        result.end = result.end.toOffsetString() as any;
+
+        return result;
+    }
 }
 
 
@@ -84,6 +94,7 @@ export interface IInterventionProductReadModel {
     readonly pictureFileName: string;
     readonly qrCode: string;
     readonly productType: string;
+    readonly colorHex: string;
 
 }
 

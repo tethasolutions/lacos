@@ -115,6 +115,8 @@ public class TicketsService : ITicketsService
 
         Ticket.IsNew = false;
 
+        if (Ticket.Activity != null && Ticket.JobId == null) Ticket.JobId = Ticket.Activity.JobId;
+
         if (Ticket.Status == TicketStatus.Resolved)
         {
             if (Ticket.Activity != null) Ticket.Activity.Status = ActivityStatus.Completed;

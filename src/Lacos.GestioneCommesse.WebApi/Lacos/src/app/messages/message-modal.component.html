@@ -4,7 +4,7 @@
     <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false"[top]="100">
         <kendo-window-titlebar>
             <div class="k-window-title">
-                Nuovo Commento
+                Commento
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
@@ -14,7 +14,7 @@
                 <div class="col-md-3">
                     <label>Data</label>
                     <div class="form-group">
-                        <kendo-datepicker format="dd/MM/yyyy" name="date" [(ngModel)]="options.date"
+                        <kendo-datepicker format="dd/MM/yyyy" name="date" [(ngModel)]="options.message.date"
                             [min]="options.date">
                         </kendo-datepicker>
                         <div class="validation-message" [control]="form.controls['date']"></div>
@@ -25,7 +25,7 @@
                 <div class="col-md-12">
                     <label>Commento</label>
                     <div class="form-group">
-                        <kendo-editor name="note" [(ngModel)]="options.note" [resizable]="true" style="height: 200px;"
+                        <kendo-editor name="note" [(ngModel)]="options.message.note" [resizable]="true" style="height: 200px;"
                             [iframe]="false" required>
                             <kendo-toolbar>
                                 <kendo-toolbar-buttongroup>
@@ -36,10 +36,6 @@
                                 <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
-                                <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorUnlinkButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
                             </kendo-toolbar>
                         </kendo-editor>

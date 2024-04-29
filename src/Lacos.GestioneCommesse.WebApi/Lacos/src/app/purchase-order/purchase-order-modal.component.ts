@@ -11,14 +11,14 @@ import { SupplierModel } from '../shared/models/supplier.model';
 import { SupplierService } from '../services/supplier.service';
 import { PurchaseOrder, PurchaseOrderItem, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderItemModalComponent } from './purchase-order-item-modal.component';
-import { filter, switchMap, tap } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs';
 import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { PurchaseOrderAttachmentUploadFileModel } from '../services/purchase-orders/purchage-order-attachment-upload-file.model';
 import { PurchaseOrderAttachmentModel } from '../services/purchase-orders/purchase-order-attachment.model';
 import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
 import { MessageModalComponent } from '../messages/message-modal.component';
-import { MessageModel, MessageReadModel } from '../services/messages/models';
+import { MessageModalOptions, MessageModel, MessageReadModel } from '../services/messages/models';
 import { Role, User } from '../services/security/models';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
@@ -53,7 +53,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         ]
     };
     gridData: GridDataResult;
-    
+
     attachments: Array<FileInfo> = [];
     adminAttachments: Array<FileInfo> = [];
     messages: MessageReadModel[];
@@ -208,17 +208,20 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     }
 
     private _getSuppliers() {
-        this._subscriptions.push(
-            this._suppliersService.getSuppliersList()
-                .pipe(
-                    tap(e => this._setData(e)),
-                    tap(() => {
-                        if (this.options.purchaseOrder.supplierId) {
-                            this.onSupplierChange();
-                        }})
-                )
-                .subscribe()
-        );
+        if (this.options) {
+            this._subscriptions.push(
+                this._suppliersService.getSuppliersList()
+                    .pipe(
+                        tap(e => this._setData(e)),
+                        tap(() => {
+                            if (this.options.purchaseOrder.supplierId) {
+                                this.onSupplierChange();
+                            }
+                        })
+                    )
+                    .subscribe()
+            );
+        }
     }
 
     private _setData(suppliers: SupplierModel[]) {
@@ -295,7 +298,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
             this.options.purchaseOrder.attachments.findAndRemove(e => e.displayName === deletedFile);
         }
     }
-    
+
     protected _getCurrentOperator(userId: number) {
         this._subscriptions.push(
             this._operatorsService.getOperatorByUserId(userId)
@@ -309,9 +312,10 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     createMessage() {
         const today = getToday();
         const message = new MessageModel(0, today, null, this.currentOperator.id, null, null, null, this.options.purchaseOrder.id);
+        const options = new MessageModalOptions(message);
 
         this._subscriptions.push(
-            this.messageModal.open(message)
+            this.messageModal.open(options)
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message)),
@@ -339,6 +343,29 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         );
     }
 
+    private _afterMessageUpdated(message: MessageModel) {
+        this._messageBox.success('Commento aggiornato.');
+        const originalMsg = this.options.purchaseOrder.messages.find(e => e.id == message.id);
+        originalMsg.date = message.date;
+        originalMsg.note = message.note;
+        this.updateUnreadCounter();
+        //this._read();
+    }
+
+    editMessage(message: MessageReadModel) {
+        this._subscriptions.push(
+            this._messagesService.get(message.id)
+                .pipe(
+                    map(e => new MessageModalOptions(e)),
+                    switchMap(e => this.messageModal.open(e)),
+                    filter(e => e),
+                    switchMap(() => this._messagesService.update(this.messageModal.options.message)),
+                    tap(() => this._afterMessageUpdated(this.messageModal.options.message))
+                )
+                .subscribe()
+        );
+    }
+
     deleteMessage(message: MessageReadModel) {
         this._messageBox.confirm(`Sei sicuro di voler cancellare il commento?`, 'Conferma l\'azione').subscribe(result => {
             if (result == true) {
@@ -356,7 +383,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
             }
         });
     }
-    
+
     updateUnreadCounter() {
         this.unreadMessages = this.options.purchaseOrder.messages.count(e => !e.isRead);
     }

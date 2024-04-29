@@ -167,10 +167,6 @@
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
-                                <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorUnlinkButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
                             </kendo-toolbar>
                         </kendo-editor>
                         <div class="validation-message" [control]="form.controls['informations']"></div>
@@ -202,14 +198,19 @@
                                     <div class="col-md-6 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}"
                                         [innerHTML]="item.note"></div>
                                     <div class="col-md-2" style="text-align: right;">
-                                        <button class="btn btn-outline-primary me-2" type="button"
+                                        <button [disabled]="item.operatorId != currentOperator.id" type="button"
+                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica" 
+                                            (click)="editMessage(item)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm me-2" type="button"
                                             title="Segna come letto" [disabled]="item.isRead"
                                             (click)="markAsRead(item)">
                                             <i class="fa-regular fa-square-check" *ngIf="item.isRead"></i>
                                             <i class="fa-regular fa-square" *ngIf="!item.isRead"></i>
                                         </button>
                                         <button [disabled]="item.operatorId != currentOperator.id" type="button"
-                                            class="btn btn-outline-danger" title="Elimina"
+                                            class="btn btn-outline-danger btn-sm" title="Elimina"
                                             (click)="deleteMessage(item)">
                                             <i class="fas fa-trash"></i>
                                         </button>

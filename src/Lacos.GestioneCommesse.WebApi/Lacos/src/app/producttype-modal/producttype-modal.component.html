@@ -38,7 +38,7 @@
                         </kendo-textbox>
                     </kendo-formfield>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label>Gestione QR Code</label>
                     <div class="form-group">
                         <kendo-switch name="isReiDoor" [(ngModel)]="options.isReiDoor" onLabel="Si" offLabel="No">
@@ -46,7 +46,7 @@
                         <div class="validation-message" [control]="form.controls['isReiDoor']"></div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label>Prodotto d'acquisto</label>
                     <div class="form-group">
                         <kendo-switch name="isSparePart" [(ngModel)]="options.isSparePart" onLabel="Si" offLabel="No">
@@ -54,6 +54,13 @@
                         <div class="validation-message" [control]="form.controls['isSparePart']"></div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <kendo-formfield class="form-group">
+                        <label>Colore</label>
+                        <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" format="hex"  required></kendo-colorpicker>
+                        <kendo-formerror>Colore è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>  
             </div>
             <div class="text-right mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">

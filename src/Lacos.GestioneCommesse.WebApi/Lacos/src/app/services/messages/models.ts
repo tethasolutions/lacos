@@ -50,3 +50,11 @@ export class MessageModel {
 
 }
 
+export class MessageModalOptions {
+
+    constructor(
+        readonly message: MessageModel
+    ) {
+    }
+
+}

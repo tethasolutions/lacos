@@ -12,6 +12,7 @@ public class PurchaseOrderReadModel
     public DateTimeOffset? ExpectedDate { get; set; }
     public string? Description { get; set; }
     public PurchaseOrderStatus Status { get; set; }
+    public bool HasAttachments { get; set; }
 
     public string? JobCode { get; set; }
     public string? JobReference { get; set; }

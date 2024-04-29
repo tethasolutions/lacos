@@ -30,6 +30,9 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
     operatorDocumentsModal: OperatorDocumentsModalComponent;
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/operators`;
+    pathImage = `${ApiUrls.baseUrl}/attachments/`;
+    signatureFileInfo: any;
+    signatureUploaded: boolean;
 
     uploadSaveUrl = `${this._baseUrl}/document/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/document/remove-file`;
@@ -60,6 +63,7 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
         this.attachmentsFileInfo = [];
         this.isUploaded = [];
         this.attachmentsUploads = [];
+        this.signatureUploaded = false;
 
         this.notHasUser = !this.options.hasUser;
 
@@ -73,6 +77,21 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
         });
 
         return result;
+    }
+
+    SignatureExecutionSuccess(e: SuccessEvent): void {
+        const body = e.response.body;
+        if (body != null) {
+
+            const uploadedFile = body as UploadFileModel;
+            const operatorAttachment = new UploadFileModel(uploadedFile.fileName, uploadedFile.originalFileName);
+            this.options.signatureFileName = uploadedFile.fileName;
+            this.signatureUploaded = true;
+        }
+        else {
+            const deletedFile = e.files[0].name;
+            this.options.signatureFileName = null;
+        }
     }
 
     AttachmentExecutionSuccess(e: SuccessEvent) {

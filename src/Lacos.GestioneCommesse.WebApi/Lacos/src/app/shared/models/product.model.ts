@@ -57,6 +57,7 @@ export interface ProductReadModel {
     readonly code: string;
     readonly name: string;
     readonly description: string;
+    readonly location: string;
     readonly pictureFileName: string;
     readonly qrCode: string;
     readonly productType: string;

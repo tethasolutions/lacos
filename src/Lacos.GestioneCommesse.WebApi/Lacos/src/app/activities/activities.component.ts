@@ -171,7 +171,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
 
     openAttachments(jobId: number, activityId: number) {
         this._subscriptions.push(
-            this.jobsAttachmentsModal.open([0, activityId])
+            this.jobsAttachmentsModal.open([0, activityId, 0])
                 .pipe(
                     filter(e => e)
                 )

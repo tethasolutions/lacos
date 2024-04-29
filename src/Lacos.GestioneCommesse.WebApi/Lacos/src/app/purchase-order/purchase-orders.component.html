@@ -35,11 +35,16 @@
             </span>
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="customer" title="Cliente">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a><br/>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="jobCode" title="Commessa" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <div *ngIf="!dataItem.jobHasHighPriority">{{dataItem.jobCode}}</div>
+            <div *ngIf="!dataItem.jobHasHighPriority"><a (click)="openJob(dataItem.jobId)" style="cursor: pointer;">{{dataItem.jobCode}}</a></div>
             <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
-                {{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                <a (click)="openJob(dataItem.customerId)" style="cursor: pointer;">{{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
             </div>
         </ng-template>
     </kendo-grid-column>
@@ -56,7 +61,9 @@
     </kendo-grid-column>
     <kendo-grid-column field="unreadMessages" title="" filterable="false">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;"><a (click)="edit(dataItem)" style="cursor: pointer;"><i class="fa-regular fa-message job-alert"></i> <span class="job-alert"> {{dataItem.unreadMessages}}</span></a></div>
+            <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;">
+                <a (click)="edit(dataItem)" style="cursor: pointer;"><i class="fa-regular fa-message job-alert"></i> <span class="job-alert"> {{dataItem.unreadMessages}}</span></a>
+            </div>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
@@ -64,6 +71,10 @@
             <div class="d-flex text-nowrap gap-1">
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                     <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati" [disabled]="!dataItem.hasAttachments"
+                    (click)="openAttachments(dataItem.jobId, dataItem.id)">
+                    <i class="fa fa-paperclip"></i>
                 </button>
                 <button class="btn btn-danger btn-sm" title="Rimuovi"
                     (click)="askRemove(dataItem)">
@@ -76,3 +87,5 @@
 </kendo-grid>
 
 <app-purchase-order-modal #purchaseOrderModal></app-purchase-order-modal>
+<app-job-modal #jobModal></app-job-modal>
+<app-jobs-attachments-modal #jobsAttachmentsModal></app-jobs-attachments-modal>

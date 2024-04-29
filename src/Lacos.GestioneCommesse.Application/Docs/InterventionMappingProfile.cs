@@ -46,7 +46,8 @@ public class InterventionMappingProfile : Profile
             .MapMember(x => x.Description, y => y.ActivityProduct.Product.Description)
             .MapMember(x => x.PictureFileName, y => y.ActivityProduct.Product.PictureFileName)
             .MapMember(x => x.QrCode, y => (y.ActivityProduct.Product.QrCodePrefix ?? "") + (y.ActivityProduct.Product.QrCodeNumber ?? ""))
-            .MapMember(x => x.ProductType, y => y.ActivityProduct.Product.ProductType.Name);
+            .MapMember(x => x.ProductType, y => y.ActivityProduct.Product.ProductType.Name)
+            .MapMember(x => x.ColorHex, y => y.ActivityProduct.Product.ProductType.ColorHex);
 
         CreateMap<InterventionProductCheckList, InterventionProductCheckListDto>();
 

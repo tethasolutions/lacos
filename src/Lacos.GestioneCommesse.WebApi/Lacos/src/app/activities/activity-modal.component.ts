@@ -23,7 +23,7 @@ import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { ActivityAttachmentModel } from '../services/activities/activity-attachment.model';
 import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
-import { MessageModel, MessageReadModel } from '../services/messages/models';
+import { MessageModalOptions, MessageModel, MessageReadModel } from '../services/messages/models';
 import { User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { MessagesService } from '../services/messages/messages.service';
@@ -346,7 +346,6 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
             this.options.activity.attachments.findAndRemove(e => e.displayName === deletedFile);
         }
     }
-
     
     protected _getCurrentOperator(userId: number) {
         this._subscriptions.push(
@@ -361,9 +360,10 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     createMessage() {
         const today = getToday();
         const message = new MessageModel(0, today, null, this.currentOperator.id, null, this.options.activity.id, null, null);
+        const options = new MessageModalOptions(message);
 
         this._subscriptions.push(
-            this.messageModal.open(message)
+            this.messageModal.open(options)
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message)),
@@ -386,6 +386,29 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
                         this._messageBox.success('Commento letto');
                         this.updateUnreadCounter();
                     })
+                )
+                .subscribe()
+        );
+    }
+
+    private _afterMessageUpdated(message: MessageModel) {
+        this._messageBox.success('Commento aggiornato.');
+        const originalMsg = this.options.activity.messages.find(e => e.id == message.id);
+        originalMsg.date = message.date;
+        originalMsg.note = message.note;
+        this.updateUnreadCounter();
+        //this._read();
+    }
+    
+    editMessage(message: MessageReadModel) {
+        this._subscriptions.push(
+            this._messagesService.get(message.id)
+                .pipe(
+                    map(e => new MessageModalOptions(e)),
+                    switchMap(e => this.messageModal.open(e)),
+                    filter(e => e),
+                    switchMap(() => this._messagesService.update(this.messageModal.options.message)),
+                    tap(() => this._afterMessageUpdated(this.messageModal.options.message))
                 )
                 .subscribe()
         );

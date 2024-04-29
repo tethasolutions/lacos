@@ -9,4 +9,5 @@ public class InterventionProductReadModel
     public string? PictureFileName { get; set; }
     public string? QrCode { get; set; }
     public string? ProductType { get; set; }
+    public string? ColorHex { get; set; }
 }

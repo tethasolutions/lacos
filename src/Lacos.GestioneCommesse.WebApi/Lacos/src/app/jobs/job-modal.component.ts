@@ -21,7 +21,7 @@ import { JobAttachmentModel } from '../services/jobs/job-attachment.model';
 import { State } from '@progress/kendo-data-query';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
-import { MessageModel, MessageReadModel } from '../services/messages/models';
+import { MessageModalOptions, MessageModel, MessageReadModel } from '../services/messages/models';
 import { MessagesService } from '../services/messages/messages.service';
 import { User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
@@ -256,9 +256,10 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     createMessage() {
         const today = getToday();
         const message = new MessageModel(0, today, null, this.currentOperator.id, this.options.id, null, null, null);
+        const options = new MessageModalOptions(message);
 
         this._subscriptions.push(
-            this.messageModal.open(message)
+            this.messageModal.open(options)
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message)),
@@ -281,6 +282,29 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
                         this.updateUnreadCounter();
                         this._messageBox.success('Commento letto');
                     })
+                )
+                .subscribe()
+        );
+    }
+
+    private _afterMessageUpdated(message: MessageModel) {
+        this._messageBox.success('Commento aggiornato.');
+        const originalMsg = this.options.messages.find(e => e.id == message.id);
+        originalMsg.date = message.date;
+        originalMsg.note = message.note;
+        this.updateUnreadCounter();
+        //this._read();
+    }
+    
+    editMessage(message: MessageReadModel) {
+        this._subscriptions.push(
+            this._messagesService.get(message.id)
+                .pipe(
+                    map(e => new MessageModalOptions(e)),
+                    switchMap(e => this.messageModal.open(e)),
+                    filter(e => e),
+                    switchMap(() => this._messagesService.update(this.messageModal.options.message)),
+                    tap(() => this._afterMessageUpdated(this.messageModal.options.message))
                 )
                 .subscribe()
         );

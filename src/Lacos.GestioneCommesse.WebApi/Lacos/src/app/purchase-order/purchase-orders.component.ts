@@ -14,6 +14,10 @@ import { OperatorModel } from '../shared/models/operator.model';
 import { User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { OperatorsService } from '../services/operators.service';
+import { JobsService } from '../services/jobs/jobs.service';
+import { JobModalComponent } from '../jobs/job-modal.component';
+import { Job } from '../services/jobs/models';
+import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.component';
 
 @Component({
     selector: 'app-purchase-orders',
@@ -21,8 +25,9 @@ import { OperatorsService } from '../services/operators.service';
 })
 export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
-    @ViewChild('purchaseOrderModal', { static: true })
-    purchaseOrderModal: PurchaseOrderModalComponent;
+    @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
+    @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;
+    @ViewChild('jobsAttachmentsModal', { static: true }) jobsAttachmentsModal: JobsAttachmentsModalComponent;
     user: User;
     currentOperator: OperatorModel;
 
@@ -52,7 +57,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         private readonly _route: ActivatedRoute,
         private readonly _user: UserService,
         private readonly _operatorsService: OperatorsService,
-        private readonly _storageService: StorageService
+        private readonly _storageService: StorageService,
+        private readonly _jobService: JobsService
     ) {
         super();
     }
@@ -251,6 +257,29 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
             this._operatorsService.getOperatorByUserId(userId)
                 .pipe(
                     tap(e => this.currentOperator = e)
+                )
+                .subscribe()
+        );
+    }
+    
+    openJob(jobId: number): void {
+        this._subscriptions.push(
+            this._jobService.get(jobId)
+            .pipe(
+                switchMap(e => this.jobModal.open(e)),
+                filter(e => e),
+                switchMap(() => this._jobService.update(this.jobModal.options)),
+                tap(e => this._read())
+            )
+            .subscribe()
+        );
+    }
+
+    openAttachments(jobId: number, purchaseOrderId: number) {
+        this._subscriptions.push(
+            this.jobsAttachmentsModal.open([0, 0, purchaseOrderId])
+                .pipe(
+                    filter(e => e)
                 )
                 .subscribe()
         );

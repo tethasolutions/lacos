@@ -2,6 +2,7 @@
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
+using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
 using Microsoft.AspNetCore.Authorization;
@@ -142,17 +143,17 @@ public class PurchaseOrdersController : LacosApiController
         return fileName;
     }
 
-    [HttpGet("{id}/all-attachments")]
-    public async Task<List<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAttachments(long id)
+    [HttpGet("all-attachments/{jobId}/{purchaseOrderId}")]
+    public async Task<List<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAttachments(long jobId, long purchaseOrderId)
     {
-        List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(id)).Where(e => !e.IsAdminDocument).ToList();
+        List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(jobId,purchaseOrderId)).Where(e => !e.IsAdminDocument).ToList();
         return purchaseOrdersAttachment;
     }
 
-    [HttpGet("{id}/all-admin-attachments")]
-    public async Task<List<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAdminAttachments(long id)
+    [HttpGet("all-admin-attachments/{jobId}/{purchaseOrderId}")]
+    public async Task<List<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAdminAttachments(long jobId, long purchaseOrderId)
     {
-        List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(id)).Where(e => e.IsAdminDocument).ToList();
+        List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(jobId, purchaseOrderId)).Where(e => e.IsAdminDocument).ToList();
         return purchaseOrdersAttachment;
     }
 }

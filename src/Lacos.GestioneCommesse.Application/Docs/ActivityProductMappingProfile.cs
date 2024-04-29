@@ -22,7 +22,8 @@ public class ActivityProductMappingProfile : Profile
             .MapMember(x => x.CanBeRemoved, 
                 y => y.InterventionProducts
                     .All(e => e.Intervention!.Status == InterventionStatus.Scheduled)
-            );
+            )
+            .MapMember(x => x.ColorHex, y => y.Product.ProductType.ColorHex);
 
         CreateMap<ActivityProductDto, ActivityProduct>()
             .IgnoreCommonMembers()

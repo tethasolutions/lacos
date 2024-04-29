@@ -29,6 +29,11 @@
             {{dataItemAddress.isSparePart | bool}}
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="colorHex" title="Colore">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="operator-color-in-grid" [style.background-color]="dataItem.colorHex"></div>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
         <ng-template kendoGridCellTemplate let-dataItem>
             <button (click)="editProductType(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">

@@ -22,7 +22,7 @@ import { Role } from '../services/security/models';
     templateUrl: './jobs-attachments-modal.component.html'
 })
 
-export class JobsAttachmentsModalComponent extends ModalComponent<[number, number]> implements OnInit {
+export class JobsAttachmentsModalComponent extends ModalComponent<[number, number, number]> implements OnInit {
 
     @ViewChild('form', { static: false }) form: NgForm;
 
@@ -52,7 +52,7 @@ export class JobsAttachmentsModalComponent extends ModalComponent<[number, numbe
 
     }
 
-    override open(data: [jobId: number, activityId: number]) {
+    override open(data: [jobId: number, activityId: number, purchaseOrderId: number]) {
         const result = super.open(data);
 
         this._activitiesService.getActivityAttachments(data[0], data[1])
@@ -73,13 +73,13 @@ export class JobsAttachmentsModalComponent extends ModalComponent<[number, numbe
             )
             .subscribe();
 
-        this._purchaseOrdersService.getPurchaseOrderAttachments(data[0])
+        this._purchaseOrdersService.getPurchaseOrderAttachments(data[0], data[2])
             .pipe(
                 tap(e => this.purchaseOrderAttachments = e)
             )
             .subscribe();
 
-        this._purchaseOrdersService.getPurchaseOrderAdminAttachments(data[0])
+        this._purchaseOrdersService.getPurchaseOrderAdminAttachments(data[0], data[2])
             .pipe(
                 tap(e => this.purchaseOrderAdminAttachments = e)
             )

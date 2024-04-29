@@ -89,6 +89,25 @@
             </div>
 
             <div class="row riga-form form-group">
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label>Firma</label>
+                        <kendo-upload [(ngModel)]="this.signatureFileInfo" (success)="SignatureExecutionSuccess($event)"
+                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" name="SignatureUpload">
+                            <ng-template kendoUploadFileInfoTemplate let-files>
+                                <span *ngIf="signatureUploaded">{{ files[0].name }}</span>
+                            </ng-template>
+                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
+                        </kendo-upload>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6" style="text-align:center">
+                    <img *ngIf="options.signatureFileName!= null" [src]="pathImage + options.signatureFileName" alt=""
+                        width="100%">
+                </div>
+            </div>
+
+            <div class="row riga-form form-group">
                 <div class="col-md-12">
                     <kendo-formfield class="form-group">
                         <label>Allegati</label>
@@ -101,7 +120,7 @@
                                     {{ files[0].name }}
                                 </a>
                             </ng-template>
-                            <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
+                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
                         </kendo-upload>
                     </kendo-formfield>
                 </div>

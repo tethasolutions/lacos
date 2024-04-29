@@ -64,15 +64,15 @@ export class PurchaseOrdersService {
         );
     }
 
-    getPurchaseOrderAttachments(jobId: number) {
-        return this._http.get<Array<PurchaseOrderAttachmentModel>>(`${this._baseUrl}/${jobId}/all-attachments`)
+    getPurchaseOrderAttachments(jobId: number, purchaseOrderId: number) {
+        return this._http.get<Array<PurchaseOrderAttachmentModel>>(`${this._baseUrl}/all-attachments/${jobId}/${purchaseOrderId}`)
             .pipe(
                 map(e => e.map(ee => PurchaseOrderAttachmentModel.build(ee)))
             );
     }
 
-    getPurchaseOrderAdminAttachments(jobId: number) {
-        return this._http.get<Array<PurchaseOrderAttachmentModel>>(`${this._baseUrl}/${jobId}/all-admin-attachments`)
+    getPurchaseOrderAdminAttachments(jobId: number, purchaseOrderId: number) {
+        return this._http.get<Array<PurchaseOrderAttachmentModel>>(`${this._baseUrl}/all-admin-attachments/${jobId}/${purchaseOrderId}`)
             .pipe(
                 map(e => e.map(ee => PurchaseOrderAttachmentModel.build(ee)))
             );

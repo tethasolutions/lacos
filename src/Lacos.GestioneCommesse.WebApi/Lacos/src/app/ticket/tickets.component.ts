@@ -93,7 +93,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     
     create() {
         const today = getToday();
-        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null,this.currentOperator.id,[],[]);
+        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null,null,this.currentOperator.id,[],[]);
 
         this._subscriptions.push(
             this.ticketModal.open(ticket)
@@ -170,7 +170,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         this._messageBox.success(`Ticket ${ticket.code} salvata.`);
 
         if (ticket.activityId != null) {
-            this.router.navigate(['/activities/' + ticket.activityId]);
+            this.router.navigate(['/activities?jobId=' + ticket.jobId]);
         }
 
         this._read();

@@ -8,7 +8,7 @@ import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { TicketModalComponent } from './ticket-modal.component';
 import { ITicketReadModel, Ticket, TicketStatus, ticketStatusNames } from '../services/tickets/models';
 import { getToday } from '../services/common/functions';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { StorageService } from '../services/common/storage.service';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
@@ -38,11 +38,8 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         take: 30,
         filter: {
             filters: [
-                {
-                    filters: [TicketStatus.Opened, TicketStatus.InProgress]
-                        .map(e => ({ field: 'status', operator: 'eq', value: e })),
-                    logic: 'or'
-                }
+                this._buildStatusFilter(),
+                this._buildJobIdFilter()
             ],
             logic: 'and'
         },
@@ -55,10 +52,12 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     private cellArgs: CellClickEvent;
     user: User;
     currentOperator: OperatorModel;
+    private _jobId: number;
 
     constructor(
         private readonly _service: TicketsService,
         private readonly _messageBox: MessageBoxService,
+        private readonly _route: ActivatedRoute,
         private router: Router,
         private readonly _user: UserService,
         private readonly _operatorsService: OperatorsService,
@@ -70,7 +69,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     ngOnInit() {
         this._resumeState();
-        this._read();
+        this._subscribeRouteParams();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
     }
@@ -228,5 +227,60 @@ export class TicketsComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+
+    private _buildJobIdFilter() {
+        const that = this;
+        
+        return {
+            field: 'jobId',
+            get operator() {
+                return that._jobId
+                    ? 'eq'
+                    : 'neq'
+            },
+            get value() {
+                return that._jobId
+                   ? that._jobId
+                    : 0;
+            }
+        };
+    }
+
+    private _buildStatusFilter() {
+        const that = this;
+
+        return {
+            get field() {
+                return that._jobId
+                    ? 'id'
+                    : undefined
+            },
+            get operator() {
+                return that._jobId
+                    ? 'isnotnull'
+                    : undefined
+            },
+            get filters() {
+                return that._jobId
+                    ? undefined
+                    : [TicketStatus.Opened, TicketStatus.InProgress]
+                        .map(e => ({ field: 'status', operator: 'eq', value: e }))
+            },
+            logic: 'or'
+        };
+    }
+    
+    private _subscribeRouteParams() {
+        this._route.queryParams
+            .pipe(
+                tap(e => this._setParams(e))
+            )
+            .subscribe();
+    }
+
+    private _setParams(params: Params) {
+        this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
+        this._read();
     }
 }

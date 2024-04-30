@@ -98,7 +98,8 @@
                     <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
                         <i class="fas fa-copy"></i>
                     </button>
-                    <button class="btn btn-outline-primary btn-sm" title="Visualizza tickets" disabled >
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza tickets" [routerLink]="['/tickets']" [disabled]="!dataItem.hasActivities"
+                    [queryParams]="{jobId: dataItem.id}">
                         <i class="fa fa-tag"></i>
                     </button>
                     <!-- <button *ngIf="dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"

@@ -21,6 +21,7 @@ public class JobReadModel
     public bool HasActivities { get; set; }
     public bool HasAttachments { get; set; }
     public bool HasPurchaseOrders { get; set; }
+    public bool HasInterventions { get; set; }
     public long? ReferentId { get; set; }
     public string? ReferentName { get; set; }
 

@@ -208,20 +208,18 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     }
 
     private _getSuppliers() {
-        if (this.options) {
-            this._subscriptions.push(
-                this._suppliersService.getSuppliersList()
-                    .pipe(
-                        tap(e => this._setData(e)),
-                        tap(() => {
-                            if (this.options.purchaseOrder.supplierId) {
-                                this.onSupplierChange();
-                            }
-                        })
-                    )
-                    .subscribe()
-            );
-        }
+        this._subscriptions.push(
+            this._suppliersService.getSuppliersList()
+                .pipe(
+                    tap(e => this._setData(e)),
+                    tap(() => {
+                        if (this.options) if (this.options.purchaseOrder.supplierId) {
+                            this.onSupplierChange();
+                        }
+                    })
+                )
+                .subscribe()
+        );
     }
 
     private _setData(suppliers: SupplierModel[]) {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, input } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { CellClickEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
@@ -9,6 +9,7 @@ import { MessageBoxService } from '../services/common/message-box.service';
 import { InterventionModalComponent } from './intervention-modal.component';
 import { ApiUrls } from '../services/common/api-urls';
 import { UserService } from '../services/security/user.service';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
     selector: 'app-interventions-grid',
@@ -18,6 +19,8 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
     @Input()
     activityId: number;
+
+    private _jobId: number;
 
     @Input()
     interventionModal: InterventionModalComponent;
@@ -37,7 +40,8 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
         take: 30,
         filter: {
             filters: [
-                this._buildActivityIdFilter()
+                this._buildActivityIdFilter(),
+                this._buildJobIdFilter()
             ],
             logic: 'and'
         },
@@ -47,13 +51,15 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
     constructor(
         private readonly _service: InterventionsService,
+        private readonly _route: ActivatedRoute,
         private readonly _messageBox: MessageBoxService,
         private readonly _userService: UserService
     ) {
         super();
     }
 
-    ngOnInit() {
+    ngOnInit() {        
+        this._subscribeRouteParams();
         this._read();
     }
 
@@ -169,4 +175,34 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
         };
     }
 
+    private _buildJobIdFilter() {
+        const that = this;
+        
+        return {
+            field: 'jobId',
+            get operator() {
+                return that._jobId
+                    ? 'eq'
+                    : 'neq'
+            },
+            get value() {
+                return that._jobId
+                   ? that._jobId
+                    : 0;
+            }
+        };
+    }
+
+    private _subscribeRouteParams() {
+        this._route.queryParams
+            .pipe(
+                tap(e => this._setParams(e))
+            )
+            .subscribe();
+    }
+
+    private _setParams(params: Params) {
+        this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
+        this._read();
+    }
 }

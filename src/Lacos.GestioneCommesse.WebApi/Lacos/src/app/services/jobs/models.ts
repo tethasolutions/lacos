@@ -41,6 +41,7 @@ export interface IJobReadModel {
     readonly hasActivities: boolean;
     readonly hasAttachments: boolean;
     readonly hasPurchseOrders: boolean;
+    readonly hasInterventions: boolean;
     readonly referentId: number;
     readonly referentName: string;
     readonly unreadMessages: number;

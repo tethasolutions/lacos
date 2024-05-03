@@ -72,6 +72,7 @@ export interface IInterventionReadModel {
     readonly activityType: string;
     readonly activityColor: string;
     readonly activityId: number;
+    readonly jobId: number;
     readonly canBeRemoved: boolean;
 
 }

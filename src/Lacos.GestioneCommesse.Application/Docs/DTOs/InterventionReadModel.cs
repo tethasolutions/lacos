@@ -17,6 +17,7 @@ public class InterventionReadModel
     public string? ActivityType { get; set; }
     public string? ActivityColor { get; set; }
     public long ActivityId { get; set; }
+    public long JobId { get; set; }
     public bool CanBeRemoved { get; set; }
 
     public InterventionReadModel()

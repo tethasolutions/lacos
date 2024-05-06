@@ -113,7 +113,6 @@ import { PurchaseOrderModalComponent } from './purchase-order/purchase-order-mod
 import { PurchaseOrderItemModalComponent } from './purchase-order/purchase-order-item-modal.component';
 import { PurchaseOrdersService } from './services/purchase-orders/purchase-orders.service';
 import { PurchaseOrderStatusPipe } from './shared/pipes/purchase-order-status.pipe';
-import { Role } from './services/security/models';
 import { RolePipe } from './pipes/role.pipe';
 import { JobsCompletedComponent } from './jobs/jobs-completed.component';
 import { JobsAttachmentsModalComponent } from './jobs/jobs-attachments-modal.component';
@@ -121,6 +120,7 @@ import { InterventionNotesModalComponent } from './interventions/intervention-no
 import { MessagesService } from './services/messages/messages.service';
 import { MessageModalComponent } from './messages/message-modal.component';
 import { JobDetailsComponent } from './jobs/job-details.component';
+import { GalleryModalComponent } from './shared/gallery-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -194,7 +194,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         PurchaseOrderModalComponent,
         PurchaseOrderItemModalComponent,
         PurchaseOrderStatusPipe,
-        MessageModalComponent
+        MessageModalComponent,
+        GalleryModalComponent
     ],
     imports: [
         BrowserModule,

@@ -1,0 +1,23 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+  <kendo-window (close)="dismiss()" [resizable]="true" [draggable]="true" [top]="30" [(state)]="windowState">
+    <kendo-window-titlebar>
+      <div class="k-window-title">
+        &nbsp;
+      </div>
+      <button kendoWindowMinimizeAction></button>
+      <button kendoWindowRestoreAction></button>
+      <button kendoWindowMaximizeAction></button>
+      <button kendoWindowCloseAction></button>
+    </kendo-window-titlebar>
+    <div>
+      <img [src]="options.images[currentIndex]" [alt]="options.images[currentIndex]" width="100%" />
+    </div>
+    <div class="row">&nbsp;</div>
+    <div>
+      <button type="button" class="btn btn-secondary" (click)="prev()" style="float: left;">Precedente</button>
+      <button type="button" class="btn btn-secondary" (click)="next()" style="float: right;">Successivo</button>
+    </div>
+  </kendo-window>
+</div>

@@ -26,7 +26,6 @@ import { UserService } from '../services/security/user.service';
 import { OperatorsService } from '../services/operators.service';
 import { User } from '../services/security/models';
 import { OperatorModel } from '../shared/models/operator.model';
-import { MessageModel } from '../services/messages/models';
 
 @Component({
     selector: 'app-jobs',
@@ -317,4 +316,14 @@ export class JobsComponent extends BaseComponent implements OnInit {
         );
     }
 
+    test() {
+        var albums: any[] = [];
+        const album = {
+            src: "http://localhost:5021/attachments/adbec439-a326-485e-af18-6abdc49908ef.jpg",
+            caption: "TEST",
+            thumb: "http://localhost:5021/attachments/adbec439-a326-485e-af18-6abdc49908ef.jpg"
+        };
+        albums.push(album);
+        //this.lightbox.open(albums,0);
+    }
 }

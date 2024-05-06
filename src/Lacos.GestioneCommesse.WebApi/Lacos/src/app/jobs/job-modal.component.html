@@ -150,12 +150,13 @@
                 </div>
             </div>
 
-            <hr class="border-green"/>
+            <hr class="border-green" />
             <!--<kendo-expansionpanel title="Commenti ({{options.activity.messages.length}})" subtitle="Visualizza messaggi">-->
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Commenti ({{options.messages.length}}) <strong *ngIf="unreadMessages" style="padding-left: 15px;">Da leggere:
+                        <label>Commenti ({{options.messages.length}}) <strong *ngIf="unreadMessages"
+                                style="padding-left: 15px;">Da leggere:
                                 {{unreadMessages}}</strong></label>
                         <div class="row" style="margin-top:5px">
                             <div class="col-md-1">
@@ -174,7 +175,7 @@
                                         [innerHTML]="item.note"></div>
                                     <div class="col-md-2" style="text-align: right;">
                                         <button [disabled]="item.operatorId != currentOperator.id" type="button"
-                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica" 
+                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica"
                                             (click)="editMessage(item)">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -197,7 +198,7 @@
                 </div>
             </div>
             <!--</kendo-expansionpanel>-->
-            <hr class="border-green"/>
+            <hr class="border-green" />
 
             <div class="row">
                 <div class="col-md-3">
@@ -216,12 +217,12 @@
                 </div>
                 <div class="col-md-9">
                     <div class="row">
-                        <div *ngFor="let item of options.attachments" class="col-2">
-                            <a [href]="pathImage + item.fileName" target="_blank">
-                                <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName"
-                                    *ngIf="item.isImage" />
-                                <img src="assets/document.jpg" width="90%" [title]="item.displayName"
-                                    *ngIf="!item.isImage" />
+                        <div *ngFor="let item of options.attachments; let i = index" class="col-2">
+                            <a href="javascript:void(0)" (click)="openImage(i)" *ngIf="item.isImage">
+                                <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName" />
+                            </a> 
+                            <a [href]="pathImage + item.fileName" target="_blank" *ngIf="!item.isImage">
+                                <img src="assets/document.jpg" width="90%" [title]="item.displayName" />
                             </a>
                         </div>
                     </div>
@@ -247,3 +248,4 @@
 <app-customer-modal #customerModal></app-customer-modal>
 <app-address-modal #addressModal></app-address-modal>
 <app-message-modal #messageModal></app-message-modal>
+<app-gallery-modal #galleryModal></app-gallery-modal>

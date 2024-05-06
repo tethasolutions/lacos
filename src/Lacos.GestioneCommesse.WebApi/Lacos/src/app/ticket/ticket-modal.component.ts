@@ -27,6 +27,7 @@ import { MessagesService } from '../services/messages/messages.service';
 import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
+import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
 
 @Component({
     selector: 'app-ticket-modal',
@@ -39,6 +40,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
+    @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
 
     customers: CustomerModel[];
     _job: Job;
@@ -47,6 +49,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     user: User;
     currentOperator: OperatorModel;
     unreadMessages: number;
+    album: string[] = [];
     
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -82,6 +85,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
             this.options.pictures.forEach(element => {
                 if (element.description != null && element.fileName != null) {
                     this.attachments.push({ name: element.description });
+                    this.album.push(this.pathImage + element.fileName);
                 }
             });
         }
@@ -312,4 +316,10 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     updateUnreadCounter() {
         this.unreadMessages = this.options.messages.count(e => !e.isRead);
     }
+    
+    openImage(index: number) {
+        const options = new GalleryModalInput(this.album, index);
+        this.galleryModal.open(options).subscribe();
+    }
+
 }

@@ -26,6 +26,7 @@ import { MessagesService } from '../services/messages/messages.service';
 import { User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { MessageModalComponent } from '../messages/message-modal.component';
+import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
 
 @Component({
     selector: 'app-job-modal',
@@ -37,6 +38,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
+    @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
 
     public windowState: WindowState = "default";
 
@@ -48,6 +50,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     user: User;
     currentOperator: OperatorModel;
     unreadMessages: number;
+    album: string[] = [];
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -87,6 +90,8 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
             this.options.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {
                     this.attachments.push({ name: element.displayName });
+                    if (element.isImage) this.album.push(this.pathImage + element.fileName);
+                    if (!element.isImage) this.album.push("assets/document.jpg");
                 }
             });
         }
@@ -295,7 +300,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
         this.updateUnreadCounter();
         //this._read();
     }
-    
+
     editMessage(message: MessageReadModel) {
         this._subscriptions.push(
             this._messagesService.get(message.id)
@@ -327,8 +332,15 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
             }
         });
     }
-    
+
     updateUnreadCounter() {
         this.unreadMessages = this.options.messages.count(e => !e.isRead);
     }
+
+
+    openImage(index: number) {
+        const options = new GalleryModalInput(this.album, index);
+        this.galleryModal.open(options).subscribe();
+    }
+
 }

@@ -241,12 +241,12 @@
                 </div>
                 <div class="col-md-9">
                     <div class="row">
-                        <div *ngFor="let item of options.activity.attachments" class="col-2">
-                            <a [href]="pathImage + item.fileName" target="_blank">
-                                <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName"
-                                    *ngIf="item.isImage" />
-                                <img src="assets/document.jpg" width="90%" [title]="item.displayName"
-                                    *ngIf="!item.isImage" />
+                        <div *ngFor="let item of options.activity.attachments; let i = index" class="col-2">
+                            <a href="javascript:void(0)" (click)="openImage(i)" *ngIf="item.isImage">
+                                <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName" />
+                            </a> 
+                            <a [href]="pathImage + item.fileName" target="_blank" *ngIf="!item.isImage">
+                                <img src="assets/document.jpg" width="90%" [title]="item.displayName" />
                             </a>
                         </div>
                     </div>
@@ -268,3 +268,4 @@
 <app-address-modal #addressModal></app-address-modal>
 <app-supplier-modal #supplierModal></app-supplier-modal>
 <app-message-modal #messageModal></app-message-modal>
+<app-gallery-modal #galleryModal></app-gallery-modal>

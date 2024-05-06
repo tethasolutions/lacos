@@ -25,6 +25,7 @@ import { OperatorsService } from '../services/operators.service';
 import { UserService } from '../services/security/user.service';
 import { MessagesService } from '../services/messages/messages.service';
 import { SecurityService } from '../services/security/security.service';
+import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -38,6 +39,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     @ViewChild('purchaseOrderItemModal', { static: true }) purchaseOrderItemModal: PurchaseOrderItemModalComponent;
     @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
+    @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
 
     jobs: SelectableJob[];
     job: Job;
@@ -61,6 +63,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     currentOperator: OperatorModel;
     unreadMessages: number;
     isAdmin: boolean;
+    album: string[] = [];
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
@@ -144,6 +147,8 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
             this.options.purchaseOrder.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {
                     this.attachments.push({ name: element.displayName });
+                    if (element.isImage) this.album.push(this.imagesUrl + element.fileName);
+                    if (!element.isImage) this.album.push("assets/document.jpg");
                 }
             });
         }
@@ -385,6 +390,12 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     updateUnreadCounter() {
         this.unreadMessages = this.options.purchaseOrder.messages.count(e => !e.isRead);
     }
+
+    openImage(index: number) {
+        const options = new GalleryModalInput(this.album, index);
+        this.galleryModal.open(options).subscribe();
+    }
+
 }
 
 export class PurchaseOrderModalOptions {

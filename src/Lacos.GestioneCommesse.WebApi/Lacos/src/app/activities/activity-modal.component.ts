@@ -28,6 +28,7 @@ import { User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { MessagesService } from '../services/messages/messages.service';
 import { MessageModalComponent } from '../messages/message-modal.component';
+import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
 
 @Component({
     selector: 'app-activity-modal',
@@ -39,6 +40,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
+    @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
 
     activityTypes: ActivityTypeModel[];
     customer: CustomerModel;
@@ -57,6 +59,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
     unreadMessages: number;
 
     attachments: Array<FileInfo> = [];
+    album: string[] = [];
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
 
@@ -150,6 +153,8 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
             this.options.activity.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {
                     this.attachments.push({ name: element.displayName });
+                    if (element.isImage) this.album.push(this.pathImage + element.fileName);
+                    if (!element.isImage) this.album.push("assets/document.jpg");
                 }
             });
         }
@@ -434,6 +439,11 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     updateUnreadCounter() {
         this.unreadMessages = this.options.activity.messages.count(e => !e.isRead);
+    }
+
+    openImage(index: number) {
+        const options = new GalleryModalInput(this.album, index);
+        this.galleryModal.open(options).subscribe();
     }
 
 }

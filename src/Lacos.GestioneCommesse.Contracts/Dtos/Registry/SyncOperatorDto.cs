@@ -8,4 +8,6 @@ public class SyncOperatorDto:SyncBaseDto
     public long? DefaultVehicleId { get; set; }
     public long? UserId { get; set; }
 
+    public string? SignatureFileName { get; set; }
+
 }

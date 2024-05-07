@@ -43,7 +43,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'desc' },{ field: 'code', dir: 'desc' }]
     };
 
     private _jobId: number;

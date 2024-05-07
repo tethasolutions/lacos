@@ -316,14 +316,4 @@ export class JobsComponent extends BaseComponent implements OnInit {
         );
     }
 
-    test() {
-        var albums: any[] = [];
-        const album = {
-            src: "http://localhost:5021/attachments/adbec439-a326-485e-af18-6abdc49908ef.jpg",
-            caption: "TEST",
-            thumb: "http://localhost:5021/attachments/adbec439-a326-485e-af18-6abdc49908ef.jpg"
-        };
-        albums.push(album);
-        //this.lightbox.open(albums,0);
-    }
 }

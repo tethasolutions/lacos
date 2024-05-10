@@ -60,5 +60,6 @@ public enum ActivityStatus
 {
     Pending,
     InProgress,
+    Ready,
     Completed
 }

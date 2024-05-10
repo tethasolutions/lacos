@@ -6,6 +6,7 @@ export enum ActivityStatus {
 
     Pending,
     InProgress,
+    Ready,
     Completed
 
 }
@@ -14,6 +15,7 @@ export const activityStatusNames: Dictionary<ActivityStatus, string> = {
 
     [ActivityStatus.Pending]: 'In attesa',
     [ActivityStatus.InProgress]: 'In corso',
+    [ActivityStatus.Ready]: 'Pronto',
     [ActivityStatus.Completed]: 'Completata'
 
 };

@@ -167,7 +167,6 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         JobDetailsComponent,
         DropdownlistGridColumnFilterComponent,
         MultiselectGridColumnFilterComponent,
-        ActivityStatusPipe,
         ActivitiesComponent,
         ActivityComponent,
         ActivityModalComponent,

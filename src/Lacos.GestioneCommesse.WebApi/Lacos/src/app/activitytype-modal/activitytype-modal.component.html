@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="row riga-form">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label>Etichetta Stato "In attesa"</label>
                     <div class="form-group">
                         <kendo-textbox [(ngModel)]="options.statusLabel0" name="statusLabel0" required>
@@ -63,7 +63,7 @@
                         <div class="validation-message" [control]="form.controls['statusLabel0']"></div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label>Etichetta Stato "In corso"</label>
                     <div class="form-group">
                         <kendo-textbox [(ngModel)]="options.statusLabel1" name="statusLabel1" required>
@@ -71,12 +71,20 @@
                         <div class="validation-message" [control]="form.controls['statusLabel1']"></div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label>Etichetta Stato "Completata"</label>
+                <div class="col-md-3">
+                    <label>Etichetta Stato "Pronto"</label>
                     <div class="form-group">
                         <kendo-textbox [(ngModel)]="options.statusLabel2" name="statusLabel2" required>
                         </kendo-textbox>
                         <div class="validation-message" [control]="form.controls['statusLabel2']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Etichetta Stato "Completata"</label>
+                    <div class="form-group">
+                        <kendo-textbox [(ngModel)]="options.statusLabel3" name="statusLabel3" required>
+                        </kendo-textbox>
+                        <div class="validation-message" [control]="form.controls['statusLabel3']"></div>
                     </div>
                 </div>
             </div>

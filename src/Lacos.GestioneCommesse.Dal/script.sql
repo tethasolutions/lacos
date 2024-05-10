@@ -3107,3 +3107,25 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240510102507_aggiunta quarto stato tipi attività')
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [StatusLabel3] nvarchar(max) NULL;
+    update [Docs].[Activities] set [Status] = 3 where [Status] = 2;
+    update [Registry].[ActivityTypes] set StatusLabel3 = StatusLabel2;
+    update [Registry].[ActivityTypes] set StatusLabel2 = 'PRONTO';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240510102507_aggiunta quarto stato tipi attività')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240510102507_aggiunta quarto stato tipi attività', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

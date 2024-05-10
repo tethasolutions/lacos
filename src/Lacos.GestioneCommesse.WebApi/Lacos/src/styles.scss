@@ -303,6 +303,10 @@ app-activities {
     .activity-in-progress .activity-status {
         @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
     }
+
+    .activity-ready .activity-status {
+        @include striped-background(rgba(169, 233, 19, 0.3), rgba(202, 240, 97, 0.685));
+    }
 }
 
 app-tickets {
@@ -367,7 +371,7 @@ app-jobs-completed {
     }
     
     .job-billed .job-status {
-        @include striped-background(rgba(138, 245, 229, 0.384), rgba(117, 186, 221, 0.433));
+        @include striped-background(rgba(232, 56, 255, 0.384), rgba(255, 180, 252, 0.685));
     }
 }
 

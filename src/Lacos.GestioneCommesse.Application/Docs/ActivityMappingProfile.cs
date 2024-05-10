@@ -37,7 +37,8 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
-            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead));
+           .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3)
+           .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead));
 
         CreateMap<ActivityDto, Activity>()
            .IgnoreCommonMembers()
@@ -60,7 +61,8 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.Number, y => y.RowNumber)
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
-           .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2);
+           .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
+           .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3);
 
         CreateMap<Activity, ActivityDetailDto>()
            .MapMember(x => x.Number, y => y.RowNumber)
@@ -72,7 +74,8 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.Referent, y => (y.Referent != null) ? y.Referent.Name : "")
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
-           .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2);
+           .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
+           .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3);
 
         CreateMap<ActivityAttachment, ActivityAttachmentReadModel>();
         CreateMap<ActivityAttachmentReadModel, ActivityAttachment>()

@@ -82,7 +82,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     private _saveState() {
-        this._storageService.save(this.gridState,window.location.hash,true);
+        this._storageService.save(this.gridState, window.location.hash, true);
     }
 
     dataStateChange(state: State) {
@@ -193,6 +193,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                 return { 'activity-pending': true };
             case activity.status === ActivityStatus.InProgress:
                 return { 'activity-in-progress': true };
+            case activity.status === ActivityStatus.Ready:
+                return { 'activity-ready': true };
             case activity.status != ActivityStatus.Completed && !!activity.expirationDate && new Date(activity.expirationDate).addDays(1).isPast():
                 return { 'activity-expired': true };
             default:
@@ -322,7 +324,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             get filters() {
                 return that._jobId
                     ? undefined
-                    : [ActivityStatus.Pending, ActivityStatus.InProgress]
+                    : [ActivityStatus.Pending, ActivityStatus.InProgress, ActivityStatus.Ready]
                         .map(e => ({ field: 'status', operator: 'eq', value: e }))
             },
             logic: 'or'

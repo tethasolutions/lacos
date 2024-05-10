@@ -17,8 +17,10 @@ export class ActivityStatusPipe extends BaseComponent implements PipeTransform {
                 return value.statusLabel0;
             case ActivityStatus.InProgress:
                 return value.statusLabel1;
+                case ActivityStatus.Ready:
+                    return value.statusLabel2;
             case ActivityStatus.Completed:
-                return value.statusLabel2;
+                return value.statusLabel3;
             default:
                 return null;
         }
@@ -31,4 +33,5 @@ interface ActivityStatusWithLabels {
     readonly statusLabel0?: string;
     readonly statusLabel1?: string;
     readonly statusLabel2?: string;
+    readonly statusLabel3?: string;
 }

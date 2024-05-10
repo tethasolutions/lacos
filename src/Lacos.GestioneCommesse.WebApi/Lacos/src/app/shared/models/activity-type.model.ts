@@ -9,6 +9,7 @@ export class ActivityTypeModel {
     statusLabel0: string;
     statusLabel1: string;
     statusLabel2: string;
+    statusLabel3: string;
 
     constructor() {
         this.id = null;
@@ -18,8 +19,9 @@ export class ActivityTypeModel {
         this.isExternal = false;
         this.colorHex = null;
         this.statusLabel0 = "In attesa";
-        this.statusLabel1 = "In corso";        
-        this.statusLabel2 = "Completata";
+        this.statusLabel1 = "In corso";
+        this.statusLabel2 = "Pronto";
+        this.statusLabel3 = "Completata";
     }
 }
 

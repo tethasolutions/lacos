@@ -143,6 +143,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         const result = super.open(options);
 
         this.attachments = [];
+        this.album = [];
         if (options.purchaseOrder.attachments != null) {
             this.options.purchaseOrder.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {

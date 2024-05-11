@@ -35,11 +35,6 @@
             </span>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="customer" title="Cliente">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a><br/>
-        </ng-template>
-    </kendo-grid-column>
     <kendo-grid-column field="jobCode" title="Commessa" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="!dataItem.jobHasHighPriority"><a (click)="openJob(dataItem.jobId)" style="cursor: pointer;">{{dataItem.jobCode}}</a></div>

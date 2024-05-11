@@ -149,6 +149,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         const result = super.open(options);
 
         this.attachments = [];
+        this.album = [];
         if (options.activity.attachments != null) {
             this.options.activity.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {

@@ -11,13 +11,15 @@
       <button kendoWindowMaximizeAction></button>
       <button kendoWindowCloseAction></button>
     </kendo-window-titlebar>
-    <div>
-      <img [src]="options.images[currentIndex]" [alt]="options.images[currentIndex]" width="100%" />
-    </div>
-    <div class="row">&nbsp;</div>
-    <div>
+    <div class="row">
+    <div class="col-12">
       <button type="button" class="btn btn-secondary" (click)="prev()" style="float: left;">Precedente</button>
       <button type="button" class="btn btn-secondary" (click)="next()" style="float: right;">Successivo</button>
+    </div>
+  </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+      <img [src]="options.images[currentIndex]" [alt]="options.images[currentIndex]" class="imageGallery" />
     </div>
   </kendo-window>
 </div>

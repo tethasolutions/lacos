@@ -81,6 +81,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
         const result = super.open(ticket);
         
         this.attachments = [];
+        this.album = [];
         if (ticket.pictures != null) {
             this.options.pictures.forEach(element => {
                 if (element.description != null && element.fileName != null) {

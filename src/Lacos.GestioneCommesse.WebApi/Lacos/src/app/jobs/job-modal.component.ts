@@ -86,6 +86,7 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
         const result = super.open(job);
 
         this.attachments = [];
+        this.album = [];
         if (job.attachments != null) {
             this.options.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {

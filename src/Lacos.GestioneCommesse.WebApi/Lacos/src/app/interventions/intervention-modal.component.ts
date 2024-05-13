@@ -112,11 +112,12 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
     }
 
     trySave() {
-        if (this.readonly) {
-            this.dismiss();
-        } else {
-            this.close();
-        }
+        this.close();
+        // if (this.readonly) {
+        //     this.dismiss();
+        // } else {
+        //     this.close();
+        // }
     }
 
     onSearchProductsValueChange(value: string) {

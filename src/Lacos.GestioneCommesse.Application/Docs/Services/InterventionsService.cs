@@ -119,10 +119,10 @@ public class InterventionsService : IInterventionsService
             throw new NotFoundException($"Intervento con Id {interventionDto.Id} non trovato.");
         }
 
-        if (intervention.Status != InterventionStatus.Scheduled)
-        {
-            throw new LacosException("Non puoi modificare un intervento già completato.");
-        }
+        //if (intervention.Status != InterventionStatus.Scheduled)
+        //{
+        //    throw new LacosException("Non puoi modificare un intervento già completato.");
+        //}
 
         var previousActivityId = intervention.ActivityId;
         intervention = interventionDto.MapTo(intervention, mapper);

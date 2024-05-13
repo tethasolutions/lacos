@@ -115,10 +115,10 @@
                             Prodotti
                         </label>
                         <ng-container *ngIf="!readonly">
-                            <button type="button" class="btn btn-sm btn-link" (click)="selectAllProducts()">
+                            <button type="button" class="btn btn-sm btn-link" (click)="selectAllProducts()" [disabled]="readonly">
                                 Seleziona tutti
                             </button>
-                            <button type="button" class="btn btn-sm btn-link" (click)="unselectAllProducts()">
+                            <button type="button" class="btn btn-sm btn-link" (click)="unselectAllProducts()" [disabled]="readonly">
                                 Deseleziona tutti
                             </button>
                         </ng-container>
@@ -166,7 +166,7 @@
                 <button type="button" (click)="openNotes()" class="btn btn-primary">
                     Note
                 </button>
-                <button type="submit" class="btn btn-primary" [disabled]="readonly">
+                <button type="submit" class="btn btn-primary">
                     Salva
                 </button>
             </div>

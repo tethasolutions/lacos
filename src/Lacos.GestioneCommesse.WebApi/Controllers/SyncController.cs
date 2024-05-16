@@ -62,7 +62,30 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("LocalDocument")]
+        [HttpPost("Documents")]
+        public async Task<SyncDocumentListDto> SyncFromDBToApp_RemoteDocumentList([FromBody] SyncDocumentListDto syncDocumentListDto)
+        {
+              return  await service.SyncFromDBToApp_RemoteDocumentList(syncDocumentListDto);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("Documents/IsSyncronized")]
+        public async Task<IActionResult> SyncFromAppToDb_IsSyncronized([FromBody] SyncDocumentSyncronizedDto syncDocumentSyncronizedDto)
+        {
+            try
+            {
+                await service.SyncFromDBToApp_SyncronizedDocument(syncDocumentSyncronizedDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost("Documents/Local")]
         public async Task<IActionResult> SyncFromAppToDb_LocalDocument([FromBody] SyncDocumentDto syncLocalDocument)
         {
             try
@@ -77,11 +100,12 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("RemoteDocument")]
+        [HttpPost("Documents/Remote")]
         public async Task<SyncDocumentDto> SyncFromAppToDb_RemoteImage([FromBody] SyncDocumentDto syncLocalDocument)
         {
                return await service.SyncFromDBToApp_RemoteDocument(syncLocalDocument);
         }
+
 
         [AllowAnonymous]
         [HttpPost("SignIntervention")]

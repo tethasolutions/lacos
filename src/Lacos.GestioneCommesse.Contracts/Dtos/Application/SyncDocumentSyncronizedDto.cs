@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Lacos.GestioneCommesse.Contracts.Dtos.Application
 {
-    public class SyncDocumentSyncronizedDto
+    public class SyncDocumentDto
     {
+        public string Filename { get; set; }
+        public byte[]? Content{ get; set; }
 
-        public string DeviceGuid { get; set; }
-        public string DocumentName { get; set; }
-
-        public SyncDocumentSyncronizedDto()
+        public SyncDocumentDto()
         { 
+            Content = null;
         }
     }
 }

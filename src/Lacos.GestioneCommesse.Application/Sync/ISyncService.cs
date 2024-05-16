@@ -28,5 +28,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
         Task SyncFromAppToDB_SignIntervention(SyncSignDto signDto);
 
         Task<SyncDocumentDto> SyncFromDBToApp_RemoteDocument(SyncDocumentDto syncLocalImage);
+        Task<SyncDocumentListDto> SyncFromDBToApp_RemoteDocumentList(SyncDocumentListDto syncDocumentListDto);
+        Task SyncFromDBToApp_SyncronizedDocument(SyncDocumentSyncronizedDto syncDocumentSyncronizedDto);
     }
 }

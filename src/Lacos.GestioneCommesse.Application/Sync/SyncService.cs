@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -24,6 +26,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Lacos.GestioneCommesse.Application.Sync
 {
+
+    public class DocumentItem
+    {
+        public string DocumentName { get; set; }
+        public int Order { get; set; }
+    }
+
+
     public class SyncService : ISyncService
     {
         private readonly IMapper mapper;
@@ -40,6 +50,182 @@ namespace Lacos.GestioneCommesse.Application.Sync
             this.serviceProvider = serviceProvider;
             this.dbContext = dbContext;
             this.configuration = configuration;
+        }
+
+        public async Task SyncFromDBToApp_SyncronizedDocument(SyncDocumentSyncronizedDto syncDocumentSyncronizedDto)
+        {
+            var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
+
+            var entity = documentToSyncQueueRepository
+                .Query()
+                .AsNoTracking()
+                .SingleOrDefault(x=>x.DocumentName == syncDocumentSyncronizedDto.DocumentName && x.DeviceGuid == syncDocumentSyncronizedDto.DeviceGuid);
+
+            if (entity != null)
+            {
+                entity.IsSyncronized = true;
+                documentToSyncQueueRepository.Update(entity);
+                await dbContext.SaveChanges();
+            }
+            else
+            {
+                throw new NotFoundException("Documento non presente nel database");
+            }
+
+        }
+
+        
+
+        public async Task<SyncDocumentListDto> SyncFromDBToApp_RemoteDocumentList(SyncDocumentListDto syncDocumentListDto)
+        {
+            var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
+
+            await CreateUpdateDocumentsToSync(syncDocumentListDto.DeviceGuid);
+            
+            List<string> documentsNames = await documentToSyncQueueRepository
+                .Query()
+                .Where(x => !x.IsSyncronized)
+                .OrderBy(x=>x.Order)
+                .Select(x => x.DocumentName)
+                .ToListAsync();
+
+            syncDocumentListDto.DocumentNames = documentsNames;
+
+            return syncDocumentListDto;
+
+        }
+
+        private async Task CreateUpdateDocumentsToSync(string DeviceGuid)
+        {
+
+            var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
+            List<string> oldDocumentsToSyncList = await documentToSyncQueueRepository
+                                                  .Query()
+                                                  .Where(x => x.DeviceGuid == DeviceGuid)
+                                                  .Select(x => x.DocumentName)
+                                                  .ToListAsync();
+            
+
+            List<DocumentItem> newDocumentsToSyncList = new List<DocumentItem>();
+
+            //---------------------------------------------------------------------------------
+            var operatorDocumentRepository = serviceProvider.GetRequiredService<IRepository<OperatorDocument>>();
+
+            var operatorDocumentList = await operatorDocumentRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.FileName))
+                .Select(x => new DocumentItem {DocumentName = x.FileName ?? "", Order = 1} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(operatorDocumentList);
+            //--------------------------------------------------------------------------------
+
+            //---------------------------------------------------------------------------------
+            var activityAttachmentRepository = serviceProvider.GetRequiredService<IRepository<ActivityAttachment>>();
+
+            var activityAttachmentList = await activityAttachmentRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.FileName))
+                .OrderByDescending(x=>x.Activity.StartDate)
+                .Select(x => new DocumentItem {DocumentName = x.FileName ?? "", Order = 2} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(activityAttachmentList);
+            //--------------------------------------------------------------------------------
+
+            //---------------------------------------------------------------------------------
+            var interventionNoteRepository = serviceProvider.GetRequiredService<IRepository<InterventionNote>>();
+
+            var interventionNoteList = await interventionNoteRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.PictureFileName))
+                .Select(x => new DocumentItem {DocumentName = x.PictureFileName ?? "", Order = 3} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(interventionNoteList);
+            //--------------------------------------------------------------------------------
+
+            //---------------------------------------------------------------------------------
+            var productRepository = serviceProvider.GetRequiredService<IRepository<Product>>();
+
+            var productList = await productRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.PictureFileName))
+                .Select(x => new DocumentItem {DocumentName = x.PictureFileName ?? "", Order = 4} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(productList);
+            //--------------------------------------------------------------------------------
+            
+            //---------------------------------------------------------------------------------
+            var productDocumentRepository = serviceProvider.GetRequiredService<IRepository<ProductDocument>>();
+
+            var productDocumentList = await productDocumentRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.OriginalFilename))
+                .Select(x => new DocumentItem {DocumentName = x.OriginalFilename ?? "", Order = 5} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(productDocumentList);
+            //--------------------------------------------------------------------------------
+            
+            //---------------------------------------------------------------------------------
+            var ticketPictureRepository = serviceProvider.GetRequiredService<IRepository<TicketPicture>>();
+
+            var ticketPictureList = await ticketPictureRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.FileName))
+                .Select(x => new DocumentItem {DocumentName = x.FileName ?? "", Order = 6} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(ticketPictureList);
+            //--------------------------------------------------------------------------------
+
+            //---------------------------------------------------------------------------------
+            var interventionRepository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
+
+            var interventionList = await interventionRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.CustomerSignatureFileName))
+                .Select(x => new DocumentItem {DocumentName = x.CustomerSignatureFileName ?? "", Order = 7} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(interventionList);
+            //--------------------------------------------------------------------------------
+
+            //---------------------------------------------------------------------------------
+            var checkListRepository = serviceProvider.GetRequiredService<IRepository<CheckList>>();
+
+            var checkListList = await checkListRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.PictureFileName))
+                .Select(x => new DocumentItem {DocumentName = x.PictureFileName ?? "", Order = 8} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(checkListList);
+            //--------------------------------------------------------------------------------
+
+            //---------------------------------------------------------------------------------
+            var interventionProductCheckListItemRepository = serviceProvider.GetRequiredService<IRepository<InterventionProductCheckListItem>>();
+
+            var interventionProductCheckListItemList = await interventionProductCheckListItemRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.AttachmentFileName))
+                .Select(x => new DocumentItem {DocumentName = x.AttachmentFileName ?? "", Order = 9} )
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(interventionProductCheckListItemList);
+            //--------------------------------------------------------------------------------
+
+            var list = newDocumentsToSyncList.Where(x => !oldDocumentsToSyncList.Contains(x.DocumentName));
+
+            foreach (var documentItem in list)
+            {
+                var entity = new DocumentToSyncQueue(){DeviceGuid = DeviceGuid, DocumentName = documentItem.DocumentName, Order = documentItem.Order, IsSyncronized = false};
+                await documentToSyncQueueRepository.Insert(entity);
+            }
+
+            await dbContext.SaveChanges();
         }
 
         public async Task<List<SyncUserDto>> SyncFromDBToApp_Users()

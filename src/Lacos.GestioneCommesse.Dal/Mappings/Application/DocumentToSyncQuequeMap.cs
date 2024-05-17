@@ -1,9 +1,8 @@
-﻿using Lacos.GestioneCommesse.Dal.Extensions;
-using Lacos.GestioneCommesse.Domain.Docs;
+﻿using Lacos.GestioneCommesse.Domain.Application;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Lacos.GestioneCommesse.Dal.Mappings.Docs;
+namespace Lacos.GestioneCommesse.Dal.Mappings.Application;
 
 public class DocumentToSyncQuequeMap : BaseEntityMapping<DocumentToSyncQueue>
 {
@@ -20,7 +19,5 @@ public class DocumentToSyncQuequeMap : BaseEntityMapping<DocumentToSyncQueue>
         builder.Property(x => x.DocumentName)
             .HasMaxLength(100)
             .IsRequired();
-
-       
     }
 }

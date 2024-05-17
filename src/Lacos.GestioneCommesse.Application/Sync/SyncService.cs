@@ -15,6 +15,7 @@ using Lacos.GestioneCommesse.Contracts.Dtos.Registry;
 using Lacos.GestioneCommesse.Contracts.Dtos.Security;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain;
+using Lacos.GestioneCommesse.Domain.Application;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Domain.Security;

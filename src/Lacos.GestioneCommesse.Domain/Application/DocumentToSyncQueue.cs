@@ -1,6 +1,4 @@
-﻿using Lacos.GestioneCommesse.Domain.Registry;
-
-namespace Lacos.GestioneCommesse.Domain.Docs;
+﻿namespace Lacos.GestioneCommesse.Domain.Application;
 
 public class DocumentToSyncQueue : FullAuditedEntity
 {

@@ -62,7 +62,7 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("Documents")]
+        [HttpPost("Documents/Remote/List")]
         public async Task<SyncDocumentListDto> SyncFromDBToApp_RemoteDocumentList([FromBody] SyncDocumentListDto syncDocumentListDto)
         {
               return  await service.SyncFromDBToApp_RemoteDocumentList(syncDocumentListDto);
@@ -83,6 +83,12 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("Documents/Local/List")]
+        public async Task<SyncDocumentListDto> SyncFromAppToDb_LocalDocumentList([FromBody] SyncDocumentListDto syncDocumentListDto)
+        {
+                 return  await service.SyncFromAppToDB_LocalDocumentList(syncDocumentListDto);
+        }
 
         [AllowAnonymous]
         [HttpPost("Documents/Local")]

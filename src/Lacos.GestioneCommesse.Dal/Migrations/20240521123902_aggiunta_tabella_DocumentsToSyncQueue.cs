@@ -25,6 +25,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     DocumentName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     IsSyncronized = table.Column<bool>(type: "bit", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
+                    IsInError = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset(3)", precision: 3, nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedById = table.Column<long>(type: "bigint", nullable: true),

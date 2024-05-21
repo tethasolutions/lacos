@@ -6,10 +6,12 @@ public class DocumentToSyncQueue : FullAuditedEntity
     public string DocumentName { get; set; }
     public bool IsSyncronized { get; set; }
     public int Order { get; set; }
+    public bool IsInError { get; set; }
     
     public DocumentToSyncQueue()
     {
        IsSyncronized = false;
        Order = int.MaxValue;
+       IsInError = false;
     }
 }

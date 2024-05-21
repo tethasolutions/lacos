@@ -75,8 +75,6 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
         }
 
-        
-
         public async Task<SyncDocumentListDto> SyncFromDBToApp_RemoteDocumentList(SyncDocumentListDto syncDocumentListDto)
         {
             var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
@@ -91,9 +89,19 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 .ToListAsync();
 
             syncDocumentListDto.DocumentNames = documentsNames;
-
             return syncDocumentListDto;
+        }
 
+        public async Task<SyncDocumentListDto> SyncFromAppToDB_LocalDocumentList(SyncDocumentListDto syncDocumentListDto)
+        {
+            var folder = configuration.AttachmentsPath;
+            if (Directory.Exists(folder) && !(syncDocumentListDto.DocumentNames is null) && syncDocumentListDto.DocumentNames.Count > 0)
+            {
+                List<string> fileList = Directory.EnumerateFiles(folder, "*.*").ToList();
+                List<string> fileNotSyncList = syncDocumentListDto.DocumentNames.Except(fileList.Select(Path.GetFileName)).ToList();
+                syncDocumentListDto.DocumentNames = fileNotSyncList;
+            }
+            return syncDocumentListDto;
         }
 
         private async Task CreateUpdateDocumentsToSync(string DeviceGuid)
@@ -310,7 +318,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     await using Stream streamOriginalDocument = new MemoryStream(syncLocalDocument.Content);
                     var folder = configuration.AttachmentsPath;
                     Directory.CreateDirectory(folder);
-                    var path = Path.Combine(folder, syncLocalDocument.Filename);
+                    var path = Path.Combine(folder, syncLocalDocument.DocumentName);
                     if (!File.Exists(path))
                     {
                         await using Stream stremNewDocument = File.Create(path);
@@ -368,16 +376,28 @@ namespace Lacos.GestioneCommesse.Application.Sync
              try
              {
                  var folder = configuration.AttachmentsPath;
-                 var path = Path.Combine(folder, syncLocalDocument.Filename);
+                 var path = Path.Combine(folder, syncLocalDocument.DocumentName);
+                 
                  if (File.Exists(path))
                  {
                      syncLocalDocument.Content = await File.ReadAllBytesAsync(path);
                     return syncLocalDocument;
                  }
-                 //else
-                 //{
-                 //    throw new Exception("Immagine inesistente");
-                 //}
+
+
+                 var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
+
+                 var entity = documentToSyncQueueRepository
+                     .Query()
+                     .AsNoTracking()
+                     .SingleOrDefault(x=>x.DocumentName == syncLocalDocument.DocumentName && x.DeviceGuid == syncLocalDocument.DeviceGuid);
+
+                 if (entity != null)
+                 {
+                     entity.IsInError = true;
+                     documentToSyncQueueRepository.Update(entity);
+                     await dbContext.SaveChanges();
+                 }
              }
              catch (Exception e)
              {

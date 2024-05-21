@@ -30,5 +30,6 @@ namespace Lacos.GestioneCommesse.Application.Sync
         Task<SyncDocumentDto> SyncFromDBToApp_RemoteDocument(SyncDocumentDto syncLocalImage);
         Task<SyncDocumentListDto> SyncFromDBToApp_RemoteDocumentList(SyncDocumentListDto syncDocumentListDto);
         Task SyncFromDBToApp_SyncronizedDocument(SyncDocumentSyncronizedDto syncDocumentSyncronizedDto);
+        Task<SyncDocumentListDto>  SyncFromAppToDB_LocalDocumentList(SyncDocumentListDto syncDocumentListDto);
     }
 }

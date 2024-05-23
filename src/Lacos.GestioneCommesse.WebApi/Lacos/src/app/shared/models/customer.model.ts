@@ -11,6 +11,7 @@ export class CustomerModel {
     contact: string;
     contactTelephone: string;
     contactEmail: string;
+    sdiCode: string;
     addresses: AddressModel[];
 
     mainAddress: AddressModel;
@@ -30,6 +31,7 @@ export class CustomerModel {
         this.contact = null;
         this.contactTelephone = null;
         this.contactEmail = null;
+        this.sdiCode = null;
         this.addresses = [];
 
         this.mainAddress = null;

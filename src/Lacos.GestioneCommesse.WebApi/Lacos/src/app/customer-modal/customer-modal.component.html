@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label>Telefono</label>
                     <div class="form-group">
                         <input class="form-control" name="telephone" [(ngModel)]="options.telephone"
@@ -47,7 +47,14 @@
                             maxlength="255" novalidate autocomplete="off" />
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
+                    <label>SDI</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="sdiCode" [(ngModel)]="options.sdiCode"
+                            maxlength="7" novalidate autocomplete="off" />
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <label>Può generare tickets</label>
                     <div class="form-group">
                         <kendo-switch name="canGenerateTickets" [(ngModel)]="options.canGenerateTickets" onLabel="Si" offLabel="No">

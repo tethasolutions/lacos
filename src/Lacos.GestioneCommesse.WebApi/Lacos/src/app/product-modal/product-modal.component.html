@@ -47,8 +47,21 @@
                     <kendo-formfield class="form-group">
                         <label>Immagine</label>
                         <kendo-upload [(ngModel)]="this.attachmentsFileInfo"
-                            (success)="AttachmentExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
+                            (success)="ImageExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
                             [removeUrl]="uploadRemoveUrl" name="myUpload">
+                        </kendo-upload>
+                        <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
+                    </kendo-formfield>
+                    <kendo-formfield class="form-group">
+                        <label>Documenti</label>
+                        <kendo-upload [(ngModel)]="this.documents"
+                            (success)="DocumentExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
+                            [removeUrl]="uploadRemoveUrl" name="myUploadDoc">
+                            <ng-template kendoUploadFileInfoTemplate let-files>
+                                <a (click)="downloadAttachment(files[0].name)" class="pointer">
+                                    {{ files[0].name }}
+                                </a>
+                            </ng-template>
                         </kendo-upload>
                         <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
                     </kendo-formfield>

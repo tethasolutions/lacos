@@ -1,20 +1,13 @@
 ﻿using Lacos.GestioneCommesse.WebApi.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Lacos.GestioneCommesse.Application.Vehicles.DTOs;
 using Kendo.Mvc.UI;
-using Lacos.GestioneCommesse.Domain.Docs;
-using Lacos.GestioneCommesse.Application.Operators.DTOs;
-using System.Net.Http;
-using System.Web.Http;
 using Kendo.Mvc.Extensions;
-using Lacos.GestioneCommesse.Domain.Registry;
-using Telerik.SvgIcons;
 using Lacos.GestioneCommesse.Application.Products.DTOs;
 using Lacos.GestioneCommesse.Application.Products.Service;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
-using Lacos.GestioneCommesse.Application.Operators.Services;
 using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -90,4 +83,67 @@ public class ProductsController : LacosApiController
         return productTypes;
     }
 
+    [HttpPost("document/upload-file")]
+    public async Task<IActionResult> UploadOperatorDocument()
+    {
+        var file = Request.Form.Files.FirstOrDefault();
+        if (file == null)
+        {
+            return BadRequest();
+        }
+        var fileName = await SaveFile(file);
+        return Ok(new
+        {
+            fileName,
+            originalFileName = Path.GetFileName(file.FileName)
+        });
+    }
+
+    [HttpPost("document/remove-file")]
+    public async Task<IActionResult> DeleteFile()
+    {
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpGet("product-document/download-file/{fileName}/{originalFileName}")]
+    public async Task<FileResult> DownloadAttachment(string fileName, string originalFileName)
+    {
+        fileName = Uri.UnescapeDataString(fileName);
+        originalFileName = Uri.UnescapeDataString(originalFileName);
+
+        var productDocument = await productService.DownloadProductDocument(fileName);
+        var downloadFileName = productDocument == null
+            ? originalFileName
+            : productDocument.OriginalFilename;
+        var folder = configuration.AttachmentsPath!;
+
+        if (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+
+        var path = Path.Combine(folder, fileName);
+        var mimeType = mimeTypeProvider.Provide(fileName);
+        var stream = System.IO.File.OpenRead(path);
+
+        return File(stream, mimeType, downloadFileName);
+    }
+
+    private async Task<string> SaveFile(IFormFile file)
+    {
+        var extension = Path.GetExtension(file.FileName);
+        var fileName = Guid.NewGuid() + extension;
+        var folder = configuration.AttachmentsPath;
+        Directory.CreateDirectory(folder);
+        var path = Path.Combine(folder, fileName);
+        await using (var stream = file.OpenReadStream())
+        {
+            await using (var fileStream = System.IO.File.OpenWrite(path))
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+        }
+        return fileName;
+    }
 }

@@ -16,6 +16,8 @@ public class Customer : FullAuditedEntity
     public string? ContactTelephone { get; set; }
     public string? ContactEmail { get; set; }
 
+    public string? SDICode { get; set; }
+
     public long? UserId { get; set; }
     public User? User { get; set; }
 

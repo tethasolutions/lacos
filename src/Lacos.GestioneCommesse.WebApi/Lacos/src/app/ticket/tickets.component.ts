@@ -283,4 +283,5 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
         this._read();
     }
+
 }

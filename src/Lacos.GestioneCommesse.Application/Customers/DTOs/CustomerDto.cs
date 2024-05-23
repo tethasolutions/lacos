@@ -15,6 +15,7 @@ namespace Lacos.GestioneCommesse.Application.Customers.DTOs
         public string? ContactTelephone { get; set; }
         public string? ContactEmail { get; set; }
         public bool CanGenerateTickets { get; set; }
+        public string? SDICode { get; set; }
         public ICollection<AddressDto>? Addresses { get; set; }
     }
 }

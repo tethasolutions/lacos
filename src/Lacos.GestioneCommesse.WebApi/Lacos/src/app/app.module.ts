@@ -91,6 +91,7 @@ import { InterventionsCalendarComponent } from './interventions/interventions-ca
 import { SchedulerModule } from '@progress/kendo-angular-scheduler';
 import { OperatorAvatarComponent } from './shared/operator-avatar.component';
 import { LayoutModule } from '@progress/kendo-angular-layout';
+import { ContextMenuModule } from '@progress/kendo-angular-menu';
 import { InterventionsComponent } from './interventions/interventions.component';
 import { InterventionsGridComponent } from './interventions/interventions-grid.component';
 import { InterventionStatusPipe } from './shared/pipes/intervention-status.pipe';
@@ -121,6 +122,7 @@ import { MessagesService } from './services/messages/messages.service';
 import { MessageModalComponent } from './messages/message-modal.component';
 import { JobDetailsComponent } from './jobs/job-details.component';
 import { GalleryModalComponent } from './shared/gallery-modal.component';
+import { GridContextMenuComponent } from './shared/grid-context-menu.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -194,7 +196,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         PurchaseOrderItemModalComponent,
         PurchaseOrderStatusPipe,
         MessageModalComponent,
-        GalleryModalComponent
+        GalleryModalComponent,
+        GridContextMenuComponent
     ],
     imports: [
         BrowserModule,
@@ -205,6 +208,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         AppRoutingModule,
         NotificationModule,
         GridModule,
+        ContextMenuModule,
         DialogsModule,
         DropDownsModule,
         NumericTextBoxModule,

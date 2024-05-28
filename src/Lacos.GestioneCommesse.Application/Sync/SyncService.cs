@@ -53,6 +53,29 @@ namespace Lacos.GestioneCommesse.Application.Sync
             this.configuration = configuration;
         }
 
+        public async Task<SyncCountersSyncDto> SyncFromDBToApp_CountersSyncronizedDocument(SyncCountersSyncDto syncCountersSyncDto)
+        {
+            var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
+
+            var TotalDocuments = documentToSyncQueueRepository
+                                           .Query()
+                                           .AsNoTracking()
+                                           .Where(x => x.DeviceGuid == syncCountersSyncDto.DeviceGuid);
+
+            var SyncronizedDocuments = TotalDocuments
+                .Where(x => x.IsSyncronized);
+
+            var DocumentsInError = TotalDocuments
+                .Where(x => x.IsInError);
+
+            syncCountersSyncDto.ErrorDocuments = DocumentsInError.Count();
+            syncCountersSyncDto.TotalDocuments = TotalDocuments.Count();
+            syncCountersSyncDto.SyncrnizedDocuments = SyncronizedDocuments.Count();
+
+            return syncCountersSyncDto;
+        }
+
+
         public async Task SyncFromDBToApp_SyncronizedDocument(SyncDocumentSyncronizedDto syncDocumentSyncronizedDto)
         {
             var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
@@ -65,6 +88,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             if (entity != null)
             {
                 entity.IsSyncronized = true;
+                entity.IsInError = false;
                 documentToSyncQueueRepository.Update(entity);
                 await dbContext.SaveChanges();
             }
@@ -79,7 +103,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
         {
             var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
 
-            await CreateUpdateDocumentsToSync(syncDocumentListDto.DeviceGuid);
+            await CreateUpdateDocumentsToSync(syncDocumentListDto.DeviceGuid,syncDocumentListDto.OperatorId);
             
             List<string> documentsNames = await documentToSyncQueueRepository
                 .Query()
@@ -104,13 +128,13 @@ namespace Lacos.GestioneCommesse.Application.Sync
             return syncDocumentListDto;
         }
 
-        private async Task CreateUpdateDocumentsToSync(string DeviceGuid)
+        private async Task CreateUpdateDocumentsToSync(string deviceGuid, long operatorId)
         {
 
             var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
             List<string> oldDocumentsToSyncList = await documentToSyncQueueRepository
                                                   .Query()
-                                                  .Where(x => x.DeviceGuid == DeviceGuid)
+                                                  .Where(x => x.DeviceGuid == deviceGuid)
                                                   .Select(x => x.DocumentName)
                                                   .ToListAsync();
             
@@ -122,6 +146,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
             var operatorDocumentList = await operatorDocumentRepository
                 .Query()
+                .Where(x=>x.OperatorId == operatorId)
                 .Where(x=>!string.IsNullOrEmpty(x.FileName))
                 .Select(x => new DocumentItem {DocumentName = x.FileName ?? "", Order = 1} )
                 .ToListAsync();
@@ -230,7 +255,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
             foreach (var documentItem in list)
             {
-                var entity = new DocumentToSyncQueue(){DeviceGuid = DeviceGuid, DocumentName = documentItem.DocumentName, Order = documentItem.Order, IsSyncronized = false};
+                var entity = new DocumentToSyncQueue(){DeviceGuid = deviceGuid, DocumentName = documentItem.DocumentName, Order = documentItem.Order, IsSyncronized = false};
                 await documentToSyncQueueRepository.Insert(entity);
             }
 

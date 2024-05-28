@@ -159,7 +159,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
     }
 
     cellClickHandler(args: CellClickEvent): void {
-        this.cellArgs = args;
+            this.cellArgs = args;
     }
 
     copyJob(job: IJobReadModel) {

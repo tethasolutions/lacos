@@ -16,6 +16,7 @@ import { AddressesService } from '../services/addresses.service';
 import { ApiUrls } from '../services/common/api-urls';
 import { RemoveEvent, SuccessEvent, FileInfo,FileState,SelectEvent} from "@progress/kendo-angular-upload";
 import { UploadFileModel } from '../shared/models/upload-file.model';
+import { ProductDocumentModel } from '../shared/models/product-document.model';
 
 @Component({
   selector: 'app-product-modal',
@@ -29,13 +30,14 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
   @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
   
-  private readonly _baseUrl = `${ApiUrls.baseApiUrl}/operators`;
+  private readonly _baseUrl = `${ApiUrls.baseApiUrl}/products`;
   uploadSaveUrl = `${this._baseUrl}/document/upload-file`;
   uploadRemoveUrl = `${this._baseUrl}/document/remove-file`; 
   productTypes: Array<ProductTypeModel> = [];
   customers: Array<CustomerModel> = [];
   customerSelezionato = new CustomerModel();
 
+  documents: Array<FileInfo> = [];
   attachmentsUploads: Array<UploadFileModel> =[];
   isUploaded:Array<boolean>= [];
   get qrCode(){
@@ -175,7 +177,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
     }
   }
 
-  public AttachmentExecutionSuccess(e: SuccessEvent): void
+  public ImageExecutionSuccess(e: SuccessEvent): void
   {
     const body = e.response.body;
     if(body != null)
@@ -198,6 +200,25 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
     }
   }
 
+  downloadAttachment(fileName: string) {
+    const attachment = this.options.documents
+        .find(e => e.originalFileName === fileName);
+    const url = `${this._baseUrl}/product-document/download-file/${attachment.fileName}/${attachment.originalFileName}`;
+
+    window.open(url);
+}
+
+  public DocumentExecutionSuccess(e: SuccessEvent): void
+  {const file = e.response.body as ProductDocumentModel;
+    if (file != null) {
+        let productDocumentModel = new ProductDocumentModel(0, this.options.id, file.originalFileName, file.fileName, this.options.name);
+        this.options.documents.push(productDocumentModel);
+    } else {
+        const deletedFile = e.files[0].name;
+        this.options.documents.findAndRemove(e => e.originalFileName === deletedFile);
+    }
+  }
+
   // public AttachmentSelect(e: SelectEvent): void
   // {
   //   const files = e.files;
@@ -217,6 +238,16 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   // }
 
   public loadData() {
+    
+    this.documents = [];
+    if (this.options.documents != null) {
+        this.options.documents.forEach(element => {
+            if (element.originalFileName != null && element.fileName != null) {
+                this.documents.push({ name: element.originalFileName });
+            }
+        });
+    }
+
     this._readProductTypes();
     this._readCustomers();
   }

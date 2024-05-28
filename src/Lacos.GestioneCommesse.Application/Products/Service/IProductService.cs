@@ -69,6 +69,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
                 .Query()
                 .AsNoTracking()
                 .Include(x=>x.ProductType)
+                .Include(x=>x.Documents)
                 .Where(x => x.Id == productId)
                 .SingleOrDefaultAsync();
 

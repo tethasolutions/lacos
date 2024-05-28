@@ -3169,3 +3169,22 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240523150839_add sdi code')
+BEGIN
+    ALTER TABLE [Registry].[Customers] ADD [SDICode] nvarchar(7) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240523150839_add sdi code')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240523150839_add sdi code', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -2,6 +2,7 @@
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Application.Products.DTOs;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using Lacos.GestioneCommesse.Application.Docs.DTOs;
 
 namespace Lacos.GestioneCommesse.Application.Products
 {
@@ -18,7 +19,8 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.ProductType)
                 .Ignore(x => x.PurchaseOrderItems)
                 .Ignore(x => x.ActivityProducts)
-                .Ignore(x => x.Documents);
+                .Ignore(x => x.Documents)
+                .AfterMap(AfterMap);
 
             CreateMap<Product, ProductReadModel>()
                 .MapMember(x => x.QrCode, y => (y.QrCodePrefix ?? "") + (y.QrCodeNumber?? "")) 
@@ -55,6 +57,10 @@ namespace Lacos.GestioneCommesse.Application.Products
             CreateMap<ProductDocumentDto, ProductDocument>()
                 .Ignore(x => x.Product)
                 .IgnoreCommonMembers();
+        }
+        private static void AfterMap(ProductDto productDto, Product product, ResolutionContext context)
+        {
+            if (productDto.Documents != null) productDto.Documents.Merge(product.Documents, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.ProductId = product.Id, context);
         }
     }
 }

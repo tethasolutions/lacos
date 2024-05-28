@@ -155,11 +155,24 @@ namespace Lacos.GestioneCommesse.Application.Sync
             //--------------------------------------------------------------------------------
 
             //---------------------------------------------------------------------------------
+
+
+            var dateTimeNow = DateTimeOffset.Now.AddDays(-14);
+            var dateTimeStart = new DateTimeOffset(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, 0, 0, 0, dateTimeNow.Offset);
+            
+            var activityRepository = serviceProvider.GetRequiredService<IRepository<Activity>>();
+            var activityIdList = await activityRepository
+                    .Query()
+                    .Where(x=>x.StartDate >= dateTimeStart || x.Status == ActivityStatus.InProgress)
+                    .Select(x=>x.Id)
+                    .ToListAsync();
+            
             var activityAttachmentRepository = serviceProvider.GetRequiredService<IRepository<ActivityAttachment>>();
 
             var activityAttachmentList = await activityAttachmentRepository
                 .Query()
                 .Where(x=>!string.IsNullOrEmpty(x.FileName))
+                .Where(x=>activityIdList.Contains(x.ActivityId))
                 .OrderByDescending(x=>x.Activity.StartDate)
                 .Select(x => new DocumentItem {DocumentName = x.FileName ?? "", Order = 2} )
                 .ToListAsync();

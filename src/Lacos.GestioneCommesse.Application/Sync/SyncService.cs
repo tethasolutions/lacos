@@ -107,7 +107,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             
             List<string> documentsNames = await documentToSyncQueueRepository
                 .Query()
-                .Where(x => !x.IsSyncronized)
+                .Where(x => !x.IsSyncronized && x.DeviceGuid == syncDocumentListDto.DeviceGuid)
                 .OrderBy(x=>x.Order)
                 .Select(x => x.DocumentName)
                 .ToListAsync();

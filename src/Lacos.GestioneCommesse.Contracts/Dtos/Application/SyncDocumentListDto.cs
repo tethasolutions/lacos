@@ -9,11 +9,13 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Application
     public class SyncDocumentListDto
     {
         public string DeviceGuid { get; set; }
+        public long OperatorId { get; set; }
         public List<string> DocumentNames { get; set; }
 
         public SyncDocumentListDto()
         { 
             DocumentNames = new List<string>();
+            OperatorId = -1;
         }
     }
 }

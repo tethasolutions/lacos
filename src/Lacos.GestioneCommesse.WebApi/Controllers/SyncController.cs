@@ -84,6 +84,14 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("Documents/Counters")]
+        public async Task<SyncCountersSyncDto> SyncFromDBToApp_CountersSyncronizedDocument([FromBody] SyncCountersSyncDto syncCountersSyncDto)
+        {
+               return  await service.SyncFromDBToApp_CountersSyncronizedDocument(syncCountersSyncDto);
+        }
+
+
+        [AllowAnonymous]
         [HttpPost("Documents/Local/List")]
         public async Task<SyncDocumentListDto> SyncFromAppToDb_LocalDocumentList([FromBody] SyncDocumentListDto syncDocumentListDto)
         {

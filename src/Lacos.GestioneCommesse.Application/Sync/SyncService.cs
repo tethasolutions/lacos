@@ -160,10 +160,10 @@ namespace Lacos.GestioneCommesse.Application.Sync
             var dateTimeNow = DateTimeOffset.Now.AddDays(-14);
             var dateTimeStart = new DateTimeOffset(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, 0, 0, 0, dateTimeNow.Offset);
             
-            var activityRepository = serviceProvider.GetRequiredService<IRepository<Activity>>();
-            var activityIdList = await activityRepository
+            var interventionListRepository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
+            var activityIdList = await interventionListRepository
                     .Query()
-                    .Where(x=>x.StartDate >= dateTimeStart || x.Status == ActivityStatus.InProgress)
+                    .Where(x=>x.Start >= dateTimeStart || x.Status == InterventionStatus.Scheduled)
                     .Select(x=>x.Id)
                     .ToListAsync();
             

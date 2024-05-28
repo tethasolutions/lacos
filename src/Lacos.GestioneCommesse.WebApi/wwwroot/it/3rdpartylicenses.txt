@@ -259,6 +259,9 @@ SEE LICENSE IN LICENSE.md
 @progress/kendo-angular-layout
 SEE LICENSE IN LICENSE.md
 
+@progress/kendo-angular-menu
+SEE LICENSE IN LICENSE.md
+
 @progress/kendo-angular-navigation
 SEE LICENSE IN LICENSE.md
 

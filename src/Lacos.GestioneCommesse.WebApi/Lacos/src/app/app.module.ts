@@ -243,7 +243,6 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true, deps: [LoaderService] },
         
         { provide: HTTP_INTERCEPTORS, useClass: UploadInterceptor, multi: true },
-        Clipboard,
         AuthGuard,
         CustomerService,
         SupplierService,

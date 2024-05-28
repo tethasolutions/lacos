@@ -88,6 +88,7 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
             var product = await productRepository
                 .Query()
                 .Where(x => x.Id == id)
+                .Include(x => x.Documents)
                 .SingleOrDefaultAsync();
             
             if (product == null)

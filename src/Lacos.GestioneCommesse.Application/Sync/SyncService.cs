@@ -96,7 +96,6 @@ namespace Lacos.GestioneCommesse.Application.Sync
             {
                 throw new NotFoundException("Documento non presente nel database");
             }
-
         }
 
         public async Task<SyncDocumentListDto> SyncFromDBToApp_RemoteDocumentList(SyncDocumentListDto syncDocumentListDto)
@@ -164,7 +163,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             var activityIdList = await interventionListRepository
                     .Query()
                     .Where(x=>x.Start >= dateTimeStart || x.Status == InterventionStatus.Scheduled)
-                    .Select(x=>x.Id)
+                    .Select(x=>x.ActivityId)
                     .ToListAsync();
             
             var activityAttachmentRepository = serviceProvider.GetRequiredService<IRepository<ActivityAttachment>>();

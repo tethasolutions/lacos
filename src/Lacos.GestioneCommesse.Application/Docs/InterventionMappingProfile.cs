@@ -64,5 +64,10 @@ public class InterventionMappingProfile : Profile
            .Ignore(x => x.Operator)
            .Ignore(x => x.Intervention)
            .IgnoreCommonMembers();
+
+
+        CreateMap<InterventionProductCheckListItemKOReadModel, InterventionProductCheckListItemKO>();
+
+        CreateMap<InterventionProductCheckListItemKO, InterventionProductCheckListItemKOReadModel>();
     }
 }

@@ -16,4 +16,5 @@ public interface IInterventionsService
 
     Task<ReportDto> GenerateReport(long interventionId);
     Task<InterventionNoteDto> DownloadInterventionNote(string filename);
+    IQueryable<InterventionProductCheckListItemKOReadModel> GetInterventionsKo();
 }

@@ -16,7 +16,7 @@ public interface ILacosDbContext
     Task SaveChanges();
     void RejectChanges();
     Task<IDbContextTransaction> BeginTransaction();
-    DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity;
+    DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task ExecuteWithEnabledQueryFilters(Func<Task> action, params QueryFilter[] queryFiltersEnabled);
     Task<T> ExecuteWithEnabledQueryFilters<T>(Func<Task<T>> func, params QueryFilter[] queryFiltersEnabled);
     Task ExecuteWithDisabledQueryFilters(Func<Task> action, params QueryFilter[] queryFiltersDisabled);
@@ -53,7 +53,7 @@ public class LacosDbContext : DbContext, ILacosDbContext
             : Task.FromResult(Database.CurrentTransaction);
     }
 
-    public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
+    public new DbSet<TEntity> Set<TEntity>() where TEntity : class
     {
         return base.Set<TEntity>();
     }

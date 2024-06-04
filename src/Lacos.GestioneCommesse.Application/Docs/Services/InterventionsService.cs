@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Telerik.Reporting.Processing;
 using Telerik.Reporting;
 using Parameter = Telerik.Reporting.Parameter;
+using Westcar.WebApplication.Dal;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -23,6 +24,7 @@ public class InterventionsService : IInterventionsService
     private readonly IRepository<Activity> activityRepository;
     private readonly IRepository<InterventionProductCheckList> productCheckListRepository;
     private readonly IRepository<InterventionNote> noteRepository;
+    private readonly IViewRepository<InterventionProductCheckListItemKO> productCheckListItemKORepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
@@ -35,6 +37,7 @@ public class InterventionsService : IInterventionsService
         IRepository<Activity> activityRepository,
         IRepository<InterventionProductCheckList> productCheckListRepository,
         IRepository<InterventionNote> noteRepository,
+        IViewRepository<InterventionProductCheckListItemKO> productCheckListItemKORepository,
         ILacosSession session
     )
     {
@@ -46,6 +49,7 @@ public class InterventionsService : IInterventionsService
         this.activityRepository = activityRepository;
         this.productCheckListRepository = productCheckListRepository;
         this.noteRepository = noteRepository;
+        this.productCheckListItemKORepository = productCheckListItemKORepository;
         this.session = session;
     }
 
@@ -345,4 +349,13 @@ public class InterventionsService : IInterventionsService
 
         return interventionAttachments.MapTo<IEnumerable<InterventionNoteDto>>(mapper);
     }
+
+    public IQueryable<InterventionProductCheckListItemKOReadModel> GetInterventionsKo()
+    {
+        var query = productCheckListItemKORepository.Query();
+
+        return query
+            .Project<InterventionProductCheckListItemKOReadModel>(mapper);
+    }
+
 }

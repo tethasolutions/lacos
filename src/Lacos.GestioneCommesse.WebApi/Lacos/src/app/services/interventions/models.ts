@@ -1,3 +1,4 @@
+import { ActivityStatus } from '../activities/models';
 import { ActivityProduct } from '../activity-products/models';
 import { Dictionary } from '../common/models';
 
@@ -141,4 +142,26 @@ export class InterventionNote {
     static build(o: InterventionNote) {
         return new InterventionNote(o.id, o.pictureFileName, o.notes, o.operatorName, o.interventionId);
     }
+}
+
+
+export class InterventionCheckListItemKO {
+    
+    readonly jobId: number;
+    readonly activityId: number;
+    readonly jobCode: string;
+    readonly customer: string;
+    readonly activityType: string;
+    readonly activityTypeColor: string;
+    readonly activityStatus: ActivityStatus;
+    readonly productCode: string;
+    readonly productName: string;
+    readonly productDescription: string;
+    readonly productLocation: string;
+    readonly checklistItem: string;
+    readonly start: Date | string;
+    readonly shortDescription: string;
+    readonly interventionDescription: string;
+    readonly outcomeNotes: string;
+    readonly attachmentFileName: string;
 }

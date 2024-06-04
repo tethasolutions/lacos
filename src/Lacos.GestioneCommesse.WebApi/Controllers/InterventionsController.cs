@@ -109,4 +109,12 @@ public class InterventionsController : LacosApiController
         List<InterventionNoteDto> activitysAttachment = (await service.GetInterventionAttachments(jobId, activityId)).ToList();
         return activitysAttachment;
     }
+
+    [HttpGet("interventions-ko")]
+    public Task<DataSourceResult> ReadInterventionsKo(DataSourceRequest request)
+    {
+        return service.GetInterventionsKo()
+            .ToDataSourceResultAsync(request);
+    }
+
 }

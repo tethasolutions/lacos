@@ -124,7 +124,10 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
             this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/","-"))
                 .pipe(
                     tap(e => this._job = e),
-                    tap(() => this._newActivity(ticket))
+                    tap(() => {
+                        this.options.jobId = this._job.id;
+                        this._newActivity(ticket); 
+                    })
                 )
                 .subscribe()
         );
@@ -144,7 +147,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._servicePurchaseOrder.create(purchaseOrder)),
-                    tap(e => ticket.jobId = this._job.id),
+                    tap(e => this.options.jobId = this._job.id),
                     tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
                     tap(() => this.close())
                 )

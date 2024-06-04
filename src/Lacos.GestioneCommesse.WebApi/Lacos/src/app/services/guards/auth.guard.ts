@@ -28,6 +28,7 @@ export class AuthGuard {
             case (/^\/activities\/([0-9]{1,}?)$/gi).test(url):
             case url === '/interventions':
             case url === '/interventions-list':
+            case url === '/interventions-ko':
             case url === '/tickets':
             case url === '/orders':
             case url === '/activities':

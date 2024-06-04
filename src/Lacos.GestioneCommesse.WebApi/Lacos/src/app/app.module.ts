@@ -123,6 +123,7 @@ import { MessageModalComponent } from './messages/message-modal.component';
 import { JobDetailsComponent } from './jobs/job-details.component';
 import { GalleryModalComponent } from './shared/gallery-modal.component';
 import { GridContextMenuComponent } from './shared/grid-context-menu.component';
+import { InterventionsKoComponent } from './interventions/interventions-ko.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -186,6 +187,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         InterventionsListComponent,
         InterventionsProductsGridComponent,
         InterventionProductChecklistItemsModalComponent,
+        InterventionsKoComponent,
         TicketsComponent,
         TicketStatusPipe,
         TicketModalComponent,

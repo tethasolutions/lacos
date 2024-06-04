@@ -96,19 +96,19 @@
             </div>
         </div>
         <hr class="lacos" />
-        <!-- <div class="row">
+        <div *ngIf="isAdmin" class="row">
             <div class="col-12">
-                <div class="title lacos" style="margin-bottom: 10px;"><i>Porte REI</i></div>
+                <div class="title lacos" style="margin-bottom: 10px;"><i>Gestione KO</i></div>
             </div>
         </div>
-        <div class="row">
+        <div *ngIf="isAdmin" class="row">
             <div class="col-md-2">
-                <a class="btn btn-light dashboardBtn" routerLink="#" routerLinkActive="active">
-                    <div class="title">Porte REI</div>
+                <a class="btn btn-light dashboardBtn" routerLink="/interventions-ko" routerLinkActive="active">
+                    <div class="title">Interventi KO</div>
                     <span><i class="fa fa-3x fa-qrcode"></i></span>
                 </a>
             </div>
         </div>
-        <hr class="lacos" /> -->
+        <hr *ngIf="isAdmin" class="lacos" />
     </div>
 </div>

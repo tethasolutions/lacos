@@ -4,7 +4,11 @@
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
     scrollable="none" (dataStateChange)="dataStateChange($event)"
     (cellClick)="cellClickHandler($event)" (cellClick)="gridMenu.onCellClick($event)">
-
+    <ng-template kendoGridToolbarTemplate>
+        <button type="button" class="btn btn-primary" (click)="exportToExcel()">
+            Esporta in Excel
+        </button>
+      </ng-template>
     <kendo-grid-column field="activityTypeColor" [sortable]="false" [filterable]="false" title=" " class="activity-color">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div [style.background-color]="dataItem.activityTypeColor" [title]="dataItem.activityType">&nbsp;</div>
@@ -24,6 +28,7 @@
     <kendo-grid-column field="interventionDescription" title="Descrizione Intervento"></kendo-grid-column>
     <kendo-grid-column field="checklistItem" title="Voce Checklist"></kendo-grid-column>
     <kendo-grid-column field="outcomeNotes" title="Note KO"></kendo-grid-column>
+    <kendo-grid-column field="correctiveAction" title="Azioni Correttive"></kendo-grid-column>
     
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>

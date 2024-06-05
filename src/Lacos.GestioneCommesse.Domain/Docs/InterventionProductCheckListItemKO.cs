@@ -20,6 +20,7 @@ public class InterventionProductCheckListItemKO
     public string? ShortDescription { get; set; }
     public string? InterventionDescription { get; set; }
     public string? OutcomeNotes { get; set; }
+    public string? OutcomeCorrectiveAction { get; set; }
     public string? AttachmentFileName { get; set; }
 
 }

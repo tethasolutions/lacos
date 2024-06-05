@@ -151,9 +151,20 @@
                 <div class="col-md-12">
                     <label>Descrizione</label>
                     <div class="form-group">
-                        <textarea class="form-control" name="description" [(ngModel)]="options.description" novalidate
-                            autocomplete="off" maxlength="500" rows="3" [readonly]="readonly">
-                        </textarea>
+                        <kendo-editor name="description" [(ngModel)]="options.description" [resizable]="true"
+                            [iframe]="false">
+                            <kendo-toolbar>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                            </kendo-toolbar>
+                        </kendo-editor>
                         <div class="validation-message" [control]="form.controls['description']"></div>
                     </div>
                 </div>

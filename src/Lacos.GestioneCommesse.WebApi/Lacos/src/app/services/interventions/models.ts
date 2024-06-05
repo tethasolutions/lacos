@@ -121,12 +121,13 @@ export class InterventionProductCheckListItem {
         readonly description: string,
         readonly outcome: string,
         readonly notes: string,
+        readonly correctiveAction: string,
         readonly attachmentFileName: string,
         readonly operatorName: string
     ) { }
 
     static build(o: InterventionProductCheckListItem) {
-        return new InterventionProductCheckListItem(o.description, o.outcome, o.notes, o.operatorName, o.attachmentFileName);
+        return new InterventionProductCheckListItem(o.description, o.outcome, o.notes, o.correctiveAction, o.operatorName, o.attachmentFileName);
     }
 }
 

@@ -3188,3 +3188,22 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240605100436_nuovo campo correctiveAction')
+BEGIN
+    ALTER TABLE [Docs].[InterventionProductCheckListItems] ADD [CorrectiveAction] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240605100436_nuovo campo correctiveAction')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240605100436_nuovo campo correctiveAction', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

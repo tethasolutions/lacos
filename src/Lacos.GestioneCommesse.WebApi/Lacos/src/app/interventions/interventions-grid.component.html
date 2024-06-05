@@ -2,8 +2,8 @@
 
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-    scrollable="none" (dataStateChange)="dataStateChange($event)"
-    (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
+    scrollable="none" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)"
+    (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
 
     <ng-container *ngIf="!activityId">
         <kendo-grid-column field="customer" title="Cliente">
@@ -40,12 +40,28 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Descrizione">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div [innerHTML]="dataItem.description"></div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="operators" title="Operatori">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.operators">
+                <span *ngFor="let operator of dataItem.operators; index as i">                
+                    {{ operator.name }}<span *ngIf="i != (dataItem.operators.length-1)">, </span>
+                </span>
+            </div>
+            <div *ngIf="!dataItem.operators">
+                Nessun operatore impostato
+            </div>
+        </ng-template>
     </kendo-grid-column>
 
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">
-                <button class="btn btn-primary btn-sm" title="Download Rapportino" (click)="downloadReport(dataItem.id)">
+                <button class="btn btn-primary btn-sm" title="Download Rapportino"
+                    (click)="downloadReport(dataItem.id)">
                     <i class="fas fa-file"></i>
                 </button>
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">

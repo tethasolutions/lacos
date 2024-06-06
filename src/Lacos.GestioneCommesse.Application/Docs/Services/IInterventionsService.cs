@@ -8,6 +8,9 @@ public interface IInterventionsService
     Task<InterventionDto> Get(long id);
     Task<InterventionDto> Create(InterventionDto interventionDto);
     Task<InterventionDto> Update(InterventionDto interventionDto);
+
+    Task UpdateActivityStatus(long id);
+
     Task Delete(long id);
 
     IQueryable<InterventionProductReadModel> GetProductsByIntervention(long id);

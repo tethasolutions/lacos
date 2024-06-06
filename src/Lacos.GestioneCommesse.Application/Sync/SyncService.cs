@@ -41,16 +41,19 @@ namespace Lacos.GestioneCommesse.Application.Sync
         private readonly IServiceProvider serviceProvider;
         private readonly ILacosDbContext dbContext;
         private readonly ILacosConfiguration configuration;
+        private readonly IInterventionsService interventionsService;
+        
 
 
         public SyncService(
             IMapper mapper,
-           IServiceProvider serviceProvider, ILacosDbContext dbContext, ILacosConfiguration configuration)
+           IServiceProvider serviceProvider, ILacosDbContext dbContext, ILacosConfiguration configuration, IInterventionsService interventionsService)
         {
             this.mapper = mapper;
             this.serviceProvider = serviceProvider;
             this.dbContext = dbContext;
             this.configuration = configuration;
+            this.interventionsService = interventionsService;
         }
 
         public async Task<SyncCountersSyncDto> SyncFromDBToApp_CountersSyncronizedDocument(SyncCountersSyncDto syncCountersSyncDto)
@@ -316,6 +319,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             return ret;
         }
 
+        
         public async Task<SyncLocalDbChanges> SyncFromAppToDB_LocalChanges(SyncLocalDbChanges syncLocalDbChanges)
         {
             SyncLocalDbChanges syncLocalDbChangesRemote = new SyncLocalDbChanges();
@@ -323,7 +327,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             {
                 await using (var transaction = await dbContext.BeginTransaction())
                 {
-                    syncLocalDbChangesRemote.Interventions = await InsertUpdateAllModified<SyncInterventionDto, Intervention>(syncLocalDbChanges.Interventions);
+                    syncLocalDbChangesRemote.Interventions = await InsertUpdateAllModifiedInterventions(syncLocalDbChanges.Interventions);
                     syncLocalDbChangesRemote.InterventionNotes = await InsertUpdateAllModified<SyncInterventionNoteDto, InterventionNote>(syncLocalDbChanges.InterventionNotes);
                     syncLocalDbChangesRemote.InterventionDisputes = await InsertUpdateAllModified<SyncInterventionDisputeDto, InterventionDispute>(syncLocalDbChanges.InterventionDisputes);
                     syncLocalDbChangesRemote.InterventionProducts = await InsertUpdateAllModified<SyncInterventionProductDto, InterventionProduct>(syncLocalDbChanges.InterventionProducts);
@@ -485,8 +489,37 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 Console.WriteLine(e);
                 throw;
             }
+        }
 
+        private async Task<List<SyncInterventionDto>> InsertUpdateAllModifiedInterventions(List<SyncInterventionDto> tdoModels)
+        {
+            var repository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
+            List<SyncInterventionDto>  list = new List<SyncInterventionDto>();
+            
+            foreach (var model in tdoModels)
+            {
+                var entity = await
+                    repository
+                        .Query()
+                        .Where(x=>x.Id == model.Id)
+                        .SingleOrDefaultAsync();
 
+                if (entity != null)
+                {
+                    model.MapTo(entity, mapper);
+                    repository.Update(entity);
+                    await dbContext.SaveChanges();
+                }
+                else
+                { 
+                    var newEntity = model.MapTo<Intervention>(mapper);
+                    await repository.Insert(newEntity);
+                    await dbContext.SaveChanges();
+                    list.Add(newEntity.MapTo<SyncInterventionDto>(mapper));
+                }
+                await interventionsService.UpdateActivityStatus(model.ActivityId.Value);
+            }
+            return list;
         }
 
         private async Task<List<TDto>> InsertUpdateAllModified<TDto, TEntity>(List<TDto> tdoModels) where TEntity : FullAuditedEntity where TDto : SyncBaseDto

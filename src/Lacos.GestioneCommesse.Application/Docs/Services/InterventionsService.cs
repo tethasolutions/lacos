@@ -235,7 +235,7 @@ public class InterventionsService : IInterventionsService
         intervention.Products.AddRange(productsToAdd);
     }
 
-    private async Task UpdateActivityStatus(long id)
+    public async Task UpdateActivityStatus(long id)
     {
         var activity = await activityRepository.Query()
             .Where(e => e.Id == id)

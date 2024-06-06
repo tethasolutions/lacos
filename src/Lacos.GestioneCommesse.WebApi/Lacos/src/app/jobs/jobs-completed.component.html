@@ -93,8 +93,9 @@
                         [routerLink]="['/purchase-orders']" [queryParams]="{jobId: dataItem.id}">
                         <i class="fa fa-bag-shopping"></i>
                     </button>
-                    <button class="btn btn-primary btn-sm" title="Copia Commessa" (click)="copyJob(dataItem)">
-                        <i class="fas fa-copy"></i>
+                    <button class="btn btn-primary btn-sm" title="Visualizza Interventi" [routerLink]="['/interventions-list']" [disabled]="!dataItem.hasInterventions"
+                    [queryParams]="{jobId: dataItem.id}">
+                        <i class="fas fa-i"></i>
                     </button>
                     <button class="btn btn-outline-primary btn-sm" title="Visualizza tickets" [routerLink]="['/tickets']" [disabled]="!dataItem.hasActivities"
                     [queryParams]="{jobId: dataItem.id}">

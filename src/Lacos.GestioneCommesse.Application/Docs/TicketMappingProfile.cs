@@ -16,7 +16,8 @@ public class TicketMappingProfile : Profile
             .MapMember(x => x.Date, y => y.TicketDate)
             .MapMember(x => x.CustomerName, y => y.Customer!.Name)
             .MapMember(x => x.OperatorName, y => y.Operator!.Name)
-            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead));
+            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead))
+            .MapMember(x => x.HasInterventions, y => (y.Activity == null ? false : y.Activity.Interventions.Any()));
 
         CreateMap<TicketDto, Ticket>()
             .IgnoreCommonMembers()

@@ -66,6 +66,10 @@
                 [queryParams]="{jobId: dataItem.jobId}">
                     <i class="fas fa-a"></i>
                 </button>
+                <button class="btn btn-primary btn-sm" title="Visualizza Interventi" [routerLink]="['/interventions-list']" [disabled]="!dataItem.hasInterventions"
+                [queryParams]="{jobId: dataItem.jobId}">
+                    <i class="fas fa-i"></i>
+                </button>
                 <button class="btn btn-danger btn-sm" title="Rimuovi" (click)="askRemove(dataItem)">
                     <i class="fas fa-trash"></i>
                 </button>

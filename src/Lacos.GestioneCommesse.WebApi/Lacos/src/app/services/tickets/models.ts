@@ -32,6 +32,7 @@ export interface ITicketReadModel {
     readonly operatorName: string;
     //readonly canBeRemoved: boolean;
     readonly unreadMessages: number;
+    readonly hasInterventions: boolean;
 
 }
 

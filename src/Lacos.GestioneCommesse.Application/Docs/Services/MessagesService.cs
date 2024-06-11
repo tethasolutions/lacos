@@ -225,17 +225,20 @@ public class MessagesService : IMessagesService
 
     public async Task ReadMessage(long messageId, long operatorId)
     {
-        var MessageNotification = await notificationRepository.Query()
-            .FirstOrDefaultAsync(e => e.MessageId == messageId && e.OperatorId == operatorId);
+        var MessageNotifications = await notificationRepository.Query()
+            .Where(e => e.MessageId == messageId && e.OperatorId == operatorId && e.IsRead == false)
+            .ToListAsync();
 
-        if (MessageNotification == null)
+        if (MessageNotifications == null)
         {
             throw new NotFoundException($"Commento con Id {messageId} non trovato.");
         }
 
-        MessageNotification.IsRead = true;
-
-        notificationRepository.Update(MessageNotification);
+        foreach (var Notification in MessageNotifications)
+        {
+            Notification.IsRead = true;
+            notificationRepository.Update(Notification);
+        }
 
         await dbContext.SaveChanges();
 

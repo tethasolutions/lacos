@@ -137,7 +137,7 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
     private _newPurchaseOrder(ticket: Ticket) {
         const today = getToday();
         const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, 
-            this._job.id, null, null, this.currentOperator.id, [], [], [], []);
+            this._job.id, null, null, this.currentOperator.id, [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         ticket.status = TicketStatus.InProgress;

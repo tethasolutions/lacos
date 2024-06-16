@@ -227,7 +227,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     createPurchaseOrder(job: IJobReadModel) {
         const today = getToday();
-        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, job.id, null, null, this.currentOperator.id, [], [], [], []);
+        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, job.id, null, null, this.currentOperator.id, [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(order);
 
         this._subscriptions.push(

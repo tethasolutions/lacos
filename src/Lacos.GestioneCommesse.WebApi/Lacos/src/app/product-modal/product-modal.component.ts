@@ -47,6 +47,7 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   pathImage = `${ApiUrls.baseUrl}/attachments/`;
   attachmentsFileInfo:any;
   isImpiantoPortaRei = false;
+  imageLabel: string;
 
   constructor(
       private readonly _messageBox: MessageBoxService,
@@ -238,6 +239,11 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   // }
 
   public loadData() {
+    this.attachmentsFileInfo = null;
+    if (this.options.pictureFileName != null) 
+      this.imageLabel = "Cambia immagine"
+    else
+      this.imageLabel = "Immagine"
     
     this.documents = [];
     if (this.options.documents != null) {

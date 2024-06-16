@@ -60,6 +60,7 @@ export class PurchaseOrder {
         public operatorId: number,
         public items: PurchaseOrderItem[],
         public attachments: PurchaseOrderAttachmentModel[],
+        public userAttachments: PurchaseOrderAttachmentModel[],
         public adminAttachments: PurchaseOrderAttachmentModel[],
         public messages: MessageReadModel[]
     ) {
@@ -69,10 +70,11 @@ export class PurchaseOrder {
 
     static build(o: PurchaseOrder) {
         const items = o.items.map(e => PurchaseOrderItem.build(e));
-        const attachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => !e.isAdminDocument);
+        const attachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e));
+        const userAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => !e.isAdminDocument);
         const adminAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => e.isAdminDocument);
         const messages = o.messages.map(e => MessageReadModel.build(e));
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments, adminAttachments, messages);
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments, userAttachments, adminAttachments, messages);
     }
 
 }

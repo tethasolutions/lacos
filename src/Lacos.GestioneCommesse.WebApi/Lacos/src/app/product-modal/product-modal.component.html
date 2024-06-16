@@ -45,7 +45,7 @@
                         <kendo-formerror>Descrizione è il campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                     <kendo-formfield class="form-group">
-                        <label>Immagine</label>
+                        <label>{{imageLabel}}</label>
                         <kendo-upload [(ngModel)]="this.attachmentsFileInfo"
                             (success)="ImageExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
                             [removeUrl]="uploadRemoveUrl" name="myUpload">
@@ -53,7 +53,7 @@
                         <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
                     </kendo-formfield>
                     <kendo-formfield class="form-group">
-                        <label>Documenti</label>
+                        <label><strong>Documenti</strong></label>
                         <kendo-upload [(ngModel)]="this.documents"
                             (success)="DocumentExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
                             [removeUrl]="uploadRemoveUrl" name="myUploadDoc">

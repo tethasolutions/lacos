@@ -56,7 +56,7 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     };
     gridData: GridDataResult;
 
-    attachments: Array<FileInfo> = [];
+    userAttachments: Array<FileInfo> = [];
     adminAttachments: Array<FileInfo> = [];
     messages: MessageReadModel[];
     user: User;
@@ -142,12 +142,12 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
     override open(options: PurchaseOrderModalOptions) {
         const result = super.open(options);
 
-        this.attachments = [];
+        this.userAttachments = [];
         this.album = [];
         if (options.purchaseOrder.attachments != null) {
-            this.options.purchaseOrder.attachments.forEach(element => {
+            this.options.purchaseOrder.userAttachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {
-                    this.attachments.push({ name: element.displayName });
+                    this.userAttachments.push({ name: element.displayName });
                     if (element.isImage) this.album.push(this.imagesUrl + element.fileName);
                     if (!element.isImage) this.album.push("assets/document.jpg");
                 }
@@ -286,9 +286,11 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         if (file != null) {
             let purchaseOrderAttachmentModal = new PurchaseOrderAttachmentModel(0, file.originalFileName, file.fileName, this.options.purchaseOrder.id, false);
             this.options.purchaseOrder.attachments.push(purchaseOrderAttachmentModal);
+            this.options.purchaseOrder.userAttachments.push(purchaseOrderAttachmentModal);
         } else {
             const deletedFile = e.files[0].name;
             this.options.purchaseOrder.attachments.findAndRemove(e => e.displayName === deletedFile);
+            this.options.purchaseOrder.userAttachments.findAndRemove(e => e.displayName === deletedFile);
         }
     }
 
@@ -297,9 +299,11 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
         if (file != null) {
             let purchaseOrderAttachmentModal = new PurchaseOrderAttachmentModel(0, file.originalFileName, file.fileName, this.options.purchaseOrder.id, true);
             this.options.purchaseOrder.attachments.push(purchaseOrderAttachmentModal);
+            this.options.purchaseOrder.adminAttachments.push(purchaseOrderAttachmentModal);
         } else {
             const deletedFile = e.files[0].name;
             this.options.purchaseOrder.attachments.findAndRemove(e => e.displayName === deletedFile);
+            this.options.purchaseOrder.adminAttachments.findAndRemove(e => e.displayName === deletedFile);
         }
     }
 

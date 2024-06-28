@@ -32,6 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Reports\InterventionNotes.trdp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Reports\InterventionOperators.trdp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

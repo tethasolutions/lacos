@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { Job, JobStatus } from '../services/jobs/models';
 import { BehaviorSubject, Observable, filter, map, switchMap, tap } from 'rxjs';
@@ -32,9 +32,8 @@ import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-moda
     selector: 'app-job-modal',
     templateUrl: 'job-modal.component.html'
 })
-export class JobModalComponent extends ModalComponent<Job> implements OnInit {
+export class JobModalComponent extends ModalFormComponent<Job> implements OnInit {
 
-    @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
@@ -62,13 +61,13 @@ export class JobModalComponent extends ModalComponent<Job> implements OnInit {
     constructor(
         private readonly _customersService: CustomerService,
         private readonly _service: JobsService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _addressesService: AddressesService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
         private readonly _messagesService: MessagesService
     ) {
-        super();
+        super(messageBox);
     }
 
     ngOnInit() {

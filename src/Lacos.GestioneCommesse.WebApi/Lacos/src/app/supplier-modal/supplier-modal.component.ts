@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { SupplierModel } from '../shared/models/supplier.model';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
@@ -18,9 +18,8 @@ import { AddressModel } from '../shared/models/address.model';
     styleUrls: ['./supplier-modal.component.scss']
 })
 
-export class SupplierModalComponent extends ModalComponent<SupplierModel> {
+export class SupplierModalComponent extends ModalFormComponent<SupplierModel> {
 
-    @ViewChild('form') form: NgForm;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('addressesModal', { static: true }) addressesModal: AddressesModalComponent;
 
@@ -32,11 +31,11 @@ export class SupplierModalComponent extends ModalComponent<SupplierModel> {
     }
 
     constructor(
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _supplierService: SupplierService,
         private readonly _addressesService: AddressesService
     ) {
-        super();
+        super(messageBox);
     }
 
     protected _canClose() {

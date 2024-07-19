@@ -98,7 +98,7 @@
         <hr class="lacos" />
         <div *ngIf="isAdmin" class="row">
             <div class="col-12">
-                <div class="title lacos" style="margin-bottom: 10px;"><i>Gestione KO</i></div>
+                <div class="title lacos" style="margin-bottom: 10px;"><i>Utility varie</i></div>
             </div>
         </div>
         <div *ngIf="isAdmin" class="row">
@@ -106,6 +106,12 @@
                 <a class="btn btn-light dashboardBtn" routerLink="/interventions-ko" routerLinkActive="active">
                     <div class="title">Interventi KO</div>
                     <span><i class="fa fa-3x fa-qrcode"></i></span>
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-light dashboardBtn" routerLink="/activities-from-product" routerLinkActive="active">
+                    <div class="title">Attività Prodotto</div>
+                    <span><i class="fa fa-3x fa-search"></i></span>
                 </a>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Activity, ActivityStatus } from '../services/activities/models';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 import { filter, map, switchMap, tap } from 'rxjs';
 import { ActivityTypesService } from '../services/activityTypes.service';
@@ -34,9 +34,8 @@ import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-moda
     selector: 'app-activity-modal',
     templateUrl: 'activity-modal.component.html'
 })
-export class ActivityModalComponent extends ModalComponent<ActivityModalOptions> implements OnInit {
+export class ActivityModalComponent extends ModalFormComponent<ActivityModalOptions> implements OnInit {
 
-    @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
@@ -71,7 +70,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
 
     constructor(
         private readonly _activityTypesService: ActivityTypesService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _suppliersService: SupplierService,
         private readonly _addressesService: AddressesService,
@@ -79,7 +78,7 @@ export class ActivityModalComponent extends ModalComponent<ActivityModalOptions>
         private readonly _user: UserService,
         private readonly _messagesService: MessagesService
     ) {
-        super();
+        super(messageBox);
     }
 
     ngOnInit() {

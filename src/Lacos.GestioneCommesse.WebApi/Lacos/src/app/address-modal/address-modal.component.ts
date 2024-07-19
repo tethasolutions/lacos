@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { AddressModel } from '../shared/models/address.model';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
@@ -14,11 +14,8 @@ import { SupplierModel } from '../shared/models/supplier.model';
   styleUrls: ['./address-modal.component.scss']
 })
 
-export class AddressModalComponent extends ModalComponent<AddressModel> {
+export class AddressModalComponent extends ModalFormComponent<AddressModel> {
   
-  @ViewChild('form')
-  form: NgForm;
-
   readonly role = Role;
   addressesTypes: Array<string> = ['Cantiere','Consegna','Fornitore','Sede'];
 
@@ -26,9 +23,9 @@ export class AddressModalComponent extends ModalComponent<AddressModel> {
   @Input() supplier = new SupplierModel();
 
   constructor(
-      private readonly _messageBox: MessageBoxService
+      messageBox: MessageBoxService
   ) {
-      super();
+      super(messageBox);
   }
 
   protected _canClose() {

@@ -1,6 +1,9 @@
 import { BaseComponent } from './base.component';
-import { Subject } from 'rxjs';
-import { Directive, EventEmitter } from '@angular/core';
+import { filter, Subject, tap } from 'rxjs';
+import { Directive, EventEmitter, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { MessageBoxService } from '../services/common/message-box.service';
+import { tableNodes } from '@progress/kendo-angular-editor';
 
 @Directive()
 export abstract class ModalComponent<T> extends BaseComponent {
@@ -46,6 +49,7 @@ export abstract class ModalComponent<T> extends BaseComponent {
     }
 
     dismiss() {
+        
         this._closeSubject.next(false);
         this._closeSubject.complete();
         this._closeSubject = null;
@@ -57,3 +61,26 @@ export abstract class ModalComponent<T> extends BaseComponent {
 
 }
 
+@Directive()
+export abstract class ModalFormComponent<T> extends ModalComponent<T> {
+
+    @ViewChild('form', { static: false }) form: NgForm;
+    
+    constructor (protected readonly _messageBox: MessageBoxService){
+        super();
+
+    }
+
+    override dismiss() {
+        if (this.form.dirty) {
+            this._messageBox.confirm("Sei sicuro di voler chiudere la finestra senza salvare?", "Conferma chiusura")
+            .pipe(
+                filter(e => e),
+                tap(() => super.dismiss())
+            )
+            .subscribe();
+        }
+        else
+            super.dismiss();
+    }
+}

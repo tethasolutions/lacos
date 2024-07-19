@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -12,18 +12,16 @@ import { ActivityTypeModel } from '../shared/models/activity-type.model';
   styleUrls: ['./activityType-modal.component.scss']
 })
 
-export class ActivityTypeModalComponent extends ModalComponent<ActivityTypeModel> {
+export class ActivityTypeModalComponent extends ModalFormComponent<ActivityTypeModel> {
   
-  @ViewChild('form') form: NgForm;
-
   readonly role = Role;
 
   @Input() activityType = new ActivityTypeModel();
 
   constructor(
-      private readonly _messageBox: MessageBoxService
+      messageBox: MessageBoxService
   ) {
-      super();
+      super(messageBox);
       this.options = new ActivityTypeModel();
       this.options.pictureRequired = false;
   }

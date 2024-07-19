@@ -3207,3 +3207,22 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240719102520_nuovo campo note prodotto')
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD [Note] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240719102520_nuovo campo note prodotto')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240719102520_nuovo campo note prodotto', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

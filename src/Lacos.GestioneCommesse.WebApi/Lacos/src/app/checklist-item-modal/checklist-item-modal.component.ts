@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { AddressModel } from '../shared/models/address.model';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
@@ -22,15 +22,14 @@ import { CheckListItemModel } from '../shared/models/check-list-item.model';
   templateUrl: './checklist-item-modal.component.html',
   styleUrls: ['./checklist-item-modal.component.scss']
 })
-export class ChecklistItemModalComponent extends ModalComponent<CheckListItemModel> {
+export class ChecklistItemModalComponent extends ModalFormComponent<CheckListItemModel> {
 
-  @ViewChild('form') form: NgForm;
   readonly role = Role;
 
   constructor(
-      private readonly _messageBox: MessageBoxService
+      messageBox: MessageBoxService
   ) {
-      super();
+      super(messageBox);
   }
 
   protected _canClose() {

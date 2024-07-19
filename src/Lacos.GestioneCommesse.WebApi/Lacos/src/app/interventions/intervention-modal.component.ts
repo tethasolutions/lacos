@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { Intervention, InterventionStatus } from '../services/interventions/models';
 import { NgForm } from '@angular/forms';
 import { Subject, debounce, debounceTime, distinctUntilChanged, tap } from 'rxjs';
@@ -24,9 +24,8 @@ import { InterventionNotesModalComponent } from './intervention-notes-modal.comp
     selector: 'app-intervention-modal',
     templateUrl: 'intervention-modal.component.html'
 })
-export class InterventionModalComponent extends ModalComponent<Intervention> implements OnInit {
+export class InterventionModalComponent extends ModalFormComponent<Intervention> implements OnInit {
 
-    @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('interventionNotesModal', { static: true }) interventionNotesModal: InterventionNotesModalComponent;
 
     jobs: SelectableJob[];
@@ -49,12 +48,12 @@ export class InterventionModalComponent extends ModalComponent<Intervention> imp
     constructor(
         private readonly _jobsService: JobsService,
         private readonly _activitiesService: ActivitiesService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _vechiclesService: VehiclesService,
         private readonly _operatorsService: OperatorsService,
         private readonly _activityProductsService: ActivityProductsService
     ) {
-        super();
+        super(messageBox);
     }
 
     ngOnInit() {

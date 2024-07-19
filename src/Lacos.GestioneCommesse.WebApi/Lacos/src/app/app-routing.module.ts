@@ -24,6 +24,7 @@ import { PurchaseOrdersComponent } from './purchase-order/purchase-orders.compon
 import { JobsCompletedComponent } from './jobs/jobs-completed.component';
 import { JobDetailsComponent } from './jobs/job-details.component';
 import { InterventionsKoComponent } from './interventions/interventions-ko.component';
+import { ActivitiesFromProductComponent } from './activities/activities-from-product.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -43,6 +44,7 @@ const routes: Routes = [
     { path: 'jobs-completed', component: JobsCompletedComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'tickets', component: TicketsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities', component: ActivitiesComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'activities-from-product', component: ActivitiesFromProductComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities/:activityId', component: ActivityComponent, canActivate: [AuthGuard.asInjectableGuard], resolve: { activity: ActivitiesService.asActivityDetailResolver } },
     { path: 'interventions-list', component: InterventionsListComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'interventions', component: InterventionsComponent, canActivate: [AuthGuard.asInjectableGuard] },

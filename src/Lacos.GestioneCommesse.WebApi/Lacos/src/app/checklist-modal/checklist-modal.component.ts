@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -26,9 +26,8 @@ import { UploadFileModel } from '../shared/models/upload-file.model';
   styleUrls: ['./checklist-modal.component.scss']
 })
 
-export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
+export class ChecklistModalComponent extends ModalFormComponent<CheckListModel> {
 
-  @ViewChild('form') form: NgForm;
   @ViewChild('checklistItemModal', { static: true }) checklistItemModal: ChecklistItemModalComponent;
 
   private readonly _baseUrl = `${ApiUrls.baseApiUrl}/operators`;
@@ -46,12 +45,12 @@ export class ChecklistModalComponent extends ModalComponent<CheckListModel> {
   readonly role = Role;
 
   constructor(
-      private readonly _messageBox: MessageBoxService,
+      messageBox: MessageBoxService,
       private readonly _checkListService: CheckListService,
       private readonly _productTypesService: ProductTypesService,
       private readonly _activityTypesService: ActivityTypesService
   ) {
-      super();
+      super(messageBox);
   }
   
   override open(checkListModel : CheckListModel){

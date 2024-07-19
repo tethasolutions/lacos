@@ -31,6 +31,14 @@ public class ActivitiesController : LacosApiController
             .ToDataSourceResultAsync(request);
     }
 
+    [HttpGet("{product}/activitiesFromProduct")]
+    public Task<DataSourceResult> activitiesFromProducts([DataSourceRequest] DataSourceRequest request, string product)
+    {
+        return service.GetActivitiesFromProduct(product)
+            .ToDataSourceResultAsync(request);
+    }
+
+
     [HttpGet("{id}")]
     public Task<ActivityDto> Get(long id)
     {

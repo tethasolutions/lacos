@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { Ticket, TicketStatus } from '../services/tickets/models';
 import { filter, map, switchMap, tap } from 'rxjs';
@@ -33,9 +33,8 @@ import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-moda
     selector: 'app-ticket-modal',
     templateUrl: 'ticket-modal.component.html'
 })
-export class TicketModalComponent extends ModalComponent<Ticket> implements OnInit {
+export class TicketModalComponent extends ModalFormComponent<Ticket> implements OnInit {
 
-    @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
@@ -63,12 +62,12 @@ export class TicketModalComponent extends ModalComponent<Ticket> implements OnIn
         private readonly _serviceJob: JobsService,
         private readonly _serviceActivity: ActivitiesService,
         private readonly _servicePurchaseOrder: PurchaseOrdersService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
         private readonly _messagesService: MessagesService
     ) {
-        super();
+        super(messageBox);
     }
 
     ngOnInit() {

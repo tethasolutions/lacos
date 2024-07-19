@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { tap } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -15,10 +15,7 @@ import { ApiUrls } from '../services/common/api-urls';
     selector: 'app-activity-product-modal',
     templateUrl: 'activity-product-modal.component.html'
 })
-export class ActivityProductModalComponent extends ModalComponent<ActivityProductModalOptions> implements OnInit {
-
-    @ViewChild('form', { static: false })
-    form: NgForm;
+export class ActivityProductModalComponent extends ModalFormComponent<ActivityProductModalOptions> implements OnInit {
 
     productTypes: SelectableProductType[];
     productType: SelectableProductType;
@@ -29,10 +26,10 @@ export class ActivityProductModalComponent extends ModalComponent<ActivityProduc
 
     constructor(
         private readonly _productTypesService: ProductTypesService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _productsService: ProductsService
     ) {
-        super();
+        super(messageBox);
     }
 
     ngOnInit() {

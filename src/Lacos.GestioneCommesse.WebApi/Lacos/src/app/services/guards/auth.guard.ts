@@ -32,6 +32,7 @@ export class AuthGuard {
             case url === '/tickets':
             case url === '/orders':
             case url === '/activities':
+            case url === '/activities-from-product':
             case url === '/users':
             case url === '/customers':
             case url === '/suppliers':

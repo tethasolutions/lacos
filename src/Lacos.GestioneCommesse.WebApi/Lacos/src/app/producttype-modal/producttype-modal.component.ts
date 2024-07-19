@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -12,18 +12,16 @@ import { ProductTypeModel } from '../shared/models/product-type.model';
   styleUrls: ['./producttype-modal.component.scss']
 })
 
-export class ProductTypeModalComponent extends ModalComponent<ProductTypeModel> {
+export class ProductTypeModalComponent extends ModalFormComponent<ProductTypeModel> {
   
-  @ViewChild('form') form: NgForm;
-
   readonly role = Role;
 
   @Input() productType = new ProductTypeModel();
 
   constructor(
-      private readonly _messageBox: MessageBoxService
+      messageBox: MessageBoxService
   ) {
-      super();
+      super(messageBox);
   }
 
   protected _canClose(): boolean {

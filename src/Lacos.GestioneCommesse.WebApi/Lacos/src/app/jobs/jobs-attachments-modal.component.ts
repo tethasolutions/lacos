@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input, OnInit } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { ActivitiesService } from '../services/activities/activities.service';
@@ -22,9 +22,7 @@ import { Role } from '../services/security/models';
     templateUrl: './jobs-attachments-modal.component.html'
 })
 
-export class JobsAttachmentsModalComponent extends ModalComponent<[number, number, number]> implements OnInit {
-
-    @ViewChild('form', { static: false }) form: NgForm;
+export class JobsAttachmentsModalComponent extends ModalFormComponent<[number, number, number]> implements OnInit {
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
     attachments: JobAttachmentModel[];
@@ -37,14 +35,14 @@ export class JobsAttachmentsModalComponent extends ModalComponent<[number, numbe
 
     constructor(
         private security: SecurityService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _activitiesService: ActivitiesService,
         private readonly _purchaseOrdersService: PurchaseOrdersService,
         private readonly _ticketsService: TicketsService,
         private readonly _interventionService: InterventionsService,
     ) {
-        super();
+        super(messageBox);
         this.isAdmin = security.isAuthorized(Role.Administrator);
     }
 

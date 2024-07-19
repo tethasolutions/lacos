@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { markAsDirty } from '../services/common/functions';
@@ -11,16 +11,14 @@ import { OperatorDocumentModel } from '../shared/models/operator-document.model'
   templateUrl: './operator-document-modal.component.html',
   styleUrls: ['./operator-document-modal.component.scss']
 })
-export class OperatorDocumentModalComponent extends ModalComponent<OperatorDocumentModel> {
-
-  @ViewChild('form') form: NgForm;
+export class OperatorDocumentModalComponent extends ModalFormComponent<OperatorDocumentModel> {
 
   documents: Array<JobOperatorModel> = [];
 
   constructor(
-      private readonly _messageBox: MessageBoxService
+      messageBox: MessageBoxService
   ) {
-      super();
+      super(messageBox);
   }
 
   protected _canClose() {

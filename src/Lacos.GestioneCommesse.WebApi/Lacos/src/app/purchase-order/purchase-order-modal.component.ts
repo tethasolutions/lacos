@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { JobsService } from '../services/jobs/jobs.service';
@@ -31,10 +31,7 @@ import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-moda
     selector: 'app-purchase-order-modal',
     templateUrl: 'purchase-order-modal.component.html'
 })
-export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderModalOptions> implements OnInit {
-
-    @ViewChild('form', { static: false })
-    form: NgForm;
+export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrderModalOptions> implements OnInit {
 
     @ViewChild('purchaseOrderItemModal', { static: true }) purchaseOrderItemModal: PurchaseOrderItemModalComponent;
     @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
@@ -74,14 +71,14 @@ export class PurchaseOrderModalComponent extends ModalComponent<PurchaseOrderMod
 
     constructor(
         private security: SecurityService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _suppliersService: SupplierService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
         private readonly _messagesService: MessagesService
     ) {
-        super();
+        super(messageBox);
         this.isAdmin = security.isAuthorized(Role.Administrator);
     }
 

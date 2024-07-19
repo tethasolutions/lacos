@@ -1,6 +1,6 @@
 import { Component, ViewChild, Input } from '@angular/core';
 import { ProductModel } from '../shared/models/product.model';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -24,9 +24,8 @@ import { ProductDocumentModel } from '../shared/models/product-document.model';
   styleUrls: ['./product-modal.component.scss']
 })
 
-export class ProductModalComponent extends ModalComponent<ProductModel> {
+export class ProductModalComponent extends ModalFormComponent<ProductModel> {
 
-  @ViewChild('form') form: NgForm;
   @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
   @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
   
@@ -50,12 +49,12 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
   imageLabel: string;
 
   constructor(
-      private readonly _messageBox: MessageBoxService,
+      messageBox: MessageBoxService,
       private readonly _productsService: ProductsService,
       private readonly _customerService: CustomerService,
       private readonly _addressesService: AddressesService
   ) {
-      super();
+      super(messageBox);
       this.openedEvent.subscribe(item => {
         this.loadData();
       });
@@ -257,4 +256,5 @@ export class ProductModalComponent extends ModalComponent<ProductModel> {
     this._readProductTypes();
     this._readCustomers();
   }
+
 }

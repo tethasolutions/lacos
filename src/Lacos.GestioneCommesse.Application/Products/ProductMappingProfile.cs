@@ -27,6 +27,7 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .MapMember(x => x.ProductType, y => y.ProductType.Name);
 
             CreateMap<ProductReadModel, Product>()
+                .Ignore(x => x.Note)
                 .Ignore(x => x.Customer)
                 .Ignore(x => x.CustomerId)
                 .Ignore(x => x.Address)

@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -13,9 +13,8 @@ import { ApiUrls } from '../services/common/api-urls';
   selector: 'app-intervention-product-checklist-items-modal',
   templateUrl: './intervention-product-checklist-items-modal.component.html'
 })
-export class InterventionProductChecklistItemsModalComponent extends ModalComponent<number> {
+export class InterventionProductChecklistItemsModalComponent extends ModalFormComponent<number> {
 
-  @ViewChild('form') form: NgForm;
   readonly role = Role;
   readonly imagesUrl = `${ApiUrls.baseUrl}/attachments`;
 
@@ -23,9 +22,9 @@ export class InterventionProductChecklistItemsModalComponent extends ModalCompon
 
   constructor(
     private readonly _service: InterventionsService,
-    private readonly _messageBox: MessageBoxService
+    messageBox: MessageBoxService
   ) {
-    super();
+    super(messageBox);
   }
 
   override open(interventionProductId: number) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { tap } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -13,20 +13,17 @@ import { PurchaseOrderItem } from '../services/purchase-orders/models';
     selector: 'app-purchase-order-item-modal',
     templateUrl: 'purchase-order-item-modal.component.html'
 })
-export class PurchaseOrderItemModalComponent extends ModalComponent<PurchaseOrderItem> implements OnInit {
-
-    @ViewChild('form', { static: false })
-    form: NgForm;
+export class PurchaseOrderItemModalComponent extends ModalFormComponent<PurchaseOrderItem> implements OnInit {
 
     products: SelectableProduct[];
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
 
     constructor(
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _productsService: ProductsService
     ) {
-        super();
+        super(messageBox);
     }
 
     ngOnInit() {

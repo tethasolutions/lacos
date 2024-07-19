@@ -27,6 +27,12 @@ export class ActivitiesService {
         return readData(this._http, state, url);
     }
 
+    activitiesFromProduct(state: State, product: string) {
+        const url = `${this._baseUrl}/${product}/activitiesFromProduct`
+
+        return readData(this._http, state, url);
+    }
+
     get(id: number) {
         return this._http.get<Activity>(`${this._baseUrl}/${id}`)
             .pipe(

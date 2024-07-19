@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -21,10 +21,7 @@ import { ActivityTypesService } from '../services/activityTypes.service';
     selector: 'app-operator-modal',
     templateUrl: './operator-modal.component.html'
 })
-export class OperatorModalComponent extends ModalComponent<OperatorModel> {
-
-    @ViewChild('form')
-    form: NgForm;
+export class OperatorModalComponent extends ModalFormComponent<OperatorModel> {
 
     @ViewChild('operatorDocumentsModal', { static: true })
     operatorDocumentsModal: OperatorDocumentsModalComponent;
@@ -50,11 +47,11 @@ export class OperatorModalComponent extends ModalComponent<OperatorModel> {
     operator = new OperatorModel();
 
     constructor(
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _vehiclesService: VehiclesService,
         private readonly _activityTypesService: ActivityTypesService
     ) {
-        super();
+        super(messageBox);
     }
 
     override open(options: OperatorModel) {

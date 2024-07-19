@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { Job, JobCopy } from '../services/jobs/models';
 import { filter, map, switchMap, tap } from 'rxjs';
@@ -15,9 +15,8 @@ import { AddressModel } from '../shared/models/address.model';
     selector: 'app-job-copy-modal',
     templateUrl: 'job-copy-modal.component.html'
 })
-export class JobCopyModalComponent extends ModalComponent<JobCopy> implements OnInit {
+export class JobCopyModalComponent extends ModalFormComponent<JobCopy> implements OnInit {
 
-    @ViewChild('form', { static: false }) form: NgForm;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
 
@@ -26,10 +25,10 @@ export class JobCopyModalComponent extends ModalComponent<JobCopy> implements On
 
     constructor(
         private readonly _customersService: CustomerService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _addressesService: AddressesService
     ) {
-        super();
+        super(messageBox);
     }
 
     ngOnInit() {

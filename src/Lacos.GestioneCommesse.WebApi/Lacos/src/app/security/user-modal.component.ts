@@ -3,23 +3,20 @@ import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { Role, UpdateUserRequest } from '../services/security/models';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 
 @Component({
     selector: 'lacos-user-modal',
     templateUrl: 'user-modal.component.html'
 })
-export class UserModalComponent extends ModalComponent<UpdateUserRequest> {
-
-    @ViewChild('form')
-    form: NgForm;
+export class UserModalComponent extends ModalFormComponent<UpdateUserRequest> {
 
     readonly role = Role;
 
     constructor(
-        private readonly _messageBox: MessageBoxService
+        messageBox: MessageBoxService
     ) {
-        super();
+        super(messageBox);
     }
 
     protected _canClose() {

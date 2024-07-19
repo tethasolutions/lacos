@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { CustomerModel } from '../shared/models/customer.model';
 import { AddressModel } from '../shared/models/address.model';
 import { NgForm } from '@angular/forms';
@@ -20,9 +20,8 @@ import { SecurityService } from '../services/security/security.service';
     styleUrls: ['./customer-modal.component.scss']
 })
 
-export class CustomerModalComponent extends ModalComponent<CustomerModel> {
+export class CustomerModalComponent extends ModalFormComponent<CustomerModel> {
 
-    @ViewChild('form') form: NgForm;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('addressesModal', { static: true }) addressesModal: AddressesModalComponent;
 
@@ -38,11 +37,11 @@ export class CustomerModalComponent extends ModalComponent<CustomerModel> {
 
     constructor(
         security: SecurityService,
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _customerService: CustomerService,
         private readonly _addressesService: AddressesService
     ) {
-        super();
+        super(messageBox);
         this.isOperator = security.isAuthorized(Role.Operator);
     }
 

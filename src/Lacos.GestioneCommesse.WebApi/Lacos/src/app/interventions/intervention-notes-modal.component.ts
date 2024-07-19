@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input, OnInit } from '@angular/core';
-import { ModalComponent } from '../shared/modal.component';
+import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
@@ -12,18 +12,16 @@ import { InterventionsService } from '../services/interventions/interventions.se
     templateUrl: './intervention-notes-modal.component.html'
 })
 
-export class InterventionNotesModalComponent extends ModalComponent<Intervention> implements OnInit {
-
-    @ViewChild('form', { static: false }) form: NgForm;
+export class InterventionNotesModalComponent extends ModalFormComponent<Intervention> implements OnInit {
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/interventions`;
     intervention: Intervention;
 
     constructor(
-        private readonly _messageBox: MessageBoxService,
+        messageBox: MessageBoxService,
         private readonly _service: InterventionsService
     ) {
-        super();
+        super(messageBox);
     }
 
     ngOnInit() {

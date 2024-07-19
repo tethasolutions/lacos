@@ -124,6 +124,7 @@ import { JobDetailsComponent } from './jobs/job-details.component';
 import { GalleryModalComponent } from './shared/gallery-modal.component';
 import { GridContextMenuComponent } from './shared/grid-context-menu.component';
 import { InterventionsKoComponent } from './interventions/interventions-ko.component';
+import { ActivitiesFromProductComponent } from './activities/activities-from-product.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -171,6 +172,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         DropdownlistGridColumnFilterComponent,
         MultiselectGridColumnFilterComponent,
         ActivitiesComponent,
+        ActivitiesFromProductComponent,
         ActivityComponent,
         ActivityModalComponent,
         ActivityProductsComponent,

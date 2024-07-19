@@ -407,4 +407,15 @@ public class ActivitiesService : IActivitiesService
         return query ?? new ActivityCounterNewDto();
 
     }
+
+    public IQueryable<ActivityReadModel> GetActivitiesFromProduct(string product)
+    {
+        var query = repository.Query()
+            .Where(e => e.ActivityProducts.Any(p => p.Product.Code == product || (p.Product.QrCodePrefix + p.Product.QrCodeNumber) == product));
+
+        return query
+            .AsQueryable()
+            .Project<ActivityReadModel>(mapper);
+
+    }
 }

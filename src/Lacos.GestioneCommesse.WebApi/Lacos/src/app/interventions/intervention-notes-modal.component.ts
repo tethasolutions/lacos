@@ -12,16 +12,18 @@ import { InterventionsService } from '../services/interventions/interventions.se
     templateUrl: './intervention-notes-modal.component.html'
 })
 
-export class InterventionNotesModalComponent extends ModalFormComponent<Intervention> implements OnInit {
+export class InterventionNotesModalComponent extends ModalComponent<Intervention> implements OnInit {
 
+    @ViewChild('form', { static: false }) form: NgForm;
+    
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/interventions`;
     intervention: Intervention;
 
     constructor(
-        messageBox: MessageBoxService,
+        private readonly _messageBox: MessageBoxService,
         private readonly _service: InterventionsService
     ) {
-        super(messageBox);
+        super();
     }
 
     ngOnInit() {

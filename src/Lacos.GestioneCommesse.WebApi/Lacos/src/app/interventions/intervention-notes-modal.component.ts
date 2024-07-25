@@ -14,8 +14,6 @@ import { InterventionsService } from '../services/interventions/interventions.se
 
 export class InterventionNotesModalComponent extends ModalComponent<Intervention> implements OnInit {
 
-    @ViewChild('form', { static: false }) form: NgForm;
-    
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/interventions`;
     intervention: Intervention;
 
@@ -37,13 +35,7 @@ export class InterventionNotesModalComponent extends ModalComponent<Intervention
     }
 
     protected override _canClose() {
-        this.form.markAsDirty();
-
-        if (this.form.invalid) {
-            this._messageBox.error('Compilare correttamente tutti i campi.');
-        }
-
-        return this.form.valid;
+        return true;
     }
 
     public CreateUrl(fileName: string): string {

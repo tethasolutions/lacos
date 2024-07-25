@@ -358,4 +358,25 @@ public class InterventionsService : IInterventionsService
             .Project<InterventionProductCheckListItemKOReadModel>(mapper);
     }
 
+    public IQueryable<InterventionSingleProductReadModel> QuerySingleProduct(long activityId, string product)
+    {
+        var query = repository.Query()
+            .Where(e => e.ActivityId == activityId)
+            .SelectMany(e => e.Products, (i, p) => new { intervention = i, product = p })
+            .Where(p => p.product.ActivityProduct.Product.Code == product || (p.product.ActivityProduct.Product.QrCodePrefix + p.product.ActivityProduct.Product.QrCodeNumber) == product)
+            .Select(e => new InterventionSingleProductReadModel()
+            {
+                Id = e.intervention.Id,
+                ActivityId = activityId,
+                Status = e.intervention.Status,
+                Start = e.intervention.Start,
+                End = e.intervention.End,
+                Description = e.intervention.Description,
+                Operators = e.intervention.Operators.Select(o => o.Name),
+                JobId = e.intervention.Activity.JobId,
+                InterventionProductId = e.product.Id
+            });
+
+        return query;
+    }
 }

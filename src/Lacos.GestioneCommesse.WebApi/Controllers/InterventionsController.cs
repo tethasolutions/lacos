@@ -1,4 +1,5 @@
-﻿using Kendo.Mvc.Extensions;
+﻿using Azure.Core;
+using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
@@ -37,6 +38,12 @@ public class InterventionsController : LacosApiController
     public Task<InterventionDto> Get(long id)
     {
         return service.Get(id);
+    }
+
+    [HttpGet("interventions-singleproduct/{activityId}/{product}")]
+    public Task<DataSourceResult> GetInterventionsSingleProduct([DataSourceRequest] DataSourceRequest request, long activityId, string product)
+    {
+        return service.QuerySingleProduct(activityId, product).ToDataSourceResultAsync(request);
     }
 
     [HttpPost]

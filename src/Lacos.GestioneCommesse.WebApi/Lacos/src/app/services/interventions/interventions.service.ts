@@ -75,6 +75,21 @@ export class InterventionsService {
             
     }
     
+    readInterventionsSingleProduct(state: State, activityId: number, product: string) {
+        const params = toDataSourceRequestString(state);
+        const hasGroups = state.group && state.group.length;
+
+        return this._http.get<GridDataResult>(`${this._baseUrl}/interventions-singleproduct/${activityId}/${product}?${params}`)
+            .pipe(
+                map(e =>
+                    <GridDataResult>{
+                        data: hasGroups ? translateDataSourceResultGroups(e.data) : e.data,
+                        total: e.total
+                    }
+                )
+            );
+    }
+
     readInterventionsKo(state: State) {
         const params = toDataSourceRequestString(state);
         const hasGroups = state.group && state.group.length;

@@ -1,0 +1,61 @@
+<kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+    [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="false"
+    scrollable="none" (dataStateChange)="dataStateChange($event)">
+
+    <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric">
+        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+            let-filterService="filterService">
+            <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
+                [data]="interventionStatusNames">
+            </app-multiselect-grid-column-filter>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span class="text-nowrap">
+                {{dataItem.status | interventionStatus}}
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="start" title="Inizio" filter="date" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span class="text-nowrap">
+                {{dataItem.start | date:'dd/MM/yyyy HH:mm'}}
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="end" title="Fine" filter="date" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span class="text-nowrap">
+                {{dataItem.end | date:'dd/MM/yyyy: HH:mm'}}
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="description" title="Descrizione">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div [innerHTML]="dataItem.description"></div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="operators" title="Operatori">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.operators">
+                <span *ngFor="let operator of dataItem.operators; index as i">                
+                    {{ operator }}<span *ngIf="i != (dataItem.operators.length-1)">, </span>
+                </span>
+            </div>
+            <div *ngIf="!dataItem.operators">
+                Nessun operatore impostato
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    
+    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="d-flex text-nowrap gap-1">
+                <button class="btn btn-primary btn-sm" title="Visualizza CheckList" (click)="openChecklist(dataItem.interventionProductId)">
+                    <i class="fas fa-list-check"></i>
+                </button>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+
+<app-intervention-product-checklist-items-modal #interventionProductModal></app-intervention-product-checklist-items-modal>

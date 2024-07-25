@@ -5,6 +5,7 @@ namespace Lacos.GestioneCommesse.Application.Docs.Services;
 public interface IInterventionsService
 {
     IQueryable<InterventionReadModel> Query();
+    IQueryable<InterventionSingleProductReadModel> QuerySingleProduct(long activityId, string product);
     Task<InterventionDto> Get(long id);
     Task<InterventionDto> Create(InterventionDto interventionDto);
     Task<InterventionDto> Update(InterventionDto interventionDto);

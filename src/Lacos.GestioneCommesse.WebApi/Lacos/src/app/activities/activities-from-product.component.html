@@ -103,7 +103,10 @@
             </div>
         </ng-template>
     </kendo-grid-column>
-
+    
+    <div *kendoGridDetailTemplate="let dataItem">
+        <app-interventions-singleproduct-grid [activityId]="dataItem.id" [product]="productSearchField"></app-interventions-singleproduct-grid>
+    </div>
 </kendo-grid>
 
 <app-activity-modal #activityModal></app-activity-modal>

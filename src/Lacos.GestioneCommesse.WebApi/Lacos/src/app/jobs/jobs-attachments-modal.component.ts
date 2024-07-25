@@ -22,7 +22,7 @@ import { Role } from '../services/security/models';
     templateUrl: './jobs-attachments-modal.component.html'
 })
 
-export class JobsAttachmentsModalComponent extends ModalFormComponent<[number, number, number]> implements OnInit {
+export class JobsAttachmentsModalComponent extends ModalComponent<[number, number, number]> implements OnInit {
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
     attachments: JobAttachmentModel[];
@@ -35,14 +35,13 @@ export class JobsAttachmentsModalComponent extends ModalFormComponent<[number, n
 
     constructor(
         private security: SecurityService,
-        messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
         private readonly _activitiesService: ActivitiesService,
         private readonly _purchaseOrdersService: PurchaseOrdersService,
         private readonly _ticketsService: TicketsService,
         private readonly _interventionService: InterventionsService,
     ) {
-        super(messageBox);
+        super();
         this.isAdmin = security.isAuthorized(Role.Administrator);
     }
 
@@ -93,13 +92,7 @@ export class JobsAttachmentsModalComponent extends ModalFormComponent<[number, n
     }
 
     protected override _canClose() {
-        this.form.markAsDirty();
-
-        if (this.form.invalid) {
-            this._messageBox.error('Compilare correttamente tutti i campi.');
-        }
-
-        return this.form.valid;
+        return true;
     }
 
     public CreateUrl(fileName: string, displayName: string): string {

@@ -19,6 +19,7 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
   public windowState: WindowState = "default";
 
   operators: OperatorModel[];
+  hasTargetOperators: boolean;
 
   constructor(
     messageBox: MessageBoxService,
@@ -33,6 +34,7 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
 
   override open(options: MessageModalOptions) {
     const result = super.open(options);
+    this.hasTargetOperators = options.targetOperators.any();
     return result;
   }
 

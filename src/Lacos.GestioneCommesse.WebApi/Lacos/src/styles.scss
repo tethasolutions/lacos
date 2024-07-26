@@ -536,3 +536,11 @@ app-purchase-orders {
 .messageRowPadding p {
     margin-bottom: 0px;
 }
+
+#messages-grid tr.unread {
+    font-weight: bold;
+}
+
+#messages-grid tr.read {
+    font-weight: normal;
+}

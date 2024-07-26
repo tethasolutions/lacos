@@ -58,3 +58,34 @@ export class MessageModalOptions {
     }
 
 }
+
+export class MessagesListReadModel {
+
+    date: Date;
+
+    constructor(
+        readonly id: number,
+        date: Date | string,
+        public note: string,
+        public senderOperatorId: number,
+        public senderOperator: string,
+        public targetOperators: string,
+        public isRead: boolean,
+
+        public jobCode: string,
+        public jobReference: string,
+        public customerName: string,
+        public activityType: string,
+        public activityColor: string,
+        public activityDescription: string,
+
+        public jobId: number,
+        public activityId: number,
+        public ticketId: number,
+        public purchaseOrderId: number
+
+    ){
+        this.date = date ? new Date(date) : null;
+    }
+
+}

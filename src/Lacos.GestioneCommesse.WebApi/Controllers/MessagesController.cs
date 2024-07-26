@@ -51,6 +51,12 @@ public class MessagesController : LacosApiController
         return service.Create(messageDto);
     }
 
+    [HttpPut("create-reply/{replyAll}")]
+    public Task<MessageDto> CreateReply(MessageDto messageDto, bool replyAll)
+    {
+        return service.CreateReply(messageDto, replyAll);
+    }
+
     [HttpPut("{id}")]
     public Task<MessageDto> Update(long id, MessageDto messageDto)
     {
@@ -69,6 +75,20 @@ public class MessagesController : LacosApiController
     public Task MarkAsRead(long messageId, long operatorId)
     {
         return service.ReadMessage(messageId, operatorId);
+    }
+
+
+    [HttpGet("{operatorId}/get-messageslist")]
+    public Task<DataSourceResult> GetMessagesList([DataSourceRequest] DataSourceRequest request, long operatorId)
+    {
+        return service.GetMessagesList(operatorId)
+            .ToDataSourceResultAsync(request);
+    }
+
+    [HttpGet("unread-counter/{operatorId}")]
+    public async Task<int> GetUnreadCounter(long operatorId)
+    {
+        return await service.GetUnreadCounter(operatorId);
     }
 
 }

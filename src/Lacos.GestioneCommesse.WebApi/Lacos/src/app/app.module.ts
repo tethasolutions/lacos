@@ -126,6 +126,7 @@ import { GridContextMenuComponent } from './shared/grid-context-menu.component';
 import { InterventionsKoComponent } from './interventions/interventions-ko.component';
 import { ActivitiesFromProductComponent } from './activities/activities-from-product.component';
 import { InterventionsSingleProductGridComponent } from './interventions/interventions-singleproduct-grid.component';
+import { MessagesListComponent } from './messages/messages-list.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -202,6 +203,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         PurchaseOrderItemModalComponent,
         PurchaseOrderStatusPipe,
         MessageModalComponent,
+        MessagesListComponent,
         GalleryModalComponent,
         GridContextMenuComponent
     ],

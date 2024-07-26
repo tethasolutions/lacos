@@ -35,6 +35,9 @@
                 
                 <a [routerLink]="['/activities']" [queryParams]="{referentId: currentOperator.id}" routerLinkActive="active"
                 class="red-number bage-number" *ngIf="newActivitiesCounter.newActivities> 0">{{newActivitiesCounter.newActivities}}</a>
+
+                <a [routerLink]="['/messages-list']" routerLinkActive="active"
+                class="red-number bage-number" *ngIf="unreadCounter> 0"><i class="fa fa-comments"></i> {{unreadCounter}}</a>
             </span>
         </div>
     </div>

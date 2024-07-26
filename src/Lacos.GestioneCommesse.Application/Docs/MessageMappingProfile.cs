@@ -38,5 +38,10 @@ public class MessageMappingProfile : Profile
             .Ignore(x => x.Job)
             .Ignore(x => x.PurchaseOrder)
             .Ignore(x => x.MessageNotifications);
+
+        CreateMap<MessagesList, MessagesListReadModel>();
+        CreateMap<MessagesListReadModel, MessagesList>()
+            .Ignore(x => x.TargetOperatorId)
+            .Ignore(x => x.TargetOperator);
     }
 }

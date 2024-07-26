@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Azure;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Dal.Migrations;
@@ -9,6 +11,7 @@ using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using Westcar.WebApplication.Dal;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -19,6 +22,7 @@ public class MessagesService : IMessagesService
     private readonly IRepository<MessageNotification> notificationRepository;
     private readonly IRepository<Operator> operatorRepository;
     private readonly IRepository<Domain.Docs.Activity> activityRepository;
+    private readonly IViewRepository<MessagesList> viewRepository;
     private readonly ILacosDbContext dbContext;
 
     public MessagesService(
@@ -27,6 +31,7 @@ public class MessagesService : IMessagesService
         IRepository<MessageNotification> notificationRepository,
         IRepository<Operator> operatorRepository,
         IRepository<Domain.Docs.Activity> activityRepository,
+        IViewRepository<MessagesList> viewRepository,
         ILacosDbContext dbContext
     )
     {
@@ -35,6 +40,7 @@ public class MessagesService : IMessagesService
         this.notificationRepository = notificationRepository;
         this.operatorRepository = operatorRepository;
         this.activityRepository = activityRepository;
+        this.viewRepository = viewRepository;
         this.dbContext = dbContext;
     }
 
@@ -185,6 +191,58 @@ public class MessagesService : IMessagesService
         return await Get(Message.Id);
     }
 
+    public async Task<MessageDto> CreateReply(MessageDto MessageDto, bool replyAll)
+    {
+        long senderMessageId = MessageDto.Id;
+        
+        var Message = MessageDto.MapTo<Message>(mapper);
+        Message.Id = 0;
+        await repository.Insert(Message);
+        await dbContext.SaveChanges();
+
+        Message senderMessage = await repository.Get(senderMessageId);
+
+        if (senderMessage != null)
+        {
+            if (Message.OperatorId != senderMessage.OperatorId)
+            {
+                var MessageNotification = new MessageNotification
+                {
+                    MessageId = Message.Id,
+                    IsRead = false,
+                    OperatorId = (long)senderMessage.OperatorId
+                };
+                await notificationRepository.Insert(MessageNotification);
+            }
+            //aggiunta anche di tutti gli altri operatori ad eccezione di se stesso
+            if (replyAll)
+            {
+                List<long> messageNotificationOperators = await dbContext.ExecuteWithDisabledQueryFilters(async () => await notificationRepository.Query()
+                    .Where(x => x.MessageId == senderMessage.Id)
+                    .Select(x => x.OperatorId)
+                    .Distinct()
+                    .ToListAsync(), QueryFilter.OperatorEntity);
+                foreach (long @operator in messageNotificationOperators)
+                {
+                    if (Message.OperatorId != @operator)
+                    {
+                        var messageNotificationReply = new MessageNotification
+                        {
+                            MessageId = Message.Id,
+                            IsRead = false,
+                            OperatorId = (long)@operator
+                        };
+                        await notificationRepository.Insert(messageNotificationReply);
+                    }
+                }
+            }
+
+            await dbContext.SaveChanges();
+        }
+
+        return await Get(Message.Id);
+    }
+
     public async Task<MessageDto> Update(MessageDto MessageDto)
     {
         var Message = await repository
@@ -285,5 +343,24 @@ public class MessagesService : IMessagesService
         }
 
         throw new NotFoundException($"Messaggi non trovati."); ;
+    }
+
+    public IQueryable<MessagesListReadModel> GetMessagesList(long operatorId)
+    {
+        var Messages = viewRepository.Query()
+            .Where(e => e.SenderOperatorId == operatorId || e.TargetOperatorId == operatorId);
+
+        return Messages
+            .Project<MessagesListReadModel>(mapper)
+            .Distinct();
+    }
+
+    public async Task<int> GetUnreadCounter(long operatorId)
+    {
+        int counter = await viewRepository.Query()
+            .Where(x => x.TargetOperatorId == operatorId && x.IsRead == false)
+            .CountAsync();
+
+        return counter;
     }
 }

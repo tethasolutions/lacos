@@ -12,6 +12,7 @@ import { NewActivityCounter } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
+import { MessagesService } from '../services/messages/messages.service';
 
 @Component({
     selector: 'lacos-menu',
@@ -91,6 +92,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/activities-from-product'], 'Ricerca Attività Prodotto',
                     e => e.startsWith('/activities-from-product'),
                     e => e.isAuthorized(Role.Administrator)
+                ),
+                new MenuEntry(['/messages-list'], 'Commenti',
+                    e => e.startsWith('/messages-list'),
+                    e => e.isAuthenticated()
                 )
             ]),
             new DropDownMenuEntry('Gestione', [
@@ -118,6 +123,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
     ticketsCounters: TicketCounter;
     newActivitiesCounter = new NewActivityCounter(0);
     currentOperator: OperatorModel;
+    unreadCounter: number;
     private intervalId: number;
 
     constructor(
@@ -126,6 +132,7 @@ export class MenuComponent extends BaseComponent implements OnInit {
         private readonly _user: UserService,
         private readonly _activityService: ActivitiesService,
         private readonly _ticketService: TicketsService,
+        private readonly _messagesService: MessagesService,
         private readonly _operatorsService: OperatorsService
     ) {
         super();
@@ -140,6 +147,8 @@ export class MenuComponent extends BaseComponent implements OnInit {
             this._getTicketsCounters();
             this._getNewActivitiesCounter();
         }, 300000); // 300000 ms = 5 minuti
+        this._getTicketsCounters();
+        this._getNewActivitiesCounter();
         this._getCurrentOperator(this.user.id);
     }
 
@@ -219,7 +228,22 @@ export class MenuComponent extends BaseComponent implements OnInit {
         this._subscriptions.push(
             this._operatorsService.getOperatorByUserId(userId)
                 .pipe(
-                    tap(e => this.currentOperator = e)
+                    tap(e => {
+                        this.currentOperator = e;
+                        this._getUnreadCounter();
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    _getUnreadCounter() {
+        this._subscriptions.push(
+            this._messagesService.getUnreadCounter(this.currentOperator.id)
+                .pipe(
+                    tap(e => {
+                        this.unreadCounter = e;
+                    })
                 )
                 .subscribe()
         );

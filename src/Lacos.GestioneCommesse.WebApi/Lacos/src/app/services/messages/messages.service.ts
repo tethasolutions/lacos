@@ -4,7 +4,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
 import { readData } from '../common/functions';
-import { MessageModel, MessageReadModel } from './models';
+import { MessageModel, MessageReadModel, MessagesListReadModel } from './models';
 
 @Injectable()
 export class MessagesService {
@@ -35,9 +35,22 @@ export class MessagesService {
                 map(e => e.map(ee => MessageReadModel.build(ee)))
             );
     }
+    
+    getMessagesList(state: State, operatorId: number) {
+        const url = `${this._baseUrl}/${operatorId}/get-messageslist`
+
+        return readData(this._http, state, url);
+    }
 
     create(message: MessageModel) {
         return this._http.post<MessageModel>(this._baseUrl, message)
+            .pipe(
+                map(e => MessageModel.build(e))
+            );
+    }
+
+    createReply(message: MessageModel, replyAll: boolean) {
+        return this._http.put<MessageModel>(`${this._baseUrl}/create-reply/${replyAll}`, message)
             .pipe(
                 map(e => MessageModel.build(e))
             );
@@ -64,4 +77,10 @@ export class MessagesService {
             );
     }
     
+    getUnreadCounter(operatorId: number) {
+        return this._http.get<number>(`${this._baseUrl}/unread-counter/${operatorId}`)
+            .pipe(
+                map(e => e)
+            );
+    }
 }

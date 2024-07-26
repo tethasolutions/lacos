@@ -114,6 +114,20 @@
                     <span><i class="fa fa-3x fa-search"></i></span>
                 </a>
             </div>
+            <div class="col-md-2">
+                <a class="btn btn-light dashboardBtn" routerLink="/messages-list" routerLinkActive="active"
+                    [ngStyle]="unreadCounter>0 ? {'background-color':'#ffbcbc'} : ''">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="title">Commenti</div>
+                            <span><i class="fa fa-3x fa-comments"></i></span>
+                        </div>
+                        <div class="col-4">
+                            <div class="red-number bage-number">{{unreadCounter}}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
         <hr *ngIf="isAdmin" class="lacos" />
     </div>

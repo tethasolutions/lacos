@@ -21,8 +21,8 @@
     <kendo-grid-column field="isRead" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">
-                <button class="btn btn-outline-primary btn-sm me-2" type="button"
-                    title="Segna come letto" [disabled]="dataItem.isRead || dataItem.senderOperatorId == currentOperator.id "
+                <button class="btn btn-outline-primary btn-sm me-2" type="button" title="Segna come letto"
+                    [disabled]="dataItem.isRead || dataItem.senderOperatorId == currentOperator.id "
                     (click)="markAsRead(dataItem)">
                     <i class="fa-regular fa-square-check" *ngIf="dataItem.isRead"></i>
                     <i class="fa-regular fa-square" *ngIf="!dataItem.isRead"></i>
@@ -31,7 +31,7 @@
         </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-column field="senderOperator" title="Mittente" >
+    <kendo-grid-column field="senderOperator" title="Mittente">
     </kendo-grid-column>
     <kendo-grid-column field="date" title="Data Messaggio" filter="date" format="dd/MM/yyyy" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -40,7 +40,7 @@
             </div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="note" title="Messaggio" >
+    <kendo-grid-column field="note" title="Messaggio">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div [innerHTML]="dataItem.note"></div>
         </ng-template>
@@ -53,35 +53,37 @@
             </div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="customerName" title="Cliente" >
+    <kendo-grid-column field="customerName" title="Cliente">
     </kendo-grid-column>
-    <kendo-grid-column field="jobReference" title="Riferimento" >
+    <kendo-grid-column field="jobReference" title="Riferimento">
     </kendo-grid-column>
     <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div [style.background-color]="dataItem.activityColor">&nbsp;</div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="activityDescription" title="Attività" >
+    <kendo-grid-column field="activityDescription" title="Attività">
     </kendo-grid-column>
-    
-    <kendo-grid-column field="targetOperators" title="Dest." >
+
+    <kendo-grid-column field="targetOperators" title=" " [sortable]="false" [filterable]="false" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <i class="fas fa-users" [title]="dataItem.targetOperators"></i>
+            <div style="text-align: center;">
+                <span title="Sorgente commento">{{dataItem.elementType}}</span>
+                <i class="fas fa-users" [title]="'Destinatari: ' + dataItem.targetOperators"></i>
+            </div>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="d-flex text-nowrap gap-1">
                 <button [disabled]="dataItem.senderOperatorId != currentOperator.id" type="button"
-                    class="btn btn-outline-primary btn-sm me-2" title="Modifica"
-                    (click)="editMessage(dataItem)">
+                    class="btn btn-outline-primary btn-sm me-2" title="Modifica" (click)="editMessage(dataItem)">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-outline-primary btn-sm" title="Rispondi" (click)="createMessage(dataItem,false)">
+                <button class="btn btn-outline-primary btn-sm" title="Rispondi" (click)="replyMessage(dataItem,false)">
                     <i class="fas fa-reply"></i>
                 </button>
-                <button class="btn btn-outline-primary btn-sm" title="Rispondi a tutti" (click)="createMessage(dataItem,true)">
+                <button class="btn btn-outline-primary btn-sm" title="Rispondi a tutti" (click)="replyMessage(dataItem,true)">
                     <i class="fas fa-reply-all"></i>
                 </button>
             </div>
@@ -90,3 +92,7 @@
 </kendo-grid>
 
 <app-message-modal #messageModal></app-message-modal>
+<app-job-modal #jobModal></app-job-modal>
+<app-activity-modal #activityModal></app-activity-modal>
+<app-purchase-order-modal #purchaseOrderModal></app-purchase-order-modal>
+<app-ticket-modal #ticketModal></app-ticket-modal>

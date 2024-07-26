@@ -12,6 +12,7 @@ using Telerik.Reporting.Processing;
 using Telerik.Reporting;
 using Parameter = Telerik.Reporting.Parameter;
 using Westcar.WebApplication.Dal;
+using System.Linq.Expressions;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -25,8 +26,24 @@ public class InterventionsService : IInterventionsService
     private readonly IRepository<InterventionProductCheckList> productCheckListRepository;
     private readonly IRepository<InterventionNote> noteRepository;
     private readonly IViewRepository<InterventionProductCheckListItemKO> productCheckListItemKORepository;
+    private readonly IRepository<Job> jobRepository;
+    private readonly IRepository<Ticket> ticketRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
+
+    private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
+    j.Activities
+    .Any() &&
+    j.Activities.All(a => a.Status == ActivityStatus.Completed)
+    ?
+        JobStatus.Completed
+    : j.Activities
+            .Any(a => a.Status == ActivityStatus.InProgress)
+            ? JobStatus.InProgress
+            : j.Activities
+                .Any(a => a.Status == ActivityStatus.Pending)
+                ? JobStatus.Pending
+                : j.Status;
 
     public InterventionsService(
         IMapper mapper,
@@ -38,6 +55,8 @@ public class InterventionsService : IInterventionsService
         IRepository<InterventionProductCheckList> productCheckListRepository,
         IRepository<InterventionNote> noteRepository,
         IViewRepository<InterventionProductCheckListItemKO> productCheckListItemKORepository,
+        IRepository<Job> jobRepository,
+        IRepository<Ticket> ticketRepository,
         ILacosSession session
     )
     {
@@ -50,6 +69,8 @@ public class InterventionsService : IInterventionsService
         this.productCheckListRepository = productCheckListRepository;
         this.noteRepository = noteRepository;
         this.productCheckListItemKORepository = productCheckListItemKORepository;
+        this.jobRepository = jobRepository;
+        this.ticketRepository = ticketRepository;
         this.session = session;
     }
 
@@ -99,6 +120,14 @@ public class InterventionsService : IInterventionsService
             await repository.Insert(intervention);
 
             await dbContext.SaveChanges();
+
+            Activity activity = await activityRepository.Get(intervention.ActivityId);
+            if (activity != null)
+            {
+                activity.ExpirationDate = intervention.Start;
+                activityRepository.Update(activity);
+                await dbContext.SaveChanges();
+            }
 
             await UpdateActivityStatus(intervention.ActivityId);
 
@@ -241,11 +270,13 @@ public class InterventionsService : IInterventionsService
             .Where(e => e.Id == id)
             .Select(e => new
             {
+                Id = e.Id,
+                JobId = e.JobId,
                 CurrentStatus = e.Status,
                 Status = !e.Interventions.Any()
                     ? ActivityStatus.Pending
                     : e.Interventions.Any(i => i.Status == InterventionStatus.Scheduled)
-                        ? ActivityStatus.InProgress
+                        ? ActivityStatus.Ready
                         : ActivityStatus.Completed
             })
             .FirstAsync();
@@ -258,6 +289,34 @@ public class InterventionsService : IInterventionsService
         await activityRepository.Update(id, e => e.Status = activity.Status);
 
         await dbContext.SaveChanges();
+
+        if (activity.JobId != null)
+        {
+            Job job = await jobRepository.Query()
+                .Where(e => e.Id == activity.JobId)
+                .Include(e => e.Activities)
+                .FirstOrDefaultAsync();
+            if (job != null)
+            {
+                if (job.Status != JobStatus.Billing && job.Status != JobStatus.Billed)
+                {
+                    Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                    job.Status = statusDelegate(job);
+                    jobRepository.Update(job);
+                    await dbContext.SaveChanges();
+                }
+            }
+        }
+
+        Ticket ticket = await ticketRepository.Query()
+            .Where(x => x.ActivityId == activity.Id)
+            .FirstOrDefaultAsync();
+        if (ticket != null)
+        {
+            ticket.Status = TicketStatus.Resolved;
+            ticketRepository.Update(ticket);
+            await dbContext.SaveChanges();
+        }
     }
 
     public IQueryable<InterventionProductReadModel> GetProductsByIntervention(long id)

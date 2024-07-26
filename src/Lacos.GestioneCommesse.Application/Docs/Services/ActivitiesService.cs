@@ -24,6 +24,7 @@ public class ActivitiesService : IActivitiesService
     private readonly IRepository<ActivityAttachment> activityAttachmentRepository;
     private readonly IRepository<Product> productRepository;
     private readonly IRepository<Job> jobRepository;
+    private readonly IRepository<Ticket> ticketRepository;
     private readonly ILacosSession session;
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
@@ -47,6 +48,7 @@ public class ActivitiesService : IActivitiesService
         IRepository<ActivityProduct> activityProductRepository,
         IRepository<Product> productRepository,
         IRepository<Job> jobRepository,
+        IRepository<Ticket> ticketRepository,
         ILacosSession session, 
         IRepository<ActivityAttachment> activityAttachmentRepository
     )
@@ -58,6 +60,7 @@ public class ActivitiesService : IActivitiesService
         this.activityAttachmentRepository= activityAttachmentRepository;
         this.productRepository = productRepository;
         this.jobRepository = jobRepository;
+        this.ticketRepository = ticketRepository;
         this.session = session;
     }
 
@@ -143,11 +146,14 @@ public class ActivitiesService : IActivitiesService
                 .FirstOrDefaultAsync();
             if (job != null)
             {
-                Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
-                job.Status = statusDelegate(job);
-                jobRepository.Update(job);
+                if (job.Status != JobStatus.Billing && job.Status != JobStatus.Billed)
+                {
+                    Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                    job.Status = statusDelegate(job);
+                    jobRepository.Update(job);
+                    await dbContext.SaveChanges();
+                }
             }
-            await dbContext.SaveChanges();
         }
 
         return await Get(activity.Id);
@@ -185,10 +191,23 @@ public class ActivitiesService : IActivitiesService
                 .FirstOrDefaultAsync();
             if (job != null)
             {
-                Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
-                job.Status = statusDelegate(job);
-                jobRepository.Update(job);
+                if (job.Status != JobStatus.Billing && job.Status != JobStatus.Billed)
+                {
+                    Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                    job.Status = statusDelegate(job);
+                    jobRepository.Update(job);
+                    await dbContext.SaveChanges();
+                }
             }
+        }
+
+        Ticket ticket = await ticketRepository.Query()
+            .Where(x => x.ActivityId == activity.Id)
+            .FirstOrDefaultAsync();
+        if (ticket != null)
+        {
+            ticket.Status = TicketStatus.Resolved;
+            ticketRepository.Update(ticket);
             await dbContext.SaveChanges();
         }
 

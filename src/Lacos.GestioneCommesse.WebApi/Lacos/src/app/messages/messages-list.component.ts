@@ -8,13 +8,19 @@ import { OperatorsService } from '../services/operators.service';
 import { OperatorModel } from '../shared/models/operator.model';
 import { UserService } from '../services/security/user.service';
 import { User } from '../services/security/models';
-import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { StorageService } from '../services/common/storage.service';
 import { MessagesService } from '../services/messages/messages.service';
 import { MessageModalOptions, MessageModel, MessagesListReadModel } from '../services/messages/models';
 import { MessageModalComponent } from './message-modal.component';
 import { State } from '@progress/kendo-data-query';
-import { getToday } from '../services/common/functions';
+import { JobModalComponent } from '../jobs/job-modal.component';
+import { ActivityModalComponent, ActivityModalOptions } from '../activities/activity-modal.component';
+import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
+import { TicketModalComponent } from '../ticket/ticket-modal.component';
+import { JobsService } from '../services/jobs/jobs.service';
+import { ActivitiesService } from '../services/activities/activities.service';
+import { TicketsService } from '../services/tickets/tickets.service';
+import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 
 @Component({
     selector: 'app-messages-list',
@@ -23,7 +29,11 @@ import { getToday } from '../services/common/functions';
 export class MessagesListComponent extends BaseComponent implements OnInit {
 
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
-    
+    @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;
+    @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
+    @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
+    @ViewChild('ticketModal', { static: true }) ticketModal: TicketModalComponent;
+
     data: GridDataResult;
     gridState: State = {
         skip: 0,
@@ -41,6 +51,7 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
     currentOperator: OperatorModel;
     unreadCounter: number;
     hasFilter: boolean;
+    targetOperatorsArray: number[];
 
     readonly activityStatusNames = activityStatusNames;
 
@@ -49,6 +60,10 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
         private readonly _messageBox: MessageBoxService,
         private readonly _user: UserService,
         private readonly _operatorsService: OperatorsService,
+        private readonly _jobsService: JobsService,
+        private readonly _activityService: ActivitiesService,
+        private readonly _ticketsService: TicketsService,
+        private readonly _purchaseOrdersService: PurchaseOrdersService,
         private readonly _storageService: StorageService
     ) {
         super();
@@ -78,18 +93,59 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
     }
 
     onDblClick(): void {
-        if (!this.cellArgs.isEdited && this.cellArgs.dataItem.senderOperatorId == this.currentOperator.id) {
+        if (this.cellArgs.dataItem.ticketId) {
             this._subscriptions.push(
-                this._service.get(this.cellArgs.dataItem.id)
+                this._ticketsService.get(this.cellArgs.dataItem.ticketId)
                     .pipe(
-                        map(e => new MessageModalOptions(e)),
-                        switchMap(e => this.messageModal.open(e)),
+                        switchMap(e => this.ticketModal.open(e)),
                         filter(e => e),
-                        switchMap(() => this._service.update(this.messageModal.options.message)),
-                        //tap(() => this._afterMessageUpdated(this.messageModal.options.message))
+                        switchMap(() => this._ticketsService.update(this.ticketModal.options)),
+                        tap(e => this._read())
                     )
                     .subscribe()
             );
+            return;
+        }
+        if (this.cellArgs.dataItem.purchaseOrderId) {
+            this._subscriptions.push(
+                this._purchaseOrdersService.get(this.cellArgs.dataItem.purchaseOrderId)
+                    .pipe(
+                        map(e => new PurchaseOrderModalOptions(e)),
+                        switchMap(e => this.purchaseOrderModal.open(e)),
+                        filter(e => e),
+                        switchMap(() => this._purchaseOrdersService.update(this.purchaseOrderModal.options.purchaseOrder)),
+                        tap(() => this._read())
+                    )
+                    .subscribe()
+            );
+            return;
+        }
+        if (this.cellArgs.dataItem.activityId) {
+            this._subscriptions.push(
+                this._activityService.get(this.cellArgs.dataItem.activityId)
+                    .pipe(
+                        map(e => new ActivityModalOptions(e)),
+                        switchMap(e => this.activityModal.open(e)),
+                        filter(e => e),
+                        switchMap(() => this._activityService.update(this.activityModal.options.activity)),
+                        tap(() => this._read())
+                    )
+                    .subscribe()
+            );
+            return;
+        }
+        if (this.cellArgs.dataItem.jobId) {
+            this._subscriptions.push(
+                this._jobsService.get(this.cellArgs.dataItem.jobId)
+                    .pipe(
+                        switchMap(e => this.jobModal.open(e)),
+                        filter(e => e),
+                        switchMap(() => this._jobsService.update(this.jobModal.options)),
+                        tap(e => this._read())
+                    )
+                    .subscribe()
+            );
+            return;
         }
     }
 
@@ -115,7 +171,9 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
             this._operatorsService.getOperatorByUserId(userId)
                 .pipe(
                     tap(e => this.currentOperator = e),
-                    tap(() => this._read())
+                    tap(() => {
+                        this.filterUnread();
+                    })
                 )
                 .subscribe()
         );
@@ -140,7 +198,7 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
         this._subscriptions.push(
             this._service.get(message.id)
                 .pipe(
-                    map(e => new MessageModalOptions(e)),
+                    map(e => new MessageModalOptions(e, true)),
                     switchMap(e => this.messageModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._service.update(this.messageModal.options.message)),
@@ -150,29 +208,42 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
         );
     }
 
+    replyMessage(message: MessagesListReadModel, replyAll: boolean) {
+        this._subscriptions.push(
+            this._service.getTargetOperators(message.id, replyAll)
+                .pipe(
+                    tap(e => {
+                        this.targetOperatorsArray = e;
+                        this.createMessage(message,replyAll);
+                    })
+                )
+                .subscribe()
+        );
+    }
+
     createMessage(message: MessagesListReadModel, replyAll: boolean) {
         const today = new Date();
         const newMessage = new MessageModel(message.id, today, null, this.currentOperator.id, message.jobId, message.activityId, message.ticketId, message.purchaseOrderId);
-        const options = new MessageModalOptions(newMessage);
+        const options = new MessageModalOptions(newMessage, replyAll, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)
                 .pipe(
                     filter(e => e),
-                    switchMap(() => this._service.createReply(newMessage,replyAll)),
+                    switchMap(() => this._service.createReply(newMessage, options.targetOperators.join(","))),
                     tap(() => this._read()),
                     tap(() => this._messageBox.success('Commento creato'))
                 )
                 .subscribe()
         );
     }
-    
+
     readonly rowCallback = (context: RowClassArgs) => {
         if (!context.dataItem.isRead && context.dataItem.senderOperatorId != this.currentOperator.id) {
             return { unread: true };
-          } else {
+        } else {
             return { read: true };
-          }
+        }
         // const activity = context.dataItem as IActivityReadModel;
 
         // switch (true) {
@@ -199,7 +270,7 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
 
     filterUnread() {
         this.gridState.filter.filters = [
-            { field: 'senderOperatorId', operator: 'neq', value: this.currentOperator.id }, 
+            { field: 'senderOperatorId', operator: 'neq', value: this.currentOperator.id },
             { field: 'isRead', operator: 'eq', value: false }
         ];
         this._saveState();

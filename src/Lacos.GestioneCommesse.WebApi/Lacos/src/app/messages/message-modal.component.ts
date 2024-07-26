@@ -1,10 +1,13 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
-import { NgForm } from '@angular/forms';
 import { markAsDirty } from '../services/common/functions';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { MessageModalOptions, MessageModel } from '../services/messages/models';
 import { WindowState } from '@progress/kendo-angular-dialog';
+import { OperatorModel } from '../shared/models/operator.model';
+import { OperatorsService } from '../services/operators.service';
+import { State } from '@progress/kendo-data-query';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-message-modal',
@@ -15,19 +18,22 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
 
   public windowState: WindowState = "default";
 
+  operators: OperatorModel[];
+
   constructor(
-    messageBox: MessageBoxService
+    messageBox: MessageBoxService,
+    private readonly _operatorsService: OperatorsService
   ) {
     super(messageBox);
   }
 
   ngOnInit() {
-    
+    this._getOperators();
   }
-  
+
   override open(options: MessageModalOptions) {
-      const result = super.open(options);
-      return result;
+    const result = super.open(options);
+    return result;
   }
 
   protected _canClose() {
@@ -38,6 +44,22 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
     }
 
     return this.form.valid;
+  }
+
+  private _getOperators() {
+    const state: State = {
+      sort: [
+        { field: 'name', dir: 'asc' }
+      ]
+    };
+
+    this._subscriptions.push(
+      this._operatorsService.readOperators(state)
+        .pipe(
+          tap(e => this.operators = e.data as OperatorModel[])
+        )
+        .subscribe()
+    )
   }
 
 }

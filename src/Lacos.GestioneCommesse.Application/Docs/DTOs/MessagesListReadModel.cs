@@ -27,4 +27,5 @@ public class MessagesListReadModel
     public long? ActivityId { get; set; }
     public long? TicketId { get; set; }
     public long? PurchaseOrderId { get; set; }
+    public string? ElementType { get; set; }
 }

@@ -158,7 +158,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
         this._read();
     }
-
+    
     private _buildActivityIdFilter() {
         const that = this;
 

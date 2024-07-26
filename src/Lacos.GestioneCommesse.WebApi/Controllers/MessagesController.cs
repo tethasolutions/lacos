@@ -4,6 +4,8 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
+using Lacos.GestioneCommesse.Application.Operators.DTOs;
+using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
 using Microsoft.AspNetCore.Authorization;
@@ -51,10 +53,10 @@ public class MessagesController : LacosApiController
         return service.Create(messageDto);
     }
 
-    [HttpPut("create-reply/{replyAll}")]
-    public Task<MessageDto> CreateReply(MessageDto messageDto, bool replyAll)
+    [HttpPut("create-reply/{targetOperators}")]
+    public Task<MessageDto> CreateReply(MessageDto messageDto, string targetOperators)
     {
-        return service.CreateReply(messageDto, replyAll);
+        return service.CreateReply(messageDto, targetOperators);
     }
 
     [HttpPut("{id}")]
@@ -83,6 +85,13 @@ public class MessagesController : LacosApiController
     {
         return service.GetMessagesList(operatorId)
             .ToDataSourceResultAsync(request);
+    }
+
+    [HttpGet("{messageId}/{replyAll}/get-messageslist")]
+    public async Task<List<long>> GetTargetOperators(long messageId, bool replyAll)
+    {
+        List<long> operators = (await service.GetReplyTargetOperators(messageId, replyAll)).ToList();
+        return operators;
     }
 
     [HttpGet("unread-counter/{operatorId}")]

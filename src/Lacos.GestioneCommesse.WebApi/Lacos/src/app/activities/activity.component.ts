@@ -195,7 +195,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
 
     private _afterInterventionCreated() {
         this._messageBox.success(`Intervento programmato.`);
-
+        this._getActivity();
         this.interventionsCalendar?.refresh();
         this.interventionsGrid?.refresh();
     }

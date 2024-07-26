@@ -5,6 +5,7 @@ import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
 import { readData } from '../common/functions';
 import { MessageModel, MessageReadModel, MessagesListReadModel } from './models';
+import { OperatorModel } from 'src/app/shared/models/operator.model';
 
 @Injectable()
 export class MessagesService {
@@ -49,8 +50,8 @@ export class MessagesService {
             );
     }
 
-    createReply(message: MessageModel, replyAll: boolean) {
-        return this._http.put<MessageModel>(`${this._baseUrl}/create-reply/${replyAll}`, message)
+    createReply(message: MessageModel, targetOperators: string) {
+        return this._http.put<MessageModel>(`${this._baseUrl}/create-reply/${targetOperators}`, message)
             .pipe(
                 map(e => MessageModel.build(e))
             );
@@ -77,6 +78,13 @@ export class MessagesService {
             );
     }
     
+    getTargetOperators(messageId: number, replyAll: boolean) {
+        return this._http.get<Array<number>>(`${this._baseUrl}/${messageId}/${replyAll}/get-messageslist`)
+            .pipe(
+                map(e => e)
+            );
+    }
+
     getUnreadCounter(operatorId: number) {
         return this._http.get<number>(`${this._baseUrl}/unread-counter/${operatorId}`)
             .pipe(

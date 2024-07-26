@@ -136,10 +136,13 @@ public class TicketsService : ITicketsService
                     .FirstOrDefaultAsync();
                 if (job != null)
                 {
-                    Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
-                    job.Status = statusDelegate(job);
-                    jobRepository.Update(job);
-                    await dbContext.SaveChanges();
+                    if (job.Status != JobStatus.Billing && job.Status != JobStatus.Billed)
+                    {
+                        Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                        job.Status = statusDelegate(job);
+                        jobRepository.Update(job);
+                        await dbContext.SaveChanges();
+                    }
                 }
             }
         }

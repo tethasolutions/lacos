@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { Intervention, InterventionStatus } from '../services/interventions/models';
-import { NgForm } from '@angular/forms';
 import { Subject, debounce, debounceTime, distinctUntilChanged, tap } from 'rxjs';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { IJobReadModel } from '../services/jobs/models';

@@ -1,5 +1,6 @@
 import { NumberSymbol } from '@angular/common';
 import { Dictionary } from '../common/models';
+import { OperatorModel } from 'src/app/shared/models/operator.model';
 
 export class MessageReadModel {
 
@@ -53,7 +54,9 @@ export class MessageModel {
 export class MessageModalOptions {
 
     constructor(
-        readonly message: MessageModel
+        readonly message: MessageModel,
+        readonly replyAll: boolean,
+        readonly targetOperators: number[] = []
     ) {
     }
 
@@ -82,7 +85,8 @@ export class MessagesListReadModel {
         public jobId: number,
         public activityId: number,
         public ticketId: number,
-        public purchaseOrderId: number
+        public purchaseOrderId: number,
+        public elementType: string
 
     ){
         this.date = date ? new Date(date) : null;

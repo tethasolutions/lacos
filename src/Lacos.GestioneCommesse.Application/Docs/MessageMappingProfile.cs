@@ -39,7 +39,12 @@ public class MessageMappingProfile : Profile
             .Ignore(x => x.PurchaseOrder)
             .Ignore(x => x.MessageNotifications);
 
-        CreateMap<MessagesList, MessagesListReadModel>();
+        CreateMap<MessagesList, MessagesListReadModel>()
+            .MapMember(x => x.ElementType, y => (y.TicketId.HasValue) ? "T" : (
+                (y.PurchaseOrderId.HasValue) ? "O" : (
+                    (y.ActivityId.HasValue) ? "A" : "C"
+                    )
+                ));
         CreateMap<MessagesListReadModel, MessagesList>()
             .Ignore(x => x.TargetOperatorId)
             .Ignore(x => x.TargetOperator);

@@ -51,6 +51,30 @@
                     </div>
                 </div>
             </div>
+            <div class="row" *ngIf="options.targetOperators.count() > 0">
+                <div class="col-md-12">
+                    <label>Operatori</label>
+                    <div class="form-group">
+                        <kendo-multiselect [data]="operators" textField="name" valueField="id" name="operators"
+                            [(ngModel)]="options.targetOperators" required [allowCustom]="false" [valuePrimitive]="true"
+                            [readonly]="readonly">
+                            <ng-template kendoMultiSelectItemTemplate let-dataItem>
+                                <div class="d-flex gap-1">
+                                    <app-operator-avatar [options]="dataItem"></app-operator-avatar>
+                                    {{ dataItem.name }}
+                                </div>
+                            </ng-template>
+                            <ng-template kendoMultiSelectTagTemplate let-dataItem>
+                                <div class="d-flex gap-1">
+                                    <app-operator-avatar [options]="dataItem"></app-operator-avatar>
+                                    {{ dataItem.name }}
+                                </div>
+                            </ng-template>
+                        </kendo-multiselect>
+                        <div class="validation-message" [control]="form.controls['operators']"></div>
+                    </div>
+                </div>
+            </div>
             <div class="text-right mt-5">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
                     <i class="fa fa-rotate-left me-2"></i> ANNULLA

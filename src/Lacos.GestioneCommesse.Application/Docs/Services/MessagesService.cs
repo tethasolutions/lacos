@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Azure;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using Lacos.GestioneCommesse.Application.Operators.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Dal.Migrations;
 using Lacos.GestioneCommesse.Domain.Docs;
@@ -191,7 +192,7 @@ public class MessagesService : IMessagesService
         return await Get(Message.Id);
     }
 
-    public async Task<MessageDto> CreateReply(MessageDto MessageDto, bool replyAll)
+    public async Task<MessageDto> CreateReply(MessageDto MessageDto, string targetOperators)
     {
         long senderMessageId = MessageDto.Id;
         
@@ -204,36 +205,17 @@ public class MessagesService : IMessagesService
 
         if (senderMessage != null)
         {
-            if (Message.OperatorId != senderMessage.OperatorId)
+            foreach (long @operator in targetOperators.Split(",").Select(long.Parse).ToList())
             {
-                var MessageNotification = new MessageNotification
+                if (Message.OperatorId != @operator)
                 {
-                    MessageId = Message.Id,
-                    IsRead = false,
-                    OperatorId = (long)senderMessage.OperatorId
-                };
-                await notificationRepository.Insert(MessageNotification);
-            }
-            //aggiunta anche di tutti gli altri operatori ad eccezione di se stesso
-            if (replyAll)
-            {
-                List<long> messageNotificationOperators = await dbContext.ExecuteWithDisabledQueryFilters(async () => await notificationRepository.Query()
-                    .Where(x => x.MessageId == senderMessage.Id)
-                    .Select(x => x.OperatorId)
-                    .Distinct()
-                    .ToListAsync(), QueryFilter.OperatorEntity);
-                foreach (long @operator in messageNotificationOperators)
-                {
-                    if (Message.OperatorId != @operator)
+                    var messageNotificationReply = new MessageNotification
                     {
-                        var messageNotificationReply = new MessageNotification
-                        {
-                            MessageId = Message.Id,
-                            IsRead = false,
-                            OperatorId = (long)@operator
-                        };
-                        await notificationRepository.Insert(messageNotificationReply);
-                    }
+                        MessageId = Message.Id,
+                        IsRead = false,
+                        OperatorId = (long)@operator
+                    };
+                    await notificationRepository.Insert(messageNotificationReply);
                 }
             }
 
@@ -362,5 +344,34 @@ public class MessagesService : IMessagesService
             .CountAsync();
 
         return counter;
+    }
+
+    public async Task<IEnumerable<long>> GetReplyTargetOperators(long messageId, bool replyAll)
+    {
+        if (replyAll) {
+            var operators = await dbContext.ExecuteWithDisabledQueryFilters(async () => await notificationRepository.Query()
+                .Where(x => x.MessageId == messageId)
+                .Select(x => x.OperatorId)
+                .Distinct()
+                .ToListAsync(), QueryFilter.OperatorEntity);
+
+            var senderOperator = await repository.Query()
+                .Where(x => x.Id == messageId)
+                .Select(x => x.OperatorId)
+                .FirstOrDefaultAsync();
+
+            operators.Add(senderOperator);
+
+            return operators.MapTo<IEnumerable<long>>(mapper);
+        }
+        else
+        {
+            var operators = await repository.Query()
+                .Where(x => x.Id == messageId)
+                .Select(x => x.OperatorId)
+                .ToListAsync();
+
+            return operators.MapTo<IEnumerable<long>>(mapper);
+        }
     }
 }

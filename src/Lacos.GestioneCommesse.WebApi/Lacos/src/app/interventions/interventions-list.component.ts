@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, output, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { InterventionModalComponent } from './intervention-modal.component';

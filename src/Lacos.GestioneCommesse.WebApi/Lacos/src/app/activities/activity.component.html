@@ -124,7 +124,7 @@
             </div>
             <app-interventions-grid #interventionsGrid [interventionModal]="interventionModal"
                 [activityId]="activity.id" (interventionUpdated)="onInterventionsChanged()"
-                (interventionRemoved)="onInterventionsChanged()">
+                (interventionRemoved)="onInterventionsChanged()" (created)="onInterventionsChanged()">
             </app-interventions-grid>
         </ng-template>
     </kendo-tabstrip-tab>

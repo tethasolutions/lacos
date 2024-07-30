@@ -78,8 +78,15 @@ export class MessagesService {
             );
     }
     
-    getTargetOperators(messageId: number, replyAll: boolean) {
-        return this._http.get<Array<number>>(`${this._baseUrl}/${messageId}/${replyAll}/get-messageslist`)
+    getReplyTargetOperators(messageId: number, replyAll: boolean) {
+        return this._http.get<Array<number>>(`${this._baseUrl}/${messageId}/${replyAll}/get-target-operators`)
+            .pipe(
+                map(e => e)
+            );
+    }
+
+    getElementTargetOperators(senderOperatorId: number, elementId: number, elementType: string) {
+        return this._http.get<Array<number>>(`${this._baseUrl}/${senderOperatorId}/${elementId}/${elementType}/get-target-operators-by-element`)
             .pipe(
                 map(e => e)
             );

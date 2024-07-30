@@ -5,9 +5,23 @@
 </div>
 
 <div class="row">
-    <div class="col-12">
-        <button class="btn btn-primary me-2" (click)="resetFilter()" [disabled]="!hasFilter">Tutti</button>
-        <button class="btn btn-primary" (click)="filterUnread()">Da leggere ({{unreadCounter}})</button>
+    <div class="col-md-3">
+        <label>Tipo Attività</label>
+        <div class="form-group">
+            <kendo-combobox [data]="activityTypes" [valuePrimitive]="true" textField="name" valueField="id"
+                name="typeId" [suggest]="true" (valueChange)="onActivityTypeChange()"
+                [(ngModel)]="selectedActivityTypeId" [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                [allowCustom]="false">
+            </kendo-combobox>
+        </div>
+    </div>
+    <div class="col-6">
+        <label>Filtri</label>
+        <div class="form-group">
+            <button class="btn btn-primary me-2" (click)="filterUnread()" [disabled]="hasFilterUnread">Da leggere
+                ({{unreadCounter}})</button>
+            <button class="btn btn-primary" (click)="resetFilter()" [disabled]="!hasFilter">Visualizza Tutti</button>
+        </div>
     </div>
 </div>
 
@@ -83,7 +97,8 @@
                 <button class="btn btn-outline-primary btn-sm" title="Rispondi" (click)="replyMessage(dataItem,false)">
                     <i class="fas fa-reply"></i>
                 </button>
-                <button class="btn btn-outline-primary btn-sm" title="Rispondi a tutti" (click)="replyMessage(dataItem,true)">
+                <button class="btn btn-outline-primary btn-sm" title="Rispondi a tutti"
+                    (click)="replyMessage(dataItem,true)">
                     <i class="fas fa-reply-all"></i>
                 </button>
             </div>

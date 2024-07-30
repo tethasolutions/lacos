@@ -544,3 +544,7 @@ app-purchase-orders {
 #messages-grid tr.read {
     font-weight: normal;
 }
+
+kendo-grid{
+    touch-action: auto !important;
+}

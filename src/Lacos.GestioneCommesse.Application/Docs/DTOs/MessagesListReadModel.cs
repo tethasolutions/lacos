@@ -18,6 +18,7 @@ public class MessagesListReadModel
     public string? JobCode { get; set; }
     public string? JobReference { get; set; }
     public string? CustomerName {  get; set; }
+    public long? ActivityTypeId { get; set; }
     public string? ActivityType { get; set; }
     public string? ActivityColor { get; set; }
     public string? ActivityDescription { get; set; }

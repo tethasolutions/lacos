@@ -87,10 +87,17 @@ public class MessagesController : LacosApiController
             .ToDataSourceResultAsync(request);
     }
 
-    [HttpGet("{messageId}/{replyAll}/get-messageslist")]
+    [HttpGet("{messageId}/{replyAll}/get-target-operators")]
     public async Task<List<long>> GetTargetOperators(long messageId, bool replyAll)
     {
         List<long> operators = (await service.GetReplyTargetOperators(messageId, replyAll)).ToList();
+        return operators;
+    }
+
+    [HttpGet("{senderOperatorId}/{elementId}/{elementType}/get-target-operators-by-element")]
+    public async Task<List<long>> GetElementTargetOperators(long senderOperatorId, long elementId, string elementType)
+    {
+        List<long> operators = (await service.GetElementTargetOperators(senderOperatorId, elementId, elementType)).ToList();
         return operators;
     }
 

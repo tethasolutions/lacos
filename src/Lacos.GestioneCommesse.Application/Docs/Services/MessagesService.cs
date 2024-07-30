@@ -12,6 +12,7 @@ using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Net.Sockets;
 using Westcar.WebApplication.Dal;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
@@ -23,6 +24,9 @@ public class MessagesService : IMessagesService
     private readonly IRepository<MessageNotification> notificationRepository;
     private readonly IRepository<Operator> operatorRepository;
     private readonly IRepository<Domain.Docs.Activity> activityRepository;
+    private readonly IRepository<Job> jobRepository;
+    private readonly IRepository<PurchaseOrder> purchaseOrderRepository;
+    private readonly IRepository<Ticket> ticketRepository;
     private readonly IViewRepository<MessagesList> viewRepository;
     private readonly ILacosDbContext dbContext;
 
@@ -32,6 +36,9 @@ public class MessagesService : IMessagesService
         IRepository<MessageNotification> notificationRepository,
         IRepository<Operator> operatorRepository,
         IRepository<Domain.Docs.Activity> activityRepository,
+        IRepository<Job> jobRepository,
+        IRepository<PurchaseOrder> purchaseOrderRepository,
+        IRepository<Ticket> ticketRepository,
         IViewRepository<MessagesList> viewRepository,
         ILacosDbContext dbContext
     )
@@ -41,6 +48,9 @@ public class MessagesService : IMessagesService
         this.notificationRepository = notificationRepository;
         this.operatorRepository = operatorRepository;
         this.activityRepository = activityRepository;
+        this.jobRepository = jobRepository;
+        this.purchaseOrderRepository = purchaseOrderRepository;
+        this.ticketRepository = ticketRepository;
         this.viewRepository = viewRepository;
         this.dbContext = dbContext;
     }
@@ -373,5 +383,95 @@ public class MessagesService : IMessagesService
 
             return operators.MapTo<IEnumerable<long>>(mapper);
         }
+    }
+    public async Task<IEnumerable<long>> GetElementTargetOperators(long senderOperatorId, long elementId, string elementType)
+    {
+        var AdminOperators = await operatorRepository.Query()
+            .Where(e => e.User.Role == Domain.Security.Role.Administrator).ToListAsync();
+
+        List<long> operators = new List<long>();
+
+        if (AdminOperators.Any())
+        {
+            foreach (Operator @operator in AdminOperators)
+            {
+                if (senderOperatorId != @operator.Id)
+                {
+                    operators.Add(@operator.Id);
+                }
+            }
+        }
+
+        //---------JOB-------------------------------------------------------------------------------------
+        if (elementType == "J") {
+
+            Job job = await jobRepository.Get(elementId);
+            if (job != null)
+            {
+                if (job.ReferentId != null && job.ReferentId != senderOperatorId)
+                {
+                    operators.Add((long)job.ReferentId);
+                }
+            }
+        }
+
+
+        //---------ACTIVITY-------------------------------------------------------------------------------------
+        if (elementType == "A")
+        {
+            Domain.Docs.Activity activity = await activityRepository.Get(elementId);
+            if (activity != null)
+            {
+                if (activity.ReferentId != null && activity.ReferentId != senderOperatorId)
+                {
+                    operators.Add((long)activity.ReferentId);
+                }
+
+                activity = await activityRepository.Query()
+                    .Where(e => e.Id == elementId)
+                    .Include(e => e.Type)
+                    .ThenInclude(e => e.Operators)
+                    .FirstOrDefaultAsync();
+
+                if (activity.Type.Operators.Count() > 0)
+                {
+                    foreach (Operator @operator in activity.Type.Operators)
+                    {
+                        if (senderOperatorId != @operator.Id)
+                        {
+                            operators.Add((long)@operator.Id);
+                        }
+                    }
+                }
+            }
+        }
+
+        //---------TICKET-------------------------------------------------------------------------------------
+        if (elementType == "T")
+        {
+            Ticket ticket = await ticketRepository.Get(elementId);
+            if (ticket != null)
+            {
+                if (ticket.OperatorId != null && ticket.OperatorId != senderOperatorId)
+                {
+                    operators.Add((long)ticket.OperatorId);
+                }
+            }
+        }
+
+        //---------PURCHASE ORDER-------------------------------------------------------------------------------------
+        if (elementType == "O")
+        {
+            PurchaseOrder purchaseOrder = await purchaseOrderRepository.Get(elementId);
+            if (purchaseOrder != null)
+            {
+                if (purchaseOrder.OperatorId != null && purchaseOrder.OperatorId != senderOperatorId)
+                {
+                    operators.Add((long)purchaseOrder.OperatorId);
+                }
+            }
+        }
+
+        return operators.MapTo<IEnumerable<long>>(mapper);
     }
 }

@@ -59,6 +59,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
 
     attachments: Array<FileInfo> = [];
     album: string[] = [];
+    targetOperatorsArray: number[];
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
 
@@ -97,6 +98,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
 
     onActivityTypeChange() {
         this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
+        this.options.activity.shortDescription = this.selectedActivityType.name;
         this.selectedJob = this.jobs.find(e => e.id == this.options.activity.jobId);
         if (this.selectedActivityType.isInternal) {
             this.onSupplierChange();
@@ -362,10 +364,29 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         );
     }
 
+    initNewMessage() {
+        this.targetOperatorsArray = [];
+        if (this.options.activity.id == 0) 
+        {
+            this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
+            return;
+        }
+        this._subscriptions.push(
+            this._messagesService.getElementTargetOperators(this.currentOperator.id, this.options.activity.id, "A")
+                .pipe(
+                    tap(e => {
+                        this.targetOperatorsArray = e;
+                        this.createMessage();
+                    })
+                )
+                .subscribe()
+        );
+    }
+
     createMessage() {
         const today = new Date();
         const message = new MessageModel(0, today, null, this.currentOperator.id, null, this.options.activity.id, null, null);
-        const options = new MessageModalOptions(message,true);
+        const options = new MessageModalOptions(message,true, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)

@@ -21,6 +21,8 @@ import { JobsService } from '../services/jobs/jobs.service';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { TicketsService } from '../services/tickets/tickets.service';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
+import { ActivityTypesService } from '../services/activityTypes.service';
+import { ActivityTypeModel } from '../shared/models/activity-type.model';
 
 @Component({
     selector: 'app-messages-list',
@@ -52,10 +54,14 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
     unreadCounter: number;
     hasFilter: boolean;
     targetOperatorsArray: number[];
+    activityTypes: ActivityTypeModel[];
+    selectedActivityTypeId: number;
+    hasFilterUnread: boolean;
 
     readonly activityStatusNames = activityStatusNames;
 
     constructor(
+        private readonly _activityTypesService: ActivityTypesService,
         private readonly _service: MessagesService,
         private readonly _messageBox: MessageBoxService,
         private readonly _user: UserService,
@@ -70,6 +76,8 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.hasFilterUnread = true;
+        this._getActivityTypes();
         this._resumeState();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
@@ -209,12 +217,13 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
     }
 
     replyMessage(message: MessagesListReadModel, replyAll: boolean) {
+        this.targetOperatorsArray = [];
         this._subscriptions.push(
-            this._service.getTargetOperators(message.id, replyAll)
+            this._service.getReplyTargetOperators(message.id, replyAll)
                 .pipe(
                     tap(e => {
                         this.targetOperatorsArray = e;
-                        this.createMessage(message,replyAll);
+                        this.createMessage(message, replyAll);
                     })
                 )
                 .subscribe()
@@ -263,16 +272,33 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
     };
 
     resetFilter() {
+        this.hasFilterUnread = false;
+        this.selectedActivityTypeId = null;
         this.gridState.filter.filters = [];
         this._saveState();
         this._read();
     }
 
     filterUnread() {
+        this.hasFilterUnread = true;
         this.gridState.filter.filters = [
             { field: 'senderOperatorId', operator: 'neq', value: this.currentOperator.id },
             { field: 'isRead', operator: 'eq', value: false }
         ];
+        this._saveState();
+        this._read();
+    }
+
+    onActivityTypeChange() {
+        if (this.hasFilterUnread)
+            this.gridState.filter.filters = [
+                { field: 'activityTypeId', operator: 'eq', value: this.selectedActivityTypeId },
+                { field: 'isRead', operator: 'eq', value: false }
+            ];
+        else
+            this.gridState.filter.filters = [
+                { field: 'activityTypeId', operator: 'eq', value: this.selectedActivityTypeId }
+            ];
         this._saveState();
         this._read();
     }
@@ -289,4 +315,13 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
         );
     }
 
+    private _getActivityTypes() {
+        this._subscriptions.push(
+            this._activityTypesService.readActivityTypesList()
+                .pipe(
+                    tap(e => this.activityTypes = e)
+                )
+                .subscribe()
+        );
+    }
 }

@@ -50,6 +50,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     currentOperator: OperatorModel;
     unreadMessages: number;
     album: string[] = [];
+    targetOperatorsArray: number[];
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -258,10 +259,29 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         );
     }
 
+    initNewMessage() {
+        this.targetOperatorsArray = [];
+        if (this.options.id == 0) 
+        {
+            this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
+            return;
+        }
+        this._subscriptions.push(
+            this._messagesService.getElementTargetOperators(this.currentOperator.id, this.options.id, "J")
+                .pipe(
+                    tap(e => {
+                        this.targetOperatorsArray = e;
+                        this.createMessage();
+                    })
+                )
+                .subscribe()
+        );
+    }
+
     createMessage() {
         const today = new Date();
         const message = new MessageModel(0, today, null, this.currentOperator.id, this.options.id, null, null, null);
-        const options = new MessageModalOptions(message,true);
+        const options = new MessageModalOptions(message,true, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)

@@ -78,6 +78,7 @@ export class MessagesListReadModel {
         public jobCode: string,
         public jobReference: string,
         public customerName: string,
+        public activityTypeId: number,
         public activityType: string,
         public activityColor: string,
         public activityDescription: string,

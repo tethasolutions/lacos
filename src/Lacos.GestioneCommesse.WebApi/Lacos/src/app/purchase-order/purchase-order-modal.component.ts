@@ -61,6 +61,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     unreadMessages: number;
     isAdmin: boolean;
     album: string[] = [];
+    targetOperatorsArray: number[];
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
@@ -314,10 +315,29 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         );
     }
 
+    initNewMessage() {
+        this.targetOperatorsArray = [];
+        if (this.options.purchaseOrder.id == 0) 
+        {
+            this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
+            return;
+        }
+        this._subscriptions.push(
+            this._messagesService.getElementTargetOperators(this.currentOperator.id, this.options.purchaseOrder.id, "O")
+                .pipe(
+                    tap(e => {
+                        this.targetOperatorsArray = e;
+                        this.createMessage();
+                    })
+                )
+                .subscribe()
+        );
+    }
+
     createMessage() {
         const today = new Date();
         const message = new MessageModel(0, today, null, this.currentOperator.id, null, null, null, this.options.purchaseOrder.id);
-        const options = new MessageModalOptions(message,true);
+        const options = new MessageModalOptions(message,true, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)
@@ -358,6 +378,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     }
 
     editMessage(message: MessageReadModel) {
+        this.targetOperatorsArray = [];
         this._subscriptions.push(
             this._messagesService.get(message.id)
                 .pipe(

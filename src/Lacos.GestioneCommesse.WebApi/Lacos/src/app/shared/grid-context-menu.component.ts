@@ -3,6 +3,9 @@ import { BaseComponent } from "./base.component";
 import { ContextMenuComponent, ContextMenuSelectEvent } from "@progress/kendo-angular-menu";
 import { Router } from "@angular/router";
 import { CellClickEvent } from "@progress/kendo-angular-grid";
+import { JobsService } from "../services/jobs/jobs.service";
+import { JobModalComponent } from "../jobs/job-modal.component";
+import { filter, switchMap, tap } from "rxjs";
 
 @Component({
     selector: 'app-grid-context-menu',
@@ -11,11 +14,13 @@ import { CellClickEvent } from "@progress/kendo-angular-grid";
 export class GridContextMenuComponent extends BaseComponent {
 
     @ViewChild("gridMenu", {static: true}) gridMenu: ContextMenuComponent;
+    @ViewChild('jobDetailModal', { static: true }) jobDetailModal: JobModalComponent;
 
     @Input() key: string;
 
     constructor (
-        private readonly router: Router
+        private readonly router: Router,
+        private readonly _jobsService: JobsService
     )
     {
         super();
@@ -43,6 +48,15 @@ public onCellClick(
 
   public onSelect(event: ContextMenuSelectEvent): void {
     
+    if (event.item.text === "Scheda Commessa") {
+      this._subscriptions.push(
+          this._jobsService.get(this.contextItem[this.key])
+              .pipe(
+                  switchMap(e => this.jobDetailModal.open(e))
+              )
+              .subscribe()
+      );
+    }
     if (event.item.text === "Commessa") {
         this.router.navigate(['/job-details'], {queryParams: {jobId: this.contextItem[this.key]}});
     }

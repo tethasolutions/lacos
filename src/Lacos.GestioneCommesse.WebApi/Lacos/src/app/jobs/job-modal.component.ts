@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, input, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { Job, JobStatus } from '../services/jobs/models';
@@ -33,6 +33,8 @@ import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-moda
     templateUrl: 'job-modal.component.html'
 })
 export class JobModalComponent extends ModalFormComponent<Job> implements OnInit {
+
+    @Input() jobReadOnly: boolean = false;
 
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;

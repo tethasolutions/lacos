@@ -102,6 +102,9 @@ public class JobsService : IJobsService
             .Project<JobDto>(mapper)
             .FirstOrDefaultAsync();
 
+        jobDto.Messages = jobDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+            m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
+
         if (jobDto == null)
         {
             throw new NotFoundException($"Commessa con Id {id} non trovata.");
@@ -142,8 +145,8 @@ public class JobsService : IJobsService
             .Query()
             .Where(x => x.Id == jobDto.Id)
             .Include(x => x.Attachments)
-            .Include(e => e.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId
-                || m.MessageNotifications.Any(n => n.OperatorId == session.CurrentUser.OperatorId)))
+            .Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+                m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
             .SingleOrDefaultAsync();
 
         if (job == null)

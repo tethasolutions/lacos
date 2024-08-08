@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -15,6 +16,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     private readonly IRepository<PurchaseOrder> repository;
     private readonly IRepository<PurchaseOrderItem> repositoryItem;
     private readonly IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository;
+    private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
     public PurchaseOrdersService(
@@ -22,6 +24,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         IRepository<PurchaseOrder> repository,
         IRepository<PurchaseOrderItem> repositoryItem,
         IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository,
+        ILacosSession session,
         ILacosDbContext dbContext
     )
     {
@@ -29,6 +32,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         this.repository = repository;
         this.repositoryItem = repositoryItem;
         this.purchaseOrderAttachmentRepository = purchaseOrderAttachmentRepository;
+        this.session = session;
         this.dbContext = dbContext;
     }
 
@@ -44,6 +48,9 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Where(e => e.Id == id)
             .Project<PurchaseOrderDto>(mapper)
             .FirstOrDefaultAsync();
+
+        purchaseOrderDto.Messages = purchaseOrderDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+            m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
 
         if (purchaseOrderDto == null)
         {
@@ -84,7 +91,8 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Where(e => e.Id == purchaseOrderDto.Id)
             .Include(e => e.Items)
             .Include(x => x.Attachments)
-            .Include(x => x.Messages)
+            .Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+                m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
             .FirstOrDefaultAsync();
 
         if (purchaseOrder == null)

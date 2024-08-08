@@ -17,6 +17,7 @@ public class TicketsService : ITicketsService
     private readonly IRepository<Ticket> repository;
     private readonly IRepository<TicketPicture> ticketAttachmentRepository;
     private readonly IRepository<Job> jobRepository;
+    private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
@@ -38,6 +39,7 @@ public class TicketsService : ITicketsService
         IRepository<Ticket> repository,
         IRepository<TicketPicture> ticketAttachmentRepository,
         IRepository<Job> jobRepository,
+        ILacosSession session,
         ILacosDbContext dbContext
     )
     {
@@ -45,6 +47,7 @@ public class TicketsService : ITicketsService
         this.repository = repository;
         this.ticketAttachmentRepository = ticketAttachmentRepository;
         this.jobRepository = jobRepository;
+        this.session = session;
         this.dbContext = dbContext;
     }
 
@@ -60,6 +63,9 @@ public class TicketsService : ITicketsService
             .Where(e => e.Id == id)
             .Project<TicketDto>(mapper)
             .FirstOrDefaultAsync();
+
+        TicketDto.Messages = TicketDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+            m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
 
         if (TicketDto == null)
         {
@@ -103,7 +109,8 @@ public class TicketsService : ITicketsService
             .Where(e => e.Id == TicketDto.Id)
             .Include(e => e.Activity)
             .Include(e => e.Pictures)
-            .Include(x => x.Messages)
+            .Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+                m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
             .FirstOrDefaultAsync();
 
         if (Ticket == null)

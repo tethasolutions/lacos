@@ -1,0 +1,79 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>Stato Avanzamento Commesse</h3>
+    </div>
+
+</div>
+
+<app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
+
+<kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+    [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
+    scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback"
+    (cellClick)="gridMenu.onCellClick($event)">
+
+    <kendo-grid-column field="jobDate" title="Data" filter="date" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.jobDate | date:'dd/MM/yyyy'}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="jobCode" title="Cod." [width]="1">
+    </kendo-grid-column>
+    <kendo-grid-column field="customerName" title="Cliente">
+    </kendo-grid-column>
+    <kendo-grid-column field="jobReference" title="Riferimento">
+    </kendo-grid-column>
+    <kendo-grid-column field="jobStatus" title="Stato" [width]="1" filter="numeric" class="job-status">
+        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+            let-filterService="filterService">
+            <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
+                [data]="jobStatusNames">
+            </app-multiselect-grid-column-filter>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span class="text-nowrap">
+                {{dataItem.jobStatus | jobStatus}}
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="activities_progress" title="Attività" width="250">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div class="progress-container" [ngClass]="{'progress-hide':(dataItem.activities_progress==-1)}" kendoTooltip
+            title="Attività evase {{dataItem.activities_completed}} / {{dataItem.activities_list}}">
+          <div class="progress-bar" [style.width.%]="dataItem.activities_progress">{{ dataItem.activities_progress }}%</div>
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="interventions_progress" title="Interventi" width="250">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div class="progress-container" [ngClass]="{'progress-hide':(dataItem.interventions_progress==-1)}" kendoTooltip
+        title="Interventi evasi {{dataItem.interventions_completed}} / {{dataItem.interventions_list}}">
+          <div class="progress-bar" [style.width.%]="dataItem.interventions_progress">{{ dataItem.interventions_progress }}%</div>
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="purchaseOrders_progress" title="Ordini Acquisto" width="250">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div class="progress-container" [ngClass]="{'progress-hide':(dataItem.purchaseOrders_progress==-1)}" kendoTooltip
+        title="Ordini evasi {{dataItem.purchaseOrders_completed}} / {{dataItem.purchaseOrders_list}}">
+          <div class="progress-bar" [style.width.%]="dataItem.purchaseOrders_progress">{{ dataItem.purchaseOrders_progress }}%</div>
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+    <!-- <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="job-status">
+        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+            let-filterService="filterService">
+            <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
+                [data]="jobStatusNames">
+            </app-multiselect-grid-column-filter>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span class="text-nowrap">
+                {{dataItem.status | jobStatus}}
+            </span>
+        </ng-template>
+    </kendo-grid-column> -->
+
+</kendo-grid>
+
+<app-job-modal #jobModal></app-job-modal>

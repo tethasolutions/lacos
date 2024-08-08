@@ -48,6 +48,27 @@ export interface IJobReadModel {
 
 }
 
+export interface IJobProgressStatus {
+
+    readonly jobId: number;
+    readonly jobCode: string;
+    readonly jobYear: number;
+    readonly jobDate: Date | string;
+    readonly jobReference: string;
+    readonly jobStatus: JobStatus;
+    readonly customerName: string;
+    readonly activities_list: number;
+    readonly activities_completed: number;
+    readonly activities_progress: number;
+    readonly interventions_list: number;
+    readonly interventions_completed: number;
+    readonly interventions_progress: number;
+    readonly purchaseOrders_list: number;
+    readonly purchaseOrders_completed: number;
+    readonly purchaseOrders_progress: number;
+
+}
+
 export class Job {
 
     date: Date;

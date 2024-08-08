@@ -159,4 +159,11 @@ public class JobsController : LacosApiController
         List<JobAttachmentReadModel> jobsAttachment = (await service.GetJobAttachments(id)).ToList();
         return jobsAttachment;
     }
+
+    [HttpGet("get-jobs-progress-status")]
+    public Task<DataSourceResult> GetMessagesList([DataSourceRequest] DataSourceRequest request)
+    {
+        return service.GetJobsProgressStatus()
+            .ToDataSourceResultAsync(request);
+    }
 }

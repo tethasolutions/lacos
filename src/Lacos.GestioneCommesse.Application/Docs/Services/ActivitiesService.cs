@@ -22,6 +22,7 @@ public class ActivitiesService : IActivitiesService
     private readonly ILacosDbContext dbContext;
     private readonly IRepository<ActivityProduct> activityProductRepository;
     private readonly IRepository<ActivityAttachment> activityAttachmentRepository;
+    private readonly IRepository<ActivityType> activityTypeRepository;
     private readonly IRepository<Product> productRepository;
     private readonly IRepository<Job> jobRepository;
     private readonly IRepository<Ticket> ticketRepository;
@@ -29,17 +30,19 @@ public class ActivitiesService : IActivitiesService
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
     j.Activities
-    .Any() &&
-    j.Activities.All(a => a.Status == ActivityStatus.Completed)
-    ?
-        JobStatus.Completed
-    : j.Activities
-            .Any(a => a.Status == ActivityStatus.InProgress)
-            ? JobStatus.InProgress
-            : j.Activities
-                .Any(a => a.Status == ActivityStatus.Pending)
-                ? JobStatus.Pending
-                : j.Status;
+    .All(e => e.Type.InfluenceJobStatus != true) 
+    ? j.Status
+    :
+        j.Activities.Where(e => e.Type.InfluenceJobStatus == true).All(a => a.Status == ActivityStatus.Completed)
+        ?
+            JobStatus.Completed
+        : j.Activities
+                .Any(a => a.Status == ActivityStatus.InProgress && a.Type.InfluenceJobStatus.GetValueOrDefault())
+                ? JobStatus.InProgress
+                : j.Activities
+                    .Any(a => a.Status == ActivityStatus.Pending && a.Type.InfluenceJobStatus.GetValueOrDefault())
+                    ? JobStatus.Pending
+                    : j.Status;
 
     public ActivitiesService(
         IMapper mapper,
@@ -50,7 +53,8 @@ public class ActivitiesService : IActivitiesService
         IRepository<Job> jobRepository,
         IRepository<Ticket> ticketRepository,
         ILacosSession session, 
-        IRepository<ActivityAttachment> activityAttachmentRepository
+        IRepository<ActivityAttachment> activityAttachmentRepository,
+        IRepository<ActivityType> activityTypeRepository
     )
     {
         this.mapper = mapper;
@@ -58,6 +62,7 @@ public class ActivitiesService : IActivitiesService
         this.dbContext = dbContext;
         this.activityProductRepository = activityProductRepository;
         this.activityAttachmentRepository= activityAttachmentRepository;
+        this.activityTypeRepository = activityTypeRepository;
         this.productRepository = productRepository;
         this.jobRepository = jobRepository;
         this.ticketRepository = ticketRepository;
@@ -90,6 +95,9 @@ public class ActivitiesService : IActivitiesService
             .Where(e => e.Id == id)
             .Project<ActivityDto>(mapper)
             .FirstOrDefaultAsync();
+
+        activityDto.Messages = activityDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId || 
+            m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
 
         if (activityDto == null)
         {
@@ -138,7 +146,8 @@ public class ActivitiesService : IActivitiesService
 
         await dbContext.SaveChanges();
 
-        if (activity.JobId != null)
+        ActivityType activityType = await activityTypeRepository.Get(activity.TypeId);
+        if ((bool)activityType.InfluenceJobStatus && activity.JobId != null)
         {
             Job job = await jobRepository.Query()
                 .Where(e => e.Id == activity.JobId)
@@ -165,7 +174,8 @@ public class ActivitiesService : IActivitiesService
             .Query()
             .Where(x => x.Id == activityDto.Id)
             .Include(x => x.Attachments)
-            .Include(x => x.Messages)
+            .Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId || 
+                m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
             .SingleOrDefaultAsync();
 
         if (activity == null)
@@ -183,11 +193,13 @@ public class ActivitiesService : IActivitiesService
         repository.Update(activity);
         await dbContext.SaveChanges();
 
-        if (activity.JobId != null)
+        ActivityType activityType = await activityTypeRepository.Get(activity.TypeId);
+        if ((bool)activityType.InfluenceJobStatus && activity.JobId != null)
         {
             Job job = await jobRepository.Query()
                 .Where(e => e.Id == activity.JobId)
                 .Include(e => e.Activities)
+                .ThenInclude(e => e.Type)
                 .FirstOrDefaultAsync();
             if (job != null)
             {

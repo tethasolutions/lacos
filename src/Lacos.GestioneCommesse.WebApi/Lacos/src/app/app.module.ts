@@ -127,6 +127,7 @@ import { InterventionsKoComponent } from './interventions/interventions-ko.compo
 import { ActivitiesFromProductComponent } from './activities/activities-from-product.component';
 import { InterventionsSingleProductGridComponent } from './interventions/interventions-singleproduct-grid.component';
 import { MessagesListComponent } from './messages/messages-list.component';
+import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -171,6 +172,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         JobCopyModalComponent,
         JobStatusPipe,
         JobDetailsComponent,
+        JobsProgressStatusComponent,
         DropdownlistGridColumnFilterComponent,
         MultiselectGridColumnFilterComponent,
         ActivitiesComponent,

@@ -13,7 +13,7 @@ public interface IMessagesService
     IQueryable<MessageReadModel> Query();
     Task<MessageDto> Get(long id);
     Task<IEnumerable<MessageReadModel>> GetMessages(long jobId, long activityId, long ticketId, long purchaseOrderId);
-    Task<MessageDto> Create(MessageDto jobDto);
+    Task<MessageDto> Create(MessageDto jobDto, string targetOperators);
     Task<MessageDto> CreateReply(MessageDto jobDto, string targetOperators);
     Task<MessageDto> Update(MessageDto jobDto);
     Task Delete(long id);

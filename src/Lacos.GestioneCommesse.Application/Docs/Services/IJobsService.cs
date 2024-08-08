@@ -20,4 +20,5 @@ public interface IJobsService
     Task<JobAttachmentReadModel> DownloadJobAttachment(string filename);
     Task<JobAttachmentDto> UpdateJobAttachment(long id, JobAttachmentDto attachmentDto);
     Task<JobAttachmentDto> CreateJobAttachment(JobAttachmentDto attachmentDto);
+    IQueryable<JobsProgressStatusReadModel> GetJobsProgressStatus();
 }

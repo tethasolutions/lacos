@@ -101,4 +101,10 @@ export class JobsService {
                 map(e => new JobAttachmentUploadFileModel(e.fileName, e.originalFileName))
             );
     }
+    
+    getJobsProgressStatus(state: State) {
+        const url = `${this._baseUrl}/get-jobs-progress-status`
+
+        return readData(this._http, state, url);
+    }
 }

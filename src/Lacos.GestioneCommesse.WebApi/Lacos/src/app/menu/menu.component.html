@@ -33,7 +33,7 @@
             <span class="navbar-text" *ngIf="user">
                 Benvenuto, <b>{{user.userName}}</b>! 
                 
-                <a [routerLink]="['/activities']" [queryParams]="{referentId: currentOperator.id}" routerLinkActive="active"
+                <a [routerLink]="['/activities']" [queryParams]="{referentId: currentOperator?.id}" routerLinkActive="active"
                 class="red-number bage-number" *ngIf="newActivitiesCounter.newActivities> 0">{{newActivitiesCounter.newActivities}}</a>
 
                 <a [routerLink]="['/messages-list']" routerLinkActive="active"

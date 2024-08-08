@@ -33,17 +33,19 @@ public class InterventionsService : IInterventionsService
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
     j.Activities
-    .Any() &&
-    j.Activities.All(a => a.Status == ActivityStatus.Completed)
-    ?
-        JobStatus.Completed
-    : j.Activities
-            .Any(a => a.Status == ActivityStatus.InProgress)
-            ? JobStatus.InProgress
-            : j.Activities
-                .Any(a => a.Status == ActivityStatus.Pending)
-                ? JobStatus.Pending
-                : j.Status;
+    .All(e => e.Type.InfluenceJobStatus != true)
+    ? j.Status
+    :
+        j.Activities.Where(e => e.Type.InfluenceJobStatus == true).All(a => a.Status == ActivityStatus.Completed)
+        ?
+            JobStatus.Completed
+        : j.Activities
+                .Any(a => a.Status == ActivityStatus.InProgress && a.Type.InfluenceJobStatus.GetValueOrDefault())
+                ? JobStatus.InProgress
+                : j.Activities
+                    .Any(a => a.Status == ActivityStatus.Pending && a.Type.InfluenceJobStatus.GetValueOrDefault())
+                    ? JobStatus.Pending
+                    : j.Status;
 
     public InterventionsService(
         IMapper mapper,
@@ -272,6 +274,7 @@ public class InterventionsService : IInterventionsService
             {
                 Id = e.Id,
                 JobId = e.JobId,
+                InfluenceJobStatus = e.Type.InfluenceJobStatus,
                 CurrentStatus = e.Status,
                 Status = !e.Interventions.Any()
                     ? ActivityStatus.Pending
@@ -290,11 +293,12 @@ public class InterventionsService : IInterventionsService
 
         await dbContext.SaveChanges();
 
-        if (activity.JobId != null)
+        if ((bool)activity.InfluenceJobStatus && activity.JobId != null)
         {
             Job job = await jobRepository.Query()
                 .Where(e => e.Id == activity.JobId)
                 .Include(e => e.Activities)
+                .ThenInclude(e => e.Type)
                 .FirstOrDefaultAsync();
             if (job != null)
             {

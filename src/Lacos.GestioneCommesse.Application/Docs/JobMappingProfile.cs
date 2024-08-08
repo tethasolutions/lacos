@@ -64,6 +64,9 @@ public class JobMappingProfile : Profile
         CreateMap<JobAttachmentDto, JobAttachment>()
            .Ignore(x => x.Job)
            .IgnoreCommonMembers();
+
+        CreateMap<JobsProgressStatus, JobsProgressStatusReadModel>();
+        CreateMap<JobsProgressStatusReadModel, JobsProgressStatus>();
     }
     private static void AfterMap(JobDto jobDto, Job job, ResolutionContext context)
     {

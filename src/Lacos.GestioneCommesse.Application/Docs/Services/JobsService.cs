@@ -5,9 +5,11 @@ using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using Westcar.WebApplication.Dal;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -17,6 +19,8 @@ public class JobsService : IJobsService
     private readonly IRepository<Job> repository;
     private readonly IRepository<Operator> operatorRepository;
     private readonly IRepository<JobAttachment> jobAttachmentRepository;
+    private readonly IViewRepository<JobsProgressStatus> jobsProgressStatusRepository;
+    private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
     public JobsService(
@@ -24,6 +28,8 @@ public class JobsService : IJobsService
         IRepository<Job> repository,
         IRepository<Operator> operatorRepository,
         IRepository<JobAttachment> jobAttachmentRepository,
+        IViewRepository<JobsProgressStatus> jobsProgressStatusRepository,
+        ILacosSession session,
         ILacosDbContext dbContext
     )
     {
@@ -31,6 +37,8 @@ public class JobsService : IJobsService
         this.repository = repository;
         this.operatorRepository = operatorRepository;
         this.jobAttachmentRepository = jobAttachmentRepository;
+        this.jobsProgressStatusRepository = jobsProgressStatusRepository;
+        this.session = session;
         this.dbContext = dbContext;
     }
 
@@ -134,7 +142,8 @@ public class JobsService : IJobsService
             .Query()
             .Where(x => x.Id == jobDto.Id)
             .Include(x => x.Attachments)
-            .Include(x => x.Messages)
+            .Include(e => e.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId
+                || m.MessageNotifications.Any(n => n.OperatorId == session.CurrentUser.OperatorId)))
             .SingleOrDefaultAsync();
 
         if (job == null)
@@ -287,5 +296,12 @@ public class JobsService : IJobsService
 
         return attachment.MapTo<JobAttachmentDto>(mapper);
     }
-    //------------------------------------------------------------------------------------------------------------
+
+    public IQueryable<JobsProgressStatusReadModel> GetJobsProgressStatus()
+    {
+        var jobsProgressStatus = jobsProgressStatusRepository.Query();
+
+        return jobsProgressStatus
+            .Project<JobsProgressStatusReadModel>(mapper);
+    }
 }

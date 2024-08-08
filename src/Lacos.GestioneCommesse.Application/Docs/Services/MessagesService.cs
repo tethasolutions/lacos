@@ -76,7 +76,7 @@ public class MessagesService : IMessagesService
         return MessageDto;
     }  
 
-    public async Task<MessageDto> Create(MessageDto MessageDto)
+    public async Task<MessageDto> Create(MessageDto MessageDto, string targetOperators)
     {
         var Message = MessageDto.MapTo<Message>(mapper);
 
@@ -84,120 +84,24 @@ public class MessagesService : IMessagesService
 
         await dbContext.SaveChanges();
 
-        //
-
-        Message message = await repository.Query()
-            .Where(e => e.Id == Message.Id)
-            .Include(e => e.Job)
-            .Include(e => e.Ticket)
-            .Include(e => e.Activity)
-            .Include(e => e.PurchaseOrder)
-            .FirstOrDefaultAsync();
-
-        var AdminOperators = await operatorRepository.Query()
-            .Where(e => e.User.Role == Domain.Security.Role.Administrator).ToListAsync();
-
-        //---------ADMIN OPERATORS ------------------------------------------------------------------------
-        if (AdminOperators.Any())
+        if (Message != null)
         {
-            foreach (Operator @operator in AdminOperators)
+            foreach (long @operator in targetOperators.Split(",").Select(long.Parse).ToList())
             {
-                if (message.OperatorId != @operator.Id)
+                if (Message.OperatorId != @operator)
                 {
-                    var MessageNotification = new MessageNotification
+                    var messageNotificationReply = new MessageNotification
                     {
-                        MessageId = message.Id,
+                        MessageId = Message.Id,
                         IsRead = false,
-                        OperatorId = @operator.Id
+                        OperatorId = (long)@operator
                     };
-                    await notificationRepository.Insert(MessageNotification);
+                    await notificationRepository.Insert(messageNotificationReply);
                 }
             }
+
+            await dbContext.SaveChanges();
         }
-
-        //---------JOB-------------------------------------------------------------------------------------
-        if (message.JobId != null)
-        {
-            if (message.Job.ReferentId != null && message.Job.ReferentId != message.OperatorId)
-            {
-                var MessageNotification = new MessageNotification
-                {
-                    MessageId = message.Id,
-                    IsRead = false,
-                    OperatorId = (long)message.Job.ReferentId
-                };
-                await notificationRepository.Insert(MessageNotification);
-            }
-        }
-
-        //---------ACTIVITY-------------------------------------------------------------------------------------
-        if (message.ActivityId != null)
-        {
-            if (message.Activity.ReferentId != null && message.Activity.ReferentId != message.OperatorId)
-            {
-                var MessageNotification = new MessageNotification
-                {
-                    MessageId = message.Id,
-                    IsRead = false,
-                    OperatorId = (long)message.Activity.ReferentId
-                };
-                await notificationRepository.Insert(MessageNotification);
-            }
-
-            Domain.Docs.Activity activity = await activityRepository.Query()
-                .Where(e => e.Id == message.ActivityId)
-                .Include(e => e.Type)
-                .ThenInclude(e => e.Operators)
-                .FirstOrDefaultAsync();
-
-            if (activity.Type.Operators.Count() > 0)
-            {
-                foreach (Operator @operator in message.Activity.Type.Operators)
-                {
-                    if (message.OperatorId != @operator.Id)
-                    {
-                        var MessageNotification = new MessageNotification
-                        {
-                            MessageId = message.Id,
-                            IsRead = false,
-                            OperatorId = @operator.Id
-                        };
-                        await notificationRepository.Insert(MessageNotification);
-                    }
-                }
-            }
-        }
-
-        //---------TICKET-------------------------------------------------------------------------------------
-        if (message.TicketId != null)
-        {
-            if (message.Ticket.OperatorId != null && message.Ticket.OperatorId != message.OperatorId)
-            {
-                var MessageNotification = new MessageNotification
-                {
-                    MessageId = message.Id,
-                    IsRead = false,
-                    OperatorId = (long)message.Ticket.OperatorId
-                };
-                await notificationRepository.Insert(MessageNotification);
-            }
-        }
-
-        //---------PURCHASE ORDER-------------------------------------------------------------------------------------
-        if (message.PurchaseOrderId != null)
-        {
-            if (message.PurchaseOrder.OperatorId != null && message.PurchaseOrder.OperatorId != message.OperatorId)
-            {
-                var MessageNotification = new MessageNotification
-                {
-                    MessageId = message.Id,
-                    IsRead = false,
-                    OperatorId = (long)message.PurchaseOrder.OperatorId
-                };
-                await notificationRepository.Insert(MessageNotification);
-            }
-        }
-        await dbContext.SaveChanges();
 
         return await Get(Message.Id);
     }

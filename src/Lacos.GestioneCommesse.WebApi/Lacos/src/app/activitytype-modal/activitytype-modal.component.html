@@ -37,7 +37,7 @@
                 </div>      
             </div>
             <div class="row riga-form">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label>Immagine obbligatoria</label>
                     <div class="form-group">
                         <kendo-switch name="pictureRequired" [(ngModel)]="options.pictureRequired" onLabel="Si" offLabel="No">
@@ -59,6 +59,14 @@
                         <kendo-switch name="isExternal" [(ngModel)]="options.isExternal" onLabel="Si" offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['isExternal']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Influenza stato commessa</label>
+                    <div class="form-group">
+                        <kendo-switch name="influenceJobStatus" [(ngModel)]="options.influenceJobStatus" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['influenceJobStatus']"></div>
                     </div>
                 </div>
             </div>

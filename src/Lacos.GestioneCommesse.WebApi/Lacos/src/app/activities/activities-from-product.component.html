@@ -28,9 +28,9 @@
     scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback"
     (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
 
-    <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color">
+    <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color" kendoTooltip>
         <ng-template kendoGridCellTemplate let-dataItem>
-            <div [style.background-color]="dataItem.activityColor">&nbsp;</div>
+            <div [style.background-color]="dataItem.activityColor" title="{{dataItem.type}}">&nbsp;</div>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="customer" title="Cliente">

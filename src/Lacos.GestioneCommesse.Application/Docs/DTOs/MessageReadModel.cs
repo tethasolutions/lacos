@@ -19,4 +19,5 @@ public class MessageReadModel : BaseEntityDto
     public long? PurchaseOrderId { get; set; }
     public string? ElementCode { get; set; }
     public bool IsRead { get; set; }
+    public string? TargetOperatorsId { get; set; }
 }

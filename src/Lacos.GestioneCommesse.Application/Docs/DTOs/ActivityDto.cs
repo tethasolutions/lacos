@@ -26,4 +26,5 @@ public class ActivityDto
 
     public IEnumerable<ActivityAttachmentDto>? Attachments { get; set; }
     public IEnumerable<MessageReadModel>? Messages { get; set; }
+
 }

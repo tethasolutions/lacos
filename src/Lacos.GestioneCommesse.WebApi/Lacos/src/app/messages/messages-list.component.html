@@ -71,9 +71,9 @@
     </kendo-grid-column>
     <kendo-grid-column field="jobReference" title="Riferimento">
     </kendo-grid-column>
-    <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color">
+    <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color" kendoTooltip>
         <ng-template kendoGridCellTemplate let-dataItem>
-            <div [style.background-color]="dataItem.activityColor">&nbsp;</div>
+            <div [style.background-color]="dataItem.activityColor" title="{{dataItem.activityType}}">&nbsp;</div>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="activityDescription" title="Attività">

@@ -3226,3 +3226,41 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240808082844_nuovo campo tipo attività')
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [NotUpdateJobStatus] bit NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240808082844_nuovo campo tipo attività')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240808082844_nuovo campo tipo attività', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240808084409_aggiorna campo tipo attività')
+BEGIN
+    EXEC sp_rename N'[Registry].[ActivityTypes].[NotUpdateJobStatus]', N'InfluenceJobStatus', N'COLUMN';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240808084409_aggiorna campo tipo attività')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240808084409_aggiorna campo tipo attività', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

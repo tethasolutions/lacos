@@ -356,7 +356,7 @@ app-jobs {
     }
 }
 
-app-jobs-completed {
+app-jobs-completed, app-jobs-progress-status {
 
     .job-completed .job-status {
         @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
@@ -547,4 +547,25 @@ app-purchase-orders {
 
 kendo-grid{
     touch-action: auto !important;
+}
+
+.progress-container {
+    position: relative;
+    width: 100%;
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    height: 20px;
+    background-color: #4caf50;
+    text-align: center;
+    color: white;
+    line-height: 20px; /* Align the text vertically */
+  }
+  
+.progress-hide {
+    display: none;
 }

@@ -270,7 +270,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
             this.messageModal.open(options)
                 .pipe(
                     filter(e => e),
-                    switchMap(() => this._messagesService.create(message)),
+                    switchMap(() => this._messagesService.create(message, options.targetOperators.join(","))),
                     tap(e => {
                         var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true);
                         this.options.messages.push(msg);

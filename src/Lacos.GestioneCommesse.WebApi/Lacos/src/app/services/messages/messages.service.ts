@@ -43,8 +43,8 @@ export class MessagesService {
         return readData(this._http, state, url);
     }
 
-    create(message: MessageModel) {
-        return this._http.post<MessageModel>(this._baseUrl, message)
+    create(message: MessageModel, targetOperators: string) {
+        return this._http.put<MessageModel>(`${this._baseUrl}/create/${targetOperators}`, message)
             .pipe(
                 map(e => MessageModel.build(e))
             );

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, input } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, input } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { CellClickEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { saveAs } from '@progress/kendo-file-saver';
@@ -34,6 +34,7 @@ export class InterventionsKoComponent extends BaseComponent implements OnInit {
 
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     album: string[] = [];
+    screenWidth: number;
 
     constructor(
         private readonly _service: InterventionsService,
@@ -44,7 +45,20 @@ export class InterventionsKoComponent extends BaseComponent implements OnInit {
 
     ngOnInit() {        
         this._read();
-    }
+        this.updateScreenSize();
+      }
+    
+      @HostListener('window:resize', ['$event'])
+      onResize(event: Event): void {
+        this.updateScreenSize();
+      }
+    
+      private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth -44;
+        if (this.screenWidth > 1876) this.screenWidth = 1876;
+        if (this.screenWidth < 1400) this.screenWidth = 1400;     
+      }
+
 
     refresh() {
         this._read();

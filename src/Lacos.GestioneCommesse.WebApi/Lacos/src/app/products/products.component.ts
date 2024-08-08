@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
@@ -36,6 +36,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   };
 
   productSelezionato = new ProductModel();
+  screenWidth: number;
 
   constructor(
       private readonly _productsService: ProductsService,
@@ -46,7 +47,20 @@ export class ProductsComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     this._readProducts();
+    this.updateScreenSize();
   }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateScreenSize();
+  }
+
+  private updateScreenSize(): void {
+    this.screenWidth = window.innerWidth -44;
+    if (this.screenWidth > 1876) this.screenWidth = 1876;
+    if (this.screenWidth < 1400) this.screenWidth = 1400;     
+  }
+
 
   dataStateChange(state: State) {
     this.stateGridProducts = state;

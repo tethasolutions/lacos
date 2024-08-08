@@ -13,11 +13,12 @@
 
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
+<div class="grid-container">
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
     (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback"
     (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)"
-    scrollable="none">
+    scrollable="none" [style.width.px]="screenWidth" >
 
     <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color" width="1" kendoTooltip>
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -68,8 +69,8 @@
     </kendo-grid-column>
     <kendo-grid-column field="referentName" title="Operatore">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <div *ngIf="!dataItem.isNewReferent || dataItem.referentId != currentOperator.id">{{dataItem.referentName}}</div>
-            <div *ngIf="dataItem.isNewReferent && dataItem.referentId == currentOperator.id" class="job-alert">
+            <div *ngIf="!dataItem.isNewReferent || dataItem.referentId != currentOperator?.id">{{dataItem.referentName}}</div>
+            <div *ngIf="dataItem.isNewReferent && dataItem.referentId == currentOperator?.id" class="job-alert">
                 {{dataItem.referentName}} <i class="fa fa-bell" aria-hidden="true"></i>
             </div>
         </ng-template>
@@ -103,6 +104,7 @@
     </kendo-grid-column>
 
 </kendo-grid>
+</div>
 
 <app-activity-modal #activityModal></app-activity-modal>
 <app-customer-modal #customerModal></app-customer-modal>

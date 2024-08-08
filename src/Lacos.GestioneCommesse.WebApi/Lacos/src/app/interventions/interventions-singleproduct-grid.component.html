@@ -1,6 +1,6 @@
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="false"
-    scrollable="none" (dataStateChange)="dataStateChange($event)">
+    scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)">
 
     <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric">
         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"

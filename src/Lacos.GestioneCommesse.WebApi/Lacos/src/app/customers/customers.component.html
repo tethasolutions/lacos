@@ -14,7 +14,7 @@
             [skip]="stateGridCustomers.skip" [sort]="stateGridCustomers.sort" 
             [filter]="stateGridCustomers.filter"
             [group]="stateGridCustomers.group" filterable="menu" 
-            [sortable]="true" [pageable]="true" scrollable="none"
+            [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
             (dataStateChange)="dataStateChange($event)">
     <kendo-grid-column field="name" title="Nominativo"></kendo-grid-column>
     <kendo-grid-column field="telephone" title="Telefono"></kendo-grid-column>
@@ -46,7 +46,7 @@
                 </button>
             </div>
         </div>
-        <kendo-grid [data]="dataItem.addresses" [sortable]="false" [pageable]="false" scrollable="none">
+        <kendo-grid [data]="dataItem.addresses" [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth">
             <kendo-grid-column field="description" title="Tipo Indirizzo"></kendo-grid-column>
             <kendo-grid-column field="city" title="Città"></kendo-grid-column>
             <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>

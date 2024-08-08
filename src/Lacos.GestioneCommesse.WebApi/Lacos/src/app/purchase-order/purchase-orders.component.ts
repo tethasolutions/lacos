@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -30,7 +30,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     @ViewChild('jobsAttachmentsModal', { static: true }) jobsAttachmentsModal: JobsAttachmentsModalComponent;
     user: User;
     currentOperator: OperatorModel;
-
+    screenWidth: number;
+    
     data: GridDataResult;
     gridState: State = {
         skip: 0,
@@ -68,7 +69,20 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         this._subscribeRouteParams();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
-    }
+        this.updateScreenSize();
+      }
+    
+      @HostListener('window:resize', ['$event'])
+      onResize(event: Event): void {
+        this.updateScreenSize();
+      }
+    
+      private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth -44;
+        if (this.screenWidth > 1876) this.screenWidth = 1876;
+        if (this.screenWidth < 1400) this.screenWidth = 1400;     
+      }
+
 
     dataStateChange(state: State) {
         this.gridState = state;

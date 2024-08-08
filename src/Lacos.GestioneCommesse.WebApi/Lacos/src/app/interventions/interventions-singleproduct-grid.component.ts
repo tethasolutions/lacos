@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
@@ -19,6 +19,7 @@ export class InterventionsSingleProductGridComponent extends BaseComponent imple
     @ViewChild('interventionProductModal', { static: true }) interventionProductModalComponent: InterventionProductChecklistItemsModalComponent;
 
     selectedInterventionProduct: IInterventionProductReadModel;
+    screenWidth: number;
 
     data: GridDataResult;
     gridState: State = {
@@ -36,7 +37,20 @@ export class InterventionsSingleProductGridComponent extends BaseComponent imple
 
     ngOnInit() {
         this._read();
-    }
+        this.updateScreenSize();
+      }
+    
+      @HostListener('window:resize', ['$event'])
+      onResize(event: Event): void {
+        this.updateScreenSize();
+      }
+    
+      private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth -44;
+        if (this.screenWidth > 1876) this.screenWidth = 1876;
+        if (this.screenWidth < 1400) this.screenWidth = 1400;     
+      }
+
 
     ngOnChanges(changes: SimpleChanges) {
         if ((changes['activityId'] && this.activityId) && (changes['product'] && this.product)) {

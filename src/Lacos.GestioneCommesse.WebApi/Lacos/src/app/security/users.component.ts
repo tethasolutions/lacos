@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
@@ -16,6 +16,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
     @ViewChild('userModal', { static: true })
     userModal: UserModalComponent;
+    screenWidth: number;
 
     data: GridDataResult;
     state: State = {
@@ -34,7 +35,20 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
     ngOnInit() {
         this._read();
-    }
+        this.updateScreenSize();
+      }
+    
+      @HostListener('window:resize', ['$event'])
+      onResize(event: Event): void {
+        this.updateScreenSize();
+      }
+    
+      private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth -44;
+        if (this.screenWidth > 1876) this.screenWidth = 1876;
+        if (this.screenWidth < 1400) this.screenWidth = 1400;     
+      }
+
 
     dataStateChange(state: State) {
         this.state = state;

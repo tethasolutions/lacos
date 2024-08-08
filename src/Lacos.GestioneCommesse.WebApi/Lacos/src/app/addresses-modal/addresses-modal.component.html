@@ -26,7 +26,7 @@
                 </button>
             </div>
         </div>
-        <kendo-grid [data]="customer.addresses" [sortable]="false" [pageable]="false" scrollable="none" *ngIf="customer.id != null">
+        <kendo-grid [data]="customer.addresses" [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth" *ngIf="customer.id != null">
             <kendo-grid-column field="city" title="Città"></kendo-grid-column>
             <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
             <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
@@ -51,7 +51,7 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
-        <kendo-grid [data]="supplier.addresses" [sortable]="false" [pageable]="false" scrollable="none" *ngIf="supplier.id != null">
+        <kendo-grid [data]="supplier.addresses" [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth" *ngIf="supplier.id != null">
             <kendo-grid-column field="city" title="Città"></kendo-grid-column>
             <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
             <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>

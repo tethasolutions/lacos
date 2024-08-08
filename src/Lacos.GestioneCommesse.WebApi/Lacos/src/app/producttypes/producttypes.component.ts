@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { GridDataResult, 
   GridComponent,
   CancelEvent,
@@ -38,6 +38,8 @@ export class ProductTypesComponent extends BaseComponent implements OnInit {
   @Input() productType = new ProductTypeModel();
   @ViewChild('productTypeModal', { static: true }) productTypeModal: ProductTypeModalComponent;
 
+  screenWidth: number;
+  
   constructor(
       private readonly _productTypesService: ProductTypesService,
       private readonly _messageBox: MessageBoxService,
@@ -48,7 +50,20 @@ export class ProductTypesComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
       this._readProductTypes();
-  }
+      this.updateScreenSize();
+    }
+  
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
+      this.updateScreenSize();
+    }
+  
+    private updateScreenSize(): void {
+      this.screenWidth = window.innerWidth -44;
+      if (this.screenWidth > 1876) this.screenWidth = 1876;
+      if (this.screenWidth < 1400) this.screenWidth = 1400;     
+    }
+
 
   dataStateChange(state: State) {
       this.stateGridProductTypes = state;

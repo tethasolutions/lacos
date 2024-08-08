@@ -14,7 +14,7 @@
             [skip]="stateGridOperators.skip" [sort]="stateGridOperators.sort" 
             [filter]="stateGridOperators.filter"
             [group]="stateGridOperators.group" filterable="menu" 
-            [sortable]="true" [pageable]="true" scrollable="none"
+            [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
             (dataStateChange)="dataStateChange($event)">
     <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
     <kendo-grid-column field="email" title="email"></kendo-grid-column>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, input } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, input } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { CellClickEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
@@ -33,6 +33,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
     readonly interventionStatusNames = interventionStatusNames;
     private cellArgs: CellClickEvent;
+    screenWidth: number;
 
     data: GridDataResult;
     gridState: State = {
@@ -61,7 +62,20 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
     ngOnInit() {        
         this._subscribeRouteParams();
         this._read();
-    }
+        this.updateScreenSize();
+      }
+    
+      @HostListener('window:resize', ['$event'])
+      onResize(event: Event): void {
+        this.updateScreenSize();
+      }
+    
+      private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth -44;
+        if (this.screenWidth > 1876) this.screenWidth = 1876;
+        if (this.screenWidth < 1400) this.screenWidth = 1400;     
+      }
+
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['activityId'] && !changes['activityId'].isFirstChange && this.activityId) {

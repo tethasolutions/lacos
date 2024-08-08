@@ -119,7 +119,7 @@
                 <div>
                     <kendo-grid [data]="gridData" [pageSize]="gridState.take" [skip]="gridState.skip"
                         [sort]="gridState.sort" filterable="menu" [filter]="gridState.filter" [group]="gridState.group"
-                        [sortable]="true" [pageable]="true" scrollable="none"
+                        [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
                         (dataStateChange)="onDataStateChange($event)">
 
                         <kendo-grid-column field="productImage" title="&nbsp;" [sortable]="false" [filterable]="false"

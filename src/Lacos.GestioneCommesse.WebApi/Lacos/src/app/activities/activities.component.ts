@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -53,6 +53,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     private cellArgs: CellClickEvent;
     user: User;
     currentOperator: OperatorModel;
+    screenWidth: number;
 
     readonly activityStatusNames = activityStatusNames;
 
@@ -73,7 +74,19 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this._subscribeRouteParams();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
-    }
+        this.updateScreenSize();
+      }
+    
+      @HostListener('window:resize', ['$event'])
+      onResize(event: Event): void {
+        this.updateScreenSize();
+      }
+    
+      private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth -44;
+        if (this.screenWidth > 1876) this.screenWidth = 1876;
+        if (this.screenWidth < 1400) this.screenWidth = 1400;     
+      }
 
     private _resumeState() {
         const savedState = this._storageService.get<State>(window.location.hash, true);

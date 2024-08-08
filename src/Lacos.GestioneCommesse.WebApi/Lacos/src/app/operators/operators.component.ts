@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -32,6 +32,7 @@ export class OperatorsComponent extends BaseComponent implements OnInit {
   };
 
   operatorSelezionato = new OperatorModel();
+  screenWidth: number;
 
   constructor(
       private readonly _operatorsService: OperatorsService,
@@ -43,7 +44,20 @@ export class OperatorsComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
       this._readOperators();
-  }
+      this.updateScreenSize();
+    }
+  
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
+      this.updateScreenSize();
+    }
+  
+    private updateScreenSize(): void {
+      this.screenWidth = window.innerWidth -44;
+      if (this.screenWidth > 1876) this.screenWidth = 1876;
+      if (this.screenWidth < 1400) this.screenWidth = 1400;     
+    }
+
 
   dataStateChange(state: State) {
       this.stateGridOperators = state;

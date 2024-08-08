@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CellClickEvent, GridComponent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { JobsService } from '../services/jobs/jobs.service';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -26,6 +26,7 @@ export class JobsProgressStatusComponent extends BaseComponent implements OnInit
     grid: GridComponent;
     user: User;
     currentOperator: OperatorModel;
+    screenWidth: number;
 
     data: GridDataResult;
     gridState: State = {
@@ -52,7 +53,20 @@ export class JobsProgressStatusComponent extends BaseComponent implements OnInit
     ngOnInit() {
         this._resumeState();
         this._read();
-    }
+        this.updateScreenSize();
+      }
+    
+      @HostListener('window:resize', ['$event'])
+      onResize(event: Event): void {
+        this.updateScreenSize();
+      }
+    
+      private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth -44;
+        if (this.screenWidth > 1876) this.screenWidth = 1876;
+        if (this.screenWidth < 1400) this.screenWidth = 1400;     
+      }
+
 
     dataStateChange(state: State) {
         this.gridState = state;

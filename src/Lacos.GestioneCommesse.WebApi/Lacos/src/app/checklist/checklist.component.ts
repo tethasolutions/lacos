@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -34,6 +34,7 @@ export class ChecklistComponent extends BaseComponent implements OnInit {
   };
 
   checklistSelezionato = new CheckListModel();
+  screenWidth: number;
 
   constructor(
       private readonly _checkListService: CheckListService,
@@ -45,7 +46,20 @@ export class ChecklistComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
       this._readChecklists();
-  }
+      this.updateScreenSize();
+    }
+  
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
+      this.updateScreenSize();
+    }
+  
+    private updateScreenSize(): void {
+      this.screenWidth = window.innerWidth -44;
+      if (this.screenWidth > 1876) this.screenWidth = 1876;
+      if (this.screenWidth < 1400) this.screenWidth = 1400;     
+    }
+
 
   dataStateChange(state: State) {
       this.stateGridChecklists = state;

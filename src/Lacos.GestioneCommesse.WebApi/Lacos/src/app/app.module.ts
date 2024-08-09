@@ -128,10 +128,13 @@ import { ActivitiesFromProductComponent } from './activities/activities-from-pro
 import { InterventionsSingleProductGridComponent } from './interventions/interventions-singleproduct-grid.component';
 import { MessagesListComponent } from './messages/messages-list.component';
 import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.component';
+import { SharepointService } from './services/sharepoint/sharepoint.service';
+import { SharepointModalComponent } from './sharepoint-browser-modal/sharepoint-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
         BooleanPipe,
         RolePipe,
         AppComponent,
@@ -206,7 +209,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         MessageModalComponent,
         MessagesListComponent,
         GalleryModalComponent,
-        GridContextMenuComponent
+        GridContextMenuComponent,
+        SharepointModalComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         BrowserAnimationsModule,
@@ -233,37 +237,39 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         BarcodesModule,
         EditorModule,
         UploadModule], providers: [
-        {
-            provide: LOCALE_ID, useValue: 'it'
-        },
-        StorageService,
-        UserService,
-        VehiclesService,
-        SecurityService,
-        { provide: APP_INITIALIZER, useFactory: refreshUserData, multi: true, deps: [SecurityService, UserService] },
-        { provide: HTTP_INTERCEPTORS, useClass: HeadersInterceptor, multi: true, deps: [UserService] },
-        MessageBoxService,
-        { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true, deps: [Router, UserService, MessageBoxService] },
-        LoaderService,
-        { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true, deps: [LoaderService] },
-        { provide: HTTP_INTERCEPTORS, useClass: UploadInterceptor, multi: true },
-        AuthGuard,
-        CustomerService,
-        SupplierService,
-        AddressesService,
-        OperatorsService,
-        CheckListService,
-        ProductsService,
-        ActivityTypesService,
-        ProductTypesService,
-        JobsService,
-        ActivitiesService,
-        ActivityProductsService,
-        InterventionsService,
-        TicketsService,
-        SupplierService,
-        PurchaseOrdersService,
-        MessagesService,
-        provideHttpClient(withInterceptorsFromDi())
-    ] })
+            {
+                provide: LOCALE_ID, useValue: 'it'
+            },
+            StorageService,
+            UserService,
+            VehiclesService,
+            SecurityService,
+            { provide: APP_INITIALIZER, useFactory: refreshUserData, multi: true, deps: [SecurityService, UserService] },
+            { provide: HTTP_INTERCEPTORS, useClass: HeadersInterceptor, multi: true, deps: [UserService, SharepointService] },
+            MessageBoxService,
+            { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true, deps: [Router, UserService, MessageBoxService] },
+            LoaderService,
+            { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true, deps: [LoaderService] },
+            { provide: HTTP_INTERCEPTORS, useClass: UploadInterceptor, multi: true },
+            AuthGuard,
+            CustomerService,
+            SupplierService,
+            AddressesService,
+            OperatorsService,
+            CheckListService,
+            ProductsService,
+            ActivityTypesService,
+            ProductTypesService,
+            JobsService,
+            ActivitiesService,
+            ActivityProductsService,
+            InterventionsService,
+            TicketsService,
+            SupplierService,
+            PurchaseOrdersService,
+            MessagesService,
+            SharepointService,
+            provideHttpClient(withInterceptorsFromDi())
+        ]
+})
 export class AppModule { }

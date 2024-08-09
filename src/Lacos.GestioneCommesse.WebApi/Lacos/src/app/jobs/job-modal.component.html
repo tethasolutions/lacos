@@ -157,6 +157,22 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 d-flex flex-column">
+                    <label>Cartella sharepoint</label>
+                    <div class="d-flex flex-row">
+                        <input [placeholder]="selectedSharepointPath" disabled>
+                        <button class="btn btn-primary ml-2"
+                            (click)="browseSharepointPath(selectedSharepointPath, true)" type="button">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <button class="btn btn-primary ml-2"
+                            (click)="browseSharepointPath(selectedSharepointPath, false)" type="button">
+                            <i class="fa-regular fa-folder"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <hr class="border-green" />
             <!--<kendo-expansionpanel title="Commenti ({{options.activity.messages.length}})" subtitle="Visualizza messaggi">-->
@@ -228,7 +244,7 @@
                         <div *ngFor="let item of options.attachments; let i = index" class="col-2">
                             <a href="javascript:void(0)" (click)="openImage(i)" *ngIf="item.isImage">
                                 <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName" />
-                            </a> 
+                            </a>
                             <a [href]="pathImage + item.fileName" target="_blank" *ngIf="!item.isImage">
                                 <img src="assets/document.jpg" width="90%" [title]="item.displayName" />
                             </a>
@@ -257,3 +273,4 @@
 <app-address-modal #addressModal></app-address-modal>
 <app-message-modal #messageModal></app-message-modal>
 <app-gallery-modal #galleryModal></app-gallery-modal>
+<app-sharepoint-modal #sharepointModal></app-sharepoint-modal>

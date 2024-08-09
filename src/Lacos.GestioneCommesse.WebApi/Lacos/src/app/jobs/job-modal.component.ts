@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, input, OnInit, viewChild, ViewChild } from '@angular/core';
 import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { NgForm } from '@angular/forms';
 import { Job, JobStatus } from '../services/jobs/models';
@@ -27,6 +27,8 @@ import { User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { MessageModalComponent } from '../messages/message-modal.component';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
+import { SharepointModalComponent } from '../sharepoint-browser-modal/sharepoint-modal.component';
+import { ISharepointModalOptions } from '../services/sharepoint/sharepoint.service';
 
 @Component({
     selector: 'app-job-modal',
@@ -40,8 +42,15 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
     @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
+    @ViewChild('sharepointModal', { static: true }) sharepointModal: SharepointModalComponent
 
     public windowState: WindowState = "default";
+
+    public sharepointRootPath: string = "/RootTest";
+
+    get selectedSharepointPath() {
+        return !this._selectedSharepointPath ? this.sharepointRootPath : this._selectedSharepointPath
+    }
 
     customers: CustomerModel[];
     addresses: AddressModel[];
@@ -54,12 +63,14 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     album: string[] = [];
     targetOperatorsArray: number[];
 
+    readonly states = listEnum<JobStatus>(JobStatus);
+
+    private _selectedSharepointPath: string = "";
+
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     uploadSaveUrl = `${this._baseUrl}/job-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/job-attachment/remove-file`;
-
-    readonly states = listEnum<JobStatus>(JobStatus);
 
     constructor(
         private readonly _customersService: CustomerService,
@@ -173,6 +184,22 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         );
     }
 
+    browseSharepointPath(path: string, browseMode: boolean) {
+        const options: ISharepointModalOptions = {
+            path,
+            browseMode
+        }
+
+        this._subscriptions.push(
+            this.sharepointModal.open(options)
+                .pipe(
+                    filter(e => e),
+                    tap(() => this._selectedSharepointPath = this.sharepointModal.currentPath)
+                )
+                .subscribe()
+        )
+    }
+
     addNewAddress(address: AddressModel) {
         if (this.options.customerId !== null) address.customerId = this.options.customerId;
         this._subscriptions.push(
@@ -263,8 +290,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
 
     initNewMessage() {
         this.targetOperatorsArray = [];
-        if (this.options.id == 0) 
-        {
+        if (this.options.id == 0) {
             this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
             return;
         }
@@ -283,7 +309,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     createMessage() {
         const today = new Date();
         const message = new MessageModel(0, today, null, this.currentOperator.id, this.options.id, null, null, null);
-        const options = new MessageModalOptions(message,true, this.targetOperatorsArray);
+        const options = new MessageModalOptions(message, true, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)
@@ -327,7 +353,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         this._subscriptions.push(
             this._messagesService.get(message.id)
                 .pipe(
-                    map(e => new MessageModalOptions(e,true)),
+                    map(e => new MessageModalOptions(e, true)),
                     switchMap(e => this.messageModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._messagesService.update(this.messageModal.options.message)),

@@ -1,0 +1,66 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="600" [top]="110">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Cartella sharepoint
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-row">
+                <p>Cartella corrente: </p>
+                <input [(ngModel)]="currentPath" disabled class="w-75">
+            </div>
+        </div>
+
+        <div class="p-5">
+
+            <button [disabled]="currentPath.toLowerCase() === rootPath.toLowerCase()" (click)="back()">Indietro</button>
+
+            @for(folder of folders; track folder){
+            <div class="d-flex flex-row align-items-center">
+                <i class="fa-regular fa-folder"></i>
+                <p (click)="navigate(folder.ServerRelativeUrl)" class="m-2" style="cursor: pointer;">{{ folder.Name }}
+                </p>
+            </div>
+            }
+
+            @if(!browseMode){
+            @for(file of files; track file){
+            <div class="d-flex flex-row align-items-center">
+                <i class="fa-regular fa-file"></i>
+                <p class="m-2">{{ file.Name }}</p>
+                <button (click)="downloadFile(file.ServerRelativeUrl)" class="fa-solid fa-download"></button>
+                @if(isImg(file)){
+                <img style="width: 100px; height: auto;" [src]="tenantUrl + file.ServerRelativeUrl">
+                <p></p>
+                }
+            </div>
+            }
+            }
+
+            @if(!files.length && !folders.length){
+            <p>La cartella è vuota</p>
+            }
+
+        </div>
+
+        <div class="d-flex flex-row justify-content-end">
+            @if(browseMode){
+            <div class="text-right mt-5">
+                <button type="button" (click)="close()" class="btn btn-primary me-2">
+                    SALVA
+                </button>
+            </div>
+            }
+
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    CHIUDI
+                </button>
+            </div>
+        </div>
+    </kendo-window>
+</div>

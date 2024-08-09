@@ -26,7 +26,7 @@ import { NotificationModule } from '@progress/kendo-angular-notification';
 import { EditorModule } from '@progress/kendo-angular-editor';
 import { IntlModule } from '@progress/kendo-angular-intl';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TooltipsModule } from "@progress/kendo-angular-tooltip";
 import { StorageService } from './services/common/storage.service';
 import { UserService } from './services/security/user.service';
@@ -131,8 +131,7 @@ import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.compone
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         BooleanPipe,
         RolePipe,
         AppComponent,
@@ -209,10 +208,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         GalleryModalComponent,
         GridContextMenuComponent
     ],
-    imports: [
-        BrowserModule,
+    bootstrap: [AppComponent], imports: [BrowserModule,
         BrowserAnimationsModule,
-        HttpClientModule,
         FormsModule,
         IntlModule,
         AppRoutingModule,
@@ -235,9 +232,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         LayoutModule,
         BarcodesModule,
         EditorModule,
-        UploadModule
-    ],
-    providers: [
+        UploadModule], providers: [
         {
             provide: LOCALE_ID, useValue: 'it'
         },
@@ -251,7 +246,6 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true, deps: [Router, UserService, MessageBoxService] },
         LoaderService,
         { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true, deps: [LoaderService] },
-        
         { provide: HTTP_INTERCEPTORS, useClass: UploadInterceptor, multi: true },
         AuthGuard,
         CustomerService,
@@ -269,8 +263,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         TicketsService,
         SupplierService,
         PurchaseOrdersService,
-        MessagesService
-    ],
-    bootstrap: [AppComponent]
-})
+        MessagesService,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }

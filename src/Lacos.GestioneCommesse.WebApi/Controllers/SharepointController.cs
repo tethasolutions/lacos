@@ -17,7 +17,7 @@ public class SharepointController : LacosApiController
                 {
                     new KeyValuePair<string, string>("grant_type", "client_credentials"),
                     new KeyValuePair<string, string>("client_id", "aabb1280-67e0-4495-ab1c-65ffd96e891f@136f579a-1be2-44ab-a6de-3d19af66d603"),
-                    new KeyValuePair<string, string>("client_secret", "IQX8Q~43FlFvK-VkNbkOkbVoswHcuApIZivVFbq_"),
+                    new KeyValuePair<string, string>("client_secret", ""),
                     new KeyValuePair<string, string>("resource", "00000003-0000-0ff1-ce00-000000000000/tetha365.sharepoint.com@136f579a-1be2-44ab-a6de-3d19af66d603")
                 };
             var content = new FormUrlEncodedContent(values);

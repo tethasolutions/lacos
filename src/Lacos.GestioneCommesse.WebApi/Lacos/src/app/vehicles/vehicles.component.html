@@ -10,6 +10,7 @@
     </div>
 </div>
 
+<div class="grid-container">
 <kendo-grid [data]="dataVehicles" [pageSize]="stateGridVehicles.take" 
             [skip]="stateGridVehicles.skip" [sort]="stateGridVehicles.sort" 
             [filter]="stateGridVehicles.filter"
@@ -30,5 +31,6 @@
         </ng-template>
     </kendo-grid-column>
 </kendo-grid>
+</div>
 
 <app-vehicle-modal #vehicleModal></app-vehicle-modal>

@@ -84,7 +84,8 @@
                         </div>
                     </div>
                     
-                    <kendo-grid [data]="options.items" filterable="none" 
+                    <div class="grid-container">
+<kendo-grid [data]="options.items" filterable="none" 
                                 [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth" class="GridNoHeader">
                         <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
                         <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
@@ -98,6 +99,7 @@
                             </ng-template>
                         </kendo-grid-column>
                     </kendo-grid>
+</div>
                 </div>
             </div>
             <div class="text-right mt-5">

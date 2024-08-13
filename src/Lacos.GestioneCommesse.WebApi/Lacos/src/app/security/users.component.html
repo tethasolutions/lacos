@@ -6,6 +6,7 @@
     </div>
 </div>
 
+<div class="grid-container">
 <kendo-grid [data]="data" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
     [group]="state.group" filterable="menu" [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
     (dataStateChange)="dataStateChange($event)">
@@ -30,5 +31,6 @@
         </ng-template>
     </kendo-grid-column>
 </kendo-grid>
+</div>
 
 <lacos-user-modal #userModal></lacos-user-modal>

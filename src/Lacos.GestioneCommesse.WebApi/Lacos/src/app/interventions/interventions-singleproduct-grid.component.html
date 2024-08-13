@@ -1,3 +1,4 @@
+<div class="grid-container">
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="false"
     scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)">
@@ -57,5 +58,6 @@
         </ng-template>
     </kendo-grid-column>
 </kendo-grid>
+</div>
 
 <app-intervention-product-checklist-items-modal #interventionProductModal></app-intervention-product-checklist-items-modal>

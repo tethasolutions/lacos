@@ -10,6 +10,7 @@
     </div>
 </div>
 
+<div class="grid-container">
 <kendo-grid [data]="dataCustomers" [pageSize]="stateGridCustomers.take" 
             [skip]="stateGridCustomers.skip" [sort]="stateGridCustomers.sort" 
             [filter]="stateGridCustomers.filter"
@@ -46,7 +47,8 @@
                 </button>
             </div>
         </div>
-        <kendo-grid [data]="dataItem.addresses" [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth">
+        <div class="grid-container">
+<kendo-grid [data]="dataItem.addresses" [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth">
             <kendo-grid-column field="description" title="Tipo Indirizzo"></kendo-grid-column>
             <kendo-grid-column field="city" title="Città"></kendo-grid-column>
             <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
@@ -72,8 +74,10 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
+</div>
     </div>
 </kendo-grid>
+</div>
 
 <app-customer-modal #customerModal></app-customer-modal>
 <app-address-modal [customer]="customerSelezionato" #addressModal></app-address-modal>

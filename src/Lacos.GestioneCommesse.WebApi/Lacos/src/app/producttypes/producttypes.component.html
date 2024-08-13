@@ -10,6 +10,7 @@
     </div>
 </div>
 
+<div class="grid-container">
 <kendo-grid [data]="dataProductTypes" [pageSize]="stateGridProductTypes.take" 
             [skip]="stateGridProductTypes.skip" [sort]="stateGridProductTypes.sort" 
             [filter]="stateGridProductTypes.filter"
@@ -45,5 +46,6 @@
         </ng-template>
     </kendo-grid-column>
 </kendo-grid>
+</div>
 
 <app-productType-modal #productTypeModal></app-productType-modal>

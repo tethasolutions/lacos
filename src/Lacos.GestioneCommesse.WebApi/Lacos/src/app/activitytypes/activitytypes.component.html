@@ -10,6 +10,7 @@
     </div>
 </div>
 
+<div class="grid-container">
 <kendo-grid [data]="dataActivityTypes" [pageSize]="stateGridActivityTypes.take" 
             [skip]="stateGridActivityTypes.skip" [sort]="stateGridActivityTypes.sort" 
             [filter]="stateGridActivityTypes.filter"
@@ -53,5 +54,6 @@
         </ng-template>
     </kendo-grid-column>
 </kendo-grid>
+</div>
 
 <app-activityType-modal #activityTypeModal></app-activityType-modal>

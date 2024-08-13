@@ -10,6 +10,7 @@
     </div>
 </div>
 
+<div class="grid-container">
 <kendo-grid [data]="checklists" [pageSize]="stateGridChecklists.take" 
             [skip]="stateGridChecklists.skip" [sort]="stateGridChecklists.sort" 
             [filter]="stateGridChecklists.filter"
@@ -35,5 +36,6 @@
         </ng-template>
     </kendo-grid-column>
 </kendo-grid>
+</div>
 
 <app-checklist-modal #checklistModal></app-checklist-modal>

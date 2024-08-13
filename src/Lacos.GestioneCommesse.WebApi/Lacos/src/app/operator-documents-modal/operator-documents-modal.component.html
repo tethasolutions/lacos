@@ -18,7 +18,8 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <kendo-grid [data]="documents">
+                <div class="grid-container">
+<kendo-grid [data]="documents">
                     <kendo-grid-column field="description" title="Descrizione"> </kendo-grid-column>
                     <kendo-grid-column field="fileName" title="Percorso"> </kendo-grid-column>
                     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="100">
@@ -32,6 +33,7 @@
                         </ng-template>
                     </kendo-grid-column>
                 </kendo-grid>
+</div>
             </div>
         </div>
         <div class="text-right mt-5">

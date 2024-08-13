@@ -23,6 +23,7 @@
 
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
+<div class="grid-container">
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
     scrollable="none" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback"
@@ -108,6 +109,7 @@
         <app-interventions-singleproduct-grid [activityId]="dataItem.id" [product]="productSearchField"></app-interventions-singleproduct-grid>
     </div>
 </kendo-grid>
+</div>
 
 <app-activity-modal #activityModal></app-activity-modal>
 <app-customer-modal #customerModal></app-customer-modal>

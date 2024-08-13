@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SharepointFile, SharepointFolder, SharepointItem, SharepointService } from '../services/sharepoint/sharepoint.service';
 
-import { catchError, of, Subject, takeUntil, tap, zip } from 'rxjs';
+import { catchError, map, of, Subject, takeUntil, tap, zip } from 'rxjs';
 import { ModalComponent } from '../shared/modal.component';
 
 import { BreadCrumbItem } from "@progress/kendo-angular-navigation";
@@ -13,7 +13,7 @@ import { MessageBoxService } from '../services/common/message-box.service';
     templateUrl: 'sharepoint-modal.component.html'
 })
 
-export class SharepointModalComponent extends ModalComponent<ISharepointModalOptions> implements OnDestroy {
+export class SharepointModalComponent extends ModalComponent<ISharepointModalOptions> implements OnInit, OnDestroy {
 
     public readonly tenantUrl = this._sharepointService.tenantUrl;
 
@@ -35,6 +35,10 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
         private _messageBox: MessageBoxService
     ) {
         super();
+    }
+
+    ngOnInit() {
+
     }
 
     onPathClick(item: BreadCrumbItem) {
@@ -62,7 +66,12 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
         this.browseMode = options.browseMode;
         this.navigationMenuItems = [];
 
-        this._navigate(this.currentPath);
+        this._sharepointService.updateSharepointApiAccessToken()
+            .pipe(
+                takeUntil(this._ngUnsubscribe),
+                tap(() => this._navigate(this.currentPath))
+            )
+            .subscribe();
 
         return super.open(options);
     }

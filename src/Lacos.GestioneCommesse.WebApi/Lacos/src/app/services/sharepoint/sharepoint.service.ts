@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, of, tap, zip } from 'rxjs';
+import { map, tap } from 'rxjs';
+import { ApiUrls } from '../common/api-urls';
 
 @Injectable({ providedIn: 'root' })
 export class SharepointService {
@@ -17,7 +18,10 @@ export class SharepointService {
     }
 
     private _apiUrl = `${this.tenantUrl}/_api/web`;
-    private _apiAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IktRMnRBY3JFN2xCYVZWR0JtYzVGb2JnZEpvNCIsImtpZCI6IktRMnRBY3JFN2xCYVZWR0JtYzVGb2JnZEpvNCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvdGV0aGEzNjUuc2hhcmVwb2ludC5jb21AMTM2ZjU3OWEtMWJlMi00NGFiLWE2ZGUtM2QxOWFmNjZkNjAzIiwiaXNzIjoiMDAwMDAwMDEtMDAwMC0wMDAwLWMwMDAtMDAwMDAwMDAwMDAwQDEzNmY1NzlhLTFiZTItNDRhYi1hNmRlLTNkMTlhZjY2ZDYwMyIsImlhdCI6MTcyMzQ0Nzc2NiwibmJmIjoxNzIzNDQ3NzY2LCJleHAiOjE3MjM1MzQ0NjYsImlkZW50aXR5cHJvdmlkZXIiOiIwMDAwMDAwMS0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDBAMTM2ZjU3OWEtMWJlMi00NGFiLWE2ZGUtM2QxOWFmNjZkNjAzIiwibmFtZWlkIjoiYWFiYjEyODAtNjdlMC00NDk1LWFiMWMtNjVmZmQ5NmU4OTFmQDEzNmY1NzlhLTFiZTItNDRhYi1hNmRlLTNkMTlhZjY2ZDYwMyIsIm9pZCI6ImRmOWEzYzY3LWY5MDItNDNkYS1iODE2LWNmOTNmNmZjODE2OSIsInN1YiI6ImRmOWEzYzY3LWY5MDItNDNkYS1iODE2LWNmOTNmNmZjODE2OSIsInRydXN0ZWRmb3JkZWxlZ2F0aW9uIjoiZmFsc2UifQ.O9C9wGu5msm3oB1hLbn2GKeQyF4JUUaX-F1g9GfmvbSevg9qgm-e7ttmULjHP9ZdaCU2iG5SDWGPPB0DRMVoAj2nlneeSaYh4U1S56X65WZ7q5Nl753XPP10eK6f7xGinskhs3ddLTyekQasflAkIKMNUMip5OGhfmCsx-iOcnGoNbAVZ0ygurKliXS6r3cK_h3HD_bPI8whtIhhcT39FElM_7Y0iGnN7IC_vOc79qVzG0m9l0qWTlYWTHewOEZu4B084QJxqB-KWCMH_OpMuqvmGSARR_LvWGpSLUbBjPaDgXB4t3KjCAhzm_cydK-GQKImBE0VjsNxE04ZPJzQqQ";
+    private _apiAccessToken = "";
+
+    private readonly _baseUrl = `${ApiUrls.baseApiUrl}/sharepoint`;
+    private readonly _tokenEndpoint = `${this._baseUrl}/token`;
 
     private _headers = new HttpHeaders({
         Authorization: `Bearer ${this._apiAccessToken}`,
@@ -66,9 +70,21 @@ export class SharepointService {
             )
     }
 
+    updateSharepointApiAccessToken() {
+        return this._http.get<SharepointResult>(this._tokenEndpoint)
+            .pipe(
+                map(e => e.accessToken),
+                tap(e => this._apiAccessToken = e)
+            )
+    }
+
 }
 
-declare type SharepointResponse<T> = {
+interface SharepointResult {
+    readonly accessToken: string;
+}
+
+interface SharepointResponse<T> {
     d: {
         results: Array<T>;
         ServerRelativeUrl: string;

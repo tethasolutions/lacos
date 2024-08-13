@@ -356,7 +356,8 @@ app-jobs {
     }
 }
 
-app-jobs-completed, app-jobs-progress-status {
+app-jobs-completed,
+app-jobs-progress-status {
 
     .job-completed .job-status {
         @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
@@ -373,7 +374,7 @@ app-jobs-completed, app-jobs-progress-status {
     .job-billing .job-status {
         @include striped-background(rgba(191, 84, 77, 0.384), rgba(242, 52, 39, 0.26));
     }
-    
+
     .job-billed .job-status {
         @include striped-background(rgba(232, 56, 255, 0.384), rgba(255, 180, 252, 0.685));
     }
@@ -498,12 +499,12 @@ app-purchase-orders {
 }
 
 .k-expander-title {
-    color:#212529 !important;
+    color: #212529 !important;
     text-transform: none;
     font-weight: normal;
 }
 
-.ProseMirror > p {
+.ProseMirror>p {
     margin: 0 !important;
 }
 
@@ -511,7 +512,9 @@ app-purchase-orders {
     margin-bottom: 0px;
 }
 
-.btn:disabled, .btn.disabled, fieldset:disabled .btn {
+.btn:disabled,
+.btn.disabled,
+fieldset:disabled .btn {
     background-color: #b9bec1;
 }
 
@@ -519,12 +522,12 @@ app-purchase-orders {
     font-weight: bold;
 }
 
-.messageTableRow:nth-of-type(odd){
+.messageTableRow:nth-of-type(odd) {
     background-color: #FFF;
     border-bottom: #ccc 1px solid;
 }
 
-.messageTableRow:nth-of-type(even){
+.messageTableRow:nth-of-type(even) {
     background-color: #EEE;
     border-bottom: #ccc 1px solid;
 }
@@ -545,7 +548,7 @@ app-purchase-orders {
     font-weight: normal;
 }
 
-kendo-grid{
+kendo-grid {
     touch-action: auto !important;
 }
 
@@ -556,21 +559,52 @@ kendo-grid{
     border: 1px solid #ccc;
     border-radius: 4px;
     overflow: hidden;
-  }
-  
-  .progress-bar {
+}
+
+.progress-bar {
     height: 20px;
     background-color: #4caf50;
     text-align: center;
     color: white;
-    line-height: 20px; /* Align the text vertically */
-  }
-  
+    line-height: 20px;
+    /* Align the text vertically */
+}
+
 .progress-hide {
     display: none;
 }
 
 .grid-container {
     overflow-x: auto;
-  }
-  
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+app-sharepoint-modal {
+    .file:hover {
+        cursor: pointer;
+    }
+
+    kendo-breadcrumb {
+        background-color: lightslategrey !important;
+        color: white !important;
+
+        span {
+            text-decoration: none !important;
+        }
+
+        .k-breadcrumb-item-text {
+            color: white !important;
+            padding: 2px !important;
+            border-radius: 5px;
+        }
+
+        .k-breadcrumb-item-text:hover {
+            background-color: #212529 !important;
+        }
+    }
+}

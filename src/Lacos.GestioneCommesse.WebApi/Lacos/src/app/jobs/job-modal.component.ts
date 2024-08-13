@@ -1,19 +1,17 @@
-import { Component, Input, input, OnInit, viewChild, ViewChild } from '@angular/core';
-import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
-import { NgForm } from '@angular/forms';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ModalFormComponent } from '../shared/modal.component';
 import { Job, JobStatus } from '../services/jobs/models';
-import { BehaviorSubject, Observable, filter, map, switchMap, tap } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
-import { refreshUserData } from '../services/security/security.service';
 import { AddressesService } from '../services/addresses.service';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
 import { AddressModel } from '../shared/models/address.model';
 import { WindowState } from '@progress/kendo-angular-dialog';
 import { JobsService } from '../services/jobs/jobs.service';
-import { getToday, listEnum } from '../services/common/functions';
+import { listEnum } from '../services/common/functions';
 import { ApiUrls } from '../services/common/api-urls';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { JobAttachmentUploadFileModel } from '../services/jobs/job-attachment-upload-file.model';
@@ -27,8 +25,8 @@ import { User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { MessageModalComponent } from '../messages/message-modal.component';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
-import { SharepointModalComponent } from '../sharepoint-browser-modal/sharepoint-modal.component';
-import { ISharepointModalOptions } from '../services/sharepoint/sharepoint.service';
+import { ISharepointModalOptions, SharepointModalComponent } from '../sharepoint-browser-modal/sharepoint-modal.component';
+import { SharepointService } from '../services/sharepoint/sharepoint.service';
 
 @Component({
     selector: 'app-job-modal',
@@ -46,7 +44,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
 
     public windowState: WindowState = "default";
 
-    public sharepointRootPath: string = "/RootTest";
+    public sharepointRootPath: string = this._sharepoint.rootPath;
 
     get selectedSharepointPath() {
         return !this._selectedSharepointPath ? this.sharepointRootPath : this._selectedSharepointPath
@@ -79,7 +77,8 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         private readonly _addressesService: AddressesService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
-        private readonly _messagesService: MessagesService
+        private readonly _messagesService: MessagesService,
+        private readonly _sharepoint: SharepointService
     ) {
         super(messageBox);
     }

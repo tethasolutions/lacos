@@ -1,80 +1,68 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IFile, IFolder, ISharepointModalOptions, SharepointService } from '../services/sharepoint/sharepoint.service';
+import { Component, OnDestroy } from '@angular/core';
+import { SharepointFile, SharepointFolder, SharepointItem, SharepointService } from '../services/sharepoint/sharepoint.service';
 
-import { of, Subject, takeUntil, tap } from 'rxjs';
+import { catchError, of, Subject, takeUntil, tap, zip } from 'rxjs';
 import { ModalComponent } from '../shared/modal.component';
+
+import { BreadCrumbItem } from "@progress/kendo-angular-navigation";
+import { CellClickEvent } from '@progress/kendo-angular-grid';
+import { MessageBoxService } from '../services/common/message-box.service';
 
 @Component({
     selector: 'app-sharepoint-modal',
     templateUrl: 'sharepoint-modal.component.html'
 })
 
-export class SharepointModalComponent extends ModalComponent<ISharepointModalOptions> implements OnInit, OnDestroy {
+export class SharepointModalComponent extends ModalComponent<ISharepointModalOptions> implements OnDestroy {
 
-    public tenantUrl = this._sharepointService.tenantUrl;
+    public readonly tenantUrl = this._sharepointService.tenantUrl;
 
-    public folders: IFolder[] = [];
-    public files: IFile[] = [];
+    public folders: SharepointFolder[] = [];
+    public files: SharepointFile[] = [];
+    public items: SharepointItem[];
 
-    public rootPath = this._sharepointService.rootPath;
+    public readonly rootPath = this._sharepointService.rootPath;
     public currentPath = this.rootPath;
-
-    public pathExist = true;
 
     public browseMode: boolean;
 
-    private _ngUnsubscribe = new Subject<void>();
+    public navigationMenuItems: BreadCrumbItem[];
+
+    private readonly _ngUnsubscribe = new Subject<void>();
 
     constructor(
-        private _sharepointService: SharepointService
+        private _sharepointService: SharepointService,
+        private _messageBox: MessageBoxService
     ) {
         super();
     }
 
-    ngOnInit(): void {
-        this.navigate(this.rootPath);
+    onPathClick(item: BreadCrumbItem) {
+        const index = this.navigationMenuItems.indexOf(item);
+        const path = this.navigationMenuItems
+            .filter((_, i) => i <= index)
+            .map(e => e.text)
+            .join('/');
+
+        this._navigate(path);
     }
 
-    navigate(path: string) {
-        this._sharepointService.getFolderContents(path)
-            .pipe(
-                takeUntil(this._ngUnsubscribe),
-                tap(e => this.folders = e.folders),
-                tap(e => this.files = e.files),
-                tap(() => this.currentPath = path)
-            )
-            .subscribe();
-    }
+    onCellClick($event: CellClickEvent) {
+        const dataItem = $event.dataItem as SharepointItem;
 
-    downloadFile(path: string) {
-        this._sharepointService.downloadFile(path)
-            .subscribe();
-    }
-
-    isImg(file: IFile) {
-        const imgExtensions = ['apng', 'avif', 'gif', 'jpg', 'jpeg', 'png', 'svg', 'webp'];
-        const fileExtension = file.Name.split('.').reverse()[0];
-
-        if (imgExtensions.includes(fileExtension.toLowerCase())) {
-            return true;
+        if (dataItem.isFolder) {
+            this._navigate(dataItem.path);
+        } else {
+            this._downloadFile(dataItem.path);
         }
-        return false;
-    }
-
-    back() {
-        this._sharepointService.getParentFolderPath(this.currentPath)
-            .pipe(
-                takeUntil(this._ngUnsubscribe),
-                tap(e => this.navigate(e))
-            )
-            .subscribe()
     }
 
     override open(options: ISharepointModalOptions) {
         this.currentPath = options.path;
         this.browseMode = options.browseMode;
+        this.navigationMenuItems = [];
 
-        this.navigate(this.currentPath);
+        this._navigate(this.currentPath);
 
         return super.open(options);
     }
@@ -83,4 +71,39 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
         return true;
     }
 
+    private _navigate(path: string) {
+        this._getFolderContents(path);
+        this.currentPath = path;
+        this.navigationMenuItems = this.currentPath.split('/').filter(e => e).map(item => ({ text: item, title: item }))
+    }
+
+    private _downloadFile(path: string) {
+        this._sharepointService.downloadFile(path)
+            .pipe(
+                takeUntil(this._ngUnsubscribe),
+                catchError(e => {
+                    this._messageBox.error("Questo file non può essere scaricato");
+                    return of(0);
+                })
+            )
+            .subscribe();
+    }
+
+    private _getFolderContents(path: string) {
+        zip(
+            this._sharepointService.getFolders(path),
+            this.browseMode ? of(new Array<SharepointFile>()) : this._sharepointService.getFiles(path)
+        )
+            .pipe(
+                takeUntil(this._ngUnsubscribe),
+                tap(e => this.items = e[0].orderBy(ee => ee.name).concat(e[1].orderBy(ee => ee.name)).map(ee => new SharepointItem(ee)))
+            )
+            .subscribe();
+    }
+
+}
+
+export interface ISharepointModalOptions {
+    path: string;
+    browseMode: boolean;
 }

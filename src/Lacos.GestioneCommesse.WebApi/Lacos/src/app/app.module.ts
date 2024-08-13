@@ -131,6 +131,9 @@ import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.compone
 import { SharepointService } from './services/sharepoint/sharepoint.service';
 import { SharepointModalComponent } from './sharepoint-browser-modal/sharepoint-modal.component';
 
+import { NavigationModule } from "@progress/kendo-angular-navigation";
+import { ButtonsModule } from "@progress/kendo-angular-buttons";
+
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
 @NgModule({
@@ -213,6 +216,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         SharepointModalComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
+        NavigationModule,
+        ButtonsModule,
         BrowserAnimationsModule,
         FormsModule,
         IntlModule,

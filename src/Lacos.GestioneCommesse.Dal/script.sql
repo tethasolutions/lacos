@@ -3264,3 +3264,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240822094335_aumento limite caratteri checlist intervento')
+BEGIN
+    DECLARE @var28 sysname;
+    SELECT @var28 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Docs].[InterventionProductCheckLists]') AND [c].[name] = N'Description');
+    IF @var28 IS NOT NULL EXEC(N'ALTER TABLE [Docs].[InterventionProductCheckLists] DROP CONSTRAINT [' + @var28 + '];');
+    ALTER TABLE [Docs].[InterventionProductCheckLists] ALTER COLUMN [Description] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240822094335_aumento limite caratteri checlist intervento')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240822094335_aumento limite caratteri checlist intervento', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

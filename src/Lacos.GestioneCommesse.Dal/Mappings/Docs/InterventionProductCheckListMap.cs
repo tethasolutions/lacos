@@ -13,10 +13,6 @@ public class InterventionProductCheckListMap : BaseEntityMapping<InterventionPro
 
         builder.ToTable("InterventionProductCheckLists", "Docs");
 
-        builder.Property(e => e.Description)
-            .HasMaxLength(500)
-            .IsRequired();
-
         builder.OneToMany(e => e.Items, e => e.CheckList, e => e.CheckListId);
     }
 }

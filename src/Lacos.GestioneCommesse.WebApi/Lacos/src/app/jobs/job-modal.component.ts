@@ -268,16 +268,17 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
             this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
             return;
         }
-        this._subscriptions.push(
-            this._messagesService.getElementTargetOperators(this.currentOperator.id, this.options.id, "J")
-                .pipe(
-                    tap(e => {
-                        this.targetOperatorsArray = e;
-                        this.createMessage();
-                    })
-                )
-                .subscribe()
-        );
+        this.createMessage();
+        // this._subscriptions.push(
+        //     this._messagesService.getElementTargetOperators(this.currentOperator.id, this.options.id, "J")
+        //         .pipe(
+        //             tap(e => {
+        //                 this.targetOperatorsArray = e;
+        //                 this.createMessage();
+        //             })
+        //         )
+        //         .subscribe()
+        // );
     }
 
     createMessage() {

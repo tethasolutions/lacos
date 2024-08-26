@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="row">
-            <div *ngFor="let activityType of activitiesCounters" class="col-md-2">
+            <div *ngFor="let activityType of activitiesCounters" class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" [routerLink]="['/activities']"
                     [queryParams]="{typeId: activityType.activityId}"
                     [style.background-color]="activityType.activityColor || '#3485fd'" routerLinkActive="active">
@@ -35,19 +35,19 @@
             </div>
         </div>
         <div class="row">
-            <div *ngIf="isAdmin" class="col-md-2">
+            <div *ngIf="isAdmin" class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/jobs" routerLinkActive="active">
                     <div class="title">Commesse</div>
                     <span><i class="fa fa-3x fa-door-open"></i></span>
                 </a>
             </div>
-            <div *ngIf="isAdmin" class="col-md-2">
+            <div *ngIf="isAdmin" class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/jobs-completed" routerLinkActive="active">
                     <div class="title">Commesse Complete</div>
                     <span><i class="fa fa-3x fa-coins"></i></span>
                 </a>
             </div>
-            <div class="col-md-2" *ngIf="newActivitiesCounter.newActivities>0">
+            <div class="col-sm-12 col-md-6 col-lg-2" *ngIf="newActivitiesCounter.newActivities>0">
                 <a class="btn btn-light dashboardBtn" routerLink="/activities" routerLinkActive="active"
                     [ngStyle]="newActivitiesCounter.newActivities>0 ? {'background-color':'#ffbcbc'} : ''">
                     <div class="row">
@@ -61,19 +61,19 @@
                     </div>
                 </a>
             </div>
-            <div class="col-md-2" *ngIf="newActivitiesCounter.newActivities==0">
+            <div class="col-sm-12 col-md-6 col-lg-2" *ngIf="newActivitiesCounter.newActivities==0">
                 <a class="btn btn-light dashboardBtn" routerLink="/activities" routerLinkActive="active">
                     <div class="title">Attività</div>
                     <span><i class="fa fa-3x fa-tag"></i></span>
                 </a>
             </div>
-            <div *ngIf="isAdmin" class="col-md-2">
+            <div *ngIf="isAdmin" class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/interventions" routerLinkActive="active">
                     <div class="title">Calendario</div>
                     <span><i class="fa fa-3x fa-calendar-days"></i></span>
                 </a>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/tickets" routerLinkActive="active"
                     [ngStyle]="ticketsCounters.newTickets>0 ? {'background-color':'#ffbcbc'} : ''">
                     <div class="row">
@@ -88,7 +88,7 @@
                     </div>
                 </a>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/purchase-orders" routerLinkActive="active">
                     <div class="title">Ordini Acquisto</div>
                     <span><i class="fa fa-3x fa-shop"></i></span>
@@ -102,25 +102,25 @@
             </div>
         </div>
         <div *ngIf="isAdmin" class="row">
-            <div class="col-md-2">
+            <div class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/interventions-ko" routerLinkActive="active">
                     <div class="title">Interventi KO</div>
                     <span><i class="fa fa-3x fa-qrcode"></i></span>
                 </a>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/jobs-progress-status" routerLinkActive="active">
                     <div class="title">Avanzamento Commesse</div>
                     <span><i class="fa fa-3x fa-chart-gantt"></i></span>
                 </a>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/activities-from-product" routerLinkActive="active">
                     <div class="title">Attività Prodotto</div>
                     <span><i class="fa fa-3x fa-search"></i></span>
                 </a>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-12 col-md-6 col-lg-2">
                 <a class="btn btn-light dashboardBtn" routerLink="/messages-list" routerLinkActive="active"
                     [ngStyle]="unreadCounter>0 ? {'background-color':'#ffbcbc'} : ''">
                     <div class="row">

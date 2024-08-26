@@ -96,8 +96,8 @@ public class ActivitiesService : IActivitiesService
             .Project<ActivityDto>(mapper)
             .FirstOrDefaultAsync();
 
-        activityDto.Messages = activityDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId || 
-            m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
+        //activityDto.Messages = activityDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId || 
+        //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
 
         if (activityDto == null)
         {
@@ -174,8 +174,9 @@ public class ActivitiesService : IActivitiesService
             .Query()
             .Where(x => x.Id == activityDto.Id)
             .Include(x => x.Attachments)
-            .Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId || 
-                m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
+            .Include(x => x.Messages)
+            //.Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId || 
+            //    m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
             .SingleOrDefaultAsync();
 
         if (activity == null)

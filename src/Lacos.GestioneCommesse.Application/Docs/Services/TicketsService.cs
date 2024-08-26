@@ -64,8 +64,8 @@ public class TicketsService : ITicketsService
             .Project<TicketDto>(mapper)
             .FirstOrDefaultAsync();
 
-        TicketDto.Messages = TicketDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
-            m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
+        //TicketDto.Messages = TicketDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+        //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
 
         if (TicketDto == null)
         {
@@ -109,8 +109,9 @@ public class TicketsService : ITicketsService
             .Where(e => e.Id == TicketDto.Id)
             .Include(e => e.Activity)
             .Include(e => e.Pictures)
-            .Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
-                m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
+            .Include(e => e.Messages)
+            //.Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+            //    m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
             .FirstOrDefaultAsync();
 
         if (Ticket == null)

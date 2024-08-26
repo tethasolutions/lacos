@@ -34,7 +34,8 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
 
   override open(options: MessageModalOptions) {
     const result = super.open(options);
-    this.hasTargetOperators = options.targetOperators.any();
+    //this.hasTargetOperators = options.targetOperators.any();
+    this.hasTargetOperators = true;
     return result;
   }
 

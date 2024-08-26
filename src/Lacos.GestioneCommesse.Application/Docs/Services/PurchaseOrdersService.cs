@@ -49,8 +49,8 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Project<PurchaseOrderDto>(mapper)
             .FirstOrDefaultAsync();
 
-        purchaseOrderDto.Messages = purchaseOrderDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
-            m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
+        //purchaseOrderDto.Messages = purchaseOrderDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+        //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
 
         if (purchaseOrderDto == null)
         {
@@ -91,8 +91,9 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Where(e => e.Id == purchaseOrderDto.Id)
             .Include(e => e.Items)
             .Include(x => x.Attachments)
-            .Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
-                m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
+            .Include(x => x.Messages)
+            //.Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+            //    m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
             .FirstOrDefaultAsync();
 
         if (purchaseOrder == null)

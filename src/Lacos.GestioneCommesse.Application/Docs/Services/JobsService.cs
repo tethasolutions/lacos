@@ -102,8 +102,8 @@ public class JobsService : IJobsService
             .Project<JobDto>(mapper)
             .FirstOrDefaultAsync();
 
-        jobDto.Messages = jobDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
-            m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
+        //jobDto.Messages = jobDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+        //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
 
         if (jobDto == null)
         {
@@ -145,8 +145,9 @@ public class JobsService : IJobsService
             .Query()
             .Where(x => x.Id == jobDto.Id)
             .Include(x => x.Attachments)
-            .Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
-                m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
+            .Include(x => x.Messages)
+            //.Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
+            //    m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
             .SingleOrDefaultAsync();
 
         if (job == null)

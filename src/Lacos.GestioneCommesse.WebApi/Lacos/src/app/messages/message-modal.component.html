@@ -51,12 +51,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="hasTargetOperators">
+            <div class="row" *ngIf="hasTargetOperators && options.message.id == 0">
                 <div class="col-md-12">
-                    <label>Operatori</label>
+                    <label>Destinatari commento</label>
                     <div class="form-group">
                         <kendo-multiselect [data]="operators" textField="name" valueField="id" name="operators"
-                            [(ngModel)]="options.targetOperators" required [allowCustom]="false" [valuePrimitive]="true"
+                            [(ngModel)]="options.targetOperators" [allowCustom]="false" [valuePrimitive]="true"
                             [readonly]="readonly" style="max-width: 1000px;">
                             <ng-template kendoMultiSelectItemTemplate let-dataItem>
                                 <div class="d-flex gap-1">

@@ -53,6 +53,12 @@ public class MessagesController : LacosApiController
         return service.Create(messageDto, targetOperators);
     }
 
+    [HttpPut("create")]
+    public Task<MessageDto> Create(MessageDto messageDto)
+    {
+        return service.Create(messageDto, string.Empty);
+    }
+
     [HttpPut("create-reply/{targetOperators}")]
     public Task<MessageDto> CreateReply(MessageDto messageDto, string targetOperators)
     {

@@ -36,11 +36,11 @@ public class ActivitiesService : IActivitiesService
         j.Activities.Where(e => e.Type.InfluenceJobStatus == true).All(a => a.Status == ActivityStatus.Completed)
         ?
             JobStatus.Completed
-        : j.Activities
-                .Any(a => a.Status == ActivityStatus.InProgress && a.Type.InfluenceJobStatus.GetValueOrDefault())
+        : j.Activities.Where(e => e.Type.InfluenceJobStatus == true)
+                .Any(a => a.Status == ActivityStatus.InProgress)
                 ? JobStatus.InProgress
-                : j.Activities
-                    .Any(a => a.Status == ActivityStatus.Pending && a.Type.InfluenceJobStatus.GetValueOrDefault())
+                : j.Activities.Where(e => e.Type.InfluenceJobStatus == true)
+                    .Any(a => a.Status == ActivityStatus.Pending)
                     ? JobStatus.Pending
                     : j.Status;
 
@@ -157,10 +157,14 @@ public class ActivitiesService : IActivitiesService
             {
                 if (job.Status != JobStatus.Billing && job.Status != JobStatus.Billed)
                 {
-                    Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
-                    job.Status = statusDelegate(job);
-                    jobRepository.Update(job);
-                    await dbContext.SaveChanges();
+                    try
+                    {
+                        Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                        job.Status = statusDelegate(job);
+                        jobRepository.Update(job);
+                        await dbContext.SaveChanges();
+                    }
+                    catch (Exception ex) { }
                 }
             }
         }

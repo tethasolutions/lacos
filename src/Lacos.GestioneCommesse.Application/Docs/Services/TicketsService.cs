@@ -22,17 +22,19 @@ public class TicketsService : ITicketsService
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
     j.Activities
-    .Any() &&
-    j.Activities.All(a => a.Status == ActivityStatus.Completed)
-    ?
-        JobStatus.Completed
-    : j.Activities
-            .Any(a => a.Status == ActivityStatus.InProgress)
-            ? JobStatus.InProgress
-            : j.Activities
-                .Any(a => a.Status == ActivityStatus.Pending)
-                ? JobStatus.Pending
-                : j.Status;
+    .All(e => e.Type.InfluenceJobStatus != true)
+    ? j.Status
+    :
+        j.Activities.Where(e => e.Type.InfluenceJobStatus == true).All(a => a.Status == ActivityStatus.Completed)
+        ?
+            JobStatus.Completed
+        : j.Activities.Where(e => e.Type.InfluenceJobStatus == true)
+                .Any(a => a.Status == ActivityStatus.InProgress)
+                ? JobStatus.InProgress
+                : j.Activities.Where(e => e.Type.InfluenceJobStatus == true)
+                    .Any(a => a.Status == ActivityStatus.Pending)
+                    ? JobStatus.Pending
+                    : j.Status;
 
     public TicketsService(
         IMapper mapper,

@@ -84,7 +84,7 @@ public class MessagesService : IMessagesService
 
         await dbContext.SaveChanges();
 
-        if (Message != null)
+        if (Message != null && targetOperators != string.Empty)
         {
             foreach (long @operator in targetOperators.Split(",").Select(long.Parse).ToList())
             {

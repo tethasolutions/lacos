@@ -8,6 +8,7 @@
         public string? ColorHex { get; set; }
         public bool IsExternal { get; set; }
 
+        public bool? InfluenceJobStatus { get; set; }
         public string? StatusLabel0 { get; set; }
         public string? StatusLabel1 { get; set; }
         public string? StatusLabel2 { get; set; }

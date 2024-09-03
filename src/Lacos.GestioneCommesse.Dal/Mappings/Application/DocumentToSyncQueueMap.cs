@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lacos.GestioneCommesse.Dal.Mappings.Application;
 
-public class DocumentToSyncQuequeMap : BaseEntityMapping<DocumentToSyncQueue>
+public class DocumentToSyncQueueMap : BaseEntityMapping<DocumentToSyncQueue>
 {
     public override void Configure(EntityTypeBuilder<DocumentToSyncQueue> builder)
     {
@@ -17,7 +17,6 @@ public class DocumentToSyncQuequeMap : BaseEntityMapping<DocumentToSyncQueue>
             .IsRequired();
 
         builder.Property(x => x.DocumentName)
-            .HasMaxLength(100)
             .IsRequired();
     }
 }

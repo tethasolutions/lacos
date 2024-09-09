@@ -269,12 +269,12 @@ public class MessagesService : IMessagesService
                 .Distinct()
                 .ToListAsync(), QueryFilter.OperatorEntity);
 
-            var senderOperator = await repository.Query()
-                .Where(x => x.Id == messageId)
-                .Select(x => x.OperatorId)
-                .FirstOrDefaultAsync();
+            //var senderOperator = await repository.Query()
+            //    .Where(x => x.Id == messageId)
+            //    .Select(x => x.OperatorId)
+            //    .FirstOrDefaultAsync();
 
-            operators.Add(senderOperator);
+            //operators.Add(senderOperator);
 
             return operators.MapTo<IEnumerable<long>>(mapper);
         }
@@ -378,4 +378,5 @@ public class MessagesService : IMessagesService
 
         return operators.MapTo<IEnumerable<long>>(mapper);
     }
+
 }

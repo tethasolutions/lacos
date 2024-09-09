@@ -7,7 +7,7 @@ import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
-import { refreshUserData } from '../services/security/security.service';
+import { refreshUserData, SecurityService } from '../services/security/security.service';
 import { AddressesService } from '../services/addresses.service';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
 import { AddressModel } from '../shared/models/address.model';
@@ -23,7 +23,7 @@ import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { MessageModalOptions, MessageModel, MessageReadModel } from '../services/messages/models';
 import { MessagesService } from '../services/messages/messages.service';
-import { User } from '../services/security/models';
+import { Role, User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { MessageModalComponent } from '../messages/message-modal.component';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
@@ -53,6 +53,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     unreadMessages: number;
     album: string[] = [];
     targetOperatorsArray: number[];
+    readonly isOperator: boolean;
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -62,6 +63,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     readonly states = listEnum<JobStatus>(JobStatus);
 
     constructor(
+        security: SecurityService,
         private readonly _customersService: CustomerService,
         private readonly _service: JobsService,
         messageBox: MessageBoxService,
@@ -71,6 +73,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         private readonly _messagesService: MessagesService
     ) {
         super(messageBox);
+        this.isOperator = security.isAuthorized(Role.Operator);
     }
 
     ngOnInit() {

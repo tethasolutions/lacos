@@ -52,7 +52,6 @@ export class MessageModel {
 }
 
 export class MessageModalOptions {
-
     constructor(
         readonly message: MessageModel,
         readonly replyAll: boolean,

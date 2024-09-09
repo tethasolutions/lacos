@@ -16,8 +16,10 @@ import { UserService } from '../services/security/user.service';
 import { OperatorsService } from '../services/operators.service';
 import { JobsService } from '../services/jobs/jobs.service';
 import { JobModalComponent } from '../jobs/job-modal.component';
-import { Job } from '../services/jobs/models';
 import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.component';
+import { CustomerService } from '../services/customer.service';
+import { CustomerModel } from '../shared/models/customer.model';
+import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 
 @Component({
     selector: 'app-purchase-orders',
@@ -26,6 +28,7 @@ import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.co
 export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
+    @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;
     @ViewChild('jobsAttachmentsModal', { static: true }) jobsAttachmentsModal: JobsAttachmentsModalComponent;
     user: User;
@@ -59,6 +62,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         private readonly _user: UserService,
         private readonly _operatorsService: OperatorsService,
         private readonly _storageService: StorageService,
+        private readonly _customerService: CustomerService,
         private readonly _jobService: JobsService
     ) {
         super();
@@ -271,6 +275,24 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
             this._operatorsService.getOperatorByUserId(userId)
                 .pipe(
                     tap(e => this.currentOperator = e)
+                )
+                .subscribe()
+        );
+    }
+    
+    openCustomer(customerId: number): void {
+        this._subscriptions.push(
+            this._customerService.getCustomer(customerId)
+                .pipe(
+                    map(e => {
+                        return Object.assign(new CustomerModel(), e);
+                    }),
+                    switchMap(e => this.customerModal.open(e)),
+                    filter(e => e),
+                    map(() => this.customerModal.options),
+                    switchMap(e => this._customerService.updateCustomer(e, customerId)),
+                    map(() => this.customerModal.options),
+                    tap(e => this._messageBox.success(`Cliente ${e.name} aggiornato`)),
                 )
                 .subscribe()
         );

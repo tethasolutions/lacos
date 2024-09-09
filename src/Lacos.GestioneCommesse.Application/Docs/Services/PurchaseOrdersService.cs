@@ -39,6 +39,9 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     public IQueryable<PurchaseOrderReadModel> Query()
     {
         return repository.Query()
+            .AsNoTracking()
+            .Include(x => x.Job)
+            .ThenInclude(x => x.Customer)
             .Project<PurchaseOrderReadModel>(mapper);
     }
 

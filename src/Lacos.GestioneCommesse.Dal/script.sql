@@ -3289,3 +3289,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue')
+BEGIN
+    DECLARE @var29 sysname;
+    SELECT @var29 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Application].[DocumentsToSyncQueue]') AND [c].[name] = N'DocumentName');
+    IF @var29 IS NOT NULL EXEC(N'ALTER TABLE [Application].[DocumentsToSyncQueue] DROP CONSTRAINT [' + @var29 + '];');
+    ALTER TABLE [Application].[DocumentsToSyncQueue] ALTER COLUMN [DocumentName] nvarchar(max) NOT NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

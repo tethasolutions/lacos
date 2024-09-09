@@ -14,6 +14,8 @@ public class PurchaseOrderMappingProfile : Profile
             .MapMember(x => x.Code, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3))
             .MapMember(x => x.SupplierName, y => y.Supplier!.Name)
             .MapMember(x => x.JobCode, y => CustomDbFunctions.FormatCode(y.Job!.Number, y.Job.Year, 3))
+            .MapMember(x => x.CustomerId, y => y.Job!.CustomerId)
+            .MapMember(x => x.CustomerName, y => y.Job!.Customer.Name)
             .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
             .MapMember(x => x.JobReference, y => y.Job!.Reference)
             .MapMember(x => x.OperatorName, y => y.Operator!.Name)

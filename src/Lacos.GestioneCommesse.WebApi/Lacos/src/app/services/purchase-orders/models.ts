@@ -30,11 +30,14 @@ export interface IPurchaseOrderReadModel {
     readonly status: PurchaseOrderStatus;
     readonly hasAttachments: boolean;
     readonly jobId: number;
+    readonly jobCode: string;
     readonly jobReference: string;
     readonly jobHasHighPriority: boolean;
+    readonly customerId: number;
+    readonly customerName: string;
     readonly supplierName: string;
     readonly operatorName: string;
-
+    readonly unreadMessages: number;
 }
 
 export class PurchaseOrder {

@@ -13,7 +13,7 @@
                 <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
                     <i class="fa fa-rotate-left me-2"></i> ANNULLA
                 </button>
-                <button type="button" (click)="close()" class="btn btn-primary">
+                <button type="button" (click)="close()" class="btn btn-primary" [disabled]="isOperator">
                     <i class="fa fa-floppy-disk me-2"></i> SALVA
                 </button>
             </div>
@@ -242,10 +242,10 @@
                     <i class="fa fa-rotate-left me-2"></i> ANNULLA
                 </button>
                 <button *ngIf="options.id != null" type="button" class="btn btn-danger me-2" title="Elimina"
-                    (click)="deleteJob()">
+                    (click)="deleteJob()" [disabled]="isOperator">
                     <i class="fas fa-trash"></i>
                 </button>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" [disabled]="isOperator">
                     <i class="fa fa-floppy-disk me-2"></i> SALVA
                 </button>
             </div>

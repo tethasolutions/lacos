@@ -8,6 +8,7 @@ import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { State } from '@progress/kendo-data-query';
 import { tap } from 'rxjs';
+import { MessagesService } from '../services/messages/messages.service';
 
 @Component({
   selector: 'app-message-modal',
@@ -19,11 +20,13 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
   public windowState: WindowState = "default";
 
   operators: OperatorModel[];
+  targetOperators: number[];
   hasTargetOperators: boolean;
 
   constructor(
     messageBox: MessageBoxService,
-    private readonly _operatorsService: OperatorsService
+    private readonly _operatorsService: OperatorsService,
+    private readonly _messagesService: MessagesService
   ) {
     super(messageBox);
   }
@@ -33,11 +36,25 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
   }
 
   override open(options: MessageModalOptions) {
+    this.targetOperators = [];
     const result = super.open(options);
     //this.hasTargetOperators = options.targetOperators.any();
+    if (options.message.id != null) this.replyMessage(options.message.id);
     this.hasTargetOperators = true;
     return result;
   }
+
+  replyMessage(messageId: number) {
+    this._subscriptions.push(
+        this._messagesService.getReplyTargetOperators(messageId, true)
+            .pipe(
+                tap(e => {
+                    this.targetOperators = e;
+                })
+            )
+            .subscribe()
+    );
+}
 
   protected _canClose() {
     markAsDirty(this.form);

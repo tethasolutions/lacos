@@ -21,7 +21,6 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
 
   operators: OperatorModel[];
   targetOperators: number[];
-  hasTargetOperators: boolean;
 
   constructor(
     messageBox: MessageBoxService,
@@ -38,15 +37,13 @@ export class MessageModalComponent extends ModalFormComponent<MessageModalOption
   override open(options: MessageModalOptions) {
     this.targetOperators = [];
     const result = super.open(options);
-    //this.hasTargetOperators = options.targetOperators.any();
-    if (options.message.id != null) this.replyMessage(options.message.id);
-    this.hasTargetOperators = true;
+    if (!options.isNewMessage) this.getTargetOperators(options.message.id);
     return result;
   }
 
-  replyMessage(messageId: number) {
+  getTargetOperators(messageId: number) {
     this._subscriptions.push(
-        this._messagesService.getReplyTargetOperators(messageId, true)
+        this._messagesService.getMessageTargetOperators(messageId)
             .pipe(
                 tap(e => {
                     this.targetOperators = e;

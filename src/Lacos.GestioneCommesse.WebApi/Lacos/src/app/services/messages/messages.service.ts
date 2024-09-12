@@ -85,6 +85,13 @@ export class MessagesService {
             );
     }
 
+    getMessageTargetOperators(messageId: number) {
+        return this._http.get<Array<number>>(`${this._baseUrl}/${messageId}/get-message-target-operators`)
+            .pipe(
+                map(e => e)
+            );
+    }
+
     getElementTargetOperators(senderOperatorId: number, elementId: number, elementType: string) {
         return this._http.get<Array<number>>(`${this._baseUrl}/${senderOperatorId}/${elementId}/${elementType}/get-target-operators-by-element`)
             .pipe(

@@ -51,7 +51,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="hasTargetOperators && options.message.id == 0">
+            {{options.isNewMessage}}
+            <div class="row" *ngIf="options.isNewMessage">
                 <div class="col-md-12">
                     <label>Destinatari commento</label>
                     <div class="form-group">
@@ -75,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="hasTargetOperators && options.message.id != 0">
+            <div class="row" *ngIf="!options.isNewMessage">
                 <div class="col-md-12">
                     <label>Destinatari commento</label>
                     <div class="form-group">

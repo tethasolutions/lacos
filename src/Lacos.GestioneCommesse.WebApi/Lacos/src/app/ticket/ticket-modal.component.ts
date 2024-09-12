@@ -265,7 +265,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     createMessage() {
         const today = new Date();
         const message = new MessageModel(0, today, null, this.currentOperator.id, null, null, this.options.id, null);
-        const options = new MessageModalOptions(message,true, this.targetOperatorsArray);
+        const options = new MessageModalOptions(message, true, true, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)
@@ -309,7 +309,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         this._subscriptions.push(
             this._messagesService.get(message.id)
                 .pipe(
-                    map(e => new MessageModalOptions(e,true)),
+                    map(e => new MessageModalOptions(e,false)),
                     switchMap(e => this.messageModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._messagesService.update(this.messageModal.options.message)),

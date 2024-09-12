@@ -100,6 +100,13 @@ public class MessagesController : LacosApiController
         return operators;
     }
 
+    [HttpGet("{messageId}/get-message-target-operators")]
+    public async Task<List<long>> GetMessageTargetOperators(long messageId)
+    {
+        List<long> operators = (await service.GetMessageTargetOperators(messageId)).ToList();
+        return operators;
+    }
+
     [HttpGet("{senderOperatorId}/{elementId}/{elementType}/get-target-operators-by-element")]
     public async Task<List<long>> GetElementTargetOperators(long senderOperatorId, long elementId, string elementType)
     {

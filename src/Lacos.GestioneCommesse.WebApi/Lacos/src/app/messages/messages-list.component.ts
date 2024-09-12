@@ -247,7 +247,7 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
     createMessage(message: MessagesListReadModel, replyAll: boolean) {
         const today = new Date();
         const newMessage = new MessageModel(message.id, today, null, this.currentOperator.id, message.jobId, message.activityId, message.ticketId, message.purchaseOrderId);
-        const options = new MessageModalOptions(newMessage, replyAll, this.targetOperatorsArray);
+        const options = new MessageModalOptions(newMessage, true, replyAll, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)

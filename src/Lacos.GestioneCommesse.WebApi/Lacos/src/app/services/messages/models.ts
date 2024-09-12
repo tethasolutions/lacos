@@ -54,7 +54,8 @@ export class MessageModel {
 export class MessageModalOptions {
     constructor(
         readonly message: MessageModel,
-        readonly replyAll: boolean,
+        readonly isNewMessage: boolean,
+        readonly replyAll: boolean = false,
         readonly targetOperators: number[] = []
     ) {
     }

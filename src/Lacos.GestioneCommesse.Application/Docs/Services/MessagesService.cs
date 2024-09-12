@@ -288,6 +288,17 @@ public class MessagesService : IMessagesService
             return operators.MapTo<IEnumerable<long>>(mapper);
         }
     }
+    public async Task<IEnumerable<long>> GetMessageTargetOperators(long messageId)
+    {
+        var operators = await dbContext.ExecuteWithDisabledQueryFilters(async () => await notificationRepository.Query()
+            .Where(x => x.MessageId == messageId)
+            .Select(x => x.OperatorId)
+            .Distinct()
+            .ToListAsync(), QueryFilter.OperatorEntity);
+
+        return operators.MapTo<IEnumerable<long>>(mapper);
+    }
+
     public async Task<IEnumerable<long>> GetElementTargetOperators(long senderOperatorId, long elementId, string elementType)
     {
         var AdminOperators = await operatorRepository.Query()

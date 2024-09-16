@@ -46,8 +46,6 @@
         </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-column field="senderOperator" title="Mittente">
-    </kendo-grid-column>
     <kendo-grid-column field="date" title="Data Messaggio" filter="date" format="dd/MM/yyyy" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="text-nowrap">
@@ -55,10 +53,9 @@
             </div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="note" title="Messaggio">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div [innerHTML]="dataItem.note"></div>
-        </ng-template>
+    <kendo-grid-column field="senderOperator" title="Mittente">
+    </kendo-grid-column>
+    <kendo-grid-column field="customerName" title="Cliente" [width]="100">
     </kendo-grid-column>
     <kendo-grid-column field="jobCode" title="Comm." [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -68,16 +65,19 @@
             </div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="customerName" title="Cliente">
-    </kendo-grid-column>
-    <kendo-grid-column field="jobReference" title="Riferimento">
+    <kendo-grid-column field="jobReference" title="Riferimento" [width]="250">
     </kendo-grid-column>
     <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color" kendoTooltip>
         <ng-template kendoGridCellTemplate let-dataItem>
             <div [style.background-color]="dataItem.activityColor" title="{{dataItem.activityType}}">&nbsp;</div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="activityDescription" title="Attività">
+    <kendo-grid-column field="activityDescription" title="Attività" [width]="250">
+    </kendo-grid-column>
+    <kendo-grid-column field="note" title="Messaggio">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div [innerHTML]="dataItem.note"></div>
+        </ng-template>
     </kendo-grid-column>
 
     <kendo-grid-column field="targetOperators" title=" " [sortable]="false" [filterable]="false" [width]="1">

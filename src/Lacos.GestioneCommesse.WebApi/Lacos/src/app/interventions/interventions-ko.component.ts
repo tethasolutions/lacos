@@ -9,6 +9,7 @@ import { filter, switchMap, tap } from 'rxjs';
 import { ApiUrls } from '../services/common/api-urls';
 import { UserService } from '../services/security/user.service';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
+import { MessageBoxService } from '../services/common/message-box.service';
 
 @Component({
     selector: 'app-interventions-ko',
@@ -38,6 +39,7 @@ export class InterventionsKoComponent extends BaseComponent implements OnInit {
 
     constructor(
         private readonly _service: InterventionsService,
+        private readonly _messageBox: MessageBoxService,
         private readonly _userService: UserService
     ) {
         super();
@@ -71,11 +73,6 @@ export class InterventionsKoComponent extends BaseComponent implements OnInit {
 
     cellClickHandler(args: CellClickEvent): void {
         this.cellArgs = args;
-    }
-
-    downloadReport(interventionId: number) {
-        const user = this._userService.getUser();
-        window.open(`${ApiUrls.baseApiUrl}/interventions/download-report/${interventionId}?access_token=${user.accessToken}`, "_blank");
     }
 
     protected _read() {

@@ -144,7 +144,20 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
     downloadReport(interventionId: number) {
         const user = this._userService.getUser();
-        window.open(`${ApiUrls.baseApiUrl}/interventions/download-report/${interventionId}?access_token=${user.accessToken}`, "_blank");
+        window.open(`${ApiUrls.baseApiUrl}/interventions/download-report/${interventionId}?access_token=${user.accessToken}`, "_blank")
+    }
+
+    sendReport(interventionId: number, customerEmail: string) {
+        const user = this._userService.getUser();
+        var sendEmail = false;
+        this._messageBox.confirm("Vuoi inviare il rapportino alla mail del cliente (" + customerEmail + ")?", "Invio rapportino")
+        .pipe(
+            filter(e => e),
+            switchMap(() => 
+                this._service.sendReport(interventionId, customerEmail)
+            )
+        )
+        .subscribe();
     }
 
     protected _read() {

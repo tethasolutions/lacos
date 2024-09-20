@@ -9,7 +9,7 @@
     <ng-container *ngIf="!activityId">
         <kendo-grid-column field="customer" title="Cliente">
         </kendo-grid-column>
-        <kendo-grid-column field="address" title="Indirizzo">
+        <kendo-grid-column field="customerAddress" title="Indirizzo">
         </kendo-grid-column>
     </ng-container>
 
@@ -64,6 +64,10 @@
                 <button class="btn btn-primary btn-sm" title="Download Rapportino"
                     (click)="downloadReport(dataItem.id)">
                     <i class="fas fa-file"></i>
+                </button>
+                <button class="btn btn-primary btn-sm" [title]="dataItem.customerEmail" [disabled]="!dataItem.customerEmail"
+                    (click)="sendReport(dataItem.id, dataItem.customerEmail)">
+                    <i class="fas fa-paper-plane"></i>
                 </button>
                 <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                     <i class="fas fa-edit"></i>

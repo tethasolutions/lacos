@@ -111,4 +111,11 @@ export class InterventionsService {
                 map(e => e.map(ee => InterventionNote.build(ee)))
             );
     }
+
+    sendReport(interventionId: number, customerEmail: string) {
+        return this._http.post<void>(`${this._baseUrl}/send-report/${interventionId}`, {customerEmail})
+            .pipe(
+                map(() => { })
+            );
+    }
 }

@@ -4,12 +4,15 @@ using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
 using Lacos.GestioneCommesse.Application.Products.Service;
+using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
 using Lacos.GestioneCommesse.WebApi.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
+using System.Net.Mail;
+using System.Runtime.CompilerServices;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -19,6 +22,11 @@ public class InterventionsController : LacosApiController
     private readonly IInterventionsService service;
     private readonly ILacosConfiguration configuration;
     private readonly IMimeTypeProvider mimeTypeProvider;
+
+    public class sendReportParameter
+    {
+        public string customerEmail { get; set; }
+    }
 
     public InterventionsController(IInterventionsService service, ILacosConfiguration configuration, IMimeTypeProvider mimeTypeProvider)
     {
@@ -84,6 +92,25 @@ public class InterventionsController : LacosApiController
     {
         var report = await service.GenerateReport(interventionId);
         return File(report.Content, "application/pdf", report.FileName);
+    }
+
+
+    [HttpPost("send-report/{interventionId}")]
+    public async Task SendReport(long interventionId, sendReportParameter parameter)
+    {
+        var report = await service.GenerateReport(interventionId);
+        FileResult f = File(report.Content, "application/pdf", report.FileName);
+        var intervention = await service.Get(interventionId);
+        if (intervention != null)
+        {
+            string subject = "Invio rapportino intervento - Lacos Group";
+            string body = "<html><body><p>Gentile Cliente,<br/>in allego il rapportino dell'intervento effettuato in data "
+                + "<strong>" + intervention.Start.Date.ToLongDateString() + "</strong></p>"
+                + "<p>L'esito dell'intervento è: <strong>" + (intervention.Status == InterventionStatus.CompletedSuccesfully ? "Completato con successo" : "Completato con KO") + "</strong></p>"
+                + "<p>Cordiali saluti,<br/><i>Lacos Group Srl</i></p></body></html>";
+            var attachment = new Attachment(new MemoryStream(report.Content), report.FileName);
+            await service.SendMessage(parameter.customerEmail, "", subject, body, attachment, true);
+        }
     }
 
     [AllowAnonymous]

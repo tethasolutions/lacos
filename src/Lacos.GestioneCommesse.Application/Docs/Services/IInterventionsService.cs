@@ -1,4 +1,5 @@
 ﻿using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using System.Net.Mail;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -21,4 +22,6 @@ public interface IInterventionsService
     Task<ReportDto> GenerateReport(long interventionId);
     Task<InterventionNoteDto> DownloadInterventionNote(string filename);
     IQueryable<InterventionProductCheckListItemKOReadModel> GetInterventionsKo();
+
+    Task SendMessage(string receiver, string CC, string subject, string body, Attachment attachments = null, bool isBodyHtml = true);
 }

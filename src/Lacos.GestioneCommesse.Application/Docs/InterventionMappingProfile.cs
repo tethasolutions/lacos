@@ -12,7 +12,8 @@ public class InterventionMappingProfile : Profile
     {
         CreateMap<Intervention, InterventionReadModel>()
             .MapMember(x => x.Customer, y => y.Activity!.Job!.Customer!.Name)
-            .MapMember(x => x.Address, y => y.Activity!.Address!.StreetAddress + ", " + y.Activity!.Address.City + " (" + y.Activity!.Address.Province + ")")
+            .MapMember(x => x.CustomerAddress, y => y.Activity!.Address!.StreetAddress + ", " + y.Activity!.Address.City + " (" + y.Activity!.Address.Province + ")")
+            .MapMember(x => x.CustomerEmail, y => (y.Activity!.Job!.Customer!.Email != null ? y.Activity!.Job!.Customer!.Email : y.Activity!.Job!.Customer!.ContactEmail))
             .MapMember(x => x.ActivityType, y => y.Activity!.Type!.Name)
             .MapMember(x => x.ActivityTypeId, y => y.Activity!.TypeId)
             .MapMember(x => x.ActivityColor, y => y.Activity!.Type!.ColorHex)

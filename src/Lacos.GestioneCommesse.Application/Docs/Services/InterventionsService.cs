@@ -13,6 +13,9 @@ using Telerik.Reporting;
 using Parameter = Telerik.Reporting.Parameter;
 using Westcar.WebApplication.Dal;
 using System.Linq.Expressions;
+using System.Net.Mail;
+using System.Net;
+using System.Linq;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -352,12 +355,28 @@ public class InterventionsService : IInterventionsService
         return productCheckList;
     }
 
-    public Task<ReportDto> GenerateReport(long interventionId)
+    public async Task<ReportDto> GenerateReport(long interventionId)
     {
         var parameters = new[] { new Parameter("InterventionId", interventionId) };
         var content = Report("Intervento.trdp", parameters);
 
-        return Task.FromResult(new ReportDto(content, "intervento.pdf"));
+        string fileName = "intervento.pdf";
+
+        Intervention intervention = await repository.Query()
+            .Where(i => i.Id == interventionId)
+            .FirstOrDefaultAsync();
+
+        if (intervention != null)
+        {
+            fileName = "intervento_" + intervention.Start.Year.ToString() + "_" + intervention.Start.Month.ToString("00") + "_" + intervention.Start.Day.ToString("00") 
+                + "_" + intervention.Id.ToString() + ".pdf";
+            intervention.ReportFileName = fileName;
+            intervention.ReportGeneratedOn = DateTimeOffset.Now;
+            repository.Update(intervention);
+            await dbContext.SaveChanges();
+        }
+
+        return await Task.FromResult(new ReportDto(content, fileName));
     }
 
     private static byte[] Report(string reportName, params Parameter[] parameters)
@@ -441,5 +460,37 @@ public class InterventionsService : IInterventionsService
             });
 
         return query;
+    }
+
+    public async Task SendMessage(string receiver, string CC, string subject, string body, Attachment attachment = null, bool isBodyHtml = true)
+    {
+        SmtpClient SmtpClient = new SmtpClient("smtp.sendgrid.net", 587)
+        {
+            DeliveryMethod = SmtpDeliveryMethod.Network,
+            UseDefaultCredentials = false,
+            Credentials = new NetworkCredential("apikey", "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"),
+            EnableSsl = false
+        };
+
+        string sender = "report@lacosgroup.it";
+
+        var message = new MailMessage(sender, receiver, subject, body)
+        {
+            IsBodyHtml = isBodyHtml
+        };
+
+        message.CC.Add(new MailAddress(sender));
+
+        if (CC != "")
+        {
+            message.CC.Add(new MailAddress(CC));
+        }
+
+        if (attachment != null)
+        {
+            message.Attachments.Add(attachment);
+        }
+
+        SmtpClient.Send(message);
     }
 }

@@ -67,6 +67,7 @@ export interface IInterventionReadModel {
     readonly end: Date | string;
     readonly customer: string;
     readonly customerAddress: string;
+    readonly customerEmail: string;
     readonly description: string;
     readonly operators: IInterventionOperatorReadModel[];
     readonly activityTypeId: string;

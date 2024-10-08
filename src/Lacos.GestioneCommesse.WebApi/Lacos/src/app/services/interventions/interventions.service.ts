@@ -91,18 +91,9 @@ export class InterventionsService {
     }
 
     readInterventionsKo(state: State) {
-        const params = toDataSourceRequestString(state);
-        const hasGroups = state.group && state.group.length;
 
-        return this._http.get<GridDataResult>(`${this._baseUrl}/interventions-ko?${params}`)
-            .pipe(
-                map(e =>
-                    <GridDataResult>{
-                        data: hasGroups ? translateDataSourceResultGroups(e.data) : e.data,
-                        total: e.total
-                    }
-                )
-            );
+        return readData(this._http, state, `${this._baseUrl}/interventions-ko`);
+
     }
 
     getInterventionAttachments(jobId: number, activityId: number) {

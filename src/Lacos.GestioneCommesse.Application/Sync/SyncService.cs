@@ -132,6 +132,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
         private async Task CreateUpdateDocumentsToSync(string deviceGuid, long operatorId)
         {
+            //var result = dbContext.ExecuteStoredProcedure<string>("usp_removeDuplicateRecord_SyncDocument");
 
             var documentToSyncQueueRepository = serviceProvider.GetRequiredService<IRepository<DocumentToSyncQueue>>();
             List<string> oldDocumentsToSyncList = await documentToSyncQueueRepository

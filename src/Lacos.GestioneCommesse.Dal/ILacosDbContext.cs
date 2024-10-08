@@ -1,8 +1,10 @@
 ﻿using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Lacos.GestioneCommesse.Domain;
 using Lacos.GestioneCommesse.Framework.Session;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
@@ -21,6 +23,8 @@ public interface ILacosDbContext
     Task<T> ExecuteWithEnabledQueryFilters<T>(Func<Task<T>> func, params QueryFilter[] queryFiltersEnabled);
     Task ExecuteWithDisabledQueryFilters(Func<Task> action, params QueryFilter[] queryFiltersDisabled);
     Task<T> ExecuteWithDisabledQueryFilters<T>(Func<Task<T>> func, params QueryFilter[] queryFiltersDisabled);
+    IQueryable<T> ExecuteStoredProcedure<T>(string storedProcedureName, params SqlParameter[] parameters) where T : class;
+    IQueryable<T> ExecuteStoredProcedure<T>(string storedProcedureName) where T : class;
 }
 
 public enum QueryFilter
@@ -360,6 +364,19 @@ public class LacosDbContext : DbContext, ILacosDbContext
             { QueryFilter.SoftDelete, enabled },
             { QueryFilter.OperatorEntity, enabled }
         };
+    }
+
+    public IQueryable<T> ExecuteStoredProcedure<T>(string storedProcedureName, params SqlParameter[] parameters) where T : class
+    {
+        var query = FormattableStringFactory.Create($"EXEC {storedProcedureName} {string.Join(", ", parameters.Select((p, index) => $"{{{index}}}"))}", parameters);
+
+        return base.Set<T>().FromSqlInterpolated(query);
+    }
+    public IQueryable<T> ExecuteStoredProcedure<T>(string storedProcedureName) where T : class
+    {
+        var query = FormattableStringFactory.Create($"EXEC {storedProcedureName}");
+
+        return base.Set<T>().FromSqlInterpolated(query);
     }
 
     private class ReplaceExpressionVisitor : ExpressionVisitor

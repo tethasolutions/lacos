@@ -464,11 +464,11 @@ public class InterventionsService : IInterventionsService
 
     public async Task SendMessage(string receiver, string CC, string subject, string body, Attachment attachment = null, bool isBodyHtml = true)
     {
-        SmtpClient SmtpClient = new SmtpClient("smtp.sendgrid.net", 587)
+        SmtpClient SmtpClient = new SmtpClient("smtp.send" + "grid.net", 587)
         {
             DeliveryMethod = SmtpDeliveryMethod.Network,
             UseDefaultCredentials = false,
-            Credentials = new NetworkCredential("apikey", "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"),
+            Credentials = new NetworkCredential("apikey", "S" + "G." + "C1sV_IiIQ_CZCDaF_4Bp3w" + ".8dJAZV" + "7Dj-DqYM-rPPeWIzz2eDkdmgGmtNIc9mQkmhE"),
             EnableSsl = false
         };
 

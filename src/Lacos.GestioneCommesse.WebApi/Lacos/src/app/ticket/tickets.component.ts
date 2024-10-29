@@ -17,6 +17,7 @@ import { UserService } from '../services/security/user.service';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
+import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
     selector: 'app-tickets',
@@ -201,8 +202,8 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         const ticket = context.dataItem as ITicketReadModel;
 
         switch (true) {
-            case ticket.status === TicketStatus.Canceled:
-                return { 'ticket-canceled': true };
+            case ticket.status === TicketStatus.Closed:
+                return { 'ticket-closed': true };
             case ticket.status === TicketStatus.InProgress:
                 return { 'ticket-inprogress': true };
             case ticket.status === TicketStatus.Opened:
@@ -298,4 +299,21 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         this._read();
     }
 
+    downloadReport(ticketId: number) {
+        const user = this._user.getUser();
+        window.open(`${ApiUrls.baseApiUrl}/tickets/download-report/${ticketId}?access_token=${user.accessToken}`, "_blank")
+    }
+
+    sendReport(ticketId: number, customerEmail: string) {
+        const user = this._user.getUser();
+        var sendEmail = false;
+        this._messageBox.confirm("Vuoi inviare il ticket alla mail del cliente (" + customerEmail + ")?", "Invio ticket")
+        .pipe(
+            filter(e => e),
+            switchMap(() => 
+                this._service.sendReport(ticketId, customerEmail)
+            )
+        )
+        .subscribe();
+    }
 }

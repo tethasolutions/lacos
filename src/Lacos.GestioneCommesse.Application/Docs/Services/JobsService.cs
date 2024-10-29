@@ -20,6 +20,7 @@ public class JobsService : IJobsService
     private readonly IRepository<Operator> operatorRepository;
     private readonly IRepository<JobAttachment> jobAttachmentRepository;
     private readonly IViewRepository<JobsProgressStatus> jobsProgressStatusRepository;
+    private readonly IRepository<Ticket> ticketRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
@@ -29,6 +30,7 @@ public class JobsService : IJobsService
         IRepository<Operator> operatorRepository,
         IRepository<JobAttachment> jobAttachmentRepository,
         IViewRepository<JobsProgressStatus> jobsProgressStatusRepository,
+        IRepository<Ticket> ticketRepository,
         ILacosSession session,
         ILacosDbContext dbContext
     )
@@ -38,6 +40,7 @@ public class JobsService : IJobsService
         this.operatorRepository = operatorRepository;
         this.jobAttachmentRepository = jobAttachmentRepository;
         this.jobsProgressStatusRepository = jobsProgressStatusRepository;
+        this.ticketRepository = ticketRepository;
         this.session = session;
         this.dbContext = dbContext;
     }
@@ -159,6 +162,23 @@ public class JobsService : IJobsService
 
         repository.Update(job);
 
+        //se il job viene impostato come fatturata allora chiudo il relativo ticket se presente
+        if (job.Status == JobStatus.Billed)
+        {
+            var tickets = await ticketRepository.Query()
+                .Where(e => e.JobId == job.Id || e.Activity.JobId == job.Id)
+                .ToListAsync();
+
+            if (tickets != null)
+            {
+                foreach (var ticket in tickets)
+                {
+                    ticket.Status = TicketStatus.Closed;
+                    ticketRepository.Update(ticket);
+                }
+            }
+        }
+                
         await dbContext.SaveChanges();
 
         return await Get(job.Id);

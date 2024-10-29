@@ -3314,3 +3314,40 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD [CustomerSignatureFileName] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD [CustomerSignatureName] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD [ReportFileName] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD [ReportGeneratedOn] datetimeoffset(3) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241028124621_nuovi campi ticket', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

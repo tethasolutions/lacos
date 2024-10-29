@@ -547,6 +547,20 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     var newEntity = model.MapTo<TEntity>(mapper);
                     await repository.Insert(newEntity);
                     await dbContext.SaveChanges();
+
+                    //aggiunta commento su inserimento note intervento
+                    if (typeof(TEntity) == typeof(InterventionNote) && newEntity != null) {
+                        var messageRepository = serviceProvider.GetRequiredService<IRepository<Message>>();
+                        Message message = new Message();
+                        InterventionNote interventionNote = repository.Get(newEntity.Id).MapTo<InterventionNote>(mapper);
+                        message.OperatorId = interventionNote.OperatorId;
+                        message.ActivityId = interventionNote.Intervention.ActivityId;
+                        message.Note = interventionNote.Notes;
+                        message.Date = interventionNote.CreatedOn;
+                        await messageRepository.Insert(message);
+
+                    }
+
                     list.Add(newEntity.MapTo<TDto>(mapper));
                 }
             }

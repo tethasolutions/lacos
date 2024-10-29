@@ -17,4 +17,5 @@ public interface ITicketsService
     Task<TicketAttachmentReadModel> DownloadTicketAttachment(string filename);
     Task<TicketAttachmentDto> UpdateTicketAttachment(long id, TicketAttachmentDto attachmentDto);
     Task<TicketAttachmentDto> CreateTicketAttachment(TicketAttachmentDto attachmentDto);
+    Task<ReportDto> GenerateReport(long ticketId);
 }

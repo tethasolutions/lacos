@@ -22,17 +22,19 @@ public class InterventionsController : LacosApiController
     private readonly IInterventionsService service;
     private readonly ILacosConfiguration configuration;
     private readonly IMimeTypeProvider mimeTypeProvider;
+    private readonly ISharedService sharedService;
 
     public class sendReportParameter
     {
         public string customerEmail { get; set; }
     }
 
-    public InterventionsController(IInterventionsService service, ILacosConfiguration configuration, IMimeTypeProvider mimeTypeProvider)
+    public InterventionsController(IInterventionsService service, ILacosConfiguration configuration, IMimeTypeProvider mimeTypeProvider, ISharedService sharedService)
     {
         this.service = service;
         this.configuration = configuration;
         this.mimeTypeProvider = mimeTypeProvider;
+        this.sharedService = sharedService;
     }
 
     [HttpGet("read")]
@@ -109,7 +111,7 @@ public class InterventionsController : LacosApiController
                 + "<p>L'esito dell'intervento è: <strong>" + (intervention.Status == InterventionStatus.CompletedSuccesfully ? "Completato con successo" : "Completato con KO") + "</strong></p>"
                 + "<p>Cordiali saluti,<br/><i>Lacos Group Srl</i></p></body></html>";
             var attachment = new Attachment(new MemoryStream(report.Content), report.FileName);
-            await service.SendMessage(parameter.customerEmail, "", subject, body, attachment, true);
+            await sharedService.SendMessage(parameter.customerEmail, "", subject, body, attachment, true);
         }
     }
 

@@ -6,7 +6,7 @@ export enum TicketStatus {
     Opened,
     InProgress,
     Resolved,
-    Canceled
+    Closed
 }
 
 export const ticketStatusNames: Dictionary<TicketStatus, string> = {
@@ -14,7 +14,7 @@ export const ticketStatusNames: Dictionary<TicketStatus, string> = {
     [TicketStatus.Opened]: 'APERTO',
     [TicketStatus.InProgress]: 'IN CORSO',
     [TicketStatus.Resolved]: 'EVASO',
-    [TicketStatus.Canceled]: 'ANNULLATO'
+    [TicketStatus.Closed]: 'CHIUSO'
 
 };
 
@@ -29,6 +29,7 @@ export interface ITicketReadModel {
     readonly activityId: number;
     readonly customerId: number;
     readonly customerName: string;
+    readonly customerEmail: string;
     readonly operatorName: string;
     //readonly canBeRemoved: boolean;
     readonly unreadMessages: number;

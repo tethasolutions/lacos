@@ -97,4 +97,11 @@ export class TicketsService {
                 map(e => new TicketAttachmentUploadFileModel(e.fileName, e.originalFileName))
             );
     }
+
+    sendReport(ticketId: number, customerEmail: string) {
+        return this._http.post<void>(`${this._baseUrl}/send-report/${ticketId}`, {customerEmail})
+            .pipe(
+                map(() => { })
+            );
+    }
 }

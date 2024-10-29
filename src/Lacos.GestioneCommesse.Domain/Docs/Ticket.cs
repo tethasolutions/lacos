@@ -22,6 +22,11 @@ public class Ticket : FullAuditedEntity
     public long? OperatorId { get; set; }
     public Operator? Operator { get; set; }
 
+    public string? ReportFileName { get; set; }
+    public DateTimeOffset? ReportGeneratedOn { get; set; }
+    public string? CustomerSignatureName { get; set; }
+    public string? CustomerSignatureFileName { get; set; }
+
     public ICollection<TicketPicture> Pictures { get; set; }
     public ICollection<Message> Messages { get; set; }
 

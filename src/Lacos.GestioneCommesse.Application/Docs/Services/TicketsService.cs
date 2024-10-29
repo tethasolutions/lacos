@@ -8,6 +8,9 @@ using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using Telerik.Reporting.Processing;
+using Telerik.Reporting;
+using Parameter = Telerik.Reporting.Parameter;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -268,4 +271,40 @@ public class TicketsService : ITicketsService
         return attachment.MapTo<TicketAttachmentDto>(mapper);
     }
     //------------------------------------------------------------------------------------------------------------
+
+    public async Task<ReportDto> GenerateReport(long ticketId)
+    {
+        var parameters = new[] { new Parameter("TicketId", ticketId) };
+        var content = Report("Ticket.trdp", parameters);
+
+        string fileName = "ticket.pdf";
+
+        Ticket ticket = await repository.Query()
+            .Where(i => i.Id == ticketId)
+            .FirstOrDefaultAsync();
+
+        if (ticket != null)
+        {
+            fileName = "ticket_" + ticket.TicketDate.Year.ToString() + "_" + ticket.TicketDate.Month.ToString("00") + "_" + ticket.TicketDate.Day.ToString("00")
+                + "_" + ticket.Id.ToString() + ".pdf";
+            ticket.ReportFileName = fileName;
+            ticket.ReportGeneratedOn = DateTimeOffset.Now;
+            repository.Update(ticket);
+            await dbContext.SaveChanges();
+        }
+
+        return await Task.FromResult(new ReportDto(content, fileName));
+    }
+
+    private static byte[] Report(string reportName, params Parameter[] parameters)
+    {
+        var processor = new ReportProcessor();
+        var src = new UriReportSource { Uri = $@"Reports\{reportName}" };
+
+        src.Parameters.AddRange(parameters);
+
+        var result = processor.RenderReport("PDF", src, null);
+
+        return result.DocumentBytes;
+    }
 }

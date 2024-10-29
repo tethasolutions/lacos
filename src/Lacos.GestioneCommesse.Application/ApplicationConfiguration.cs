@@ -21,6 +21,7 @@ public static class ApplicationConfiguration
         services
             .AddScoped<ISecurityContextFactory, SecurityContextFactory>()
             .AddScoped<ISecurityService, SecurityService>()
+            .AddScoped<ISharedService, SharedService> ()
             .AddScoped<IAccessTokenProvider, TAccessTokenProvider>()
             .AddScoped<ICustomerService, CustomerService>()
             .AddScoped<ISupplierService, SupplierService>()

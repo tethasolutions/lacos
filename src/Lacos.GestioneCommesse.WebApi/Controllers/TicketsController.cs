@@ -7,6 +7,9 @@ using Lacos.GestioneCommesse.Framework.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
+using static Lacos.GestioneCommesse.WebApi.Controllers.InterventionsController;
+using System.Net.Mail;
+using Lacos.GestioneCommesse.Domain.Docs;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -15,12 +18,14 @@ public class TicketsController : LacosApiController
     private readonly ITicketsService service;
     private readonly ILacosConfiguration configuration;
     private readonly IMimeTypeProvider mimeTypeProvider;
+    private readonly ISharedService sharedService;
 
-    public TicketsController(ITicketsService service, ILacosConfiguration configuration, IMimeTypeProvider mimeTypeProvider)
+    public TicketsController(ITicketsService service, ILacosConfiguration configuration, IMimeTypeProvider mimeTypeProvider, ISharedService sharedService)
     {
         this.service = service;
         this.configuration = configuration;
         this.mimeTypeProvider = mimeTypeProvider;
+        this.sharedService = sharedService;
     }
 
     [HttpGet("read")]
@@ -153,5 +158,30 @@ public class TicketsController : LacosApiController
     {
         List<TicketAttachmentReadModel> ticketsAttachment = (await service.GetTicketAttachments(id)).ToList();
         return ticketsAttachment;
+    }
+
+    [HttpGet("download-report/{ticketId}")]
+    public async Task<FileResult> DownloadReport(long ticketId)
+    {
+        var report = await service.GenerateReport(ticketId);
+        return File(report.Content, "application/pdf", report.FileName);
+    }
+
+    [HttpPost("send-report/{ticketId}")]
+    public async Task SendReport(long ticketId, sendReportParameter parameter)
+    {
+        var report = await service.GenerateReport(ticketId);
+        FileResult f = File(report.Content, "application/pdf", report.FileName);
+        var ticket = await service.Get(ticketId);
+        if (ticket != null)
+        {
+            string subject = "Invio rapportino intervento - Lacos Group";
+            string body = "<html><body><p>Gentile Cliente,<br/>in allego il rapportino dell'intervento effettuato in data "
+                + "<strong>" + ticket.Date.Date.ToLongDateString() + "</strong></p>"
+                + "<p>Lo stato del ticket è: <strong>" + (ticket.Status == TicketStatus.Resolved || ticket.Status == TicketStatus.Closed ? "Evaso" : "In lavorazione") + "</strong></p>"
+                + "<p>Cordiali saluti,<br/><i>Lacos Group Srl</i></p></body></html>";
+            var attachment = new Attachment(new MemoryStream(report.Content), report.FileName);
+            await sharedService.SendMessage(parameter.customerEmail, "", subject, body, attachment, true);
+        }
     }
 }

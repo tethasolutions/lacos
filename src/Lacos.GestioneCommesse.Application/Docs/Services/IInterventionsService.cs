@@ -23,5 +23,4 @@ public interface IInterventionsService
     Task<InterventionNoteDto> DownloadInterventionNote(string filename);
     IQueryable<InterventionProductCheckListItemKOReadModel> GetInterventionsKo();
 
-    Task SendMessage(string receiver, string CC, string subject, string body, Attachment attachments = null, bool isBodyHtml = true);
 }

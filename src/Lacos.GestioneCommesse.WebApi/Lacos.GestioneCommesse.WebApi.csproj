@@ -44,6 +44,9 @@
     <None Update="Reports\CheckListItems.trdp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Reports\Ticket.trdp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Reports\Intervento.trdp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -52,7 +52,10 @@ public onCellClick(
       this._subscriptions.push(
           this._jobsService.get(this.contextItem[this.key])
               .pipe(
-                  switchMap(e => this.jobDetailModal.open(e))
+                  switchMap(e => this.jobDetailModal.open(e)),
+                  filter(e => e),
+                  switchMap(() => this._jobsService.update(this.jobDetailModal.options)),
+                  tap(() => window.location.reload())
               )
               .subscribe()
       );

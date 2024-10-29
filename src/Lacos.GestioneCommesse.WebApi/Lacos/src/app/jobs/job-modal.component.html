@@ -9,7 +9,7 @@
             <div *ngIf="!options.id" class="k-window-title">
                 Nuova commessa
             </div>
-            <div class="text-right" *ngIf="!jobReadOnly">
+            <div class="text-right" *ngIf="!jobReadOnly || !isOperator">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
                     <i class="fa fa-rotate-left me-2"></i> ANNULLA
                 </button>
@@ -236,8 +236,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="d-flex justify-content-end gap-2 mt-5" *ngIf="!jobReadOnly">
+            <div class="d-flex justify-content-end gap-2 mt-5" *ngIf="!jobReadOnly || !isOperator">
                 <button type="button" (click)="dismiss()" class="btn btn-secondary">
                     <i class="fa fa-rotate-left me-2"></i> ANNULLA
                 </button>

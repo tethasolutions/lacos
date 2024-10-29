@@ -112,6 +112,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 .Where(x => !x.IsSyncronized && x.DeviceGuid == syncDocumentListDto.DeviceGuid)
                 .OrderBy(x=>x.Order)
                 .Select(x => x.DocumentName)
+                
                 .ToListAsync();
 
             syncDocumentListDto.DocumentNames = documentsNames;
@@ -266,7 +267,21 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
             newDocumentsToSyncList.AddRange(interventionProductCheckListItemList);
             //--------------------------------------------------------------------------------
+            
+            //---------------------------------------------------------------------------------
+            var ticketRepository = serviceProvider.GetRequiredService<IRepository<Ticket>>();
 
+            var ticketSignList = await ticketRepository
+                .Query()
+                .Where(x=>!string.IsNullOrEmpty(x.CustomerSignatureFileName))
+                .Select(x => new DocumentItem {DocumentName = x.CustomerSignatureFileName ?? "", Order = 10} )
+                .Distinct()
+                .ToListAsync();
+
+            newDocumentsToSyncList.AddRange(ticketSignList);
+            //--------------------------------------------------------------------------------
+            
+            
             var list = newDocumentsToSyncList.Where(x => !oldDocumentsToSyncList.Contains(x.DocumentName));
 
             foreach (var documentItem in list)

@@ -14,6 +14,10 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public long? CustomerId { get; set; }
         public long? ActivityId { get; set; }
         public long? OperatorId { get; set;}
+        public string? ReportFileName { get; set; }
+        public DateTimeOffset? ReportGeneratedOn { get; set; }
+        public string? CustomerSignatureName { get; set; }
+        public string? CustomerSignatureFileName { get; set; }
         
     }
 

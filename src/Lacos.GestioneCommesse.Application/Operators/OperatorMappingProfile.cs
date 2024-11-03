@@ -27,6 +27,7 @@ public class OperatorMappingProfile : Profile
             .Ignore(x => x.ActivityTypes)
             .Ignore(x => x.Documents)
             .Ignore(x => x.Jobs)
+            .Ignore(x => x.NotificationOperators)
             .AfterMap(AfterMap);
 
         CreateMap<Operator, OperatorReadModel>()
@@ -40,9 +41,19 @@ public class OperatorMappingProfile : Profile
             .Ignore(x => x.OperatorId)
             .IgnoreCommonMembers();
 
-
         CreateMap<OperatorDocument, OperatorDocumentDto>();
         CreateMap<OperatorDocumentDto, OperatorDocument>()
+            .Ignore(x => x.Operator)
+            .IgnoreCommonMembers();
+
+        CreateMap<NotificationOperator, NotificationOperatorDto>();
+        CreateMap<NotificationOperatorDto, NotificationOperator>()
+            .Ignore(x => x.Operator)
+            .IgnoreCommonMembers();
+
+        CreateMap<NotificationOperator, NotificationOperatorReadModel>()
+            .MapMember(x => x.OperatorName, y => y.Operator.Name);
+        CreateMap<NotificationOperatorReadModel, NotificationOperator>()
             .Ignore(x => x.Operator)
             .IgnoreCommonMembers();
 

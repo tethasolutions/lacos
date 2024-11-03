@@ -29,5 +29,6 @@ public class OperatorMap : BaseEntityMapping<Operator>
         builder.OneToMany(e => e.InterventionProductPictures, e => e.Operator, e => e.OperatorId);
         builder.OneToMany(e => e.InterventionProductCheckListItems, e => e.Operator, e => e.OperatorId);
         builder.OneToMany(e => e.InterventionNotes, e => e.Operator, e => e.OperatorId);
+        builder.OneToMany(e => e.NotificationOperators, e => e.Operator, e => e.OperatorId);
     }
 }

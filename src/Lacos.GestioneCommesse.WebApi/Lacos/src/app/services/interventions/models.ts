@@ -28,6 +28,7 @@ export class Intervention {
         start: string | Date,
         end: string | Date,
         public status: InterventionStatus,
+        public toBeReschedule: boolean,
         public description: string,
         public vehicleId: number,
         public activityId: number,
@@ -42,7 +43,7 @@ export class Intervention {
 
     static build(o: Intervention) {
         const notes = o.notes.map(e => InterventionNote.build(e));
-        return new Intervention(o.id, o.start, o.end, o.status, o.description, o.vehicleId,
+        return new Intervention(o.id, o.start, o.end, o.status, o.toBeReschedule, o.description, o.vehicleId,
             o.activityId, o.jobId, o.operators, o.activityProducts, notes);
     }
 
@@ -63,6 +64,7 @@ export interface IInterventionReadModel {
 
     readonly id: number;
     readonly status: InterventionStatus;
+    readonly toBeReschedule: boolean;
     readonly start: Date | string;
     readonly end: Date | string;
     readonly customer: string;

@@ -1,6 +1,7 @@
 ﻿using Lacos.GestioneCommesse.Application.CheckLists.Services;
 using Lacos.GestioneCommesse.Application.Customers.Services;
 using Lacos.GestioneCommesse.Application.Docs.Services;
+using Lacos.GestioneCommesse.Application.NotificationOperators.Service;
 using Lacos.GestioneCommesse.Application.Operators.Services;
 using Lacos.GestioneCommesse.Application.Products.Service;
 using Lacos.GestioneCommesse.Application.Registry.Services;
@@ -39,7 +40,8 @@ public static class ApplicationConfiguration
             .AddScoped<IInterventionsService, InterventionsService>()
             .AddScoped<ITicketsService, TicketsService>()
             .AddScoped<IPurchaseOrdersService, PurchaseOrdersService>()
-            .AddScoped<IMessagesService, MessagesService>();
+            .AddScoped<IMessagesService, MessagesService>()
+            .AddScoped<INotificationOperatorService, NotificationOperatorService> ();
 
         return services;
     }

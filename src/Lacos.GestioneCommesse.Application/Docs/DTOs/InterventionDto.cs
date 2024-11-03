@@ -8,6 +8,7 @@ public class InterventionDto
     public DateTimeOffset Start { get; set; }
     public DateTimeOffset End { get; set; }
     public InterventionStatus Status { get; set; }
+    public bool? ToBeReschedule { get; set; }
     public string? Description { get; set; }
     public long? VehicleId { get; set; }
     public long ActivityId { get; set; }

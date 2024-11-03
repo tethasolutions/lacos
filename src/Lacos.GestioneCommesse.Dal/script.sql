@@ -3351,3 +3351,49 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento')
+BEGIN
+    ALTER TABLE [Docs].[Interventions] ADD [ToBeReschedule] bit NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento')
+BEGIN
+    CREATE TABLE [Registry].[NotificationOperators] (
+        [Id] bigint NOT NULL IDENTITY,
+        [OperatorId] bigint NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_NotificationOperators] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_NotificationOperators_Operators_OperatorId] FOREIGN KEY ([OperatorId]) REFERENCES [Registry].[Operators] ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento')
+BEGIN
+    CREATE INDEX [IX_NotificationOperators_OperatorId] ON [Registry].[NotificationOperators] ([OperatorId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241103101514_nuovo campo rischedulazione intervento', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

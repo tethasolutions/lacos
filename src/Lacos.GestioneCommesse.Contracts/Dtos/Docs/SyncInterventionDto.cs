@@ -9,6 +9,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public DateTimeOffset? Start { get; set; }
         public DateTimeOffset? End { get; set; }
         public InterventionStatus? Status { get; set; }
+        public bool? ToBeReschedule { get; set; }
         public string? Description { get; set; }
         public string? FinalNotes { get; set; }
         public string? ReportFileName { get; set; }

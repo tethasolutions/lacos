@@ -8,6 +8,7 @@ public class Intervention : FullAuditedEntity
     public DateTimeOffset End { get; set; }
 
     public InterventionStatus Status { get; set; }
+    public bool? ToBeReschedule { get; set; }
 
     public string? Description { get; set; }
     public string? FinalNotes { get; set; }

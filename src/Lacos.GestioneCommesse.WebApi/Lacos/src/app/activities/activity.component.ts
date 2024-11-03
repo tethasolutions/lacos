@@ -127,7 +127,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     createIntervention() {
         const now = new Date();
         const intervention = new Intervention(0, new Date(new Date(new Date().setMinutes(0)).setSeconds(0)),
-        new Date(new Date(new Date().setMinutes(0)).setSeconds(0)).addHours(1), InterventionStatus.Scheduled,
+        new Date(new Date(new Date().setMinutes(0)).setSeconds(0)).addHours(1), InterventionStatus.Scheduled, false,
         this.activity.informations, null, this.activity.id, this.activity.jobId, [], [], []);
 
         this._subscriptions.push(

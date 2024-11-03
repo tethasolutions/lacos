@@ -27,6 +27,7 @@ import { InterventionsKoComponent } from './interventions/interventions-ko.compo
 import { ActivitiesFromProductComponent } from './activities/activities-from-product.component';
 import { MessagesListComponent } from './messages/messages-list.component';
 import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.component';
+import { NotificationOperatorsComponent } from './notificationOperators/notificationOperators.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -55,6 +56,7 @@ const routes: Routes = [
     { path: 'job-details', component: JobDetailsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs-progress-status', component: JobsProgressStatusComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'messages-list', component: MessagesListComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'notification-operators', component: NotificationOperatorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
 ];
 
 @NgModule({

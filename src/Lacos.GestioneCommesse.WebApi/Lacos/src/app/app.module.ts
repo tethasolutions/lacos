@@ -128,6 +128,8 @@ import { ActivitiesFromProductComponent } from './activities/activities-from-pro
 import { InterventionsSingleProductGridComponent } from './interventions/interventions-singleproduct-grid.component';
 import { MessagesListComponent } from './messages/messages-list.component';
 import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.component';
+import { NotificationOperatorsComponent } from './notificationOperators/notificationOperators.component';
+import { NotificationOperatorModalComponent } from './notificationOperators/notificationOperator-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -207,7 +209,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         MessageModalComponent,
         MessagesListComponent,
         GalleryModalComponent,
-        GridContextMenuComponent
+        GridContextMenuComponent,
+        NotificationOperatorsComponent,
+        NotificationOperatorModalComponent
     ],
     imports: [
         BrowserModule,

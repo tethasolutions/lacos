@@ -24,6 +24,7 @@ public class Operator : FullAuditedEntity
     public ICollection<InterventionProductPicture> InterventionProductPictures { get; set; }
     public ICollection<InterventionNote> InterventionNotes { get; set; }
     public ICollection<InterventionProductCheckListItem> InterventionProductCheckListItems { get; set; }
+    public ICollection<NotificationOperator> NotificationOperators { get; set; }
 
     public Operator()
     {
@@ -33,5 +34,6 @@ public class Operator : FullAuditedEntity
         InterventionProductPictures = new List<InterventionProductPicture>();
         InterventionProductCheckListItems = new List<InterventionProductCheckListItem>();
         InterventionNotes = new List<InterventionNote>();
+        NotificationOperators = new List<NotificationOperator>();
     }
 }

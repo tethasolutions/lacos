@@ -110,6 +110,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/users'], 'Utenti',
                     e => e.startsWith('/users'),
                     e => e.isAuthorized(Role.Administrator)
+                ),
+                new MenuEntry(['/notification-operators'], 'Operatori Notifica',
+                    e => e.startsWith('/notification-operators'),
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new MenuEntry(['/logout'], 'Logout',

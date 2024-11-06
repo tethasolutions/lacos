@@ -19,8 +19,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public long? VehicleId { get; set; }
         public long? ActivityId { get; set; }
         public IEnumerable<long> OperatorIds { get; set; } = new List<long>();
-
-
+        
     }
     
 }

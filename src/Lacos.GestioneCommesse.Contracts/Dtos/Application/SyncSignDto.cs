@@ -14,6 +14,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Application
         public string NameSurname { get; set; }
         public string Filename { get; set; }
         public byte[]? Content{ get; set; }
+        public bool ToBeReschedule { get; set; }
 
         public SyncSignDto()
         { 

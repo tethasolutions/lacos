@@ -405,6 +405,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                  entity.CustomerSignatureName = signDto.NameSurname;
                  entity.FinalNotes = signDto.FinalNotes;
                  entity.CustomerSignatureFileName = signDto.Filename;
+                 entity.ToBeReschedule = signDto.ToBeReschedule;
                  //entity. = signDto.NameSurname;
                  repository.Update(entity);
                  await dbContext.SaveChanges();
@@ -565,9 +566,19 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
                     //aggiunta commento su inserimento note intervento
                     if (typeof(TEntity) == typeof(InterventionNote) && newEntity != null) {
+                        
+                        
                         var messageRepository = serviceProvider.GetRequiredService<IRepository<Message>>();
+                        var interventionNoteRepository = serviceProvider.GetRequiredService<IRepository<InterventionNote>>();
                         Message message = new Message();
-                        InterventionNote interventionNote = repository.Get(newEntity.Id).MapTo<InterventionNote>(mapper);
+                        
+                        var dbEntity = await interventionNoteRepository
+                                .Query()
+                                .AsNoTracking()
+                                .Include(x=>x.Intervention)
+                                .SingleOrDefaultAsync(x=>x.Id == newEntity.Id);
+                        
+                        InterventionNote interventionNote = dbEntity as InterventionNote;
                         message.OperatorId = interventionNote.OperatorId;
                         message.ActivityId = interventionNote.Intervention.ActivityId;
                         message.Note = interventionNote.Notes;

@@ -585,26 +585,26 @@ namespace Lacos.GestioneCommesse.Application.Sync
                         message.Date = interventionNote.CreatedOn;
                         await messageRepository.Insert(message);
 
-                        try
-                        {
-                            var notificationOperatosRepository = serviceProvider.GetRequiredService<IRepository<NotificationOperator>>();
-                            var messageNotificationRepository = serviceProvider.GetRequiredService<IRepository<MessageNotification>>();
-                            var notificationOperators = await notificationOperatosRepository.Query()
-                                .AsNoTracking()
-                                .ToListAsync();
-                            foreach (var notificationOperator in notificationOperators)
-                            {
-                                MessageNotification notification = new MessageNotification();
-                                notification.MessageId = message.Id;
-                                notification.OperatorId = (long)notificationOperator.OperatorId;
-                                notification.IsRead = false;
-                                await messageNotificationRepository.Insert(notification);
+                        //try
+                        //{
+                        //    var notificationOperatosRepository = serviceProvider.GetRequiredService<IRepository<NotificationOperator>>();
+                        //    var messageNotificationRepository = serviceProvider.GetRequiredService<IRepository<MessageNotification>>();
+                        //    var notificationOperators = await notificationOperatosRepository.Query()
+                        //        .AsNoTracking()
+                        //        .ToListAsync();
+                        //    foreach (var notificationOperator in notificationOperators)
+                        //    {
+                        //        MessageNotification notification = new MessageNotification();
+                        //        notification.MessageId = message.Id;
+                        //        notification.OperatorId = (long)notificationOperator.OperatorId;
+                        //        notification.IsRead = false;
+                        //        await messageNotificationRepository.Insert(notification);
 
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                        }
+                        //    }
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //}
 
                         await dbContext.SaveChanges();
 

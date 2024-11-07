@@ -45,6 +45,11 @@
             <div [innerHTML]="dataItem.description"></div>
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="toBeReschedule" title="Da Rischedulare">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.toBeReschedule | bool}}
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="operators" title="Operatori">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="dataItem.operators">

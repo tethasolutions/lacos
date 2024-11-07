@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241107141040_aggiunta piva-cf cliente")]
+    partial class aggiuntapivacfcliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1993,8 +1996,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FiscalCode")
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FiscalType")
                         .HasColumnType("int");
@@ -2021,8 +2023,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("VatNumber")
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

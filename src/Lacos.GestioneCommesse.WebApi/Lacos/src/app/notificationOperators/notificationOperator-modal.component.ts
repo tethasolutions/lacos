@@ -4,6 +4,9 @@ import { filter, map, switchMap, tap } from 'rxjs';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { ApiUrls } from '../services/common/api-urls';
 import { NotificationOperator } from '../shared/models/notificationOperator-model';
+import { State } from '@progress/kendo-data-query';
+import { OperatorsService } from '../services/operators.service';
+import { OperatorModel } from '../shared/models/operator.model';
 
 @Component({
     selector: 'app-notificationOperator-modal',
@@ -13,17 +16,21 @@ export class NotificationOperatorModalComponent extends ModalFormComponent<Notif
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/notificationOperators`;
     
+    operators: OperatorModel[];
+    
     constructor(
         messageBox: MessageBoxService,
+        private readonly _operatorsService: OperatorsService,
     ) {
         super(messageBox);
     }
 
     ngOnInit() {
+        this._getOperators();
     }
 
-    override open(notificationOperator: NotificationOperator) {
-        const result = super.open(notificationOperator);
+    override open(options: NotificationOperator) {
+        const result = super.open(options);
         
         return result;
     }
@@ -38,4 +45,19 @@ export class NotificationOperatorModalComponent extends ModalFormComponent<Notif
         return this.form.valid;
     }
 
+    private _getOperators() {
+        const state: State = {
+            sort: [
+                { field: 'name', dir: 'asc' }
+            ]
+        };
+
+        this._subscriptions.push(
+            this._operatorsService.readOperators(state)
+                .pipe(
+                    tap(e => this.operators = e.data as OperatorModel[])
+                )
+                .subscribe()
+        )
+    }
 }

@@ -1,49 +1,51 @@
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
 <div class="grid-container">
-<kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
-    [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-    scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)"
-    (cellClick)="cellClickHandler($event)" (cellClick)="gridMenu.onCellClick($event)">
-    <ng-template kendoGridToolbarTemplate>
-        <button type="button" class="btn btn-primary" (click)="exportToExcel()">
-            Esporta in Excel
-        </button>
-      </ng-template>
-    <kendo-grid-column field="activityTypeColor" [sortable]="false" [filterable]="false" title=" " class="activity-color">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div [style.background-color]="dataItem.activityTypeColor" [title]="dataItem.activityType">&nbsp;</div>
+    <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+        [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
+        scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)"
+        (cellClick)="cellClickHandler($event)" (cellClick)="gridMenu.onCellClick($event)">
+        <ng-template kendoGridToolbarTemplate>
+            <button type="button" class="btn btn-primary" (click)="exportToExcel()">
+                Esporta in Excel
+            </button>
         </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="start" title="Data Interv."filter="date" [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <span class="text-nowrap">
-                {{dataItem.start | date:'dd/MM/yyyy HH:mm'}}
-            </span>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="jobCode" title="Commessa"></kendo-grid-column>
-    <kendo-grid-column field="customer" title="Cliente"></kendo-grid-column>
-    <kendo-grid-column field="productName" title="Nome Prod."></kendo-grid-column>
-    <kendo-grid-column field="productDescription" title="Prodotto"></kendo-grid-column>
-    <kendo-grid-column field="interventionDescription" title="Descrizione Intervento"></kendo-grid-column>
-    <kendo-grid-column field="checklistItem" title="Voce Checklist"></kendo-grid-column>
-    <kendo-grid-column field="outcomeNotes" title="Note KO"></kendo-grid-column>
-    <kendo-grid-column field="correctiveAction" title="Azioni Correttive"></kendo-grid-column>
-    
-    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div class="d-flex flex-column gap-2">
-                <div class="d-flex text-nowrap justify-content-center gap-1">
-                    <a href="javascript:void(0)" (click)="openImage(dataItem.attachmentFileName)" *ngIf="dataItem.attachmentFileName">
-                        <i class="fa fa-paperclip"></i>
-                    </a> 
-                </div>
-            </div>
-        </ng-template>
-    </kendo-grid-column>
+        <kendo-grid-column field="activityTypeColor" [sortable]="false" [filterable]="false" title=" "
+            class="activity-color">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div [style.background-color]="dataItem.activityTypeColor" [title]="dataItem.activityType">&nbsp;</div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="start" title="Data Interv." filter="date" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span class="text-nowrap">
+                    {{dataItem.start | date:'dd/MM/yyyy HH:mm'}}
+                </span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="jobCode" title="Commessa"></kendo-grid-column>
+        <kendo-grid-column field="customer" title="Cliente"></kendo-grid-column>
+        <kendo-grid-column field="productName" title="Nome Prod."></kendo-grid-column>
+        <kendo-grid-column field="productDescription" title="Prodotto"></kendo-grid-column>
+        <kendo-grid-column field="interventionDescription" title="Descrizione Intervento"></kendo-grid-column>
+        <kendo-grid-column field="checklistItem" title="Voce Checklist"></kendo-grid-column>
+        <kendo-grid-column field="outcomeNotes" title="Note KO"></kendo-grid-column>
+        <kendo-grid-column field="correctiveAction" title="Azioni Correttive"></kendo-grid-column>
 
-</kendo-grid>
+        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div class="d-flex flex-column gap-2">
+                    <div class="d-flex text-nowrap justify-content-center gap-1">
+                        <a href="javascript:void(0)" (click)="openImage(dataItem.attachmentFileName)"
+                            *ngIf="dataItem.attachmentFileName">
+                            <i class="fa fa-paperclip"></i>
+                        </a>
+                    </div>
+                </div>
+            </ng-template>
+        </kendo-grid-column>
+
+    </kendo-grid>
 </div>
 
 <app-gallery-modal #galleryModal></app-gallery-modal>

@@ -3397,3 +3397,65 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente')
+BEGIN
+    ALTER TABLE [Registry].[Customers] ADD [FiscalCode] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente')
+BEGIN
+    ALTER TABLE [Registry].[Customers] ADD [VatNumber] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241107141040_aggiunta piva-cf cliente', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente')
+BEGIN
+    DECLARE @var30 sysname;
+    SELECT @var30 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Registry].[Customers]') AND [c].[name] = N'VatNumber');
+    IF @var30 IS NOT NULL EXEC(N'ALTER TABLE [Registry].[Customers] DROP CONSTRAINT [' + @var30 + '];');
+    ALTER TABLE [Registry].[Customers] ALTER COLUMN [VatNumber] nvarchar(16) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente')
+BEGIN
+    DECLARE @var31 sysname;
+    SELECT @var31 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Registry].[Customers]') AND [c].[name] = N'FiscalCode');
+    IF @var31 IS NOT NULL EXEC(N'ALTER TABLE [Registry].[Customers] DROP CONSTRAINT [' + @var31 + '];');
+    ALTER TABLE [Registry].[Customers] ALTER COLUMN [FiscalCode] nvarchar(16) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241107141310_modifica piva-cf cliente', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

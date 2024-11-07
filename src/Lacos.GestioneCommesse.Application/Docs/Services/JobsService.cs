@@ -21,6 +21,7 @@ public class JobsService : IJobsService
     private readonly IRepository<JobAttachment> jobAttachmentRepository;
     private readonly IViewRepository<JobsProgressStatus> jobsProgressStatusRepository;
     private readonly IRepository<Ticket> ticketRepository;
+    private readonly IRepository<Customer> customerRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
 
@@ -31,6 +32,7 @@ public class JobsService : IJobsService
         IRepository<JobAttachment> jobAttachmentRepository,
         IViewRepository<JobsProgressStatus> jobsProgressStatusRepository,
         IRepository<Ticket> ticketRepository,
+        IRepository<Customer> customerRepository,
         ILacosSession session,
         ILacosDbContext dbContext
     )
@@ -41,6 +43,7 @@ public class JobsService : IJobsService
         this.jobAttachmentRepository = jobAttachmentRepository;
         this.jobsProgressStatusRepository = jobsProgressStatusRepository;
         this.ticketRepository = ticketRepository;
+        this.customerRepository = customerRepository;
         this.session = session;
         this.dbContext = dbContext;
     }
@@ -62,10 +65,12 @@ public class JobsService : IJobsService
 
         if (jobDto == null)
         {
+            var customer = await customerRepository.Get(CustomerId);
+            
             jobDto = new JobDto();
             jobDto.CustomerId = CustomerId;
             jobDto.Year = DateTime.Now.Year;
-            jobDto.Reference = "Ticket " + TicketCode;
+            jobDto.Reference = "Ticket " + TicketCode + ((customer != null) ? " - " + customer.Name : "");
             jobDto.Date = DateTime.Now;
             jobDto.Status = JobStatus.Pending;
             jobDto.Description = " ";

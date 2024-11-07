@@ -1,13 +1,11 @@
 export class NotificationOperator {
-
-    constructor(
-        public id: number,
-        public operatorId: number
-    ) {}
-    
-    static build(o: NotificationOperator) {
-        return new NotificationOperator(o.id, o.operatorId);
+    id: number;
+    operatorId: number;
+    constructor() {
+        this.id = null;
+        this.operatorId = null;
     }
+    
 }
 
 export interface NotificationOperatorReadModel {

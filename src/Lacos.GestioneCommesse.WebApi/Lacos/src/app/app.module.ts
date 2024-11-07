@@ -130,6 +130,7 @@ import { MessagesListComponent } from './messages/messages-list.component';
 import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.component';
 import { NotificationOperatorsComponent } from './notificationOperators/notificationOperators.component';
 import { NotificationOperatorModalComponent } from './notificationOperators/notificationOperator-modal.component';
+import { NotificationOperatorsService } from './services/notificationOperators.service';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -273,7 +274,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         TicketsService,
         SupplierService,
         PurchaseOrdersService,
-        MessagesService
+        MessagesService,
+        NotificationOperatorsService
     ],
     bootstrap: [AppComponent]
 })

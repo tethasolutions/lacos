@@ -12,6 +12,8 @@ export class CustomerModel {
     contactTelephone: string;
     contactEmail: string;
     sdiCode: string;
+    vatNumber: string;
+    fiscalCode: string;
     addresses: AddressModel[];
 
     mainAddress: AddressModel;
@@ -32,6 +34,8 @@ export class CustomerModel {
         this.contactTelephone = null;
         this.contactEmail = null;
         this.sdiCode = null;
+        this.vatNumber = null;
+        this.fiscalCode = null;
         this.addresses = [];
 
         this.mainAddress = null;

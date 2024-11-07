@@ -19,6 +19,10 @@ public class CustomerMap : BaseEntityMapping<Customer>
 
         builder.Property(e => e.SDICode)
             .HasMaxLength(7);
+        builder.Property(e => e.VatNumber)
+            .HasMaxLength(16);
+        builder.Property(e => e.FiscalCode)
+            .HasMaxLength(16);
 
         builder.OneToMany(e => e.Addresses, e => e.Customer, e => e.CustomerId);
         builder.OneToMany(e => e.Jobs, e => e.Customer, e => e.CustomerId);

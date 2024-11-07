@@ -20,6 +20,8 @@ import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.co
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
+import { Workbook } from '@progress/kendo-angular-excel-export';
+import { saveAs } from '@progress/kendo-file-saver';
 
 @Component({
     selector: 'app-purchase-orders',
@@ -319,5 +321,56 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+    exportToExcel(): void {
+        const options = this.getExportOptions();
+        const workbook = new Workbook(options);
+        workbook.toDataURL().then((dataURL) => {
+            saveAs(dataURL, 'ordini.xlsx');
+        });
+    }
+
+    private getExportOptions(): any {
+        return {
+            sheets: [{
+                columns: [
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true }
+                ],
+                title: 'Commesse',
+                rows: [
+                    {
+                        cells: [
+                            { value: 'Cliente', bold: true },
+                            { value: 'Commessa', bold: true },
+                            { value: 'Data Ord.', bold: true },
+                            { value: 'Stato', bold: true },
+                            { value: 'Riferimento', bold: true },
+                            { value: 'Fornitore', bold: true },
+                            { value: 'Descrizione', bold: true },
+                            { value: 'Inserito Da', bold: true }
+                        ]
+                    },
+                    ...this.data.data.map((item: any) => ({
+                        cells: [
+                            { value: item.customerName },
+                            { value: item.jobCode },
+                            { value: item.date, format: 'dd/MM/yyyy' },
+                            { value: item.status },
+                            { value: item.jobReference },
+                            { value: item.supplierName },
+                            { value: item.description },
+                            { value: item.operatorName }
+                        ]
+                    }))
+                ]
+            }]
+        };
     }
 }

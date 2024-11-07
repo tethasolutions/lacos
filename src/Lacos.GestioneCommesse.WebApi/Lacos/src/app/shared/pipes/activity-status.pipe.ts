@@ -17,8 +17,8 @@ export class ActivityStatusPipe extends BaseComponent implements PipeTransform {
                 return value.statusLabel0;
             case ActivityStatus.InProgress:
                 return value.statusLabel1;
-                case ActivityStatus.Ready:
-                    return value.statusLabel2;
+            case ActivityStatus.Ready:
+                return value.statusLabel2;
             case ActivityStatus.Completed:
                 return value.statusLabel3;
             default:

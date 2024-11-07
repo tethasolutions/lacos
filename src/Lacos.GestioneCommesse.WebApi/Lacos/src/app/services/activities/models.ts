@@ -45,9 +45,11 @@ export interface IActivityReadModel {
     readonly isNewReferent: boolean;
     readonly isExpired: boolean;
     readonly isInternal: boolean;
+    readonly isFromTicket: boolean;
     readonly statusLabel0: string;
     readonly statusLabel1: string;
     readonly statusLabel2: string;
+    readonly statusLabel3: string;
 
 }
 
@@ -73,6 +75,7 @@ export class Activity {
         public statusLabel0: string,
         public statusLabel1: string,
         public statusLabel2: string,
+        public statusLabel3: string,
         public attachments: ActivityAttachmentModel[],
         public messages: MessageReadModel[]
     ) {
@@ -100,7 +103,7 @@ export class Activity {
         const messages = o.messages.map(e => MessageReadModel.build(e));
 
         return new Activity(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.supplierId, o.addressId,
-            o.typeId, o.referentId, o.startDate, o.expirationDate, o.statusLabel0, o.statusLabel1, o.statusLabel2, attachments, messages);
+            o.typeId, o.referentId, o.startDate, o.expirationDate, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, attachments, messages);
     }
 
 }
@@ -133,6 +136,7 @@ export class ActivityDetail {
         readonly statusLabel0: string,
         readonly statusLabel1: string,
         readonly statusLabel2: string,
+        readonly statusLabel3: string,
         public attachments: ActivityAttachmentModel[],
         public messages: MessageReadModel[]
     ) {
@@ -142,7 +146,7 @@ export class ActivityDetail {
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.shortDescription, this.informations, this.description, this.jobId, this.supplierId,
-            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.statusLabel0, this.statusLabel1, this.statusLabel2, this.attachments, this.messages);
+            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.statusLabel0, this.statusLabel1, this.statusLabel2, this.statusLabel3, this.attachments, this.messages);
     }
 
     static build(o: ActivityDetail) {
@@ -151,7 +155,7 @@ export class ActivityDetail {
 
         return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate,
-            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, attachments, messages);
+            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, attachments, messages);
     }
 
 }

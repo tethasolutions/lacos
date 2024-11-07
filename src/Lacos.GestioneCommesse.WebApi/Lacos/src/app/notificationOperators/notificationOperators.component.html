@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h3>Ticket</h3>
+        <h3>Operatori Notifica</h3>
     </div>
 
     <div class="col-auto">
@@ -19,7 +19,7 @@
     scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" 
     (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
 
-    <kendo-grid-column field="operatorName" title="Inserito da">
+    <kendo-grid-column field="operatorName" title="Operatore">
     </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -36,3 +36,4 @@
 </kendo-grid>
 </div>
 
+<app-notificationOperator-modal #notificationOperatorModal></app-notificationOperator-modal>

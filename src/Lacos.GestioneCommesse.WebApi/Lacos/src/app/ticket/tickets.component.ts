@@ -18,6 +18,8 @@ import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { ApiUrls } from '../services/common/api-urls';
+import { Workbook } from '@progress/kendo-angular-excel-export';
+import { saveAs } from '@progress/kendo-file-saver';
 
 @Component({
     selector: 'app-tickets',
@@ -315,5 +317,51 @@ export class TicketsComponent extends BaseComponent implements OnInit {
             )
         )
         .subscribe();
+    }
+    
+    exportToExcel(): void {
+        const options = this.getExportOptions();
+        const workbook = new Workbook(options);
+        workbook.toDataURL().then((dataURL) => {
+            saveAs(dataURL, 'tickets.xlsx');
+        });
+    }
+
+    private getExportOptions(): any {
+        return {
+            sheets: [{
+                columns: [
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true }
+                ],
+                title: 'Commesse',
+                rows: [
+                    {
+                        cells: [
+                            { value: 'Data', bold: true },
+                            { value: 'Codice', bold: true },
+                            { value: 'Stato', bold: true },
+                            { value: 'Cliente', bold: true },
+                            { value: 'Descrizione', bold: true },
+                            { value: 'Inserito Da', bold: true }
+                        ]
+                    },
+                    ...this.data.data.map((item: any) => ({
+                        cells: [
+                            { value: item.date, format: 'dd/MM/yyyy' },
+                            { value: item.code },
+                            { value: item.status },
+                            { value: item.customerName },
+                            { value: item.description },
+                            { value: item.operatorName }
+                        ]
+                    }))
+                ]
+            }]
+        };
     }
 }

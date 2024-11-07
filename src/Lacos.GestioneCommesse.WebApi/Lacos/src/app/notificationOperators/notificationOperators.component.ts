@@ -6,18 +6,10 @@ import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { NotificationOperatorModalComponent } from './notificationOperator-modal.component';
 import { getToday } from '../services/common/functions';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { StorageService } from '../services/common/storage.service';
 import { OperatorModel } from '../shared/models/operator.model';
-import { OperatorsService } from '../services/operators.service';
 import { User } from '../services/security/models';
-import { UserService } from '../services/security/user.service';
-import { CustomerService } from '../services/customer.service';
-import { CustomerModel } from '../shared/models/customer.model';
-import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
-import { ApiUrls } from '../services/common/api-urls';
 import { NotificationOperatorsService } from '../services/notificationOperators.service';
-import { NotificationOperator } from '../shared/models/notificationOperator-model';
+import { NotificationOperator, NotificationOperatorReadModel } from '../shared/models/notificationOperator-model';
 
 @Component({
     selector: 'app-notificationOperators',
@@ -41,7 +33,6 @@ export class NotificationOperatorsComponent extends BaseComponent implements OnI
     private cellArgs: CellClickEvent;
     user: User;
     currentOperator: OperatorModel;
-    private _jobId: number;
     screenWidth: number;
 
     constructor(
@@ -53,6 +44,7 @@ export class NotificationOperatorsComponent extends BaseComponent implements OnI
 
     ngOnInit() {
         this.updateScreenSize();
+        this._read();
       }
     
       @HostListener('window:resize', ['$event'])
@@ -73,15 +65,14 @@ export class NotificationOperatorsComponent extends BaseComponent implements OnI
     }
 
     create() {
-        const today = getToday();
-        const notificationOperator = new NotificationOperator(0,null);
+        const notificationOperator = new NotificationOperator();
 
         this._subscriptions.push(
             this.notificationOperatorModal.open(notificationOperator)
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._service.create(notificationOperator)),
-                    tap(e => this._afterSaved(e))
+                    tap(e => this._read())
                 )
                 .subscribe()
         );
@@ -94,7 +85,7 @@ export class NotificationOperatorsComponent extends BaseComponent implements OnI
                     switchMap(e => this.notificationOperatorModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._service.update(this.notificationOperatorModal.options)),
-                    tap(e => this._afterSaved(e))
+                    tap(e => this._read())
                 )
                 .subscribe()
         );
@@ -107,7 +98,7 @@ export class NotificationOperatorsComponent extends BaseComponent implements OnI
                     .pipe(
                         switchMap(e => this.notificationOperatorModal.open(e)),
                         switchMap(() => this._service.update(this.notificationOperatorModal.options)),
-                        tap(e => this._afterSaved(e))
+                        tap(e => this._read())
                     )
                     .subscribe()
             );
@@ -118,15 +109,15 @@ export class NotificationOperatorsComponent extends BaseComponent implements OnI
         this.cellArgs = args;
     }
 
-    askRemove(notificationOperator: NotificationOperator) {
-        const text = `Sei sicuro di voler rimuovere l'operatore ${notificationOperator.operatorId}?`;
+    askRemove(notificationOperator: NotificationOperatorReadModel) {
+        const text = `Sei sicuro di voler rimuovere l'operatore ${notificationOperator.operatorName}?`;
 
         this._subscriptions.push(
             this._messageBox.confirm(text, 'Attenzione')
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._service.delete(notificationOperator.id)),
-                    tap(() => this._afterRemoved(notificationOperator))
+                    tap(() => this._read())
                 )
                 .subscribe()
         );
@@ -142,16 +133,4 @@ export class NotificationOperatorsComponent extends BaseComponent implements OnI
         );
     }
 
-    private _afterSaved(notificationOperator: NotificationOperator) {
-        this._messageBox.success(`Operatore ${notificationOperator.operatorId} salvato.`);
-
-        this._read();
-    }
-
-    private _afterRemoved(notificationOperator: NotificationOperator) {
-        this._messageBox.success(`Operatore ${notificationOperator.operatorId} rimosso.`);
-
-        this._read();
-    }
-    
 }

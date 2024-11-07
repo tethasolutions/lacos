@@ -18,6 +18,11 @@
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
     scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
 
+    <ng-template kendoGridToolbarTemplate>
+        <button type="button" class="btn btn-primary" (click)="exportToExcel()">
+            Esporta in Excel
+        </button>
+      </ng-template>
     <kendo-grid-column field="date" title="Data" filter="date" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.date | date:'dd/MM/yyyy'}}

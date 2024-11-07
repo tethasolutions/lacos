@@ -28,6 +28,7 @@ public class ActivityReadModel
     public bool IsNewReferent { get; set; }
     public bool IsExpired { get; set; }
     public bool IsInternal { get; set; }
+    public bool IsFromTicket { get; set; }
 
     public int? UnreadMessages { get; set; }
 

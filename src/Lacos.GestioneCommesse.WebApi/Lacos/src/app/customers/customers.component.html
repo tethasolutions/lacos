@@ -20,6 +20,8 @@
         <kendo-grid-column field="contact" title="Contatto"></kendo-grid-column>
         <kendo-grid-column field="mainAddress.fullAddress" title="Indirizzo"></kendo-grid-column>
         <kendo-grid-column field="sdiCode" title="SDI"></kendo-grid-column>
+        <kendo-grid-column field="vatNumber" title="P.IVA"></kendo-grid-column>
+        <kendo-grid-column field="fiscalCode" title="Cod. Fiscale"></kendo-grid-column>
         <kendo-grid-column field="canGenerateTickets" title="Gener. Tickets">
             <ng-template kendoGridCellTemplate let-dataItemAddress>
                 {{dataItemAddress.canGenerateTickets | bool}}

@@ -96,6 +96,24 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-4">
+                    <label>P.IVA</label>
+                    <div class="form-group">
+                        <input class="form-control" name="vatNumber" [(ngModel)]="options.vatNumber"
+                            maxlength="16" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['vatNumber']"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Codice Fiscale</label>
+                    <div class="form-group">
+                        <input class="form-control" name="fiscalCode" [(ngModel)]="options.fiscalCode"
+                            maxlength="16" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['fiscalCode']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-8">
                     <label>Indirizzo</label>
                     <div class="form-group">

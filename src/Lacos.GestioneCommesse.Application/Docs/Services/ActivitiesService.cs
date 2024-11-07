@@ -267,7 +267,7 @@ public class ActivitiesService : IActivitiesService
         var activityProducts = activityProductRepository.Query()
             .Where(e => e.ActivityId == id);
         var products = productRepository.Query()
-            .Where(e => e.AddressId == activity.AddressId);
+            .Where(e => e.CustomerId == activity.Job!.CustomerId);
         var missingProducts = await (
                 from product in products
                 join activityProduct in activityProducts

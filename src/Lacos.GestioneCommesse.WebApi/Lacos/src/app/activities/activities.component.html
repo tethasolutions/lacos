@@ -14,96 +14,116 @@
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
 <div class="grid-container">
-<kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
-    [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-    (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback"
-    (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)"
-    scrollable="none" [style.width.px]="screenWidth" >
-
-    <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" " class="activity-color" width="1" kendoTooltip>
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div [style.background-color]="dataItem.activityColor" title="{{dataItem.type}}">&nbsp;</div>
+    <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+        [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
+        (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)"
+        (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)" scrollable="none"
+        [style.width.px]="screenWidth">
+        <ng-template kendoGridToolbarTemplate>
+            <button type="button" class="btn btn-primary" (click)="exportToExcel()">
+                Esporta in Excel
+            </button>
         </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="customer" title="Cliente">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="jobCode" title="Comm." [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div *ngIf="!dataItem.jobHasHighPriority">{{dataItem.jobCode}}</div>
-            <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
-                {{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-            </div>
-        </ng-template>
-    </kendo-grid-column>
-    <!-- <kendo-grid-column field="number" title="N." [width]="1" filter="numeric" format="n0">
+        <kendo-grid-column field="activityColor" [sortable]="false" [filterable]="false" title=" "
+            class="activity-color" width="1" kendoTooltip>
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div [style.background-color]="dataItem.activityColor" title="{{dataItem.type}}">&nbsp;</div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="customer" title="Cliente">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="jobCode" title="Comm." [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="!dataItem.jobHasHighPriority">{{dataItem.jobCode}}</div>
+                <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
+                    {{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                </div>
+            </ng-template>
+        </kendo-grid-column>
+        <!-- <kendo-grid-column field="number" title="N." [width]="1" filter="numeric" format="n0">
     </kendo-grid-column> -->
-    <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="activity-status">
-        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-            let-filterService="filterService">
-            <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
-                [data]="activityStatusNames">
-            </app-multiselect-grid-column-filter>
-        </ng-template>
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <span class="text-nowrap">
-                {{dataItem | activityStatus}}
-            </span>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="jobReference" title="Riferimento" >
-    </kendo-grid-column>
-    <kendo-grid-column field="shortDescription" title="Descrizione Attività" >
-    </kendo-grid-column>
-    <kendo-grid-column field="expirationDate" title="Scadenza" filter="date" format="dd/MM/yyyy" [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div class="text-nowrap job-alert" *ngIf="dataItem.isExpired">
-                {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
-            </div>
-            <div class="text-nowrap" *ngIf="!dataItem.isExpired">
-                {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
-            </div>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="referentName" title="Operatore">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div *ngIf="!dataItem.isNewReferent || dataItem.referentId != currentOperator?.id">{{dataItem.referentName}}</div>
-            <div *ngIf="dataItem.isNewReferent && dataItem.referentId == currentOperator?.id" class="job-alert">
-                {{dataItem.referentName}} <i class="fa fa-bell" aria-hidden="true"></i>
-            </div>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="lastOperator" title="Inser. Da" [width]="1">
-    </kendo-grid-column>
-    <kendo-grid-column field="unreadMessages" title="" filterable="false">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;"><a (click)="edit(dataItem)" style="cursor: pointer;"><i class="fa-regular fa-message job-alert"></i> <span class="job-alert"> {{dataItem.unreadMessages}}</span></a></div>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div class="d-flex text-nowrap gap-1">
-                <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', dataItem.id]" [disabled]="dataItem.isInternal">
-                    <i class="fas fa-gear"></i>
-                </button>
-                <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati" [disabled]="!dataItem.hasAttachments"
-                    (click)="openAttachments(dataItem.jobId, dataItem.id)">
-                    <i class="fa fa-paperclip"></i>
-                </button>
-                <button [disabled]="!dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
-                    (click)="askRemove(dataItem)">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </ng-template>
-    </kendo-grid-column>
+        <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="activity-status">
+            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                let-filterService="filterService">
+                <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
+                    [data]="activityStatusNames">
+                </app-multiselect-grid-column-filter>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span class="text-nowrap">
+                    {{dataItem | activityStatus}}
+                </span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="jobReference" title="Riferimento">
+        </kendo-grid-column>
+        <kendo-grid-column field="shortDescription" title="Descrizione Attività">
+        </kendo-grid-column>
+        <kendo-grid-column field="expirationDate" title="Scadenza" filter="date" format="dd/MM/yyyy" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div class="text-nowrap job-alert" *ngIf="dataItem.isExpired">
+                    {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
+                </div>
+                <div class="text-nowrap" *ngIf="!dataItem.isExpired">
+                    {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
+                </div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="referentName" title="Operatore">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="!dataItem.isNewReferent || dataItem.referentId != currentOperator?.id">
+                    {{dataItem.referentName}}</div>
+                <div *ngIf="dataItem.isNewReferent && dataItem.referentId == currentOperator?.id" class="job-alert">
+                    {{dataItem.referentName}} <i class="fa fa-bell" aria-hidden="true"></i>
+                </div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="lastOperator" title="Inser. Da" [width]="1">
+        </kendo-grid-column>
+        <kendo-grid-column field="isFromTicket" title="Ticket" [width]="1" filterable="false">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                @if (dataItem.isFromTicket) {
+                <strong>{{dataItem.isFromTicket | bool}}</strong>
+                }
+                @else {
+                {{dataItem.isFromTicket | bool}}
+                }
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="unreadMessages" title="" filterable="false">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;"><a
+                        (click)="edit(dataItem)" style="cursor: pointer;"><i
+                            class="fa-regular fa-message job-alert"></i> <span class="job-alert">
+                            {{dataItem.unreadMessages}}</span></a></div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div class="d-flex text-nowrap gap-1">
+                    <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', dataItem.id]"
+                        [disabled]="dataItem.isInternal">
+                        <i class="fas fa-gear"></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati"
+                        [disabled]="!dataItem.hasAttachments" (click)="openAttachments(dataItem.jobId, dataItem.id)">
+                        <i class="fa fa-paperclip"></i>
+                    </button>
+                    <button [disabled]="!dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
+                        (click)="askRemove(dataItem)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </ng-template>
+        </kendo-grid-column>
 
-</kendo-grid>
+    </kendo-grid>
 </div>
 
 <app-activity-modal #activityModal></app-activity-modal>

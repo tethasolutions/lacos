@@ -24,6 +24,8 @@ import { UserService } from '../services/security/user.service';
 import { OperatorsService } from '../services/operators.service';
 import { OperatorModel } from '../shared/models/operator.model';
 import { User } from '../services/security/models';
+import { Workbook } from '@progress/kendo-angular-excel-export';
+import { saveAs } from '@progress/kendo-file-saver';
 
 @Component({
     selector: 'app-jobs-completed',
@@ -173,7 +175,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
     }
 
     createActivity(job: IJobReadModel) {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", [], []);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, "In attesa", "In corso", "Pronto", "Completata", [], []);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -310,5 +312,57 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+    
+    exportToExcel(): void {
+        const options = this.getExportOptions();
+        const workbook = new Workbook(options);
+        workbook.toDataURL().then((dataURL) => {
+            saveAs(dataURL, 'commesse.xlsx');
+        });
+    }
+
+    private getExportOptions(): any {
+        return {
+            sheets: [{
+                columns: [
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true },
+                    { autoWidth: true }
+                ],
+                title: 'Commesse',
+                rows: [
+                    {
+                        cells: [
+                            { value: 'Data', bold: true },
+                            { value: 'Data Scadenza', bold: true },
+                            { value: 'Cliente', bold: true },
+                            { value: 'Commessa', bold: true },
+                            { value: 'Stato', bold: true },
+                            { value: 'Riferimento', bold: true },
+                            { value: 'Responsabile Comm', bold: true },
+                            { value: 'Note', bold: true }
+                        ]
+                    },
+                    ...this.data.data.map((item: any) => ({
+                        cells: [
+                            { value: item.date, format: 'dd/MM/yyyy' },
+                            { value: item.expirationDate, format: 'dd/MM/yyyy' },
+                            { value: item.customer },
+                            { value: item.code },
+                            { value: item.status },
+                            { value: item.reference },
+                            { value: item.referentName },
+                            { value: item.description }
+                        ]
+                    }))
+                ]
+            }]
+        };
     }
 }

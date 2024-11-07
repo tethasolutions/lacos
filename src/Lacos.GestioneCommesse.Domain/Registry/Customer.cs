@@ -17,6 +17,8 @@ public class Customer : FullAuditedEntity
     public string? ContactEmail { get; set; }
 
     public string? SDICode { get; set; }
+    public string? VatNumber { get; set; }
+    public string? FiscalCode { get; set; }
 
     public long? UserId { get; set; }
     public User? User { get; set; }

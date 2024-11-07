@@ -25,21 +25,21 @@ public class NotificationOperatorsController : LacosApiController
         this.mimeTypeProvider = mimeTypeProvider;
     }
 
-    [HttpGet("notificationOperators")]
+    [HttpGet("")]
     public async Task<DataSourceResult> GetNotificationOperators([DataSourceRequest] DataSourceRequest request)
     {
         var notificationOperators = (notificationOperatorService.GetNotificationOperators());
         return await notificationOperators.ToDataSourceResultAsync(request);
     }
 
-    [HttpGet("notificationOperator-detail/{notificationOperatorId}")]
-    public async Task<NotificationOperatorDto> GetNotificationOperatorDetail(long notificationOperatorId)
+    [HttpGet("{id}")]
+    public async Task<NotificationOperatorDto> GetNotificationOperatorDetail(long id)
     {
-        var notificationOperator = await notificationOperatorService.GetNotificationOperatorDetail(notificationOperatorId);
+        var notificationOperator = await notificationOperatorService.GetNotificationOperatorDetail(id);
         return notificationOperator;
     }
 
-    [HttpPut("notificationOperator/{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNotificationOperator(long id, [FromBody] NotificationOperatorDto notificationOperatorDto)
     {
         if (!ModelState.IsValid)
@@ -50,7 +50,7 @@ public class NotificationOperatorsController : LacosApiController
         return Ok();
     }
 
-    [HttpPost("notificationOperator")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateNotificationOperator( [FromBody] NotificationOperatorDto notificationOperatorDto)
     {
         if (!ModelState.IsValid)
@@ -61,10 +61,10 @@ public class NotificationOperatorsController : LacosApiController
         return Ok(notificationOperatorDto);
     }
 
-    [HttpDelete("notificationOperator/{id}")]
-    public async Task<IActionResult> DeleteNotificationOperator(long notificationOperatorId)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteNotificationOperator(long id)
     {
-        await notificationOperatorService.DeleteNotificationOperator(notificationOperatorId);
+        await notificationOperatorService.DeleteNotificationOperator(id);
         return Ok();
     }
 

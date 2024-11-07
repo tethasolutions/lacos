@@ -17,7 +17,7 @@ export class NotificationOperatorsService {
     }
 
     read(state: State) {
-        const url = `${this._baseUrl}/notificationOperators`
+        const url = `${this._baseUrl}`
 
         return readData(this._http, state, url);
     }
@@ -25,21 +25,21 @@ export class NotificationOperatorsService {
     get(id: number) {
         return this._http.get<NotificationOperator>(`${this._baseUrl}/${id}`)
             .pipe(
-                map(e => NotificationOperator.build(e))
+                map(e => e)
             );
     }
 
     create(notificationOperator: NotificationOperator) {
         return this._http.post<NotificationOperator>(this._baseUrl, notificationOperator)
             .pipe(
-                map(e => NotificationOperator.build(e))
+                map(e => e)
             );
     }
 
     update(notificationOperator: NotificationOperator) {
         return this._http.put<NotificationOperator>(`${this._baseUrl}/${notificationOperator.id}`, notificationOperator)
             .pipe(
-                map(e => NotificationOperator.build(e))
+                map(e => e)
             );
     }
 

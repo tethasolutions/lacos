@@ -14,78 +14,88 @@
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
 <div class="grid-container">
-<kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
-    [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-    scrollable="none" [style.width.px]="screenWidth" [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys"
-    (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)" 
-    (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
+    <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+        [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
+        scrollable="none" [style.width.px]="screenWidth" [kendoGridExpandDetailsBy]="expandDetailsBy"
+        [(expandedDetailKeys)]="expandedDetailKeys" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback"
+        (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
 
-    <kendo-grid-column field="date" title="Data" filter="date" [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.date | date:'dd/MM/yyyy'}}
+        <ng-template kendoGridToolbarTemplate>
+            <button type="button" class="btn btn-primary" (click)="exportToExcel()">
+                Esporta in Excel
+            </button>
         </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="code" title="Codice" [width]="1">
-    </kendo-grid-column>
-    <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="ticket-status">
-        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-            let-filterService="filterService">
-            <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
-                [data]="ticketStatusNames">
-            </app-multiselect-grid-column-filter>
-        </ng-template>
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <span class="text-nowrap">
-                {{dataItem.status | ticketStatus}}
-            </span>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="customerName" title="Cliente">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customerName}}</a><br/>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="description" title="Note">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div [innerHTML]="dataItem.description"></div>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="operatorName" title="Inserito da">
-    </kendo-grid-column>
-    <kendo-grid-column field="unreadMessages" title="" filterable="false">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;"><a (click)="edit(dataItem)" style="cursor: pointer;"><i class="fa-regular fa-message job-alert"></i> <span class="job-alert"> {{dataItem.unreadMessages}}</span></a></div>
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <div class="d-flex text-nowrap gap-1">
-                <button class="btn btn-primary btn-sm" title="Download Rapportino"
-                    (click)="downloadReport(dataItem.id)">
-                    <i class="fas fa-file"></i>
-                </button>
-                <button class="btn btn-primary btn-sm" [title]="dataItem.customerEmail" [disabled]="!dataItem.customerEmail"
-                    (click)="sendReport(dataItem.id, dataItem.customerEmail)">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-                <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button [disabled]="dataItem.jobId == null" class="btn btn-primary btn-sm" title="Apri attività" [routerLink]="['/activities']"
-                [queryParams]="{jobId: dataItem.jobId}">
-                    <i class="fas fa-a"></i>
-                </button>
-                <button class="btn btn-primary btn-sm" title="Visualizza Interventi" [routerLink]="['/interventions-list']" [disabled]="!dataItem.hasInterventions"
-                [queryParams]="{jobId: dataItem.jobId}">
-                    <i class="fas fa-i"></i>
-                </button>
-                <button class="btn btn-danger btn-sm" title="Rimuovi" (click)="askRemove(dataItem)">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </ng-template>
-    </kendo-grid-column>
-</kendo-grid>
+        <kendo-grid-column field="date" title="Data" filter="date" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.date | date:'dd/MM/yyyy'}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="code" title="Codice" [width]="1">
+        </kendo-grid-column>
+        <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="ticket-status">
+            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                let-filterService="filterService">
+                <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
+                    [data]="ticketStatusNames">
+                </app-multiselect-grid-column-filter>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span class="text-nowrap">
+                    {{dataItem.status | ticketStatus}}
+                </span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="customerName" title="Cliente">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <a (click)="openCustomer(dataItem.customerId)"
+                    style="cursor: pointer;">{{dataItem.customerName}}</a><br />
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="description" title="Note">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div [innerHTML]="dataItem.description"></div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="operatorName" title="Inserito da">
+        </kendo-grid-column>
+        <kendo-grid-column field="unreadMessages" title="" filterable="false">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;"><a
+                        (click)="edit(dataItem)" style="cursor: pointer;"><i
+                            class="fa-regular fa-message job-alert"></i> <span class="job-alert">
+                            {{dataItem.unreadMessages}}</span></a></div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div class="d-flex text-nowrap gap-1">
+                    <button class="btn btn-primary btn-sm" title="Download Rapportino"
+                        (click)="downloadReport(dataItem.id)">
+                        <i class="fas fa-file"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm" [title]="dataItem.customerEmail"
+                        [disabled]="!dataItem.customerEmail" (click)="sendReport(dataItem.id, dataItem.customerEmail)">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button [disabled]="dataItem.jobId == null" class="btn btn-primary btn-sm" title="Apri attività"
+                        [routerLink]="['/activities']" [queryParams]="{jobId: dataItem.jobId}">
+                        <i class="fas fa-a"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm" title="Visualizza Interventi"
+                        [routerLink]="['/interventions-list']" [disabled]="!dataItem.hasInterventions"
+                        [queryParams]="{jobId: dataItem.jobId}">
+                        <i class="fas fa-i"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Rimuovi" (click)="askRemove(dataItem)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
 </div>
 
 <app-ticket-modal #ticketModal></app-ticket-modal>

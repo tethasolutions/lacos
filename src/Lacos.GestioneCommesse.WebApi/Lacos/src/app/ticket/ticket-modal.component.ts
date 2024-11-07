@@ -170,7 +170,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
 
     private _newActivity(ticket: Ticket) {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, null,
-            this._job.id, null, null, null, null, null, null, "In attesa", "In corso", "Completata", [], []);
+            this._job.id, null, null, null, null, null, null, "In attesa", "In corso", "Pronto", "Completata", [], []);
         const options = new ActivityModalOptions(activity);
 
         ticket.status = TicketStatus.InProgress;

@@ -19,7 +19,7 @@
         (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)"
         (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)" scrollable="none"
         [style.width.px]="screenWidth">
-        <ng-template kendoGridToolbarTemplate>
+        <ng-template kendoGridToolbarTemplate *ngIf="viewExportExcel">
             <button type="button" class="btn btn-primary" (click)="exportToExcel()">
                 Esporta in Excel
             </button>

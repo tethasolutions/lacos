@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -29,6 +29,8 @@ import { saveAs } from '@progress/kendo-file-saver';
 })
 export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
+    @Input() viewExportExcel: boolean = true;
+    
     @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;

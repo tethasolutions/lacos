@@ -20,7 +20,7 @@
         [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()"
         (cellClick)="gridMenu.onCellClick($event)">
 
-        <ng-template kendoGridToolbarTemplate>
+        <ng-template kendoGridToolbarTemplate *ngIf="viewExportExcel">
             <button type="button" class="btn btn-primary" (click)="exportToExcel()">
                 Esporta in Excel
             </button>

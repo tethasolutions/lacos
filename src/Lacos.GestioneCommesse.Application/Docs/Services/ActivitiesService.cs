@@ -152,6 +152,7 @@ public class ActivitiesService : IActivitiesService
             Job job = await jobRepository.Query()
                 .Where(e => e.Id == activity.JobId)
                 .Include(e => e.Activities)
+                .ThenInclude(e => e.Type)
                 .FirstOrDefaultAsync();
             if (job != null)
             {

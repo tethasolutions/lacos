@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h3>Commesse</h3>
+        <h3>Commesse Sospese</h3>
     </div>
 
     <div class="col-auto">
@@ -16,8 +16,7 @@
 <div class="grid-container">
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-    scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback"
-    (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
+    scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)" (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
 
     <ng-template kendoGridToolbarTemplate>
         <button type="button" class="btn btn-primary" (click)="exportToExcel()">
@@ -29,7 +28,7 @@
             {{dataItem.date | date:'dd/MM/yyyy'}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="expirationDate" title="Data Scad." filter="date" [width]="1">
+    <kendo-grid-column field="expirationDate" title="Data Scad." filter="expirationDate" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
         </ng-template>
@@ -38,7 +37,7 @@
         <ng-template kendoGridCellTemplate let-dataItem>
             <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a><br/>
         </ng-template>
-    </kendo-grid-column>
+    </kendo-grid-column>   
     <kendo-grid-column field="code" title="Cod." [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="!dataItem.hasHighPriority">{{dataItem.code}}</div>
@@ -61,8 +60,6 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="reference" title="Riferimento">
-    </kendo-grid-column>
-    <kendo-grid-column field="referentName" title="Respons. Comm.">
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Note">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -89,8 +86,7 @@
                         [queryParams]="{jobId: dataItem.id}">
                         <i class="fas fa-a"></i>
                     </a>
-                    <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati" [disabled]="!dataItem.hasAttachments"
-                        (click)="openAttachments(dataItem)">
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati" (click)="openAttachments(dataItem)" [disabled]="!dataItem.hasAttachments">
                         <i class="fa fa-paperclip"></i>
                     </button>
                 </div>
@@ -125,7 +121,6 @@
 
 <app-job-modal #jobModal></app-job-modal>
 <app-activity-modal #activityModal></app-activity-modal>
-<app-job-copy-modal #jobCopyModal></app-job-copy-modal>
 <app-purchase-order-modal #purchaseOrderModal></app-purchase-order-modal>
 <app-jobs-attachments-modal #jobsAttachmentsModal></app-jobs-attachments-modal>
 <app-activity-modal #activityModal></app-activity-modal>

@@ -16,4 +16,5 @@ public class MessageDto : BaseEntityDto
     public long? ActivityId { get; set; }
     public long? TicketId { get; set; }
     public long? PurchaseOrderId { get; set; }
+    public bool IsFromApp { get; set; }
 }

@@ -337,7 +337,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
 
     createMessage() {
         const today = new Date();
-        const message = new MessageModel(0, today, null, this.currentOperator.id, null, null, null, this.options.purchaseOrder.id);
+        const message = new MessageModel(0, today, null, this.currentOperator.id, null, null, null, this.options.purchaseOrder.id, false);
         const options = new MessageModalOptions(message, true, true, this.targetOperatorsArray);
 
         this._subscriptions.push(
@@ -346,7 +346,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message, options.targetOperators.join(","))),
                     tap(e => {
-                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true);
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false);
                         this.options.purchaseOrder.messages.push(msg);
                     }),
                     tap(() => this._messageBox.success('Commento creato'))

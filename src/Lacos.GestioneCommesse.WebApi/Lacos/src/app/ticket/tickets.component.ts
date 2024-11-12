@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { CellClickEvent, GridComponent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { TicketsService } from '../services/tickets/tickets.service';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -27,6 +27,8 @@ import { saveAs } from '@progress/kendo-file-saver';
 })
 export class TicketsComponent extends BaseComponent implements OnInit {
 
+    @Input() viewExportExcel: boolean = true;
+    
     @ViewChild('ticketModal', { static: true })
     ticketModal: TicketModalComponent;
 

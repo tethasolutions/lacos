@@ -28,6 +28,7 @@ import { User } from '../services/security/models';
 import { OperatorModel } from '../shared/models/operator.model';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
+import { JobStatusPipe } from '../shared/pipes/job-status.pipe';
 
 @Component({
     selector: 'app-jobs',
@@ -73,7 +74,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'desc' },{ field: 'code', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'desc' }, { field: 'code', dir: 'desc' }]
     };
 
     readonly jobStatusNames = jobStatusNames;
@@ -99,18 +100,18 @@ export class JobsComponent extends BaseComponent implements OnInit {
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
         this.updateScreenSize();
-      }
-    
-      @HostListener('window:resize', ['$event'])
-      onResize(event: Event): void {
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
         this.updateScreenSize();
-      }
-    
-      private updateScreenSize(): void {
-        this.screenWidth = window.innerWidth -44;
+    }
+
+    private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth - 44;
         if (this.screenWidth > 1876) this.screenWidth = 1876;
-        if (this.screenWidth < 1400) this.screenWidth = 1400;     
-      }
+        if (this.screenWidth < 1400) this.screenWidth = 1400;
+    }
 
 
     dataStateChange(state: State) {
@@ -175,7 +176,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
     }
 
     cellClickHandler(args: CellClickEvent): void {
-            this.cellArgs = args;
+        this.cellArgs = args;
     }
 
     copyJob(job: IJobReadModel) {
@@ -317,6 +318,8 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 return { 'job-billing': true };
             case job.status === JobStatus.Billed:
                 return { 'job-billed': true };
+            case job.status === JobStatus.Suspended:
+                return { 'job-suspended': true };
             default:
                 return {};
         }
@@ -332,7 +335,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
         );
     }
 
-    
+
     exportToExcel(): void {
         const options = this.getExportOptions();
         const workbook = new Workbook(options);
@@ -374,7 +377,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
                             { value: item.expirationDate, format: 'dd/MM/yyyy' },
                             { value: item.customer },
                             { value: item.code },
-                            { value: item.status },
+                            { value: new JobStatusPipe().transform(item.status) },
                             { value: item.reference },
                             { value: item.referentName },
                             { value: item.description }

@@ -37,7 +37,7 @@ export class JobsProgressStatusComponent extends BaseComponent implements OnInit
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'jobDate', dir: 'desc' },{ field: 'jobCode', dir: 'desc' }]
+        sort: [{ field: 'jobDate', dir: 'desc' }, { field: 'jobCode', dir: 'desc' }]
     };
 
     readonly jobStatusNames = jobStatusNames;
@@ -54,18 +54,18 @@ export class JobsProgressStatusComponent extends BaseComponent implements OnInit
         this._resumeState();
         this._read();
         this.updateScreenSize();
-      }
-    
-      @HostListener('window:resize', ['$event'])
-      onResize(event: Event): void {
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
         this.updateScreenSize();
-      }
-    
-      private updateScreenSize(): void {
-        this.screenWidth = window.innerWidth -44;
+    }
+
+    private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth - 44;
         if (this.screenWidth > 1876) this.screenWidth = 1876;
-        if (this.screenWidth < 1400) this.screenWidth = 1400;     
-      }
+        if (this.screenWidth < 1400) this.screenWidth = 1400;
+    }
 
 
     dataStateChange(state: State) {
@@ -108,6 +108,8 @@ export class JobsProgressStatusComponent extends BaseComponent implements OnInit
                 return { 'job-billing': true };
             case job.jobStatus === JobStatus.Billed:
                 return { 'job-billed': true };
+            case job.jobStatus === JobStatus.Suspended:
+                return { 'job-suspended': true };
             default:
                 return {};
         }

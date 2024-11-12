@@ -259,6 +259,14 @@ public class MessagesService : IMessagesService
 
         return counter;
     }
+    public async Task<int> GetUnreadCounterFromApp(long operatorId)
+    {
+        int counter = await viewRepository.Query()
+            .Where(x => x.TargetOperatorId == operatorId && x.IsRead == false && x.IsFromApp == true)
+            .CountAsync();
+
+        return counter;
+    }
 
     public async Task<IEnumerable<long>> GetReplyTargetOperators(long messageId, bool replyAll)
     {

@@ -5,7 +5,6 @@ import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
 import { readData } from '../common/functions';
 import { MessageModel, MessageReadModel, MessagesListReadModel } from './models';
-import { OperatorModel } from 'src/app/shared/models/operator.model';
 
 @Injectable()
 export class MessagesService {
@@ -101,6 +100,13 @@ export class MessagesService {
 
     getUnreadCounter(operatorId: number) {
         return this._http.get<number>(`${this._baseUrl}/unread-counter/${operatorId}`)
+            .pipe(
+                map(e => e)
+            );
+    }
+
+    getUnreadCounterFromApp(operatorId: number) {
+        return this._http.get<number>(`${this._baseUrl}/unread-counter-fromApp/${operatorId}`)
             .pipe(
                 map(e => e)
             );

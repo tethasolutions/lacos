@@ -30,6 +30,8 @@ import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.compone
 import { NotificationOperatorsComponent } from './notificationOperators/notificationOperators.component';
 import { HelperTypesComponent } from './helpertypes/helpertypes.component';
 import { HelperDocumentsComponent } from './helperdocuments/helperdocuments.component';
+import { JobsSuspendedComponent } from './jobs/jobs-suspended.component';
+import { InterventionMessagesListComponent } from './messages/interventionmessages-list.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -47,6 +49,7 @@ const routes: Routes = [
     { path: 'producttypes', component: ProductTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs', component: JobsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs-completed', component: JobsCompletedComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'jobs-suspended', component: JobsSuspendedComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'tickets', component: TicketsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities', component: ActivitiesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities-from-product', component: ActivitiesFromProductComponent, canActivate: [AuthGuard.asInjectableGuard] },
@@ -58,6 +61,7 @@ const routes: Routes = [
     { path: 'job-details', component: JobDetailsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs-progress-status', component: JobsProgressStatusComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'messages-list', component: MessagesListComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'interventionmessages-list', component: InterventionMessagesListComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'notification-operators', component: NotificationOperatorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'helpertypes', component: HelperTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'helperdocuments', component: HelperDocumentsComponent, canActivate: [AuthGuard.asInjectableGuard] },

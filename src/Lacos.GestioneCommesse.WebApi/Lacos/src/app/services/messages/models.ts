@@ -17,14 +17,15 @@ export class MessageReadModel {
         public ticketId: number,
         public purchaseOrderId: number,
         public elementCode: string,
-        public isRead: boolean
+        public isRead: boolean,
+        public isFromApp: boolean
 
     ){
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: MessageReadModel) {
-        return new MessageReadModel(o.id, o.date, o.note, o.operatorId, o.operatorName, o.jobId, o.activityId, o.ticketId, o.purchaseOrderId, o.elementCode, o.isRead);
+        return new MessageReadModel(o.id, o.date, o.note, o.operatorId, o.operatorName, o.jobId, o.activityId, o.ticketId, o.purchaseOrderId, o.elementCode, o.isRead, o.isFromApp);
     }
 }
 
@@ -41,12 +42,13 @@ export class MessageModel {
         public activityId: number,
         public ticketId: number,
         public purchaseOrderId: number,
+        public isFromApp: boolean
     ) {
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: MessageModel) {
-        return new MessageModel(o.id, o.date, o.note, o.operatorId, o.jobId, o.activityId, o.ticketId, o.purchaseOrderId);
+        return new MessageModel(o.id, o.date, o.note, o.operatorId, o.jobId, o.activityId, o.ticketId, o.purchaseOrderId, o.isFromApp);
     }
 
 }
@@ -74,6 +76,7 @@ export class MessagesListReadModel {
         public senderOperator: string,
         public targetOperators: string,
         public isRead: boolean,
+        public isFromApp: boolean,
 
         public jobCode: string,
         public jobReference: string,

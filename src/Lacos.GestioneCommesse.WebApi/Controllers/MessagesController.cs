@@ -120,4 +120,9 @@ public class MessagesController : LacosApiController
         return await service.GetUnreadCounter(operatorId);
     }
 
+    [HttpGet("unread-counter-fromApp/{operatorId}")]
+    public async Task<int> GetUnreadCounterFromApp(long operatorId)
+    {
+        return await service.GetUnreadCounterFromApp(operatorId);
+    }
 }

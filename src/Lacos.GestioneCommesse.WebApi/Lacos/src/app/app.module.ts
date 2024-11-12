@@ -137,6 +137,8 @@ import { HelperTypeModalComponent } from './helpertypes/helpertype-modal.compone
 import { HelperDocumentsComponent } from './helperdocuments/helperdocuments.component';
 import { HelperDocumentModalComponent } from './helperdocuments/helperdocument-modal.component';
 import { HelperDocumentsService } from './services/helper/helperDocuments.service';
+import { JobsSuspendedComponent } from './jobs/jobs-suspended.component';
+import { InterventionMessagesListComponent } from './messages/interventionmessages-list.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -177,6 +179,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ActivityStatusPipe,
         JobsComponent,
         JobsCompletedComponent,
+        JobsSuspendedComponent,
         JobModalComponent,
         JobCopyModalComponent,
         JobStatusPipe,
@@ -215,6 +218,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         PurchaseOrderStatusPipe,
         MessageModalComponent,
         MessagesListComponent,
+        InterventionMessagesListComponent,
         GalleryModalComponent,
         GridContextMenuComponent,
         NotificationOperatorsComponent,

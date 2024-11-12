@@ -15,6 +15,7 @@ public class MessagesList
     public string? TargetOperator { get; set; }
     public string? TargetOperators { get; set; }
     public bool? IsRead { get; set; }
+    public bool IsFromApp { get; set; }
 
     public string? JobCode { get; set; }
     public string? JobReference { get; set; }

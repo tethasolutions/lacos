@@ -44,10 +44,12 @@ export class AuthGuard {
             case url === '/producttypes':
             case url === '/jobs':
             case url === '/jobs-completed':
+            case url === '/jobs-suspended':
             case url === '/job-details':
             case url === '/jobs-progress-status':
             case url === '/purchase-orders':
             case url === '/messages-list':
+            case url === '/interventionmessages-list':
             case url === '/notification-operators':
             case url === '/helpertypes':
             case url === '/helperdocuments':

@@ -386,7 +386,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
 
     createMessage() {
         const today = new Date();
-        const message = new MessageModel(0, today, null, this.currentOperator.id, null, this.options.activity.id, null, null);
+        const message = new MessageModel(0, today, null, this.currentOperator.id, null, this.options.activity.id, null, null, false);
         const options = new MessageModalOptions(message,true,true, this.targetOperatorsArray);
 
         this._subscriptions.push(
@@ -395,7 +395,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message, options.targetOperators.join(","))),
                     tap(e => {
-                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true);
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false);
                         this.options.activity.messages.push(msg);
                     }),
                     tap(() => this._messageBox.success('Commento creato'))

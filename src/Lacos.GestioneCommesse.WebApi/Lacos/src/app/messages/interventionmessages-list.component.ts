@@ -25,10 +25,10 @@ import { ActivityTypesService } from '../services/activityTypes.service';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 
 @Component({
-    selector: 'app-messages-list',
-    templateUrl: 'messages-list.component.html'
+    selector: 'app-interventionmessages-list',
+    templateUrl: 'interventionmessages-list.component.html'
 })
-export class MessagesListComponent extends BaseComponent implements OnInit {
+export class InterventionMessagesListComponent extends BaseComponent implements OnInit {
 
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
     @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;
@@ -297,7 +297,8 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
         this.hasFilterUnread = true;
         this.gridState.filter.filters = [
             { field: 'senderOperatorId', operator: 'neq', value: this.currentOperator.id },
-            { field: 'isRead', operator: 'eq', value: false }
+            { field: 'isRead', operator: 'eq', value: false },
+            { field: 'isFromApp', operator: 'eq', value: true }
         ];
         this._saveState();
         this._read();
@@ -307,11 +308,13 @@ export class MessagesListComponent extends BaseComponent implements OnInit {
         if (this.hasFilterUnread)
             this.gridState.filter.filters = [
                 { field: 'activityTypeId', operator: 'eq', value: this.selectedActivityTypeId },
-                { field: 'isRead', operator: 'eq', value: false }
+                { field: 'isRead', operator: 'eq', value: false },
+                { field: 'isFromApp', operator: 'eq', value: true }
             ];
         else
             this.gridState.filter.filters = [
-                { field: 'activityTypeId', operator: 'eq', value: this.selectedActivityTypeId }
+                { field: 'activityTypeId', operator: 'eq', value: this.selectedActivityTypeId },
+                { field: 'isFromApp', operator: 'eq', value: true }
             ];
         this._saveState();
         this._read();

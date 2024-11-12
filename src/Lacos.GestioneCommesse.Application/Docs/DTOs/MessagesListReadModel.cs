@@ -14,6 +14,7 @@ public class MessagesListReadModel
     public string? SenderOperator { get; set; }
     public string? TargetOperators { get; set; }
     public bool? IsRead { get; set; }
+    public bool IsFromApp { get; set; }
 
     public string? JobCode { get; set; }
     public string? JobReference { get; set; }

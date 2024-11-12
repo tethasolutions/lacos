@@ -20,6 +20,7 @@ public interface IMessagesService
     Task ReadMessage(long messageId, long operatorId);
     IQueryable<MessagesListReadModel> GetMessagesList(long operatorId);
     Task<int> GetUnreadCounter(long operatorId);
+    Task<int> GetUnreadCounterFromApp(long operatorId);
     Task<IEnumerable<long>> GetReplyTargetOperators(long messageId, bool replyAll);
     Task<IEnumerable<long>> GetMessageTargetOperators(long messageId);
     Task<IEnumerable<long>> GetElementTargetOperators(long senderOperatorId, long elementId, string elementType);

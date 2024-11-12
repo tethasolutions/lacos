@@ -565,53 +565,80 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     await dbContext.SaveChanges();
 
                     //aggiunta commento su inserimento note intervento
-                    if (typeof(TEntity) == typeof(InterventionNote) && newEntity != null) {
-                        
-                        
+                    if (typeof(TEntity) == typeof(Intervention) && newEntity != null)
+                    {
+
                         var messageRepository = serviceProvider.GetRequiredService<IRepository<Message>>();
-                        var interventionNoteRepository = serviceProvider.GetRequiredService<IRepository<InterventionNote>>();
-                        Message message = new Message();
-                        
-                        var dbEntity = await interventionNoteRepository
+                        var interventionRepository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
+
+                        var dbEntity = await interventionRepository
                                 .Query()
                                 .AsNoTracking()
-                                .Include(x=>x.Intervention)
-                                .SingleOrDefaultAsync(x=>x.Id == newEntity.Id);
-                        
-                        InterventionNote interventionNote = dbEntity as InterventionNote;
-                        message.OperatorId = interventionNote.OperatorId;
-                        message.ActivityId = interventionNote.Intervention.ActivityId;
-                        message.Note = interventionNote.Notes;
-                        message.Date = interventionNote.CreatedOn;
-                        await messageRepository.Insert(message);
-                        await dbContext.SaveChanges();
+                                .SingleOrDefaultAsync(x => x.Id == newEntity.Id);
 
-                        try
-                        {
-                            var notificationOperatorRepository =
-                                serviceProvider.GetRequiredService<IRepository<NotificationOperator>>();
-                            var messageNotificationRepository =
-                                serviceProvider.GetRequiredService<IRepository<MessageNotification>>();
-                            var notificationOperators = await notificationOperatorRepository.Query()
-                                .AsNoTracking()
-                                .ToListAsync();
-                            foreach (var notificationOperator in notificationOperators)
-                            {
-                                MessageNotification notification = new MessageNotification();
-                                notification.MessageId = message.Id;
-                                notification.OperatorId = (long) notificationOperator.OperatorId;
-                                notification.IsRead = false;
-                                await messageNotificationRepository.Insert(notification);
+                        //Intervention intervention = dbEntity as Intervention;
+                        //if ((bool)intervention.ToBeReschedule)
+                        //{
+                        //    Message message = new Message();
 
-                            }
-
-                            await dbContext.SaveChanges();
-                        }
-                        catch (Exception)
-                        {
-                        }
+                        //    message.OperatorId = intervention.Activity.;
+                        //    message.ActivityId = intervention.ActivityId;
+                        //    message.Note = intervention.;
+                        //    message.Date = intervention.CreatedOn;
+                        //    message.IsFromApp = true;
+                        //    await messageRepository.Insert(message);
+                        //    await dbContext.SaveChanges();
+                        //}
                     }
-                    list.Add(newEntity.MapTo<TDto>(mapper));
+
+                    //aggiunta commento su inserimento note intervento
+                    if (typeof(TEntity) == typeof(InterventionNote) && newEntity != null) {
+                                                
+                    var messageRepository = serviceProvider.GetRequiredService<IRepository<Message>>();
+                    var interventionNoteRepository = serviceProvider.GetRequiredService<IRepository<InterventionNote>>();
+                    Message message = new Message();
+                        
+                    var dbEntity = await interventionNoteRepository
+                            .Query()
+                            .AsNoTracking()
+                            .Include(x=>x.Intervention)
+                            .SingleOrDefaultAsync(x=>x.Id == newEntity.Id);
+                        
+                    InterventionNote interventionNote = dbEntity as InterventionNote;
+                    message.OperatorId = interventionNote.OperatorId;
+                    message.ActivityId = interventionNote.Intervention.ActivityId;
+                    message.Note = interventionNote.Notes;
+                    message.Date = interventionNote.CreatedOn;
+                    message.IsFromApp = true;
+                    await messageRepository.Insert(message);
+                    await dbContext.SaveChanges();
+
+                    try
+                    {
+                        var notificationOperatorRepository =
+                            serviceProvider.GetRequiredService<IRepository<NotificationOperator>>();
+                        var messageNotificationRepository =
+                            serviceProvider.GetRequiredService<IRepository<MessageNotification>>();
+                        var notificationOperators = await notificationOperatorRepository.Query()
+                            .AsNoTracking()
+                            .ToListAsync();
+                        foreach (var notificationOperator in notificationOperators)
+                        {
+                            MessageNotification notification = new MessageNotification();
+                            notification.MessageId = message.Id;
+                            notification.OperatorId = (long) notificationOperator.OperatorId;
+                            notification.IsRead = false;
+                            await messageNotificationRepository.Insert(notification);
+
+                        }
+
+                        await dbContext.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                list.Add(newEntity.MapTo<TDto>(mapper));
                 }
             }
             

@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
-import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.component';
+import { JobsAttachmentsModalComponent } from './jobs-attachments-modal.component';
 import { StorageService } from '../services/common/storage.service';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
@@ -29,10 +29,10 @@ import { saveAs } from '@progress/kendo-file-saver';
 import { JobStatusPipe } from '../shared/pipes/job-status.pipe';
 
 @Component({
-    selector: 'app-jobs-completed',
-    templateUrl: 'jobs-completed.component.html'
+    selector: 'app-jobs-suspended',
+    templateUrl: 'jobs-suspended.component.html'
 })
-export class JobsCompletedComponent extends BaseComponent implements OnInit {
+export class JobsSuspendedComponent extends BaseComponent implements OnInit {
 
     @ViewChild('jobModal', { static: true })
     jobModal: JobModalComponent;
@@ -62,7 +62,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
         filter: {
             filters: [
                 {
-                    filters: [JobStatus.Billing, JobStatus.Completed, JobStatus.Billed]
+                    filters: [JobStatus.Suspended]
                         .map(e => ({ field: 'status', operator: 'eq', value: e })),
                     logic: 'or'
                 }
@@ -321,7 +321,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
         const options = this.getExportOptions();
         const workbook = new Workbook(options);
         workbook.toDataURL().then((dataURL) => {
-            saveAs(dataURL, 'commesse_completate.xlsx');
+            saveAs(dataURL, 'commesse_sospese.xlsx');
         });
     }
 

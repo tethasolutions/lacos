@@ -6,5 +6,6 @@ public enum JobStatus
     InProgress,
     Completed,
     Billing,
-    Billed
+    Billed,
+    Suspended
 }

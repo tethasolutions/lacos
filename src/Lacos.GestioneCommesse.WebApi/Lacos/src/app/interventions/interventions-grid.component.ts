@@ -17,6 +17,8 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class InterventionsGridComponent extends BaseComponent implements OnInit, OnChanges {
 
+    @Input() viewTitle: boolean = false;
+    
     @Input()
     activityId: number;
 

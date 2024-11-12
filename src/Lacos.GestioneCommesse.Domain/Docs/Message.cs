@@ -19,6 +19,7 @@ public class Message : FullAuditedEntity
     public Ticket? Ticket { get; set; }
     public long? PurchaseOrderId { get; set; }
     public PurchaseOrder? PurchaseOrder { get; set; }
+    public bool IsFromApp { get; set; }
 
     public ICollection<MessageNotification> MessageNotifications { get; set; }
 

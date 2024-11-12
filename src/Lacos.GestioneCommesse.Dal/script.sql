@@ -3540,3 +3540,22 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112145535_aggiunta campo messaggio isfromapp')
+BEGIN
+    ALTER TABLE [Docs].[Messages] ADD [IsFromApp] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112145535_aggiunta campo messaggio isfromapp')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241112145535_aggiunta campo messaggio isfromapp', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -62,6 +62,20 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 e => e.startsWith('/tickets'),
                 e => e.isAuthenticated()
             ),
+            new DropDownMenuEntry('Commesse', [
+                new MenuEntry(['/jobs'], 'Commesse',
+                    e => e.startsWith('/jobs'),
+                    e => e.isAuthorized(Role.Administrator)
+                ),
+                new MenuEntry(['/jobs-completed'], 'Commesse Completate',
+                    e => e.startsWith('/jobs-completed'),
+                    e => e.isAuthorized(Role.Administrator)
+                ),
+                new MenuEntry(['/jobs-suspended'], 'Commesse Sospese',
+                    e => e.startsWith('/jobs-suspended'),
+                    e => e.isAuthorized(Role.Administrator)
+                )
+            ]),
             new DropDownMenuEntry('Pianificazione', [
                 new MenuEntry(['/jobs'], 'Commesse',
                     e => e.startsWith('/jobs'),
@@ -80,10 +94,6 @@ export class MenuComponent extends BaseComponent implements OnInit {
                     e => e.isAuthorized(Role.Administrator)
                 )
             ]),
-            new MenuEntry(['/jobs-completed'], 'Commesse Completate',
-                e => e.startsWith('/jobs-completed'),
-                e => e.isAuthorized(Role.Administrator)
-            ),
             new MenuEntry(['/purchase-orders'], 'Ordini Acquisto',
                 e => e.startsWith('/purchase-orders'),
                 e => e.isAuthenticated()
@@ -103,6 +113,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 ),
                 new MenuEntry(['/messages-list'], 'Commenti',
                     e => e.startsWith('/messages-list'),
+                    e => e.isAuthenticated()
+                ),
+                new MenuEntry(['/interventionmessages-list'], 'Commenti Interventi da App',
+                    e => e.startsWith('/interventionmessages-list'),
                     e => e.isAuthenticated()
                 )
             ]),

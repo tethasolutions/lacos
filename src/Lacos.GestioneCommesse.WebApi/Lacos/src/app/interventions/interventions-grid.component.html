@@ -1,5 +1,11 @@
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
+<div class="d-flex align-items-center mb-3" *ngIf="viewTitle">
+    <div class="col">
+        <h3>Interventi</h3>
+    </div>
+</div>
+
 <div class="grid-container">
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"

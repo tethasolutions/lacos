@@ -354,6 +354,10 @@ app-jobs {
     .job-billed .job-status {
         @include striped-background(rgba(232, 56, 255, 0.384), rgba(255, 180, 252, 0.685));
     }
+
+    .job-suspended .job-status {
+        @include striped-background(rgba(179, 161, 182, 0.384), rgba(235, 235, 235, 0.685));
+    }
 }
 
 app-jobs-completed, app-jobs-progress-status {
@@ -376,6 +380,37 @@ app-jobs-completed, app-jobs-progress-status {
     
     .job-billed .job-status {
         @include striped-background(rgba(232, 56, 255, 0.384), rgba(255, 180, 252, 0.685));
+    }
+
+    .job-suspended .job-status {
+        @include striped-background(rgba(179, 161, 182, 0.384), rgba(235, 235, 235, 0.685));
+    }
+}
+
+app-jobs-suspended, app-jobs-progress-status {
+
+    .job-completed .job-status {
+        @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
+    }
+
+    .job-pending .job-status {
+        @include striped-background(rgba(255, 193, 7, .3), rgba(255, 193, 7, .1));
+    }
+
+    .job-inprogress .job-status {
+        @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
+    }
+
+    .job-billing .job-status {
+        @include striped-background(rgba(191, 84, 77, 0.384), rgba(242, 52, 39, 0.26));
+    }
+    
+    .job-billed .job-status {
+        @include striped-background(rgba(232, 56, 255, 0.384), rgba(255, 180, 252, 0.685));
+    }
+
+    .job-suspended .job-status {
+        @include striped-background(rgba(179, 161, 182, 0.384), rgba(235, 235, 235, 0.685));
     }
 }
 

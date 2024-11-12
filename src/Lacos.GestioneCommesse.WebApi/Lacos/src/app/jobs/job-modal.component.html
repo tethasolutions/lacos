@@ -72,8 +72,7 @@
                     <label>Stato</label>
                     <div class="form-group">
                         <kendo-dropdownlist [data]="states" [valuePrimitive]="true" name="status"
-                            [(ngModel)]="options.status" required
-                            [disabled]="options.status == 0 || options.status == 1">
+                            [(ngModel)]="options.status" required>
                             <ng-template kendoDropDownListValueTemplate let-dataItem>
                                 {{dataItem | jobStatus}}
                             </ng-template>

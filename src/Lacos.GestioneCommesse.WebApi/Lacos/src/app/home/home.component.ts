@@ -23,6 +23,7 @@ export class HomeComponent extends BaseComponent {
     ticketsCounters: TicketCounter;
     newActivitiesCounter = new NewActivityCounter(0);
     unreadCounter: number;
+    unreadCounterFromApp: number;
     user: User;
     currentOperator: OperatorModel;
 
@@ -93,7 +94,10 @@ export class HomeComponent extends BaseComponent {
             this._operatorsService.getOperatorByUserId(userId)
                 .pipe(
                     tap(e => this.currentOperator = e),
-                    tap(() => this._getUnreadCounter())
+                    tap(() => {
+                        this._getUnreadCounter();
+                        this._getUnreadCounterFromApp();
+                    })
                 )
                 .subscribe()
         );
@@ -105,6 +109,18 @@ export class HomeComponent extends BaseComponent {
                 .pipe(
                     tap(e => {
                         this.unreadCounter = e;
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    _getUnreadCounterFromApp() {
+        this._subscriptions.push(
+            this._messagesService.getUnreadCounterFromApp(this.currentOperator.id)
+                .pipe(
+                    tap(e => {
+                        this.unreadCounterFromApp = e;
                     })
                 )
                 .subscribe()

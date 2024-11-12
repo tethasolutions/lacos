@@ -146,13 +146,27 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     }
 
     assignAllCustomerProducts() {
-        const text = 'Sei sicuro di voler associare all\'attività tutti i prodotti di ' + this.activity.customer + ' in ' + this.activity.address + '?';
+        const text = 'Sei sicuro di voler associare all\'attività tutti i prodotti di ' + this.activity.customer + '?';
 
         this._subscriptions.push(
             this._messageBox.confirm(text)
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._service.assignAllCustomerProducts(this.activity.id)),
+                    tap(() => this._afterAllCustomerProductsAssigned())
+                )
+                .subscribe()
+        );
+    }
+
+    assignAllCustomerProductsMonthlyMaint() {
+        const text = 'Sei sicuro di voler associare all\'attività tutti i prodotti di ' + this.activity.customer + ' con manutenzione mensile?';
+
+        this._subscriptions.push(
+            this._messageBox.confirm(text)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._service.assignAllCustomerProductsMonthlyMaint(this.activity.id)),
                     tap(() => this._afterAllCustomerProductsAssigned())
                 )
                 .subscribe()

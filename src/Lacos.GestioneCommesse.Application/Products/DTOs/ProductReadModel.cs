@@ -12,4 +12,5 @@ public class ProductReadModel
     public string? ProductType { get; set; }
     public long? AddressId { get; set; }
     public long ProductTypeId { get; set; }
+    public bool? MonthlyMaintenance { get; set; }
 }

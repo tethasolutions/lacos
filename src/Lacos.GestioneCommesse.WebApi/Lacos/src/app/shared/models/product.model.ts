@@ -25,6 +25,7 @@ export class ProductModel {
     year: number;
     vocType: string;
     numberOfDoors: number;
+    monthlyMaintenance: boolean;
 
     documents: Array<ProductDocumentModel>;
 
@@ -49,6 +50,7 @@ export class ProductModel {
         this.year = new Date().getFullYear();
         this.vocType = null;
         this.numberOfDoors = null;
+        this.monthlyMaintenance = false;
 
         this.documents = [];
     }
@@ -65,4 +67,5 @@ export interface ProductReadModel {
     readonly productType: string;
     readonly addressId: number;
     readonly productTypeId: number;
+    readonly monthlyMaintenance: boolean;
 }

@@ -26,6 +26,17 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+    <kendo-grid-column field="monthlyMaintenance" title="Man. Mens." [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            @if (dataItem.monthlyMaintenance) {
+                <strong>{{dataItem.monthlyMaintenance | bool}}</strong>
+            }
+            @else
+            {
+                {{dataItem.monthlyMaintenance | bool}}
+            }
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
         <ng-template kendoGridCellTemplate let-dataItem>
             <button *ngIf="dataItem.qrCode != '0000'" (click)="viewQrCodeProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">

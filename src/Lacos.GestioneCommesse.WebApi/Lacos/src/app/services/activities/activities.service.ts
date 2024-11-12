@@ -81,6 +81,13 @@ export class ActivitiesService {
             );
     }
 
+    assignAllCustomerProductsMonthlyMaint(id: number) {
+        return this._http.put<void>(`${this._baseUrl}/${id}/assign-all-customer-products-monthlymaint`, null)
+            .pipe(
+                map(() => { })
+            );
+    }
+
     readActivityTypesCounters() {
         return this._http.get<Array<ActivityCounter>>(`${this._baseUrl}/activities-counters`)
             .pipe(

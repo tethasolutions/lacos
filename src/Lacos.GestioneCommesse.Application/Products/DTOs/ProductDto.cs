@@ -23,6 +23,7 @@
         public int? Year { get; set; }
         public string? VocType { get; set; }
         public int? NumberOfDoors { get; set; }
+        public bool? MonthlyMaintenance { get; set; }
 
         public ICollection<ProductDocumentDto>? Documents { get; set; }
         public ProductDto()

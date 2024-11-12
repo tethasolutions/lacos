@@ -1,0 +1,40 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>Guide Utili</h3>
+    </div>
+    <div class="col-auto">
+        <button (click)="createHelperDocument()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<div class="grid-container">
+<kendo-grid [data]="dataHelperDocuments" [pageSize]="stateGridHelperDocuments.take" 
+            [skip]="stateGridHelperDocuments.skip" [sort]="stateGridHelperDocuments.sort" 
+            [filter]="stateGridHelperDocuments.filter"
+            [group]="stateGridHelperDocuments.group" filterable="menu" 
+            [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
+            (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column field="helperTypeName" title="Tipo"></kendo-grid-column>
+    <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+    <kendo-grid-column field="fileName" title="Guida">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <a [href]="pathDocument + dataItem.fileName" target="_blank"><i class="fas fa-file"></i> Visualizza</a>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95" *ngIf="isAdmin">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button (click)="editHelperDocument(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="deleteHelperDocument(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                <i class="fas fa-trash"></i>
+            </button>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+</div>
+
+<app-helperDocument-modal #helperDocumentModal></app-helperDocument-modal>

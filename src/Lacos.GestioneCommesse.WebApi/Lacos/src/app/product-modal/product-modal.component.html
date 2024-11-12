@@ -164,7 +164,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <kendo-formfield class="form-group">
                                 <label class="custom-form-field-label">Maniglia Antipanico</label>
                                 <kendo-switch name="hasPushBar" [(ngModel)]="options.hasPushBar" onLabel="Si"
@@ -172,7 +172,15 @@
                                 </kendo-switch>
                             </kendo-formfield>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Manutenz. Mensile</label>
+                                <kendo-switch name="monthlyMaintenance" [(ngModel)]="options.monthlyMaintenance" onLabel="Si"
+                                    offLabel="No">
+                                </kendo-switch>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-2">
                             <kendo-formfield class="form-group">
                                 <label class="custom-form-field-label">Anno</label>
                                 <kendo-numerictextbox [(ngModel)]="options.year" name="year" format="0" [decimals]="0"

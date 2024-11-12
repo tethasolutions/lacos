@@ -2033,6 +2033,115 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("Customers", "Registry");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.HelperDocument", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("HelperTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HelperTypeId");
+
+                    b.ToTable("HelperDocuments", "Registry");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.HelperType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HelperTypes", "Registry");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.NotificationOperator", b =>
                 {
                     b.Property<long>("Id")
@@ -2284,6 +2393,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<string>("Location")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool?>("MonthlyMaintenance")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -3098,6 +3210,15 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.HelperDocument", b =>
+                {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.HelperType", "HelperType")
+                        .WithMany("HelperDocuments")
+                        .HasForeignKey("HelperTypeId");
+
+                    b.Navigation("HelperType");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.NotificationOperator", b =>
                 {
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Operator", "Operator")
@@ -3266,6 +3387,11 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.HelperType", b =>
+                {
+                    b.Navigation("HelperDocuments");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Operator", b =>

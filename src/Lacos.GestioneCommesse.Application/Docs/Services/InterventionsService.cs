@@ -282,7 +282,7 @@ public class InterventionsService : IInterventionsService
                 Status = !e.Interventions.Any()
                     ? ActivityStatus.Pending
                     : e.Interventions.Any(i => i.Status == InterventionStatus.Scheduled)
-                        ? ActivityStatus.InProgress
+                        ? ActivityStatus.Ready
                         : ActivityStatus.Completed
             })
             .FirstAsync();

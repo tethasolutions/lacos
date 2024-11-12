@@ -18,6 +18,7 @@
                             (click)="entry.isDropDown && toggle(entry)">
                             {{entry.name}}
                             <div class="red-number bage-number" *ngIf="(entry.name == 'Tickets') && (ticketsCounters.newTickets > 0)">{{ticketsCounters.newTickets}}</div>
+                            <i class="fas fa-circle-question" *ngIf="(entry.name == 'Help')"></i>
                         </a>
 
                         <div class="dropdown-menu" [class.show]="entry.isOpen" *ngIf="entry.isDropDown">

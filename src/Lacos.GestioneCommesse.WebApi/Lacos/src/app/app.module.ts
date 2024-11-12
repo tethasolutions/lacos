@@ -131,6 +131,12 @@ import { JobsProgressStatusComponent } from './jobs/jobs-progress-status.compone
 import { NotificationOperatorsComponent } from './notificationOperators/notificationOperators.component';
 import { NotificationOperatorModalComponent } from './notificationOperators/notificationOperator-modal.component';
 import { NotificationOperatorsService } from './services/notificationOperators.service';
+import { HelperTypesComponent } from './helpertypes/helpertypes.component';
+import { HelperTypesService } from './services/helper/helperTypes.service';
+import { HelperTypeModalComponent } from './helpertypes/helpertype-modal.component';
+import { HelperDocumentsComponent } from './helperdocuments/helperdocuments.component';
+import { HelperDocumentModalComponent } from './helperdocuments/helperdocument-modal.component';
+import { HelperDocumentsService } from './services/helper/helperDocuments.service';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -212,7 +218,11 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         GalleryModalComponent,
         GridContextMenuComponent,
         NotificationOperatorsComponent,
-        NotificationOperatorModalComponent
+        NotificationOperatorModalComponent,
+        HelperTypesComponent,
+        HelperTypeModalComponent,
+        HelperDocumentsComponent,
+        HelperDocumentModalComponent
     ],
     imports: [
         BrowserModule,
@@ -275,7 +285,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         SupplierService,
         PurchaseOrdersService,
         MessagesService,
-        NotificationOperatorsService
+        NotificationOperatorsService,
+        HelperTypesService,
+        HelperDocumentsService
     ],
     bootstrap: [AppComponent]
 })

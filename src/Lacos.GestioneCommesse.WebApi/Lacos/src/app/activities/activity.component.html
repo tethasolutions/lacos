@@ -87,7 +87,11 @@
                 </a>
                 <a class="btn btn-primary btn-sm" (click)="assignAllCustomerProducts()">
                     <span class="fa fa-plus"></span>
-                    Associa tutti i prodotti dell'indirizzo del cliente
+                    Associa tutti i prodotti cliente (Tutti)
+                </a>
+                <a class="btn btn-primary btn-sm" (click)="assignAllCustomerProductsMonthlyMaint()">
+                    <span class="fa fa-plus"></span>
+                    Associa tutti i prodotti cliente (Manut. Mensile)
                 </a>
             </div>
             <app-activity-products #activityProducts [activityId]="activity.id"

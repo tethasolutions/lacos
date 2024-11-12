@@ -41,7 +41,9 @@ public static class ApplicationConfiguration
             .AddScoped<ITicketsService, TicketsService>()
             .AddScoped<IPurchaseOrdersService, PurchaseOrdersService>()
             .AddScoped<IMessagesService, MessagesService>()
-            .AddScoped<INotificationOperatorService, NotificationOperatorService> ();
+            .AddScoped<INotificationOperatorService, NotificationOperatorService> ()
+            .AddScoped<IHelperTypeService, HelperTypeService> ()
+            .AddScoped<IHelperDocumentService, HelperDocumentService> ();
 
         return services;
     }

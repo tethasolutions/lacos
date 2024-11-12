@@ -77,6 +77,12 @@ public class ActivitiesController : LacosApiController
         return service.AssignAllCustomerProducts(id);
     }
 
+    [HttpPut("{id}/assign-all-customer-products-monthlymaint")]
+    public Task AssignAllCustomerProductsMonthlyMaint(long id)
+    {
+        return service.AssignAllCustomerProductsMonthlyMaint(id);
+    }
+
     [HttpGet("activities-counters")]
     public async Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters()
     {

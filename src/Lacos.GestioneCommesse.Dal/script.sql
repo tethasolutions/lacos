@@ -3459,3 +3459,84 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper')
+BEGIN
+    CREATE TABLE [Registry].[HelperTypes] (
+        [Id] bigint NOT NULL IDENTITY,
+        [Type] nvarchar(50) NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_HelperTypes] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper')
+BEGIN
+    CREATE TABLE [Registry].[HelperDocuments] (
+        [Id] bigint NOT NULL IDENTITY,
+        [HelperTypeId] bigint NULL,
+        [Description] nvarchar(max) NOT NULL,
+        [FileName] nvarchar(max) NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_HelperDocuments] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_HelperDocuments_HelperTypes_HelperTypeId] FOREIGN KEY ([HelperTypeId]) REFERENCES [Registry].[HelperTypes] ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper')
+BEGIN
+    CREATE INDEX [IX_HelperDocuments_HelperTypeId] ON [Registry].[HelperDocuments] ([HelperTypeId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241112085223_aggiunta tabelle helper', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112122657_aggiunta campo manutenzione mensile prodotto')
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD [MonthlyMaintenance] bit NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112122657_aggiunta campo manutenzione mensile prodotto')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241112122657_aggiunta campo manutenzione mensile prodotto', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

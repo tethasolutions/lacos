@@ -1,0 +1,34 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h3>Tipi Helper</h3>
+    </div>
+    <div class="col-auto">
+        <button (click)="createHelperType()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<div class="grid-container">
+<kendo-grid [data]="dataHelperTypes" [pageSize]="stateGridHelperTypes.take" 
+            [skip]="stateGridHelperTypes.skip" [sort]="stateGridHelperTypes.sort" 
+            [filter]="stateGridHelperTypes.filter"
+            [group]="stateGridHelperTypes.group" filterable="menu" 
+            [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
+            (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column field="type" title="Tipo"></kendo-grid-column>
+    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button (click)="editHelperType(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="deleteHelperType(dataItem)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                <i class="fas fa-trash"></i>
+            </button>
+        </ng-template>
+    </kendo-grid-column>
+</kendo-grid>
+</div>
+
+<app-helperType-modal #helperTypeModal></app-helperType-modal>

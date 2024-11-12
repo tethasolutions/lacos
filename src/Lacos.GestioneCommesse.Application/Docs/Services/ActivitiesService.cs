@@ -262,12 +262,49 @@ public class ActivitiesService : IActivitiesService
     {
         var activity = await repository.Query()
             .AsNoTracking()
+            .Include(e => e.Job)
             .Where(e => e.Id == id)
             .FirstAsync();
         var activityProducts = activityProductRepository.Query()
             .Where(e => e.ActivityId == id);
         var products = productRepository.Query()
             .Where(e => e.CustomerId == activity.Job!.CustomerId);
+        var missingProducts = await (
+                from product in products
+                join activityProduct in activityProducts
+                    on product.Id equals activityProduct.ProductId
+                    into join1
+                from activityProduct in join1.DefaultIfEmpty()
+                where activityProduct == null
+                select product.Id
+            )
+            .ToListAsync();
+
+        foreach (var missingProduct in missingProducts)
+        {
+            var missingActivityProduct = new ActivityProduct
+            {
+                ProductId = missingProduct,
+                ActivityId = id
+            };
+
+            await activityProductRepository.Insert(missingActivityProduct);
+        }
+
+        await dbContext.SaveChanges();
+    }
+
+    public async Task AssignAllCustomerProductsMonthlyMaint(long id)
+    {
+        var activity = await repository.Query()
+            .AsNoTracking()
+            .Include(e => e.Job)
+            .Where(e => e.Id == id)
+            .FirstAsync();
+        var activityProducts = activityProductRepository.Query()
+            .Where(e => e.ActivityId == id);
+        var products = productRepository.Query()
+            .Where(e => e.CustomerId == activity.Job!.CustomerId && e.MonthlyMaintenance == true);
         var missingProducts = await (
                 from product in products
                 join activityProduct in activityProducts

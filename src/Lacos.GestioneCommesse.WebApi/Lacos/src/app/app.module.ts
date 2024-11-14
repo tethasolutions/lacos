@@ -26,7 +26,7 @@ import { NotificationModule } from '@progress/kendo-angular-notification';
 import { EditorModule } from '@progress/kendo-angular-editor';
 import { IntlModule } from '@progress/kendo-angular-intl';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TooltipsModule } from "@progress/kendo-angular-tooltip";
 import { StorageService } from './services/common/storage.service';
 import { UserService } from './services/security/user.service';
@@ -140,6 +140,9 @@ import { HelperDocumentsService } from './services/helper/helperDocuments.servic
 import { JobsSuspendedComponent } from './jobs/jobs-suspended.component';
 import { InterventionMessagesListComponent } from './messages/interventionmessages-list.component';
 
+import { NavigationModule } from "@progress/kendo-angular-navigation";
+import { ButtonsModule } from "@progress/kendo-angular-buttons";
+
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
 @NgModule({
@@ -228,10 +231,10 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         HelperDocumentsComponent,
         HelperDocumentModalComponent
     ],
-    imports: [
-        BrowserModule,
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        NavigationModule,
+        ButtonsModule,
         BrowserAnimationsModule,
-        HttpClientModule,
         FormsModule,
         IntlModule,
         AppRoutingModule,

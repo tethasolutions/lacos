@@ -1,8 +1,7 @@
-import { Component, Input, input, OnInit, ViewChild } from '@angular/core';
-import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
-import { NgForm } from '@angular/forms';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ModalFormComponent } from '../shared/modal.component';
 import { Job, JobStatus } from '../services/jobs/models';
-import { BehaviorSubject, Observable, filter, map, switchMap, tap } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModel } from '../shared/models/customer.model';
 import { MessageBoxService } from '../services/common/message-box.service';
@@ -13,7 +12,7 @@ import { AddressModalComponent } from '../address-modal/address-modal.component'
 import { AddressModel } from '../shared/models/address.model';
 import { WindowState } from '@progress/kendo-angular-dialog';
 import { JobsService } from '../services/jobs/jobs.service';
-import { getToday, listEnum } from '../services/common/functions';
+import { listEnum } from '../services/common/functions';
 import { ApiUrls } from '../services/common/api-urls';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { JobAttachmentUploadFileModel } from '../services/jobs/job-attachment-upload-file.model';
@@ -27,6 +26,8 @@ import { Role, User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { MessageModalComponent } from '../messages/message-modal.component';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
+import { ISharepointModalOptions, SharepointModalComponent } from '../sharepoint-browser-modal/sharepoint-modal.component';
+import { SharepointService } from '../services/sharepoint/sharepoint.service';
 
 @Component({
     selector: 'app-job-modal',
@@ -40,8 +41,15 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
     @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
+    @ViewChild('sharepointModal', { static: true }) sharepointModal: SharepointModalComponent
 
     public windowState: WindowState = "default";
+
+    public sharepointRootPath: string = this._sharepoint.rootPath;
+
+    get selectedSharepointPath() {
+        return !this._selectedSharepointPath ? this.sharepointRootPath : this._selectedSharepointPath
+    }
 
     customers: CustomerModel[];
     addresses: AddressModel[];
@@ -55,12 +63,14 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     targetOperatorsArray: number[];
     readonly isOperator: boolean;
 
+    readonly states = listEnum<JobStatus>(JobStatus);
+
+    private _selectedSharepointPath: string = "";
+
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     uploadSaveUrl = `${this._baseUrl}/job-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/job-attachment/remove-file`;
-
-    readonly states = listEnum<JobStatus>(JobStatus);
 
     constructor(
         security: SecurityService,
@@ -70,7 +80,8 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         private readonly _addressesService: AddressesService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
-        private readonly _messagesService: MessagesService
+        private readonly _messagesService: MessagesService,
+        private readonly _sharepoint: SharepointService
     ) {
         super(messageBox);
         this.isOperator = security.isAuthorized(Role.Operator);
@@ -176,6 +187,22 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         );
     }
 
+    browseSharepointPath(path: string, browseMode: boolean) {
+        const options: ISharepointModalOptions = {
+            path,
+            browseMode
+        }
+
+        this._subscriptions.push(
+            this.sharepointModal.open(options)
+                .pipe(
+                    filter(e => e),
+                    tap(() => this._selectedSharepointPath = this.sharepointModal.currentPath)
+                )
+                .subscribe()
+        )
+    }
+
     addNewAddress(address: AddressModel) {
         if (this.options.customerId !== null) address.customerId = this.options.customerId;
         this._subscriptions.push(
@@ -266,8 +293,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
 
     initNewMessage() {
         this.targetOperatorsArray = [];
-        if (this.options.id == 0) 
-        {
+        if (this.options.id == 0) {
             this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
             return;
         }

@@ -52,10 +52,6 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/producttypes'], 'Tipi Prodotto',
                     e => e.startsWith('/producttypes'),
                     e => e.isAuthorized(Role.Administrator)
-                ),
-                new MenuEntry(['/helpertypes'], 'Tipi Helper',
-                    e => e.startsWith('/helpertypes'),
-                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new MenuEntry(['/tickets'], 'Tickets',
@@ -138,6 +134,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/helperdocuments'], 'Guide utili',
                     e => e.startsWith('/helperdocuments'),
                     e => e.isAuthenticated()
+                ),
+                new MenuEntry(['/helpertypes'], 'Tipologie Guide',
+                    e => e.startsWith('/helpertypes'),
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new MenuEntry(['/logout'], 'Logout',

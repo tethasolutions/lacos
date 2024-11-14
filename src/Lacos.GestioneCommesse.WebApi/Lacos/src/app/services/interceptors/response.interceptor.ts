@@ -19,13 +19,15 @@ export class ResponseInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req)
             .pipe(
-                catchError(e => this._catchError(e)),
+                catchError(e => this._catchError(e, req)),
                 finalize(() => { })
             );
     }
 
-    private _catchError(e: any) {
-        if (e instanceof HttpErrorResponse && this._manageHttpError(e)) {
+    private _catchError(e: any, req: HttpRequest<any>) {
+        const isSharepointTokenApiCall = req.url.includes('token');
+
+        if (e instanceof HttpErrorResponse && this._manageHttpError(e) && !isSharepointTokenApiCall) {
             return of();
         }
 

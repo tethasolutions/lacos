@@ -1,0 +1,56 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="900" [top]="110">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Cartella sharepoint
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+
+        <div>
+            <kendo-breadcrumb [items]="navigationMenuItems" (itemClick)="onPathClick($event)"></kendo-breadcrumb>
+
+            <kendo-grid [kendoGridBinding]="items" [sortable]="true" (cellClick)="onCellClick($event)"
+                scrollable="scrollable" [height]="500">
+                <kendo-grid-column class="file" field="name" [sortable]="true" title="Nome">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <div class="d-flex align-items-center gap-2" style="overflow: hidden;">
+                            <i class="fa-regular" [ngClass]="dataItem.isFolder ? 'fa-folder' : 'fa-file'"></i>
+                            <p class="ellipsis m-0">{{ dataItem.name }}</p>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                @if(!browseMode){
+                <kendo-grid-column class="file" [sortable]="false" field="isImg" title="Anteprima immagine"
+                    [width]="176">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        @if(dataItem.isImg) {
+                        <div style="height: 90px; width: 160px; min-width: 160px; min-height: 90px;">
+                            <img style="height: 100%; object-fit: cover; width: 100%" loading="lazy"
+                                [src]="tenantUrl + dataItem.path">
+                        </div>
+                        }
+                    </ng-template>
+                </kendo-grid-column>
+                }
+            </kendo-grid>
+
+        </div>
+
+        <div class="d-flex flex-row justify-content-end gap-2 mt-5">
+            @if(browseMode){
+            <button type="button" (click)="close()" class="btn btn-primary">
+                CONFERMA
+            </button>
+            }
+
+            <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                CHIUDI
+            </button>
+        </div>
+
+    </kendo-window>
+</div>

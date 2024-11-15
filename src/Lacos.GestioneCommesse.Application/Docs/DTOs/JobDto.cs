@@ -18,6 +18,7 @@ public class JobDto : BaseEntityDto
     public long CustomerId { get; set; }
     public long? AddressId { get; set; }
     public long? ReferentId { get; set; }
+    public string? SharepointFolder { get; set; }
     public IEnumerable<JobAttachmentDto>? Attachments { get; set; }
     public IEnumerable<MessageReadModel>? Messages { get; set; }
 }

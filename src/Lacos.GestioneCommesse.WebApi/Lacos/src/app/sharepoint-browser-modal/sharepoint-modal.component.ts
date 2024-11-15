@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, input, OnDestroy, OnInit } from '@angular/core';
 import { SharepointFile, SharepointFolder, SharepointItem, SharepointService } from '../services/sharepoint/sharepoint.service';
 
 import { catchError, map, of, Subject, takeUntil, tap, zip } from 'rxjs';
@@ -14,6 +14,8 @@ import { MessageBoxService } from '../services/common/message-box.service';
 })
 
 export class SharepointModalComponent extends ModalComponent<ISharepointModalOptions> implements OnInit, OnDestroy {
+
+    @Input() startPath: string;
 
     public readonly tenantUrl = this._sharepointService.tenantUrl;
 
@@ -47,6 +49,11 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
             .filter((_, i) => i <= index)
             .map(e => e.text)
             .join('/');
+
+        if (!this.browseMode) {
+            const pathFolder = path.startsWith('/') ? path : '/' + path;
+            if (pathFolder.indexOf(this.startPath) == -1) return;
+        }
 
         this._navigate(path);
     }

@@ -25,6 +25,8 @@ public class Job : FullAuditedEntity
     public long? ReferentId { get; set; }
     public Operator Referent { get; set; }
 
+    public string? SharepointFolder { get; set; }
+
     public ICollection<Activity> Activities { get; set; }
     public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     public ICollection<Ticket> Tickets { get; set; }

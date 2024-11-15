@@ -3559,3 +3559,22 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241115104503_aggiunta campo sharepoint')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [SharepointFolder] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241115104503_aggiunta campo sharepoint')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241115104503_aggiunta campo sharepoint', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

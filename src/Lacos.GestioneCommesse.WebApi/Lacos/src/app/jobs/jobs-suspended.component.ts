@@ -128,7 +128,7 @@ export class JobsSuspendedComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = new Date();
-        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, [], []);
+        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, null, [], []);
 
         this._subscriptions.push(
             this.jobModal.open(job)

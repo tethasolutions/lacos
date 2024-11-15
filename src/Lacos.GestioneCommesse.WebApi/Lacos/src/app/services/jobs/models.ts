@@ -93,6 +93,7 @@ export class Job {
         public customerId: number,
         public addressId: number,
         public referentId: number,
+        public sharepointFolder: string,
         public attachments: JobAttachmentModel[],
         public messages: MessageReadModel[]
     ) {
@@ -103,7 +104,7 @@ export class Job {
     static build(o: Job) {
         const attachments = o.attachments.map(e => JobAttachmentModel.build(e));
         const messages = o.messages.map(e => MessageReadModel.build(e));
-        return new Job(o.id, o.number, o.year, o.date, o.expirationDate, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId, o.referentId, attachments, messages);
+        return new Job(o.id, o.number, o.year, o.date, o.expirationDate, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId, o.referentId, o.sharepointFolder, attachments, messages);
     }
 
 }

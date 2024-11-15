@@ -45,11 +45,11 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
 
     public windowState: WindowState = "default";
 
-    public sharepointRootPath: string = this._sharepoint.rootPath;
+    //public sharepointRootPath: string = this._sharepoint.rootPath;
 
-    get selectedSharepointPath() {
-        return !this._selectedSharepointPath ? this.sharepointRootPath : this._selectedSharepointPath
-    }
+    // get selectedSharepointPath() {
+    //     return !this._selectedSharepointPath ? this.sharepointRootPath : this._selectedSharepointPath
+    // }
 
     customers: CustomerModel[];
     addresses: AddressModel[];
@@ -65,7 +65,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
 
     readonly states = listEnum<JobStatus>(JobStatus);
 
-    private _selectedSharepointPath: string = "";
+    //private _selectedSharepointPath: string = "";
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -112,6 +112,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
                 }
             });
         }
+        if (job.sharepointFolder == null) this.options.sharepointFolder = this._sharepoint.rootPath;
 
         this.updateUnreadCounter();
         this.readAddresses();
@@ -193,11 +194,12 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
             browseMode
         }
 
+        this.sharepointModal.startPath = this.options.sharepointFolder;
         this._subscriptions.push(
             this.sharepointModal.open(options)
                 .pipe(
                     filter(e => e),
-                    tap(() => this._selectedSharepointPath = this.sharepointModal.currentPath)
+                    tap(() => this.options.sharepointFolder = this.sharepointModal.currentPath)
                 )
                 .subscribe()
         )

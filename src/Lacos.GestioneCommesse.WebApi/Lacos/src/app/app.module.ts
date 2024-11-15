@@ -142,6 +142,9 @@ import { InterventionMessagesListComponent } from './messages/interventionmessag
 
 import { NavigationModule } from "@progress/kendo-angular-navigation";
 import { ButtonsModule } from "@progress/kendo-angular-buttons";
+import { SharepointModalComponent } from './sharepoint-browser-modal/sharepoint-modal.component';
+import { SharepointService } from './services/sharepoint/sharepoint.service';
+import { HttpClientModule } from '@angular/common/http';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -229,7 +232,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         HelperTypesComponent,
         HelperTypeModalComponent,
         HelperDocumentsComponent,
-        HelperDocumentModalComponent
+        HelperDocumentModalComponent,
+        SharepointModalComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,
@@ -257,7 +261,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         LayoutModule,
         BarcodesModule,
         EditorModule,
-        UploadModule
+        UploadModule,
+        HttpClientModule
     ],
     providers: [
         {
@@ -268,7 +273,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         VehiclesService,
         SecurityService,
         { provide: APP_INITIALIZER, useFactory: refreshUserData, multi: true, deps: [SecurityService, UserService] },
-        { provide: HTTP_INTERCEPTORS, useClass: HeadersInterceptor, multi: true, deps: [UserService] },
+        { provide: HTTP_INTERCEPTORS, useClass: HeadersInterceptor, multi: true, deps: [UserService, SharepointService] },
         MessageBoxService,
         { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true, deps: [Router, UserService, MessageBoxService] },
         LoaderService,
@@ -295,7 +300,6 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         NotificationOperatorsService,
         HelperTypesService,
         HelperDocumentsService
-    ],
-    bootstrap: [AppComponent]
+    ]
 })
 export class AppModule { }

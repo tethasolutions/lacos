@@ -55,19 +55,29 @@ export class SharepointService {
             );
     }
 
-    downloadFile(path: string) {
+    getFileContentUrl(path: string) {
         return this._http.get(`${this._apiUrl}/GetFileByServerRelativeUrl('${path}')/$value`, { headers: this._headers, responseType: 'arraybuffer' })
             .pipe(
-                tap(e => {
+                map(e => {
                     const blob = new Blob([e], { type: "file/download" });
                     const url = URL.createObjectURL(blob);
+
+                    return url;
+                })
+            )
+    }
+
+    downloadFile(path: string) {
+        return this.getFileContentUrl(path)
+            .pipe(
+                tap(url => {
                     const a = document.createElement('a');
                     a.href = url;
                     a.download = path.split('/').reverse()[0];
                     a.click();
                     window.URL.revokeObjectURL(url);
                 })
-            )
+            );
     }
 
     updateSharepointApiAccessToken() {

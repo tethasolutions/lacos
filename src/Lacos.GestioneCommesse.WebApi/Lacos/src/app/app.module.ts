@@ -145,6 +145,7 @@ import { ButtonsModule } from "@progress/kendo-angular-buttons";
 import { SharepointModalComponent } from './sharepoint-browser-modal/sharepoint-modal.component';
 import { SharepointService } from './services/sharepoint/sharepoint.service';
 import { HttpClientModule } from '@angular/common/http';
+import { SharepointImageDirective } from './sharepoint-browser-modal/sharepoint-image.directive';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -233,7 +234,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         HelperTypeModalComponent,
         HelperDocumentsComponent,
         HelperDocumentModalComponent,
-        SharepointModalComponent
+        SharepointModalComponent,
+        SharepointImageDirective
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,
@@ -278,7 +280,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true, deps: [Router, UserService, MessageBoxService] },
         LoaderService,
         { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true, deps: [LoaderService] },
-        
+
         { provide: HTTP_INTERCEPTORS, useClass: UploadInterceptor, multi: true },
         AuthGuard,
         CustomerService,

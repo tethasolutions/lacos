@@ -6,18 +6,19 @@ import { ApiUrls } from '../common/api-urls';
 @Injectable({ providedIn: 'root' })
 export class SharepointService {
 
-    public tenantUrl = "https://tetha365.sharepoint.com";
+    public tenantUrl = "https://graph.microsoft.com/v1.0";
+    public siteId = "0fdfacc1-fe8c-4646-94d0-47e99014b0e2";
+    public driveId = "daa8fa9e-0baa-4edb-9bbe-31add2837fd4";
+    public rootItemId = "01M6PTOZIUWLYL7KVEUJCLFX2ONYCRAXY2";
 
-    public rootPath = "RootTest";
-
-    get sharepointApi() {
+    get graphApi() {
         return {
             url: this._apiUrl,
             accessToken: this._apiAccessToken
-        }
+        };
     }
 
-    private _apiUrl = `${this.tenantUrl}/_api/web`;
+    private _apiUrl = `${this.tenantUrl}/sites/lacosgroup.sharepoint.com,${this.siteId},${this.driveId}/drive/items`;
     private _apiAccessToken = "";
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/sharepoint`;
@@ -25,55 +26,48 @@ export class SharepointService {
 
     private _headers = new HttpHeaders({
         Authorization: `Bearer ${this._apiAccessToken}`,
-        Accept: "application/json;odata=verbose"
+        Accept: "application/json"
     });
 
     constructor(
         private _http: HttpClient
     ) { }
 
-    getFolders(path: string) {
-        return this._http.get<SharepointResponse<IFolder>>(`${this._apiUrl}/GetFolderByServerRelativeUrl('${path}')/Folders`, { headers: this._headers })
+    getChildren(itemId: string = this.rootItemId) {
+        const url = `${this._apiUrl}/${itemId}/children`;
+        return this._http.get<GraphResponse<IItem>>(url, { headers: this._headers })
             .pipe(
-                map(e => e.d.results),
-                map(e => e.map(e => new SharepointFolder(e.Name, e.ServerRelativeUrl)))
+                map(response => response.value),
+                map(items => items.map(item => item.folder ? new SharepointFolder(item.name, item.id, item.parentReference.path, item.webUrl) : new SharepointFile(item.name, item.id, item.parentReference.path, item.webUrl)))
             );
     }
 
-    getFiles(path: string) {
-        return this._http.get<SharepointResponse<IFile>>(`${this._apiUrl}/GetFolderByServerRelativeUrl('${path}')/Files`, { headers: this._headers })
+    getParentFolderPath(itemId: string) {
+        const url = `${this._apiUrl}/${itemId}`;
+        return this._http.get<IItem>(url, { headers: this._headers })
             .pipe(
-                map(e => e.d.results),
-                map(e => e.map(e => new SharepointFile(e.Name, e.ServerRelativeUrl)))
-            )
-    }
-
-    getParentFolderPath(path: string) {
-        return this._http.get<SharepointResponse<string>>(`${this._apiUrl}/GetFolderByServerRelativeUrl('${path}')/ParentFolder`, { headers: this._headers })
-            .pipe(
-                map(e => e.d.ServerRelativeUrl)
+                map(item => item.parentReference.path)
             );
     }
 
-    getFileContentUrl(path: string) {
-        return this._http.get(`${this._apiUrl}/GetFileByServerRelativeUrl('${path}')/$value`, { headers: this._headers, responseType: 'arraybuffer' })
+    getFileContentUrl(itemId: string) {
+        const url = `${this._apiUrl}/${itemId}/content`;
+        return this._http.get(url, { headers: this._headers, responseType: 'blob' })
             .pipe(
-                map(e => {
-                    const blob = new Blob([e], { type: "file/download" });
-                    const url = URL.createObjectURL(blob);
-
-                    return url;
+                map(blob => {
+                    const fileUrl = URL.createObjectURL(blob);
+                    return fileUrl;
                 })
-            )
+            );
     }
 
-    downloadFile(path: string) {
-        return this.getFileContentUrl(path)
+    downloadFile(itemId: string, fileName: string) {
+        return this.getFileContentUrl(itemId)
             .pipe(
                 tap(url => {
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = path.split('/').reverse()[0];
+                    a.download = fileName;
                     a.click();
                     window.URL.revokeObjectURL(url);
                 })
@@ -83,9 +77,12 @@ export class SharepointService {
     updateSharepointApiAccessToken() {
         return this._http.get<SharepointResult>(this._tokenEndpoint)
             .pipe(
-                map(e => e.accessToken),
-                tap(e => this._apiAccessToken = e)
-            )
+                map(response => response.accessToken),
+                tap(token => {
+                    this._apiAccessToken = token;
+                    this._headers = this._headers.set('Authorization', `Bearer ${token}`);
+                })
+            );
     }
 
 }
@@ -94,28 +91,28 @@ interface SharepointResult {
     readonly accessToken: string;
 }
 
-interface SharepointResponse<T> {
-    d: {
-        results: Array<T>;
-        ServerRelativeUrl: string;
-    }
+interface GraphResponse<T> {
+    value: Array<T>;
 }
 
-interface IFolder {
-    Name: string;
-    ServerRelativeUrl: string;
-}
-
-interface IFile {
-    Name: string;
-    ServerRelativeUrl: string;
+interface IItem {
+    id: string;
+    name: string;
+    parentReference: {
+        path: string;
+    };
+    file?: object;
+    folder?: object;
+    webUrl?: string;
 }
 
 export class SharepointFolder {
 
     constructor(
         public name: string,
-        public path: string
+        public id: string,
+        public path: string,
+        public webUrl: string
     ) { }
 
 }
@@ -126,19 +123,18 @@ export class SharepointFile {
 
     constructor(
         public name: string,
-        public path: string
+        public id: string,
+        public path: string,
+        public webUrl: string
     ) {
-        this.isImg = this._isImg(this.name)
+        this.isImg = this._isImg(this.name);
     }
 
     private _isImg(file: string) {
         const imgExtensions = ['apng', 'avif', 'gif', 'jpg', 'jpeg', 'png', 'svg', 'webp'];
-        const fileExtension = file.split('.').last();
+        const fileExtension = file.split('.').pop();
 
-        if (imgExtensions.includes(fileExtension.toLowerCase())) {
-            return true;
-        }
-        return false;
+        return imgExtensions.includes(fileExtension?.toLowerCase() || "");
     }
 
 }
@@ -148,13 +144,17 @@ export class SharepointItem {
     readonly isFolder: boolean;
     readonly isImg: boolean;
     readonly name: string;
+    readonly id: string;
     readonly path: string;
+    readonly webUrl: string;
 
     constructor(
         item: SharepointFile | SharepointFolder
     ) {
         this.name = item.name;
+        this.id = item.id;
         this.path = item.path;
+        this.webUrl = item.webUrl;
         this.isImg = item instanceof SharepointFile && item.isImg;
         this.isFolder = item instanceof SharepointFolder;
     }

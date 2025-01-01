@@ -387,6 +387,62 @@ public class ActivitiesService : IActivitiesService
 
     }
 
+    public async Task<ActivityDto> CopyActivity(ActivityCopyDto activityCopyDto)
+    {
+        var sourceActivity = await repository.Query()
+            .AsNoTracking()
+            .Where(x => x.Id == activityCopyDto.SourceActivityId)
+            .Include(x => x.Attachments)
+            .FirstOrDefaultAsync();
+        
+        var number = await GetNextNumber(activityCopyDto.JobId);
+        Activity activity = new Activity();
+
+        activity.SetNumber(number);
+        activity.IsNewReferent = true;
+        activity.JobId = activityCopyDto.JobId;
+        activity.Attachments = sourceActivity.Attachments;
+        activity.Description = sourceActivity.Description;
+        activity.ExpirationDate = sourceActivity.ExpirationDate;
+        activity.Informations = sourceActivity.Informations;
+        activity.ReferentId = sourceActivity.ReferentId;
+        activity.ShortDescription = sourceActivity.ShortDescription;
+        activity.StartDate = sourceActivity.StartDate;
+        activity.Status = ActivityStatus.Pending;
+        activity.SupplierId = sourceActivity.SupplierId;
+        activity.TypeId = sourceActivity.TypeId;
+
+        await repository.Insert(activity);
+
+        await dbContext.SaveChanges();
+
+        ActivityType activityType = await activityTypeRepository.Get(activity.TypeId);
+        if ((bool)activityType.InfluenceJobStatus && activity.JobId != null)
+        {
+            Job job = await jobRepository.Query()
+                .Where(e => e.Id == activity.JobId)
+                .Include(e => e.Activities)
+                .ThenInclude(e => e.Type)
+                .FirstOrDefaultAsync();
+            if (job != null)
+            {
+                if (job.Status != JobStatus.Billing && job.Status != JobStatus.Billed)
+                {
+                    try
+                    {
+                        Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                        job.Status = statusDelegate(job);
+                        jobRepository.Update(job);
+                        await dbContext.SaveChanges();
+                    }
+                    catch (Exception ex) { }
+                }
+            }
+        }
+
+        return await Get(activity.Id);
+    }
+
     // --------------------------------------------------------------------------------------------------------------
     public async Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long jobId, long activityId)
     {

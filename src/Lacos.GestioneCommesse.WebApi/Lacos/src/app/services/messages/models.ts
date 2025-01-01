@@ -18,14 +18,15 @@ export class MessageReadModel {
         public purchaseOrderId: number,
         public elementCode: string,
         public isRead: boolean,
-        public isFromApp: boolean
+        public isFromApp: boolean,
+        public targetOperators: string
 
     ){
         this.date = date ? new Date(date) : null;
     }
 
     static build(o: MessageReadModel) {
-        return new MessageReadModel(o.id, o.date, o.note, o.operatorId, o.operatorName, o.jobId, o.activityId, o.ticketId, o.purchaseOrderId, o.elementCode, o.isRead, o.isFromApp);
+        return new MessageReadModel(o.id, o.date, o.note, o.operatorId, o.operatorName, o.jobId, o.activityId, o.ticketId, o.purchaseOrderId, o.elementCode, o.isRead, o.isFromApp, o.targetOperators);
     }
 }
 

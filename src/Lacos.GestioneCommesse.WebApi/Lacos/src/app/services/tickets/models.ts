@@ -27,6 +27,7 @@ export interface ITicketReadModel {
     readonly status: TicketStatus;
     readonly jobId: number;
     readonly activityId: number;
+    readonly purchaseOrderId: number;
     readonly customerId: number;
     readonly customerName: string;
     readonly customerEmail: string;
@@ -55,6 +56,7 @@ export class Ticket {
         public customerId: number,
         public jobId: number,
         public activityId: number,
+        public purchaseOrderId: number,
         public operatorId: number,
         public pictures: TicketAttachmentModel[],
         public messages: MessageReadModel[]
@@ -64,7 +66,7 @@ export class Ticket {
 
     static build(o: Ticket) {
         const messages = o.messages.map(e => MessageReadModel.build(e));
-        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.jobId, o.activityId, o.operatorId, o.pictures, messages);
+        return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.jobId, o.activityId, o.purchaseOrderId, o.operatorId, o.pictures, messages);
     }
 
 }

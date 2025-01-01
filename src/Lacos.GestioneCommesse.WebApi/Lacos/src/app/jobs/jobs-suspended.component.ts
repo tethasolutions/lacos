@@ -128,7 +128,7 @@ export class JobsSuspendedComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = new Date();
-        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, null, [], []);
+        const job = new Job(0, null, today.getFullYear(), today, null, null, null, false, JobStatus.Pending, null, null, null, null, null, [], []);
 
         this._subscriptions.push(
             this.jobModal.open(job)
@@ -157,17 +157,18 @@ export class JobsSuspendedComponent extends BaseComponent implements OnInit {
 
     onDblClick(): void {
         if (!this.cellArgs.isEdited) {
-            this._subscriptions.push(
-                this._service.get(this.cellArgs.dataItem.id)
-                    .pipe(
-                        switchMap(e => this.jobModal.open(e)),
-                        tap(e => !e && this._read()),
-                        filter(e => e),
-                        switchMap(() => this._service.update(this.jobModal.options)),
-                        tap(e => this._afterSaved(e))
-                    )
-                    .subscribe()
-            );
+            this.router.navigate(['/job-details'], {queryParams: {jobId: this.cellArgs.dataItem.id}});
+            // this._subscriptions.push(
+            //     this._service.get(this.cellArgs.dataItem.id)
+            //         .pipe(
+            //             switchMap(e => this.jobModal.open(e)),
+            //             tap(e => !e && this._read()),
+            //             filter(e => e),
+            //             switchMap(() => this._service.update(this.jobModal.options)),
+            //             tap(e => this._afterSaved(e))
+            //         )
+            //         .subscribe()
+            // );
         }
     }
 

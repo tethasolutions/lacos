@@ -146,6 +146,7 @@ import { SharepointModalComponent } from './sharepoint-browser-modal/sharepoint-
 import { SharepointService } from './services/sharepoint/sharepoint.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SharepointImageDirective } from './sharepoint-browser-modal/sharepoint-image.directive';
+import { CopyActivityModalComponent } from './activities/copy-activity-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -199,6 +200,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ActivityComponent,
         ActivityModalComponent,
         ActivityProductsComponent,
+        CopyActivityModalComponent,
         JobsAttachmentsModalComponent,
         StringsPipe,
         ActivityProductModalComponent,

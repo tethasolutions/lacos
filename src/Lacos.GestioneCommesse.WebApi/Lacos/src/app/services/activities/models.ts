@@ -177,12 +177,22 @@ export class ActivityCounter {
 
 }
 
-export class NewActivityCounter {    
+export class NewActivityCounter {
     constructor(
         readonly newActivities: number
-    ){}
+    ) { }
 
     static build(o: NewActivityCounter) {
         return new NewActivityCounter(o.newActivities);
+    }
+}
+
+export class CopyActivityModel {
+    constructor(
+        readonly sourceActivityId: number,
+        readonly jobId: number
+    ) { }
+    static build(o: CopyActivityModel) {
+        return new CopyActivityModel(o.sourceActivityId, o.jobId);
     }
 }

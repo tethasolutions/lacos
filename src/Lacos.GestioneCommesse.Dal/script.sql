@@ -3578,3 +3578,53 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD [PurchaseOrderId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket')
+BEGIN
+    CREATE INDEX [IX_Tickets_PurchaseOrderId] ON [Docs].[Tickets] ([PurchaseOrderId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket')
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD CONSTRAINT [FK_Tickets_PurchaseOrders_PurchaseOrderId] FOREIGN KEY ([PurchaseOrderId]) REFERENCES [Docs].[PurchaseOrders] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241118125950_aggiunta campo purchaseorderid in ticket', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241231153149_aggiunta campo sharepoint foldername')
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [sharepointFolderName] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241231153149_aggiunta campo sharepoint foldername')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241231153149_aggiunta campo sharepoint foldername', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

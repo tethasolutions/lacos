@@ -15,6 +15,7 @@ public interface IActivitiesService
     Task AssignAllCustomerProductsMonthlyMaint(long id);
     Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters();
     Task<ActivityCounterNewDto> GetNewActivitiesCounter();
+    Task<ActivityDto> CopyActivity(ActivityCopyDto activityCopyDto);
 
     Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long jobId, long activityId);
     Task<ActivityAttachmentReadModel> GetActivityAttachmentDetail(long attachmentId);

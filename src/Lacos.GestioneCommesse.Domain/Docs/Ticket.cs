@@ -14,6 +14,8 @@ public class Ticket : FullAuditedEntity
     public Job? Job { get; set; }
     public long? ActivityId { get; set; }
     public Activity? Activity { get; set; }
+    public long? PurchaseOrderId { get; set; }
+    public PurchaseOrder? PurchaseOrder { get; set; }
 
     public long CustomerId { get; set; }
     public Customer? Customer { get; set; }

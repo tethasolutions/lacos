@@ -21,4 +21,5 @@ public class MessageReadModel : BaseEntityDto
     public bool IsRead { get; set; }
     public string? TargetOperatorsId { get; set; }
     public bool IsFromApp { get; set; }
+    public string? TargetOperators { get; set; }
 }

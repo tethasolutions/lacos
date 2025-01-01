@@ -1,4 +1,4 @@
-import { Component, Input, input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { SharepointFile, SharepointFolder, SharepointItem, SharepointService } from '../services/sharepoint/sharepoint.service';
 
 import { catchError, map, of, Subject, takeUntil, tap, zip } from 'rxjs';
@@ -23,10 +23,11 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
     public files: SharepointFile[] = [];
     public items: SharepointItem[];
 
-    public readonly rootPath = this._sharepointService.rootPath;
+    public readonly rootPath = this._sharepointService.rootItemId;
     public currentPath = this.rootPath;
 
     public browseMode: boolean;
+    public navFolder: string;
 
     public navigationMenuItems: BreadCrumbItem[];
 
@@ -43,28 +44,17 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
 
     }
 
-    onPathClick(item: BreadCrumbItem) {
-        const index = this.navigationMenuItems.indexOf(item);
-        const path = this.navigationMenuItems
-            .filter((_, i) => i <= index)
-            .map(e => e.text)
-            .join('/');
-
-        if (!this.browseMode) {
-            const pathFolder = path.startsWith('/') ? path : '/' + path;
-            if (pathFolder.indexOf(this.startPath) == -1) return;
-        }
-
-        this._navigate(path);
+    resetFolder() {
+        this._navigate(this.rootPath,"COMMESSE");
     }
 
     onCellClick($event: CellClickEvent) {
         const dataItem = $event.dataItem as SharepointItem;
 
         if (dataItem.isFolder) {
-            this._navigate(dataItem.path);
+            this._navigate(dataItem.id, dataItem.name);
         } else {
-            this._downloadFile(dataItem.path);
+            this._downloadFile(dataItem.id, dataItem.name);
         }
     }
 
@@ -76,7 +66,7 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
         this._sharepointService.updateSharepointApiAccessToken()
             .pipe(
                 takeUntil(this._ngUnsubscribe),
-                tap(() => this._navigate(this.currentPath))
+                tap(() => this._navigate(this.currentPath,options.folderName))
             )
             .subscribe();
 
@@ -87,14 +77,22 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
         return true;
     }
 
-    private _navigate(path: string) {
-        this._getFolderContents(path);
-        this.currentPath = path;
-        this.navigationMenuItems = this.currentPath.split('/').filter(e => e).map(item => ({ text: item, title: item }))
+    private _navigate(itemId: string, folderName: string) {
+        this._getFolderContents(itemId);
+        this._sharepointService.getParentFolderPath(itemId)
+            .pipe(
+                takeUntil(this._ngUnsubscribe),
+                tap(path => {
+                    this.navigationMenuItems = path.replace('/drive/root:','').concat('/',folderName).split('/').filter(e => e).map(item => ({ text: item, title: itemId }));
+                    this.currentPath = itemId;
+                    this.navFolder = path;
+                })
+            )
+            .subscribe();
     }
 
-    private _downloadFile(path: string) {
-        this._sharepointService.downloadFile(path)
+    private _downloadFile(itemId: string, fileName: string) {
+        this._sharepointService.downloadFile(itemId, fileName)
             .pipe(
                 takeUntil(this._ngUnsubscribe),
                 catchError(e => {
@@ -106,13 +104,10 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
     }
 
     private _getFolderContents(path: string) {
-        zip(
-            this._sharepointService.getFolders(path),
-            this.browseMode ? of(new Array<SharepointFile>()) : this._sharepointService.getFiles(path)
-        )
+        this._sharepointService.getChildren(path)
             .pipe(
                 takeUntil(this._ngUnsubscribe),
-                tap(e => this.items = e[0].orderBy(ee => ee.name).concat(e[1].orderBy(ee => ee.name)).map(ee => new SharepointItem(ee)))
+                tap(items => this.items = items.map(item => new SharepointItem(item)))
             )
             .subscribe();
     }
@@ -121,5 +116,6 @@ export class SharepointModalComponent extends ModalComponent<ISharepointModalOpt
 
 export interface ISharepointModalOptions {
     path: string;
+    folderName: string;
     browseMode: boolean;
 }

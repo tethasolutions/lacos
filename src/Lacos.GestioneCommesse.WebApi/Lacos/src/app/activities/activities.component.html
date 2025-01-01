@@ -17,7 +17,7 @@
     <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
         [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
         (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)"
-        (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)" scrollable="none"
+        (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event,true)" scrollable="none"
         [style.width.px]="screenWidth">
         <ng-template kendoGridToolbarTemplate *ngIf="viewExportExcel">
             <button type="button" class="btn btn-primary" (click)="exportToExcel()">

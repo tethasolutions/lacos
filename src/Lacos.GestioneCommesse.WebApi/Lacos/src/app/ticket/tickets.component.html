@@ -80,7 +80,7 @@
                     <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button [disabled]="dataItem.jobId == null" class="btn btn-primary btn-sm" title="Apri attività"
+                    <button [disabled]="dataItem.activityId == null" class="btn btn-primary btn-sm" title="Apri attività"
                         [routerLink]="['/activities']" [queryParams]="{jobId: dataItem.jobId}">
                         <i class="fas fa-a"></i>
                     </button>
@@ -88,6 +88,11 @@
                         [routerLink]="['/interventions-list']" [disabled]="!dataItem.hasInterventions"
                         [queryParams]="{jobId: dataItem.jobId}">
                         <i class="fas fa-i"></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto"
+                        [disabled]="dataItem.purchaseOrderId == null" [routerLink]="['/purchase-orders']"
+                        [queryParams]="{jobId: dataItem.jobId}">
+                        <i class="fa fa-bag-shopping"></i>
                     </button>
                     <button class="btn btn-danger btn-sm" title="Rimuovi" (click)="askRemove(dataItem)">
                         <i class="fas fa-trash"></i>

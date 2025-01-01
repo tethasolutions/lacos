@@ -1,0 +1,43 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="true" [draggable]="true" [top]="30">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Copia Attività
+            </div>
+            <button kendoWindowMinimizeAction></button>
+            <button kendoWindowRestoreAction></button>
+            <button kendoWindowMaximizeAction></button>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="copy-activity-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()"
+            style="min-width: 600px;">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Commessa</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
+                            [(ngModel)]="options.jobId" required [suggest]="true" [allowCustom]="false"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [valuePrimitive]="true">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['jobId']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!--</kendo-expansionpanel>-->
+            <hr class="border-green"/>
+
+            <div class="d-flex justify-content-end gap-2 mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-floppy-disk me-2"></i> COPIA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

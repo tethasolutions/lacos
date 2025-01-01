@@ -65,12 +65,11 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
 
     readonly states = listEnum<JobStatus>(JobStatus);
 
-    //private _selectedSharepointPath: string = "";
-
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     uploadSaveUrl = `${this._baseUrl}/job-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/job-attachment/remove-file`;
+    cannotBrowseSharepoint: boolean = false;
 
     constructor(
         security: SecurityService,
@@ -112,7 +111,10 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
                 }
             });
         }
-        if (job.sharepointFolder == null) this.options.sharepointFolder = this._sharepoint.rootPath;
+        if (job.sharepointFolder == null) {
+            this.options.sharepointFolder = this._sharepoint.rootItemId;
+        }
+        this.cannotBrowseSharepoint = (job.sharepointFolder == null || job.sharepointFolder == this._sharepoint.rootItemId);
 
         this.updateUnreadCounter();
         this.readAddresses();
@@ -187,22 +189,28 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
                 .subscribe()
         );
     }
-
-    browseSharepointPath(path: string, browseMode: boolean) {
+    
+    browseSharepointPath(path: string, folderName: string, browseMode: boolean) {
         const options: ISharepointModalOptions = {
             path,
+            folderName,
             browseMode
-        }
+        };
 
         this.sharepointModal.startPath = this.options.sharepointFolder;
         this._subscriptions.push(
             this.sharepointModal.open(options)
                 .pipe(
                     filter(e => e),
-                    tap(() => this.options.sharepointFolder = this.sharepointModal.currentPath)
+                    tap(() => {
+                        const selectedFolderName = this.sharepointModal.navigationMenuItems.slice(-1)[0]?.text;
+                        this.options.sharepointFolder = this.sharepointModal.currentPath;
+                        this.options.sharepointFolderName = selectedFolderName || null;
+                        this.cannotBrowseSharepoint = (this.options.sharepointFolder == null || this.options.sharepointFolder == this._sharepoint.rootItemId);
+                    })
                 )
                 .subscribe()
-        )
+        );
     }
 
     addNewAddress(address: AddressModel) {
@@ -315,7 +323,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     createMessage() {
         const today = new Date();
         const message = new MessageModel(0, today, null, this.currentOperator.id, this.options.id, null, null, null, false);
-        const options = new MessageModalOptions(message,true, true, this.targetOperatorsArray);
+        const options = new MessageModalOptions(message, true, true, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)
@@ -323,7 +331,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message, options.targetOperators.join(","))),
                     tap(e => {
-                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false);
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false, null);
                         this.options.messages.push(msg);
                     }),
                     tap(() => this._messageBox.success('Commento creato'))
@@ -359,7 +367,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         this._subscriptions.push(
             this._messagesService.get(message.id)
                 .pipe(
-                    map(e => new MessageModalOptions(e,false)),
+                    map(e => new MessageModalOptions(e, false)),
                     switchMap(e => this.messageModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._messagesService.update(this.messageModal.options.message)),

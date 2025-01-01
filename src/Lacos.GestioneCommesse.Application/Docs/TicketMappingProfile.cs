@@ -25,6 +25,7 @@ public class TicketMappingProfile : Profile
             .Ignore(x => x.Customer)
             .Ignore(x => x.Job)
             .Ignore(x => x.Activity)
+            .Ignore(x => x.PurchaseOrder)
             .Ignore(x => x.Pictures)
             .Ignore(x => x.IsNew)
             .Ignore(x => x.Operator)

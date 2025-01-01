@@ -12,6 +12,7 @@ public class TicketDto : BaseEntityDto
     public TicketStatus Status { get; set; }
     public long? JobId { get; set; }
     public long? ActivityId { get; set; }
+    public long? PurchaseOrderId { get; set; }
     public long CustomerId { get; set; }
     public string? CustomerName { get; set; }
     public long? OperatorId { get; set; }

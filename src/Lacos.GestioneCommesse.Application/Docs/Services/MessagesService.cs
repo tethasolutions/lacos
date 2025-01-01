@@ -204,7 +204,10 @@ public class MessagesService : IMessagesService
         if (jobId != null)
         {
             var MessageDto = await repository.Query()
+                .AsNoTracking()
                 .Where(e => e.JobId == jobId)
+                .Include(e => e.MessageNotifications)
+                .ThenInclude(e => e.Operator)
                 .OrderBy(e => e.Date)
             .ToArrayAsync();
 
@@ -214,7 +217,11 @@ public class MessagesService : IMessagesService
         if (activityId != null)
         {
             var MessageDto = await repository.Query()
+                .AsNoTracking()
                 .Where(e => e.ActivityId == activityId)
+                .Where(e => e.JobId == jobId)
+                .Include(e => e.MessageNotifications)
+                .ThenInclude(e => e.Operator)
                 .OrderBy(e => e.Date)
             .ToArrayAsync();
         return MessageDto.MapTo<IEnumerable<MessageReadModel>>(mapper);
@@ -223,7 +230,11 @@ public class MessagesService : IMessagesService
         if (ticketId != null)
         {
             var MessageDto = await repository.Query()
+                .AsNoTracking()
                 .Where(e => e.TicketId == ticketId)
+                .Where(e => e.JobId == jobId)
+                .Include(e => e.MessageNotifications)
+                .ThenInclude(e => e.Operator)
                 .OrderBy(e => e.Date)
             .ToArrayAsync();
         return MessageDto.MapTo<IEnumerable<MessageReadModel>>(mapper);
@@ -232,7 +243,11 @@ public class MessagesService : IMessagesService
         if (purchaseOrderId != null)
         {
             var MessageDto = await repository.Query()
+                .AsNoTracking()
                 .Where(e => e.PurchaseOrderId == purchaseOrderId)
+                .Where(e => e.JobId == jobId)
+                .Include(e => e.MessageNotifications)
+                .ThenInclude(e => e.Operator)
                 .OrderBy(e => e.Date)
             .ToArrayAsync();
         return MessageDto.MapTo<IEnumerable<MessageReadModel>>(mapper);

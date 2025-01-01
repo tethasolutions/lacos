@@ -8,6 +8,8 @@
         <kendo-menu-item text="Ordini d'acquisto Commessa"></kendo-menu-item>
         <kendo-menu-item text="Interventi Commessa"></kendo-menu-item>
     </kendo-menu-item>
+    <kendo-menu-item text="Copia Attività" *ngIf="isActivityGrid"></kendo-menu-item>
 </kendo-contextmenu>
 
 <app-job-modal #jobDetailModal [jobReadOnly]="true"></app-job-modal>
+<app-copy-activity-modal #copyActivityModal></app-copy-activity-modal>

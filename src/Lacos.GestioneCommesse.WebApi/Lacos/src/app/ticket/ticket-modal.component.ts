@@ -134,40 +134,6 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
 
     }
 
-    private _newPurchaseOrder(ticket: Ticket) {
-        const today = getToday();
-        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, 
-            this._job.id, null, null, this.currentOperator.id, [], [], [], [], []);
-        const options = new PurchaseOrderModalOptions(purchaseOrder);
-
-        ticket.status = TicketStatus.InProgress;
-
-        this._subscriptions.push(
-            this.purchaseOrderModal.open(options)
-                .pipe(
-                    filter(e => e),
-                    switchMap(() => this._servicePurchaseOrder.create(purchaseOrder)),
-                    tap(e => this.options.jobId = this._job.id),
-                    tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
-                    tap(() => this.close())
-                )
-                .subscribe()
-        );
-    }
-
-    createPurchaseOrder(ticket: Ticket) {
-
-        this._subscriptions.push(
-            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/","-"))
-                .pipe(
-                    tap(e => this._job = e),
-                    tap(() => this._newPurchaseOrder(ticket))
-                )
-                .subscribe()
-        );
-
-    }
-
     private _newActivity(ticket: Ticket) {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, null,
             this._job.id, null, null, null, null, null, null, "In attesa", "In corso", "Pronto", "Completata", [], []);
@@ -182,6 +148,42 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
                     switchMap(() => this._serviceActivity.create(activity)),
                     tap(e => ticket.activityId = e.id),
                     tap(e => ticket.jobId = this._job.id),
+                    tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
+                    tap(() => this.close())
+                )
+                .subscribe()
+        );
+    }
+
+    createPurchaseOrder(ticket: Ticket) {
+
+        this._subscriptions.push(
+            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/","-"))
+                .pipe(
+                    tap(e => this._job = e),
+                    tap (e => this.options.jobId = this._job.id),
+                    tap(() => this._newPurchaseOrder(ticket))
+                )
+                .subscribe()
+        );
+
+    }
+
+    private _newPurchaseOrder(ticket: Ticket) {
+        const today = getToday();
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, PurchaseOrderStatus.Pending, 
+            this._job.id, null, null, this.currentOperator.id, [], [], [], [], []);
+        const options = new PurchaseOrderModalOptions(purchaseOrder);
+
+        ticket.status = TicketStatus.InProgress;
+
+        this._subscriptions.push(
+            this.purchaseOrderModal.open(options)
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._servicePurchaseOrder.create(purchaseOrder)),
+                    tap(e => ticket.jobId = this._job.id),
+                    tap(e => ticket.purchaseOrderId = e.id),
                     tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
                     tap(() => this.close())
                 )
@@ -273,7 +275,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message, options.targetOperators.join(","))),
                     tap(e => {
-                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false);
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false, null);
                         this.options.messages.push(msg);
                     }),
                     tap(() => this._messageBox.success('Commento creato'))

@@ -21,7 +21,7 @@ export class HeadersInterceptor implements HttpInterceptor {
         let headers = req.headers;
 
         if (isSharepointApiCall && !isSharepointTokenApiCall) {
-            headers = headers.set('Authorization', 'Bearer ' + this._sharepointService.sharepointApi.accessToken);
+            headers = headers.set('Authorization', 'Bearer ' + this._sharepointService.graphApi.accessToken);
             headers = headers.set('Content-Type', 'application/json;odata=verbose');
         } else {
             if (user && user.accessToken) {

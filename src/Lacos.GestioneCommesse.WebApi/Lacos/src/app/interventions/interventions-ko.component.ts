@@ -138,7 +138,8 @@ export class InterventionsKoComponent extends BaseComponent implements OnInit {
                             { value: item.productDescription },
                             { value: item.interventionDescription },
                             { value: item.checklistItem },
-                            { value: item.outcomeNotes }
+                            { value: item.outcomeNotes },
+                            { value: item.outcomeCorrectiveAction }
                         ]
                     }))
                 ]

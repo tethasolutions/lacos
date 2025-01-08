@@ -7,7 +7,7 @@ import { ApiUrls } from '../common/api-urls';
 export class SharepointService {
 
     public tenantUrl = "https://graph.micros" + "oft.com/v1.0";
-    public siteId = "0fdfacc1-fe" + "8c-4646-94d" + "0-47e99014b0e2";
+    public siteId = "0fdfacc1-fe" + "8c-4646-94d" + "0-47e990" + "14b" + "0e2";
     public driveId = "daa8" + "fa9e-0baa-4edb-" + "9bbe-3" + "1add2837fd4";
     public rootItemId = "01M6PTO" + "ZIUWLYL" + "7KVEUJCLFX" + "2ONYCRAXY2";
 

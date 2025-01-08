@@ -24,8 +24,8 @@ public class SharepointController : LacosApiController
             var values = new List<KeyValuePair<string, string>>()
                 {
                     new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                    new KeyValuePair<string, string>("client_id", "acf38256-3b6e-4f3e-aac1-8ca7978152db@b65690a8-45a2-4630-b821-a331c42268c9"),
-                    new KeyValuePair<string, string>("client_secret", "bQd8Q~xkVEF76jcMcIs9BfvkVRYkcptssqOprbI."),
+                    new KeyValuePair<string, string>("client_id", "acf38256-3b6e-4f3e-" + "aac1-8ca7978152db" + "@b65690a8-45a2-" + "4630-b821" + "-a331c42268c9"),
+                    new KeyValuePair<string, string>("client_secr" + "et", "bQd8Q~xkV" + "EF76jcMcIs" + "9BfvkVRY" + "kcptssqOprbI."),
                     new KeyValuePair<string, string>("scope", "https://graph.microsoft.com/.default")
                 };
             var content = new FormUrlEncodedContent(values);

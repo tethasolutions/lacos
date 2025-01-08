@@ -39,7 +39,9 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
            .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3)
-           .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead));
+           .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead))
+           .MapMember(x => x.CreatedOn, y => y.CreatedOn)
+           .MapMember(x => x.EditedOn, y => y.EditedOn);
 
         CreateMap<ActivityDto, Activity>()
            .IgnoreCommonMembers()

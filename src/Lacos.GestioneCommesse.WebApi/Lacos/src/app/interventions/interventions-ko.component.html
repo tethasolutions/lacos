@@ -27,7 +27,11 @@
         <kendo-grid-column field="customer" title="Cliente"></kendo-grid-column>
         <kendo-grid-column field="productName" title="Nome Prod."></kendo-grid-column>
         <kendo-grid-column field="productDescription" title="Prodotto"></kendo-grid-column>
-        <kendo-grid-column field="interventionDescription" title="Descrizione Intervento"></kendo-grid-column>
+        <kendo-grid-column field="interventionDescription" title="Descrizione Intervento">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div [innerHTML]="dataItem.interventionDescription"></div>
+            </ng-template>
+        </kendo-grid-column>
         <kendo-grid-column field="checklistItem" title="Voce Checklist"></kendo-grid-column>
         <kendo-grid-column field="outcomeNotes" title="Note KO"></kendo-grid-column>
         <kendo-grid-column field="outcomeCorrectiveAction" title="Azioni Correttive"></kendo-grid-column>

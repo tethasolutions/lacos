@@ -108,6 +108,14 @@
                         </button>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <label>Tiro al piano</label>
+                    <div class="form-group">
+                        <kendo-switch name="isFloorDelivery" [(ngModel)]="options.activity.isFloorDelivery" onLabel="Si"
+                            offLabel="No">
+                        </kendo-switch>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -138,7 +146,8 @@
                             </ng-template>
                             <ng-template kendoDropDownListItemTemplate let-dataItem>
                                 {{{status: dataItem, statusLabel0: options.activity.statusLabel0, statusLabel1:
-                                options.activity.statusLabel1, statusLabel2: options.activity.statusLabel2, statusLabel3: options.activity.statusLabel3} |
+                                options.activity.statusLabel1, statusLabel2: options.activity.statusLabel2,
+                                statusLabel3: options.activity.statusLabel3} |
                                 activityStatus}}
                             </ng-template>
                         </kendo-dropdownlist>
@@ -182,7 +191,7 @@
                 </div>
             </div>
 
-            <hr class="border-green"/>
+            <hr class="border-green" />
             <!--<kendo-expansionpanel title="Commenti ({{options.activity.messages.length}})" subtitle="Visualizza messaggi">-->
             <div class="row">
                 <div class="col-md-12">
@@ -202,12 +211,13 @@
                                     <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
                                         {{item.date | date:'dd/MM/yyyy'}}</div>
                                     <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
-                                        {{item.operatorName}} | <i class="fas fa-users" [title]="'Destinatari: ' + item.targetOperators"></i></div>
+                                        {{item.operatorName}} | <i class="fas fa-users"
+                                            [title]="'Destinatari: ' + item.targetOperators"></i></div>
                                     <div class="col-md-6 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}"
                                         [innerHTML]="item.note"></div>
                                     <div class="col-md-2" style="text-align: right;">
                                         <button [disabled]="item.operatorId != currentOperator.id" type="button"
-                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica" 
+                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica"
                                             (click)="editMessage(item)">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -230,7 +240,7 @@
                 </div>
             </div>
             <!--</kendo-expansionpanel>-->
-            <hr class="border-green"/>
+            <hr class="border-green" />
 
             <div class="row">
                 <div class="col-md-3">
@@ -252,7 +262,7 @@
                         <div *ngFor="let item of options.activity.attachments; let i = index" class="col-2">
                             <a href="javascript:void(0)" (click)="openImage(i)" *ngIf="item.isImage">
                                 <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName" />
-                            </a> 
+                            </a>
                             <a [href]="pathImage + item.fileName" target="_blank" *ngIf="!item.isImage">
                                 <img src="assets/document.jpg" width="90%" [title]="item.displayName" />
                             </a>

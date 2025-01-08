@@ -29,6 +29,8 @@ public class Activity : FullAuditedEntity
     public Operator Referent { get; set; }
     public bool IsNewReferent { get; set; }
 
+    public bool? IsFloorDelivery { get; set; }
+
     public ActivityStatus Status { get; set; }
 
     public ICollection<Intervention> Interventions { get; set; }

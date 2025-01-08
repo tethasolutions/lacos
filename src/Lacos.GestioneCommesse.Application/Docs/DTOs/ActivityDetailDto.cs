@@ -29,6 +29,8 @@ public class ActivityDetailDto
     public string? StatusLabel2 { get; set; }
     public string? StatusLabel3 { get; set; }
 
+    public bool? IsFloorDelivery { get; set; }
+
     public IEnumerable<ActivityAttachmentDto>? Attachments { get; set; }
     public IEnumerable<MessageReadModel>? Messages { get; set; }
 }

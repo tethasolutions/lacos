@@ -47,6 +47,7 @@ export interface IJobReadModel {
     readonly referentId: number;
     readonly referentName: string;
     readonly unreadMessages: number;
+    readonly hasSharepoint: boolean;
 
 }
 

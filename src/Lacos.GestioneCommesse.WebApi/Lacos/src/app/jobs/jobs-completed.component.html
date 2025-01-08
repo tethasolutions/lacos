@@ -68,6 +68,13 @@
             <div [innerHTML]="dataItem.description"></div>
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="hasSharepoint" title="SP" [width]="1" [filterable]="false">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            @if (dataItem.hasSharepoint){
+                <img src="assets/sharepoint.png" width="20px" />
+            }
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="unreadMessages" title="" [filterable]="false">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;"><a (click)="edit(dataItem)"

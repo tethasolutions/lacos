@@ -26,4 +26,6 @@ public class JobReadModel
     public string? ReferentName { get; set; }
 
     public int? UnreadMessages { get; set; }
+
+    public bool HasSharepoint { get; set; }
 }

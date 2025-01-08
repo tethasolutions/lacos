@@ -81,6 +81,14 @@
                 </div>
             </ng-template>
         </kendo-grid-column>
+        <kendo-grid-column field="createdOn" title="Ins. / Mod." filterable="false" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div class="text-nowrap" style="font-size: 0.8rem;">
+                    <i>Ins: {{dataItem.createdOn | date:'dd/MM/yyyy'}}</i>
+                    @if (dataItem.editedOn){<br/><i>Mod: {{dataItem.editedOn | date:'dd/MM/yyyy'}}</i>}
+                </div>
+            </ng-template>
+        </kendo-grid-column>
         <kendo-grid-column field="lastOperator" title="Inser. Da" [width]="1">
         </kendo-grid-column>
         <kendo-grid-column field="isFromTicket" title="Ticket" [width]="1" filterable="false">

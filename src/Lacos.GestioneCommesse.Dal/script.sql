@@ -3628,3 +3628,22 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250108111623_aggiunta campo tiro al piano attività')
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [IsFloorDelivery] bit NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250108111623_aggiunta campo tiro al piano attività')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250108111623_aggiunta campo tiro al piano attività', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

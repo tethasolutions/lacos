@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250108111623_aggiunta campo tiro al piano attività")]
+    partial class aggiuntacampotiroalpianoattività
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

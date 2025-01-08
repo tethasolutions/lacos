@@ -32,7 +32,8 @@ public class JobMappingProfile : Profile
             .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
             .MapMember(x => x.HasPurchaseOrders, y => y.PurchaseOrders.Any())
             .MapMember(x => x.HasInterventions, y => y.Activities.Where(i => i.Interventions.Any()).Any())
-            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead));
+            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead))
+            .MapMember(x => x.HasSharepoint, y => y.SharepointFolder != null);
 
         CreateMap<JobDto, Job>()
             .IgnoreCommonMembers()

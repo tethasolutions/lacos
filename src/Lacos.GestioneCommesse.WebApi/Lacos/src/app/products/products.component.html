@@ -26,6 +26,7 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+    <kendo-grid-column field="serialNumber" title="Matricola"></kendo-grid-column>
     <kendo-grid-column field="monthlyMaintenance" title="Man. Mens." [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             @if (dataItem.monthlyMaintenance) {

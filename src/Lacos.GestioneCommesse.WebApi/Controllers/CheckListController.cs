@@ -14,6 +14,7 @@ using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Application.CheckLists.Services;
 using Lacos.GestioneCommesse.Application.Operators.Services;
 using Microsoft.CodeAnalysis.Editing;
+using Lacos.GestioneCommesse.Application.Docs.DTOs;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -114,5 +115,11 @@ public class CheckListController : LacosApiController
         await checklistService.DeleteCheckListItem(id);
 
         return Ok();
+    }
+
+    [HttpPost("copy-checklist")]
+    public Task<CheckListDto> CopyChecklist(ChecklistCopyDto checklistCopyDto)
+    {
+        return checklistService.CopyChecklist(checklistCopyDto);
     }
 }

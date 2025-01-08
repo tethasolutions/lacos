@@ -21,7 +21,7 @@
             <div class="row riga-form">
                 <div class="col-md-8">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <kendo-formfield class="form-group">
                                 <label class="custom-form-field-label">Codice</label>
                                 <kendo-textbox [(ngModel)]="options.code" name="code" required>
@@ -37,6 +37,14 @@
                                     valueField="id" (valueChange)="checkIfImpiantoIsPortaRei()" required>
                                 </kendo-combobox>
                                 <kendo-formerror>Tipologia prodotto è il campo obbligatorio</kendo-formerror>
+                            </kendo-formfield>
+                        </div>
+                        <div class="col-md-1">
+                            <kendo-formfield class="form-group">
+                                <label class="custom-form-field-label">Dismesso</label>
+                                <kendo-switch name="isDecommissioned" [(ngModel)]="options.isDecommissioned" onLabel="Si"
+                                    offLabel="No">
+                                </kendo-switch>
                             </kendo-formfield>
                         </div>
                     </div>

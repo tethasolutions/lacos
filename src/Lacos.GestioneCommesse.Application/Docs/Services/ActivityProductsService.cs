@@ -78,7 +78,8 @@ public class ActivityProductsService : IActivityProductsService
         activityProduct = new ActivityProduct
         {
             ActivityId = activityProduct.ActivityId,
-            ProductId = activityProduct.ProductId
+            ProductId = activityProduct.ProductId,
+            Description = activityProduct.Description,
         };
 
         await repository.Insert(activityProduct);

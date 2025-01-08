@@ -13,5 +13,6 @@ public class ProductReadModel
     public long? AddressId { get; set; }
     public long ProductTypeId { get; set; }
     public bool? MonthlyMaintenance { get; set; }
+    public bool? IsDecommissioned { get; set; }
     public string? SerialNumber { get; set; }
 }

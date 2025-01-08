@@ -36,6 +36,7 @@ public class Product : FullAuditedEntity
     public string? VocType { get; set; }
     public int? NumberOfDoors { get; set; } //ante
     public bool? MonthlyMaintenance { get; set; }
+    public bool? IsDecommissioned { get; set; }
 
     public ICollection<PurchaseOrderItem> PurchaseOrderItems { get; set; }
     public ICollection<ActivityProduct> ActivityProducts { get; set; }

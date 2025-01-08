@@ -3647,3 +3647,23 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250108145116_aggiunta campo prodotto dismesso')
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD [IsDecommissioned] bit NULL;
+    UPDATE [Registry].[Products] SET [IsDecommissioned] = 0;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250108145116_aggiunta campo prodotto dismesso')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250108145116_aggiunta campo prodotto dismesso', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

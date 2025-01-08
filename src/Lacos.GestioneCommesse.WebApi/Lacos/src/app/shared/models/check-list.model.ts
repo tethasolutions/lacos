@@ -23,3 +23,14 @@ export class CheckListModel {
         this.items = [];
     }
 }
+
+export class CopyChecklistModel {
+    constructor(
+        readonly sourceChecklistId: number,
+        readonly activityTypeId: number,
+        readonly productTypeId: number
+    ) { }
+    static build(o: CopyChecklistModel) {
+        return new CopyChecklistModel(o.sourceChecklistId, o.activityTypeId, o.productTypeId);
+    }
+}

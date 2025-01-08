@@ -5,10 +5,11 @@ import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
-import { CheckListModel } from '../shared/models/check-list.model';
+import { CheckListModel, CopyChecklistModel } from '../shared/models/check-list.model';
 import { ChecklistModalComponent } from '../checklist-modal/checklist-modal.component';
 import { CheckListService } from '../services/check-list.service';
 import { ApiUrls } from '../services/common/api-urls';
+import { CopyChecklistModalComponent } from '../checklist-modal/copy-checklist-modal.component';
 
 @Component({
   selector: 'app-checklist',
@@ -18,6 +19,7 @@ import { ApiUrls } from '../services/common/api-urls';
 export class ChecklistComponent extends BaseComponent implements OnInit {
 
   @ViewChild('checklistModal', { static: true }) checklistModal: ChecklistModalComponent;
+  @ViewChild('copyChecklistModal', { static: true }) copyChecklistModal: CopyChecklistModalComponent;
 
   pathImage = `${ApiUrls.baseUrl}/attachments/`;
   checklists: GridDataResult;
@@ -128,4 +130,20 @@ export class ChecklistComponent extends BaseComponent implements OnInit {
     });
   }
 
+  copyChecklist(checkList: CheckListModel) {
+        const options = new CopyChecklistModel(checkList.id, checkList.productTypeId, 0);
+  
+        this._subscriptions.push(
+          this.copyChecklistModal.open(options)
+            .pipe(
+              filter(e => e),
+              switchMap(() => this._checkListService.copyChecklist(options)),
+              tap(() => {
+                this._messageBox.success("Checklist copiata con successo");
+                this._router.navigate(['/checklist']);
+              })
+            )
+            .subscribe()
+        );
+      }
 }

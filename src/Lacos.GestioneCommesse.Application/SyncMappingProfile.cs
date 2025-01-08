@@ -70,6 +70,7 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<SyncProductDto, Product>()
                 .Ignore(x => x.Note)
                 .Ignore(x => x.MonthlyMaintenance)
+                .Ignore(x => x.IsDecommissioned)
                 .IgnoreCommonMembers()
                 .IgnoreNavigationPropertyEntity();
             CreateMap<SyncPurchaseOrderDto, PurchaseOrder>()

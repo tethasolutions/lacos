@@ -26,7 +26,8 @@ export class ProductModel {
     vocType: string;
     numberOfDoors: number;
     monthlyMaintenance: boolean;
-
+    isDecommissioned: boolean;
+    
     documents: Array<ProductDocumentModel>;
 
     constructor() {
@@ -51,6 +52,7 @@ export class ProductModel {
         this.vocType = null;
         this.numberOfDoors = null;
         this.monthlyMaintenance = false;
+        this.isDecommissioned = false;
 
         this.documents = [];
     }
@@ -68,4 +70,5 @@ export interface ProductReadModel {
     readonly addressId: number;
     readonly productTypeId: number;
     readonly monthlyMaintenance: boolean;
+    readonly isDecommissioned: boolean;
 }

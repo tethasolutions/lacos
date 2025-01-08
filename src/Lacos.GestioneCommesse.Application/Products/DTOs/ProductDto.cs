@@ -24,6 +24,7 @@
         public string? VocType { get; set; }
         public int? NumberOfDoors { get; set; }
         public bool? MonthlyMaintenance { get; set; }
+        public bool? IsDecommissioned { get; set; }
 
         public ICollection<ProductDocumentDto>? Documents { get; set; }
         public ProductDto()

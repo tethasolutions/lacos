@@ -5,6 +5,9 @@ using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using Lacos.GestioneCommesse.Domain.Docs;
+using System.Diagnostics;
 
 namespace Lacos.GestioneCommesse.Application.CheckLists.Services
 {
@@ -21,6 +24,7 @@ namespace Lacos.GestioneCommesse.Application.CheckLists.Services
         Task UpdateCheckListItem(long id, CheckListItemDto checkListItemDto);
         Task DeleteCheckListItem(long id);
         Task<CheckListItemDto> CreateCheckListItem(CheckListItemDto checkListItemDto);
+        Task<CheckListDto> CopyChecklist(ChecklistCopyDto checklistCopyDto);
     }
 
     public class CheckListService : ICheckListService
@@ -208,5 +212,38 @@ namespace Lacos.GestioneCommesse.Application.CheckLists.Services
             await dbContext.SaveChanges();
         }
 
+        public async Task<CheckListDto> CopyChecklist(ChecklistCopyDto checklistCopyDto)
+        {
+            var sourceChecklist = await checklistRepository.Query()
+                .AsNoTracking()
+                .Where(x => x.Id == checklistCopyDto.SourceChecklistId)
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync();
+
+            if (sourceChecklist == null)
+                throw new LacosException($"Impossibile trovare checklist con id {checklistCopyDto.SourceChecklistId}");
+
+            CheckList checkList = new CheckList();
+
+            checkList.ActivityTypeId = checklistCopyDto.ActivityTypeId;
+            checkList.ProductTypeId = checklistCopyDto.ProductTypeId;
+            checkList.Description = sourceChecklist.Description;
+
+            await checklistRepository.Insert(checkList);
+
+            await dbContext.SaveChanges();
+
+            foreach (CheckListItem checkListItem in sourceChecklist.Items)
+            {
+                CheckListItem newCheckListItem = new CheckListItem();
+                newCheckListItem.CheckListId = checkList.Id;
+                newCheckListItem.Description = checkListItem.Description;
+                await checklistItemRepository.Insert(newCheckListItem);
+
+            }
+            await dbContext.SaveChanges();
+
+            return await GetCheckListDetail(checkList.Id);
+        }
     }
 }

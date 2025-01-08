@@ -147,6 +147,7 @@ import { SharepointService } from './services/sharepoint/sharepoint.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SharepointImageDirective } from './sharepoint-browser-modal/sharepoint-image.directive';
 import { CopyActivityModalComponent } from './activities/copy-activity-modal.component';
+import { CopyChecklistModalComponent } from './checklist-modal/copy-checklist-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -176,6 +177,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ChecklistComponent,
         ChecklistModalComponent,
         ChecklistItemModalComponent,
+        CopyChecklistModalComponent,
         ProductsComponent,
         ProductModalComponent,
         ProductQrCodeModalComponent,

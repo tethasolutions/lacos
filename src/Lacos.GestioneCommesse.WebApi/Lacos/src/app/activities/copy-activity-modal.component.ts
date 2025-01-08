@@ -1,34 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Activity, ActivityStatus, CopyActivityModel } from '../services/activities/models';
-import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
-import { ActivityTypeModel } from '../shared/models/activity-type.model';
-import { filter, map, switchMap, tap } from 'rxjs';
-import { ActivityTypesService } from '../services/activityTypes.service';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { CopyActivityModel } from '../services/activities/models';
+import { ModalFormComponent } from '../shared/modal.component';
+import { tap } from 'rxjs';
 import { MessageBoxService } from '../services/common/message-box.service';
-import { CustomerModel } from '../shared/models/customer.model';
 import { JobsService } from '../services/jobs/jobs.service';
 import { State } from '@progress/kendo-data-query';
-import { IJobReadModel, Job } from '../services/jobs/models';
-import { getToday, listEnum } from '../services/common/functions';
-import { AddressModel } from '../shared/models/address.model';
-import { AddressesService } from '../services/addresses.service';
-import { AddressModalComponent } from '../address-modal/address-modal.component';
-import { ApiUrls } from '../services/common/api-urls';
-import { ActivityAttachmentUploadFileModel } from '../services/activities/activity-attachment-upload-file.model';
-import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
-import { SupplierModel } from '../shared/models/supplier.model';
-import { SupplierService } from '../services/supplier.service';
-import { OperatorModel } from '../shared/models/operator.model';
-import { OperatorsService } from '../services/operators.service';
-import { ActivityAttachmentModel } from '../services/activities/activity-attachment.model';
-import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
-import { MessageModalOptions, MessageModel, MessageReadModel } from '../services/messages/models';
-import { User } from '../services/security/models';
-import { UserService } from '../services/security/user.service';
-import { MessagesService } from '../services/messages/messages.service';
-import { MessageModalComponent } from '../messages/message-modal.component';
-import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
+import { IJobReadModel } from '../services/jobs/models';
 
 @Component({
     selector: 'app-copy-activity-modal',

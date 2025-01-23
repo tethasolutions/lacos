@@ -47,10 +47,10 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
     public async Task<PurchaseOrderDto> Get(long id)
     {
-        var purchaseOrderDto = await repository.Query()
+        var purchaseOrderDto = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
             .Where(e => e.Id == id)
             .Project<PurchaseOrderDto>(mapper)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(), QueryFilter.OperatorEntity);
 
         //purchaseOrderDto.Messages = purchaseOrderDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
         //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));

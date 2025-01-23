@@ -395,7 +395,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message, options.targetOperators.join(","))),
                     tap(e => {
-                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false, null);
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, [], false, null);
                         this.options.activity.messages.push(msg);
                     }),
                     tap(() => this._messageBox.success('Commento creato'))

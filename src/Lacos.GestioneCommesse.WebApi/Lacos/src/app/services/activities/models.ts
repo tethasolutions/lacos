@@ -102,9 +102,9 @@ export class Activity {
         return result;
     }
 
-    static build(o: Activity) {
+    static build(o: Activity, operatorId: number) {
         const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
-        const messages = o.messages.map(e => MessageReadModel.build(e));
+        const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
 
         return new Activity(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.supplierId, o.addressId,
             o.typeId, o.referentId, o.startDate, o.expirationDate, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery, attachments, messages);
@@ -155,9 +155,9 @@ export class ActivityDetail {
             this.statusLabel3, this.isFloorDelivery, this.attachments, this.messages);
     }
 
-    static build(o: ActivityDetail) {
+    static build(o: ActivityDetail, operatorId: number) {
         const attachments = o.attachments.map(e => ActivityAttachmentModel.build(e));
-        const messages = o.messages.map(e => MessageReadModel.build(e));
+        const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
 
         return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate,

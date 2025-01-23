@@ -64,10 +64,10 @@ public class TicketsService : ITicketsService
 
     public async Task<TicketDto> Get(long id)
     {
-        var TicketDto = await repository.Query()
+        var TicketDto = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
             .Where(e => e.Id == id)
             .Project<TicketDto>(mapper)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(), QueryFilter.OperatorEntity);
 
         //TicketDto.Messages = TicketDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
         //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));

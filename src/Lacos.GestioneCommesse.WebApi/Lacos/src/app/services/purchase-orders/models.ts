@@ -6,7 +6,7 @@ export enum PurchaseOrderStatus {
     Pending,
     Ordered,
     Completed,
-    Withdrawn,
+    Partial,
     Canceled
 }
 
@@ -15,7 +15,7 @@ export const purchaseOrderStatusNames: Dictionary<PurchaseOrderStatus, string> =
     [PurchaseOrderStatus.Pending]: 'Da ordinare',
     [PurchaseOrderStatus.Ordered]: 'Ordinato',
     [PurchaseOrderStatus.Completed]: 'Consegnato',
-    [PurchaseOrderStatus.Withdrawn]: 'Ritirato',
+    [PurchaseOrderStatus.Partial]: 'Cons. parzialmente',
     [PurchaseOrderStatus.Canceled]: 'Annullato'
 
 };
@@ -71,12 +71,12 @@ export class PurchaseOrder {
         this.expectedDate = expectedDate ? new Date(expectedDate) : null;
     }
 
-    static build(o: PurchaseOrder) {
+    static build(o: PurchaseOrder, operatorId: number) {
         const items = o.items.map(e => PurchaseOrderItem.build(e));
         const attachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e));
         const userAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => !e.isAdminDocument);
         const adminAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => e.isAdminDocument);
-        const messages = o.messages.map(e => MessageReadModel.build(e));
+        const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
         return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments, userAttachments, adminAttachments, messages);
     }
 

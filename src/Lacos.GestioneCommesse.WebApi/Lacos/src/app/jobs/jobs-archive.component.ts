@@ -7,7 +7,6 @@ import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { JobModalComponent } from './job-modal.component';
 import { IJobReadModel, Job, JobCopy, JobStatus, jobStatusNames } from '../services/jobs/models';
-import { getToday } from '../services/common/functions';
 import { ActivityModalComponent, ActivityModalOptions } from '../activities/activity-modal.component';
 import { Activity, ActivityStatus } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
@@ -27,12 +26,13 @@ import { User } from '../services/security/models';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
 import { JobStatusPipe } from '../shared/pipes/job-status.pipe';
+import { getToday } from '../services/common/functions';
 
 @Component({
-    selector: 'app-jobs-completed',
-    templateUrl: 'jobs-completed.component.html'
+    selector: 'app-jobs-archive',
+    templateUrl: 'jobs-archive.component.html'
 })
-export class JobsCompletedComponent extends BaseComponent implements OnInit {
+export class JobsArchiveComponent extends BaseComponent implements OnInit {
 
     @ViewChild('jobModal', { static: true })
     jobModal: JobModalComponent;
@@ -62,19 +62,17 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
         filter: {
             filters: [
                 {
-                    filters: [JobStatus.Billing, JobStatus.Completed]
+                    filters: [JobStatus.Billed]
                         .map(e => ({ field: 'status', operator: 'eq', value: e })),
-                    logic: 'or'
+                    logic: 'and'
                 },
                 {
-                    filters: [
-                        { field: 'date', operator: 'gte', value: new Date(getToday().getFullYear(),0,1) },
-                        { field: 'status', operator: 'eq', value: JobStatus.Billed }
-                    ],
+                    filters: [new Date(getToday().getFullYear(),0,1)]
+                        .map(e => ({ field: 'date', operator: 'lt', value: e })),
                     logic: 'and'
                 }
             ],
-            logic: 'or'
+            logic: 'and'
         },
         group: [],
         sort: [{ field: 'date', dir: 'desc' }, { field: 'code', dir: 'desc' }]

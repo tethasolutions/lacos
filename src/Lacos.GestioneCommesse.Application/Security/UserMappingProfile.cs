@@ -13,8 +13,8 @@ public class UserMappingProfile : Profile
     {
        
 
-        CreateMap<User, UserDto>();
-
+        CreateMap<User, UserDto>()
+            .MapMember(x => x.OperatorId, y => y.Operator == null ? (long?)null : y.Operator.Id);
 
 
         CreateMap<UserDto, User>()

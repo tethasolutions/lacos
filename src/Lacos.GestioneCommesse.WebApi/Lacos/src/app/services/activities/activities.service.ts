@@ -8,6 +8,7 @@ import { readData } from '../common/functions';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 import { ActivityAttachmentModel } from './activity-attachment.model';
 import { ActivityAttachmentUploadFileModel } from './activity-attachment-upload-file.model';
+import { UserService } from '../security/user.service';
 
 @Injectable()
 export class ActivitiesService {
@@ -17,7 +18,8 @@ export class ActivitiesService {
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
 
     constructor(
-        private readonly _http: HttpClient
+        private readonly _http: HttpClient,
+        private readonly _userService: UserService
     ) {
     }
 
@@ -36,28 +38,28 @@ export class ActivitiesService {
     get(id: number) {
         return this._http.get<Activity>(`${this._baseUrl}/${id}`)
             .pipe(
-                map(e => Activity.build(e))
+                map(e => Activity.build(e, this._userService.getUser().operatorId))
             );
     }
 
     getDetail(id: number) {
         return this._http.get<ActivityDetail>(`${this._baseUrl}/${id}/detail`)
             .pipe(
-                map(e => ActivityDetail.build(e))
+                map(e => ActivityDetail.build(e, this._userService.getUser().operatorId))
             );
     }
 
     create(activity: Activity) {
         return this._http.post<Activity>(this._baseUrl, activity)
             .pipe(
-                map(e => Activity.build(e))
+                map(e => Activity.build(e, this._userService.getUser().operatorId))
             );
     }
 
     update(activity: Activity) {
         return this._http.put<Activity>(`${this._baseUrl}/${activity.id}`, activity)
             .pipe(
-                map(e => Activity.build(e))
+                map(e => Activity.build(e, this._userService.getUser().operatorId))
             );
     }
 
@@ -132,7 +134,7 @@ export class ActivitiesService {
     getActivityAttachmentDetail(id: number) {
         return this._http.get<ActivityDetail>(`${this._baseUrl}/attachment-detail/${id}`)
             .pipe(
-                map(e => ActivityDetail.build(e))
+                map(e => ActivityDetail.build(e, this._userService.getUser().operatorId))
             );
     }
 

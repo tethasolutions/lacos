@@ -5,6 +5,6 @@ public enum PurchaseOrderStatus
     Pending,
     Ordered,
     Completed,
-    Withdrawn,
+    Partial,
     Canceled
 }

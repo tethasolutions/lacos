@@ -7,6 +7,7 @@ import { Ticket, TicketCounter } from './models';
 import { readData } from '../common/functions';
 import { TicketAttachmentModel } from './ticket-attachment.model';
 import { TicketAttachmentUploadFileModel } from './ticket-attachment-upload-file.model';
+import { UserService } from '../security/user.service';
 
 @Injectable()
 export class TicketsService {
@@ -14,7 +15,8 @@ export class TicketsService {
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
 
     constructor(
-        private readonly _http: HttpClient
+        private readonly _http: HttpClient,
+        private readonly _userService: UserService
     ) {
     }
 
@@ -27,21 +29,21 @@ export class TicketsService {
     get(id: number) {
         return this._http.get<Ticket>(`${this._baseUrl}/${id}`)
             .pipe(
-                map(e => Ticket.build(e))
+                map(e => Ticket.build(e, this._userService.getUser().operatorId))
             );
     }
 
     create(ticket: Ticket) {
         return this._http.post<Ticket>(this._baseUrl, ticket)
             .pipe(
-                map(e => Ticket.build(e))
+                map(e => Ticket.build(e, this._userService.getUser().operatorId))
             );
     }
 
     update(ticket: Ticket) {
         return this._http.put<Ticket>(`${this._baseUrl}/${ticket.id}`, ticket)
             .pipe(
-                map(e => Ticket.build(e))
+                map(e => Ticket.build(e, this._userService.getUser().operatorId))
             );
     }
 

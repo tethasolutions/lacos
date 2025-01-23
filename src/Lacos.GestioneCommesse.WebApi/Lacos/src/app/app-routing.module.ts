@@ -32,6 +32,7 @@ import { HelperTypesComponent } from './helpertypes/helpertypes.component';
 import { HelperDocumentsComponent } from './helperdocuments/helperdocuments.component';
 import { JobsSuspendedComponent } from './jobs/jobs-suspended.component';
 import { InterventionMessagesListComponent } from './messages/interventionmessages-list.component';
+import { JobsArchiveComponent } from './jobs/jobs-archive.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -50,6 +51,7 @@ const routes: Routes = [
     { path: 'jobs', component: JobsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs-completed', component: JobsCompletedComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs-suspended', component: JobsSuspendedComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'jobs-archive', component: JobsArchiveComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'tickets', component: TicketsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities', component: ActivitiesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities-from-product', component: ActivitiesFromProductComponent, canActivate: [AuthGuard.asInjectableGuard] },

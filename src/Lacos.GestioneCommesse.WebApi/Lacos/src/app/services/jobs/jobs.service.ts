@@ -7,6 +7,7 @@ import { Job, JobCopy } from './models';
 import { readData } from '../common/functions';
 import { JobAttachmentModel } from './job-attachment.model';
 import { JobAttachmentUploadFileModel } from './job-attachment-upload-file.model';
+import { UserService } from '../security/user.service';
 
 @Injectable()
 export class JobsService {
@@ -14,7 +15,8 @@ export class JobsService {
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobs`;
 
     constructor(
-        private readonly _http: HttpClient
+        private readonly _http: HttpClient,
+        private readonly _userService: UserService
     ) {
     }
 
@@ -27,28 +29,28 @@ export class JobsService {
     get(id: number) {
         return this._http.get<Job>(`${this._baseUrl}/${id}`)
             .pipe(
-                map(e => Job.build(e))
+                map(e => Job.build(e, this._userService.getUser().operatorId))
             );
     }
 
     getTicketJob(customerId: number, ticketCode: string) {
         return this._http.get<Job>(`${this._baseUrl}/getTicketJob/${customerId}/${ticketCode}`)
             .pipe(
-                map(e => Job.build(e))
+                map(e => Job.build(e, this._userService.getUser().operatorId))
             );
     }
 
     create(job: Job) {
         return this._http.post<Job>(this._baseUrl, job)
             .pipe(
-                map(e => Job.build(e))
+                map(e => Job.build(e, this._userService.getUser().operatorId))
             );
     }
 
     update(job: Job) {
         return this._http.put<Job>(`${this._baseUrl}/${job.id}`, job)
             .pipe(
-                map(e => Job.build(e))
+                map(e => Job.build(e, this._userService.getUser().operatorId))
             );
     }
     

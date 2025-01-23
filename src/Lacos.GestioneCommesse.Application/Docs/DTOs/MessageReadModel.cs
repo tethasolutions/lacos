@@ -18,8 +18,14 @@ public class MessageReadModel : BaseEntityDto
     public long? TicketId { get; set; }
     public long? PurchaseOrderId { get; set; }
     public string? ElementCode { get; set; }
-    public bool IsRead { get; set; }
+    //public bool IsRead { get; set; }
+    public ICollection<MessageNotificationReadModel> MessageNotifications { get; set; }
     public string? TargetOperatorsId { get; set; }
     public bool IsFromApp { get; set; }
     public string? TargetOperators { get; set; }
+
+    public MessageReadModel()
+    {
+        MessageNotifications = new List<MessageNotificationReadModel>();
+    }
 }

@@ -91,10 +91,10 @@ public class ActivitiesService : IActivitiesService
 
     public async Task<ActivityDto> Get(long id)
     {
-        var activityDto = await repository.Query()
-            .Where(e => e.Id == id)
-            .Project<ActivityDto>(mapper)
-            .FirstOrDefaultAsync();
+            var activityDto = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
+                .Where(e => e.Id == id)
+                .Project<ActivityDto>(mapper)
+                .FirstOrDefaultAsync(), QueryFilter.OperatorEntity);
 
         //activityDto.Messages = activityDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId || 
         //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));

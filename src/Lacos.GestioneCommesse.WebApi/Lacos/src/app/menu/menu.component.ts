@@ -70,6 +70,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/jobs-suspended'], 'Commesse Sospese',
                     e => e.startsWith('/jobs-suspended'),
                     e => e.isAuthorized(Role.Administrator)
+                ),
+                new MenuEntry(['/jobs-archive'], 'Archivio Storico Commesse',
+                    e => e.startsWith('/jobs-archive'),
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new DropDownMenuEntry('Pianificazione', [

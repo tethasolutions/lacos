@@ -148,6 +148,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharepointImageDirective } from './sharepoint-browser-modal/sharepoint-image.directive';
 import { CopyActivityModalComponent } from './activities/copy-activity-modal.component';
 import { CopyChecklistModalComponent } from './checklist-modal/copy-checklist-modal.component';
+import { JobsArchiveComponent } from './jobs/jobs-archive.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -190,6 +191,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         JobsComponent,
         JobsCompletedComponent,
         JobsSuspendedComponent,
+        JobsArchiveComponent,
         JobModalComponent,
         JobCopyModalComponent,
         JobStatusPipe,

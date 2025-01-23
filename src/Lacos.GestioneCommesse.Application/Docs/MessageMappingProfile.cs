@@ -28,7 +28,7 @@ public class MessageMappingProfile : Profile
                     ((y.ActivityId != null) ? "Attività " + y.Activity.Type.Name :
                     ((y.TicketId != null) ? "Ticket " + CustomDbFunctions.FormatCode(y.Ticket.Number, y.Ticket.Year, 3) :
                     ((y.PurchaseOrderId != null) ? "Ordine " + CustomDbFunctions.FormatCode(y.PurchaseOrder.Number, y.PurchaseOrder.Year, 3) : null))))
-            .MapMember(x => x.IsRead, y => (!y.MessageNotifications.Any() || y.MessageNotifications.All(e => e.IsRead)))
+            //.MapMember(x => x.IsRead, y => (!y.MessageNotifications.Any() || y.MessageNotifications.All(e => e.IsRead)))
             .MapMember(x => x.TargetOperatorsId, y => string.Join(",", y.MessageNotifications.Select(mn => mn.OperatorId)))
             .MapMember(x => x.TargetOperators, y => string.Join(",", y.MessageNotifications.Select(mn => mn.Operator.Name)));
 
@@ -38,8 +38,15 @@ public class MessageMappingProfile : Profile
             .Ignore(x => x.Activity)
             .Ignore(x => x.Ticket)
             .Ignore(x => x.Job)
-            .Ignore(x => x.PurchaseOrder)
-            .Ignore(x => x.MessageNotifications);
+            .Ignore(x => x.PurchaseOrder);
+
+        CreateMap<MessageNotificationReadModel, MessageNotification>()
+            .IgnoreCommonMembers()
+            .Ignore(x => x.Operator)
+            .Ignore(x => x.Message)
+            .Ignore(x => x.ReadDate);
+
+        CreateMap<MessageNotification, MessageNotificationReadModel>();
 
         CreateMap<MessagesList, MessagesListReadModel>()
             .MapMember(x => x.ElementType, y => (y.TicketId.HasValue) ? "T" : (

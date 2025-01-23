@@ -50,12 +50,12 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     unreadMessages: number;
     album: string[] = [];
     targetOperatorsArray: number[];
-    
+
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
     uploadSaveUrl = `${this._baseUrl}/ticket-attachment/upload-file`;
     uploadRemoveUrl = `${this._baseUrl}/ticket-attachment/remove-file`;
-    
+
     readonly states = listEnum<TicketStatus>(TicketStatus);
 
     constructor(
@@ -79,7 +79,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
 
     override open(ticket: Ticket) {
         const result = super.open(ticket);
-        
+
         this.attachments = [];
         this.album = [];
         if (ticket.pictures != null) {
@@ -121,12 +121,12 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     createActivity(ticket: Ticket) {
 
         this._subscriptions.push(
-            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/","-"))
+            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/", "-"))
                 .pipe(
                     tap(e => this._job = e),
                     tap(() => {
                         this.options.jobId = this._job.id;
-                        this._newActivity(ticket); 
+                        this._newActivity(ticket);
                     })
                 )
                 .subscribe()
@@ -158,11 +158,13 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     createPurchaseOrder(ticket: Ticket) {
 
         this._subscriptions.push(
-            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/","-"))
+            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/", "-"))
                 .pipe(
                     tap(e => this._job = e),
-                    tap (e => this.options.jobId = this._job.id),
-                    tap(() => this._newPurchaseOrder(ticket))
+                    tap(() => {
+                        this.options.jobId = this._job.id;
+                        this._newPurchaseOrder(ticket);
+                    })
                 )
                 .subscribe()
         );
@@ -171,7 +173,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
 
     private _newPurchaseOrder(ticket: Ticket) {
         const today = getToday();
-        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, PurchaseOrderStatus.Pending, 
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, PurchaseOrderStatus.Pending,
             this._job.id, null, null, this.currentOperator.id, [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
@@ -233,7 +235,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
             this.options.pictures.findAndRemove(e => e.description === deletedFile);
         }
     }
-    
+
     protected _getCurrentOperator(userId: number) {
         this._subscriptions.push(
             this._operatorsService.getOperatorByUserId(userId)
@@ -246,8 +248,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
 
     initNewMessage() {
         this.targetOperatorsArray = [];
-        if (this.options.id == 0) 
-        {
+        if (this.options.id == 0) {
             this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
             return;
         }
@@ -275,7 +276,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message, options.targetOperators.join(","))),
                     tap(e => {
-                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false, null);
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, [], false, null);
                         this.options.messages.push(msg);
                     }),
                     tap(() => this._messageBox.success('Commento creato'))
@@ -306,12 +307,12 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         this.updateUnreadCounter();
         //this._read();
     }
-    
+
     editMessage(message: MessageReadModel) {
         this._subscriptions.push(
             this._messagesService.get(message.id)
                 .pipe(
-                    map(e => new MessageModalOptions(e,false)),
+                    map(e => new MessageModalOptions(e, false)),
                     switchMap(e => this.messageModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._messagesService.update(this.messageModal.options.message)),
@@ -338,11 +339,11 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
             }
         });
     }
-    
+
     updateUnreadCounter() {
         this.unreadMessages = this.options.messages.count(e => !e.isRead);
     }
-    
+
     openImage(index: number) {
         const options = new GalleryModalInput(this.album, index);
         this.galleryModal.open(options).subscribe();

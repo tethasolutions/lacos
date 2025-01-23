@@ -103,9 +103,9 @@ export class Job {
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
     }
 
-    static build(o: Job) {
+    static build(o: Job, operatorId: number) {
         const attachments = o.attachments.map(e => JobAttachmentModel.build(e));
-        const messages = o.messages.map(e => MessageReadModel.build(e));
+        const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
         return new Job(o.id, o.number, o.year, o.date, o.expirationDate, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId, o.referentId, o.sharepointFolder, o.sharepointFolderName, attachments, messages);
     }
 

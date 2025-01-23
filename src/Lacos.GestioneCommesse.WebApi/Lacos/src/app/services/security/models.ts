@@ -34,12 +34,13 @@ export class User {
         readonly userName: string,
         readonly enabled: boolean,
         readonly role: Role,
-        readonly accessToken: string
+        readonly accessToken: string,
+        readonly operatorId: number
     ) {
     }
 
     static build(obj: User) {
-        return new User(obj.id, obj.userName, obj.enabled, obj.role, obj.accessToken);
+        return new User(obj.id, obj.userName, obj.enabled, obj.role, obj.accessToken, obj.operatorId);
     }
 
 }

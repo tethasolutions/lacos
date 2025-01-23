@@ -44,7 +44,7 @@ public class SecurityController : LacosApiController
     [HttpPost("users")]
     public async Task<IActionResult> CreateUser(UpdateUserRequest request)
     {
-        var user = new UserDto(request.UserName, request.Enabled, request.Role, null);
+        var user = new UserDto(request.UserName, request.Enabled, request.Role, null, null);
         var result = await service.Register(user, request.Password);
 
         return CreatedAtAction(nameof(GetUser), new { result.Id }, result);

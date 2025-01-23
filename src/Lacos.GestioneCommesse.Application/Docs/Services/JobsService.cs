@@ -105,10 +105,10 @@ public class JobsService : IJobsService
 
     public async Task<JobDto> Get(long id)
     {
-        var jobDto = await repository.Query()
+        var jobDto = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
             .Where(e => e.Id == id)
             .Project<JobDto>(mapper)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(), QueryFilter.OperatorEntity);
 
         //jobDto.Messages = jobDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
         //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));

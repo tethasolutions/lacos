@@ -5,6 +5,7 @@ import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
 import { readData } from '../common/functions';
 import { MessageModel, MessageReadModel, MessagesListReadModel } from './models';
+import { UserService } from '../security/user.service';
 
 @Injectable()
 export class MessagesService {
@@ -12,7 +13,8 @@ export class MessagesService {
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/messages`;
 
     constructor(
-        private readonly _http: HttpClient
+        private readonly _http: HttpClient,
+        private readonly _userService: UserService
     ) {
     }
 
@@ -32,7 +34,7 @@ export class MessagesService {
     getMessages(jobId: number, activityId: number, ticketId: number, purchaseOrderId: number) {
         return this._http.get<Array<MessageReadModel>>(`${this._baseUrl}/get-messages/${jobId}/${activityId}/${ticketId}/${purchaseOrderId}`)
             .pipe(
-                map(e => e.map(ee => MessageReadModel.build(ee)))
+                map(e => e.map(ee => MessageReadModel.build(ee, this._userService.getUser().operatorId)))
             );
     }
     

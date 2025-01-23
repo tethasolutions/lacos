@@ -64,8 +64,8 @@ export class Ticket {
         this.date = date ? new Date(date) : null;
     }
 
-    static build(o: Ticket) {
-        const messages = o.messages.map(e => MessageReadModel.build(e));
+    static build(o: Ticket, operatorId: number) {
+        const messages = o.messages.map(e => MessageReadModel.build(e,operatorId));
         return new Ticket(o.id, o.number, o.year, o.date, o.description, o.status, o.customerId, o.jobId, o.activityId, o.purchaseOrderId, o.operatorId, o.pictures, messages);
     }
 

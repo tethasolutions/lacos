@@ -360,7 +360,7 @@ app-jobs {
     }
 }
 
-app-jobs-completed,
+app-jobs-archive, app-jobs-completed,
 app-jobs-progress-status {
 
     .job-completed .job-status {
@@ -425,7 +425,7 @@ app-purchase-orders {
         @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
     }
 
-    .purchase-order-withdrawn .purchase-order-status {
+    .purchase-order-partial .purchase-order-status {
         @include striped-background(rgba(35, 167, 18, 0.3), rgba(77, 253, 13, 0.1));
     }
 

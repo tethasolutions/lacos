@@ -85,7 +85,6 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
 
     ngOnInit() {
         this._getSuppliers();
-        this._getJobs();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
     }
@@ -139,6 +138,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
 
     override open(options: PurchaseOrderModalOptions) {
         const result = super.open(options);
+        this._getJobs();
 
         this.userAttachments = [];
         this.album = [];
@@ -346,7 +346,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
                     filter(e => e),
                     switchMap(() => this._messagesService.create(message, options.targetOperators.join(","))),
                     tap(e => {
-                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, false, null);
+                        var msg = new MessageReadModel(e.id, e.date, e.note, e.operatorId, this.currentOperator.name, e.jobId, e.activityId, e.ticketId, e.purchaseOrderId, "", true, [], false, null);
                         this.options.purchaseOrder.messages.push(msg);
                     }),
                     tap(() => this._messageBox.success('Commento creato'))

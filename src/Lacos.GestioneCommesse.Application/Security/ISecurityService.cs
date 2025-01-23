@@ -143,6 +143,7 @@ public class SecurityService : ISecurityService
     private async Task<User> GetUser(Expression<Func<User, bool>> expression, string? errorMessage = null)
     {
         var user = await userRepository.Query()
+            .Include(e => e.Operator)
             .FirstOrDefaultAsync(expression);
 
         if (user == null)

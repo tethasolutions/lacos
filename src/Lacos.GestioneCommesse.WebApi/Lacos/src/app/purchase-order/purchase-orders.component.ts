@@ -182,8 +182,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                 return { 'purchase-order-pending': true };
             case purchaseOrder.status === PurchaseOrderStatus.Ordered:
                 return { 'purchase-order-ordered': true };
-            case purchaseOrder.status === PurchaseOrderStatus.Withdrawn:
-                return { 'purchase-order-withdrawn': true };
+            case purchaseOrder.status === PurchaseOrderStatus.Partial:
+                return { 'purchase-order-partial': true };
             case purchaseOrder.status === PurchaseOrderStatus.Canceled:
                 return { 'purchase-order-canceled': true };
             default:
@@ -254,7 +254,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
             get filters() {
                 return that._jobId
                     ? undefined
-                    : [PurchaseOrderStatus.Pending, PurchaseOrderStatus.Ordered]
+                    : [PurchaseOrderStatus.Pending, PurchaseOrderStatus.Ordered, PurchaseOrderStatus.Partial]
                         .map(e => ({ field: 'status', operator: 'eq', value: e }))
             },
             logic: 'or'

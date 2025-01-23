@@ -7,6 +7,7 @@ import { PurchaseOrder, PurchaseOrderItem } from './models';
 import { readData } from '../common/functions';
 import { PurchaseOrderAttachmentModel } from './purchase-order-attachment.model';
 import { PurchaseOrderAttachmentUploadFileModel } from './purchage-order-attachment-upload-file.model';
+import { UserService } from '../security/user.service';
 
 @Injectable()
 export class PurchaseOrdersService {
@@ -14,7 +15,8 @@ export class PurchaseOrdersService {
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
 
     constructor(
-        private readonly _http: HttpClient
+        private readonly _http: HttpClient,
+        private readonly _userService: UserService
     ) {
     }
 
@@ -27,21 +29,21 @@ export class PurchaseOrdersService {
     get(id: number) {
         return this._http.get<PurchaseOrder>(`${this._baseUrl}/${id}`)
             .pipe(
-                map(e => PurchaseOrder.build(e))
+                map(e => PurchaseOrder.build(e, this._userService.getUser().operatorId))
             );
     }
 
     create(purchaseOrder: PurchaseOrder) {
         return this._http.post<PurchaseOrder>(this._baseUrl, purchaseOrder)
             .pipe(
-                map(e => PurchaseOrder.build(e))
+                map(e => PurchaseOrder.build(e, this._userService.getUser().operatorId))
             );
     }
 
     update(purchaseOrder: PurchaseOrder) {
         return this._http.put<PurchaseOrder>(`${this._baseUrl}/${purchaseOrder.id}`, purchaseOrder)
             .pipe(
-                map(e => PurchaseOrder.build(e))
+                map(e => PurchaseOrder.build(e, this._userService.getUser().operatorId))
             );
     }
 

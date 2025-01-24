@@ -710,7 +710,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     await repository.Insert(newEntity);
                     await dbContext.SaveChanges();
                     list.Add(newEntity.MapTo<SyncTicketDto>(mapper));
-                    if (tdoChild != null)
+                    if (tdoChild != null && tdoChild.Count>0)
                     {
                         tdoChild.ForEach(x=>x.TicketId = (x.TicketId == oldId?  newEntity.Id : x.TicketId));
                     }

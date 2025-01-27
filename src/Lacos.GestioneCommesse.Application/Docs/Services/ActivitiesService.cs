@@ -269,7 +269,7 @@ public class ActivitiesService : IActivitiesService
         var activityProducts = activityProductRepository.Query()
             .Where(e => e.ActivityId == id);
         var products = productRepository.Query()
-            .Where(e => e.CustomerId == activity.Job!.CustomerId && e.IsDecommissioned != false);
+            .Where(e => e.CustomerId == activity.Job!.CustomerId && e.IsDecommissioned == false);
         var missingProducts = await (
                 from product in products
                 join activityProduct in activityProducts
@@ -305,7 +305,7 @@ public class ActivitiesService : IActivitiesService
         var activityProducts = activityProductRepository.Query()
             .Where(e => e.ActivityId == id);
         var products = productRepository.Query()
-            .Where(e => e.CustomerId == activity.Job!.CustomerId && e.MonthlyMaintenance == true && e.IsDecommissioned != false);
+            .Where(e => e.CustomerId == activity.Job!.CustomerId && e.MonthlyMaintenance == true && e.IsDecommissioned == false);
         var missingProducts = await (
                 from product in products
                 join activityProduct in activityProducts

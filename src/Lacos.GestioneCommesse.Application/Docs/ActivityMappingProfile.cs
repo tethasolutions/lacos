@@ -48,7 +48,7 @@ public class ActivityMappingProfile : Profile
            .Ignore(x => x.RowNumber)
            .Ignore(x => x.Supplier)
            .Ignore(x => x.Address)
-           .MapMember(x => x.JobId, (x, y) => y.IsTransient() ? x.JobId : y.JobId)
+           //.MapMember(x => x.JobId, (x, y) => y.IsTransient() ? x.JobId : y.JobId)
            .Ignore(x => x.Job)
            .MapMember(x => x.TypeId, (x, y) => y.IsTransient() ? x.TypeId : y.TypeId)
            .Ignore(x => x.Type)

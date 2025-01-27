@@ -166,16 +166,20 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
                     .pipe(
                         tap(e => {
                             this.job = e;
+                            this._getJobs(this.job.customerId);
                         })
                     )
                     .subscribe()
             );
         }
+        else
+        {
+            this._getJobs(0);
+        }
 
-        this.jobReadonly = !!options.activity.jobId;
+        this.jobReadonly = false; //!!options.activity.jobId;
         this.customer = null;
         this.status = options.activity.status;
-        this._getJobs();
 
         if (this.options.activity.typeId) {
             this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
@@ -246,7 +250,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         this.suppliers = suppliers;
     }
 
-    private _getJobs() {
+    private _getJobs(customerId: number) {
         const state: State = {
             filter: {
                 filters: [],
@@ -259,7 +263,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
 
         if (this.options.activity.jobId) {
             state.filter.filters.push(
-                { field: 'id', operator: 'eq', value: this.options.activity.jobId }
+                { field: 'customerId', operator: 'eq', value: customerId }
             );
         }
 

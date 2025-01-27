@@ -129,7 +129,7 @@ export class AddressesModalComponent extends BaseComponent {
   }
 
   editAddress(address: AddressModel) {
-    if (this.customer.id === null) {
+    if (this.customer.id != null) {
         const request: AddressModel = Object.assign(new AddressModel(), JSON.parse(JSON.stringify(address)));
         this._subscriptions.push(
             this.addressModal.open(request)
@@ -151,7 +151,7 @@ export class AddressesModalComponent extends BaseComponent {
                 )
                 .subscribe()
         );
-    } else if (this.supplier.id === null) {
+    } else if (this.supplier.id != null) {
         const request: AddressModel = Object.assign(new AddressModel(), JSON.parse(JSON.stringify(address)));
         this._subscriptions.push(
             this.addressModal.open(request)

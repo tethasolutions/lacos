@@ -51,23 +51,6 @@
                         <div class="validation-message" [control]="form.controls['date']"></div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-7">
-                    <label>Cliente</label>
-                    <div class="form-group">
-                        <kendo-combobox [data]="customers" [valuePrimitive]="true" textField="name" valueField="id"
-                            name="customerId" [(ngModel)]="options.customerId" required [suggest]="true"
-                            [allowCustom]="false" [disabled]="!!options.id" class="customer-combobox">
-                        </kendo-combobox>
-                        <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button"
-                            title="Nuovo cliente">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <div class="validation-message" [control]="form.controls['customerId']"></div>
-                    </div>
-                </div>
                 <div class="col-md-3">
                     <label>Stato</label>
                     <div class="form-group">
@@ -81,6 +64,37 @@
                             </ng-template>
                         </kendo-dropdownlist>
                         <div class="validation-message" [control]="form.controls['status']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Cliente</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="customers" [valuePrimitive]="true" textField="name" valueField="id"
+                            name="customerId" [(ngModel)]="options.customerId" required [suggest]="true"
+                            [allowCustom]="false" [disabled]="!!options.id" class="customer-combobox" (valueChange)="onCustomerChange()">
+                        </kendo-combobox>
+                        <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button"
+                            title="Nuovo cliente">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <div class="validation-message" [control]="form.controls['customerId']"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Commessa</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
+                            [(ngModel)]="options.jobId" required [suggest]="true" [allowCustom]="false"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" class="customer-combobox" [valuePrimitive]="true" [disabled]="!options.customerId">
+                        </kendo-combobox>
+                        <button (click)="createJobTicket()" type="button" class="btn btn-primary add-customer-button"
+                            title="Nuovo cliente">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <div class="validation-message" [control]="form.controls['jobId']"></div>
                     </div>
                 </div>
             </div>

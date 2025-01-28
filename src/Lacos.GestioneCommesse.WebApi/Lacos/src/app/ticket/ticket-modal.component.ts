@@ -12,7 +12,7 @@ import { Activity, ActivityStatus } from '../services/activities/models';
 import { ActivityModalComponent, ActivityModalOptions } from '../activities/activity-modal.component';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { JobsService } from '../services/jobs/jobs.service';
-import { Job } from '../services/jobs/models';
+import { IJobReadModel, Job } from '../services/jobs/models';
 import { TicketAttachmentModel } from '../services/tickets/ticket-attachment.model';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { TicketAttachmentUploadFileModel } from '../services/tickets/ticket-attachment-upload-file.model';
@@ -28,6 +28,7 @@ import { PurchaseOrder, PurchaseOrderStatus } from '../services/purchase-orders/
 import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
+import { State } from '@progress/kendo-data-query';
 
 @Component({
     selector: 'app-ticket-modal',
@@ -42,7 +43,6 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
 
     customers: CustomerModel[];
-    _job: Job;
     attachments: Array<FileInfo> = [];
     messages: MessageReadModel[];
     user: User;
@@ -50,6 +50,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     unreadMessages: number;
     album: string[] = [];
     targetOperatorsArray: number[];
+    jobs: SelectableJob[];
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -66,7 +67,8 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         messageBox: MessageBoxService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
-        private readonly _messagesService: MessagesService
+        private readonly _messagesService: MessagesService,
+        private readonly _jobsService: JobsService
     ) {
         super(messageBox);
     }
@@ -91,12 +93,43 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
             });
         }
 
+        this._getJobs();
         this.updateUnreadCounter();
         return result;
     }
 
     onDateChange() {
         this.options.year = this.options.date?.getFullYear();
+    }
+
+    onCustomerChange() {
+        this._getJobs();
+    }
+
+    private _getJobs() {
+        const state: State = {
+            filter: {
+                filters: [],
+                logic: 'and'
+            },
+            sort: [
+                { field: 'date', dir: 'asc' }
+            ]
+        };
+
+        if (this.options.customerId) {
+            state.filter.filters.push(
+                { field: 'customerId', operator: 'eq', value: this.options.customerId }
+            );
+        }
+
+        this._subscriptions.push(
+            this._jobsService.read(state)
+                .pipe(
+                    tap(e => this.jobs = (e.data as IJobReadModel[]).map(e => new SelectableJob(e))),
+                )
+                .subscribe()
+        );
     }
 
     createCustomer() {
@@ -118,25 +151,38 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         );
     }
 
-    createActivity(ticket: Ticket) {
+    createJobTicket() {
+        const text = `Vuoi creare una nuova commessa per il ticket corrente?`;
 
         this._subscriptions.push(
-            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/", "-"))
+            this._messageBox.confirm(text, 'Nuova commessa')
                 .pipe(
-                    tap(e => this._job = e),
                     tap(() => {
-                        this.options.jobId = this._job.id;
-                        this._newActivity(ticket);
+                        this._subscriptions.push(
+                            this._serviceJob.getTicketJob(this.options.customerId, this.options.code.replace("/", "-"))
+                                .pipe(
+                                    tap(e => this.options.jobId = e.id),
+                                    tap(() => {
+                                        this._getJobs();
+                                    })
+                                )
+                                .subscribe()
+                        );
                     })
                 )
                 .subscribe()
         );
+    }
 
+    createActivity(ticket: Ticket) {
+        if (this.options.jobId) {
+            this._newActivity(ticket);
+        }
     }
 
     private _newActivity(ticket: Ticket) {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, null,
-            this._job.id, null, null, null, null, null, null, "In attesa", "In corso", "Pronto", "Completata", false, [], []);
+            ticket.jobId, null, null, null, null, null, null, "In attesa", "In corso", "Pronto", "Completata", false, [], []);
         const options = new ActivityModalOptions(activity);
 
         ticket.status = TicketStatus.InProgress;
@@ -147,7 +193,6 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
                     filter(e => e),
                     switchMap(() => this._serviceActivity.create(activity)),
                     tap(e => ticket.activityId = e.id),
-                    tap(e => ticket.jobId = this._job.id),
                     tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
                     tap(() => this.close())
                 )
@@ -156,25 +201,15 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     }
 
     createPurchaseOrder(ticket: Ticket) {
-
-        this._subscriptions.push(
-            this._serviceJob.getTicketJob(ticket.customerId, ticket.code.replace("/", "-"))
-                .pipe(
-                    tap(e => this._job = e),
-                    tap(() => {
-                        this.options.jobId = this._job.id;
-                        this._newPurchaseOrder(ticket);
-                    })
-                )
-                .subscribe()
-        );
-
+        if (this.options.jobId) {
+            this._newPurchaseOrder(ticket);
+        }
     }
 
     private _newPurchaseOrder(ticket: Ticket) {
         const today = getToday();
         const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, PurchaseOrderStatus.Pending,
-            this._job.id, null, null, this.currentOperator.id, [], [], [], [], []);
+            ticket.jobId, null, null, this.currentOperator.id, [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         ticket.status = TicketStatus.InProgress;
@@ -184,7 +219,6 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._servicePurchaseOrder.create(purchaseOrder)),
-                    tap(e => ticket.jobId = this._job.id),
                     tap(e => ticket.purchaseOrderId = e.id),
                     tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
                     tap(() => this.close())
@@ -347,6 +381,30 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     openImage(index: number) {
         const options = new GalleryModalInput(this.album, index);
         this.galleryModal.open(options).subscribe();
+    }
+
+}
+
+class SelectableJob {
+
+    readonly id: number;
+    readonly customer: string;
+    readonly code: string;
+    readonly fullName: string;
+    readonly customerId: number;
+    readonly addressId: number;
+    readonly description: string;
+
+    constructor(
+        job: IJobReadModel
+    ) {
+        this.id = job.id;
+        this.customer = job.customer;
+        this.code = job.code;
+        this.fullName = `${job.code} - ${job.customer}` + ((job.reference) ? ` - ${job.reference}` : ``);
+        this.customerId = job.customerId;
+        this.addressId = job.addressId;
+        this.description = job.description;
     }
 
 }

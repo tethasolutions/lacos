@@ -141,11 +141,12 @@ public class TicketsService : ITicketsService
 
         if (Ticket.Activity != null)
         {
-            if (Ticket.Activity.JobId != null)
+            if (Ticket.JobId != null)
             {
                 Job job = await jobRepository.Query()
-                    .Where(e => e.Id == Ticket.Activity.JobId)
+                    .Where(e => e.Id == Ticket.JobId)
                     .Include(e => e.Activities)
+                    .ThenInclude(e => e.Type)
                     .FirstOrDefaultAsync();
                 if (job != null)
                 {

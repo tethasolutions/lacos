@@ -38,7 +38,8 @@ public class MessageMappingProfile : Profile
             .Ignore(x => x.Activity)
             .Ignore(x => x.Ticket)
             .Ignore(x => x.Job)
-            .Ignore(x => x.PurchaseOrder);
+            .Ignore(x => x.PurchaseOrder)
+            .Ignore(x => x.MessageNotifications);
 
         CreateMap<MessageNotificationReadModel, MessageNotification>()
             .IgnoreCommonMembers()

@@ -42,7 +42,7 @@
                         <div class="validation-message" [control]="form.controls['number']"></div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Data</label>
                     <div class="form-group">
                         <kendo-datepicker format="dd/MM/yyyy" name="date" [(ngModel)]="options.purchaseOrder.date"
@@ -57,6 +57,16 @@
                         <kendo-datepicker format="dd/MM/yyyy" name="expectedDate" [(ngModel)]="options.purchaseOrder.expectedDate" >
                         </kendo-datepicker>
                         <div class="validation-message" [control]="form.controls['expectedDate']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Tipologia</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="activityTypes" [valuePrimitive]="true" textField="name" valueField="id"
+                            name="typeId" [(ngModel)]="options.purchaseOrder.activityTypeId" required [suggest]="true"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [allowCustom]="false">
+                        </kendo-combobox>
+                        <div class="validation-message" [control]="form.controls['typeId']"></div>
                     </div>
                 </div>
             </div>

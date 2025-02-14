@@ -26,6 +26,8 @@ import { UserService } from '../services/security/user.service';
 import { MessagesService } from '../services/messages/messages.service';
 import { SecurityService } from '../services/security/security.service';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
+import { ActivityTypesService } from '../services/activityTypes.service';
+import { ActivityTypeModel } from '../shared/models/activity-type.model';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -53,6 +55,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     };
     gridData: GridDataResult;
 
+    activityTypes: ActivityTypeModel[];
     userAttachments: Array<FileInfo> = [];
     adminAttachments: Array<FileInfo> = [];
     messages: MessageReadModel[];
@@ -77,6 +80,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         private readonly _suppliersService: SupplierService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
+        private readonly _activityTypesService: ActivityTypesService,
         private readonly _messagesService: MessagesService
     ) {
         super(messageBox);
@@ -84,6 +88,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     }
 
     ngOnInit() {
+        this._getActivityTypes();
         this._getSuppliers();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
@@ -181,6 +186,16 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         }
 
         return this.form.valid;
+    }
+
+    private _getActivityTypes() {
+        this._subscriptions.push(
+            this._activityTypesService.readActivityTypesList()
+                .pipe(
+                    tap(e => this.activityTypes = e)
+                )
+                .subscribe()
+        );
     }
 
     private _getJob(id: number) {

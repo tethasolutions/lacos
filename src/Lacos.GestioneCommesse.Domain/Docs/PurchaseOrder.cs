@@ -11,6 +11,9 @@ public class PurchaseOrder : FullAuditedEntity
     public string? Description { get; set; }
     public PurchaseOrderStatus Status { get; set; }
 
+    public long? ActivityTypeId { get; set; }
+    public ActivityType ActivityType { get; set; }
+
     public long? JobId { get; set; }
     public Job? Job { get; set; }
 

@@ -20,7 +20,8 @@ public class PurchaseOrderMappingProfile : Profile
             .MapMember(x => x.JobReference, y => y.Job!.Reference)
             .MapMember(x => x.OperatorName, y => y.Operator!.Name)
             .MapMember(x => x.HasAttachments, y => y.Attachments.Any())
-            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead));
+            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead))
+            .MapMember(x => x.Type, y => y.ActivityType.Name);
 
         CreateMap<PurchaseOrderDto, PurchaseOrder>()
             .IgnoreCommonMembers()
@@ -30,6 +31,7 @@ public class PurchaseOrderMappingProfile : Profile
             .Ignore(x => x.Attachments)
             .Ignore(x => x.Operator)
             .Ignore(x => x.Messages)
+            .Ignore(x => x.ActivityType)
             .AfterMap(AfterMap);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()

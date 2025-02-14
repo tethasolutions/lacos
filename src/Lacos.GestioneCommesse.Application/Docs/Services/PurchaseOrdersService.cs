@@ -2,6 +2,7 @@
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
@@ -38,10 +39,13 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
     public IQueryable<PurchaseOrderReadModel> Query()
     {
+        var user = session.CurrentUser!;
+
         return repository.Query()
             .AsNoTracking()
             .Include(x => x.Job)
             .ThenInclude(x => x.Customer)
+            //.Where(e => e.ActivityType!.Operators.Any(o => o.Id == user.OperatorId)
             .Project<PurchaseOrderReadModel>(mapper);
     }
 

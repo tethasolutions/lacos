@@ -124,7 +124,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, this._jobId, null, null, this.currentOperator.id, [], [], [], [], []);
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, null, this._jobId, null, null, this.currentOperator.id, [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         this._subscriptions.push(

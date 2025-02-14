@@ -75,6 +75,7 @@ namespace Lacos.GestioneCommesse.Application
                 .IgnoreNavigationPropertyEntity();
             CreateMap<SyncPurchaseOrderDto, PurchaseOrder>()
                 .Ignore(e => e.ExpectedDate)
+                .Ignore(e => e.ActivityTypeId)
                 .IgnoreCommonMembers()
                 .IgnoreNavigationPropertyEntity();
             CreateMap<SyncPurchaseOrderItemDto, PurchaseOrderItem>()

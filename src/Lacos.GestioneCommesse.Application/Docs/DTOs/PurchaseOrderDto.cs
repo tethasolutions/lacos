@@ -13,6 +13,8 @@ public class PurchaseOrderDto : BaseEntityDto
     public string? Description { get; set; }
     public PurchaseOrderStatus Status { get; set; }
 
+    public long? ActivityTypeId { get; set; }
+
     public long? JobId { get; set; }
 
     public long SupplierId { get; set; }

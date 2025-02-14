@@ -87,10 +87,10 @@
                     <label>Commessa</label>
                     <div class="form-group">
                         <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
-                            [(ngModel)]="options.jobId" required [suggest]="true" [allowCustom]="false"
+                            [(ngModel)]="options.jobId" [suggest]="true" [allowCustom]="false"
                             [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" class="customer-combobox" [valuePrimitive]="true" [disabled]="!options.customerId">
                         </kendo-combobox>
-                        <button (click)="createJobTicket()" type="button" class="btn btn-primary add-customer-button"
+                        <button (click)="createJobTicket()" [disabled]="options.id == 0" type="button" class="btn btn-primary add-customer-button"
                             title="Nuovo cliente">
                             <i class="fa fa-plus"></i>
                         </button>

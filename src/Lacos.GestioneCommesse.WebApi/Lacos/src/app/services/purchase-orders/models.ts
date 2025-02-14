@@ -28,6 +28,7 @@ export interface IPurchaseOrderReadModel {
     readonly expectedDate: Date | string;
     readonly description: string;
     readonly status: PurchaseOrderStatus;
+    readonly type: string;
     readonly hasAttachments: boolean;
     readonly jobId: number;
     readonly jobCode: string;
@@ -57,6 +58,7 @@ export class PurchaseOrder {
         expectedDate: Date | string,
         public description: string,
         public status: PurchaseOrderStatus,
+        public activityTypeId: number,
         public jobId: number,
         public supplierId: number,
         public supplierName: string,
@@ -77,7 +79,7 @@ export class PurchaseOrder {
         const userAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => !e.isAdminDocument);
         const adminAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => e.isAdminDocument);
         const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments, userAttachments, adminAttachments, messages);
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.activityTypeId, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments, userAttachments, adminAttachments, messages);
     }
 
 }

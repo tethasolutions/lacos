@@ -56,6 +56,23 @@ public class JobsService : IJobsService
             .Project<JobReadModel>(mapper);
     }
 
+    public IQueryable<JobReadModel> QueryCurrentJobs()
+    {
+        return repository.Query()
+            .Where(e => (e.Year >= DateTime.Now.Year && e.Status == JobStatus.Billed) || 
+                (e.Status == JobStatus.Billing || e.Status == JobStatus.Completed))
+            .Include(e => e.Referent)
+            .Project<JobReadModel>(mapper);
+    }
+
+    public IQueryable<JobReadModel> QueryArchivedJobs()
+    {
+        return repository.Query()
+            .Where(e => e.Year < DateTime.Now.Year)
+            .Include(e => e.Referent)
+            .Project<JobReadModel>(mapper);
+    }
+
     public async Task<JobDto> GetTicketJob(long CustomerId, string TicketCode)
     {
         var jobDto = await repository.Query()

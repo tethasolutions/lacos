@@ -54,7 +54,8 @@
                 <div class="col-md-3">
                     <label>Data Prevista Consegna</label>
                     <div class="form-group">
-                        <kendo-datepicker format="dd/MM/yyyy" name="expectedDate" [(ngModel)]="options.purchaseOrder.expectedDate" >
+                        <kendo-datepicker format="dd/MM/yyyy" name="expectedDate"
+                            [(ngModel)]="options.purchaseOrder.expectedDate">
                         </kendo-datepicker>
                         <div class="validation-message" [control]="form.controls['expectedDate']"></div>
                     </div>
@@ -63,7 +64,7 @@
                     <label>Tipologia</label>
                     <div class="form-group">
                         <kendo-combobox [data]="activityTypes" [valuePrimitive]="true" textField="name" valueField="id"
-                            name="typeId" [(ngModel)]="options.purchaseOrder.activityTypeId" required [suggest]="true"
+                            name="typeId" [(ngModel)]="options.purchaseOrder.activityTypeId" [suggest]="true"
                             [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [allowCustom]="false">
                         </kendo-combobox>
                         <div class="validation-message" [control]="form.controls['typeId']"></div>
@@ -88,7 +89,8 @@
                         <kendo-combobox [data]="suppliers" [valuePrimitive]="true" textField="name" valueField="id"
                             name="supplierId" [(ngModel)]="options.purchaseOrder.supplierId" [suggest]="true"
                             [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [allowCustom]="false"
-                            [disabled]="!!options.id" (valueChange)="onSupplierChange()" required class="customer-combobox">
+                            [disabled]="!!options.id" (valueChange)="onSupplierChange()" required
+                            class="customer-combobox">
                         </kendo-combobox>
                         <button (click)="createSupplier()" type="button" class="btn btn-primary add-customer-button"
                             title="Nuovo fornitore">
@@ -128,40 +130,40 @@
                 </div>
                 <div>
                     <div class="grid-container">
-<kendo-grid [data]="gridData" [pageSize]="gridState.take" [skip]="gridState.skip"
-                        [sort]="gridState.sort" filterable="menu" [filter]="gridState.filter" [group]="gridState.group"
-                        [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
-                        (dataStateChange)="onDataStateChange($event)">
+                        <kendo-grid [data]="gridData" [pageSize]="gridState.take" [skip]="gridState.skip"
+                            [sort]="gridState.sort" filterable="menu" [filter]="gridState.filter"
+                            [group]="gridState.group" [sortable]="true" [pageable]="true" scrollable="none"
+                            [style.width.px]="screenWidth" (dataStateChange)="onDataStateChange($event)">
 
-                        <kendo-grid-column field="productImage" title="&nbsp;" [sortable]="false" [filterable]="false"
-                            [width]="1">
-                            <ng-template kendoGridCellTemplate let-dataItem>
-                                <a *ngIf="dataItem.productImage" [href]="imagesUrl + dataItem.productImage"
-                                    target="_blank">
-                                    <img [src]="imagesUrl + dataItem.productImage" class="thumbnail-s">
-                                </a>
-                            </ng-template>
-                        </kendo-grid-column>
-                        <kendo-grid-column field="productName" title="Nome">
-                        </kendo-grid-column>
-                        <kendo-grid-column field="quantity" title="Q.ta" [width]="1" filter="numeric" format="0.00">
-                        </kendo-grid-column>
-                        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
-                            <ng-template kendoGridCellTemplate let-dataItem>
-                                <div class="d-flex text-nowrap gap-1">
-                                    <button type="button" class="btn btn-primary btn-sm" title="Modifica"
-                                        (click)="edit(dataItem)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm" title="Rimuovi"
-                                        (click)="askRemove(dataItem)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </ng-template>
-                        </kendo-grid-column>
-                    </kendo-grid>
-</div>
+                            <kendo-grid-column field="productImage" title="&nbsp;" [sortable]="false"
+                                [filterable]="false" [width]="1">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a *ngIf="dataItem.productImage" [href]="imagesUrl + dataItem.productImage"
+                                        target="_blank">
+                                        <img [src]="imagesUrl + dataItem.productImage" class="thumbnail-s">
+                                    </a>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="productName" title="Nome">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="quantity" title="Q.ta" [width]="1" filter="numeric" format="0.00">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <div class="d-flex text-nowrap gap-1">
+                                        <button type="button" class="btn btn-primary btn-sm" title="Modifica"
+                                            (click)="edit(dataItem)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" title="Rimuovi"
+                                            (click)="askRemove(dataItem)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid>
+                    </div>
                 </div>
             </div>
 
@@ -171,7 +173,8 @@
                 <div class="col-md-12">
                     <label>Descrizione</label>
                     <div class="form-group">
-                        <kendo-editor name="description" [(ngModel)]="options.purchaseOrder.description" required [resizable]="true" [iframe]="false">
+                        <kendo-editor name="description" [(ngModel)]="options.purchaseOrder.description" required
+                            [resizable]="true" [iframe]="false">
                             <kendo-toolbar>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
@@ -188,13 +191,14 @@
                     </div>
                 </div>
             </div>
-                        
-            <hr class="border-green"/>
+
+            <hr class="border-green" />
             <!--<kendo-expansionpanel title="Commenti ({{options.activity.messages.length}})" subtitle="Visualizza messaggi">-->
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Commenti ({{options.purchaseOrder.messages.length}}) <strong *ngIf="unreadMessages" style="padding-left: 15px;">Da leggere:
+                        <label>Commenti ({{options.purchaseOrder.messages.length}}) <strong *ngIf="unreadMessages"
+                                style="padding-left: 15px;">Da leggere:
                                 {{unreadMessages}}</strong></label>
                         <div class="row" style="margin-top:5px">
                             <div class="col-md-1">
@@ -208,12 +212,13 @@
                                     <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
                                         {{item.date | date:'dd/MM/yyyy'}}</div>
                                     <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
-                                        {{item.operatorName}} | <i class="fas fa-users" [title]="'Destinatari: ' + item.targetOperators"></i></div>
+                                        {{item.operatorName}} | <i class="fas fa-users"
+                                            [title]="'Destinatari: ' + item.targetOperators"></i></div>
                                     <div class="col-md-6 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}"
                                         [innerHTML]="item.note"></div>
                                     <div class="col-md-2" style="text-align: right;">
                                         <button [disabled]="item.operatorId != currentOperator.id" type="button"
-                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica" 
+                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica"
                                             (click)="editMessage(item)">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -236,12 +241,12 @@
                 </div>
             </div>
             <!--</kendo-expansionpanel>-->
-            <hr class="border-green"/>
+            <hr class="border-green" />
 
             <div class="row">
                 <div class="col-md-3">
                     <kendo-formfield class="form-group">
-                        <label>Allegati</label> 
+                        <label>Allegati</label>
                         <kendo-upload [(ngModel)]="this.userAttachments" (success)="AttachmentExecutionSuccess($event)"
                             [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
@@ -249,7 +254,7 @@
                                     {{ files[0].name }}
                                 </a>
                             </ng-template>
-                            <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
+                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
                         </kendo-upload>
                     </kendo-formfield>
                 </div>
@@ -258,7 +263,7 @@
                         <div *ngFor="let item of options.purchaseOrder.userAttachments; let i = index" class="col-2">
                             <a href="javascript:void(0)" (click)="openImage(i)" *ngIf="item.isImage">
                                 <img [src]="imagesUrl + item.fileName" width="90%" [title]="item.displayName" />
-                            </a> 
+                            </a>
                             <a [href]="imagesUrl + item.fileName" target="_blank" *ngIf="!item.isImage">
                                 <img src="assets/document.jpg" width="90%" [title]="item.displayName" />
                             </a>
@@ -266,30 +271,33 @@
                     </div>
                 </div>
             </div>
-            
-            <hr *ngIf="isAdmin" class="border-green"/>
+
+            <hr *ngIf="isAdmin" class="border-green" />
 
             <div class="row" *ngIf="isAdmin">
                 <div class="col-md-3">
                     <kendo-formfield class="form-group">
                         <label>Allegati Amministrazione</label>
-                        <kendo-upload [(ngModel)]="this.adminAttachments" (success)="AttachmentExecutionSuccessAdmin($event)"
-                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload2">
+                        <kendo-upload [(ngModel)]="this.adminAttachments"
+                            (success)="AttachmentExecutionSuccessAdmin($event)" [saveUrl]="uploadSaveUrl"
+                            [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload2">
                             <ng-template kendoUploadFileInfoTemplate let-files>
                                 <a (click)="downloadAttachment(files[0].name)" class="pointer">
                                     {{ files[0].name }}
                                 </a>
                             </ng-template>
-                            <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
+                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
                         </kendo-upload>
                     </kendo-formfield>
                 </div>
                 <div class="col-md-9">
                     <div class="row">
-                    <div *ngFor="let item of options.purchaseOrder.adminAttachments"class="col-2">
+                        <div *ngFor="let item of options.purchaseOrder.adminAttachments" class="col-2">
                             <a [href]="imagesUrl + item.fileName" target="_blank">
-                                <img [src]="imagesUrl + item.fileName" width="90%" [title]="item.displayName" *ngIf="item.isImage" />
-                                <img src="assets/document.jpg" width="90%" [title]="item.displayName" *ngIf="!item.isImage" />
+                                <img [src]="imagesUrl + item.fileName" width="90%" [title]="item.displayName"
+                                    *ngIf="item.isImage" />
+                                <img src="assets/document.jpg" width="90%" [title]="item.displayName"
+                                    *ngIf="!item.isImage" />
                             </a>
                         </div>
                     </div>

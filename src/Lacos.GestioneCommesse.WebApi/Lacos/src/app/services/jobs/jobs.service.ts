@@ -25,6 +25,18 @@ export class JobsService {
 
         return readData(this._http, state, url);
     }
+    
+    readCurrentJobs(state: State) {
+        const url = `${this._baseUrl}/readcurrentjobs`
+
+        return readData(this._http, state, url);
+    }
+    
+    readArchivedJobs(state: State) {
+        const url = `${this._baseUrl}/readarchivedjobs`
+
+        return readData(this._http, state, url);
+    }
 
     get(id: number) {
         return this._http.get<Job>(`${this._baseUrl}/${id}`)

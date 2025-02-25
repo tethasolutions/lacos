@@ -65,11 +65,6 @@ export class JobsArchiveComponent extends BaseComponent implements OnInit {
                     filters: [JobStatus.Billed]
                         .map(e => ({ field: 'status', operator: 'eq', value: e })),
                     logic: 'and'
-                },
-                {
-                    filters: [new Date(getToday().getFullYear(),0,1)]
-                        .map(e => ({ field: 'date', operator: 'lt', value: e })),
-                    logic: 'and'
                 }
             ],
             logic: 'and'
@@ -259,7 +254,7 @@ export class JobsArchiveComponent extends BaseComponent implements OnInit {
 
     protected _read() {
         this._subscriptions.push(
-            this._service.read(this.gridState)
+            this._service.readArchivedJobs(this.gridState)
                 .pipe(
                     tap(e => this.data = e)
                 )

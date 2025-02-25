@@ -60,20 +60,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
         skip: 0,
         take: 30,
         filter: {
-            filters: [
-                {
-                    filters: [JobStatus.Billing, JobStatus.Completed]
-                        .map(e => ({ field: 'status', operator: 'eq', value: e })),
-                    logic: 'or'
-                },
-                {
-                    filters: [
-                        { field: 'date', operator: 'gte', value: new Date(getToday().getFullYear(),0,1) },
-                        { field: 'status', operator: 'eq', value: JobStatus.Billed }
-                    ],
-                    logic: 'and'
-                }
-            ],
+            filters: [],
             logic: 'or'
         },
         group: [],
@@ -261,7 +248,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
 
     protected _read() {
         this._subscriptions.push(
-            this._service.read(this.gridState)
+            this._service.readCurrentJobs(this.gridState)
                 .pipe(
                     tap(e => this.data = e)
                 )

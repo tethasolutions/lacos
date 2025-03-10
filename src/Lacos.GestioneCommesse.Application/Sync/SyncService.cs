@@ -406,6 +406,8 @@ namespace Lacos.GestioneCommesse.Application.Sync
                  entity.FinalNotes = signDto.FinalNotes;
                  entity.CustomerSignatureFileName = signDto.Filename;
                  entity.ToBeReschedule = signDto.ToBeReschedule;
+                 entity.Start = signDto.Start;
+                 entity.End = signDto.End;
                  //entity. = signDto.NameSurname;
                  repository.Update(entity);
                  await dbContext.SaveChanges();

@@ -14,5 +14,6 @@
         public string? StatusLabel2 { get; set; }
         public string? StatusLabel3 { get; set; }
         public bool? InfluenceJobStatus { get; set; }
+        public bool? ViewInPurchaseOrder { get; set; }
     }
 }

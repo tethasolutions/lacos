@@ -38,6 +38,11 @@
             {{dataItemAddress.influenceJobStatus | bool}}
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="viewInPurchaseOrder" title="Visibile in Ordini Acq">
+        <ng-template kendoGridCellTemplate let-dataItemAddress>
+            {{dataItemAddress.viewInPurchaseOrder | bool}}
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="colorHex" title="Colore">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="operator-color-in-grid" [style.background-color]="dataItem.colorHex"></div>

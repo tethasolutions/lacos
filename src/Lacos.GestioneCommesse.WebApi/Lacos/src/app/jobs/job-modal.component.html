@@ -122,7 +122,7 @@
                     <label>Riferimento Commessa</label>
                     <div class="form-group">
                         <input class="form-control" name="reference" [(ngModel)]="options.reference" maxlength="255"
-                            novalidate autocomplete="off" />
+                            novalidate autocomplete="off" [disabled]="options.id == 0" />
                         <div class="validation-message" [control]="form.controls['reference']"></div>
                     </div>
                 </div>

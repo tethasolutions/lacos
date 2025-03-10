@@ -17,6 +17,7 @@ public class ActivityType : FullAuditedEntity
     public string? StatusLabel3 { get; set; }
 
     public bool? InfluenceJobStatus { get; set; }
+    public bool? ViewInPurchaseOrder { get; set; }
 
     public ICollection<Activity> Activities { get; set; }
     public ICollection<CheckList> CheckLists { get; set; }

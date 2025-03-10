@@ -3665,35 +3665,4 @@ GO
 
 COMMIT;
 GO
-
-BEGIN TRANSACTION;
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
-BEGIN
-    ALTER TABLE [Docs].[PurchaseOrders] ADD [ActivityTypeId] bigint NULL;
-END;
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
-BEGIN
-    CREATE INDEX [IX_PurchaseOrders_ActivityTypeId] ON [Docs].[PurchaseOrders] ([ActivityTypeId]);
-END;
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
-BEGIN
-    ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_ActivityTypes_ActivityTypeId] FOREIGN KEY ([ActivityTypeId]) REFERENCES [Registry].[ActivityTypes] ([Id]);
-END;
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
-BEGIN
-    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250214140535_aggiunta campo tipoattività in ordini acquisto', N'7.0.10');
-END;
-GO
-
-COMMIT;
-GO
-
+ 

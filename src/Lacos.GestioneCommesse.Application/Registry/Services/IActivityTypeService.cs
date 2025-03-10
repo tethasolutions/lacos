@@ -12,7 +12,7 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
 {
     public interface IActivityTypeService
     {
-        Task<IEnumerable<ActivityTypeDto>> GetActivityTypes();
+        Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(bool filterPO = false);
 
         Task<ActivityTypeDto> CreateActivityType(ActivityTypeDto activityTypeDto);
 
@@ -65,7 +65,7 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
             return activityType.MapTo<ActivityTypeDto>(mapper);
         }
 
-        public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypes()
+        public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(bool filterPO = false)
         {
             var query = activityTypeRepository.Query()
                 .AsNoTracking();
@@ -73,12 +73,15 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
             if(session.IsAuthenticated() && session.IsAuthorized(Role.Operator))
             {
                 var user = session.CurrentUser!;
-
                 query = query
                     .Where(t =>
                         t.Operators.Any(o => o.Id == user.OperatorId)
                     );
             }
+
+            if (filterPO)
+                query = query
+                    .Where(t => t.ViewInPurchaseOrder == true);
 
             return await query
                 .Project<ActivityTypeDto>(mapper)

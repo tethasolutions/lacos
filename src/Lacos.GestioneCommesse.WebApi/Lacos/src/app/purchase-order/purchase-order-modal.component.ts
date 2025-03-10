@@ -190,7 +190,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
 
     private _getActivityTypes() {
         this._subscriptions.push(
-            this._activityTypesService.readActivityTypesList()
+            this._activityTypesService.readActivityTypesListPO()
                 .pipe(
                     tap(e => this.activityTypes = e)
                 )

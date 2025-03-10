@@ -149,7 +149,7 @@ public class JobsService : IJobsService
         var customer = await customerRepository.Query().Where(x => x.Id == job.CustomerId).FirstOrDefaultAsync();
         if (customer != null)
         {
-            job.Reference = customer.Name + " " + number.ToString("000") + "/" + job.Year.ToString().Substring(2,2);
+            job.Reference = number.ToString("000") + "/" + job.Year.ToString().Substring(2, 2) + " " + customer.Name;
         }
 
         await repository.Insert(job);

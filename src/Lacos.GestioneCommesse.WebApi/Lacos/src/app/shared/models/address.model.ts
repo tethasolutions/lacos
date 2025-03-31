@@ -13,6 +13,9 @@ export class AddressModel {
     email: string;
     isMainAddress: boolean;
     notes: string;
+    jobReference: string;
+    contactName: string;
+    contactReference: string;
     tempId: string;
 
     get fullAddress(): string {
@@ -36,6 +39,9 @@ export class AddressModel {
         this.zipCode = null;
         this.isMainAddress = false;
         this.notes = null;
+        this.jobReference = null;
+        this.contactName = null;
+        this.contactReference = null;
         this.tempId = uuidv4();
     }
 }

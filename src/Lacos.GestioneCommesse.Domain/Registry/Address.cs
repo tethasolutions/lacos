@@ -14,6 +14,10 @@ public class Address : FullAuditedEntity
     public bool IsMainAddress { get; set; }
     public string? Notes { get; set; }
 
+    public string? JobReference { get; set; }
+    public string? ContactName { get; set; }
+    public string? ContactReference { get; set; }
+
     public long? CustomerId { get; set; }
     public Customer? Customer { get; set; }
 

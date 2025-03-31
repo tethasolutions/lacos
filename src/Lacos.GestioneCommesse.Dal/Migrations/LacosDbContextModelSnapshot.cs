@@ -1766,6 +1766,12 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("ContactName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactReference")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1813,6 +1819,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<bool>("IsMainAddress")
                         .HasColumnType("bit");
+
+                    b.Property<string>("JobReference")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");

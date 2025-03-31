@@ -32,6 +32,14 @@
                         <input class="form-control" name="supplierId" [disabled]="true" [value]="supplier.name"/>
                     </div>
                 </div>
+                <div class="col-md-6" *ngIf="customer.id !== null">
+                    <label>Riferimento Commessa</label>
+                    <div class="form-group">
+                        <input class="form-control" name="jobReference" [(ngModel)]="options.jobReference"
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['jobReference']"></div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
@@ -83,6 +91,24 @@
                         <kendo-switch name="isMainAddress" [(ngModel)]="options.isMainAddress" onLabel="Si" offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['isMainAddress']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="options.description == 'Cantiere'">
+                <div class="col-md-6">
+                    <label>Nominativo Committente</label>
+                    <div class="form-group">
+                        <input class="form-control" name="contactName" [(ngModel)]="options.contactName"
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['contactName']"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Contatto Committente</label>
+                    <div class="form-group">
+                        <input class="form-control" name="contactReference" [(ngModel)]="options.contactReference"
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['contactReference']"></div>
                     </div>
                 </div>
             </div>

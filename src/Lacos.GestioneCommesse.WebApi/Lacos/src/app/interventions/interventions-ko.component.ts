@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, input } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { CellClickEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { saveAs } from '@progress/kendo-file-saver';

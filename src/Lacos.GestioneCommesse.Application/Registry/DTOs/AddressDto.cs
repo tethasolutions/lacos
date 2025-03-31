@@ -12,6 +12,9 @@
         public string? ZipCode { get; set; }
         public string? Telephone { get; set; }
         public string? Email { get; set; }
+        public string? JobReference { get; set; }
+        public string? ContactName { get; set; }
+        public string? ContactReference { get; set; }
         public bool IsMainAddress { get; set; }
     }
 }

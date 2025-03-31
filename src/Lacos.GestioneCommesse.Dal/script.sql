@@ -3665,4 +3665,98 @@ GO
 
 COMMIT;
 GO
- 
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD [ActivityTypeId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
+BEGIN
+    CREATE INDEX [IX_PurchaseOrders_ActivityTypeId] ON [Docs].[PurchaseOrders] ([ActivityTypeId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_ActivityTypes_ActivityTypeId] FOREIGN KEY ([ActivityTypeId]) REFERENCES [Registry].[ActivityTypes] ([Id]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250214140535_aggiunta campo tipoattività in ordini acquisto', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250310133909_aggiunta campo tipi attività')
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [ViewInPurchaseOrder] bit NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250310133909_aggiunta campo tipi attività')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250310133909_aggiunta campo tipi attività', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331123119_aggiunta campo contatto riferimenti in addresses')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD [ContactReference] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331123119_aggiunta campo contatto riferimenti in addresses')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250331123119_aggiunta campo contatto riferimenti in addresses', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD [ContactName] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses')
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD [JobReference] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250331125604_aggiunta nuovi campi in addresses', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

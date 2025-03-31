@@ -1,8 +1,8 @@
 <div class="d-flex align-items-center gap-3 mb-4">
     <h3>
-        Elenco Interventi
+        Interventi
     </h3>
-    <a class="btn btn-primary tn-sm" (click)="create()">
+    <a class="btn btn-primary tn-sm" (click)="create()" *ngIf="viewNewInterventionButton">
         <span class="fa fa-calendar-plus"></span>
         Programma intervento
     </a>

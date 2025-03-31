@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { InterventionModalComponent } from './intervention-modal.component';
@@ -13,6 +13,8 @@ import { InterventionsGridComponent } from './interventions-grid.component';
 })
 export class InterventionsListComponent extends BaseComponent {
 
+    @Input() viewNewInterventionButton: boolean = true;
+    
     @ViewChild('interventionsGrid', { static: true })
     interventionsGrid: InterventionsGridComponent;
 

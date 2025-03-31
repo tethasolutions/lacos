@@ -71,6 +71,9 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     uploadRemoveUrl = `${this._baseUrl}/job-attachment/remove-file`;
     cannotBrowseSharepoint: boolean = false;
 
+    contactName: string;
+    contactReference: string;
+
     constructor(
         security: SecurityService,
         private readonly _customersService: CustomerService,
@@ -102,6 +105,9 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
 
         this.attachments = [];
         this.album = [];
+        this.contactName = null;
+        this.contactReference = null;
+
         if (job.attachments != null) {
             this.options.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {
@@ -129,6 +135,14 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
             if (selectedAddress != undefined) {
                 this.options.addressId = selectedAddress.id;
             }
+        }
+    }
+
+    onAddressChange() {
+        const selectedAddress = this.addresses.find(e => e.id == this.options.addressId);
+        if (selectedAddress != undefined) {
+            this.contactName = selectedAddress.contactName;
+            this.contactReference = selectedAddress.contactReference;
         }
     }
 
@@ -235,7 +249,9 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
                     map(e => {
                         this.addresses = e;
                     }),
-                    tap(() => { })
+                    tap(() => { 
+                        this.onAddressChange();
+                     })
                 )
                 .subscribe()
         );

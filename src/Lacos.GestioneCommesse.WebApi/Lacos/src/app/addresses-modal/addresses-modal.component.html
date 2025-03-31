@@ -28,10 +28,11 @@
         </div>
         <div class="grid-container">
 <kendo-grid [data]="customer.addresses" [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth" *ngIf="customer.id != null">
+            <kendo-grid-column field="description" title="Tipo"></kendo-grid-column>
             <kendo-grid-column field="city" title="Città"></kendo-grid-column>
             <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
             <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
-            <kendo-grid-column field="zipCode" title="CAP"></kendo-grid-column>
+            <kendo-grid-column field="jobReference" title="Rifer. Comm."></kendo-grid-column>
             <kendo-grid-column field="isMainAddress" title="Principale">
                 <ng-template kendoGridCellTemplate let-dataItemAddress>
                     {{dataItemAddress.isMainAddress | bool}}
@@ -58,7 +59,7 @@
             <kendo-grid-column field="city" title="Città"></kendo-grid-column>
             <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
             <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
-            <kendo-grid-column field="zipCode" title="CAP"></kendo-grid-column>
+            <kendo-grid-column field="jobReference" title="Rif. Indirizzo"></kendo-grid-column>
             <kendo-grid-column field="isMainAddress" title="Principale">
                 <ng-template kendoGridCellTemplate let-dataItemAddress>
                     {{dataItemAddress.isMainAddress | bool}}

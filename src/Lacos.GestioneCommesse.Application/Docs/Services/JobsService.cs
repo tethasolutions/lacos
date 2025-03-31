@@ -146,10 +146,14 @@ public class JobsService : IJobsService
         job.SetCode(job.JobDate.Year, number);
         if (job.Description == null) job.Description = " ";
 
-        var customer = await customerRepository.Query().Where(x => x.Id == job.CustomerId).FirstOrDefaultAsync();
+        var customer = await customerRepository.Query().Include(x => x.Addresses).Where(x => x.Id == job.CustomerId).FirstOrDefaultAsync();
         if (customer != null)
         {
             job.Reference = number.ToString("000") + "/" + job.Year.ToString().Substring(2, 2) + " " + customer.Name;
+            if (job.AddressId != null)
+            {
+                job.Reference += $"({customer.Addresses.Where(a => a.Id == job.AddressId).Select(a => a.JobReference).FirstOrDefault()})";
+            }
         }
 
         await repository.Insert(job);

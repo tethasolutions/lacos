@@ -32,14 +32,6 @@
                         <input class="form-control" name="supplierId" [disabled]="true" [value]="supplier.name"/>
                     </div>
                 </div>
-                <div class="col-md-6" *ngIf="customer.id !== null">
-                    <label>Riferimento Commessa</label>
-                    <div class="form-group">
-                        <input class="form-control" name="jobReference" [(ngModel)]="options.jobReference"
-                            maxlength="255" novalidate autocomplete="off" />
-                        <div class="validation-message" [control]="form.controls['jobReference']"></div>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
@@ -94,9 +86,19 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Riferimento Cantiere Cliente</label>
+                    <div class="form-group">
+                        <input class="form-control" name="jobReference" [(ngModel)]="options.jobReference"
+                            maxlength="255" novalidate autocomplete="off" />
+                        <div class="validation-message" [control]="form.controls['jobReference']"></div>
+                    </div>
+                </div>
+            </div>
             <div class="row" *ngIf="options.description == 'Cantiere'">
                 <div class="col-md-6">
-                    <label>Nominativo Committente</label>
+                    <label>Nominativo Committente Cliente</label>
                     <div class="form-group">
                         <input class="form-control" name="contactName" [(ngModel)]="options.contactName"
                             maxlength="255" novalidate autocomplete="off" />
@@ -104,7 +106,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label>Contatto Committente</label>
+                    <label>Contatto Committente Cliente</label>
                     <div class="form-group">
                         <input class="form-control" name="contactReference" [(ngModel)]="options.contactReference"
                             maxlength="255" novalidate autocomplete="off" />

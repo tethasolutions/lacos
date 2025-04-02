@@ -17,7 +17,7 @@ import { SupplierModel } from '../shared/models/supplier.model';
 export class AddressModalComponent extends ModalFormComponent<AddressModel> {
   
   readonly role = Role;
-  addressesTypes: Array<string> = ['Cantiere','Consegna','Fornitore','Sede'];
+  addressesTypes: Array<string> = ['Abitazione','Cantiere','Consegna','Fornitore','Sede'];
 
   @Input() customer = new CustomerModel();
   @Input() supplier = new SupplierModel();

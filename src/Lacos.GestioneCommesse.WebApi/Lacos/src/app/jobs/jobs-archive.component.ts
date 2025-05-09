@@ -157,7 +157,17 @@ export class JobsArchiveComponent extends BaseComponent implements OnInit {
 
     onDblClick(): void {
         if (!this.cellArgs.isEdited) {
-            this.router.navigate(['/job-details'], {queryParams: {jobId: this.cellArgs.dataItem.id}});
+            this._subscriptions.push(
+                this._service.get(this.cellArgs.dataItem.id)
+                    .pipe(
+                        switchMap(e => this.jobModal.open(e)),
+                        tap(e => !e && this._read()),
+                        filter(e => e),
+                        switchMap(() => this._service.update(this.jobModal.options)),
+                        tap(e => this._afterSaved(e))
+                    )
+                    .subscribe()
+            );
         }
     }
 

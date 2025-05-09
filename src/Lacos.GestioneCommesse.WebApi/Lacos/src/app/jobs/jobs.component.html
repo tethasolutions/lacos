@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h3>Commesse</h3>
+        <h4>Commesse</h4>
     </div>
 
     <div class="col-auto">
@@ -67,7 +67,7 @@
     </kendo-grid-column>
     <kendo-grid-column field="description" title="Note">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <div [innerHTML]="dataItem.description"></div>
+            <div [innerHTML]="dataItem.description | domsanitizer"></div>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="hasSharepoint" title="SP" [width]="1" [filterable]="false">

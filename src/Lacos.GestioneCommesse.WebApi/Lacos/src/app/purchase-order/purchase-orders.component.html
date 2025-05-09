@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h3>Ordini Acquisto</h3>
+        <h4>Ordini Acquisto</h4>
     </div>
 
     <div class="col-auto">
@@ -25,12 +25,12 @@
                 Esporta in Excel
             </button>
         </ng-template>
-        <kendo-grid-column field="customerName" title="Cliente">
+        <kendo-grid-column field="customerName" title="Cliente" *ngIf="viewExportExcel">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customerName}}</a>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="jobCode" title="Comm." [width]="1">
+        <kendo-grid-column field="jobCode" title="Comm." [width]="1" *ngIf="viewExportExcel">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div *ngIf="!dataItem.jobHasHighPriority"><a (click)="openJob(dataItem.jobId)"
                         style="cursor: pointer;">{{dataItem.jobCode}}</a></div>
@@ -41,6 +41,11 @@
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="date" title="Data Ord." filter="date" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.date | date:'dd/MM/yyyy'}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="expectedDate" title="Prevista Cons." filter="date" [width]="1">
             <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.date | date:'dd/MM/yyyy'}}
             </ng-template>
@@ -60,13 +65,13 @@
                 </span>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="jobReference" title="Rifer.">
+        <kendo-grid-column field="jobReference" title="Rifer." *ngIf="viewExportExcel">
         </kendo-grid-column>
         <kendo-grid-column field="supplierName" title="Fornitore">
         </kendo-grid-column>
         <kendo-grid-column field="description" title="Note">
             <ng-template kendoGridCellTemplate let-dataItem>
-                <div [innerHTML]="dataItem.description"></div>
+                <div [innerHTML]="dataItem.description | domsanitizer"></div>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="type" title="Tipologia">

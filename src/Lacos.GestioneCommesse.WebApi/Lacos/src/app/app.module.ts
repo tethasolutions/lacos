@@ -149,6 +149,7 @@ import { SharepointImageDirective } from './sharepoint-browser-modal/sharepoint-
 import { CopyActivityModalComponent } from './activities/copy-activity-modal.component';
 import { CopyChecklistModalComponent } from './checklist-modal/copy-checklist-modal.component';
 import { JobsArchiveComponent } from './jobs/jobs-archive.component';
+import { DomSanitizerPipe } from './shared/pipes/domsanitizer.pipe';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -156,6 +157,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
     declarations: [
         BooleanPipe,
         RolePipe,
+        DomSanitizerPipe,
         AppComponent,
         LoaderComponent,
         ValidationMessageComponent,

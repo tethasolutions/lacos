@@ -1,3 +1,26 @@
+<div class="row border-bottom mb-3">
+    <div class="col-12 border-bottom mb-3">
+        <h4>Dettaglio commessa {{job.code}}</h4>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <h6>Riferimento</h6>
+        <p>{{job.reference}}</p>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <h6>Data</h6>
+        <p>{{job.date | date:'dd/MM/yyyy' }}</p>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <h6>Stato</h6>
+        <p>{{job.status | jobStatus}}</p>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <h6>Note</h6>
+        <div [innerHTML]="job.description | domsanitizer"></div>
+    </div>
+</div>
+
+
 <app-activities [viewExportExcel]="false"></app-activities>
 <div><hr></div>
 <app-purchase-orders [viewExportExcel]="false"></app-purchase-orders>

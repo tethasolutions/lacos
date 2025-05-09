@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h3>Commenti interventi da APP</h3>
+        <h4>Commenti interventi da APP</h4>
     </div>
 </div>
 
@@ -76,7 +76,7 @@
     </kendo-grid-column>
     <kendo-grid-column field="note" title="Messaggio">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <div [innerHTML]="dataItem.note"></div>
+            <div [innerHTML]="dataItem.note | domsanitizer"></div>
         </ng-template>
     </kendo-grid-column>
 

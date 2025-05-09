@@ -29,7 +29,7 @@
         <kendo-grid-column field="productDescription" title="Prodotto"></kendo-grid-column>
         <kendo-grid-column field="interventionDescription" title="Descrizione Intervento">
             <ng-template kendoGridCellTemplate let-dataItem>
-                <div [innerHTML]="dataItem.interventionDescription"></div>
+                <div [innerHTML]="dataItem.interventionDescription | domsanitizer"></div>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="checklistItem" title="Voce Checklist"></kendo-grid-column>

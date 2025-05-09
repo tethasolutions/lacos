@@ -163,14 +163,15 @@
                     <label>Descrizione</label>
                     <div class="form-group">
                         <kendo-editor name="description" [(ngModel)]="options.description" [resizable]="true"
-                            [iframe]="false">
+                            [iframe]="false" [pasteCleanupSettings]="{ convertMsLists: true, removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
                             <kendo-toolbar>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
                                     <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
                                     <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
-                                <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
+                                <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor view="gradient"></kendo-toolbar-colorpicker>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>

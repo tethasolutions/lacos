@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center gap-3 mb-2">
-    <h3>
+    <h4>
         Attività {{activity.number}} &bull; {{activity | activityStatus}}
-    </h3>
+    </h4>
     <div class="d-flex gap-1">
         <a class="btn btn-primary btn-sm" (click)="editJob(activity.jobId)">
             <span class="fa fa-edit"></span>
@@ -23,7 +23,7 @@
         <b>
             Commessa
         </b>
-        <div [innerHTML]="activity.job">
+        <div [innerHTML]="activity.job | domsanitizer">
         </div>
     </div>
     <div class="col-3">
@@ -70,7 +70,7 @@
         <b>
             Note
         </b>
-        <div [innerHTML]="activity.description"></div>
+        <div [innerHTML]="activity.description | domsanitizer"></div>
     </div>
 </div>
 

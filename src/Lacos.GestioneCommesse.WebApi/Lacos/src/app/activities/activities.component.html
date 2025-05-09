@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h3>Attività</h3>
+        <h4>Attività</h4>
     </div>
 
     <div class="col-auto">
@@ -30,12 +30,12 @@
                 <div [style.background-color]="dataItem.activityColor" title="{{dataItem.type}}">&nbsp;</div>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="customer" title="Cliente">
+        <kendo-grid-column field="customer" title="Cliente" *ngIf="viewExportExcel">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="jobCode" title="Comm." [width]="1">
+        <kendo-grid-column field="jobCode" title="Comm." [width]="1" *ngIf="viewExportExcel">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div *ngIf="!dataItem.jobHasHighPriority">{{dataItem.jobCode}}</div>
                 <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
@@ -58,7 +58,7 @@
                 </span>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="jobReference" title="Riferimento">
+        <kendo-grid-column field="jobReference" title="Riferimento"*ngIf="viewExportExcel">
         </kendo-grid-column>
         <kendo-grid-column field="shortDescription" title="Descrizione Attività">
         </kendo-grid-column>

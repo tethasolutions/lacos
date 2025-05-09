@@ -10,6 +10,8 @@ import { CopyActivityModalComponent } from "../activities/copy-activity-modal.co
 import { CopyActivityModel } from "../services/activities/models";
 import { ActivitiesService } from "../services/activities/activities.service";
 import { MessageBoxService } from "../services/common/message-box.service";
+import { UserService } from "../services/security/user.service";
+import { Role, User } from "../services/security/models";
 
 @Component({
   selector: 'app-grid-context-menu',
@@ -27,6 +29,7 @@ export class GridContextMenuComponent extends BaseComponent {
     private readonly router: Router,
     private readonly _jobsService: JobsService,
     private readonly _activityService: ActivitiesService,
+    private readonly _user: UserService,
     private readonly _messageboxService: MessageBoxService
   ) {
     super();
@@ -34,6 +37,13 @@ export class GridContextMenuComponent extends BaseComponent {
 
   private contextItem: any;
   public isActivityGrid: boolean = false;
+  user: User;
+  isOperator: boolean = false;
+
+  ngOnInit() {
+    this.user = this._user.getUser();
+    this.isOperator = this.user?.role === Role.Operator;;
+  }
 
   public onCellClick(
     e: CellClickEvent,

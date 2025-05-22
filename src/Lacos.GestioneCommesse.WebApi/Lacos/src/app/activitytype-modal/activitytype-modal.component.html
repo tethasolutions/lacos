@@ -79,6 +79,14 @@
                         <div class="validation-message" [control]="form.controls['viewInPurchaseOrder']"></div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <label>Può avere dipendenze</label>
+                    <div class="form-group">
+                        <kendo-switch name="hasDependencies" [(ngModel)]="options.hasDependencies" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['hasDependencies']"></div>
+                    </div>
+                </div>
             </div>
             <div class="row riga-form">
                 <div class="col-md-3">

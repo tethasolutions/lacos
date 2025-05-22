@@ -173,7 +173,8 @@
                     <div class="form-group">
                         <label>Descrizione</label>
                         <kendo-editor name="informations" [(ngModel)]="options.activity.informations" [resizable]="true"
-                            [iframe]="false" [pasteCleanupSettings]="{ convertMsLists: true, removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
+                            [iframe]="false"
+                            [pasteCleanupSettings]="{ convertMsLists: true, removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
                             <kendo-toolbar>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
@@ -181,7 +182,8 @@
                                     <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
                                 <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
-                                <kendo-toolbar-colorpicker kendoEditorForeColor view="gradient"></kendo-toolbar-colorpicker>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor
+                                    view="gradient"></kendo-toolbar-colorpicker>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
@@ -273,13 +275,24 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end gap-2 mt-5">
-                <button type="button" (click)="dismiss()" class="btn btn-secondary">
-                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
-                </button>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-floppy-disk me-2"></i> SALVA
-                </button>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex justify-content gap-2 mt-5">
+                        <button type="button" (click)="onOpenDependecies()" class="btn btn-primary" *ngIf="options.activity.canHaveDependencies">
+                            <i class="fa fa-link me-2"></i> DIPENDENZE
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-end gap-2 mt-5">
+                        <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                            <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-floppy-disk me-2"></i> SALVA
+                        </button>
+                    </div>
+                </div>
             </div>
         </form>
     </kendo-window>
@@ -289,3 +302,4 @@
 <app-supplier-modal #supplierModal></app-supplier-modal>
 <app-message-modal #messageModal></app-message-modal>
 <app-gallery-modal #galleryModal></app-gallery-modal>
+<app-dependencies-modal #dependenciesModal [jobId]="options.activity.jobId" [activityId]="options.activity.id" *ngIf="options"></app-dependencies-modal>

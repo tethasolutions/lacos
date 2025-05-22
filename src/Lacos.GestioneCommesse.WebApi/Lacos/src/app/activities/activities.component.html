@@ -123,6 +123,10 @@
                         [disabled]="!dataItem.hasAttachments" (click)="openAttachments(dataItem.jobId, dataItem.id)">
                         <i class="fa fa-paperclip"></i>
                     </button>
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza dipendenze"
+                        [disabled]="!dataItem.hasDependencies" (click)="openDependencies(dataItem.jobId, dataItem.id)">
+                        <i class="fa fa-link"></i>
+                    </button>
                     <button [disabled]="!dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
                         (click)="askRemove(dataItem)">
                         <i class="fas fa-trash"></i>
@@ -137,3 +141,4 @@
 <app-activity-modal #activityModal></app-activity-modal>
 <app-customer-modal #customerModal></app-customer-modal>
 <app-jobs-attachments-modal #jobsAttachmentsModal></app-jobs-attachments-modal>
+<app-dependencies-modal #dependenciesModal></app-dependencies-modal>

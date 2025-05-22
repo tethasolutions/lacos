@@ -10,6 +10,9 @@ public interface IPurchaseOrdersService
     Task<PurchaseOrderDto> Update(PurchaseOrderDto purchaseOrderDto);
     Task Delete(long id);
     Task<int> GetNextNumber(int year);
+    IQueryable<PurchaseOrderReadModel> GetJobPurchaseOrders(long jobId);
+
+    //attachments ----------------------------------------------------
     Task<IEnumerable<PurchaseOrderAttachmentReadModel>> GetPurchaseOrderAttachments(long jobId, long purchaseOrderId);
     Task<PurchaseOrderAttachmentReadModel> GetPurchaseOrderAttachmentDetail(long attachmentId);
     Task<PurchaseOrderAttachmentReadModel> DownloadPurchaseOrderAttachment(string filename);

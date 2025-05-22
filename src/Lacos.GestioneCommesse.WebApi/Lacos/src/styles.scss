@@ -290,7 +290,7 @@ kendo-scheduler .k-event .k-event-actions:first-child,
     background: repeating-linear-gradient(135deg, $color1, $color1 $stripeSize, $color2 $stripeSize, $color2 $stripeSize*2);
 }
 
-app-activities {
+app-activities, app-dependencies-modal {
 
     .activity-expired .activity-status {
         @include striped-background(rgba(220, 53, 69, .3), rgba(220, 53, 69, .1));
@@ -415,7 +415,7 @@ app-jobs-suspended, app-jobs-progress-status {
     }
 }
 
-app-purchase-orders {
+app-purchase-orders, app-dependencies-modal {
 
     .purchase-order-canceled .purchase-order-status {
         @include striped-background(rgba(220, 53, 69, .3), rgba(220, 53, 69, .1));

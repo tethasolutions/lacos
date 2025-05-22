@@ -32,6 +32,7 @@ public class PurchaseOrderMappingProfile : Profile
             .Ignore(x => x.Operator)
             .Ignore(x => x.Messages)
             .Ignore(x => x.ActivityType)
+            .Ignore(x => x.ParentActivities)
             .AfterMap(AfterMap);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()

@@ -1,4 +1,6 @@
-<div class="row border-bottom mb-3">
+@if (job)
+{
+    <div class="row border-bottom mb-3">
     <div class="col-12 border-bottom mb-3">
         <h4>Dettaglio commessa {{job.code}}</h4>
     </div>
@@ -19,7 +21,7 @@
         <div [innerHTML]="job.description | domsanitizer"></div>
     </div>
 </div>
-
+}
 
 <app-activities [viewExportExcel]="false"></app-activities>
 <div><hr></div>

@@ -13,6 +13,7 @@ export class ActivityTypeModel {
 
     influenceJobStatus: boolean;
     viewInPurchaseOrder: boolean;
+    hasDependencies: boolean;
 
     constructor() {
         this.id = null;
@@ -27,6 +28,7 @@ export class ActivityTypeModel {
         this.statusLabel3 = "Completata";
         this.influenceJobStatus = false;
         this.viewInPurchaseOrder = false;
+        this.hasDependencies = false;
     }
 }
 

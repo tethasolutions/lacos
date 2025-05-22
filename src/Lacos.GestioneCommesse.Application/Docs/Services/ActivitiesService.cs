@@ -93,6 +93,7 @@ public class ActivitiesService : IActivitiesService
     {
             var activityDto = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
                 .Where(e => e.Id == id)
+                .Include(e => e.Type)
                 .Project<ActivityDto>(mapper)
                 .FirstOrDefaultAsync(), QueryFilter.OperatorEntity);
 
@@ -548,4 +549,79 @@ public class ActivitiesService : IActivitiesService
             .Project<ActivityReadModel>(mapper);
 
     }
+
+    public IQueryable<ActivityReadModel> GetJobActivities(long jobId)
+    {
+        var activities = repository
+            .Query()
+            .AsNoTracking()
+            .Where(e => e.JobId == jobId && e.Type!.HasDependencies != true);
+
+        return activities
+            .AsQueryable()
+            .Project<ActivityReadModel>(mapper);
+    }
+
+    public async Task UpdateDependencies(long id, DependencyDto dependencyDto)
+    {
+        var activity = await repository.Query()
+            .Include(a => a.ActivityDependencies)
+            .Include(a => a.PurchaseOrderDependencies)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (activity == null)
+        {
+            throw new NotFoundException($"Attività con Id {id} non trovata.");
+        }
+
+        activity.ActivityDependencies.Clear();
+        if (dependencyDto.ActivityDependenciesId.Any())
+        {
+            var dependencies = await repository.Query()
+                .Where(a => dependencyDto.ActivityDependenciesId.Contains(a.Id))
+                .ToListAsync();
+
+            foreach (var dep in dependencies)
+            {
+                activity.ActivityDependencies.Add(dep);
+            }
+        }
+
+        activity.PurchaseOrderDependencies.Clear();
+        if (dependencyDto.PurchaseOrderDependenciesId.Any())
+        {
+            var purchaseOrders = await dbContext.Set<PurchaseOrder>()
+                .Where(po => dependencyDto.PurchaseOrderDependenciesId.Contains(po.Id))
+                .ToListAsync();
+
+            foreach (var po in purchaseOrders)
+            {
+                activity.PurchaseOrderDependencies.Add(po);
+            }
+        }
+
+        repository.Update(activity);
+        await dbContext.SaveChanges();
+    }
+    public async Task<DependencyDto> GetDependencies(long id)
+    {
+        var activity = await repository.Query()
+            .Include(a => a.ActivityDependencies)
+            .Include(a => a.PurchaseOrderDependencies)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (activity == null)
+        {
+            throw new NotFoundException($"Attività con Id {id} non trovata.");
+        }
+
+        var dto = new DependencyDto
+        {
+            ActivityDependenciesId = activity.ActivityDependencies.Select(a => a.Id).ToList(),
+            PurchaseOrderDependenciesId = activity.PurchaseOrderDependencies.Select(po => po.Id).ToList()
+        };
+
+        return dto;
+    }
+
 }

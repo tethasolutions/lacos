@@ -29,6 +29,7 @@ import { UserService } from '../services/security/user.service';
 import { MessagesService } from '../services/messages/messages.service';
 import { MessageModalComponent } from '../messages/message-modal.component';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
+import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
 
 @Component({
     selector: 'app-activity-modal',
@@ -40,6 +41,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
     @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
+    @ViewChild('dependenciesModal', { static: false }) dependenciesModal: DependenciesModalComponent;
 
     activityTypes: ActivityTypeModel[];
     customer: CustomerModel;
@@ -146,6 +148,10 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         }
     }
 
+    onOpenDependecies() {
+        this.dependenciesModal.open();
+    }
+
     override open(options: ActivityModalOptions) {
         const result = super.open(options);
 
@@ -172,8 +178,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
                     .subscribe()
             );
         }
-        else
-        {
+        else {
             this._getJobs(0);
         }
 
@@ -357,7 +362,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
             this.options.activity.attachments.findAndRemove(e => e.displayName === deletedFile);
         }
     }
-    
+
     protected _getCurrentOperator(userId: number) {
         this._subscriptions.push(
             this._operatorsService.getOperatorByUserId(userId)
@@ -370,8 +375,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
 
     initNewMessage() {
         this.targetOperatorsArray = [];
-        if (this.options.activity.id == 0) 
-        {
+        if (this.options.activity.id == 0) {
             this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
             return;
         }
@@ -391,7 +395,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     createMessage() {
         const today = new Date();
         const message = new MessageModel(0, today, null, this.currentOperator.id, null, this.options.activity.id, null, null, false);
-        const options = new MessageModalOptions(message,true,true, this.targetOperatorsArray);
+        const options = new MessageModalOptions(message, true, true, this.targetOperatorsArray);
 
         this._subscriptions.push(
             this.messageModal.open(options)
@@ -430,12 +434,12 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         this.updateUnreadCounter();
         //this._read();
     }
-    
+
     editMessage(message: MessageReadModel) {
         this._subscriptions.push(
             this._messagesService.get(message.id)
                 .pipe(
-                    map(e => new MessageModalOptions(e,false)),
+                    map(e => new MessageModalOptions(e, false)),
                     switchMap(e => this.messageModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._messagesService.update(this.messageModal.options.message)),

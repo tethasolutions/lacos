@@ -3,12 +3,13 @@ import { HttpClient, HttpEventType, HttpRequest, HttpResponse } from '@angular/c
 import { filter, map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
-import { Activity, ActivityCounter, ActivityDetail, ActivityStatus, CopyActivityModel, NewActivityCounter } from './models';
+import { Activity, ActivityCounter, ActivityDetail, ActivityStatus, CopyActivityModel, IActivityReadModel, NewActivityCounter } from './models';
 import { readData } from '../common/functions';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 import { ActivityAttachmentModel } from './activity-attachment.model';
 import { ActivityAttachmentUploadFileModel } from './activity-attachment-upload-file.model';
 import { UserService } from '../security/user.service';
+import { DependencyModel } from 'src/app/shared/models/dependency.models';
 
 @Injectable()
 export class ActivitiesService {
@@ -105,10 +106,30 @@ export class ActivitiesService {
             );
     }
 
+    readJobActivities(state: State, jobId: number) {
+        const url = `${this._baseUrl}/job-activities-dependencies/${jobId}`
+
+        return readData(this._http, state, url);
+    }
+
     readNewActivitiesCounter() {
         return this._http.get<NewActivityCounter>(`${this._baseUrl}/new-activities-counter`)
             .pipe(
                 map(e => NewActivityCounter.build(e))
+            );
+    }
+
+    updateDependencies(activityId: number, dependencyModel: DependencyModel) {
+        return this._http.put<void>(`${this._baseUrl}/update-dependencies/${activityId}`, dependencyModel)
+            .pipe(
+                map(() => { })
+            );
+    }
+
+    readDependencies(activityId: number) {
+        return this._http.get<DependencyModel>(`${this._baseUrl}/read-dependencies/${activityId}`)
+            .pipe(
+                map(e => DependencyModel.build(e))
             );
     }
 
@@ -164,7 +185,7 @@ export class ActivitiesService {
                 map(() => { })
             );
     }
-    
+
     copyActivityToJob(copyActivityModel: CopyActivityModel) {
         return this._http.post<CopyActivityModel>(`${this._baseUrl}/copy-activity`, copyActivityModel)
             .pipe(

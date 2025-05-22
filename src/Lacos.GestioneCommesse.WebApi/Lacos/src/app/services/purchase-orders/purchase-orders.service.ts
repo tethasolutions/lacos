@@ -54,6 +54,12 @@ export class PurchaseOrdersService {
             );
     }
 
+    readJobPurchaseOrders(state: State, jobId: number) {
+        const url = `${this._baseUrl}/job-purchaseOrders-dependencies/${jobId}`
+
+        return readData(this._http, state, url);
+    }
+
     createPurchaseOrderAttachment(request: PurchaseOrderAttachmentModel) {
         return this._http.post<PurchaseOrderAttachmentModel>(`${this._baseUrl}/create-attachment`, request)
             .pipe(

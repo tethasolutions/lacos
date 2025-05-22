@@ -150,6 +150,7 @@ import { CopyActivityModalComponent } from './activities/copy-activity-modal.com
 import { CopyChecklistModalComponent } from './checklist-modal/copy-checklist-modal.component';
 import { JobsArchiveComponent } from './jobs/jobs-archive.component';
 import { DomSanitizerPipe } from './shared/pipes/domsanitizer.pipe';
+import { DependenciesModalComponent } from './dependencies/dependencies-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -243,7 +244,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         HelperDocumentsComponent,
         HelperDocumentModalComponent,
         SharepointModalComponent,
-        SharepointImageDirective
+        SharepointImageDirective,
+        DependenciesModalComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,

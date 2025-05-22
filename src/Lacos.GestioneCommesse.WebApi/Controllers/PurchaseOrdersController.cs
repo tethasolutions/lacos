@@ -58,6 +58,15 @@ public class PurchaseOrdersController : LacosApiController
         return service.Delete(id);
     }
 
+    [HttpGet("job-purchaseOrders-dependencies/{jobId}")]
+    public Task<DataSourceResult> GetJobActivities([DataSourceRequest] DataSourceRequest request, long jobId)
+    {
+        return service.GetJobPurchaseOrders(jobId)
+            .ToDataSourceResultAsync(request);
+    }
+
+    // attachments ---------------------------------------------------------------------
+
     [HttpPost("create-attachment")]
     public async Task<IActionResult> CreatePurchaseOrderAttachment([FromBody] PurchaseOrderAttachmentDto purchaseOrderAttachmentDtoDto)
     {

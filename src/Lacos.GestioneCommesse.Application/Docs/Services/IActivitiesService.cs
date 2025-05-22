@@ -16,7 +16,12 @@ public interface IActivitiesService
     Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters();
     Task<ActivityCounterNewDto> GetNewActivitiesCounter();
     Task<ActivityDto> CopyActivity(ActivityCopyDto activityCopyDto);
+    IQueryable<ActivityReadModel> GetJobActivities(long jobId); 
+    Task UpdateDependencies(long id, DependencyDto dependencyDto);
+    Task<DependencyDto> GetDependencies(long id);
 
+
+    //attachments------------------------------------------------------------------------
     Task<IEnumerable<ActivityAttachmentReadModel>> GetActivityAttachments(long jobId, long activityId);
     Task<ActivityAttachmentReadModel> GetActivityAttachmentDetail(long attachmentId);
     Task<ActivityAttachmentDto> UpdateActivityAttachment(long id, ActivityAttachmentDto attachmentDto);

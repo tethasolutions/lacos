@@ -217,5 +217,17 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         return attachment.MapTo<PurchaseOrderAttachmentDto>(mapper);
     }
+
     //------------------------------------------------------------------------------------------------------------
+    public IQueryable<PurchaseOrderReadModel> GetJobPurchaseOrders(long jobId)
+    {
+        var query = repository
+            .Query()
+            .AsNoTracking()
+            .Where(e => e.JobId == jobId);
+
+        return query
+            .AsQueryable()
+            .Project<PurchaseOrderReadModel>(mapper);
+    }
 }

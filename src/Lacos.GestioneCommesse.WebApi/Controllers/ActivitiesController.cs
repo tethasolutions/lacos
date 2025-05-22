@@ -5,9 +5,7 @@ using Lacos.GestioneCommesse.Application.Docs.Services;
 using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -94,6 +92,27 @@ public class ActivitiesController : LacosApiController
     {
         return await service.GetNewActivitiesCounter();
     }
+
+    [HttpGet("job-activities-dependencies/{jobId}")]
+    public Task<DataSourceResult> GetJobActivities([DataSourceRequest] DataSourceRequest request, long jobId)
+    {
+        return service.GetJobActivities(jobId)
+            .ToDataSourceResultAsync(request); 
+    }
+
+    [HttpPut("update-dependencies/{id}")]
+    public Task UpdateDependencies(long id, DependencyDto dependencyDto)
+    {
+        return service.UpdateDependencies(id, dependencyDto);
+    }
+
+    [HttpGet("read-dependencies/{id}")]
+    public async Task<DependencyDto> GetDependencies(long id)
+    {
+        return await service.GetDependencies(id);
+    }
+
+    //attachments ----------------------------------------------------------------------------
 
     [HttpGet("attachment-detail/{id}")]
     public async Task<ActivityAttachmentReadModel> GetAttachmentDetail(long id)

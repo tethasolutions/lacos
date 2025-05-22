@@ -21,6 +21,7 @@ import { StorageService } from '../services/common/storage.service';
 import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.component';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
+import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
 
 @Component({
     selector: 'app-activities',
@@ -33,6 +34,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('jobsAttachmentsModal', { static: true }) jobsAttachmentsModal: JobsAttachmentsModalComponent;
+    @ViewChild('dependenciesModal', { static: false }) dependenciesModal: DependenciesModalComponent;
 
     data: GridDataResult;
     gridState: State = {
@@ -123,7 +125,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     create() {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null, "In attesa", "In corso", "Pronto", "Completata", false, [], []);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null, 
+            "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -194,6 +197,13 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                 )
                 .subscribe()
         );
+    }
+
+    openDependencies(jobId: number, activityId: number) {
+        this.dependenciesModal.jobId = jobId;
+        this.dependenciesModal.activityId = activityId;
+        this.dependenciesModal.readonly = true;
+        this.dependenciesModal.open();
     }
 
     cellClickHandler(args: CellClickEvent): void {

@@ -37,6 +37,9 @@ public class Activity : FullAuditedEntity
     public ICollection<ActivityProduct> ActivityProducts { get; set; }
     public ICollection<ActivityAttachment> Attachments { get; set; }
     public ICollection<Message> Messages { get; set; }
+    public ICollection<Activity> ParentActivities{ get; set; }
+    public ICollection<Activity> ActivityDependencies { get; set; }
+    public ICollection<PurchaseOrder> PurchaseOrderDependencies { get; set; }
 
     public Activity()
     {
@@ -44,6 +47,9 @@ public class Activity : FullAuditedEntity
         ActivityProducts = new List<ActivityProduct>();
         Attachments = new List<ActivityAttachment>();
         Messages = new List<Message>();
+        ActivityDependencies = new List<Activity>();
+        PurchaseOrderDependencies = new List<PurchaseOrder>();
+        ParentActivities = new List<Activity>();
     }
 
     public void SetNumber(int number)

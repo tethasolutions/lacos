@@ -79,7 +79,8 @@ export class PurchaseOrder {
         const userAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => !e.isAdminDocument);
         const adminAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => e.isAdminDocument);
         const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.activityTypeId, o.jobId, o.supplierId, o.supplierName, o.operatorId, items, attachments, userAttachments, adminAttachments, messages);
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.activityTypeId, o.jobId, o.supplierId, 
+            o.supplierName, o.operatorId, items, attachments, userAttachments, adminAttachments, messages);
     }
 
 }

@@ -41,4 +41,7 @@ public class ActivityReadModel
 
     public DateTimeOffset? CreatedOn { get; set; }
     public DateTimeOffset? EditedOn { get; set; }
+
+    public bool? CanHaveDependencies { get; set; }
+    public bool? HasDependencies { get; set; }
 }

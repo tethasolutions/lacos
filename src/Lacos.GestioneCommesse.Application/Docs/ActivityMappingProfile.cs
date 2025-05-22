@@ -41,7 +41,9 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3)
            .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead))
            .MapMember(x => x.CreatedOn, y => y.CreatedOn)
-           .MapMember(x => x.EditedOn, y => y.EditedOn);
+           .MapMember(x => x.EditedOn, y => y.EditedOn)
+           .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies)
+           .MapMember(x => x.HasDependencies, y => y.ActivityDependencies.Any() || y.PurchaseOrderDependencies.Any());
 
         CreateMap<ActivityDto, Activity>()
            .IgnoreCommonMembers()
@@ -58,6 +60,9 @@ public class ActivityMappingProfile : Profile
            .Ignore(x => x.Attachments)
            .Ignore(x => x.IsNewReferent)
            .Ignore(x => x.Messages)
+           .Ignore(x => x.ParentActivities)
+           .Ignore(x => x.ActivityDependencies)
+           .Ignore(x => x.PurchaseOrderDependencies)
            .AfterMap(AfterMap);
 
         CreateMap<Activity, ActivityDto>()
@@ -65,7 +70,8 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
-           .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3);
+           .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3)
+           .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies);
 
         CreateMap<Activity, ActivityDetailDto>()
            .MapMember(x => x.Number, y => y.RowNumber)
@@ -78,7 +84,8 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
-           .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3);
+           .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3)
+           .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies);
 
         CreateMap<ActivityAttachment, ActivityAttachmentReadModel>();
         CreateMap<ActivityAttachmentReadModel, ActivityAttachment>()

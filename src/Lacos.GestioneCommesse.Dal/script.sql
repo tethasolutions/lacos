@@ -3760,3 +3760,58 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [HasDependencies] bit NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+BEGIN
+    CREATE TABLE [Docs].[ActivityDependencies] (
+        [ActivityDependenciesId] bigint NOT NULL,
+        [ParentActivitiesId] bigint NOT NULL,
+        CONSTRAINT [PK_ActivityDependencies] PRIMARY KEY ([ActivityDependenciesId], [ParentActivitiesId]),
+        CONSTRAINT [FK_ActivityDependencies_Activities_ActivityDependenciesId] FOREIGN KEY ([ActivityDependenciesId]) REFERENCES [Docs].[Activities] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_ActivityDependencies_Activities_ParentActivitiesId] FOREIGN KEY ([ParentActivitiesId]) REFERENCES [Docs].[Activities] ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+BEGIN
+    CREATE TABLE [Docs].[PurchaseOrderDependencies] (
+        [ParentActivitiesId] bigint NOT NULL,
+        [PurchaseOrderDependenciesId] bigint NOT NULL,
+        CONSTRAINT [PK_PurchaseOrderDependencies] PRIMARY KEY ([ParentActivitiesId], [PurchaseOrderDependenciesId]),
+        CONSTRAINT [FK_PurchaseOrderDependencies_Activities_ParentActivitiesId] FOREIGN KEY ([ParentActivitiesId]) REFERENCES [Docs].[Activities] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_PurchaseOrderDependencies_PurchaseOrders_PurchaseOrderDependenciesId] FOREIGN KEY ([PurchaseOrderDependenciesId]) REFERENCES [Docs].[PurchaseOrders] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+BEGIN
+    CREATE INDEX [IX_ActivityDependencies_ParentActivitiesId] ON [Docs].[ActivityDependencies] ([ParentActivitiesId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+BEGIN
+    CREATE INDEX [IX_PurchaseOrderDependencies_PurchaseOrderDependenciesId] ON [Docs].[PurchaseOrderDependencies] ([PurchaseOrderDependenciesId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250522102845_dipendenze attività', N'7.0.10');
+END;
+GO
+
+COMMIT;
+GO
+

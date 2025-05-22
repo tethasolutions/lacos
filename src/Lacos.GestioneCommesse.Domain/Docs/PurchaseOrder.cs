@@ -23,15 +23,18 @@ public class PurchaseOrder : FullAuditedEntity
     public long? OperatorId { get; set; }
     public Operator? Operator { get; set; }
 
+
     public ICollection<PurchaseOrderItem> Items { get; set; }
     public ICollection<PurchaseOrderAttachment> Attachments { get; set; }
     public ICollection<Message> Messages { get; set; }
+    public ICollection<Activity> ParentActivities { get; set; }
 
     public PurchaseOrder()
     {
         Items = new List<PurchaseOrderItem>();
         Attachments = new List<PurchaseOrderAttachment>();
         Messages = new List<Message>();
+        ParentActivities = new List<Activity>();
     }
 
     public void SetCode(int year, int number)

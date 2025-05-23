@@ -9,6 +9,7 @@ using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -27,6 +28,7 @@ public class ActivitiesService : IActivitiesService
     private readonly IRepository<Job> jobRepository;
     private readonly IRepository<Ticket> ticketRepository;
     private readonly ILacosSession session;
+    private readonly ILogger logger;
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
     j.Activities
@@ -54,7 +56,8 @@ public class ActivitiesService : IActivitiesService
         IRepository<Ticket> ticketRepository,
         ILacosSession session, 
         IRepository<ActivityAttachment> activityAttachmentRepository,
-        IRepository<ActivityType> activityTypeRepository
+        IRepository<ActivityType> activityTypeRepository,
+        ILogger logger
     )
     {
         this.mapper = mapper;
@@ -67,6 +70,7 @@ public class ActivitiesService : IActivitiesService
         this.jobRepository = jobRepository;
         this.ticketRepository = ticketRepository;
         this.session = session;
+        this.logger = logger;
     }
 
 
@@ -146,7 +150,7 @@ public class ActivitiesService : IActivitiesService
         }
 
         await dbContext.SaveChanges();
-
+        
         ActivityType activityType = await activityTypeRepository.Get(activity.TypeId);
         if ((bool)activityType.InfluenceJobStatus && activity.JobId != null)
         {

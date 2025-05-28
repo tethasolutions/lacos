@@ -24,8 +24,8 @@
                 Esporta in Excel
             </button>
         </ng-template>
-        <kendo-grid-column field="activityColor" [sortable]="true" [filterable]="false" title=" "
-            class="activity-color" width="1" kendoTooltip>
+        <kendo-grid-column field="activityColor" [sortable]="true" [filterable]="false" title=" " class="activity-color"
+            width="1" kendoTooltip>
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div [style.background-color]="dataItem.activityColor" title="{{dataItem.type}}">&nbsp;</div>
             </ng-template>
@@ -58,9 +58,20 @@
                 </span>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="jobReference" title="Riferimento"*ngIf="viewExportExcel">
+        <kendo-grid-column field="jobReference" title="Riferimento" *ngIf="viewExportExcel">
         </kendo-grid-column>
         <kendo-grid-column field="shortDescription" title="Descrizione Attività">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.shortDescription}}<br/>
+                <div class="progress-container" [ngClass]="{'progress-hide': (dataItem.totalDependencies == 0)}"
+                    kendoTooltip
+                    title="Dipendenze evase {{dataItem.fulfilledDependencies}} / {{dataItem.totalDependencies}}">
+                    <div class="progress-bar"
+                        [style.width.%]="dataItem.totalDependencies ? (dataItem.fulfilledDependencies / dataItem.totalDependencies * 100) : 0">
+                        {{dataItem.fulfilledDependencies}} / {{dataItem.totalDependencies}}
+                    </div>
+                </div>
+            </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="expirationDate" title="Scadenza" filter="date" format="dd/MM/yyyy" [width]="1">
             <ng-template kendoGridCellTemplate let-dataItem>
@@ -85,7 +96,7 @@
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div class="text-nowrap" style="font-size: 0.8rem;">
                     <i>Ins: {{dataItem.createdOn | date:'dd/MM/yyyy'}}</i>
-                    @if (dataItem.editedOn){<br/><i>Mod: {{dataItem.editedOn | date:'dd/MM/yyyy'}}</i>}
+                    @if (dataItem.editedOn){<br /><i>Mod: {{dataItem.editedOn | date:'dd/MM/yyyy'}}</i>}
                 </div>
             </ng-template>
         </kendo-grid-column>

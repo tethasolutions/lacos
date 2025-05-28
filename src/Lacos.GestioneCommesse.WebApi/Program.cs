@@ -17,7 +17,7 @@ builder.Host.UseSerilog((context, provider, config) => {
             SchemaName = "Logs",
             AutoCreateSqlTable = true,
         },
-        restrictedToMinimumLevel: LogEventLevel.Information
+        restrictedToMinimumLevel: LogEventLevel.Warning
        );
     });
 

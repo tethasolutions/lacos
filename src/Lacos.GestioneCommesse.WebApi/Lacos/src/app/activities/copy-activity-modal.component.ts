@@ -5,7 +5,7 @@ import { tap } from 'rxjs';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { JobsService } from '../services/jobs/jobs.service';
 import { State } from '@progress/kendo-data-query';
-import { IJobReadModel } from '../services/jobs/models';
+import { IJobReadModel, JobStatus } from '../services/jobs/models';
 
 @Component({
     selector: 'app-copy-activity-modal',
@@ -23,10 +23,10 @@ export class CopyActivityModalComponent extends ModalFormComponent<CopyActivityM
     }
 
     ngOnInit() {
-        this._getJobs();
     }
 
     override open(options: CopyActivityModel) {
+        if (this.jobs == null) this._getJobs();
         const result = super.open(options);
 
         return result;
@@ -45,7 +45,13 @@ export class CopyActivityModalComponent extends ModalFormComponent<CopyActivityM
     private _getJobs() {
         const state: State = {
             filter: {
-                filters: [],
+                filters: [
+                    {
+                        filters: [JobStatus.Pending, JobStatus.InProgress, JobStatus.Completed]
+                            .map(e => ({ field: 'status', operator: 'eq', value: e })),
+                        logic: 'or'
+                    }
+                ],
                 logic: 'and'
             },
             sort: [

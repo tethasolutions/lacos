@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Lacos.GestioneCommesse.Framework.Exceptions;
+﻿using Lacos.GestioneCommesse.Framework.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using Lacos.GestioneCommesse.Application;
@@ -11,6 +10,7 @@ using Lacos.GestioneCommesse.WebApi.Auth;
 using Lacos.GestioneCommesse.WebApi.Configuration;
 using Lacos.GestioneCommesse.WebApi.ModelBinders;
 using Newtonsoft.Json;
+using AutoMapper;
 
 namespace Lacos.GestioneCommesse.WebApi;
 

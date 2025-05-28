@@ -19,6 +19,7 @@ import { InterventionsGridComponent } from '../interventions/interventions-grid.
 import { ApiUrls } from '../services/common/api-urls';
 import { JobModalComponent } from '../jobs/job-modal.component';
 import { JobsService } from '../services/jobs/jobs.service';
+import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
 
 @Component({
     selector: 'app-activity',
@@ -26,29 +27,16 @@ import { JobsService } from '../services/jobs/jobs.service';
 })
 export class ActivityComponent extends BaseComponent implements OnInit {
 
-    @ViewChild('form', { static: false })
-    form: NgForm;
+    @ViewChild('form', { static: false }) form: NgForm;
 
-    @ViewChild('jobModal', { static: true })
-    jobModal: JobModalComponent;
-    
-    @ViewChild('activityModal', { static: true })
-    activityModal: ActivityModalComponent;
-
-    @ViewChild('activityProductModal', { static: true })
-    activityProductModal: ActivityProductModalComponent;
-
-    @ViewChild('activityProducts', { static: false })
-    activityProducts: ActivityProductsComponent;
-
-    @ViewChild('interventionsCalendar', { static: false })
-    interventionsCalendar: InterventionsCalendarComponent;
-
-    @ViewChild('interventionsGrid', { static: false })
-    interventionsGrid: InterventionsGridComponent;
-
-    @ViewChild('interventionModal', { static: true })
-    interventionModal: InterventionModalComponent;
+    @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;
+    @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
+    @ViewChild('activityProductModal', { static: true }) activityProductModal: ActivityProductModalComponent;
+    @ViewChild('activityProducts', { static: false }) activityProducts: ActivityProductsComponent;
+    @ViewChild('interventionsCalendar', { static: false }) interventionsCalendar: InterventionsCalendarComponent;
+    @ViewChild('interventionsGrid', { static: false }) interventionsGrid: InterventionsGridComponent;
+    @ViewChild('interventionModal', { static: true }) interventionModal: InterventionModalComponent;
+    @ViewChild('dependenciesModal', { static: false }) dependenciesModal: DependenciesModalComponent;
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
     activity: ActivityDetail;
@@ -97,7 +85,7 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     }
 
     createActivityProduct() {
-        const product = new ActivityProduct(0,this.activity.id, null, null, null, null);
+        const product = new ActivityProduct(0, this.activity.id, null, null, null, null);
         const options = new ActivityProductModalOptions(product);
 
         this._subscriptions.push(
@@ -127,8 +115,8 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     createIntervention() {
         const now = new Date();
         const intervention = new Intervention(0, new Date(new Date(new Date().setMinutes(0)).setSeconds(0)),
-        new Date(new Date(new Date().setMinutes(0)).setSeconds(0)).addHours(1), InterventionStatus.Scheduled, false,
-        this.activity.informations, null, this.activity.id, this.activity.jobId, [], [], []);
+            new Date(new Date(new Date().setMinutes(0)).setSeconds(0)).addHours(1), InterventionStatus.Scheduled, false,
+            this.activity.informations, null, this.activity.id, this.activity.jobId, [], [], []);
 
         this._subscriptions.push(
             this.interventionModal.open(intervention)
@@ -143,6 +131,13 @@ export class ActivityComponent extends BaseComponent implements OnInit {
 
     onInterventionsChanged() {
         this._getActivity();
+    }
+
+    openDependencies(jobId: number, activityId: number) {
+        this.dependenciesModal.jobId = jobId;
+        this.dependenciesModal.activityId = activityId;
+        this.dependenciesModal.readonly = true;
+        this.dependenciesModal.open();
     }
 
     assignAllCustomerProducts() {

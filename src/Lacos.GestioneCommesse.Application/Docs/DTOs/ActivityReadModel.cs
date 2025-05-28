@@ -44,4 +44,7 @@ public class ActivityReadModel
 
     public bool? CanHaveDependencies { get; set; }
     public bool? HasDependencies { get; set; }
+
+    public int? TotalDependencies { get; set; }
+    public int? FulfilledDependencies { get; set; }
 }

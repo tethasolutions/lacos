@@ -7,6 +7,7 @@ using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
@@ -19,6 +20,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     private readonly IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
+    private readonly ILogger<ActivitiesService> logger;
 
     public PurchaseOrdersService(
         IMapper mapper,
@@ -26,7 +28,8 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         IRepository<PurchaseOrderItem> repositoryItem,
         IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository,
         ILacosSession session,
-        ILacosDbContext dbContext
+        ILacosDbContext dbContext,
+        ILogger<ActivitiesService> logger
     )
     {
         this.mapper = mapper;
@@ -35,6 +38,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         this.purchaseOrderAttachmentRepository = purchaseOrderAttachmentRepository;
         this.session = session;
         this.dbContext = dbContext;
+        this.logger = logger;
     }
 
     public IQueryable<PurchaseOrderReadModel> Query()
@@ -99,8 +103,13 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Include(e => e.Items)
             .Include(x => x.Attachments)
             .Include(x => x.Messages)
-            //.Include(x => x.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
-            //    m.MessageNotifications.Any(mn => mn.OperatorId == session.CurrentUser.OperatorId)))
+            .Include(x => x.Job)
+            .Include(x => x.ParentActivities)
+            .ThenInclude(y => y.Type)
+            .Include(x => x.ParentActivities)
+            .ThenInclude(y => y.ActivityDependencies)
+            .Include(x => x.ParentActivities)
+            .ThenInclude(y => y.PurchaseOrderDependencies)
             .FirstOrDefaultAsync();
 
         if (purchaseOrder == null)
@@ -109,6 +118,31 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         }
 
         purchaseOrder = purchaseOrderDto.MapTo(purchaseOrder, mapper);
+
+        //check if has parent activities
+        if ((purchaseOrder.Status == PurchaseOrderStatus.Completed)
+            && purchaseOrder.ParentActivities.Any())
+        {
+            logger.LogWarning($"[{purchaseOrder.JobId}]Commessa {purchaseOrder.Job.Number.ToString("000")}/{purchaseOrder.Job.Year}: " +
+                $"Ordine del {purchaseOrder.Date.ToString("dd/MM/yy")} in stato '{purchaseOrder.Status}' " +
+                $"è dipendenza di altre {purchaseOrder.ParentActivities.Count()} attività");
+
+            foreach (var parentActivity in purchaseOrder.ParentActivities)
+            {
+                if (parentActivity.ActivityDependencies.All(a => a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
+                    && parentActivity.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed))
+                {
+                    logger.LogWarning($"[{purchaseOrder.JobId}]-Commessa {purchaseOrder.Job.Number.ToString("000")}/{purchaseOrder.Job.Year}: " +
+                        $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: tutte le dipendenze sono evase -> cambio stato '{parentActivity.Status}' -> '{ActivityStatus.InProgress}' ");
+                    parentActivity.Status = ActivityStatus.InProgress;
+                }
+                else
+                {
+                    logger.LogWarning($"[{purchaseOrder.JobId}]-Commessa {purchaseOrder.Job.Number.ToString("000")}/{purchaseOrder.Job.Year}: " +
+                        $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: non tutte le dipendenze sono evase -> stato '{parentActivity.Status}' invariato");
+                }
+            }
+        }
 
         repository.Update(purchaseOrder);
 

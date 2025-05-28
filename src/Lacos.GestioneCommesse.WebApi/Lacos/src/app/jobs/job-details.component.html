@@ -1,32 +1,57 @@
 @if (job)
 {
-    <div class="row border-bottom mb-3">
+<div class="row border-bottom mb-3">
     <div class="col-12 border-bottom mb-3">
-        <h4>Dettaglio commessa {{job.code}}</h4>
+        <div class="d-flex gap-2">
+            <h4>Dettaglio commessa {{job.code}}</h4>
+            <a class="btn btn-primary btn-sm" (click)="edit()">
+                <span class="fa fa-edit"></span>
+                Scheda commessa
+            </a>
+        </div>
     </div>
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-2 col-sm-6">
         <h6>Riferimento</h6>
         <p>{{job.reference}}</p>
     </div>
     <div class="col-md-3 col-sm-6">
+        <h6>Contatti</h6>
+        <p>{{address.fullAddress}}<br />
+            Tel: {{address.telephone}}</p>
+    </div>
+    <div class="col-md-1 col-sm-6">
         <h6>Data</h6>
         <p>{{job.date | date:'dd/MM/yyyy' }}</p>
     </div>
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-1 col-sm-6">
         <h6>Stato</h6>
         <p>{{job.status | jobStatus}}</p>
     </div>
-    <div class="col-md-3 col-sm-6">
-        <h6>Note</h6>
-        <div [innerHTML]="job.description | domsanitizer"></div>
+    <div class="col-md-5 col-sm-6">
+        <h6>
+            <button class="btn btn-link p-0" style="margin-top: -5px" type="button" data-bs-toggle="collapse" data-bs-target="#noteAccordion"
+                aria-expanded="false" aria-controls="noteAccordion">
+                Note <i class="fa fa-chevron-down"></i>
+            </button>
+        </h6>
+        <div class="collapse" id="noteAccordion">
+            <div [innerHTML]="job.description | domsanitizer"></div>
+        </div>
     </div>
 </div>
 }
 
 <app-activities [viewExportExcel]="false"></app-activities>
-<div><hr></div>
+<div>
+    <hr>
+</div>
 <app-purchase-orders [viewExportExcel]="false"></app-purchase-orders>
-<div><hr></div>
+<div>
+    <hr>
+</div>
 <app-tickets [viewExportExcel]="false"></app-tickets>
-<div><hr></div>
+<div>
+    <hr>
+</div>
 <app-interventions-list [viewNewInterventionButton]="false"></app-interventions-list>
+<app-job-modal #jobDetailModal></app-job-modal>

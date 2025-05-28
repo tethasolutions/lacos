@@ -55,6 +55,8 @@ export interface IActivityReadModel {
     readonly editedOn: Date | string;
     readonly canHaveDependencies: boolean;
     readonly hasDependencies: boolean;
+    readonly totalDependencies: number;
+    readonly fulfilledDependencies: number;
 
 }
 
@@ -147,6 +149,9 @@ export class ActivityDetail {
         readonly statusLabel3: string,
         readonly isFloorDelivery: boolean,
         readonly canHaveDependencies: boolean,
+        readonly hasDependencies: boolean,
+        readonly totalDependencies: number,
+        readonly fulfilledDependencies: number,
         public attachments: ActivityAttachmentModel[],
         public messages: MessageReadModel[]
     ) {
@@ -166,7 +171,8 @@ export class ActivityDetail {
 
         return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate,
-            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery, o.canHaveDependencies, attachments, messages);
+            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery, o.canHaveDependencies, 
+            o.hasDependencies, o.totalDependencies, o.fulfilledDependencies, attachments, messages);
     }
 
 }

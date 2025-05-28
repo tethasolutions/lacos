@@ -43,7 +43,11 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.CreatedOn, y => y.CreatedOn)
            .MapMember(x => x.EditedOn, y => y.EditedOn)
            .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies)
-           .MapMember(x => x.HasDependencies, y => y.ActivityDependencies.Any() || y.PurchaseOrderDependencies.Any());
+           .MapMember(x => x.HasDependencies, y => y.ActivityDependencies.Any() || y.PurchaseOrderDependencies.Any())
+           .MapMember(x => x.TotalDependencies, y => (y.ActivityDependencies.Any() ? y.ActivityDependencies.Count() : 0) + 
+                (y.PurchaseOrderDependencies.Any() ? y.PurchaseOrderDependencies.Count() : 0))
+           .MapMember(x => x.FulfilledDependencies, y => (y.ActivityDependencies.Any(a => a.Status >= ActivityStatus.Ready) ? y.ActivityDependencies.Count(a => a.Status >= ActivityStatus.Ready) : 0) +
+                (y.PurchaseOrderDependencies.Any(p => p.Status == PurchaseOrderStatus.Completed) ? y.PurchaseOrderDependencies.Count(p => p.Status == PurchaseOrderStatus.Completed) : 0));
 
         CreateMap<ActivityDto, Activity>()
            .IgnoreCommonMembers()
@@ -85,7 +89,12 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
            .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3)
-           .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies);
+           .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies)
+           .MapMember(x => x.HasDependencies, y => y.ActivityDependencies.Any() || y.PurchaseOrderDependencies.Any())
+           .MapMember(x => x.TotalDependencies, y => (y.ActivityDependencies.Any() ? y.ActivityDependencies.Count() : 0) +
+                (y.PurchaseOrderDependencies.Any() ? y.PurchaseOrderDependencies.Count() : 0))
+           .MapMember(x => x.FulfilledDependencies, y => (y.ActivityDependencies.Any(a => a.Status >= ActivityStatus.Ready) ? y.ActivityDependencies.Count(a => a.Status >= ActivityStatus.Ready) : 0) +
+                (y.PurchaseOrderDependencies.Any(p => p.Status == PurchaseOrderStatus.Completed) ? y.PurchaseOrderDependencies.Count(p => p.Status == PurchaseOrderStatus.Completed) : 0));
 
         CreateMap<ActivityAttachment, ActivityAttachmentReadModel>();
         CreateMap<ActivityAttachmentReadModel, ActivityAttachment>()

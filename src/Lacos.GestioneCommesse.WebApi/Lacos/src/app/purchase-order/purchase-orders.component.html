@@ -47,7 +47,7 @@
         </kendo-grid-column>
         <kendo-grid-column field="expectedDate" title="Prevista Cons." filter="date" [width]="1">
             <ng-template kendoGridCellTemplate let-dataItem>
-                {{dataItem.date | date:'dd/MM/yyyy'}}
+                {{dataItem.expectedDate | date:'dd/MM/yyyy'}}
             </ng-template>
         </kendo-grid-column>
         <!-- <kendo-grid-column field="code" title="N." [width]="1" filter="numeric" format="n0">

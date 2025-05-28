@@ -11,7 +11,7 @@
             <span class="fa fa-edit"></span>
             Modifica attività
         </a>
-        <a class="btn btn-primary btn-sm" [routerLink]="['/','activities']" [queryParams]="{jobId:activity.jobId}">
+        <a class="btn btn-primary btn-sm" [routerLink]="['/','job-details']" [queryParams]="{jobId:activity.jobId}">
             <span class="fa fa-rotate-left"></span>
             Torna alla commessa
         </a>
@@ -66,7 +66,25 @@
             {{activity.referent}}
         </p>
     </div>
+    @if (activity.hasDependencies) {
     <div class="col-12">
+        <b>
+            Dipendenze
+        <button class="btn btn-outline-primary btn-sm" title="Visualizza dipendenze"
+            (click)="openDependencies(activity.jobId, activity.id)">
+            <i class="fa fa-link"></i>
+        </button>
+        </b>
+        <div class="progress-container mb-2" [ngClass]="{'progress-hide': (activity.totalDependencies == 0)}"
+            kendoTooltip title="Dipendenze evase {{activity.fulfilledDependencies}} / {{activity.totalDependencies}}">
+            <div class="progress-bar"
+                [style.width.%]="activity.totalDependencies ? (activity.fulfilledDependencies / activity.totalDependencies * 100) : 0">
+                {{activity.fulfilledDependencies}} / {{activity.totalDependencies}}
+            </div>
+        </div>
+    </div>
+    }
+    <div class="col-12" *ngIf="activity.description">
         <b>
             Note
         </b>
@@ -138,3 +156,4 @@
 <app-activity-modal #activityModal></app-activity-modal>
 <app-activity-product-modal #activityProductModal></app-activity-product-modal>
 <app-intervention-modal #interventionModal></app-intervention-modal>
+<app-dependencies-modal #dependenciesModal></app-dependencies-modal>

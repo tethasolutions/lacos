@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using Telerik.Reporting.Processing;
 using Telerik.Reporting;
 using Parameter = Telerik.Reporting.Parameter;
+using Microsoft.Extensions.Logging;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -22,6 +23,7 @@ public class TicketsService : ITicketsService
     private readonly IRepository<Job> jobRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
+    private readonly ILogger<ActivitiesService> logger;
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
     j.Activities
@@ -45,7 +47,8 @@ public class TicketsService : ITicketsService
         IRepository<TicketPicture> ticketAttachmentRepository,
         IRepository<Job> jobRepository,
         ILacosSession session,
-        ILacosDbContext dbContext
+        ILacosDbContext dbContext,
+        ILogger<ActivitiesService> logger
     )
     {
         this.mapper = mapper;
@@ -54,6 +57,7 @@ public class TicketsService : ITicketsService
         this.jobRepository = jobRepository;
         this.session = session;
         this.dbContext = dbContext;
+        this.logger = logger;
     }
 
     public IQueryable<TicketReadModel> Query()
@@ -132,7 +136,12 @@ public class TicketsService : ITicketsService
 
         if (Ticket.Status == TicketStatus.Resolved)
         {
-            if (Ticket.Activity != null) Ticket.Activity.Status = ActivityStatus.Completed;
+            if (Ticket.Activity != null)
+            {
+                var PreviousStatus = Ticket.Activity.Status;
+                Ticket.Activity.Status = ActivityStatus.Completed;
+
+            }
         }
 
         repository.Update(Ticket);
@@ -152,8 +161,12 @@ public class TicketsService : ITicketsService
                 {
                     if (job.Status != JobStatus.Billing && job.Status != JobStatus.Billed)
                     {
+                        var PreviousStatus = job.Status;
                         Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
                         job.Status = statusDelegate(job);
+                        logger.LogWarning($"[{Ticket.JobId}]Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                            $"modifica ticket {Ticket.Number}/{Ticket.Year}: " +
+                            $"cambio stato commessa '{PreviousStatus}' -> '{job.Status}' ");
                         jobRepository.Update(job);
                         await dbContext.SaveChanges();
                     }

@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Net;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -33,6 +34,7 @@ public class InterventionsService : IInterventionsService
     private readonly IRepository<Ticket> ticketRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
+    private readonly ILogger<ActivitiesService> logger;
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
     j.Activities
@@ -62,7 +64,8 @@ public class InterventionsService : IInterventionsService
         IViewRepository<InterventionProductCheckListItemKO> productCheckListItemKORepository,
         IRepository<Job> jobRepository,
         IRepository<Ticket> ticketRepository,
-        ILacosSession session
+        ILacosSession session,
+        ILogger<ActivitiesService> logger
     )
     {
         this.mapper = mapper;
@@ -77,6 +80,7 @@ public class InterventionsService : IInterventionsService
         this.jobRepository = jobRepository;
         this.ticketRepository = ticketRepository;
         this.session = session;
+        this.logger = logger;
     }
 
     public IQueryable<InterventionReadModel> Query()
@@ -273,30 +277,77 @@ public class InterventionsService : IInterventionsService
     {
         var activity = await activityRepository.Query()
             .Where(e => e.Id == id)
-            .Select(e => new
-            {
-                Id = e.Id,
-                JobId = e.JobId,
-                InfluenceJobStatus = e.Type.InfluenceJobStatus,
-                CurrentStatus = e.Status,
-                Status = !e.Interventions.Any()
-                    ? ActivityStatus.Pending
-                    : e.Interventions.Any(i => i.Status == InterventionStatus.Scheduled)
-                        ? ActivityStatus.Ready
-                        : ActivityStatus.Completed
-            })
-            .FirstAsync();
+            .Include(x => x.Job)
+            .Include(x => x.Type)
+            .Include(x => x.Interventions)
+            .Include(x => x.ActivityDependencies)
+            .ThenInclude(y => y.Type)
+            .Include(x => x.PurchaseOrderDependencies)
+            .Include(x => x.ParentActivities)
+            .ThenInclude(x => x.Type)
+            .Include(x => x.ParentActivities)
+            .ThenInclude(y => y.ActivityDependencies)
+            .Include(x => x.ParentActivities)
+            .ThenInclude(y => y.PurchaseOrderDependencies)
+            .SingleOrDefaultAsync();
 
-        if (activity.Status == activity.CurrentStatus)
+        if (activity == null)
         {
-            return;
+            throw new NotFoundException($"Attività con Id {activity.Id} non trovata.");
+        }
+
+        var newStatus = !activity.Interventions.Any()
+                    ? ActivityStatus.Pending
+                    : activity.Interventions.Any(i => i.Status == InterventionStatus.Scheduled)
+                        ? ActivityStatus.Ready
+                        : ActivityStatus.Completed;
+
+        if (activity.Status != newStatus) {
+            logger.LogWarning($"[{activity.JobId}]Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                $"modifica interventi: attività {activity.RowNumber}/{activity.Type!.Name} cambio stato '{activity.Status}' -> '{newStatus}: " +
+                $"impostazione evasione dipendenze");
+            activity.Status = newStatus;
+        }
+
+        //check if has dependencies
+        if ((activity.Status == ActivityStatus.Ready)
+            && (activity.Type!.HasDependencies == true)
+            && (activity.ActivityDependencies.Any() || activity.PurchaseOrderDependencies.Any()))
+        {
+            logger.LogWarning($"[{activity.JobId}]Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                $"Attività {activity.RowNumber}/{activity.Type!.Name} in stato '{activity.Status}': " +
+                $"impostazione evasione dipendenze");
+
+            if (activity.ActivityDependencies.Any())
+            {
+                foreach (var dep in activity.ActivityDependencies)
+                {
+                    if (activity.Status == ActivityStatus.Ready)
+                    {
+                        logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                            $"Attività {dep.RowNumber}/{dep.Type!.Name}: cambio stato '{dep.Status}' -> '{ActivityStatus.Completed}' ");
+                        dep.Status = ActivityStatus.Completed;
+                    }
+                }
+            }
+
+            //if (activity.PurchaseOrderDependencies.Any())
+            //{
+            //    foreach (var dep in activity.PurchaseOrderDependencies)
+            //    {
+            //        logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+            //            $"Ordine d'acquisto {dep.Number}: cambio stato '{dep.Status}' -> '{PurchaseOrderStatus.Completed}' ");
+            //        dep.Status = PurchaseOrderStatus.Completed;
+            //    }
+            //}
+
         }
 
         await activityRepository.Update(id, e => e.Status = activity.Status);
 
         await dbContext.SaveChanges();
 
-        if ((bool)activity.InfluenceJobStatus && activity.JobId != null)
+        if ((bool)activity.Type.InfluenceJobStatus && activity.JobId != null)
         {
             Job job = await jobRepository.Query()
                 .Where(e => e.Id == activity.JobId)
@@ -307,8 +358,12 @@ public class InterventionsService : IInterventionsService
             {
                 if (job.Status != JobStatus.Billing && job.Status != JobStatus.Billed)
                 {
+                    var PreviousStatus = job.Status;
                     Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
                     job.Status = statusDelegate(job);
+                    logger.LogWarning($"[{activity.JobId}]Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                        $"modifica attività {activity.RowNumber}/{activity.Type!.Name}: " +
+                        $"cambio stato commessa '{PreviousStatus}' -> '{job.Status}' ");
                     jobRepository.Update(job);
                     await dbContext.SaveChanges();
                 }
@@ -320,7 +375,11 @@ public class InterventionsService : IInterventionsService
             .FirstOrDefaultAsync();
         if (ticket != null)
         {
+            var PreviousStatus = ticket.Status;
             ticket.Status = TicketStatus.Resolved;
+            logger.LogWarning($"[{activity.JobId}]Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                $"modifica attività {activity.RowNumber}/{activity.Type!.Name}: " +
+                $"cambio stato ticket {ticket.Number.ToString("000")}/{ticket.Year} '{PreviousStatus}' -> '{ticket.Status}' ");
             ticketRepository.Update(ticket);
             await dbContext.SaveChanges();
         }

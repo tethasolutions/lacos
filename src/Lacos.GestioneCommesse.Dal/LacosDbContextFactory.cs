@@ -19,6 +19,7 @@ public class LacosDbContextFactory : IDesignTimeDbContextFactory<LacosDbContext>
 
         builder.UseSqlServer(connectionString, e => {
             e.CommandTimeout(3600);
+            e.UseCompatibilityLevel(120);
         });
 
         return builder.Options;

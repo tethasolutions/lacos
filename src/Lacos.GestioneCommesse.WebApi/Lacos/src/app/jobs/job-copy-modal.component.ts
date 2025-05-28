@@ -32,10 +32,10 @@ export class JobCopyModalComponent extends ModalFormComponent<JobCopy> implement
     }
 
     ngOnInit() {
-        this._getData();
     }
 
     override open(job: JobCopy) {
+        if (this.customers == null) this._getData();
         const result = super.open(job);
         this.readAddresses();
         return result;

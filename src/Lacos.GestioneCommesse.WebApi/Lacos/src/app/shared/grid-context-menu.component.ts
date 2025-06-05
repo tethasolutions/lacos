@@ -6,12 +6,13 @@ import { CellClickEvent } from "@progress/kendo-angular-grid";
 import { JobsService } from "../services/jobs/jobs.service";
 import { JobModalComponent } from "../jobs/job-modal.component";
 import { filter, switchMap, tap } from "rxjs";
-import { CopyActivityModalComponent } from "../activities/copy-activity-modal.component";
-import { CopyActivityModel } from "../services/activities/models";
+import { CopyToJobModalComponent } from "./copy-to-job-modal.component";
 import { ActivitiesService } from "../services/activities/activities.service";
 import { MessageBoxService } from "../services/common/message-box.service";
 import { UserService } from "../services/security/user.service";
 import { Role, User } from "../services/security/models";
+import { CopyToJobModel } from "./models/copy-to-job.model";
+import { PurchaseOrdersService } from "../services/purchase-orders/purchase-orders.service";
 
 @Component({
   selector: 'app-grid-context-menu',
@@ -21,7 +22,7 @@ export class GridContextMenuComponent extends BaseComponent {
 
   @ViewChild("gridMenu", { static: true }) gridMenu: ContextMenuComponent;
   @ViewChild('jobDetailModal', { static: true }) jobDetailModal: JobModalComponent;
-  @ViewChild('copyActivityModal', { static: true }) copyActivityModal: CopyActivityModalComponent;
+  @ViewChild('copyToJobModal', { static: true }) copyToJobModal: CopyToJobModalComponent;
 
   @Input() key: string;
 
@@ -29,6 +30,7 @@ export class GridContextMenuComponent extends BaseComponent {
     private readonly router: Router,
     private readonly _jobsService: JobsService,
     private readonly _activityService: ActivitiesService,
+    private readonly _purchaseOrderService: PurchaseOrdersService,
     private readonly _user: UserService,
     private readonly _messageboxService: MessageBoxService
   ) {
@@ -37,6 +39,7 @@ export class GridContextMenuComponent extends BaseComponent {
 
   private contextItem: any;
   public isActivityGrid: boolean = false;
+  public isPurchaseOrderGrid: boolean = false;
   user: User;
   isOperator: boolean = false;
 
@@ -47,7 +50,8 @@ export class GridContextMenuComponent extends BaseComponent {
 
   public onCellClick(
     e: CellClickEvent,
-    isActivityGrid: boolean = false
+    isActivityGrid: boolean = false,
+    isPurchaseOrderGrid: boolean = false
   ): void {
     if (e.type === "contextmenu") {
       const originalEvent = e.originalEvent;
@@ -56,6 +60,7 @@ export class GridContextMenuComponent extends BaseComponent {
 
       this.contextItem = e.dataItem;
       this.isActivityGrid = isActivityGrid;
+      this.isPurchaseOrderGrid = isPurchaseOrderGrid;
 
       this.gridMenu.show({
         left: originalEvent.pageX,
@@ -94,15 +99,31 @@ export class GridContextMenuComponent extends BaseComponent {
       this.router.navigate(['/interventions-list'], { queryParams: { jobId: this.contextItem[this.key] } });
     }
     if (event.item.text === "Copia Attività") {
-      const options = new CopyActivityModel(this.contextItem["id"], 0);
+      const options = new CopyToJobModel(this.contextItem["id"], 0);
 
       this._subscriptions.push(
-        this.copyActivityModal.open(options)
+        this.copyToJobModal.open(options)
           .pipe(
             filter(e => e),
             switchMap(() => this._activityService.copyActivityToJob(options)),
             tap(() => {
               this._messageboxService.success("Attività copiata con successo");
+              this.router.navigate(['/job-details'], { queryParams: { jobId: options.jobId } });
+            })
+          )
+          .subscribe()
+      );
+    }
+    if (event.item.text === "Copia Ordine d'acquisto") {
+      const options = new CopyToJobModel(this.contextItem["id"], 0);
+
+      this._subscriptions.push(
+        this.copyToJobModal.open(options)
+          .pipe(
+            filter(e => e),
+            switchMap(() => this._purchaseOrderService.copyPurchaseOrderToJob(options)),
+            tap(() => {
+              this._messageboxService.success("Ordine d'acquisto copiato con successo");
               this.router.navigate(['/job-details'], { queryParams: { jobId: options.jobId } });
             })
           )

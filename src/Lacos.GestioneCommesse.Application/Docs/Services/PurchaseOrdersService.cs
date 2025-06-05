@@ -2,13 +2,14 @@
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -18,27 +19,44 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     private readonly IRepository<PurchaseOrder> repository;
     private readonly IRepository<PurchaseOrderItem> repositoryItem;
     private readonly IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository;
+    private readonly IRepository<Job> jobRepository;
+    private readonly IRepository<Activity> activityRepository;
+    private readonly IRepository<Operator> operatorRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
     private readonly ILogger<ActivitiesService> logger;
+    private readonly IMessagesService messagesService;
+
+    private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
+        j.PurchaseOrders.Any(a => a.Status == PurchaseOrderStatus.Ordered || a.Status == PurchaseOrderStatus.Partial || a.Status == PurchaseOrderStatus.Completed)
+            ? JobStatus.InProgress
+            : j.Status;
 
     public PurchaseOrdersService(
         IMapper mapper,
         IRepository<PurchaseOrder> repository,
         IRepository<PurchaseOrderItem> repositoryItem,
         IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository,
+        IRepository<Job> jobRepository,
+        IRepository<Activity> activityRepository,
+        IRepository<Operator> operatorRepository,
         ILacosSession session,
         ILacosDbContext dbContext,
-        ILogger<ActivitiesService> logger
+        ILogger<ActivitiesService> logger,
+        IMessagesService messagesService
     )
     {
         this.mapper = mapper;
         this.repository = repository;
         this.repositoryItem = repositoryItem;
         this.purchaseOrderAttachmentRepository = purchaseOrderAttachmentRepository;
+        this.jobRepository = jobRepository;
+        this.activityRepository = activityRepository;
+        this.operatorRepository = operatorRepository;
         this.session = session;
         this.dbContext = dbContext;
         this.logger = logger;
+        this.messagesService = messagesService;
     }
 
     public IQueryable<PurchaseOrderReadModel> Query()
@@ -99,8 +117,9 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     public async Task<PurchaseOrderDto> Update(PurchaseOrderDto purchaseOrderDto)
     {
         var purchaseOrder = await repository.Query()
-            .Where(e => e.Id == purchaseOrderDto.Id)
-            .Include(e => e.Items)
+            .Where(x => x.Id == purchaseOrderDto.Id)
+            .Include(x => x.Supplier)
+            .Include(x => x.Items)
             .Include(x => x.Attachments)
             .Include(x => x.Messages)
             .Include(x => x.Job)
@@ -116,6 +135,9 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         {
             throw new NotFoundException($"Ordine con Id {purchaseOrderDto.Id} non trovato.");
         }
+
+        //quando viene evaso l'ordine viene creato un nuovo commento al creatore dell'ordine
+        bool isChangedAsCompleted = (purchaseOrder.Status != purchaseOrderDto.Status && purchaseOrderDto.Status == PurchaseOrderStatus.Completed);
 
         purchaseOrder = purchaseOrderDto.MapTo(purchaseOrder, mapper);
 
@@ -145,6 +167,96 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         }
 
         repository.Update(purchaseOrder);
+
+        await dbContext.SaveChanges();
+
+        //update job status
+        if (purchaseOrder.JobId != null)
+        {
+            Job job = await jobRepository.Query()
+                .Where(e => e.Id == purchaseOrder.JobId)
+                .Include(e => e.PurchaseOrders)
+                .FirstOrDefaultAsync();
+            if (job != null)
+            {
+                if (job.Status == JobStatus.Pending)
+                {
+                    var PreviousStatus = job.Status;
+                    Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
+                    job.Status = statusDelegate(job);
+                    logger.LogWarning($"[{purchaseOrder.JobId}]Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                        $"modifica ordine d'acquisto {purchaseOrder.Number}/{purchaseOrder.Year}: " +
+                        $"cambio stato commessa '{PreviousStatus}' -> '{job.Status}' ");
+                    jobRepository.Update(job);
+                    await dbContext.SaveChanges();
+                }
+            }
+        }
+
+        //quando viene evaso l'ordine viene creato un nuovo commento al creatore dell'ordine
+        if (isChangedAsCompleted)
+        {
+            var message = new MessageDto()
+            {
+                OperatorId = (long)session.CurrentUser.OperatorId,
+                Date = DateTimeOffset.Now,
+                Note = $"L'ordine {purchaseOrder.Number} del fornitore {purchaseOrder.Supplier.Name} è stato consegnato",
+                IsFromApp = true
+            };
+
+            var targetOperatorId = await operatorRepository.Query()
+                    .Where(o => o.UserId == purchaseOrder.CreatedById)
+                    .Select(o => o.Id)
+                    .FirstOrDefaultAsync();
+
+            if (targetOperatorId != null)
+            {
+                if (purchaseOrder.ActivityTypeId == null)
+                {
+                    message.PurchaseOrderId = purchaseOrder.Id;
+                    await messagesService.Create(message, targetOperatorId.ToString());
+                }
+                else
+                {
+                    var activities = await activityRepository.Query()
+                        .Where(a => a.JobId == purchaseOrder.JobId && a.TypeId == purchaseOrder.ActivityTypeId)
+                        .ToListAsync();
+                    foreach (var activity in activities)
+                    {
+                        message.ActivityId = activity.Id;
+                        await messagesService.Create(message, targetOperatorId.ToString());
+                    }
+                }
+            }
+        }
+
+        return await Get(purchaseOrder.Id);
+    }
+
+    public async Task<PurchaseOrderDto> CopyPurchaseOrder(CopyDto copyDto)
+    {
+        var sourcePurchaseOrder = await repository.Query()
+            .AsNoTracking()
+            .Where(x => x.Id == copyDto.SourceId)
+            .Include(x => x.Attachments)
+            .Include(x => x.Items)
+            .FirstOrDefaultAsync();
+
+        PurchaseOrder purchaseOrder = new PurchaseOrder();
+
+        purchaseOrder.Number = await GetNextNumber(DateTimeOffset.Now.Year);
+        purchaseOrder.Date = DateTimeOffset.Now.Date;
+        purchaseOrder.Year = DateTimeOffset.Now.Year;
+        purchaseOrder.JobId = copyDto.JobId;
+        purchaseOrder.Attachments = sourcePurchaseOrder.Attachments;
+        purchaseOrder.Description = sourcePurchaseOrder.Description;
+        purchaseOrder.Items = sourcePurchaseOrder.Items;
+        purchaseOrder.Status = PurchaseOrderStatus.Pending;
+        purchaseOrder.SupplierId = sourcePurchaseOrder.SupplierId;
+        purchaseOrder.ActivityTypeId = sourcePurchaseOrder.ActivityTypeId;
+        purchaseOrder.OperatorId = session.CurrentUser.OperatorId;
+
+        await repository.Insert(purchaseOrder);
 
         await dbContext.SaveChanges();
 

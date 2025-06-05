@@ -41,7 +41,7 @@ public class ActivitiesService : IActivitiesService
         ?
             JobStatus.Completed
         : j.Activities.Where(e => e.Type.InfluenceJobStatus == true)
-                .Any(a => a.Status == ActivityStatus.InProgress)
+                .Any(a => a.Status == ActivityStatus.InProgress || a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
                 ? JobStatus.InProgress
                 : j.Activities.Where(e => e.Type.InfluenceJobStatus == true)
                     .Any(a => a.Status == ActivityStatus.Pending)
@@ -475,20 +475,20 @@ public class ActivitiesService : IActivitiesService
 
     }
 
-    public async Task<ActivityDto> CopyActivity(ActivityCopyDto activityCopyDto)
+    public async Task<ActivityDto> CopyActivity(CopyDto copyDto)
     {
         var sourceActivity = await repository.Query()
             .AsNoTracking()
-            .Where(x => x.Id == activityCopyDto.SourceActivityId)
+            .Where(x => x.Id == copyDto.SourceId)
             .Include(x => x.Attachments)
             .FirstOrDefaultAsync();
         
-        var number = await GetNextNumber(activityCopyDto.JobId);
+        var number = await GetNextNumber(copyDto.JobId);
         Activity activity = new Activity();
 
         activity.SetNumber(number);
         activity.IsNewReferent = true;
-        activity.JobId = activityCopyDto.JobId;
+        activity.JobId = copyDto.JobId;
         activity.Attachments = sourceActivity.Attachments;
         activity.Description = sourceActivity.Description;
         activity.ExpirationDate = sourceActivity.ExpirationDate;

@@ -204,12 +204,3 @@ export class NewActivityCounter {
     }
 }
 
-export class CopyActivityModel {
-    constructor(
-        readonly sourceActivityId: number,
-        readonly jobId: number
-    ) { }
-    static build(o: CopyActivityModel) {
-        return new CopyActivityModel(o.sourceActivityId, o.jobId);
-    }
-}

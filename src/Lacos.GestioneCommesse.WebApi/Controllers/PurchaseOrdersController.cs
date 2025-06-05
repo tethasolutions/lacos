@@ -165,4 +165,10 @@ public class PurchaseOrdersController : LacosApiController
         List<PurchaseOrderAttachmentReadModel> purchaseOrdersAttachment = (await service.GetPurchaseOrderAttachments(jobId, purchaseOrderId)).Where(e => e.IsAdminDocument).ToList();
         return purchaseOrdersAttachment;
     }
+
+    [HttpPost("copy-purchase-order")]
+    public Task<PurchaseOrderDto> CopyPurchaseOrder(CopyDto copyDto)
+    {
+        return service.CopyPurchaseOrder(copyDto);
+    }
 }

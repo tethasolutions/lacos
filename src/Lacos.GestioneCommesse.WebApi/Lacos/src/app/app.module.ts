@@ -146,7 +146,7 @@ import { SharepointModalComponent } from './sharepoint-browser-modal/sharepoint-
 import { SharepointService } from './services/sharepoint/sharepoint.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SharepointImageDirective } from './sharepoint-browser-modal/sharepoint-image.directive';
-import { CopyActivityModalComponent } from './activities/copy-activity-modal.component';
+import { CopyToJobModalComponent } from './shared/copy-to-job-modal.component';
 import { CopyChecklistModalComponent } from './checklist-modal/copy-checklist-modal.component';
 import { JobsArchiveComponent } from './jobs/jobs-archive.component';
 import { DomSanitizerPipe } from './shared/pipes/domsanitizer.pipe';
@@ -207,7 +207,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         ActivityComponent,
         ActivityModalComponent,
         ActivityProductsComponent,
-        CopyActivityModalComponent,
+        CopyToJobModalComponent,
         JobsAttachmentsModalComponent,
         StringsPipe,
         ActivityProductModalComponent,

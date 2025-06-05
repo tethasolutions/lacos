@@ -3,8 +3,8 @@ using Lacos.GestioneCommesse.Domain.Registry;
 
 namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
 
-public class ActivityCopyDto
+public class CopyDto
 {
-    public long SourceActivityId { get; set; }
+    public long SourceId { get; set; }
     public long JobId { get; set; }
 }

@@ -15,7 +15,7 @@ public interface IActivitiesService
     Task AssignAllCustomerProductsMonthlyMaint(long id);
     Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters();
     Task<ActivityCounterNewDto> GetNewActivitiesCounter();
-    Task<ActivityDto> CopyActivity(ActivityCopyDto activityCopyDto);
+    Task<ActivityDto> CopyActivity(CopyDto activityCopyDto);
     IQueryable<ActivityReadModel> GetJobActivities(long jobId); 
     Task UpdateDependencies(long id, DependencyDto dependencyDto);
     Task<DependencyDto> GetDependencies(long id);

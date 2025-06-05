@@ -8,6 +8,7 @@ public interface IPurchaseOrdersService
     Task<PurchaseOrderDto> Get(long id);
     Task<PurchaseOrderDto> Create(PurchaseOrderDto purchaseOrderDto);
     Task<PurchaseOrderDto> Update(PurchaseOrderDto purchaseOrderDto);
+    Task<PurchaseOrderDto> CopyPurchaseOrder(CopyDto copyDto);
     Task Delete(long id);
     Task<int> GetNextNumber(int year);
     IQueryable<PurchaseOrderReadModel> GetJobPurchaseOrders(long jobId);

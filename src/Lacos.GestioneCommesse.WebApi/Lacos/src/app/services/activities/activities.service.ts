@@ -3,13 +3,14 @@ import { HttpClient, HttpEventType, HttpRequest, HttpResponse } from '@angular/c
 import { filter, map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State } from '@progress/kendo-data-query';
-import { Activity, ActivityCounter, ActivityDetail, ActivityStatus, CopyActivityModel, IActivityReadModel, NewActivityCounter } from './models';
+import { Activity, ActivityCounter, ActivityDetail, ActivityStatus, IActivityReadModel, NewActivityCounter } from './models';
 import { readData } from '../common/functions';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 import { ActivityAttachmentModel } from './activity-attachment.model';
 import { ActivityAttachmentUploadFileModel } from './activity-attachment-upload-file.model';
 import { UserService } from '../security/user.service';
 import { DependencyModel } from 'src/app/shared/models/dependency.models';
+import { CopyToJobModel } from 'src/app/shared/models/copy-to-job.model';
 
 @Injectable()
 export class ActivitiesService {
@@ -186,8 +187,8 @@ export class ActivitiesService {
             );
     }
 
-    copyActivityToJob(copyActivityModel: CopyActivityModel) {
-        return this._http.post<CopyActivityModel>(`${this._baseUrl}/copy-activity`, copyActivityModel)
+    copyActivityToJob(copyActivityModel: CopyToJobModel) {
+        return this._http.post<CopyToJobModel>(`${this._baseUrl}/copy-activity`, copyActivityModel)
             .pipe(
         );
     }

@@ -34,7 +34,7 @@ public class TicketsService : ITicketsService
         ?
             JobStatus.Completed
         : j.Activities.Where(e => e.Type.InfluenceJobStatus == true)
-                .Any(a => a.Status == ActivityStatus.InProgress)
+                .Any(a => a.Status == ActivityStatus.InProgress || a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
                 ? JobStatus.InProgress
                 : j.Activities.Where(e => e.Type.InfluenceJobStatus == true)
                     .Any(a => a.Status == ActivityStatus.Pending)

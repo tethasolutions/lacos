@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { CopyActivityModel } from '../services/activities/models';
-import { ModalFormComponent } from '../shared/modal.component';
+import { ModalFormComponent } from './modal.component';
 import { tap } from 'rxjs';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { JobsService } from '../services/jobs/jobs.service';
 import { State } from '@progress/kendo-data-query';
 import { IJobReadModel, JobStatus } from '../services/jobs/models';
+import { CopyToJobModel } from './models/copy-to-job.model';
 
 @Component({
-    selector: 'app-copy-activity-modal',
-    templateUrl: 'copy-activity-modal.component.html'
+    selector: 'app-copy-to-job-modal',
+    templateUrl: 'copy-to-job-modal.component.html'
 })
-export class CopyActivityModalComponent extends ModalFormComponent<CopyActivityModel> implements OnInit {
+export class CopyToJobModalComponent extends ModalFormComponent<CopyToJobModel> implements OnInit {
 
     jobs: SelectableJob[];
 
@@ -25,7 +25,7 @@ export class CopyActivityModalComponent extends ModalFormComponent<CopyActivityM
     ngOnInit() {
     }
 
-    override open(options: CopyActivityModel) {
+    override open(options: CopyToJobModel) {
         if (this.jobs == null) this._getJobs();
         const result = super.open(options);
 

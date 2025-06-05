@@ -214,7 +214,7 @@ public class ActivitiesController : LacosApiController
     }
 
     [HttpPost("copy-activity")]
-    public Task<ActivityDto> CopyActivity(ActivityCopyDto activityCopyDto)
+    public Task<ActivityDto> CopyActivity(CopyDto activityCopyDto)
     {
         return service.CopyActivity(activityCopyDto);
     }

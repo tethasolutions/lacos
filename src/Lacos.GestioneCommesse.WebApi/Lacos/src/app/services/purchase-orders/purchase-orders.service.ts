@@ -8,6 +8,7 @@ import { readData } from '../common/functions';
 import { PurchaseOrderAttachmentModel } from './purchase-order-attachment.model';
 import { PurchaseOrderAttachmentUploadFileModel } from './purchage-order-attachment-upload-file.model';
 import { UserService } from '../security/user.service';
+import { CopyToJobModel } from 'src/app/shared/models/copy-to-job.model';
 
 @Injectable()
 export class PurchaseOrdersService {
@@ -105,4 +106,10 @@ export class PurchaseOrdersService {
                 map(e => new PurchaseOrderAttachmentUploadFileModel(e.fileName, e.originalFileName))
             );
     }
+    
+        copyPurchaseOrderToJob(copyModel: CopyToJobModel) {
+            return this._http.post<CopyToJobModel>(`${this._baseUrl}/copy-purchase-order`, copyModel)
+                .pipe(
+            );
+        }
 }

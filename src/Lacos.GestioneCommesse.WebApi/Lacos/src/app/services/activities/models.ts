@@ -1,5 +1,6 @@
 import { Dictionary } from '../common/models';
 import { MessageReadModel } from '../messages/models';
+import { PurchaseOrderStatus } from '../purchase-orders/models';
 import { ActivityAttachmentModel } from './activity-attachment.model';
 
 export enum ActivityStatus {
@@ -57,7 +58,7 @@ export interface IActivityReadModel {
     readonly hasDependencies: boolean;
     readonly totalDependencies: number;
     readonly fulfilledDependencies: number;
-
+    readonly purchaseOrderStatus: PurchaseOrderStatus;
 }
 
 export class Activity {

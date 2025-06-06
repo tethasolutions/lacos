@@ -47,4 +47,6 @@ public class ActivityReadModel
 
     public int? TotalDependencies { get; set; }
     public int? FulfilledDependencies { get; set; }
+
+    public PurchaseOrderStatus? PurchaseOrderStatus { get; set; }
 }

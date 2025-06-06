@@ -47,7 +47,8 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.TotalDependencies, y => (y.ActivityDependencies.Any() ? y.ActivityDependencies.Count() : 0) + 
                 (y.PurchaseOrderDependencies.Any() ? y.PurchaseOrderDependencies.Count() : 0))
            .MapMember(x => x.FulfilledDependencies, y => (y.ActivityDependencies.Any(a => a.Status >= ActivityStatus.Ready) ? y.ActivityDependencies.Count(a => a.Status >= ActivityStatus.Ready) : 0) +
-                (y.PurchaseOrderDependencies.Any(p => p.Status == PurchaseOrderStatus.Completed) ? y.PurchaseOrderDependencies.Count(p => p.Status == PurchaseOrderStatus.Completed) : 0));
+                (y.PurchaseOrderDependencies.Any(p => p.Status == PurchaseOrderStatus.Completed) ? y.PurchaseOrderDependencies.Count(p => p.Status == PurchaseOrderStatus.Completed) : 0))
+           .MapMember(x => x.PurchaseOrderStatus, y => y.Job.PurchaseOrders.Where(p => p.ActivityTypeId == y.TypeId).Min(p => (PurchaseOrderStatus?)p.Status));
 
         CreateMap<ActivityDto, Activity>()
            .IgnoreCommonMembers()

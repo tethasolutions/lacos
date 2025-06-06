@@ -83,6 +83,19 @@
                 </div>
             </ng-template>
         </kendo-grid-column>
+        <kendo-grid-column field="purchaseOrderStatus" title="Stato OA" [width]="1" filter="numeric" class="purchase-order-status">
+            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                let-filterService="filterService">
+                <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
+                    [data]="purchaseOrderStatusNames">
+                </app-multiselect-grid-column-filter>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span class="text-nowrap">
+                    {{dataItem.purchaseOrderStatus | purchaseOrderStatus}}
+                </span>
+            </ng-template>
+        </kendo-grid-column>
         <kendo-grid-column field="referentName" title="Operatore">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div *ngIf="!dataItem.isNewReferent || dataItem.referentId != currentOperator?.id">

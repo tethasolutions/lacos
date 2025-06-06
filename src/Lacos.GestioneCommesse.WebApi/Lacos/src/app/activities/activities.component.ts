@@ -22,6 +22,7 @@ import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.co
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
 import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
+import { PurchaseOrderStatus } from '../services/purchase-orders/models';
 
 @Component({
     selector: 'app-activities',
@@ -81,18 +82,18 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
         this.updateScreenSize();
-      }
-    
-      @HostListener('window:resize', ['$event'])
-      onResize(event: Event): void {
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
         this.updateScreenSize();
-      }
-    
-      private updateScreenSize(): void {
-        this.screenWidth = window.innerWidth -44;
+    }
+
+    private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth - 44;
         if (this.screenWidth > 1876) this.screenWidth = 1876;
-        if (this.screenWidth < 1400) this.screenWidth = 1400;     
-      }
+        if (this.screenWidth < 1400) this.screenWidth = 1400;
+    }
 
     private _resumeState() {
         const savedState = this._storageService.get<State>(window.location.hash, true);
@@ -125,7 +126,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     create() {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null, 
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null,
             "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
         const options = new ActivityModalOptions(activity);
 
@@ -209,24 +210,41 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     cellClickHandler(args: CellClickEvent): void {
         this.cellArgs = args;
     }
-
     readonly rowCallback = (context: RowClassArgs) => {
         const activity = context.dataItem as IActivityReadModel;
+        const classes: { [key: string]: boolean } = {};
 
-        switch (true) {
-            case activity.status === ActivityStatus.Completed:
-                return { 'activity-completed': true };
-            case activity.status === ActivityStatus.Pending:
-                return { 'activity-pending': true };
-            case activity.status === ActivityStatus.InProgress:
-                return { 'activity-in-progress': true };
-            case activity.status === ActivityStatus.Ready:
-                return { 'activity-ready': true };
-            case activity.status != ActivityStatus.Completed && !!activity.expirationDate && new Date(activity.expirationDate).addDays(1).isPast():
-                return { 'activity-expired': true };
-            default:
-                return {};
+        // Activity status classes
+        if (activity.status === ActivityStatus.Completed) {
+            classes['activity-completed'] = true;
+        } else if (activity.status === ActivityStatus.Pending) {
+            classes['activity-pending'] = true;
+        } else if (activity.status === ActivityStatus.InProgress) {
+            classes['activity-in-progress'] = true;
+        } else if (activity.status === ActivityStatus.Ready) {
+            classes['activity-ready'] = true;
+        } else if (
+            activity.status != ActivityStatus.Completed &&
+            !!activity.expirationDate &&
+            new Date(activity.expirationDate).addDays(1).isPast()
+        ) {
+            classes['activity-expired'] = true;
         }
+
+        // Purchase order status classes
+        if (activity.purchaseOrderStatus === PurchaseOrderStatus.Completed) {
+            classes['purchase-order-completed'] = true;
+        } else if (activity.purchaseOrderStatus === PurchaseOrderStatus.Pending) {
+            classes['purchase-order-pending'] = true;
+        } else if (activity.purchaseOrderStatus === PurchaseOrderStatus.Ordered) {
+            classes['purchase-order-ordered'] = true;
+        } else if (activity.purchaseOrderStatus === PurchaseOrderStatus.Partial) {
+            classes['purchase-order-partial'] = true;
+        } else if (activity.purchaseOrderStatus === PurchaseOrderStatus.Canceled) {
+            classes['purchase-order-canceled'] = true;
+        }
+
+        return classes;
     };
 
     protected _read() {

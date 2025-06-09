@@ -59,16 +59,19 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         this.messagesService = messagesService;
     }
 
-    public IQueryable<PurchaseOrderReadModel> Query()
+    public IQueryable<PurchaseOrderReadModel> Query(long? jobId)
     {
         var user = session.CurrentUser!;
 
-        return repository.Query()
+        var query = repository.Query()
             .AsNoTracking()
-            .Include(x => x.Job)
-            .ThenInclude(x => x.Customer)
-            //.Where(e => e.ActivityType!.Operators.Any(o => o.Id == user.OperatorId)
-            .Project<PurchaseOrderReadModel>(mapper);
+            .Include(x => x.Jobs)
+            .AsQueryable();
+
+        if (jobId != null)
+            query = query.Where(x => x.Jobs.Any(j => j.Id == jobId));
+
+        return query.Project<PurchaseOrderReadModel>(mapper);
     }
 
     public async Task<PurchaseOrderDto> Get(long id)
@@ -92,9 +95,21 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     public async Task<PurchaseOrderDto> Create(PurchaseOrderDto purchaseOrderDto)
     {
         var purchaseOrder = purchaseOrderDto.MapTo<PurchaseOrder>(mapper);
+
         var number = await GetNextNumber(purchaseOrder.Date.Year);
 
         purchaseOrder.SetCode(purchaseOrder.Date.Year, number);
+
+        if (purchaseOrderDto.Jobs != null)
+        {
+            foreach (long jobId in purchaseOrderDto.Jobs)
+            { 
+                var job = await jobRepository.Query()
+                    .Where(e => e.Id == jobId)
+                    .FirstOrDefaultAsync();
+                purchaseOrder.Jobs.Add(job);
+            }
+        }
 
         await repository.Insert(purchaseOrder);
 
@@ -122,7 +137,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Include(x => x.Items)
             .Include(x => x.Attachments)
             .Include(x => x.Messages)
-            .Include(x => x.Job)
+            .Include(x => x.Jobs)
             .Include(x => x.ParentActivities)
             .ThenInclude(y => y.Type)
             .Include(x => x.ParentActivities)
@@ -136,6 +151,18 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             throw new NotFoundException($"Ordine con Id {purchaseOrderDto.Id} non trovato.");
         }
 
+        if (purchaseOrderDto.Jobs != null)
+        {
+            purchaseOrder.Jobs.Clear();
+            foreach (long jobId in purchaseOrderDto.Jobs)
+            {
+                var job = await jobRepository.Query()
+                    .Where(e => e.Id == jobId)
+                    .FirstOrDefaultAsync();
+                purchaseOrder.Jobs.Add(job);
+            }
+        }
+
         //quando viene evaso l'ordine viene creato un nuovo commento al creatore dell'ordine
         bool isChangedAsCompleted = (purchaseOrder.Status != purchaseOrderDto.Status && purchaseOrderDto.Status == PurchaseOrderStatus.Completed);
 
@@ -144,24 +171,27 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         //check if has parent activities
         if ((purchaseOrder.Status == PurchaseOrderStatus.Completed)
             && purchaseOrder.ParentActivities.Any())
-        {
-            logger.LogWarning($"[{purchaseOrder.JobId}]Commessa {purchaseOrder.Job.Number.ToString("000")}/{purchaseOrder.Job.Year}: " +
-                $"Ordine del {purchaseOrder.Date.ToString("dd/MM/yy")} in stato '{purchaseOrder.Status}' " +
-                $"è dipendenza di altre {purchaseOrder.ParentActivities.Count()} attività");
-
-            foreach (var parentActivity in purchaseOrder.ParentActivities)
             {
-                if (parentActivity.ActivityDependencies.All(a => a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
-                    && parentActivity.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed))
+                foreach (var job in purchaseOrder.Jobs)
                 {
-                    logger.LogWarning($"[{purchaseOrder.JobId}]-Commessa {purchaseOrder.Job.Number.ToString("000")}/{purchaseOrder.Job.Year}: " +
-                        $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: tutte le dipendenze sono evase -> cambio stato '{parentActivity.Status}' -> '{ActivityStatus.InProgress}' ");
-                    parentActivity.Status = ActivityStatus.InProgress;
-                }
-                else
+                logger.LogWarning($"[{job.Id}]Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                    $"Ordine del {purchaseOrder.Date.ToString("dd/MM/yy")} in stato '{purchaseOrder.Status}' " +
+                    $"è dipendenza di altre {purchaseOrder.ParentActivities.Count()} attività");
+
+                foreach (var parentActivity in purchaseOrder.ParentActivities)
                 {
-                    logger.LogWarning($"[{purchaseOrder.JobId}]-Commessa {purchaseOrder.Job.Number.ToString("000")}/{purchaseOrder.Job.Year}: " +
-                        $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: non tutte le dipendenze sono evase -> stato '{parentActivity.Status}' invariato");
+                    if (parentActivity.ActivityDependencies.All(a => a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
+                        && parentActivity.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed))
+                    {
+                        logger.LogWarning($"[{job.Id}]-Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                            $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: tutte le dipendenze sono evase -> cambio stato '{parentActivity.Status}' -> '{ActivityStatus.InProgress}' ");
+                        parentActivity.Status = ActivityStatus.InProgress;
+                    }
+                    else
+                    {
+                        logger.LogWarning($"[{job.Id}]-Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                            $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: non tutte le dipendenze sono evase -> stato '{parentActivity.Status}' invariato");
+                    }
                 }
             }
         }
@@ -171,10 +201,10 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         await dbContext.SaveChanges();
 
         //update job status
-        if (purchaseOrder.JobId != null)
+        foreach (var j in purchaseOrder.Jobs)
         {
             Job job = await jobRepository.Query()
-                .Where(e => e.Id == purchaseOrder.JobId)
+                .Where(e => e.Id == j.Id)
                 .Include(e => e.PurchaseOrders)
                 .FirstOrDefaultAsync();
             if (job != null)
@@ -184,7 +214,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
                     var PreviousStatus = job.Status;
                     Func<Job, JobStatus> statusDelegate = StatusExpression.Compile();
                     job.Status = statusDelegate(job);
-                    logger.LogWarning($"[{purchaseOrder.JobId}]Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                    logger.LogWarning($"[{job.Id}]Commessa {job.Number.ToString("000")}/{job.Year}: " +
                         $"modifica ordine d'acquisto {purchaseOrder.Number}/{purchaseOrder.Year}: " +
                         $"cambio stato commessa '{PreviousStatus}' -> '{job.Status}' ");
                     jobRepository.Update(job);
@@ -218,8 +248,9 @@ public class PurchaseOrdersService : IPurchaseOrdersService
                 }
                 else
                 {
+                    var jobIds = purchaseOrder.Jobs.Select(j => j.Id).ToList();
                     var activities = await activityRepository.Query()
-                        .Where(a => a.JobId == purchaseOrder.JobId && a.TypeId == purchaseOrder.ActivityTypeId)
+                        .Where(a => jobIds.Contains(a.JobId) && a.TypeId == purchaseOrder.ActivityTypeId)
                         .ToListAsync();
                     foreach (var activity in activities)
                     {
@@ -247,7 +278,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         purchaseOrder.Number = await GetNextNumber(DateTimeOffset.Now.Year);
         purchaseOrder.Date = DateTimeOffset.Now.Date;
         purchaseOrder.Year = DateTimeOffset.Now.Year;
-        purchaseOrder.JobId = copyDto.JobId;
+        purchaseOrder.Jobs.Add(await jobRepository.Get(copyDto.JobId));
         purchaseOrder.Attachments = sourcePurchaseOrder.Attachments;
         purchaseOrder.Description = sourcePurchaseOrder.Description;
         purchaseOrder.Items = sourcePurchaseOrder.Items;
@@ -304,10 +335,12 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             return purchaseOrderAttachments.MapTo<IEnumerable<PurchaseOrderAttachmentReadModel>>(mapper);
         }
 
+        var job = await jobRepository.Get(jobId);
+
         var purchaseOrdersAttachments = await purchaseOrderAttachmentRepository
             .Query()
             .AsNoTracking()
-            .Where(x => x.PurchaseOrder.JobId == jobId)
+            .Where(x => x.PurchaseOrder.Jobs.Contains(job))
             .OrderBy(x => x.CreatedOn)
             .ToArrayAsync();
 
@@ -367,10 +400,17 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     //------------------------------------------------------------------------------------------------------------
     public IQueryable<PurchaseOrderReadModel> GetJobPurchaseOrders(long jobId)
     {
+        var job = jobRepository.Query().FirstOrDefault(j => j.Id == jobId);
+
+        if (job == null)
+        {
+            throw new NotFoundException($"Commessa con Id {jobId} non trovata.");
+        }
+
         var query = repository
             .Query()
             .AsNoTracking()
-            .Where(e => e.JobId == jobId);
+            .Where(e => e.Jobs.Contains(job));
 
         return query
             .AsQueryable()

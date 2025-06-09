@@ -15,19 +15,19 @@ public class PurchaseOrderDto : BaseEntityDto
 
     public long? ActivityTypeId { get; set; }
 
-    public long? JobId { get; set; }
-
     public long SupplierId { get; set; }
     public string? SupplierName { get; set; }
 
     public long? OperatorId { get; set; }
 
+    public IEnumerable<long>? Jobs { get; set; }
     public IEnumerable<PurchaseOrderAttachmentDto>? Attachments { get; set; }
     public IEnumerable<MessageReadModel>? Messages { get; set; }
 
     public IEnumerable<PurchaseOrderItemDto> Items { get; set; }
     public PurchaseOrderDto()
     {
+        Jobs = new List<long>();
         Items = new List<PurchaseOrderItemDto>();
     }
 

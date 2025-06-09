@@ -8,6 +8,7 @@ using Lacos.GestioneCommesse.Framework.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -25,10 +26,10 @@ public class PurchaseOrdersController : LacosApiController
         this.mimeTypeProvider = mimeTypeProvider;
     }
 
-    [HttpGet("read")]
-    public Task<DataSourceResult> Read(DataSourceRequest request)
+    [HttpGet("read/{jobId?}")]
+    public Task<DataSourceResult> Read(DataSourceRequest request, long? jobId)
     {
-        return service.Query()
+        return service.Query(jobId)
             .ToDataSourceResultAsync(request);
     }
 

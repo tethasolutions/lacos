@@ -40,7 +40,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
     @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
 
-    jobs: SelectableJob[];
+    jobsList: SelectableJob[];
     job: Job;
     jobReadonly: boolean;
     status: PurchaseOrderStatus;
@@ -166,16 +166,18 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
             });
         }
 
-        if (this.options.purchaseOrder.jobId) {
-            this._getJob(this.options.purchaseOrder.jobId);
-        }
-
-        this.jobReadonly = !!options.purchaseOrder.jobId;
+        this.jobReadonly = this.user.role != Role.Administrator;
         this.status = options.purchaseOrder.status;
         this.onDataStateChange(this.gridState);
         this.updateUnreadCounter();
 
         return result;
+    }
+
+    onJobsFilterChange(value: string) {
+        this.jobsList = this.jobsList.filter(j =>
+            j.fullName.toLowerCase().includes(value.toLowerCase())
+        );
     }
 
     protected override _canClose() {
@@ -259,7 +261,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         this._subscriptions.push(
             this._jobsService.read(state)
                 .pipe(
-                    tap(e => this.jobs = (e.data as IJobReadModel[]).map(e => new SelectableJob(e)))
+                    tap(e => this.jobsList = (e.data as IJobReadModel[]).map(e => new SelectableJob(e)))
                 )
                 .subscribe()
         );
@@ -332,8 +334,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
 
     initNewMessage() {
         this.targetOperatorsArray = [];
-        if (this.options.purchaseOrder.id == 0) 
-        {
+        if (this.options.purchaseOrder.id == 0) {
             this._messageBox.info("Prima di creare il nuovo commento è necessario salvare l'elemento corrente");
             return;
         }
@@ -398,7 +399,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         this._subscriptions.push(
             this._messagesService.get(message.id)
                 .pipe(
-                    map(e => new MessageModalOptions(e,false)),
+                    map(e => new MessageModalOptions(e, false)),
                     switchMap(e => this.messageModal.open(e)),
                     filter(e => e),
                     switchMap(() => this._messagesService.update(this.messageModal.options.message)),

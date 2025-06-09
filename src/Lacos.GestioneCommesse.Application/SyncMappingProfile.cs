@@ -28,7 +28,8 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<InterventionProductCheckListItem, SyncInterventionProductCheckListItemDto>();
             CreateMap<InterventionProductPicture, SyncInterventionProductPictureDto>();
             CreateMap<Job, SyncJobDto>();
-            CreateMap<PurchaseOrder, SyncPurchaseOrderDto>();
+            CreateMap<PurchaseOrder, SyncPurchaseOrderDto>()
+                .MapMember(x => x.JobId, y => y.Jobs.Min(j => j.Id));
             CreateMap<PurchaseOrderItem, SyncPurchaseOrderItemDto>();
             CreateMap<Ticket, SyncTicketDto>();
             CreateMap<TicketPicture, SyncTicketPictureDto>();

@@ -73,15 +73,13 @@
             </div>
             <div class="row">
                 <div class="col-md-5">
-                    <label>Commessa</label>
-                    <div class="form-group">
-                        <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
-                            [(ngModel)]="options.purchaseOrder.jobId" [suggest]="true" [allowCustom]="false"
-                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" [valuePrimitive]="true"
-                            [readonly]="jobReadonly">
-                        </kendo-combobox>
-                        <div class="validation-message" [control]="form.controls['jobId']"></div>
-                    </div>
+                    <label>Commessa/e</label>
+                    <kendo-multiselect [data]="jobsList" [(ngModel)]="options.purchaseOrder.jobs" name="jobs"
+                        textField="fullName" valueField="id" [valuePrimitive]="true" [filterable]="true"
+                        [filterSettings]="{ operator: 'contains', ignoreCase: true }" (filterChange)="onJobsFilterChange($event)"
+                        [placeholder]="'Seleziona commesse'" [autoClose]="false" [disabled]="jobReadonly">
+                    </kendo-multiselect>
+                    <div class="validation-message" [control]="form.controls['jobs']"></div>
                 </div>
                 <div class="col-md-4">
                     <label>Fornitore</label>
@@ -174,7 +172,8 @@
                     <label>Descrizione</label>
                     <div class="form-group">
                         <kendo-editor name="description" [(ngModel)]="options.purchaseOrder.description" required
-                            [resizable]="true" [iframe]="false" [pasteCleanupSettings]="{ convertMsLists: true, removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
+                            [resizable]="true" [iframe]="false"
+                            [pasteCleanupSettings]="{ convertMsLists: true, removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
                             <kendo-toolbar>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
@@ -182,7 +181,8 @@
                                     <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
                                 <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
-                                <kendo-toolbar-colorpicker kendoEditorForeColor view="gradient"></kendo-toolbar-colorpicker>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor
+                                    view="gradient"></kendo-toolbar-colorpicker>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>

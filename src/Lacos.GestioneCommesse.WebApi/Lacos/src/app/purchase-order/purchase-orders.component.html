@@ -25,20 +25,7 @@
                 Esporta in Excel
             </button>
         </ng-template>
-        <kendo-grid-column field="customerName" title="Cliente" *ngIf="viewExportExcel">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customerName}}</a>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="jobCode" title="Comm." [width]="1" *ngIf="viewExportExcel">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <div *ngIf="!dataItem.jobHasHighPriority"><a (click)="openJob(dataItem.jobId)"
-                        style="cursor: pointer;">{{dataItem.jobCode}}</a></div>
-                <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
-                    <a (click)="openJob(dataItem.customerId)" style="cursor: pointer;">{{dataItem.jobCode}} <i
-                            class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
-                </div>
-            </ng-template>
+        <kendo-grid-column field="jobCodes" title="Comm." [width]="1" *ngIf="viewExportExcel">
         </kendo-grid-column>
         <kendo-grid-column field="date" title="Data Ord." filter="date" [width]="1">
             <ng-template kendoGridCellTemplate let-dataItem>
@@ -50,8 +37,6 @@
                 {{dataItem.expectedDate | date:'dd/MM/yyyy'}}
             </ng-template>
         </kendo-grid-column>
-        <!-- <kendo-grid-column field="code" title="N." [width]="1" filter="numeric" format="n0">
-    </kendo-grid-column> -->
         <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="purchase-order-status">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                 let-filterService="filterService">
@@ -64,8 +49,6 @@
                     {{dataItem.status | purchaseOrderStatus}}
                 </span>
             </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="jobReference" title="Rifer." *ngIf="viewExportExcel">
         </kendo-grid-column>
         <kendo-grid-column field="supplierName" title="Fornitore">
         </kendo-grid-column>
@@ -93,7 +76,7 @@
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati"
-                        [disabled]="!dataItem.hasAttachments" (click)="openAttachments(dataItem.jobId, dataItem.id)">
+                        [disabled]="!dataItem.hasAttachments" (click)="openAttachments(dataItem.id)">
                         <i class="fa fa-paperclip"></i>
                     </button>
                     <button class="btn btn-danger btn-sm" title="Rimuovi" (click)="askRemove(dataItem)">

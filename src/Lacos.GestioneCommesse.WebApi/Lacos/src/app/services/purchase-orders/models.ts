@@ -1,4 +1,5 @@
 import { Dictionary } from '../common/models';
+import { Job } from '../jobs/models';
 import { MessageReadModel } from '../messages/models';
 import { PurchaseOrderAttachmentModel } from './purchase-order-attachment.model';
 
@@ -31,11 +32,8 @@ export interface IPurchaseOrderReadModel {
     readonly type: string;
     readonly hasAttachments: boolean;
     readonly jobId: number;
-    readonly jobCode: string;
-    readonly jobReference: string;
-    readonly jobHasHighPriority: boolean;
-    readonly customerId: number;
-    readonly customerName: string;
+    readonly jobs: number[],
+    readonly jobCodes: string;
     readonly supplierName: string;
     readonly operatorName: string;
     readonly unreadMessages: number;
@@ -59,10 +57,10 @@ export class PurchaseOrder {
         public description: string,
         public status: PurchaseOrderStatus,
         public activityTypeId: number,
-        public jobId: number,
         public supplierId: number,
         public supplierName: string,
         public operatorId: number,
+        public jobs: number[],
         public items: PurchaseOrderItem[],
         public attachments: PurchaseOrderAttachmentModel[],
         public userAttachments: PurchaseOrderAttachmentModel[],
@@ -79,8 +77,8 @@ export class PurchaseOrder {
         const userAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => !e.isAdminDocument);
         const adminAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => e.isAdminDocument);
         const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
-        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.activityTypeId, o.jobId, o.supplierId, 
-            o.supplierName, o.operatorId, items, attachments, userAttachments, adminAttachments, messages);
+        return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.activityTypeId, o.supplierId,
+            o.supplierName, o.operatorId, o.jobs, items, attachments, userAttachments, adminAttachments, messages);
     }
 
 }

@@ -245,7 +245,6 @@ public class MessagesService : IMessagesService
             var MessageDto = await repository.Query()
                 .AsNoTracking()
                 .Where(e => e.PurchaseOrderId == purchaseOrderId)
-                .Where(e => e.JobId == jobId)
                 .Include(e => e.MessageNotifications)
                 .ThenInclude(e => e.Operator)
                 .OrderBy(e => e.Date)

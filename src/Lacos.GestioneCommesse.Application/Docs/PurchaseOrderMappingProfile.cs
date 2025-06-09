@@ -13,11 +13,9 @@ public class PurchaseOrderMappingProfile : Profile
         CreateMap<PurchaseOrder, PurchaseOrderReadModel>()
             .MapMember(x => x.Code, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3))
             .MapMember(x => x.SupplierName, y => y.Supplier!.Name)
-            .MapMember(x => x.JobCode, y => CustomDbFunctions.FormatCode(y.Job!.Number, y.Job.Year, 3))
-            .MapMember(x => x.CustomerId, y => y.Job!.CustomerId)
-            .MapMember(x => x.CustomerName, y => y.Job!.Customer.Name)
-            .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
-            .MapMember(x => x.JobReference, y => y.Job!.Reference)
+            .MapMember(x => x.JobId, y => y.Jobs.Min(j => j.Id))
+            .MapMember(x => x.Jobs, y => y.Jobs.Select(e => e.Id))
+            .MapMember(x => x.JobCodes, y => string.Join(", ", y.Jobs.Select(job => CustomDbFunctions.FormatCode(job.Number, job.Year, 3))))
             .MapMember(x => x.OperatorName, y => y.Operator!.Name)
             .MapMember(x => x.HasAttachments, y => y.Attachments.Any())
             .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead))
@@ -25,8 +23,8 @@ public class PurchaseOrderMappingProfile : Profile
 
         CreateMap<PurchaseOrderDto, PurchaseOrder>()
             .IgnoreCommonMembers()
-            .Ignore(x => x.Job)
             .Ignore(x => x.Supplier)
+            .Ignore(x => x.Jobs)
             .Ignore(x => x.Items)
             .Ignore(x => x.Attachments)
             .Ignore(x => x.Operator)
@@ -36,6 +34,7 @@ public class PurchaseOrderMappingProfile : Profile
             .AfterMap(AfterMap);
 
         CreateMap<PurchaseOrder, PurchaseOrderDto>()
+            .MapMember(x => x.Jobs, y => y.Jobs.Select(e => e.Id))
             .MapMember(x => x.SupplierName, y => y.Supplier!.Name);
 
         CreateMap<PurchaseOrderItemDto, PurchaseOrderItem>()

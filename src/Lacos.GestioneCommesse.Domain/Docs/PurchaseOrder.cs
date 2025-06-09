@@ -14,8 +14,7 @@ public class PurchaseOrder : FullAuditedEntity
     public long? ActivityTypeId { get; set; }
     public ActivityType ActivityType { get; set; }
 
-    public long? JobId { get; set; }
-    public Job? Job { get; set; }
+    public ICollection<Job> Jobs { get; set; }
 
     public long SupplierId { get; set; }
     public Supplier? Supplier { get; set; }
@@ -31,6 +30,7 @@ public class PurchaseOrder : FullAuditedEntity
 
     public PurchaseOrder()
     {
+        Jobs = new List<Job>();
         Items = new List<PurchaseOrderItem>();
         Attachments = new List<PurchaseOrderAttachment>();
         Messages = new List<Message>();

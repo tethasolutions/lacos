@@ -22,6 +22,7 @@ import { CustomerModel } from '../shared/models/customer.model';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
+import { Job } from '../services/jobs/models';
 
 @Component({
     selector: 'app-purchase-orders',
@@ -30,7 +31,7 @@ import { saveAs } from '@progress/kendo-file-saver';
 export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     @Input() viewExportExcel: boolean = true;
-    
+
     @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('jobModal', { static: true }) jobModal: JobModalComponent;
@@ -38,20 +39,19 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     user: User;
     currentOperator: OperatorModel;
     screenWidth: number;
-    
+
     data: GridDataResult;
     gridState: State = {
         skip: 0,
         take: 30,
         filter: {
             filters: [
-                this._buildStatusFilter(),
-                this._buildJobIdFilter()
+                this._buildStatusFilter()
             ],
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'desc' },{ field: 'code', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'desc' }, { field: 'code', dir: 'desc' }]
     };
 
     private _jobId: number;
@@ -78,18 +78,18 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
         this.updateScreenSize();
-      }
-    
-      @HostListener('window:resize', ['$event'])
-      onResize(event: Event): void {
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
         this.updateScreenSize();
-      }
-    
-      private updateScreenSize(): void {
-        this.screenWidth = window.innerWidth -44;
+    }
+
+    private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth - 44;
         if (this.screenWidth > 1876) this.screenWidth = 1876;
-        if (this.screenWidth < 1400) this.screenWidth = 1400;     
-      }
+        if (this.screenWidth < 1400) this.screenWidth = 1400;
+    }
 
 
     dataStateChange(state: State) {
@@ -105,9 +105,9 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     }
 
     private _saveState() {
-        this._storageService.save(this.gridState,window.location.hash,true);
+        this._storageService.save(this.gridState, window.location.hash, true);
     }
-    
+
     askRemove(purchaseOrder: IPurchaseOrderReadModel) {
         const text = `Sei sicuro di voler rimuovere l'ordine ${purchaseOrder.code}?`;
 
@@ -124,7 +124,8 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     create() {
         const today = getToday();
-        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, null, this._jobId, null, null, this.currentOperator.id, [], [], [], [], []);
+        const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, null,
+            null, null, this.currentOperator.id, [this._jobId], [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         this._subscriptions.push(
@@ -193,7 +194,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     protected _read() {
         this._subscriptions.push(
-            this._service.read(this.gridState)
+            this._service.read(this.gridState, this._jobId)
                 .pipe(
                     tap(e => this.data = e)
                 )
@@ -283,7 +284,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
-    
+
     openCustomer(customerId: number): void {
         this._subscriptions.push(
             this._customerService.getCustomer(customerId)
@@ -301,21 +302,21 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
-    
+
     openJob(jobId: number): void {
         this._subscriptions.push(
             this._jobService.get(jobId)
-            .pipe(
-                switchMap(e => this.jobModal.open(e)),
-                filter(e => e),
-                switchMap(() => this._jobService.update(this.jobModal.options)),
-                tap(e => this._read())
-            )
-            .subscribe()
+                .pipe(
+                    switchMap(e => this.jobModal.open(e)),
+                    filter(e => e),
+                    switchMap(() => this._jobService.update(this.jobModal.options)),
+                    tap(e => this._read())
+                )
+                .subscribe()
         );
     }
 
-    openAttachments(jobId: number, purchaseOrderId: number) {
+    openAttachments(purchaseOrderId: number) {
         this._subscriptions.push(
             this.jobsAttachmentsModal.open([0, 0, purchaseOrderId])
                 .pipe(

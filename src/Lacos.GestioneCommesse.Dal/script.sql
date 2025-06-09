@@ -11,25 +11,37 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     IF SCHEMA_ID(N'Docs') IS NULL EXEC(N'CREATE SCHEMA [Docs];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     IF SCHEMA_ID(N'Registry') IS NULL EXEC(N'CREATE SCHEMA [Registry];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     IF SCHEMA_ID(N'Security') IS NULL EXEC(N'CREATE SCHEMA [Security];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[ActivityTypes] (
         [Id] bigint NOT NULL IDENTITY,
@@ -50,7 +62,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[ProductTypes] (
         [Id] bigint NOT NULL IDENTITY,
@@ -74,7 +89,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Security].[Users] (
         [Id] bigint NOT NULL IDENTITY,
@@ -89,7 +107,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[Vehicles] (
         [Id] bigint NOT NULL IDENTITY,
@@ -111,7 +132,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[CheckLists] (
         [Id] bigint NOT NULL IDENTITY,
@@ -136,7 +160,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[Customers] (
         [Id] bigint NOT NULL IDENTITY,
@@ -161,7 +188,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[Operators] (
         [Id] bigint NOT NULL IDENTITY,
@@ -187,7 +217,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[CheckListItems] (
         [Id] bigint NOT NULL IDENTITY,
@@ -209,7 +242,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[CustomerAddresses] (
         [Id] bigint NOT NULL IDENTITY,
@@ -239,7 +275,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[Jobs] (
         [Id] bigint NOT NULL IDENTITY,
@@ -262,7 +301,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[OperatorDocuments] (
         [Id] bigint NOT NULL IDENTITY,
@@ -285,7 +327,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[Products] (
         [Id] bigint NOT NULL IDENTITY,
@@ -315,7 +360,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Registry].[ProductDocuments] (
         [Id] bigint NOT NULL IDENTITY,
@@ -338,7 +386,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[Activities] (
         [Id] bigint NOT NULL IDENTITY,
@@ -367,7 +418,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[Interventions] (
         [Id] bigint NOT NULL IDENTITY,
@@ -398,7 +452,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[InterventionDisputes] (
         [Id] bigint NOT NULL IDENTITY,
@@ -420,7 +477,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[InterventionNotes] (
         [Id] bigint NOT NULL IDENTITY,
@@ -445,7 +505,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[InterventionOperators] (
         [InterventionsId] bigint NOT NULL,
@@ -457,7 +520,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[InterventionProducts] (
         [Id] bigint NOT NULL IDENTITY,
@@ -480,7 +546,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[PurchaseOrders] (
         [Id] bigint NOT NULL IDENTITY,
@@ -505,7 +574,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[Tickets] (
         [Id] bigint NOT NULL IDENTITY,
@@ -532,7 +604,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[InterventionProductCheckLists] (
         [Id] bigint NOT NULL IDENTITY,
@@ -556,7 +631,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[InterventionProductPictures] (
         [Id] bigint NOT NULL IDENTITY,
@@ -582,7 +660,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[PurchaseOrderItems] (
         [Id] bigint NOT NULL IDENTITY,
@@ -606,7 +687,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [Docs].[TicketPictures] (
         [Id] bigint NOT NULL IDENTITY,
@@ -629,7 +713,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE TABLE [InterventionProductCheckListItem] (
         [Id] bigint NOT NULL IDENTITY,
@@ -655,7 +742,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'AccessToken', N'Enabled', N'PasswordHash', N'Role', N'Salt', N'UserName') AND [object_id] = OBJECT_ID(N'[Security].[Users]'))
         SET IDENTITY_INSERT [Security].[Users] ON;
@@ -666,256 +756,382 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Activities_CustomerAddressId] ON [Docs].[Activities] ([CustomerAddressId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Activities_JobId] ON [Docs].[Activities] ([JobId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_Activities_SourcePuchaseOrderId] ON [Docs].[Activities] ([SourcePuchaseOrderId]) WHERE [SourcePuchaseOrderId] IS NOT NULL');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_Activities_SourceTicketId] ON [Docs].[Activities] ([SourceTicketId]) WHERE [SourceTicketId] IS NOT NULL');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Activities_TypeId] ON [Docs].[Activities] ([TypeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_CheckListItems_CheckListId] ON [Registry].[CheckListItems] ([CheckListId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_CheckLists_ActivityTypeId] ON [Registry].[CheckLists] ([ActivityTypeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_CheckLists_ProductTypeId] ON [Registry].[CheckLists] ([ProductTypeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_CustomerAddresses_CustomerId] ON [Registry].[CustomerAddresses] ([CustomerId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_Customers_UserId] ON [Registry].[Customers] ([UserId]) WHERE [UserId] IS NOT NULL');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionDisputes_InterventionId] ON [Docs].[InterventionDisputes] ([InterventionId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionNotes_InterventionId] ON [Docs].[InterventionNotes] ([InterventionId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionNotes_OperatorId] ON [Docs].[InterventionNotes] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionOperators_OperatorsId] ON [Docs].[InterventionOperators] ([OperatorsId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionProductCheckListItem_CheckListId] ON [InterventionProductCheckListItem] ([CheckListId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionProductCheckListItem_OperatorId] ON [InterventionProductCheckListItem] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE UNIQUE INDEX [IX_InterventionProductCheckLists_InterventionProductId] ON [Docs].[InterventionProductCheckLists] ([InterventionProductId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionProductPictures_InterventionProductId] ON [Docs].[InterventionProductPictures] ([InterventionProductId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionProductPictures_OperatorId] ON [Docs].[InterventionProductPictures] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionProducts_InterventionId] ON [Docs].[InterventionProducts] ([InterventionId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_InterventionProducts_ProductId] ON [Docs].[InterventionProducts] ([ProductId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Interventions_ActivityId] ON [Docs].[Interventions] ([ActivityId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Interventions_VehicleId] ON [Docs].[Interventions] ([VehicleId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Jobs_CustomerId] ON [Docs].[Jobs] ([CustomerId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_OperatorDocuments_OperatorId] ON [Registry].[OperatorDocuments] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Operators_DefaultVehicleId] ON [Registry].[Operators] ([DefaultVehicleId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE UNIQUE INDEX [IX_Operators_UserId] ON [Registry].[Operators] ([UserId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_ProductDocuments_ProductId] ON [Registry].[ProductDocuments] ([ProductId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Products_CustomerAddressId] ON [Registry].[Products] ([CustomerAddressId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Products_CustomerId] ON [Registry].[Products] ([CustomerId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Products_ProductTypeId] ON [Registry].[Products] ([ProductTypeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_PurchaseOrderItems_ProductId] ON [Docs].[PurchaseOrderItems] ([ProductId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_PurchaseOrderItems_PurchaseOrderId] ON [Docs].[PurchaseOrderItems] ([PurchaseOrderId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_PurchaseOrders_CustomerId] ON [Docs].[PurchaseOrders] ([CustomerId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_PurchaseOrders_InterventionId] ON [Docs].[PurchaseOrders] ([InterventionId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_TicketPictures_TicketId] ON [Docs].[TicketPictures] ([TicketId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Tickets_CustomerAddressId] ON [Docs].[Tickets] ([CustomerAddressId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Tickets_CustomerId] ON [Docs].[Tickets] ([CustomerId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     CREATE INDEX [IX_Tickets_InterventionId] ON [Docs].[Tickets] ([InterventionId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD CONSTRAINT [FK_Activities_PurchaseOrders_SourcePuchaseOrderId] FOREIGN KEY ([SourcePuchaseOrderId]) REFERENCES [Docs].[PurchaseOrders] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD CONSTRAINT [FK_Activities_Tickets_SourceTicketId] FOREIGN KEY ([SourceTicketId]) REFERENCES [Docs].[Tickets] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230628162247_Initial')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230628162247_Initial'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230628162247_Initial', N'7.0.10');
+    VALUES (N'20230628162247_Initial', N'8.0.16');
 END;
 GO
 
@@ -925,13 +1141,19 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230817132438_release1')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230817132438_release1'
+)
 BEGIN
     DROP INDEX [IX_Operators_UserId] ON [Registry].[Operators];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230817132438_release1')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230817132438_release1'
+)
 BEGIN
     DECLARE @var0 sysname;
     SELECT @var0 = [d].[name]
@@ -943,16 +1165,22 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230817132438_release1')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230817132438_release1'
+)
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_Operators_UserId] ON [Registry].[Operators] ([UserId]) WHERE [UserId] IS NOT NULL');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230817132438_release1')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230817132438_release1'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230817132438_release1', N'7.0.10');
+    VALUES (N'20230817132438_release1', N'8.0.16');
 END;
 GO
 
@@ -962,28 +1190,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818075037_release2')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818075037_release2'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[OperatorDocuments].[Description]', N'OriginalFilename', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818075037_release2')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818075037_release2'
+)
 BEGIN
     ALTER TABLE [Registry].[Customers] ADD [Email] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818075037_release2')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818075037_release2'
+)
 BEGIN
     ALTER TABLE [Registry].[Customers] ADD [Telephone] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818075037_release2')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818075037_release2'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230818075037_release2', N'7.0.10');
+    VALUES (N'20230818075037_release2', N'8.0.16');
 END;
 GO
 
@@ -993,13 +1233,19 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818142131_release3')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818142131_release3'
+)
 BEGIN
     ALTER TABLE [Security].[Users] ADD [IsDeleted] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818142131_release3')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818142131_release3'
+)
 BEGIN
     EXEC(N'UPDATE [Security].[Users] SET [IsDeleted] = CAST(0 AS bit)
     WHERE [Id] = CAST(1 AS bigint);
@@ -1007,10 +1253,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818142131_release3')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818142131_release3'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230818142131_release3', N'7.0.10');
+    VALUES (N'20230818142131_release3', N'8.0.16');
 END;
 GO
 
@@ -1020,34 +1269,49 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818153257_release4')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818153257_release4'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [JobDate] datetimeoffset(3) NOT NULL DEFAULT '0001-01-01T00:00:00.000+00:00';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818153257_release4')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818153257_release4'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [Number] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818153257_release4')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818153257_release4'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [Year] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818153257_release4')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818153257_release4'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [RowNumber] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230818153257_release4')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230818153257_release4'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230818153257_release4', N'7.0.10');
+    VALUES (N'20230818153257_release4', N'8.0.16');
 END;
 GO
 
@@ -1057,13 +1321,19 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230821155713_release5')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230821155713_release5'
+)
 BEGIN
     ALTER TABLE [Registry].[ProductDocuments] ADD [OriginalFilename] nvarchar(200) NOT NULL DEFAULT N'';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230821155713_release5')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230821155713_release5'
+)
 BEGIN
     DECLARE @var1 sysname;
     SELECT @var1 = [d].[name]
@@ -1075,28 +1345,40 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230821155713_release5')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230821155713_release5'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProducts] ADD [ActivityId] bigint NOT NULL DEFAULT CAST(0 AS bigint);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230821155713_release5')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230821155713_release5'
+)
 BEGIN
     CREATE INDEX [IX_InterventionProducts_ActivityId] ON [Docs].[InterventionProducts] ([ActivityId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230821155713_release5')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230821155713_release5'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProducts] ADD CONSTRAINT [FK_InterventionProducts_Activities_ActivityId] FOREIGN KEY ([ActivityId]) REFERENCES [Docs].[Activities] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230821155713_release5')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230821155713_release5'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230821155713_release5', N'7.0.10');
+    VALUES (N'20230821155713_release5', N'8.0.16');
 END;
 GO
 
@@ -1106,58 +1388,85 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [Constructor] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [HasPushBar] bit NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [Location] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [NumberOfDoors] int NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [REIType] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [SerialNumber] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [VOCType] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [Year] int NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822130835_release6')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822130835_release6'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230822130835_release6', N'7.0.10');
+    VALUES (N'20230822130835_release6', N'8.0.16');
 END;
 GO
 
@@ -1167,7 +1476,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822131310_release7')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822131310_release7'
+)
 BEGIN
     DECLARE @var2 sysname;
     SELECT @var2 = [d].[name]
@@ -1179,7 +1491,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822131310_release7')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822131310_release7'
+)
 BEGIN
     DECLARE @var3 sysname;
     SELECT @var3 = [d].[name]
@@ -1191,7 +1506,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822131310_release7')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822131310_release7'
+)
 BEGIN
     DECLARE @var4 sysname;
     SELECT @var4 = [d].[name]
@@ -1203,7 +1521,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822131310_release7')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822131310_release7'
+)
 BEGIN
     DECLARE @var5 sysname;
     SELECT @var5 = [d].[name]
@@ -1215,7 +1536,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822131310_release7')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822131310_release7'
+)
 BEGIN
     DECLARE @var6 sysname;
     SELECT @var6 = [d].[name]
@@ -1227,10 +1551,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822131310_release7')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822131310_release7'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230822131310_release7', N'7.0.10');
+    VALUES (N'20230822131310_release7', N'8.0.16');
 END;
 GO
 
@@ -1240,28 +1567,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822132138_release8')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822132138_release8'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[Products].[VOCType]', N'VocType', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822132138_release8')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822132138_release8'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[Products].[REIType]', N'ReiType', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822132138_release8')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822132138_release8'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[Products].[Constructor]', N'ConstructorName', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230822132138_release8')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230822132138_release8'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230822132138_release8', N'7.0.10');
+    VALUES (N'20230822132138_release8', N'8.0.16');
 END;
 GO
 
@@ -1271,25 +1610,37 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProducts] DROP CONSTRAINT [FK_InterventionProducts_Activities_ActivityId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProducts] DROP CONSTRAINT [FK_InterventionProducts_Products_ProductId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     DROP INDEX [IX_InterventionProducts_ActivityId] ON [Docs].[InterventionProducts];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     DECLARE @var7 sysname;
     SELECT @var7 = [d].[name]
@@ -1301,7 +1652,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     DECLARE @var8 sysname;
     SELECT @var8 = [d].[name]
@@ -1313,7 +1667,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     DECLARE @var9 sysname;
     SELECT @var9 = [d].[name]
@@ -1325,19 +1682,28 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[InterventionProducts].[ProductId]', N'ActivityProductId', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[InterventionProducts].[IX_InterventionProducts_ProductId]', N'IX_InterventionProducts_ActivityProductId', N'INDEX';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     DROP INDEX [IX_Interventions_ActivityId] ON [Docs].[Interventions];
     DECLARE @var10 sysname;
@@ -1353,7 +1719,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     DROP INDEX [IX_InterventionProducts_InterventionId] ON [Docs].[InterventionProducts];
     DECLARE @var11 sysname;
@@ -1369,7 +1738,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     CREATE TABLE [Docs].[ActivityProducts] (
         [Id] bigint NOT NULL IDENTITY,
@@ -1392,28 +1764,40 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     CREATE INDEX [IX_ActivityProducts_ActivityId] ON [Docs].[ActivityProducts] ([ActivityId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     CREATE INDEX [IX_ActivityProducts_ProductId] ON [Docs].[ActivityProducts] ([ProductId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProducts] ADD CONSTRAINT [FK_InterventionProducts_ActivityProducts_ActivityProductId] FOREIGN KEY ([ActivityProductId]) REFERENCES [Docs].[ActivityProducts] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230824125334_release9')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230824125334_release9'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230824125334_release9', N'7.0.10');
+    VALUES (N'20230824125334_release9', N'8.0.16');
 END;
 GO
 
@@ -1423,7 +1807,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230829085323_release10')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230829085323_release10'
+)
 BEGIN
     DECLARE @var12 sysname;
     SELECT @var12 = [d].[name]
@@ -1435,22 +1822,31 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230829085323_release10')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230829085323_release10'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [QrCodeNumber] int NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230829085323_release10')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230829085323_release10'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [QrCodePrefix] nvarchar(10) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230829085323_release10')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20230829085323_release10'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230829085323_release10', N'7.0.10');
+    VALUES (N'20230829085323_release10', N'8.0.16');
 END;
 GO
 
@@ -1460,28 +1856,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231006083312_release11')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231006083312_release11'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [Number] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231006083312_release11')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231006083312_release11'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [TicketDate] datetimeoffset(3) NOT NULL DEFAULT '0001-01-01T00:00:00.000+00:00';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231006083312_release11')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231006083312_release11'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [Year] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231006083312_release11')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231006083312_release11'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231006083312_release11', N'7.0.10');
+    VALUES (N'20231006083312_release11', N'8.0.16');
 END;
 GO
 
@@ -1491,56 +1899,83 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     ALTER TABLE [InterventionProductCheckListItem] DROP CONSTRAINT [FK_InterventionProductCheckListItem_InterventionProductCheckLists_CheckListId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     ALTER TABLE [InterventionProductCheckListItem] DROP CONSTRAINT [FK_InterventionProductCheckListItem_Operators_OperatorId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     ALTER TABLE [InterventionProductCheckListItem] DROP CONSTRAINT [PK_InterventionProductCheckListItem];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     EXEC sp_rename N'[InterventionProductCheckListItem]', N'InterventionProductCheckListItems';
     ALTER SCHEMA [Docs] TRANSFER [InterventionProductCheckListItems];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[InterventionProductCheckListItems].[IX_InterventionProductCheckListItem_OperatorId]', N'IX_InterventionProductCheckListItems_OperatorId', N'INDEX';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[InterventionProductCheckListItems].[IX_InterventionProductCheckListItem_CheckListId]', N'IX_InterventionProductCheckListItems_CheckListId', N'INDEX';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [ColorHex] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [IsInternal] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     DECLARE @var13 sysname;
     SELECT @var13 = [d].[name]
@@ -1552,7 +1987,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     DECLARE @var14 sysname;
     SELECT @var14 = [d].[name]
@@ -1566,7 +2004,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     DECLARE @var15 sysname;
     SELECT @var15 = [d].[name]
@@ -1578,7 +2019,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     DECLARE @var16 sysname;
     SELECT @var16 = [d].[name]
@@ -1590,13 +2034,19 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProductCheckListItems] ADD CONSTRAINT [PK_InterventionProductCheckListItems] PRIMARY KEY ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     CREATE TABLE [Registry].[OperatorsActivityTypes] (
         [ActivityTypesId] bigint NOT NULL,
@@ -1608,28 +2058,40 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     CREATE INDEX [IX_OperatorsActivityTypes_OperatorsId] ON [Registry].[OperatorsActivityTypes] ([OperatorsId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProductCheckListItems] ADD CONSTRAINT [FK_InterventionProductCheckListItems_InterventionProductCheckLists_CheckListId] FOREIGN KEY ([CheckListId]) REFERENCES [Docs].[InterventionProductCheckLists] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProductCheckListItems] ADD CONSTRAINT [FK_InterventionProductCheckListItems_Operators_OperatorId] FOREIGN KEY ([OperatorId]) REFERENCES [Registry].[Operators] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231016113304_release12')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231016113304_release12'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231016113304_release12', N'7.0.10');
+    VALUES (N'20231016113304_release12', N'8.0.16');
 END;
 GO
 
@@ -1639,16 +2101,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231017151834_Add_Status_To_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231017151834_Add_Status_To_Activity'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [Status] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231017151834_Add_Status_To_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231017151834_Add_Status_To_Activity'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231017151834_Add_Status_To_Activity', N'7.0.10');
+    VALUES (N'20231017151834_Add_Status_To_Activity', N'8.0.16');
 END;
 GO
 
@@ -1658,16 +2126,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231018075252_Add_ExpirationDate_To_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231018075252_Add_ExpirationDate_To_Activity'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [ExpirationDate] datetimeoffset(3) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231018075252_Add_ExpirationDate_To_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231018075252_Add_ExpirationDate_To_Activity'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231018075252_Add_ExpirationDate_To_Activity', N'7.0.10');
+    VALUES (N'20231018075252_Add_ExpirationDate_To_Activity', N'8.0.16');
 END;
 GO
 
@@ -1677,7 +2151,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231026084953_Modify_Product_QrCodeNumber_int_to_string')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231026084953_Modify_Product_QrCodeNumber_int_to_string'
+)
 BEGIN
     DECLARE @var17 sysname;
     SELECT @var17 = [d].[name]
@@ -1689,10 +2166,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231026084953_Modify_Product_QrCodeNumber_int_to_string')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231026084953_Modify_Product_QrCodeNumber_int_to_string'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231026084953_Modify_Product_QrCodeNumber_int_to_string', N'7.0.10');
+    VALUES (N'20231026084953_Modify_Product_QrCodeNumber_int_to_string', N'8.0.16');
 END;
 GO
 
@@ -1702,7 +2182,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031135701_release13')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031135701_release13'
+)
 BEGIN
     DECLARE @var18 sysname;
     SELECT @var18 = [d].[name]
@@ -1714,10 +2197,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031135701_release13')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031135701_release13'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231031135701_release13', N'7.0.10');
+    VALUES (N'20231031135701_release13', N'8.0.16');
 END;
 GO
 
@@ -1727,43 +2213,64 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] DROP CONSTRAINT [FK_PurchaseOrders_Customers_CustomerId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] DROP CONSTRAINT [FK_PurchaseOrders_Interventions_InterventionId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[PurchaseOrders].[InterventionId]', N'JobId', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[PurchaseOrders].[CustomerId]', N'SupplierId', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[PurchaseOrders].[IX_PurchaseOrders_InterventionId]', N'IX_PurchaseOrders_JobId', N'INDEX';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[PurchaseOrders].[IX_PurchaseOrders_CustomerId]', N'IX_PurchaseOrders_SupplierId', N'INDEX';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     CREATE TABLE [Registry].[Suppliers] (
         [Id] bigint NOT NULL IDENTITY,
@@ -1786,7 +2293,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     CREATE TABLE [Registry].[Addresses] (
         [Id] bigint NOT NULL IDENTITY,
@@ -1816,28 +2326,40 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     CREATE INDEX [IX_Addresses_SupplierId] ON [Registry].[Addresses] ([SupplierId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_Jobs_JobId] FOREIGN KEY ([JobId]) REFERENCES [Docs].[Jobs] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_Suppliers_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Registry].[Suppliers] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031151943_release14')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031151943_release14'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231031151943_release14', N'7.0.10');
+    VALUES (N'20231031151943_release14', N'8.0.16');
 END;
 GO
 
@@ -1847,16 +2369,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031154128_release15')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031154128_release15'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [HasHighPriority] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231031154128_release15')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231031154128_release15'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231031154128_release15', N'7.0.10');
+    VALUES (N'20231031154128_release15', N'8.0.16');
 END;
 GO
 
@@ -1866,34 +2394,49 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231102160233_release16'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [Reference] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231102160233_release16'
+)
 BEGIN
     ALTER TABLE [Registry].[Customers] ADD [Contact] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231102160233_release16'
+)
 BEGIN
     ALTER TABLE [Registry].[Customers] ADD [ContactEmail] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231102160233_release16'
+)
 BEGIN
     ALTER TABLE [Registry].[Customers] ADD [ContactTelephone] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231102160233_release16')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231102160233_release16'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231102160233_release16', N'7.0.10');
+    VALUES (N'20231102160233_release16', N'8.0.16');
 END;
 GO
 
@@ -1903,37 +2446,55 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] DROP CONSTRAINT [FK_Addresses_Suppliers_SupplierId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] DROP CONSTRAINT [PK_Addresses];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[Addresses].[IX_Addresses_SupplierId]', N'IX_Addresses_SupplierId', N'INDEX';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [AddressId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [AddressId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     DECLARE @var19 sysname;
     SELECT @var19 = [d].[name]
@@ -1945,46 +2506,67 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] ADD CONSTRAINT [PK_Addresses] PRIMARY KEY ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     CREATE INDEX [IX_Jobs_AddressId] ON [Docs].[Jobs] ([AddressId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     CREATE INDEX [IX_Activities_AddressId] ON [Docs].[Activities] ([AddressId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD CONSTRAINT [FK_Activities_Addresses_AddressId] FOREIGN KEY ([AddressId]) REFERENCES [Registry].[Addresses] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] ADD CONSTRAINT [FK_Addresses_Suppliers_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Registry].[Suppliers] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD CONSTRAINT [FK_Jobs_Addresses_AddressId] FOREIGN KEY ([AddressId]) REFERENCES [Registry].[Addresses] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231106145257_release17')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231106145257_release17'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231106145257_release17', N'7.0.10');
+    VALUES (N'20231106145257_release17', N'8.0.16');
 END;
 GO
 
@@ -1994,43 +2576,64 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] DROP CONSTRAINT [FK_Activities_CustomerAddresses_CustomerAddressId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] DROP CONSTRAINT [FK_Products_CustomerAddresses_CustomerAddressId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] DROP CONSTRAINT [FK_Tickets_CustomerAddresses_CustomerAddressId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     DROP TABLE [Registry].[CustomerAddresses];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     DROP INDEX [IX_Tickets_CustomerAddressId] ON [Docs].[Tickets];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     DROP INDEX [IX_Activities_CustomerAddressId] ON [Docs].[Activities];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     DECLARE @var20 sysname;
     SELECT @var20 = [d].[name]
@@ -2042,7 +2645,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     DECLARE @var21 sysname;
     SELECT @var21 = [d].[name]
@@ -2054,46 +2660,67 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[Products].[CustomerAddressId]', N'AddressId', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[Products].[IX_Products_CustomerAddressId]', N'IX_Products_AddressId', N'INDEX';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] ADD [CustomerId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     CREATE INDEX [IX_Addresses_CustomerId] ON [Registry].[Addresses] ([CustomerId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] ADD CONSTRAINT [FK_Addresses_Customers_CustomerId] FOREIGN KEY ([CustomerId]) REFERENCES [Registry].[Customers] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD CONSTRAINT [FK_Products_Addresses_AddressId] FOREIGN KEY ([AddressId]) REFERENCES [Registry].[Addresses] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231107102344_release18')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231107102344_release18'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231107102344_release18', N'7.0.10');
+    VALUES (N'20231107102344_release18', N'8.0.16');
 END;
 GO
 
@@ -2103,7 +2730,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113131318_release19')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231113131318_release19'
+)
 BEGIN
     DECLARE @var22 sysname;
     SELECT @var22 = [d].[name]
@@ -2115,10 +2745,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113131318_release19')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231113131318_release19'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231113131318_release19', N'7.0.10');
+    VALUES (N'20231113131318_release19', N'8.0.16');
 END;
 GO
 
@@ -2128,28 +2761,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113153114_release20')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231113153114_release20'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD [Date] datetimeoffset(3) NOT NULL DEFAULT '0001-01-01T00:00:00.000+00:00';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113153114_release20')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231113153114_release20'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD [Number] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113153114_release20')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231113153114_release20'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD [Year] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231113153114_release20')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231113153114_release20'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231113153114_release20', N'7.0.10');
+    VALUES (N'20231113153114_release20', N'8.0.16');
 END;
 GO
 
@@ -2159,34 +2804,49 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] DROP CONSTRAINT [FK_Tickets_Interventions_InterventionId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[Tickets].[InterventionId]', N'JobId', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention'
+)
 BEGIN
     EXEC sp_rename N'[Docs].[Tickets].[IX_Tickets_InterventionId]', N'IX_Tickets_JobId', N'INDEX';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD CONSTRAINT [FK_Tickets_Jobs_JobId] FOREIGN KEY ([JobId]) REFERENCES [Docs].[Jobs] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231114095506_Link_Ticket_to_Job_instead_Intervention'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231114095506_Link_Ticket_to_Job_instead_Intervention', N'7.0.10');
+    VALUES (N'20231114095506_Link_Ticket_to_Job_instead_Intervention', N'8.0.16');
 END;
 GO
 
@@ -2196,7 +2856,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231127175605_descrizione nullable')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231127175605_descrizione nullable'
+)
 BEGIN
     DECLARE @var23 sysname;
     SELECT @var23 = [d].[name]
@@ -2208,7 +2871,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231127175605_descrizione nullable')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231127175605_descrizione nullable'
+)
 BEGIN
     DECLARE @var24 sysname;
     SELECT @var24 = [d].[name]
@@ -2220,10 +2886,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231127175605_descrizione nullable')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231127175605_descrizione nullable'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231127175605_descrizione nullable', N'7.0.10');
+    VALUES (N'20231127175605_descrizione nullable', N'8.0.16');
 END;
 GO
 
@@ -2233,7 +2902,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231128102609_activity attachments')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231128102609_activity attachments'
+)
 BEGIN
     CREATE TABLE [Docs].[ActivityAttachments] (
         [Id] bigint NOT NULL IDENTITY,
@@ -2256,16 +2928,22 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231128102609_activity attachments')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231128102609_activity attachments'
+)
 BEGIN
     CREATE INDEX [IX_ActivityAttachments_ActivityId] ON [Docs].[ActivityAttachments] ([ActivityId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231128102609_activity attachments')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231128102609_activity attachments'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231128102609_activity attachments', N'7.0.10');
+    VALUES (N'20231128102609_activity attachments', N'8.0.16');
 END;
 GO
 
@@ -2275,28 +2953,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231128133810_internal job')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231128133810_internal job'
+)
 BEGIN
     DROP INDEX [IX_ActivityAttachments_ActivityId] ON [Docs].[ActivityAttachments];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231128133810_internal job')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231128133810_internal job'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [IsInternalJob] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231128133810_internal job')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231128133810_internal job'
+)
 BEGIN
     CREATE UNIQUE INDEX [IX_ActivityAttachments_ActivityId] ON [Docs].[ActivityAttachments] ([ActivityId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231128133810_internal job')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231128133810_internal job'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231128133810_internal job', N'7.0.10');
+    VALUES (N'20231128133810_internal job', N'8.0.16');
 END;
 GO
 
@@ -2306,28 +2996,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231211202048_supplier in activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231211202048_supplier in activity'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [SupplierId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231211202048_supplier in activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231211202048_supplier in activity'
+)
 BEGIN
     CREATE INDEX [IX_Activities_SupplierId] ON [Docs].[Activities] ([SupplierId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231211202048_supplier in activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231211202048_supplier in activity'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD CONSTRAINT [FK_Activities_Suppliers_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Registry].[Suppliers] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231211202048_supplier in activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231211202048_supplier in activity'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231211202048_supplier in activity', N'7.0.10');
+    VALUES (N'20231211202048_supplier in activity', N'8.0.16');
 END;
 GO
 
@@ -2337,28 +3039,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214133753_modifiche 12 dic')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214133753_modifiche 12 dic'
+)
 BEGIN
     ALTER TABLE [Docs].[Interventions] ADD [CustomerSignatureName] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214133753_modifiche 12 dic')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214133753_modifiche 12 dic'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProductCheckListItems] ADD [AttachmentFileName] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214133753_modifiche 12 dic')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214133753_modifiche 12 dic'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [StartDate] datetimeoffset(3) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214133753_modifiche 12 dic')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214133753_modifiche 12 dic'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231214133753_modifiche 12 dic', N'7.0.10');
+    VALUES (N'20231214133753_modifiche 12 dic', N'8.0.16');
 END;
 GO
 
@@ -2368,7 +3082,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214134227_rimozione firma da checklist')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214134227_rimozione firma da checklist'
+)
 BEGIN
     DECLARE @var25 sysname;
     SELECT @var25 = [d].[name]
@@ -2380,10 +3097,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214134227_rimozione firma da checklist')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214134227_rimozione firma da checklist'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231214134227_rimozione firma da checklist', N'7.0.10');
+    VALUES (N'20231214134227_rimozione firma da checklist', N'8.0.16');
 END;
 GO
 
@@ -2393,22 +3113,31 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti'
+)
 BEGIN
     ALTER TABLE [Docs].[ActivityProducts] ADD [Description] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti'
+)
 BEGIN
     ALTER TABLE [Docs].[ActivityProducts] ADD [Location] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231214155014_aggiunta dettagli prodotti'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231214155014_aggiunta dettagli prodotti', N'7.0.10');
+    VALUES (N'20231214155014_aggiunta dettagli prodotti', N'8.0.16');
 END;
 GO
 
@@ -2418,16 +3147,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231228091522_ticket flag isnew')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231228091522_ticket flag isnew'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [IsNew] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20231228091522_ticket flag isnew')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20231228091522_ticket flag isnew'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20231228091522_ticket flag isnew', N'7.0.10');
+    VALUES (N'20231228091522_ticket flag isnew', N'8.0.16');
 END;
 GO
 
@@ -2437,31 +3172,46 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] DROP CONSTRAINT [FK_Activities_PurchaseOrders_SourcePuchaseOrderId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] DROP CONSTRAINT [FK_Activities_Tickets_SourceTicketId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity'
+)
 BEGIN
     DROP INDEX [IX_Activities_SourcePuchaseOrderId] ON [Docs].[Activities];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity'
+)
 BEGIN
     DROP INDEX [IX_Activities_SourceTicketId] ON [Docs].[Activities];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity'
+)
 BEGIN
     DECLARE @var26 sysname;
     SELECT @var26 = [d].[name]
@@ -2473,7 +3223,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity'
+)
 BEGIN
     DECLARE @var27 sysname;
     SELECT @var27 = [d].[name]
@@ -2485,10 +3238,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240104132503_Remove_Source_From_Activity'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240104132503_Remove_Source_From_Activity', N'7.0.10');
+    VALUES (N'20240104132503_Remove_Source_From_Activity', N'8.0.16');
 END;
 GO
 
@@ -2498,16 +3254,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240114103815_activityType isExternal')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240114103815_activityType isExternal'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [IsExternal] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240114103815_activityType isExternal')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240114103815_activityType isExternal'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240114103815_activityType isExternal', N'7.0.10');
+    VALUES (N'20240114103815_activityType isExternal', N'8.0.16');
 END;
 GO
 
@@ -2517,28 +3279,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240114110442_supplier contacts')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240114110442_supplier contacts'
+)
 BEGIN
     ALTER TABLE [Registry].[Suppliers] ADD [Contact] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240114110442_supplier contacts')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240114110442_supplier contacts'
+)
 BEGIN
     ALTER TABLE [Registry].[Suppliers] ADD [ContactEmail] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240114110442_supplier contacts')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240114110442_supplier contacts'
+)
 BEGIN
     ALTER TABLE [Registry].[Suppliers] ADD [ContactTelephone] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240114110442_supplier contacts')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240114110442_supplier contacts'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240114110442_supplier contacts', N'7.0.10');
+    VALUES (N'20240114110442_supplier contacts', N'8.0.16');
 END;
 GO
 
@@ -2548,16 +3322,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240116135246_job status')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240116135246_job status'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [Status] int NOT NULL DEFAULT 0;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240116135246_job status')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240116135246_job status'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240116135246_job status', N'7.0.10');
+    VALUES (N'20240116135246_job status', N'8.0.16');
 END;
 GO
 
@@ -2567,28 +3347,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117154213_activity referent')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240117154213_activity referent'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [ReferentId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117154213_activity referent')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240117154213_activity referent'
+)
 BEGIN
     CREATE INDEX [IX_Activities_ReferentId] ON [Docs].[Activities] ([ReferentId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117154213_activity referent')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240117154213_activity referent'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD CONSTRAINT [FK_Activities_Operators_ReferentId] FOREIGN KEY ([ReferentId]) REFERENCES [Registry].[Operators] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117154213_activity referent')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240117154213_activity referent'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240117154213_activity referent', N'7.0.10');
+    VALUES (N'20240117154213_activity referent', N'8.0.16');
 END;
 GO
 
@@ -2598,16 +3390,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117161709_update activity status')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240117161709_update activity status'
+)
 BEGIN
     UPDATE [Docs].[Activities] SET Status = 1 WHERE Status = 2; UPDATE [Docs].[Activities] SET Status = 2 WHERE Status = 3; 
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240117161709_update activity status')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240117161709_update activity status'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240117161709_update activity status', N'7.0.10');
+    VALUES (N'20240117161709_update activity status', N'8.0.16');
 END;
 GO
 
@@ -2617,28 +3415,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240118155111_add tickets-activityid')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240118155111_add tickets-activityid'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [ActivityId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240118155111_add tickets-activityid')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240118155111_add tickets-activityid'
+)
 BEGIN
     CREATE INDEX [IX_Tickets_ActivityId] ON [Docs].[Tickets] ([ActivityId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240118155111_add tickets-activityid')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240118155111_add tickets-activityid'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD CONSTRAINT [FK_Tickets_Activities_ActivityId] FOREIGN KEY ([ActivityId]) REFERENCES [Docs].[Activities] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240118155111_add tickets-activityid')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240118155111_add tickets-activityid'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240118155111_add tickets-activityid', N'7.0.10');
+    VALUES (N'20240118155111_add tickets-activityid', N'8.0.16');
 END;
 GO
 
@@ -2648,34 +3458,49 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240122155620_attachments'
+)
 BEGIN
     ALTER TABLE [Docs].[ActivityAttachments] DROP CONSTRAINT [FK_ActivityAttachments_Activities_ActivityId];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240122155620_attachments'
+)
 BEGIN
     DROP INDEX [IX_ActivityAttachments_ActivityId] ON [Docs].[ActivityAttachments];
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240122155620_attachments'
+)
 BEGIN
     CREATE INDEX [IX_ActivityAttachments_ActivityId] ON [Docs].[ActivityAttachments] ([ActivityId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240122155620_attachments'
+)
 BEGIN
     ALTER TABLE [Docs].[ActivityAttachments] ADD CONSTRAINT [FK_ActivityAttachments_Activities_ActivityId] FOREIGN KEY ([ActivityId]) REFERENCES [Docs].[Activities] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240122155620_attachments')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240122155620_attachments'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240122155620_attachments', N'7.0.10');
+    VALUES (N'20240122155620_attachments', N'8.0.16');
 END;
 GO
 
@@ -2685,13 +3510,19 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [IsNewReferent] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività'
+)
 BEGIN
     CREATE TABLE [Docs].[JobAttachments] (
         [Id] bigint NOT NULL IDENTITY,
@@ -2714,7 +3545,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività'
+)
 BEGIN
     CREATE TABLE [Docs].[PurchaseOrderAttachments] (
         [Id] bigint NOT NULL IDENTITY,
@@ -2737,22 +3571,31 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività'
+)
 BEGIN
     CREATE INDEX [IX_JobAttachments_JobId] ON [Docs].[JobAttachments] ([JobId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività'
+)
 BEGIN
     CREATE INDEX [IX_PurchaseOrderAttachments_PurchaseOrderId] ON [Docs].[PurchaseOrderAttachments] ([PurchaseOrderId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240131103838_allegati job e purchase order - flag nuove attività'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240131103838_allegati job e purchase order - flag nuove attività', N'7.0.10');
+    VALUES (N'20240131103838_allegati job e purchase order - flag nuove attività', N'8.0.16');
 END;
 GO
 
@@ -2762,28 +3605,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240205145345_job referentid')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240205145345_job referentid'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [ReferentId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240205145345_job referentid')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240205145345_job referentid'
+)
 BEGIN
     CREATE INDEX [IX_Jobs_ReferentId] ON [Docs].[Jobs] ([ReferentId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240205145345_job referentid')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240205145345_job referentid'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD CONSTRAINT [FK_Jobs_Operators_ReferentId] FOREIGN KEY ([ReferentId]) REFERENCES [Registry].[Operators] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240205145345_job referentid')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240205145345_job referentid'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240205145345_job referentid', N'7.0.10');
+    VALUES (N'20240205145345_job referentid', N'8.0.16');
 END;
 GO
 
@@ -2793,40 +3648,58 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240216134743_nuovi campi attività'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [StatusLabel0] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240216134743_nuovi campi attività'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [StatusLabel1] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240216134743_nuovi campi attività'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [StatusLabel2] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240216134743_nuovi campi attività'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [Informations] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240216134743_nuovi campi attività'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [ShortDescription] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240216134743_nuovi campi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240216134743_nuovi campi attività'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240216134743_nuovi campi attività', N'7.0.10');
+    VALUES (N'20240216134743_nuovi campi attività', N'8.0.16');
 END;
 GO
 
@@ -2836,28 +3709,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240321114245_operator ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240321114245_operator ticket'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [OperatorId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240321114245_operator ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240321114245_operator ticket'
+)
 BEGIN
     CREATE INDEX [IX_Tickets_OperatorId] ON [Docs].[Tickets] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240321114245_operator ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240321114245_operator ticket'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD CONSTRAINT [FK_Tickets_Operators_OperatorId] FOREIGN KEY ([OperatorId]) REFERENCES [Registry].[Operators] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240321114245_operator ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240321114245_operator ticket'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240321114245_operator ticket', N'7.0.10');
+    VALUES (N'20240321114245_operator ticket', N'8.0.16');
 END;
 GO
 
@@ -2867,16 +3752,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328103906_expiration date job')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240328103906_expiration date job'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [ExpirationDate] datetimeoffset(3) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328103906_expiration date job')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240328103906_expiration date job'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240328103906_expiration date job', N'7.0.10');
+    VALUES (N'20240328103906_expiration date job', N'8.0.16');
 END;
 GO
 
@@ -2886,34 +3777,49 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240328121331_purchase new fields'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD [ExpectedDate] datetimeoffset(3) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240328121331_purchase new fields'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD [OperatorId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240328121331_purchase new fields'
+)
 BEGIN
     CREATE INDEX [IX_PurchaseOrders_OperatorId] ON [Docs].[PurchaseOrders] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240328121331_purchase new fields'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_Operators_OperatorId] FOREIGN KEY ([OperatorId]) REFERENCES [Registry].[Operators] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240328121331_purchase new fields')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240328121331_purchase new fields'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240328121331_purchase new fields', N'7.0.10');
+    VALUES (N'20240328121331_purchase new fields', N'8.0.16');
 END;
 GO
 
@@ -2923,7 +3829,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE TABLE [Docs].[Messages] (
         [Id] bigint NOT NULL IDENTITY,
@@ -2954,7 +3863,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE TABLE [Docs].[MessageNotfications] (
         [Id] bigint NOT NULL IDENTITY,
@@ -2979,52 +3891,76 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE INDEX [IX_MessageNotfications_MessageId] ON [Docs].[MessageNotfications] ([MessageId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE INDEX [IX_MessageNotfications_OperatorId] ON [Docs].[MessageNotfications] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE INDEX [IX_Messages_ActivityId] ON [Docs].[Messages] ([ActivityId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE INDEX [IX_Messages_JobId] ON [Docs].[Messages] ([JobId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE INDEX [IX_Messages_OperatorId] ON [Docs].[Messages] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE INDEX [IX_Messages_PurchaseOrderId] ON [Docs].[Messages] ([PurchaseOrderId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     CREATE INDEX [IX_Messages_TicketId] ON [Docs].[Messages] ([TicketId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240406082328_messages')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240406082328_messages'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240406082328_messages', N'7.0.10');
+    VALUES (N'20240406082328_messages', N'8.0.16');
 END;
 GO
 
@@ -3034,16 +3970,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240413135124_allegati admin ordini')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240413135124_allegati admin ordini'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrderAttachments] ADD [IsAdminDocument] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240413135124_allegati admin ordini')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240413135124_allegati admin ordini'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240413135124_allegati admin ordini', N'7.0.10');
+    VALUES (N'20240413135124_allegati admin ordini', N'8.0.16');
 END;
 GO
 
@@ -3053,16 +3995,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240428162658_firma operatore')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240428162658_firma operatore'
+)
 BEGIN
     ALTER TABLE [Registry].[Operators] ADD [SignFileName] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240428162658_firma operatore')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240428162658_firma operatore'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240428162658_firma operatore', N'7.0.10');
+    VALUES (N'20240428162658_firma operatore', N'8.0.16');
 END;
 GO
 
@@ -3072,16 +4020,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240429080741_modifica campo firma operatore')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240429080741_modifica campo firma operatore'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[Operators].[SignFileName]', N'SignatureFileName', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240429080741_modifica campo firma operatore')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240429080741_modifica campo firma operatore'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240429080741_modifica campo firma operatore', N'7.0.10');
+    VALUES (N'20240429080741_modifica campo firma operatore', N'8.0.16');
 END;
 GO
 
@@ -3091,16 +4045,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240429135338_aggiunta colore tipo prodotto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240429135338_aggiunta colore tipo prodotto'
+)
 BEGIN
     ALTER TABLE [Registry].[ProductTypes] ADD [ColorHex] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240429135338_aggiunta colore tipo prodotto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240429135338_aggiunta colore tipo prodotto'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240429135338_aggiunta colore tipo prodotto', N'7.0.10');
+    VALUES (N'20240429135338_aggiunta colore tipo prodotto', N'8.0.16');
 END;
 GO
 
@@ -3110,16 +4070,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240510102507_aggiunta quarto stato tipi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240510102507_aggiunta quarto stato tipi attività'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [StatusLabel3] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240510102507_aggiunta quarto stato tipi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240510102507_aggiunta quarto stato tipi attività'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240510102507_aggiunta quarto stato tipi attività', N'7.0.10');
+    VALUES (N'20240510102507_aggiunta quarto stato tipi attività', N'8.0.16');
 END;
 GO
 
@@ -3129,13 +4095,19 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240521123902_aggiunta_tabella_DocumentsToSyncQueue')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240521123902_aggiunta_tabella_DocumentsToSyncQueue'
+)
 BEGIN
     IF SCHEMA_ID(N'Application') IS NULL EXEC(N'CREATE SCHEMA [Application];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240521123902_aggiunta_tabella_DocumentsToSyncQueue')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240521123902_aggiunta_tabella_DocumentsToSyncQueue'
+)
 BEGIN
     CREATE TABLE [Application].[DocumentsToSyncQueue] (
         [Id] bigint NOT NULL IDENTITY,
@@ -3159,10 +4131,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240521123902_aggiunta_tabella_DocumentsToSyncQueue')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240521123902_aggiunta_tabella_DocumentsToSyncQueue'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240521123902_aggiunta_tabella_DocumentsToSyncQueue', N'7.0.10');
+    VALUES (N'20240521123902_aggiunta_tabella_DocumentsToSyncQueue', N'8.0.16');
 END;
 GO
 
@@ -3172,16 +4147,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240523150839_add sdi code')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240523150839_add sdi code'
+)
 BEGIN
     ALTER TABLE [Registry].[Customers] ADD [SDICode] nvarchar(7) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240523150839_add sdi code')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240523150839_add sdi code'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240523150839_add sdi code', N'7.0.10');
+    VALUES (N'20240523150839_add sdi code', N'8.0.16');
 END;
 GO
 
@@ -3191,16 +4172,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240605100436_nuovo campo correctiveAction')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240605100436_nuovo campo correctiveAction'
+)
 BEGIN
     ALTER TABLE [Docs].[InterventionProductCheckListItems] ADD [CorrectiveAction] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240605100436_nuovo campo correctiveAction')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240605100436_nuovo campo correctiveAction'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240605100436_nuovo campo correctiveAction', N'7.0.10');
+    VALUES (N'20240605100436_nuovo campo correctiveAction', N'8.0.16');
 END;
 GO
 
@@ -3210,16 +4197,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240719102520_nuovo campo note prodotto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240719102520_nuovo campo note prodotto'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [Note] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240719102520_nuovo campo note prodotto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240719102520_nuovo campo note prodotto'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240719102520_nuovo campo note prodotto', N'7.0.10');
+    VALUES (N'20240719102520_nuovo campo note prodotto', N'8.0.16');
 END;
 GO
 
@@ -3229,16 +4222,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240808082844_nuovo campo tipo attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240808082844_nuovo campo tipo attività'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [NotUpdateJobStatus] bit NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240808082844_nuovo campo tipo attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240808082844_nuovo campo tipo attività'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240808082844_nuovo campo tipo attività', N'7.0.10');
+    VALUES (N'20240808082844_nuovo campo tipo attività', N'8.0.16');
 END;
 GO
 
@@ -3248,16 +4247,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240808084409_aggiorna campo tipo attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240808084409_aggiorna campo tipo attività'
+)
 BEGIN
     EXEC sp_rename N'[Registry].[ActivityTypes].[NotUpdateJobStatus]', N'InfluenceJobStatus', N'COLUMN';
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240808084409_aggiorna campo tipo attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240808084409_aggiorna campo tipo attività'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240808084409_aggiorna campo tipo attività', N'7.0.10');
+    VALUES (N'20240808084409_aggiorna campo tipo attività', N'8.0.16');
 END;
 GO
 
@@ -3267,7 +4272,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240822094335_aumento limite caratteri checlist intervento')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240822094335_aumento limite caratteri checlist intervento'
+)
 BEGIN
     DECLARE @var28 sysname;
     SELECT @var28 = [d].[name]
@@ -3279,10 +4287,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240822094335_aumento limite caratteri checlist intervento')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240822094335_aumento limite caratteri checlist intervento'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240822094335_aumento limite caratteri checlist intervento', N'7.0.10');
+    VALUES (N'20240822094335_aumento limite caratteri checlist intervento', N'8.0.16');
 END;
 GO
 
@@ -3292,7 +4303,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue'
+)
 BEGIN
     DECLARE @var29 sysname;
     SELECT @var29 = [d].[name]
@@ -3304,10 +4318,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue', N'7.0.10');
+    VALUES (N'20240903125126_Aumento_Limite_Lunghezza_Nome_File_DocumentToSyncQueue', N'8.0.16');
 END;
 GO
 
@@ -3317,34 +4334,49 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241028124621_nuovi campi ticket'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [CustomerSignatureFileName] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241028124621_nuovi campi ticket'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [CustomerSignatureName] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241028124621_nuovi campi ticket'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [ReportFileName] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241028124621_nuovi campi ticket'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [ReportGeneratedOn] datetimeoffset(3) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241028124621_nuovi campi ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241028124621_nuovi campi ticket'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241028124621_nuovi campi ticket', N'7.0.10');
+    VALUES (N'20241028124621_nuovi campi ticket', N'8.0.16');
 END;
 GO
 
@@ -3354,13 +4386,19 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento'
+)
 BEGIN
     ALTER TABLE [Docs].[Interventions] ADD [ToBeReschedule] bit NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento'
+)
 BEGIN
     CREATE TABLE [Registry].[NotificationOperators] (
         [Id] bigint NOT NULL IDENTITY,
@@ -3381,16 +4419,22 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento'
+)
 BEGIN
     CREATE INDEX [IX_NotificationOperators_OperatorId] ON [Registry].[NotificationOperators] ([OperatorId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241103101514_nuovo campo rischedulazione intervento'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241103101514_nuovo campo rischedulazione intervento', N'7.0.10');
+    VALUES (N'20241103101514_nuovo campo rischedulazione intervento', N'8.0.16');
 END;
 GO
 
@@ -3400,22 +4444,31 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente'
+)
 BEGIN
     ALTER TABLE [Registry].[Customers] ADD [FiscalCode] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente'
+)
 BEGIN
     ALTER TABLE [Registry].[Customers] ADD [VatNumber] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241107141040_aggiunta piva-cf cliente'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241107141040_aggiunta piva-cf cliente', N'7.0.10');
+    VALUES (N'20241107141040_aggiunta piva-cf cliente', N'8.0.16');
 END;
 GO
 
@@ -3425,7 +4478,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente'
+)
 BEGIN
     DECLARE @var30 sysname;
     SELECT @var30 = [d].[name]
@@ -3437,7 +4493,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente'
+)
 BEGIN
     DECLARE @var31 sysname;
     SELECT @var31 = [d].[name]
@@ -3449,10 +4508,13 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241107141310_modifica piva-cf cliente'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241107141310_modifica piva-cf cliente', N'7.0.10');
+    VALUES (N'20241107141310_modifica piva-cf cliente', N'8.0.16');
 END;
 GO
 
@@ -3462,7 +4524,10 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper'
+)
 BEGIN
     CREATE TABLE [Registry].[HelperTypes] (
         [Id] bigint NOT NULL IDENTITY,
@@ -3482,7 +4547,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper'
+)
 BEGIN
     CREATE TABLE [Registry].[HelperDocuments] (
         [Id] bigint NOT NULL IDENTITY,
@@ -3505,16 +4573,22 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper'
+)
 BEGIN
     CREATE INDEX [IX_HelperDocuments_HelperTypeId] ON [Registry].[HelperDocuments] ([HelperTypeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241112085223_aggiunta tabelle helper'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241112085223_aggiunta tabelle helper', N'7.0.10');
+    VALUES (N'20241112085223_aggiunta tabelle helper', N'8.0.16');
 END;
 GO
 
@@ -3524,16 +4598,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112122657_aggiunta campo manutenzione mensile prodotto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241112122657_aggiunta campo manutenzione mensile prodotto'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [MonthlyMaintenance] bit NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112122657_aggiunta campo manutenzione mensile prodotto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241112122657_aggiunta campo manutenzione mensile prodotto'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241112122657_aggiunta campo manutenzione mensile prodotto', N'7.0.10');
+    VALUES (N'20241112122657_aggiunta campo manutenzione mensile prodotto', N'8.0.16');
 END;
 GO
 
@@ -3543,16 +4623,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112145535_aggiunta campo messaggio isfromapp')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241112145535_aggiunta campo messaggio isfromapp'
+)
 BEGIN
     ALTER TABLE [Docs].[Messages] ADD [IsFromApp] bit NOT NULL DEFAULT CAST(0 AS bit);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241112145535_aggiunta campo messaggio isfromapp')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241112145535_aggiunta campo messaggio isfromapp'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241112145535_aggiunta campo messaggio isfromapp', N'7.0.10');
+    VALUES (N'20241112145535_aggiunta campo messaggio isfromapp', N'8.0.16');
 END;
 GO
 
@@ -3562,16 +4648,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241115104503_aggiunta campo sharepoint')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241115104503_aggiunta campo sharepoint'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [SharepointFolder] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241115104503_aggiunta campo sharepoint')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241115104503_aggiunta campo sharepoint'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241115104503_aggiunta campo sharepoint', N'7.0.10');
+    VALUES (N'20241115104503_aggiunta campo sharepoint', N'8.0.16');
 END;
 GO
 
@@ -3581,28 +4673,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD [PurchaseOrderId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket'
+)
 BEGIN
     CREATE INDEX [IX_Tickets_PurchaseOrderId] ON [Docs].[Tickets] ([PurchaseOrderId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket'
+)
 BEGIN
     ALTER TABLE [Docs].[Tickets] ADD CONSTRAINT [FK_Tickets_PurchaseOrders_PurchaseOrderId] FOREIGN KEY ([PurchaseOrderId]) REFERENCES [Docs].[PurchaseOrders] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241118125950_aggiunta campo purchaseorderid in ticket'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241118125950_aggiunta campo purchaseorderid in ticket', N'7.0.10');
+    VALUES (N'20241118125950_aggiunta campo purchaseorderid in ticket', N'8.0.16');
 END;
 GO
 
@@ -3612,16 +4716,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241231153149_aggiunta campo sharepoint foldername')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241231153149_aggiunta campo sharepoint foldername'
+)
 BEGIN
     ALTER TABLE [Docs].[Jobs] ADD [sharepointFolderName] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20241231153149_aggiunta campo sharepoint foldername')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241231153149_aggiunta campo sharepoint foldername'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241231153149_aggiunta campo sharepoint foldername', N'7.0.10');
+    VALUES (N'20241231153149_aggiunta campo sharepoint foldername', N'8.0.16');
 END;
 GO
 
@@ -3631,16 +4741,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250108111623_aggiunta campo tiro al piano attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250108111623_aggiunta campo tiro al piano attività'
+)
 BEGIN
     ALTER TABLE [Docs].[Activities] ADD [IsFloorDelivery] bit NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250108111623_aggiunta campo tiro al piano attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250108111623_aggiunta campo tiro al piano attività'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250108111623_aggiunta campo tiro al piano attività', N'7.0.10');
+    VALUES (N'20250108111623_aggiunta campo tiro al piano attività', N'8.0.16');
 END;
 GO
 
@@ -3650,16 +4766,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250108145116_aggiunta campo prodotto dismesso')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250108145116_aggiunta campo prodotto dismesso'
+)
 BEGIN
     ALTER TABLE [Registry].[Products] ADD [IsDecommissioned] bit NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250108145116_aggiunta campo prodotto dismesso')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250108145116_aggiunta campo prodotto dismesso'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250108145116_aggiunta campo prodotto dismesso', N'7.0.10');
+    VALUES (N'20250108145116_aggiunta campo prodotto dismesso', N'8.0.16');
 END;
 GO
 
@@ -3669,28 +4791,40 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD [ActivityTypeId] bigint NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto'
+)
 BEGIN
     CREATE INDEX [IX_PurchaseOrders_ActivityTypeId] ON [Docs].[PurchaseOrders] ([ActivityTypeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto'
+)
 BEGIN
     ALTER TABLE [Docs].[PurchaseOrders] ADD CONSTRAINT [FK_PurchaseOrders_ActivityTypes_ActivityTypeId] FOREIGN KEY ([ActivityTypeId]) REFERENCES [Registry].[ActivityTypes] ([Id]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250214140535_aggiunta campo tipoattività in ordini acquisto'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250214140535_aggiunta campo tipoattività in ordini acquisto', N'7.0.10');
+    VALUES (N'20250214140535_aggiunta campo tipoattività in ordini acquisto', N'8.0.16');
 END;
 GO
 
@@ -3700,16 +4834,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250310133909_aggiunta campo tipi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250310133909_aggiunta campo tipi attività'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [ViewInPurchaseOrder] bit NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250310133909_aggiunta campo tipi attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250310133909_aggiunta campo tipi attività'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250310133909_aggiunta campo tipi attività', N'7.0.10');
+    VALUES (N'20250310133909_aggiunta campo tipi attività', N'8.0.16');
 END;
 GO
 
@@ -3719,16 +4859,22 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331123119_aggiunta campo contatto riferimenti in addresses')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250331123119_aggiunta campo contatto riferimenti in addresses'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] ADD [ContactReference] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331123119_aggiunta campo contatto riferimenti in addresses')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250331123119_aggiunta campo contatto riferimenti in addresses'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250331123119_aggiunta campo contatto riferimenti in addresses', N'7.0.10');
+    VALUES (N'20250331123119_aggiunta campo contatto riferimenti in addresses', N'8.0.16');
 END;
 GO
 
@@ -3738,22 +4884,31 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] ADD [ContactName] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses'
+)
 BEGIN
     ALTER TABLE [Registry].[Addresses] ADD [JobReference] nvarchar(max) NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250331125604_aggiunta nuovi campi in addresses'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250331125604_aggiunta nuovi campi in addresses', N'7.0.10');
+    VALUES (N'20250331125604_aggiunta nuovi campi in addresses', N'8.0.16');
 END;
 GO
 
@@ -3763,13 +4918,19 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522102845_dipendenze attività'
+)
 BEGIN
     ALTER TABLE [Registry].[ActivityTypes] ADD [HasDependencies] bit NULL;
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522102845_dipendenze attività'
+)
 BEGIN
     CREATE TABLE [Docs].[ActivityDependencies] (
         [ActivityDependenciesId] bigint NOT NULL,
@@ -3781,7 +4942,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522102845_dipendenze attività'
+)
 BEGIN
     CREATE TABLE [Docs].[PurchaseOrderDependencies] (
         [ParentActivitiesId] bigint NOT NULL,
@@ -3793,22 +4957,113 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522102845_dipendenze attività'
+)
 BEGIN
     CREATE INDEX [IX_ActivityDependencies_ParentActivitiesId] ON [Docs].[ActivityDependencies] ([ParentActivitiesId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522102845_dipendenze attività'
+)
 BEGIN
     CREATE INDEX [IX_PurchaseOrderDependencies_PurchaseOrderDependenciesId] ON [Docs].[PurchaseOrderDependencies] ([PurchaseOrderDependenciesId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20250522102845_dipendenze attività')
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522102845_dipendenze attività'
+)
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250522102845_dipendenze attività', N'7.0.10');
+    VALUES (N'20250522102845_dipendenze attività', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606154527_purchaseorders multi job'
+)
+BEGIN
+    CREATE TABLE [Docs].[PurchaseOrdersJobs] (
+        [JobsId] bigint NOT NULL,
+        [PurchaseOrdersId] bigint NOT NULL,
+        CONSTRAINT [PK_PurchaseOrdersJobs] PRIMARY KEY ([JobsId], [PurchaseOrdersId]),
+        CONSTRAINT [FK_PurchaseOrdersJobs_Jobs_JobsId] FOREIGN KEY ([JobsId]) REFERENCES [Docs].[Jobs] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_PurchaseOrdersJobs_PurchaseOrders_PurchaseOrdersId] FOREIGN KEY ([PurchaseOrdersId]) REFERENCES [Docs].[PurchaseOrders] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606154527_purchaseorders multi job'
+)
+BEGIN
+    CREATE INDEX [IX_PurchaseOrdersJobs_PurchaseOrdersId] ON [Docs].[PurchaseOrdersJobs] ([PurchaseOrdersId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606154527_purchaseorders multi job'
+)
+BEGIN
+    INSERT INTO Docs.PurchaseOrdersJobs (JobsId,PurchaseOrdersId) SELECT JobId,Id FROM Docs.PurchaseOrders WHERE IsDeleted=0 AND JobId IS NOT NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606154527_purchaseorders multi job'
+)
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrders] DROP CONSTRAINT [FK_PurchaseOrders_Jobs_JobId];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606154527_purchaseorders multi job'
+)
+BEGIN
+    DROP INDEX [IX_PurchaseOrders_JobId] ON [Docs].[PurchaseOrders];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606154527_purchaseorders multi job'
+)
+BEGIN
+    DECLARE @var32 sysname;
+    SELECT @var32 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Docs].[PurchaseOrders]') AND [c].[name] = N'JobId');
+    IF @var32 IS NOT NULL EXEC(N'ALTER TABLE [Docs].[PurchaseOrders] DROP CONSTRAINT [' + @var32 + '];');
+    ALTER TABLE [Docs].[PurchaseOrders] DROP COLUMN [JobId];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606154527_purchaseorders multi job'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250606154527_purchaseorders multi job', N'8.0.16');
 END;
 GO
 

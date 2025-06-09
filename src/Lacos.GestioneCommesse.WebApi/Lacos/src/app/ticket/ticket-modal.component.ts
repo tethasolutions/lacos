@@ -209,7 +209,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     private _newPurchaseOrder(ticket: Ticket) {
         const today = getToday();
         const purchaseOrder = new PurchaseOrder(0, null, today.getFullYear(), today, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, PurchaseOrderStatus.Pending, null,
-            ticket.jobId, null, null, this.currentOperator.id, [], [], [], [], []);
+            null, null, this.currentOperator.id, [ticket.jobId], [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(purchaseOrder);
 
         ticket.status = TicketStatus.InProgress;

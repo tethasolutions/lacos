@@ -21,8 +21,8 @@ export class PurchaseOrdersService {
     ) {
     }
 
-    read(state: State) {
-        const url = `${this._baseUrl}/read`
+    read(state: State, jobId?: number) {
+        const url = `${this._baseUrl}/read/${jobId}`;
 
         return readData(this._http, state, url);
     }

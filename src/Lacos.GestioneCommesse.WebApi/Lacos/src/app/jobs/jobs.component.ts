@@ -246,7 +246,8 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
     createPurchaseOrder(job: IJobReadModel) {
         const today = getToday();
-        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, null, job.id, null, null, this.currentOperator.id, [], [], [], [], []);
+        const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, null, null, null,
+            this.currentOperator.id, [job.id], [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(order);
 
         this._subscriptions.push(
@@ -258,7 +259,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
 
                 )
                 .subscribe()
-        );
+        )
     }
 
     openAttachments(job: IJobReadModel) {

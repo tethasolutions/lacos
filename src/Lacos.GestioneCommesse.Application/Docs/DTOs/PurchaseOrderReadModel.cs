@@ -18,12 +18,8 @@ public class PurchaseOrderReadModel
     public bool HasAttachments { get; set; }
 
     public long? JobId { get; set; }
-    public string? JobCode { get; set; }
-    public string? JobReference { get; set; }
-    public bool? JobHasHighPriority { get; set; }
-
-    public long? CustomerId { get; set; }
-    public string? CustomerName { get; set; }
+    public IEnumerable<long>? Jobs { get; set; }
+    public string? JobCodes { get; set; }
 
     public string? SupplierName { get; set; }
     public string? OperatorName { get; set; }

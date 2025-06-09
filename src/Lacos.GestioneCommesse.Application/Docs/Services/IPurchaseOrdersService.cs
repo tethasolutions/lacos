@@ -4,7 +4,7 @@ namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
 public interface IPurchaseOrdersService
 {
-    IQueryable<PurchaseOrderReadModel> Query();
+    IQueryable<PurchaseOrderReadModel> Query(long? jobId);
     Task<PurchaseOrderDto> Get(long id);
     Task<PurchaseOrderDto> Create(PurchaseOrderDto purchaseOrderDto);
     Task<PurchaseOrderDto> Update(PurchaseOrderDto purchaseOrderDto);

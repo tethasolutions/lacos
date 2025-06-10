@@ -17,6 +17,7 @@ export class CustomerModel {
     addresses: AddressModel[];
 
     mainAddress: AddressModel;
+    mainFullAddress: string;
 
     get fiscalTypeDescription(): string {
         if (this.fiscalType >= 0) { return CustomerFiscalTypeEnum[this.fiscalType]; }
@@ -39,5 +40,6 @@ export class CustomerModel {
         this.addresses = [];
 
         this.mainAddress = null;
+        this.mainFullAddress = null;
     }
 }

@@ -140,7 +140,7 @@ export class AddressesModalComponent extends BaseComponent {
                         if (indexAddressToEdit >= 0) {
                             this.customer.addresses[indexAddressToEdit] = request;
                             if (request.isMainAddress) {
-                                this.customer.mainAddress = request;
+                                // this.customer.mainAddress = request;
                                 this.customer.addresses.forEach((item: AddressModel) => {
                                     item.isMainAddress = item.tempId === request.tempId;
                                 });

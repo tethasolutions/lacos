@@ -19,5 +19,6 @@ namespace Lacos.GestioneCommesse.Application.Customers.DTOs
         public string? VatNumber { get; set; }
         public string? FiscalCode { get; set; }
         public ICollection<AddressDto>? Addresses { get; set; }
+        public string? MainFullAddress { get; set; }
     }
 }

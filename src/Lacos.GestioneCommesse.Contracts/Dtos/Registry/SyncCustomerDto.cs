@@ -16,7 +16,8 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Registry
         public string? ContactEmail { get; set; }
 
         public string? SDICode { get; set; }
-
+        public string? VatNumber { get; set; }
+        public string? FiscalCode { get; set; }
         public long? UserId { get; set; }
     }
    

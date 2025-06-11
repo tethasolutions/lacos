@@ -29,12 +29,15 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<InterventionProductPicture, SyncInterventionProductPictureDto>();
             CreateMap<Job, SyncJobDto>();
             CreateMap<PurchaseOrder, SyncPurchaseOrderDto>()
-                .MapMember(x => x.JobId, y => y.Jobs.Min(j => j.Id));
+                .MapMember(x => x.JobIds, y=>y.Jobs.Select(x=>x.Id).ToList());
             CreateMap<PurchaseOrderItem, SyncPurchaseOrderItemDto>();
             CreateMap<Ticket, SyncTicketDto>();
             CreateMap<TicketPicture, SyncTicketPictureDto>();
             CreateMap<ActivityType, SyncActivityTypeDto>()
-                .MapMember(x=>x.OperatorIds,y=>y.Operators.Select(x=>x.Id).ToList());;
+                .MapMember(x=>x.OperatorIds,y=>y.Operators.Select(x=>x.Id).ToList())
+                .MapMember(x=>x.ActivitiesIds,y=>y.Activities.Select(x=>x.Id).ToList())
+                .MapMember(x=>x.CheckListsIds,y=>y.CheckLists.Select(x=>x.Id).ToList());
+            
             CreateMap<CheckList, SyncCheckListDto>();
             CreateMap<CheckListItem, SyncCheckListItemDto>();
             CreateMap<Customer, SyncCustomerDto>();

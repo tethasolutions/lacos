@@ -11,9 +11,10 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public DateTimeOffset? ExpectedDate { get; set; }
         public string? Description { get; set; }
         public PurchaseOrderStatus? Status { get; set; }
-        public long? JobId { get; set; }
+        public IEnumerable<long>? JobIds { get; set; }
         public long? SupplierId { get; set; }
         public long? OperatorId { get; set; }
+        public long? ActivityTypeId { get; set; }
     }
     
 }

@@ -13,5 +13,8 @@
         public string? Notes { get; set; }
         public long? CustomerId { get; set; }
         public long? SupplierId { get; set; }
+        public string? JobReference { get; set; }
+        public string? ContactName { get; set; }
+        public string? ContactReference { get; set; }
     }
 }

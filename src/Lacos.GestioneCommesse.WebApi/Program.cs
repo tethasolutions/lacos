@@ -3,12 +3,12 @@ using Serilog;
 using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
-//#if DEBUG 
-//builder.WebHost.UseKestrel();
-//builder.WebHost.UseIIS();
-//builder.WebHost.UseUrls("http://*:37998");
-//#else
-//#endif
+#if DEBUG 
+builder.WebHost.UseKestrel();
+builder.WebHost.UseIIS();
+builder.WebHost.UseUrls("http://*:37998");
+#else
+#endif
 
 builder.Host.UseSerilog((context, provider, config) => {
     config.WriteTo.MSSqlServer(context.Configuration.GetConnectionString("Default"),

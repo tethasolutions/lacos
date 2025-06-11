@@ -484,7 +484,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 syncFullDb.InterventionProductCheckListItems = await GetAllModifiedRecord<InterventionProductCheckListItem, SyncInterventionProductCheckListItemDto>(date);
                 syncFullDb.InterventionProductPictures = await GetAllModifiedRecord<InterventionProductPicture, SyncInterventionProductPictureDto>(date);
                 syncFullDb.Jobs = await GetAllModifiedRecord<Job, SyncJobDto>(date);
-                syncFullDb.PurchaseOrders = await GetAllModifiedRecord<PurchaseOrder, SyncPurchaseOrderDto>(date);
+                syncFullDb.PurchaseOrders = await GetAllPurchaseOrderModifiedRecord(date);
                 syncFullDb.PurchaseOrderItems = await GetAllModifiedRecord<PurchaseOrderItem, SyncPurchaseOrderItemDto>(date);
                 syncFullDb.Tickets = await GetAllModifiedRecord<Ticket, SyncTicketDto>(date);
                 syncFullDb.TicketPictures = await GetAllModifiedRecord<TicketPicture, SyncTicketPictureDto>(date);
@@ -724,6 +724,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
         private async Task<List<SyncPurchaseOrderDto>> InsertUpdateAllModifiedPurchaseOrder(List<SyncPurchaseOrderDto> tdoModels,List<SyncPurchaseOrderItemDto> tdoChild) 
         {
             var repository = serviceProvider.GetRequiredService<IRepository<PurchaseOrder>>();
+            var jobsRepository = serviceProvider.GetRequiredService<IRepository<Job>>();
             List<SyncPurchaseOrderDto>  list = new List<SyncPurchaseOrderDto>();
             foreach (var model in tdoModels)
             {
@@ -731,11 +732,21 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     repository
                         .Query()
                         .Where(x=>x.Id == model.Id)
+                        .Include(x=>x.Jobs)
                         .SingleOrDefaultAsync();
 
                 if (entity != null)
                 {
                     model.MapTo(entity, mapper);
+                    entity.Jobs.Clear();
+                    if (model.JobIds != null && model.JobIds.Any())
+                    {
+                        foreach (var jobId in model.JobIds)
+                        {
+                            var job = await jobsRepository.Get(jobId);
+                            entity.Jobs.Add(job);
+                        }
+                    }
                     repository.Update(entity);
                     await dbContext.SaveChanges();
                 }
@@ -745,6 +756,18 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     var number = await GetNextNumber(model.Year.Value);
                     var newEntity = model.MapTo<PurchaseOrder>(mapper);
                     newEntity.Number = number;
+
+
+                    if (model.JobIds != null && model.JobIds.Any())
+                    {
+                        newEntity.Jobs.Clear();
+
+                        foreach (var jobId in model.JobIds)
+                        {
+                            var job = await jobsRepository.Get(jobId);
+                            newEntity.Jobs.Add(job);
+                        }
+                    }
                     await repository.Insert(newEntity);
                     await dbContext.SaveChanges();
                     list.Add(newEntity.MapTo<SyncPurchaseOrderDto>(mapper));
@@ -803,6 +826,32 @@ namespace Lacos.GestioneCommesse.Application.Sync
                             .ToListAsync()
                     , QueryFilter.SoftDelete);
                 var listDto = list.MapTo<List<SyncInterventionDto>>(mapper);
+
+                return listDto;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
+
+        
+        private async Task<List<SyncPurchaseOrderDto>> GetAllPurchaseOrderModifiedRecord(DateTimeOffset date)
+        {
+            try
+            {
+                var repository = serviceProvider.GetRequiredService<IRepository<PurchaseOrder>>();
+
+                var list = await dbContext.ExecuteWithDisabledQueryFilters(() =>
+                        repository.Query()
+                            .AsNoTracking()
+                            .Include(x => x.Jobs)
+                            .Where(x => x.CreatedOn >= date || (x.EditedOn ?? DateTimeOffset.MinValue) >= date || (x.DeletedOn ?? DateTimeOffset.MinValue) >= date)
+                            .ToListAsync()
+                    , QueryFilter.SoftDelete);
+                var listDto = list.MapTo<List<SyncPurchaseOrderDto>>(mapper);
 
                 return listDto;
             }

@@ -18,6 +18,8 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public bool? IsInternalJob { get; set; }
         public JobStatus? Status { get; set; }
         public long? ReferentId { get; set; }
+        public string? SharepointFolder { get; set; }
+        public string? sharepointFolderName { get; set; }
 
     }
 

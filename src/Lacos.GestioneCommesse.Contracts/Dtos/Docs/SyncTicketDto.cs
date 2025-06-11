@@ -19,6 +19,8 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public string? CustomerSignatureName { get; set; }
         public string? CustomerSignatureFileName { get; set; }
         
+        public long? PurchaseOrderId { get; set; }
+        
     }
 
    

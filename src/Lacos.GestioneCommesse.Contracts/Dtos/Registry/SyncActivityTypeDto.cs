@@ -14,6 +14,11 @@
         public string? StatusLabel2 { get; set; }
         public string? StatusLabel3 { get; set; }
 
+        public bool? ViewInPurchaseOrder { get; set; }
+        public bool? HasDependencies { get; set; }
+        
         public IEnumerable<long> OperatorIds { get; set; } = new List<long>();
+        public IEnumerable<long> CheckListsIds { get; set; } = new List<long>();
+        public IEnumerable<long> ActivitiesIds { get; set; } = new List<long>();
     }
 }

@@ -54,7 +54,7 @@
                     <label>Data Scadenza</label>
                     <div class="form-group">
                         <kendo-datepicker format="dd/MM/yyyy" name="expirationDate" [(ngModel)]="options.expirationDate"
-                            [min]="options.date">
+                            [min]="options.date" [disabled]="!isOperator">
                         </kendo-datepicker>
                         <div class="validation-message" [control]="form.controls['expirationDate']"></div>
                     </div>

@@ -20,7 +20,7 @@ public class PurchaseOrderReadModel
     public long? JobId { get; set; }
     public IEnumerable<long>? Jobs { get; set; }
     public string? JobCodes { get; set; }
-
+    public string? JobReferences { get; set; }
     public string? SupplierName { get; set; }
     public string? OperatorName { get; set; }
 

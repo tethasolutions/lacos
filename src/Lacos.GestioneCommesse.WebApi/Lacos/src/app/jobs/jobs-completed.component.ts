@@ -62,12 +62,12 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
         filter: {
             filters: [
                 {
-                    filters: [JobStatus.Billed]
-                        .map(e => ({ field: 'status', operator: 'neq', value: e })),
-                    logic: 'and'
+                    filters: [JobStatus.Billing, JobStatus.Completed]
+                        .map(e => ({ field: 'status', operator: 'eq', value: e })),
+                    logic: 'or'
                 }
             ],
-            logic: 'or'
+            logic: 'and'
         },
         group: [],
         sort: [{ field: 'date', dir: 'desc' }, { field: 'code', dir: 'desc' }]

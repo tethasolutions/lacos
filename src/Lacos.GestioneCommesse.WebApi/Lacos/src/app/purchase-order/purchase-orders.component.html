@@ -50,6 +50,11 @@
                 </span>
             </ng-template>
         </kendo-grid-column>
+        <kendo-grid-column field="jobReferences" title="Riferimenti Comm." [width]="1" *ngIf="viewExportExcel">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div [innerHTML]="dataItem.jobReferences | domsanitizer"></div>
+            </ng-template>
+        </kendo-grid-column>
         <kendo-grid-column field="supplierName" title="Fornitore">
         </kendo-grid-column>
         <kendo-grid-column field="description" title="Note">

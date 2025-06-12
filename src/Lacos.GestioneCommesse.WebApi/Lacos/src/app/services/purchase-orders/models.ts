@@ -34,6 +34,7 @@ export interface IPurchaseOrderReadModel {
     readonly jobId: number;
     readonly jobs: number[],
     readonly jobCodes: string;
+    readonly jobReferences: string;
     readonly supplierName: string;
     readonly operatorName: string;
     readonly unreadMessages: number;

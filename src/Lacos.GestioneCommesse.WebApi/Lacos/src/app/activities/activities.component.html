@@ -62,7 +62,7 @@
         </kendo-grid-column>
         <kendo-grid-column field="shortDescription" title="Descrizione Attività">
             <ng-template kendoGridCellTemplate let-dataItem>
-                {{dataItem.shortDescription}}<br/>
+                {{dataItem.shortDescription}}<br />
                 <div class="progress-container" [ngClass]="{'progress-hide': (dataItem.totalDependencies == 0)}"
                     kendoTooltip
                     title="Dipendenze evase {{dataItem.fulfilledDependencies}} / {{dataItem.totalDependencies}}">
@@ -83,7 +83,8 @@
                 </div>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="purchaseOrderStatus" title="Stato OA" [width]="1" filter="numeric" class="purchase-order-status">
+        <kendo-grid-column field="purchaseOrderStatus" title="Stato OA" [width]="1" filter="numeric"
+            class="purchase-order-status">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                 let-filterService="filterService">
                 <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
@@ -92,6 +93,11 @@
             </ng-template>
             <ng-template kendoGridCellTemplate let-dataItem>
                 <span class="text-nowrap">
+                    <button class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto"
+                        [routerLink]="['/purchase-orders']" [queryParams]="{jobId: dataItem.jobId}"
+                        *ngIf="dataItem.purchaseOrderStatus">
+                        <i class="fa fa-bag-shopping"></i>
+                    </button>
                     {{dataItem.purchaseOrderStatus | purchaseOrderStatus}}
                 </span>
             </ng-template>

@@ -131,7 +131,7 @@
                     <label>Scadenza</label>
                     <div class="form-group">
                         <kendo-datepicker name="expirationDate" [(ngModel)]="options.activity.expirationDate"
-                            format="dd/MM/yyyy">
+                            format="dd/MM/yyyy" [disabled]="isOperator">
                         </kendo-datepicker>
                         <div class="validation-message" [control]="form.controls['expirationDate']"></div>
                     </div>

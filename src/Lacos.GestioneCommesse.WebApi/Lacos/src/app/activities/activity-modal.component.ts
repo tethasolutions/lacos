@@ -24,12 +24,13 @@ import { OperatorsService } from '../services/operators.service';
 import { ActivityAttachmentModel } from '../services/activities/activity-attachment.model';
 import { SupplierModalComponent } from '../supplier-modal/supplier-modal.component';
 import { MessageModalOptions, MessageModel, MessageReadModel } from '../services/messages/models';
-import { User } from '../services/security/models';
+import { Role, User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { MessagesService } from '../services/messages/messages.service';
 import { MessageModalComponent } from '../messages/message-modal.component';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
 import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
+import { SecurityService } from '../services/security/security.service';
 
 @Component({
     selector: 'app-activity-modal',
@@ -62,6 +63,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     attachments: Array<FileInfo> = [];
     album: string[] = [];
     targetOperatorsArray: number[];
+    readonly isOperator: boolean;
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
 
@@ -72,6 +74,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     readonly states = listEnum<ActivityStatus>(ActivityStatus);
 
     constructor(
+        security: SecurityService,
         private readonly _activityTypesService: ActivityTypesService,
         messageBox: MessageBoxService,
         private readonly _jobsService: JobsService,
@@ -82,6 +85,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         private readonly _messagesService: MessagesService
     ) {
         super(messageBox);
+        this.isOperator = security.isAuthorized(Role.Operator);
     }
 
     ngOnInit() {

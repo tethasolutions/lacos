@@ -27,7 +27,7 @@
         </ng-template>
         <kendo-grid-column field="jobCodes" title="Comm." [width]="1" *ngIf="viewExportExcel">
         </kendo-grid-column>
-        <kendo-grid-column field="date" title="Data Ord." filter="date" [width]="1">
+        <kendo-grid-column field="date" title="Dt Ord." filter="date" [width]="1">
             <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.date | date:'dd/MM/yyyy'}}
             </ng-template>

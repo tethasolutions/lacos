@@ -62,7 +62,7 @@
                 <div class="col-md-12">
                     <label>Descrizione</label>
                     <div class="form-group">
-                        <kendo-editor name="description" [(ngModel)]="options.product.description" [resizable]="true" [iframe]="false"[pasteCleanupSettings]="{ convertMsLists: true, removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
+                        <kendo-editor name="description" [(ngModel)]="options.product.description" [resizable]="true" [iframe]="false"[pasteCleanupSettings]="{ convertMsLists: true, removeAttributes: ['style'], removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
                             <kendo-toolbar>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>

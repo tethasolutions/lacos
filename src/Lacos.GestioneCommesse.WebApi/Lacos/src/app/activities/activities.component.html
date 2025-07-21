@@ -154,7 +154,7 @@
                         <i class="fa fa-paperclip"></i>
                     </button>
                     <button class="btn btn-outline-primary btn-sm" title="Visualizza dipendenze"
-                        [disabled]="!dataItem.hasDependencies" (click)="openDependencies(dataItem.jobId, dataItem.id)">
+                        [disabled]="!dataItem.hasDependencies" (click)="openDependencies(dataItem.jobId, dataItem.id, dataItem.canHaveDependencies)">
                         <i class="fa fa-link"></i>
                     </button>
                     <button [disabled]="!dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"

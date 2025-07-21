@@ -49,13 +49,19 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.FulfilledDependencies, y => (y.ActivityDependencies.Any(a => a.Status >= ActivityStatus.Ready) ? y.ActivityDependencies.Count(a => a.Status >= ActivityStatus.Ready) : 0) +
                 (y.PurchaseOrderDependencies.Any(p => p.Status == PurchaseOrderStatus.Completed) ? y.PurchaseOrderDependencies.Count(p => p.Status == PurchaseOrderStatus.Completed) : 0))
            .MapMember(x => x.PurchaseOrderStatus, y => (PurchaseOrderStatus?)(
-                !y.Job.PurchaseOrders.Where(p => p.ActivityTypeId == y.TypeId).Any() ? 
+                y.PurchaseOrderDependencies.Any() ? 
+                    y.PurchaseOrderDependencies.Any(p => p.Status == PurchaseOrderStatus.Completed || p.Status == PurchaseOrderStatus.Partial)
+                    && !y.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed) ?
+                        PurchaseOrderStatus.Partial
+                        : y.PurchaseOrderDependencies.Max(p => p.Status)
+                :
+                !y.Job.PurchaseOrders.Where(p => !p.ParentActivities.Any() && p.ActivityTypeId == y.TypeId).Any() ? 
                     null 
                     : 
-                    (y.Job.PurchaseOrders.Where(p => p.ActivityTypeId == y.TypeId).Any(p => p.Status == PurchaseOrderStatus.Completed || p.Status == PurchaseOrderStatus.Partial) 
-                    && !y.Job.PurchaseOrders.Where(p => p.ActivityTypeId == y.TypeId).All(p => p.Status == PurchaseOrderStatus.Completed) ?
+                    (y.Job.PurchaseOrders.Where(p => !p.ParentActivities.Any() && p.ActivityTypeId == y.TypeId).Any(p => p.Status == PurchaseOrderStatus.Completed || p.Status == PurchaseOrderStatus.Partial) 
+                    && !y.Job.PurchaseOrders.Where(p => !p.ParentActivities.Any() && p.ActivityTypeId == y.TypeId).All(p => p.Status == PurchaseOrderStatus.Completed) ?
                         PurchaseOrderStatus.Partial
-                        : y.Job.PurchaseOrders.Where(p => p.ActivityTypeId == y.TypeId).Max(p => p.Status)
+                        : y.Job.PurchaseOrders.Where(p => !p.ParentActivities.Any() && p.ActivityTypeId == y.TypeId).Max(p => p.Status)
                     )
                 )
             );

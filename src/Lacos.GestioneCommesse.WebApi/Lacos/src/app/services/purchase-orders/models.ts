@@ -24,19 +24,17 @@ export const purchaseOrderStatusNames: Dictionary<PurchaseOrderStatus, string> =
 export interface IPurchaseOrderReadModel {
 
     readonly id: number;
-    readonly code: string;
+    readonly jobCodes: string;
+    readonly jobIds: string;
     readonly date: Date | string;
     readonly expectedDate: Date | string;
-    readonly description: string;
     readonly status: PurchaseOrderStatus;
-    readonly type: string;
-    readonly hasAttachments: boolean;
-    readonly jobId: number;
-    readonly jobs: number[],
-    readonly jobCodes: string;
     readonly jobReferences: string;
     readonly supplierName: string;
+    readonly description: string;
+    readonly activityTypeName: string;
     readonly operatorName: string;
+    readonly hasAttachments: boolean;
     readonly unreadMessages: number;
 }
 

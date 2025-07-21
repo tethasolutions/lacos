@@ -51,7 +51,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'date', dir: 'desc' }, { field: 'code', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'desc' }, { field: 'jobCodes', dir: 'desc' }]
     };
 
     private _jobId: number;
@@ -109,7 +109,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     }
 
     askRemove(purchaseOrder: IPurchaseOrderReadModel) {
-        const text = `Sei sicuro di voler rimuovere l'ordine ${purchaseOrder.code}?`;
+        const text = `Sei sicuro di voler rimuovere l'ordine?`;
 
         this._subscriptions.push(
             this._messageBox.confirm(text, 'Attenzione')
@@ -219,7 +219,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     }
 
     private _afterRemoved(purchaseOrder: IPurchaseOrderReadModel) {
-        const text = `Ordine ${purchaseOrder.code} rimosso.`;
+        const text = `Ordine con id ${purchaseOrder.id} rimosso.`;
 
         this._messageBox.success(text);
 
@@ -367,10 +367,10 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                     ...this.data.data.map((item: any) => ({
                         cells: [
                             { value: item.customerName },
-                            { value: item.jobCode },
+                            { value: item.jobCodes },
                             { value: item.date, format: 'dd/MM/yyyy' },
                             { value: item.status },
-                            { value: item.jobReference },
+                            { value: item.jobReferences },
                             { value: item.supplierName },
                             { value: item.description },
                             { value: item.operatorName }

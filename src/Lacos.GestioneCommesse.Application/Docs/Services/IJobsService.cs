@@ -11,7 +11,7 @@ public interface IJobsService
     IQueryable<JobReadModel> Query();
     IQueryable<JobReadModel> QueryCurrentJobs();
     IQueryable<JobReadModel> QueryArchivedJobs();
-    Task<JobDto> GetTicketJob(long CustomerId, string TicketCode);
+    Task<JobDto> GetTicketJob(long CustomerId, long? AddressId, string TicketCode);
     Task<JobDto> Get(long id);
     Task<JobDto> Create(JobDto jobDto);
     Task<JobDto> Update(JobDto jobDto);

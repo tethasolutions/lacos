@@ -19,6 +19,7 @@ export class DependenciesModalComponent extends BaseComponent {
 
     @Input() jobId: number;
     @Input() activityId: number;
+    @Input() canHaveDependencies: boolean;
     @Input() readonly: boolean = false;
 
     opened = false;
@@ -37,7 +38,7 @@ export class DependenciesModalComponent extends BaseComponent {
         skip: 0,
         take: 30,
         group: [],
-        sort: [{ field: 'date', dir: 'desc' }, { field: 'code', dir: 'desc' }]
+        sort: [{ field: 'date', dir: 'desc' }, { field: 'jobCodes', dir: 'desc' }]
     };
 
     selectedActivityIds: number[] = [];

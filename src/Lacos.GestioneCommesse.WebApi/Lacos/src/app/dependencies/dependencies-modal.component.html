@@ -21,6 +21,7 @@
         </kendo-window-titlebar>
 
         <div class="grid-container">
+            @if (canHaveDependencies) {
             <p><strong>Attività</strong></p>
             <kendo-grid [data]="dataActivities" [pageSize]="gridActivityState.take" [skip]="gridActivityState.skip"
                 [sort]="gridActivityState.sort" [filter]="gridActivityState.filter" [group]="gridActivityState.group"
@@ -73,14 +74,14 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="lastOperator" title="Inser. Da" [width]="1">
                 </kendo-grid-column>
-
             </kendo-grid>
+            }
             <p class="mt-3"><strong>Ordini d'acquisto</strong></p>
             <kendo-grid [data]="dataPurchaseOrders" [pageSize]="gridPurchaseOrderState.take"
                 [skip]="gridPurchaseOrderState.skip" [sort]="gridPurchaseOrderState.sort"
-                [filter]="gridPurchaseOrderState.filter" [group]="gridPurchaseOrderState.group" 
-                filterable="menu" [sortable]="true" [pageable]="true" [rowClass]="rowCallbackPurchaseOrders"
-                scrollable="none" [selectable]="{ mode: 'multiple', drag: false, multipleRanges: true }"
+                [filter]="gridPurchaseOrderState.filter" [group]="gridPurchaseOrderState.group" filterable="menu"
+                [sortable]="true" [pageable]="true" [rowClass]="rowCallbackPurchaseOrders" scrollable="none"
+                [selectable]="{ mode: 'multiple', drag: false, multipleRanges: true }"
                 (dataStateChange)="dataPurchaseOrdersStateChange($event)"
                 (selectionChange)="onPurchaseOrderSelectionChange($event)" [selectedKeys]="selectedPurchaseOrderIds"
                 kendoGridSelectBy="id">

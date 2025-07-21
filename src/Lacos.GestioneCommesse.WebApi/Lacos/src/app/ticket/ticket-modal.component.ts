@@ -29,6 +29,9 @@ import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purch
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
 import { State } from '@progress/kendo-data-query';
+import { AddressesService } from '../services/addresses.service';
+import { AddressModel } from '../shared/models/address.model';
+import { AddressModalComponent } from '../address-modal/address-modal.component';
 
 @Component({
     selector: 'app-ticket-modal',
@@ -37,6 +40,7 @@ import { State } from '@progress/kendo-data-query';
 export class TicketModalComponent extends ModalFormComponent<Ticket> implements OnInit {
 
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
+    @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
@@ -51,6 +55,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     album: string[] = [];
     targetOperatorsArray: number[];
     jobs: SelectableJob[];
+    addresses: AddressModel[];
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -68,7 +73,8 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
         private readonly _messagesService: MessagesService,
-        private readonly _jobsService: JobsService
+        private readonly _jobsService: JobsService,
+        private readonly _addressService: AddressesService
     ) {
         super(messageBox);
     }
@@ -104,6 +110,28 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
 
     onCustomerChange() {
         this._getJobs();
+        this._readAddresses(this.options.customerId);
+    }
+
+    protected _readAddresses(customerId: number) {
+        this._subscriptions.push(
+            this._addressService.getCustomerAddresses(customerId)
+                .pipe(
+                    map(e => {
+                        this.addresses = e;
+                        if (this.options.addressId) {
+                            const address = this.addresses.find(a => a.id === this.options.addressId);
+                            if (address) {
+                                this.options.addressId = address.id;
+                            } else {
+                                this.options.addressId = null;
+                            }
+                        }
+                    }),
+                    tap(() => { })
+                )
+                .subscribe()
+        );
     }
 
     private _getJobs() {
@@ -121,6 +149,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
             state.filter.filters.push(
                 { field: 'customerId', operator: 'eq', value: this.options.customerId }
             );
+            this._readAddresses(this.options.customerId);
         }
 
         this._subscriptions.push(
@@ -159,7 +188,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
                 .pipe(
                     tap(() => {
                         this._subscriptions.push(
-                            this._serviceJob.getTicketJob(this.options.customerId, this.options.code.replace("/", "-"))
+                            this._serviceJob.getTicketJob(this.options.customerId, this.options.addressId, this.options.code.replace("/", "-"))
                                 .pipe(
                                     tap(e => this.options.jobId = e.id),
                                     tap(() => {
@@ -178,11 +207,44 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         if (this.options.jobId) {
             this._newActivity(ticket);
         }
+        else
+        {
+            this._messageBox.info("Prima di creare l'attività è necessario creare una commessa");
+        }
+    }
+
+    createAddress() {
+        const request = new AddressModel();
+        this._subscriptions.push(
+            this.addressModal.open(request)
+                .pipe(
+                    filter(e => e),
+                    tap(() => {
+                        this.addNewAddress(request);
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    addNewAddress(address: AddressModel) {
+        if (this.options.customerId !== null) address.customerId = this.options.customerId;
+        this._subscriptions.push(
+            this._addressService.createAddress(address)
+                .pipe(
+                    tap(e => {
+                        this._readAddresses(this.options.customerId);
+                        this.options.addressId = e.id;
+                        this._messageBox.success(`Indirizzo creato con successo`);
+                    })
+                )
+                .subscribe()
+        );
     }
 
     private _newActivity(ticket: Ticket) {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, `Rif. Ticket: ${ticket.code}<br/>${ticket.description}`, null,
-            ticket.jobId, null, null, null, null, null, null, "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
+            ticket.jobId, null, ticket.addressId, null, null, null, null, "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
         const options = new ActivityModalOptions(activity);
 
         ticket.status = TicketStatus.InProgress;
@@ -203,6 +265,10 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     createPurchaseOrder(ticket: Ticket) {
         if (this.options.jobId) {
             this._newPurchaseOrder(ticket);
+        }
+        else
+        {
+            this._messageBox.info("Prima di creare l'attività è necessario creare una commessa");
         }
     }
 

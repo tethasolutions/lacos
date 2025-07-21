@@ -19,6 +19,9 @@ public class Ticket : FullAuditedEntity
 
     public long CustomerId { get; set; }
     public Customer? Customer { get; set; }
+
+    public long? AddressId { get; set; }
+    public Address? Address { get; set; }
     public bool IsNew { get; set; }
 
     public long? OperatorId { get; set; }

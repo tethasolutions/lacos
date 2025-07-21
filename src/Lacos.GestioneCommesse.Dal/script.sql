@@ -5070,3 +5070,46 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721095814_add address in ticket'
+)
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD [AddressId] bigint NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721095814_add address in ticket'
+)
+BEGIN
+    CREATE INDEX [IX_Tickets_AddressId] ON [Docs].[Tickets] ([AddressId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721095814_add address in ticket'
+)
+BEGIN
+    ALTER TABLE [Docs].[Tickets] ADD CONSTRAINT [FK_Tickets_Addresses_AddressId] FOREIGN KEY ([AddressId]) REFERENCES [Registry].[Addresses] ([Id]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721095814_add address in ticket'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250721095814_add address in ticket', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

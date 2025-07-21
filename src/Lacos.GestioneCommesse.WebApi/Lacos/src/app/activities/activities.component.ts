@@ -23,6 +23,7 @@ import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
 import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
 import { PurchaseOrderStatus } from '../services/purchase-orders/models';
+import { Job } from '../services/jobs/models';
 
 @Component({
     selector: 'app-activities',
@@ -60,6 +61,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     private cellArgs: CellClickEvent;
     user: User;
     currentOperator: OperatorModel;
+    job: Job;
     screenWidth: number;
 
     readonly activityStatusNames = activityStatusNames;
@@ -71,7 +73,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         private readonly _user: UserService,
         private readonly _customerService: CustomerService,
         private readonly _operatorsService: OperatorsService,
-        private readonly _storageService: StorageService
+        private readonly _storageService: StorageService,
+        private readonly _jobsService: JobsService
     ) {
         super();
     }
@@ -82,6 +85,16 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
         this.updateScreenSize();
+        
+        if (this._jobId) {
+            this._subscriptions.push(
+                this._jobsService.get(this._jobId)
+                    .pipe(
+                        tap(e => this.job = e)
+                    )
+                    .subscribe()
+            );
+        }
     }
 
     @HostListener('window:resize', ['$event'])
@@ -128,6 +141,9 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     create() {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null,
             "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
+        if (this.job) {
+            activity.addressId = this.job.addressId;
+        }
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(
@@ -200,10 +216,11 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         );
     }
 
-    openDependencies(jobId: number, activityId: number) {
+    openDependencies(jobId: number, activityId: number, canHaveDependencies: boolean) {
         this.dependenciesModal.jobId = jobId;
         this.dependenciesModal.activityId = activityId;
         this.dependenciesModal.readonly = true;
+        this.dependenciesModal.canHaveDependencies = canHaveDependencies;
         this.dependenciesModal.open();
     }
 

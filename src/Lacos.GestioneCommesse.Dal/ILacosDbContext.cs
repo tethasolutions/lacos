@@ -323,6 +323,11 @@ public class LacosDbContext : DbContext, ILacosDbContext
     {
         var user = session.CurrentUser;
 
+        if (entry.Entity is ILogEntity logEntity)
+        {
+
+        }
+
         if (entry.Entity is AuditedEntity auditedEntity)
         {
             if (user != null)

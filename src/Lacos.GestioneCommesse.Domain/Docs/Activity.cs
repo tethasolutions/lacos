@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class Activity : FullAuditedEntity
+public class Activity : FullAuditedEntity, ILogEntity
 {
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }

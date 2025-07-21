@@ -3,13 +3,14 @@ using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
-using Lacos.GestioneCommesse.Domain.Security;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Linq.Expressions;
+using Westcar.WebApplication.Dal;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -17,10 +18,11 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 {
     private readonly IMapper mapper;
     private readonly IRepository<PurchaseOrder> repository;
+    private readonly IViewRepository<PurchaseOrderSummary> summaryRepository;
     private readonly IRepository<PurchaseOrderItem> repositoryItem;
     private readonly IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository;
     private readonly IRepository<Job> jobRepository;
-    private readonly IRepository<Activity> activityRepository;
+    private readonly IRepository<Domain.Docs.Activity> activityRepository;
     private readonly IRepository<Operator> operatorRepository;
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
@@ -35,10 +37,11 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     public PurchaseOrdersService(
         IMapper mapper,
         IRepository<PurchaseOrder> repository,
+        IViewRepository<PurchaseOrderSummary> summaryRepository,
         IRepository<PurchaseOrderItem> repositoryItem,
         IRepository<PurchaseOrderAttachment> purchaseOrderAttachmentRepository,
         IRepository<Job> jobRepository,
-        IRepository<Activity> activityRepository,
+        IRepository<Domain.Docs.Activity> activityRepository,
         IRepository<Operator> operatorRepository,
         ILacosSession session,
         ILacosDbContext dbContext,
@@ -48,6 +51,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     {
         this.mapper = mapper;
         this.repository = repository;
+        this.summaryRepository = summaryRepository;
         this.repositoryItem = repositoryItem;
         this.purchaseOrderAttachmentRepository = purchaseOrderAttachmentRepository;
         this.jobRepository = jobRepository;
@@ -59,19 +63,22 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         this.messagesService = messagesService;
     }
 
-    public IQueryable<PurchaseOrderReadModel> Query(long? jobId)
+    public IQueryable<PurchaseOrderSummary> Query(long? jobId)
     {
-        var user = session.CurrentUser!;
-
-        var query = repository.Query()
-            .AsNoTracking()
-            .Include(x => x.Jobs)
-            .AsQueryable();
-
         if (jobId != null)
-            query = query.Where(x => x.Jobs.Any(j => j.Id == jobId));
+        { 
+            var filtered = summaryRepository.Query()
+                .AsNoTracking()
+                .ToList()
+                .Where(e => e.JobIds?.Split(',').Contains(jobId.ToString()) ?? false)
+                .AsQueryable();
+            return filtered;
+        }
 
-        return query.Project<PurchaseOrderReadModel>(mapper);
+        var query = summaryRepository.Query()
+            .AsNoTracking();
+
+        return query;
     }
 
     public async Task<PurchaseOrderDto> Get(long id)
@@ -241,7 +248,15 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
             if (targetOperatorId != null)
             {
-                if (purchaseOrder.ActivityTypeId == null)
+                if (purchaseOrder.ParentActivities.Any())
+                { 
+                    foreach(var activity in purchaseOrder.ParentActivities)
+                    {
+                        message.ActivityId = activity.Id;
+                        await messagesService.Create(message, targetOperatorId.ToString());
+                    }
+                }
+                else if (purchaseOrder.ActivityTypeId == null)
                 {
                     message.PurchaseOrderId = purchaseOrder.Id;
                     await messagesService.Create(message, targetOperatorId.ToString());
@@ -279,13 +294,21 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         purchaseOrder.Date = DateTimeOffset.Now.Date;
         purchaseOrder.Year = DateTimeOffset.Now.Year;
         purchaseOrder.Jobs.Add(await jobRepository.Get(copyDto.JobId));
-        purchaseOrder.Attachments = sourcePurchaseOrder.Attachments;
         purchaseOrder.Description = sourcePurchaseOrder.Description;
         purchaseOrder.Items = sourcePurchaseOrder.Items;
         purchaseOrder.Status = PurchaseOrderStatus.Pending;
         purchaseOrder.SupplierId = sourcePurchaseOrder.SupplierId;
         purchaseOrder.ActivityTypeId = sourcePurchaseOrder.ActivityTypeId;
         purchaseOrder.OperatorId = session.CurrentUser.OperatorId;
+        foreach (var attachment in sourcePurchaseOrder.Attachments)
+        {
+            purchaseOrder.Attachments.Add(new PurchaseOrderAttachment()
+            {
+                FileName = attachment.FileName,
+                DisplayName = attachment.DisplayName,
+                IsAdminDocument = attachment.IsAdminDocument
+            });
+        }
 
         await repository.Insert(purchaseOrder);
 
@@ -398,22 +421,30 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     }
 
     //------------------------------------------------------------------------------------------------------------
-    public IQueryable<PurchaseOrderReadModel> GetJobPurchaseOrders(long jobId)
+    public IQueryable<PurchaseOrderSummary> GetJobPurchaseOrders(long jobId)
     {
-        var job = jobRepository.Query().FirstOrDefault(j => j.Id == jobId);
-
-        if (job == null)
-        {
-            throw new NotFoundException($"Commessa con Id {jobId} non trovata.");
-        }
-
-        var query = repository
-            .Query()
+        var query = summaryRepository.Query()
             .AsNoTracking()
-            .Where(e => e.Jobs.Contains(job));
+            .ToList()
+            .Where(e => e.JobIds?.Split(',').Contains(jobId.ToString()) ?? false)
+            .AsQueryable();
 
-        return query
-            .AsQueryable()
-            .Project<PurchaseOrderReadModel>(mapper);
+        return query;
+
+        //var job = jobRepository.Query().FirstOrDefault(j => j.Id == jobId);
+
+        //if (job == null)
+        //{
+        //    throw new NotFoundException($"Commessa con Id {jobId} non trovata.");
+        //}
+
+        //var query = repository
+        //    .Query()
+        //    .AsNoTracking()
+        //    .Where(e => e.Jobs.Contains(job));
+
+        //return query
+        //    .AsQueryable()
+        //    .Project<PurchaseOrderReadModel>(mapper);
     }
 }

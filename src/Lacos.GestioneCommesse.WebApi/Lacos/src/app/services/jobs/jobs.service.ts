@@ -45,8 +45,8 @@ export class JobsService {
             );
     }
 
-    getTicketJob(customerId: number, ticketCode: string) {
-        return this._http.get<Job>(`${this._baseUrl}/getTicketJob/${customerId}/${ticketCode}`)
+    getTicketJob(customerId: number, addressId: number, ticketCode: string) {
+        return this._http.get<Job>(`${this._baseUrl}/getTicketJob/${customerId}/${addressId}/${ticketCode}`)
             .pipe(
                 map(e => Job.build(e, this._userService.getUser().operatorId))
             );

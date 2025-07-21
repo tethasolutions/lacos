@@ -20,6 +20,8 @@ import { CustomerModalComponent } from '../customer-modal/customer-modal.compone
 import { ApiUrls } from '../services/common/api-urls';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
+import { Job } from '../services/jobs/models';
+import { JobsService } from '../services/jobs/jobs.service';
 
 @Component({
     selector: 'app-tickets',
@@ -28,13 +30,13 @@ import { saveAs } from '@progress/kendo-file-saver';
 export class TicketsComponent extends BaseComponent implements OnInit {
 
     @Input() viewExportExcel: boolean = true;
-    
+
     @ViewChild('ticketModal', { static: true })
     ticketModal: TicketModalComponent;
 
     @ViewChild('grid', { static: true })
     grid: GridComponent;
-    
+
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
 
     data: GridDataResult;
@@ -59,6 +61,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     currentOperator: OperatorModel;
     private _jobId: number;
     screenWidth: number;
+    job: Job;
 
     constructor(
         private readonly _service: TicketsService,
@@ -68,7 +71,8 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         private readonly _user: UserService,
         private readonly _operatorsService: OperatorsService,
         private readonly _customerService: CustomerService,
-        private readonly _storageService: StorageService
+        private readonly _storageService: StorageService,
+        private readonly _jobsService: JobsService
     ) {
         super();
     }
@@ -79,18 +83,28 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id)
         this.updateScreenSize();
-      }
-    
-      @HostListener('window:resize', ['$event'])
-      onResize(event: Event): void {
+
+        if (this._jobId) {
+            this._subscriptions.push(
+                this._jobsService.get(this._jobId)
+                    .pipe(
+                        tap(e => this.job = e)
+                    )
+                    .subscribe()
+            );
+        }
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
         this.updateScreenSize();
-      }
-    
-      private updateScreenSize(): void {
-        this.screenWidth = window.innerWidth -44;
+    }
+
+    private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth - 44;
         if (this.screenWidth > 1876) this.screenWidth = 1876;
-        if (this.screenWidth < 1400) this.screenWidth = 1400;     
-      }
+        if (this.screenWidth < 1400) this.screenWidth = 1400;
+    }
 
 
     dataStateChange(state: State) {
@@ -106,12 +120,16 @@ export class TicketsComponent extends BaseComponent implements OnInit {
     }
 
     private _saveState() {
-        this._storageService.save(this.gridState,window.location.hash,true);
+        this._storageService.save(this.gridState, window.location.hash, true);
     }
-    
+
     create() {
         const today = getToday();
-        const ticket = new Ticket(0,null,today.getFullYear(),today,null,TicketStatus.Opened,null,null,null,null,this.currentOperator.id,[],[]);
+        const ticket = new Ticket(0, null, today.getFullYear(), today, null, TicketStatus.Opened, null, null, this._jobId, null, null, this.currentOperator.id, [], []);
+        if (this.job) {
+            ticket.customerId = this.job.customerId;
+            ticket.addressId = this.job.addressId;
+        }
 
         this._subscriptions.push(
             this.ticketModal.open(ticket)
@@ -151,7 +169,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
             );
         }
     }
-    
+
     cellClickHandler(args: CellClickEvent): void {
         this.cellArgs = args;
     }
@@ -169,7 +187,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
                 .subscribe()
         );
     }
-    
+
     expandDetailsBy = (ticket: ITicketReadModel) => {
         return ticket.id;
     };
@@ -201,7 +219,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
         this._read();
     }
-    
+
     readonly rowCallback = (context: RowClassArgs) => {
         const ticket = context.dataItem as ITicketReadModel;
 
@@ -250,7 +268,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
 
     private _buildJobIdFilter() {
         const that = this;
-        
+
         return {
             field: 'jobId',
             get operator() {
@@ -260,7 +278,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
             },
             get value() {
                 return that._jobId
-                   ? that._jobId
+                    ? that._jobId
                     : 0;
             }
         };
@@ -289,7 +307,7 @@ export class TicketsComponent extends BaseComponent implements OnInit {
             logic: 'or'
         };
     }
-    
+
     private _subscribeRouteParams() {
         this._route.queryParams
             .pipe(
@@ -312,15 +330,15 @@ export class TicketsComponent extends BaseComponent implements OnInit {
         const user = this._user.getUser();
         var sendEmail = false;
         this._messageBox.confirm("Vuoi inviare il ticket alla mail del cliente (" + customerEmail + ")?", "Invio ticket")
-        .pipe(
-            filter(e => e),
-            switchMap(() => 
-                this._service.sendReport(ticketId, customerEmail)
+            .pipe(
+                filter(e => e),
+                switchMap(() =>
+                    this._service.sendReport(ticketId, customerEmail)
+                )
             )
-        )
-        .subscribe();
+            .subscribe();
     }
-    
+
     exportToExcel(): void {
         const options = this.getExportOptions();
         const workbook = new Workbook(options);

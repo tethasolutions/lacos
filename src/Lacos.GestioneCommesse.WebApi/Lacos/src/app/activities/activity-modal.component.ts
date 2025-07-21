@@ -153,6 +153,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     }
 
     onOpenDependecies() {
+        this.dependenciesModal.canHaveDependencies = this.options.activity.canHaveDependencies;
         this.dependenciesModal.open();
     }
 
@@ -298,7 +299,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
 
         this.readAddresses(customerId);
 
-        if (this.options.activity.addressId) return;
+        //if (this.options.activity.addressId) return;
 
         const addressId = this.jobs
             .find(e => e.id === this.options.activity.jobId).addressId;

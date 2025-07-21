@@ -9,6 +9,7 @@ using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -489,7 +490,6 @@ public class ActivitiesService : IActivitiesService
         activity.SetNumber(number);
         activity.IsNewReferent = true;
         activity.JobId = copyDto.JobId;
-        activity.Attachments = sourceActivity.Attachments;
         activity.Description = sourceActivity.Description;
         activity.ExpirationDate = sourceActivity.ExpirationDate;
         activity.Informations = sourceActivity.Informations;
@@ -499,6 +499,14 @@ public class ActivitiesService : IActivitiesService
         activity.Status = ActivityStatus.Pending;
         activity.SupplierId = sourceActivity.SupplierId;
         activity.TypeId = sourceActivity.TypeId;
+        foreach (var attachment in sourceActivity.Attachments)
+        {
+            activity.Attachments.Add(new ActivityAttachment()
+            {
+                FileName = attachment.FileName,
+                DisplayName = attachment.DisplayName
+            });
+        }
 
         await repository.Insert(activity);
 

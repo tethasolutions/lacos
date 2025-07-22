@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class Job : FullAuditedEntity
+public class Job : FullAuditedEntity, ILogEntity
 {
     public int Number { get; set; }
     public int Year { get; set; }

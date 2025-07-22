@@ -1,6 +1,6 @@
 ﻿namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class InterventionDispute : FullAuditedEntity
+public class InterventionDispute : FullAuditedEntity, ILogEntity
 {
     public string? Description { get; set; }
 

@@ -2,7 +2,9 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using Lacos.GestioneCommesse.Domain;
+using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -307,6 +309,24 @@ public class LacosDbContext : DbContext, ILacosDbContext
     {
         var user = session.CurrentUser;
 
+        if (entry.Entity is ILogEntity logEntity)
+        {
+            var newValues = entry.CurrentValues.Properties
+                .ToDictionary(p => p.Name, p => entry.CurrentValues[p.Name]?.ToString());
+
+            var log = new EntityLog()
+            {
+                EntityType = entry.Entity.GetType().Name,
+                EntityId = 0,
+                Action = entry.State.ToString(),
+                Timestamp = DateTimeOffset.UtcNow,
+                UserId = user?.UserId ?? 0,
+                PreviousValues = null,
+                NewValues = JsonSerializer.Serialize(newValues)
+            };
+            Set<EntityLog>().Add(log);
+        }
+
         if (entry.Entity is AuditedEntity auditedEntity)
         {
             if (user != null)
@@ -325,7 +345,23 @@ public class LacosDbContext : DbContext, ILacosDbContext
 
         if (entry.Entity is ILogEntity logEntity)
         {
+            var previousValues = entry.OriginalValues.Properties
+                .ToDictionary(p => p.Name, p => entry.OriginalValues[p.Name]?.ToString());
 
+            var newValues = entry.CurrentValues.Properties
+                .ToDictionary(p => p.Name, p => entry.CurrentValues[p.Name]?.ToString());
+
+            var log = new EntityLog()
+            {
+                EntityType = entry.Entity.GetType().Name,
+                EntityId = (long)entry.Property("Id").CurrentValue!,
+                Action = entry.State.ToString(),
+                Timestamp = DateTimeOffset.UtcNow,
+                UserId = user?.UserId ?? 0,
+                PreviousValues = JsonSerializer.Serialize(previousValues),
+                NewValues = JsonSerializer.Serialize(newValues)
+            };
+            Set<EntityLog>().Add(log);
         }
 
         if (entry.Entity is AuditedEntity auditedEntity)

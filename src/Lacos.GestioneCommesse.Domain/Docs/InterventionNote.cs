@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class InterventionNote : FullAuditedEntity
+public class InterventionNote : FullAuditedEntity, ILogEntity
 {
     public string? PictureFileName { get; set; }
 

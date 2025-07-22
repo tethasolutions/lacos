@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Registry;
 
-public class Product : FullAuditedEntity
+public class Product : FullAuditedEntity, ILogEntity
 {
     public string? Code { get; set; }
     public string? Name { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Registry;
 
-public class Vehicle : FullAuditedEntity
+public class Vehicle : FullAuditedEntity, ILogEntity
 {
     public string? Name { get; set; }
     public string? Plate { get; set; }

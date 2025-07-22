@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Registry;
 
-public class Address : FullAuditedEntity
+public class Address : FullAuditedEntity, ILogEntity
 {
     public string? Description { get; set; }
     public string? City { get; set; }

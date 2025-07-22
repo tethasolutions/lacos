@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class ActivityProduct : FullAuditedEntity
+public class ActivityProduct : FullAuditedEntity, ILogEntity
 {
     public long ProductId { get; set; }
     public Product? Product { get; set; }

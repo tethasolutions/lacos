@@ -5113,3 +5113,38 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721153723_add entitylogs'
+)
+BEGIN
+    CREATE TABLE [Registry].[EntityLogs] (
+        [Id] bigint NOT NULL IDENTITY,
+        [EntityType] nvarchar(max) NOT NULL,
+        [EntityId] bigint NOT NULL,
+        [Action] nvarchar(max) NOT NULL,
+        [Timestamp] datetimeoffset(3) NOT NULL,
+        [UserId] bigint NOT NULL,
+        [PreviousValues] nvarchar(max) NULL,
+        [NewValues] nvarchar(max) NULL,
+        CONSTRAINT [PK_EntityLogs] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721153723_add entitylogs'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250721153723_add entitylogs', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

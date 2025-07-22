@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Registry;
 
-public class ActivityType : FullAuditedEntity
+public class ActivityType : FullAuditedEntity, ILogEntity
 {
     public string? Name { get; set; }
 

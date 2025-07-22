@@ -1,6 +1,6 @@
 ﻿namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class InterventionProductCheckList : FullAuditedEntity
+public class InterventionProductCheckList : FullAuditedEntity, ILogEntity
 {
     public string? Description { get; set; }
     public string? Notes { get; set; }

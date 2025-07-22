@@ -1,6 +1,6 @@
 ﻿namespace Lacos.GestioneCommesse.Domain.Registry;
 
-public class CheckList : FullAuditedEntity
+public class CheckList : FullAuditedEntity, ILogEntity
 {
     public string? PictureFileName { get; set; }
     public string? Description { get; set; }

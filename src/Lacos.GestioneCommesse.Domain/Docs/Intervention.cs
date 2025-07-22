@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class Intervention : FullAuditedEntity
+public class Intervention : FullAuditedEntity, ILogEntity
 {
     public DateTimeOffset Start { get; set; }
     public DateTimeOffset End { get; set; }

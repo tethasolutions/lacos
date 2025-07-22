@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class Message : FullAuditedEntity
+public class Message : FullAuditedEntity, ILogEntity
 {
     public DateTimeOffset Date { get; set; }
 

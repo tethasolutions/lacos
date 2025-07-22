@@ -3,7 +3,7 @@ using Lacos.GestioneCommesse.Domain.Security;
 
 namespace Lacos.GestioneCommesse.Domain.Registry;
 
-public class Supplier : FullAuditedEntity
+public class Supplier : FullAuditedEntity, ILogEntity
 {
     public string? Name { get; set; }
     public string? Notes { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Lacos.GestioneCommesse.Domain.Docs;
 
-public class PurchaseOrderItem : FullAuditedEntity
+public class PurchaseOrderItem : FullAuditedEntity, ILogEntity
 {
     public long ProductId { get; set; }
     public Product? Product { get; set; }

@@ -8,6 +8,7 @@ public class Job : FullAuditedEntity, ILogEntity
     public int Year { get; set; }
     public DateTimeOffset JobDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
+    public DateTimeOffset? MandatoryDate { get; set; }
     public string? Description { get; set; }
     public string? Reference { get; set; }
     public bool HasHighPriority { get; set; }

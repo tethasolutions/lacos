@@ -1,0 +1,16 @@
+<style>
+    .job-late-toast {
+        min-width: 320px;
+        max-width: 450px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
+        z-index: 1200;
+        pointer-events: all;
+    }
+</style>
+
+<div class="job-late-toast alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Attenzione!</strong> La commessa <b>{{jobCode}}</b> è in ritardo<br/>(scadenza tassativa: <strong>{{mandatoryDate |
+    date:'dd/MM/yyyy'}}</strong>)
+    <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+</div>

@@ -10,6 +10,8 @@ public class ActivityReadModel
     public string? JobCode { get; set; }
     public string? JobReference { get; set; }
     public bool? JobHasHighPriority { get; set; }
+    public DateTimeOffset? JobMandatoryDate { get; set; }
+    public bool? JobIsInLate { get; set; }
     public string? ShortDescription { get; set; }
     public ActivityStatus Status { get; set; }
     public string? Address { get; set; }

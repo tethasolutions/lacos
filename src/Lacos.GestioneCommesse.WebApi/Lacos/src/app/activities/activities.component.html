@@ -13,6 +13,18 @@
 
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
+<div class="job-late-toast-container">
+  <ng-container *ngFor="let job of lateJobsToNotify">
+    <app-job-late-notification
+      [jobId]="job.jobId"
+      [jobCode]="job.jobCode"
+      [mandatoryDate]="job.jobMandatoryDate"
+      [userId]="user.id"
+      (closed)="onLateNotificationClosed($event)">
+    </app-job-late-notification>
+  </ng-container>
+</div>
+
 <div class="grid-container">
     <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
         [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
@@ -35,11 +47,14 @@
                 <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="jobCode" title="Comm." [width]="1" *ngIf="viewExportExcel">
+        <kendo-grid-column field="jobCode" title="Commessa" [width]="1" *ngIf="viewExportExcel">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div *ngIf="!dataItem.jobHasHighPriority">{{dataItem.jobCode}}</div>
                 <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
                     {{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                </div>
+                <div *ngIf="dataItem.jobIsInLate" class="job-alert" kendoTooltip title="Scadenza Tassativa">
+                    {{dataItem.jobMandatoryDate | date:"dd/MM/yyyy"}} <i class="fa fa-exclamation-triangle" aria-hidden="true" ></i>
                 </div>
             </ng-template>
         </kendo-grid-column>

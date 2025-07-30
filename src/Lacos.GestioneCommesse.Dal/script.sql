@@ -5148,3 +5148,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250729144111_add job mandatory date'
+)
+BEGIN
+    ALTER TABLE [Docs].[Jobs] ADD [MandatoryDate] datetimeoffset(3) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250729144111_add job mandatory date'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250729144111_add job mandatory date', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

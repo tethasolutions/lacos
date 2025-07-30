@@ -9,7 +9,6 @@ import { ActivitiesService } from '../services/activities/activities.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ActivityModalComponent, ActivityModalOptions } from './activity-modal.component';
 import { JobsService } from '../services/jobs/jobs.service';
-import { of } from 'rxjs';
 import { OperatorsService } from '../services/operators.service';
 import { OperatorModel } from '../shared/models/operator.model';
 import { UserService } from '../services/security/user.service';
@@ -24,6 +23,7 @@ import { saveAs } from '@progress/kendo-file-saver';
 import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
 import { PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { Job } from '../services/jobs/models';
+import { JobLateNotificationComponent } from '../jobs/job-late-notification.component';
 
 @Component({
     selector: 'app-activities',
@@ -52,7 +52,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'startDate', dir: 'asc' }, { field: 'expirationDate', dir: 'asc' }]
+        sort: [{ field: 'jobIsInLate', dir: 'desc' }, { field: 'startDate', dir: 'asc' }, { field: 'expirationDate', dir: 'asc' }]
     };
 
     private _jobId: number;
@@ -63,6 +63,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     currentOperator: OperatorModel;
     job: Job;
     screenWidth: number;
+    lateJobsToNotify: any[] = [];
 
     readonly activityStatusNames = activityStatusNames;
 
@@ -85,7 +86,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
         this.updateScreenSize();
-        
+
         if (this._jobId) {
             this._subscriptions.push(
                 this._jobsService.get(this._jobId)
@@ -95,6 +96,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                     .subscribe()
             );
         }
+
     }
 
     @HostListener('window:resize', ['$event'])
@@ -268,7 +270,10 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this._subscriptions.push(
             this._service.read(this.gridState)
                 .pipe(
-                    tap(e => this.data = e)
+                    tap(e => {
+                        this.data = e;
+                        this.checkLateJobsToNotify();
+                    })
                 )
                 .subscribe()
         );
@@ -398,6 +403,41 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this._typeId = isNaN(+params['typeId']) ? null : +params['typeId'];
         this._referentId = isNaN(+params['referentId']) ? null : +params['referentId'];
         this._read();
+    }
+
+    checkLateJobsToNotify() {
+        const alreadyClosed = (jobId: number) =>
+            localStorage.getItem(`jobLateClosed_${this.user.id}_${jobId}`);
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const lateJobs = (this.data.data || [])
+            .filter(j => {
+                if (alreadyClosed(j.jobId)) return false;
+                if (!j.jobMandatoryDate) return false;
+
+                const mandatoryDate = new Date(j.jobMandatoryDate);
+                mandatoryDate.setHours(0, 0, 0, 0);
+
+                const warningDate = new Date(mandatoryDate);
+                warningDate.setDate(mandatoryDate.getDate() - 5);
+
+                return today >= warningDate;
+            });
+
+        const uniqueJobsMap = new Map<number, any>();
+        lateJobs.forEach(job => {
+            if (!uniqueJobsMap.has(job.jobId)) {
+                uniqueJobsMap.set(job.jobId, job);
+            }
+        });
+
+        this.lateJobsToNotify = Array.from(uniqueJobsMap.values());
+    }
+
+    onLateNotificationClosed(jobId: number) {
+        this.lateJobsToNotify = this.lateJobsToNotify.filter(j => j.jobId !== jobId);
     }
 
     exportToExcel(): void {

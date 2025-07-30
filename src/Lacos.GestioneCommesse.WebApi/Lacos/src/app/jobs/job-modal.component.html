@@ -25,23 +25,13 @@
         <form name="job-modal-form" #form="ngForm" novalidate autocomplete="off" (submit)="close()">
 
             <div class="row">
-                <div class="col-md-1">
-                    <label>Numero</label>
+                <div class="col-md-2">
+                    <label>Codice</label>
                     <div class="form-group">
-                        <input class="form-control" name="number" [(ngModel)]="options.number" novalidate
-                            autocomplete="off" disabled />
-                        <div class="validation-message" [control]="form.controls['number']"></div>
+                        <strong>{{options.code ? options.code : 'Nuova commessa'}}</strong>
                     </div>
                 </div>
-                <div class="col-md-1">
-                    <label>Anno</label>
-                    <div class="form-group">
-                        <input class="form-control" name="year" [(ngModel)]="options.year" novalidate autocomplete="off"
-                            disabled />
-                        <div class="validation-message" [control]="form.controls['year']"></div>
-                    </div>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Data</label>
                     <div class="form-group">
                         <kendo-datepicker format="dd/MM/yyyy" name="date" [(ngModel)]="options.date" required
@@ -50,13 +40,22 @@
                         <div class="validation-message" [control]="form.controls['date']"></div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Data Scadenza</label>
                     <div class="form-group">
                         <kendo-datepicker format="dd/MM/yyyy" name="expirationDate" [(ngModel)]="options.expirationDate"
                             [min]="options.date" [disabled]="isOperator">
                         </kendo-datepicker>
                         <div class="validation-message" [control]="form.controls['expirationDate']"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label>Data Tassativa</label>
+                    <div class="form-group">
+                        <kendo-datepicker format="dd/MM/yyyy" name="mandatoryDate" [(ngModel)]="options.mandatoryDate"
+                            [min]="options.date" [disabled]="isOperator">
+                        </kendo-datepicker>
+                        <div class="validation-message" [control]="form.controls['mandatoryDate']"></div>
                     </div>
                 </div>
                 <div class="col-md-2">

@@ -30,6 +30,7 @@ export interface IJobReadModel {
     readonly code: string;
     readonly date: Date | string;
     readonly expirationDate: Date | string;
+    readonly mandatoryDate: Date | string;
     readonly description: string;
     readonly reference: string;
     readonly hasHighPriority: boolean;
@@ -48,7 +49,7 @@ export interface IJobReadModel {
     readonly referentName: string;
     readonly unreadMessages: number;
     readonly hasSharepoint: boolean;
-
+    readonly isInLate: boolean;
 }
 
 export interface IJobProgressStatus {
@@ -76,6 +77,7 @@ export class Job {
 
     date: Date;
     expirationDate: Date;
+    mandatoryDate: Date;
 
     get code() {
         return `${this.number.toString().padStart(3, '0')}/${this.year}`;
@@ -87,6 +89,7 @@ export class Job {
         public year: number,
         date: Date | string,
         expirationDate: Date | string,
+        mandatoryDate: Date | string,
         public description: string,
         public reference: string,
         public hasHighPriority: boolean,
@@ -99,14 +102,15 @@ export class Job {
         public attachments: JobAttachmentModel[],
         public messages: MessageReadModel[]
     ) {
-        this.date = date ? new Date(date) : null;        
+        this.date = date ? new Date(date) : null;
         this.expirationDate = expirationDate ? new Date(expirationDate) : null;
+        this.mandatoryDate = mandatoryDate ? new Date(mandatoryDate) : null;
     }
 
     static build(o: Job, operatorId: number) {
         const attachments = o.attachments.map(e => JobAttachmentModel.build(e));
         const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
-        return new Job(o.id, o.number, o.year, o.date, o.expirationDate, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId, o.referentId, o.sharepointFolder, o.sharepointFolderName, attachments, messages);
+        return new Job(o.id, o.number, o.year, o.date, o.expirationDate, o.mandatoryDate, o.description, o.reference, o.hasHighPriority, o.status, o.customerId, o.addressId, o.referentId, o.sharepointFolder, o.sharepointFolderName, attachments, messages);
     }
 
 }
@@ -126,7 +130,7 @@ export class JobCopy {
     ) {
         this.date = date ? new Date(date) : null;
     }
-    
+
     static build(o: JobCopy) {
         return new JobCopy(o.originalId, o.date, o.description, o.reference, o.customerId, o.addressId, o.referentId);
     }

@@ -8,6 +8,7 @@ public class JobReadModel
     public string? Code { get; set; }
     public DateTimeOffset Date { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
+    public DateTimeOffset? MandatoryDate { get; set; }
     public string? Description { get; set; }
     public string? Reference { get; set; }
     public bool HasHighPriority { get; set; }
@@ -26,6 +27,6 @@ public class JobReadModel
     public string? ReferentName { get; set; }
 
     public int? UnreadMessages { get; set; }
-
     public bool HasSharepoint { get; set; }
+    public bool IsInLate { get; set; }
 }

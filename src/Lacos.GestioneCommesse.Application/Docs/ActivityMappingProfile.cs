@@ -26,6 +26,12 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.JobCode, y => CustomDbFunctions.FormatCode(y.Job!.Number, y.Job.Year, 3))
            .MapMember(x => x.JobReference, y => y.Job!.Reference)
            .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
+           .MapMember(x => x.JobMandatoryDate, y => y.Job!.MandatoryDate)
+           .MapMember(x => x.JobIsInLate, y => (y.Job!.Status != JobStatus.InProgress && y.Job!.Status != JobStatus.Pending)
+                ? false
+                : (y.Job!.MandatoryDate == null
+                    ? false
+                    : y.Job!.MandatoryDate.Value.AddHours(2).AddDays(-5) < DateTimeOffset.Now.Date))
            .MapMember(x => x.CustomerId, y => y.Job!.CustomerId)
            .MapMember(x => x.Customer, y => y.Job!.Customer == null ? null : y.Job.Customer.Name)
            .MapMember(x => x.ActivityColor, y => y.Type!.ColorHex)

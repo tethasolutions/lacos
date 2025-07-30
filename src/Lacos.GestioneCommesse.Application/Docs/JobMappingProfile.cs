@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Lacos.GestioneCommesse.Application.Docs;
@@ -34,7 +35,12 @@ public class JobMappingProfile : Profile
             .MapMember(x => x.HasPurchaseOrders, y => y.PurchaseOrders.Any())
             .MapMember(x => x.HasInterventions, y => y.Activities.Where(i => i.Interventions.Any()).Any())
             .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead))
-            .MapMember(x => x.HasSharepoint, y => !y.sharepointFolderName.IsNullOrEmpty());
+            .MapMember(x => x.HasSharepoint, y => !y.sharepointFolderName.IsNullOrEmpty())
+            .MapMember(x => x.IsInLate, y => (y.Status != JobStatus.InProgress && y.Status != JobStatus.Pending) 
+                ? false 
+                : (y.MandatoryDate == null 
+                    ? false 
+                    : y.MandatoryDate.Value.AddHours(2).AddDays(-5) < DateTimeOffset.Now.Date));
 
         CreateMap<JobDto, Job>()
             .IgnoreCommonMembers()

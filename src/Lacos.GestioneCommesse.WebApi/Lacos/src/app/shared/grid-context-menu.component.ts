@@ -26,6 +26,10 @@ export class GridContextMenuComponent extends BaseComponent {
 
   @Input() key: string;
 
+  showJobIdDialog = false;
+  jobIds: string[] = [];
+  private jobIdResolve: ((value: any) => void) | null = null;
+
   constructor(
     private readonly router: Router,
     private readonly _jobsService: JobsService,
@@ -42,10 +46,58 @@ export class GridContextMenuComponent extends BaseComponent {
   public isPurchaseOrderGrid: boolean = false;
   user: User;
   isOperator: boolean = false;
+  jobCodesList: string[] = [];
+  private _currentValueArray: string[] = [];
 
   ngOnInit() {
     this.user = this._user.getUser();
     this.isOperator = this.user?.role === Role.Operator;;
+  }
+
+  getSelectedJobId(): Promise<any> {
+    const jobCodesRaw = this.contextItem['jobCodes'];
+    const valueRaw = this.contextItem[this.key];
+
+    if (!jobCodesRaw) {
+      return Promise.resolve(null);
+    }
+
+    const jobCodesArr = typeof jobCodesRaw === 'string'
+      ? jobCodesRaw.split(',').map(x => x.trim()).filter(Boolean)
+      : Array.isArray(jobCodesRaw) ? jobCodesRaw : [jobCodesRaw];
+
+    const valueArr = typeof valueRaw === 'string'
+      ? valueRaw.split(',').map(x => x.trim())
+      : Array.isArray(valueRaw) ? valueRaw : [valueRaw];
+
+    if (jobCodesArr.length > 1) {
+      this.jobCodesList = jobCodesArr;
+      this._currentValueArray = valueArr;
+      this.showJobIdDialog = true;
+      return new Promise<any>((resolve) => {
+        this.jobIdResolve = resolve;
+      });
+    }
+    return Promise.resolve(valueArr[0]);
+  }
+
+  onJobIdSelected(selectedJobCode: string) {
+    this.showJobIdDialog = false;
+    if (this.jobIdResolve) {
+      const idx = this.jobCodesList.findIndex(code => code === selectedJobCode);
+      const selectedValue = this._currentValueArray[idx] ?? null;
+      this.jobIdResolve(selectedValue);
+      this.jobIdResolve = null;
+    }
+  }
+
+
+  onJobIdDialogCancel() {
+    this.showJobIdDialog = false;
+    if (this.jobIdResolve) {
+      this.jobIdResolve(null);
+      this.jobIdResolve = null;
+    }
   }
 
   public onCellClick(
@@ -69,11 +121,13 @@ export class GridContextMenuComponent extends BaseComponent {
     }
   }
 
-  public onSelect(event: ContextMenuSelectEvent): void {
+  public async onSelect(event: ContextMenuSelectEvent): Promise<void> {
+    const jobId = await this.getSelectedJobId();
+    if (!jobId) return;
 
     if (event.item.text === "Scheda Commessa") {
       this._subscriptions.push(
-        this._jobsService.get(this.contextItem[this.key])
+        this._jobsService.get(jobId)
           .pipe(
             switchMap(e => this.jobDetailModal.open(e)),
             filter(e => e),
@@ -84,19 +138,19 @@ export class GridContextMenuComponent extends BaseComponent {
       );
     }
     if (event.item.text === "Commessa") {
-      this.router.navigate(['/job-details'], { queryParams: { jobId: this.contextItem[this.key] } });
+      this.router.navigate(['/job-details'], { queryParams: { jobId: jobId } });
     }
     if (event.item.text === "Attività Commessa") {
-      this.router.navigate(['/activities'], { queryParams: { jobId: this.contextItem[this.key] } });
+      this.router.navigate(['/activities'], { queryParams: { jobId: jobId } });
     }
     if (event.item.text === "Ticket Commessa") {
-      this.router.navigate(['/tickets'], { queryParams: { jobId: this.contextItem[this.key] } });
+      this.router.navigate(['/tickets'], { queryParams: { jobId: jobId } });
     }
     if (event.item.text === "Ordini d'acquisto Commessa") {
-      this.router.navigate(['/purchase-orders'], { queryParams: { jobId: this.contextItem[this.key] } });
+      this.router.navigate(['/purchase-orders'], { queryParams: { jobId: jobId } });
     }
     if (event.item.text === "Interventi Commessa") {
-      this.router.navigate(['/interventions-list'], { queryParams: { jobId: this.contextItem[this.key] } });
+      this.router.navigate(['/interventions-list'], { queryParams: { jobId: jobId } });
     }
     if (event.item.text === "Copia Attività") {
       const options = new CopyToJobModel(this.contextItem["id"], 0);

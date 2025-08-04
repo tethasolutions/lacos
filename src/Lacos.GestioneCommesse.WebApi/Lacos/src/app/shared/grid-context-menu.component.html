@@ -1,6 +1,5 @@
-
 <kendo-contextmenu #gridMenu (select)="onSelect($event)">
-    <kendo-menu-item text="Vai a" >
+    <kendo-menu-item text="Vai a">
         <kendo-menu-item text="Scheda Commessa" *ngIf="!isOperator"></kendo-menu-item>
         <kendo-menu-item text="Commessa"></kendo-menu-item>
         <kendo-menu-item text="Attività Commessa"></kendo-menu-item>
@@ -14,3 +13,6 @@
 
 <app-job-modal #jobDetailModal [jobReadOnly]="true"></app-job-modal>
 <app-copy-to-job-modal #copyToJobModal></app-copy-to-job-modal>
+<app-jobid-selector-dialog *ngIf="showJobIdDialog" [jobIds]="jobCodesList" (select)="onJobIdSelected($event)"
+    (cancel)="onJobIdDialogCancel()">
+</app-jobid-selector-dialog>

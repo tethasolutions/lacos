@@ -1,0 +1,32 @@
+<style>
+    .jobid-selector-list {
+        display: flex;
+        flex-direction: column;
+        margin: 16px 0;
+    }
+
+    .k-button-outline-base {
+        border-color: var(--lacos-color) !important;
+    }
+
+    .k-button-outline-base:hover,
+    .k-button-outline-base.k-hover {
+        background-color: var(--lacos-color) !important;
+        border-color: var(--lacos-color) !important;
+    }
+</style>
+
+<kendo-dialog (close)="onCancel()">
+    <kendo-dialog-titlebar>
+        Scegli la commessa da utilizzare
+    </kendo-dialog-titlebar>
+    <div class="jobid-selector-list">
+        <kendo-button *ngFor="let jobId of jobIds" (click)="onSelect(jobId)" [style.marginBottom.px]="8"
+            fillMode="outline">
+            {{ jobId }}
+        </kendo-button>
+    </div>
+    <kendo-dialog-actions>
+        <kendo-button (click)="onCancel()">Annulla</kendo-button>
+    </kendo-dialog-actions>
+</kendo-dialog>

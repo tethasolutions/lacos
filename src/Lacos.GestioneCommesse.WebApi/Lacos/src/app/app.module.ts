@@ -152,6 +152,7 @@ import { JobsArchiveComponent } from './jobs/jobs-archive.component';
 import { DomSanitizerPipe } from './shared/pipes/domsanitizer.pipe';
 import { DependenciesModalComponent } from './dependencies/dependencies-modal.component';
 import { JobLateNotificationComponent } from './jobs/job-late-notification.component';
+import { JobIdSelectorDialogComponent } from './shared/jobid-selector-dialog.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -247,7 +248,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         SharepointModalComponent,
         SharepointImageDirective,
         DependenciesModalComponent,
-        JobLateNotificationComponent
+        JobLateNotificationComponent,
+        JobIdSelectorDialogComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,

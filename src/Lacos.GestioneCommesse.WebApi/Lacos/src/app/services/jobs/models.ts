@@ -80,7 +80,7 @@ export class Job {
     mandatoryDate: Date;
 
     get code() {
-        return `${this.number.toString().padStart(3, '0')}/${this.year}`;
+        return `${this.number ? this.number.toString().padStart(3, '0') : 0}/${this.year}`;
     }
 
     constructor(

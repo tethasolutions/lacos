@@ -346,7 +346,7 @@ class SelectableActivity {
         this.id = activity.id;
         this.customerAddress = activity.address;
         this.number = activity.number;
-        this.fullName = `${activity.number} - ${activity.address}`;
+        this.fullName = `${activity.number} - ${activity.shortDescription}`;
     }
 
 }

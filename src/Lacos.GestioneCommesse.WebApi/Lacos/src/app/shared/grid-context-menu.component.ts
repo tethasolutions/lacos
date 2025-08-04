@@ -58,8 +58,12 @@ export class GridContextMenuComponent extends BaseComponent {
     const jobCodesRaw = this.contextItem['jobCodes'];
     const valueRaw = this.contextItem[this.key];
 
-    if (!jobCodesRaw) {
+    if (!valueRaw) {
       return Promise.resolve(null);
+    }
+
+    if (!jobCodesRaw) {
+      return valueRaw;
     }
 
     const jobCodesArr = typeof jobCodesRaw === 'string'

@@ -229,17 +229,20 @@ public class ActivitiesService : IActivitiesService
 
             foreach (var parentActivity in activity.ParentActivities)
             {
-                if (parentActivity.ActivityDependencies.All(a => a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
+                if (parentActivity.Status != ActivityStatus.Completed)
+                {
+                    if (parentActivity.ActivityDependencies.All(a => a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
                     && parentActivity.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed))
-                {
-                    logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
-                        $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: tutte le dipendenze sono evase -> cambio stato '{parentActivity.Status}' -> '{ActivityStatus.InProgress}' ");
-                    parentActivity.Status = ActivityStatus.InProgress;
-                }
-                else
-                {
-                    logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
-                        $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: non tutte le dipendenze sono evase -> stato '{parentActivity.Status}' invariato");
+                    {
+                        logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                            $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: tutte le dipendenze sono evase -> cambio stato '{parentActivity.Status}' -> '{ActivityStatus.InProgress}' ");
+                        parentActivity.Status = ActivityStatus.InProgress;
+                    }
+                    else
+                    {
+                        logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                            $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: non tutte le dipendenze sono evase -> stato '{parentActivity.Status}' invariato");
+                    }
                 }
             }
         }

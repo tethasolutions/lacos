@@ -187,17 +187,20 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
                 foreach (var parentActivity in purchaseOrder.ParentActivities)
                 {
-                    if (parentActivity.ActivityDependencies.All(a => a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
-                        && parentActivity.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed))
+                    if (parentActivity.Status != ActivityStatus.Completed)
                     {
-                        logger.LogWarning($"[{job.Id}]-Commessa {job.Number.ToString("000")}/{job.Year}: " +
-                            $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: tutte le dipendenze sono evase -> cambio stato '{parentActivity.Status}' -> '{ActivityStatus.InProgress}' ");
-                        parentActivity.Status = ActivityStatus.InProgress;
-                    }
-                    else
-                    {
-                        logger.LogWarning($"[{job.Id}]-Commessa {job.Number.ToString("000")}/{job.Year}: " +
-                            $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: non tutte le dipendenze sono evase -> stato '{parentActivity.Status}' invariato");
+                        if (parentActivity.ActivityDependencies.All(a => a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
+                            && parentActivity.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed))
+                        {
+                            logger.LogWarning($"[{job.Id}]-Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                                $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: tutte le dipendenze sono evase -> cambio stato '{parentActivity.Status}' -> '{ActivityStatus.InProgress}' ");
+                            parentActivity.Status = ActivityStatus.InProgress;
+                        }
+                        else
+                        {
+                            logger.LogWarning($"[{job.Id}]-Commessa {job.Number.ToString("000")}/{job.Year}: " +
+                                $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: non tutte le dipendenze sono evase -> stato '{parentActivity.Status}' invariato");
+                        }
                     }
                 }
             }

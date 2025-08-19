@@ -153,6 +153,7 @@ import { DomSanitizerPipe } from './shared/pipes/domsanitizer.pipe';
 import { DependenciesModalComponent } from './dependencies/dependencies-modal.component';
 import { JobLateNotificationComponent } from './jobs/job-late-notification.component';
 import { JobIdSelectorDialogComponent } from './shared/jobid-selector-dialog.component';
+import { ActivityLateNotificationComponent } from './activities/activity-late-notification.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -249,7 +250,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         SharepointImageDirective,
         DependenciesModalComponent,
         JobLateNotificationComponent,
-        JobIdSelectorDialogComponent
+        JobIdSelectorDialogComponent,
+        ActivityLateNotificationComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,

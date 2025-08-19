@@ -38,7 +38,11 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.LastOperator, y => y.CreatedBy)
            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
            .MapMember(x => x.HasAttachments, y => y.Attachments.Any())
-           .MapMember(x => x.IsExpired, y => (y.ExpirationDate != null) ? (y.ExpirationDate < DateTime.Now.Date) : false)
+           .MapMember(x => x.IsExpired, y => (y.Status == ActivityStatus.Completed)
+                ? false
+                : (y.ExpirationDate == null
+                    ? false
+                    : y.ExpirationDate.Value.AddHours(2).AddDays(-5) < DateTimeOffset.Now.Date))
            .MapMember(x => x.IsInternal, y => y.Type!.IsInternal)
            .MapMember(x => x.IsFromTicket, y => y.Job!.Tickets.Any(t => t.ActivityId == y.Id))
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)

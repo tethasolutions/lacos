@@ -66,6 +66,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     job: Job;
     screenWidth: number;
     lateJobsToNotify: any[] = [];
+    lateActivitiesToNotify: IActivityReadModel[] = [];
     isOperator: boolean = true;
     hasQuotation: boolean = false;
 
@@ -408,7 +409,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
         this._typeId = isNaN(+params['typeId']) ? null : +params['typeId'];
         this._referentId = isNaN(+params['referentId']) ? null : +params['referentId'];
-        
+
         if (this._typeId != null) {
             this._activityTypeService.getActivityTypeDetail(this._typeId)
                 .pipe(
@@ -424,7 +425,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     checkLateJobsToNotify() {
-        const alreadyClosed = (jobId: number) =>
+        const jobAlreadyClosed = (jobId: number) =>
             localStorage.getItem(`jobLateClosed_${this.user.id}_${jobId}`);
 
         const today = new Date();
@@ -432,7 +433,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
 
         const lateJobs = (this.data.data || [])
             .filter(j => {
-                if (alreadyClosed(j.jobId)) return false;
+                if (jobAlreadyClosed(j.jobId)) return false;
                 if (!j.jobMandatoryDate) return false;
 
                 const mandatoryDate = new Date(j.jobMandatoryDate);
@@ -452,10 +453,25 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         });
 
         this.lateJobsToNotify = Array.from(uniqueJobsMap.values());
+
+        const actAlreadyClosed = (id: number) =>
+            localStorage.getItem(`activityLateClosed_${this.user.id}_${id}`);
+
+        this.lateActivitiesToNotify = (this.data.data || [])
+            .filter(a => {
+                if (actAlreadyClosed(a.id)) return false;
+                if (!a.isMandatoryExpiration) return false;
+                if (!a.expirationDate) return false;
+                return a.isExpired;
+            });
     }
 
-    onLateNotificationClosed(jobId: number) {
+    onLateJobNotificationClosed(jobId: number) {
         this.lateJobsToNotify = this.lateJobsToNotify.filter(j => j.jobId !== jobId);
+    }
+
+    onLateActivityNotificationClosed(id: number) {
+        this.lateActivitiesToNotify = this.lateActivitiesToNotify.filter(a => a.id !== id);
     }
 
     exportToExcel(): void {

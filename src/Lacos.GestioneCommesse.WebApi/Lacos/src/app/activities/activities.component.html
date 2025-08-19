@@ -20,8 +20,18 @@
       [jobCode]="job.jobCode"
       [mandatoryDate]="job.jobMandatoryDate"
       [userId]="user.id"
-      (closed)="onLateNotificationClosed($event)">
+      (closed)="onLateJobNotificationClosed($event)">
     </app-job-late-notification>
+  </ng-container>
+  <ng-container *ngFor="let act of lateActivitiesToNotify">
+    <app-activity-late-notification
+      [id]="act.id"
+      [jobCode]="act.jobCode"
+      [shortDescription]="act.shortDescription"
+      [expirationDate]="act.expirationDate"
+      [userId]="user.id"
+      (closed)="onLateActivityNotificationClosed($event)">
+    </app-activity-late-notification>
   </ng-container>
 </div>
 
@@ -90,11 +100,8 @@
         </kendo-grid-column>
         <kendo-grid-column field="expirationDate" title="Scadenza" filter="date" format="dd/MM/yyyy" [width]="1">
             <ng-template kendoGridCellTemplate let-dataItem>
-                <div class="text-nowrap job-alert" *ngIf="dataItem.isExpired">
-                    {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
-                </div>
-                <div class="text-nowrap" *ngIf="!dataItem.isExpired">
-                    {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
+                <div class="text-nowrap" [ngClass]="{'job-alert': dataItem.isExpired}">
+                    {{dataItem.expirationDate | date:'dd/MM/yyyy'}} <i class="fa fa-exclamation-triangle" aria-hidden="true" *ngIf="dataItem.isMandatoryExpiration"></i>
                 </div>
             </ng-template>
         </kendo-grid-column>

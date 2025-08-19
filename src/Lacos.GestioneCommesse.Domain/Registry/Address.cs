@@ -26,4 +26,5 @@ public class Address : FullAuditedEntity, ILogEntity
 
     public ICollection<Job> Jobs { get; set; }
     public ICollection<Activity> Activities { get; set; }
+    public ICollection<Ticket> Tickets { get; set; }
 }

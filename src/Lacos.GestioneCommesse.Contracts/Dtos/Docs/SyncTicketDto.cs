@@ -21,6 +21,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         
         public long? PurchaseOrderId { get; set; }
         
+        public long? AddressId { get; set; }
     }
 
    

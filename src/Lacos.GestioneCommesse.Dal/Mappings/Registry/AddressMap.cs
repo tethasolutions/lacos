@@ -41,5 +41,7 @@ public class AddressMap : BaseEntityMapping<Address>
 
         builder.OneToMany(e => e.Jobs, e => e.Address, e => e.AddressId);
         builder.OneToMany(e => e.Activities, e => e.Address, e => e.AddressId);
+        builder.OneToMany(e => e.Tickets, e => e.Address, e => e.AddressId);
+        
     }
 }

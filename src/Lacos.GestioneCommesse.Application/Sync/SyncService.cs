@@ -406,6 +406,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
                 entity.CustomerSignatureName = signDto.NameSurname;
                 entity.FinalNotes = signDto.FinalNotes;
+                entity.RescheduleNotes = signDto.RescheduleNotes;
                 entity.CustomerSignatureFileName = signDto.Filename;
                 entity.ToBeReschedule = signDto.ToBeReschedule;
                 entity.Start = signDto.Start;

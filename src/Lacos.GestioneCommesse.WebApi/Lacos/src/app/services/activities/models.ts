@@ -42,6 +42,7 @@ export interface IActivityReadModel {
     readonly customer: string;
     readonly startDate: Date | string;
     readonly expirationDate: Date | string;
+    readonly isMandatoryExpiration: boolean;
     readonly lastOperator: string;
     readonly referentId: number;
     readonly referentName: string;
@@ -61,6 +62,7 @@ export interface IActivityReadModel {
     readonly totalDependencies: number;
     readonly fulfilledDependencies: number;
     readonly purchaseOrderStatus: PurchaseOrderStatus;
+    readonly quotationAmount: number;
 }
 
 export class Activity {
@@ -82,11 +84,13 @@ export class Activity {
         public referentId: number,
         startDate: Date | string,
         expirationDate: Date | string,
+        public isMandatoryExpiration: boolean,
         public statusLabel0: string,
         public statusLabel1: string,
         public statusLabel2: string,
         public statusLabel3: string,
         public isFloorDelivery: boolean,
+        public quotationAmount: number,
         public canHaveDependencies: boolean,
         public attachments: ActivityAttachmentModel[],
         public messages: MessageReadModel[]
@@ -115,8 +119,8 @@ export class Activity {
         const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
 
         return new Activity(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.supplierId, o.addressId,
-            o.typeId, o.referentId, o.startDate, o.expirationDate, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery,
-            o.canHaveDependencies, attachments, messages);
+            o.typeId, o.referentId, o.startDate, o.expirationDate, o.isMandatoryExpiration, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery,
+            o.quotationAmount, o.canHaveDependencies, attachments, messages);
     }
 
 }
@@ -130,8 +134,8 @@ export class ActivityDetail {
         readonly id: number,
         readonly status: ActivityStatus,
         readonly number: number,
-        public shortDescription: string,
-        public informations: string,
+        readonly shortDescription: string,
+        readonly informations: string,
         readonly description: string,
         readonly jobId: number,
         readonly job: number,
@@ -144,6 +148,7 @@ export class ActivityDetail {
         readonly type: string,
         startDate: Date | string,
         expirationDate: Date | string,
+        readonly isMandatoryExpiration: boolean,
         readonly referentId: number,
         readonly referent: string,
         readonly statusLabel0: string,
@@ -155,6 +160,7 @@ export class ActivityDetail {
         readonly hasDependencies: boolean,
         readonly totalDependencies: number,
         readonly fulfilledDependencies: number,
+        readonly quotationAmount: number,
         public attachments: ActivityAttachmentModel[],
         public messages: MessageReadModel[]
     ) {
@@ -164,8 +170,9 @@ export class ActivityDetail {
 
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.shortDescription, this.informations, this.description, this.jobId, this.supplierId,
-            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.statusLabel0, this.statusLabel1, this.statusLabel2,
-            this.statusLabel3, this.isFloorDelivery, this.canHaveDependencies, this.attachments, this.messages);
+            this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.isMandatoryExpiration, 
+            this.statusLabel0, this.statusLabel1, this.statusLabel2, this.statusLabel3, this.isFloorDelivery, this.quotationAmount, 
+            this.canHaveDependencies, this.attachments, this.messages);
     }
 
     static build(o: ActivityDetail, operatorId: number) {
@@ -173,9 +180,9 @@ export class ActivityDetail {
         const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
 
         return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
-            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate,
-            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery, o.canHaveDependencies, 
-            o.hasDependencies, o.totalDependencies, o.fulfilledDependencies, attachments, messages);
+            o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate, o.isMandatoryExpiration,
+            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery, o.canHaveDependencies,
+            o.hasDependencies, o.totalDependencies, o.fulfilledDependencies, o.quotationAmount, attachments, messages);
     }
 
 }

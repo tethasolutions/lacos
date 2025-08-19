@@ -39,7 +39,8 @@ public class InterventionMappingProfile : Profile
             .Ignore(x => x.Operators)
             .Ignore(x => x.Notes)
             .Ignore(x => x.Products)
-            .Ignore(x => x.Disputes);
+            .Ignore(x => x.Disputes)
+            .Ignore(x => x.RescheduleNotes);
 
         CreateMap<InterventionProduct, InterventionProductReadModel>()
             .MapMember(x => x.InterventionProductId, y => y.Id)

@@ -23,6 +23,7 @@ public class ActivityReadModel
     public bool CanBeRemoved { get; set; }
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
+    public bool? IsMandatoryExpiration { get; set; }
     public string? LastOperator { get; set; }
     public long? ReferentId { get; set; }
     public string? ReferentName { get;set; }
@@ -51,4 +52,6 @@ public class ActivityReadModel
     public int? FulfilledDependencies { get; set; }
 
     public PurchaseOrderStatus? PurchaseOrderStatus { get; set; }
+
+    public decimal? QuotationAmount { get; set; }
 }

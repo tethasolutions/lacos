@@ -61,6 +61,14 @@
                         <div class="validation-message" [control]="form.controls['isExternal']"></div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <label>Contiene Preventivo</label>
+                    <div class="form-group">
+                        <kendo-switch name="hasQuotation" [(ngModel)]="options.hasQuotation" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['hasQuotation']"></div>
+                    </div>
+                </div>
             </div>
             <div class="row riga-form">
                 <div class="col-md-3">

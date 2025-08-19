@@ -19,33 +19,38 @@
             (dataStateChange)="dataStateChange($event)">
     <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
     <kendo-grid-column field="pictureRequired" title="Immagine Obbligatoria">
-        <ng-template kendoGridCellTemplate let-dataItemAddress>
-            {{dataItemAddress.pictureRequired | bool}}
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.pictureRequired | bool}}
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="isInternal" title="Attività interna">
-        <ng-template kendoGridCellTemplate let-dataItemAddress>
-            {{dataItemAddress.isInternal | bool}}
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.isInternal | bool}}
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="isExternal" title="Attività fornitore">
-        <ng-template kendoGridCellTemplate let-dataItemAddress>
-            {{dataItemAddress.isExternal | bool}}
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.isExternal | bool}}
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="influenceJobStatus" title="Influenza stato commesse">
-        <ng-template kendoGridCellTemplate let-dataItemAddress>
-            {{dataItemAddress.influenceJobStatus | bool}}
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.influenceJobStatus | bool}}
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="viewInPurchaseOrder" title="Visibile in Ordini Acq">
-        <ng-template kendoGridCellTemplate let-dataItemAddress>
-            {{dataItemAddress.viewInPurchaseOrder | bool}}
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.viewInPurchaseOrder | bool}}
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="hasDependencies" title="Può avere dipendenze">
-        <ng-template kendoGridCellTemplate let-dataItemAddress>
-            {{dataItemAddress.hasDependencies | bool}}
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.hasDependencies | bool}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="hasQuotation" title="Contiene preventivo">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.hasQuotation | bool}}
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="colorHex" title="Colore">

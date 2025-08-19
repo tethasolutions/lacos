@@ -5173,3 +5173,89 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250818123914_update activities quotation + reschedule notes'
+)
+BEGIN
+    ALTER TABLE [Docs].[Interventions] ADD [RescheduleNotes] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250818123914_update activities quotation + reschedule notes'
+)
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [HasQuotation] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250818123914_update activities quotation + reschedule notes'
+)
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [QuotationAmount] decimal(14,2) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250818123914_update activities quotation + reschedule notes'
+)
+BEGIN
+    UPDATE Registry.ActivityTypes SET HasQuotation = 0; UPDATE Registry.ActivityTypes SET HasDependencies = 0 WHERE HasDependencies IS NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250818123914_update activities quotation + reschedule notes'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250818123914_update activities quotation + reschedule notes', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250818133339_add activity mandatoryexpiration flag'
+)
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [IsMandatoryExpiration] bit NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250818133339_add activity mandatoryexpiration flag'
+)
+BEGIN
+    UPDATE [Docs].[Activities] SET IsMandatoryExpiration = 0 WHERE IsMandatoryExpiration IS NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250818133339_add activity mandatoryexpiration flag'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250818133339_add activity mandatoryexpiration flag', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -12,7 +12,7 @@ import { JobsService } from '../services/jobs/jobs.service';
 import { OperatorsService } from '../services/operators.service';
 import { OperatorModel } from '../shared/models/operator.model';
 import { UserService } from '../services/security/user.service';
-import { User } from '../services/security/models';
+import { Role, User } from '../services/security/models';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { CustomerModel } from '../shared/models/customer.model';
@@ -23,13 +23,15 @@ import { saveAs } from '@progress/kendo-file-saver';
 import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
 import { PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { Job } from '../services/jobs/models';
-import { JobLateNotificationComponent } from '../jobs/job-late-notification.component';
+import { ActivityTypesService } from '../services/activityTypes.service';
+import { ActivityTypeModel } from '../shared/models/activity-type.model';
 
 @Component({
     selector: 'app-activities',
     templateUrl: 'activities.component.html'
 })
 export class ActivitiesComponent extends BaseComponent implements OnInit {
+    [x: string]: any;
 
     @Input() viewExportExcel: boolean = true;
 
@@ -64,11 +66,14 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     job: Job;
     screenWidth: number;
     lateJobsToNotify: any[] = [];
+    isOperator: boolean = true;
+    hasQuotation: boolean = false;
 
     readonly activityStatusNames = activityStatusNames;
 
     constructor(
         private readonly _service: ActivitiesService,
+        private readonly _activityTypeService: ActivityTypesService,
         private readonly _messageBox: MessageBoxService,
         private readonly _route: ActivatedRoute,
         private readonly _user: UserService,
@@ -85,6 +90,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this._subscribeRouteParams();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
+        this.isOperator = (this.user.role == Role.Operator);
         this.updateScreenSize();
 
         if (this._jobId) {
@@ -141,8 +147,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     create() {
-        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null,
-            "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
+        const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null, false,
+            "In attesa", "In corso", "Pronto", "Completata", false, null, false, [], []);
         if (this.job) {
             activity.addressId = this.job.addressId;
         }
@@ -402,6 +408,18 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
         this._typeId = isNaN(+params['typeId']) ? null : +params['typeId'];
         this._referentId = isNaN(+params['referentId']) ? null : +params['referentId'];
+        
+        if (this._typeId != null) {
+            this._activityTypeService.getActivityTypeDetail(this._typeId)
+                .pipe(
+                    map(e => {
+                        const activityType = Object.assign(new ActivityTypeModel(), e);
+                        this.hasQuotation = activityType.hasQuotation;
+                        this.console.log(activityType);
+                    })
+                ).subscribe();
+        }
+
         this._read();
     }
 
@@ -459,6 +477,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                     { autoWidth: true },
                     { autoWidth: true },
                     { autoWidth: true },
+                    { autoWidth: true },
                     { autoWidth: true }
                 ],
                 title: 'Commesse',
@@ -472,7 +491,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                             { value: 'Riferimento', bold: true },
                             { value: 'Note', bold: true },
                             { value: 'Operatore', bold: true },
-                            { value: 'Inserito Da', bold: true }
+                            { value: 'Inserito Da', bold: true },
+                            { value: 'Val. Preventivo', bold: true }
                         ]
                     },
                     ...this.data.data.map((item: any) => ({
@@ -484,7 +504,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                             { value: item.jobReference },
                             { value: item.shortDescription },
                             { value: item.referentName },
-                            { value: item.lastOperator }
+                            { value: item.lastOperator },
+                            { value: item.quotationAmount ? item.quotationAmount : '' }
                         ]
                     }))
                 ]

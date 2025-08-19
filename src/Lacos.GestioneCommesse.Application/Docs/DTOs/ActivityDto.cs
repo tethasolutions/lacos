@@ -12,6 +12,7 @@ public class ActivityDto
     public string? Description { get; set; }
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
+    public bool? IsMandatoryExpiration { get; set; }
 
     public long JobId { get; set; }
     public long? SupplierId { get; set; }
@@ -26,6 +27,8 @@ public class ActivityDto
 
     public bool? IsFloorDelivery { get; set; }
     public bool? CanHaveDependencies { get; set; }
+
+    public decimal? QuotationAmount { get; set; }
 
     public IEnumerable<ActivityAttachmentDto>? Attachments { get; set; }
     public IEnumerable<MessageReadModel>? Messages { get; set; }

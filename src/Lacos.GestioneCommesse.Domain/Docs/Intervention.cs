@@ -12,6 +12,7 @@ public class Intervention : FullAuditedEntity, ILogEntity
 
     public string? Description { get; set; }
     public string? FinalNotes { get; set; }
+    public string? RescheduleNotes { get; set; }
 
     public string? ReportFileName { get; set; }
     public DateTimeOffset? ReportGeneratedOn { get; set; }

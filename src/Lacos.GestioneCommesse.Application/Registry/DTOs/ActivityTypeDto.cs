@@ -7,6 +7,7 @@
         public bool PictureRequired { get; set; }
         public bool IsInternal { get; set; }
         public bool IsExternal { get; set; }
+        public bool HasQuotation { get; set; }
         public string? ColorHex { get; set; }
 
         public string? StatusLabel0 { get; set; }

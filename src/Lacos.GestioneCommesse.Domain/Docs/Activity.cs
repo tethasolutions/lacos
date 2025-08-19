@@ -6,6 +6,7 @@ public class Activity : FullAuditedEntity, ILogEntity
 {
     public DateTimeOffset? StartDate { get; set; }
     public DateTimeOffset? ExpirationDate { get; set; }
+    public bool? IsMandatoryExpiration { get; set; }
 
     public int RowNumber { get; set; }
 
@@ -32,6 +33,8 @@ public class Activity : FullAuditedEntity, ILogEntity
     public bool? IsFloorDelivery { get; set; }
 
     public ActivityStatus Status { get; set; }
+
+    public decimal? QuotationAmount { get; set; }
 
     public ICollection<Intervention> Interventions { get; set; }
     public ICollection<ActivityProduct> ActivityProducts { get; set; }

@@ -393,33 +393,65 @@ namespace Lacos.GestioneCommesse.Application.Sync
          {
              try
              {
-                 var repository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
-                 var entity = await
-                     repository
-                         .Query()
-                         .Where(x=>x.Id == signDto.InterventionId)
-                         .SingleOrDefaultAsync();
-                 if (entity == null)
-                     throw new NotFoundException("Intervention not found");
+                var repository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
+                var entity = await
+                    repository
+                        .Query()
+                        .Include(x => x.Activity)
+                        .ThenInclude(x => x.Job)
+                        .Where(x=>x.Id == signDto.InterventionId)
+                        .SingleOrDefaultAsync();
+                if (entity == null)
+                    throw new NotFoundException("Intervention not found");
 
-                 entity.CustomerSignatureName = signDto.NameSurname;
-                 entity.FinalNotes = signDto.FinalNotes;
-                 entity.CustomerSignatureFileName = signDto.Filename;
-                 entity.ToBeReschedule = signDto.ToBeReschedule;
-                 entity.Start = signDto.Start;
-                 entity.End = signDto.End;
-                 //entity. = signDto.NameSurname;
-                 repository.Update(entity);
-                 await dbContext.SaveChanges();
+                entity.CustomerSignatureName = signDto.NameSurname;
+                entity.FinalNotes = signDto.FinalNotes;
+                entity.CustomerSignatureFileName = signDto.Filename;
+                entity.ToBeReschedule = signDto.ToBeReschedule;
+                entity.Start = signDto.Start;
+                entity.End = signDto.End;
+                //entity. = signDto.NameSurname;
+                repository.Update(entity);
+                await dbContext.SaveChanges();
 
-                 await using Stream streamOriginalImage = new MemoryStream(signDto.Content);
-                 var folder = configuration.AttachmentsPath;
-                 Directory.CreateDirectory(folder);
-                 var path = Path.Combine(folder, signDto.Filename);
+                if (entity.ToBeReschedule == true)
+                {
+                    var rescheduleActivityId = configuration.RescheduleActivityId;
+                    if (rescheduleActivityId != null)
+                    {
+                        var activityRepository = serviceProvider.GetRequiredService<IRepository<Activity>>();
+                        var activity = new Activity()
+                        {
+                            JobId = entity.Activity!.JobId,
+                            TypeId = rescheduleActivityId.Value,
+                            StartDate = DateTime.Now.Date,
+                            ExpirationDate = DateTime.Now.Date.AddDays(7),
+                            RowNumber = (entity.Activity!.Job!.Activities.Max(x => x.RowNumber) != null) ? (entity.Activity.Job.Activities.Max(x => x.RowNumber) + 1) : 100,
+                            ShortDescription = "Riprogrammazione intervento: " + entity.Activity.ShortDescription,
+                            Informations = entity.Activity.Informations,
+                            Description = entity.RescheduleNotes,
+                            AddressId = entity.Activity.AddressId,
+                            ReferentId = entity.Activity.ReferentId,
+                            IsNewReferent = true,
+                            IsFloorDelivery = entity.Activity.IsFloorDelivery,
+                            Status = ActivityStatus.Pending
+                        };
+                        await activityRepository.Insert(activity);
+                        await dbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new LacosException("Reschedule Activity Id not configured");
+                    }
+                }
+
+                await using Stream streamOriginalImage = new MemoryStream(signDto.Content);
+                var folder = configuration.AttachmentsPath;
+                Directory.CreateDirectory(folder);
+                var path = Path.Combine(folder, signDto.Filename);
                 
-                 await using Stream stremNewImage = File.Create(path);
-                 await streamOriginalImage.CopyToAsync(stremNewImage);
-                 
+                await using Stream stremNewImage = File.Create(path);
+                await streamOriginalImage.CopyToAsync(stremNewImage);
 
 
              }

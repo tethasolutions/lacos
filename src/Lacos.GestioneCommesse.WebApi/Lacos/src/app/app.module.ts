@@ -154,6 +154,12 @@ import { DependenciesModalComponent } from './dependencies/dependencies-modal.co
 import { JobLateNotificationComponent } from './jobs/job-late-notification.component';
 import { JobIdSelectorDialogComponent } from './shared/jobid-selector-dialog.component';
 import { ActivityLateNotificationComponent } from './activities/activity-late-notification.component';
+import { AccountingTypeModalComponent } from './accountingtypes/accountingtype-modal.component';
+import { AccountingTypesComponent } from './accountingtypes/accountingtypes.component';
+import { AccountingTypesService } from './services/accountingTypes.service';
+import { JobAccountingsService } from './services/jobs/job-accountings.service';
+import { JobAccountingModalComponent } from './job-accounting/jobaccounting-modal.component';
+import { JobAccountingsComponent } from './job-accounting/jobaccountings.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -251,7 +257,11 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         DependenciesModalComponent,
         JobLateNotificationComponent,
         JobIdSelectorDialogComponent,
-        ActivityLateNotificationComponent
+        ActivityLateNotificationComponent,
+        AccountingTypeModalComponent,
+        AccountingTypesComponent,
+        JobAccountingModalComponent,
+        JobAccountingsComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,
@@ -317,7 +327,9 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         MessagesService,
         NotificationOperatorsService,
         HelperTypesService,
-        HelperDocumentsService
+        HelperDocumentsService,
+        AccountingTypesService,
+        JobAccountingsService
     ]
 })
 export class AppModule { }

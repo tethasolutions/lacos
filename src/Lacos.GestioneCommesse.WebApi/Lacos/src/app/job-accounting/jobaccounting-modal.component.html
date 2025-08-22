@@ -1,0 +1,72 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="100">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Voce contabile commessa
+            </div>
+            <div class="text-right">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                </button>
+                <button type="button" (click)="close()" class="btn btn-primary">
+                    <i class="fa fa-floppy-disk me-2"></i> SALVA
+                </button>
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateJobAccountingForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()"
+            *ngIf="options" class="redimensionModal">
+            <div class="row riga-form">
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label>Tipo</label>
+                        <kendo-combobox [data]="accountingTypes" [valuePrimitive]="true" textField="name"
+                            valueField="id" name="accountingTypeId" [(ngModel)]="options.accountingTypeId" required
+                            [suggest]="true" [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            [allowCustom]="false">
+                        </kendo-combobox>
+                        <kendo-formerror>Tipo è un campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+
+                <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label>Importo</label>
+                        <kendo-numerictextbox name="amount" [(ngModel)]="options.amount"
+                            [format]="'c2'" [decimals]="2" [min]="0" required>
+                        </kendo-numerictextbox>
+                        <kendo-formerror>Importo è un campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                
+                <div class="col-md-3">
+                    <label>Pagato</label>
+                    <div class="form-group">
+                        <kendo-switch name="isPaid" [(ngModel)]="options.isPaid" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['isPaid']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row riga-form">
+                <div class="col-md-12">
+                    <kendo-formfield class="form-group">
+                        <label>Note</label>
+                        <kendo-textbox [(ngModel)]="options.note" name="note">
+                        </kendo-textbox>
+                    </kendo-formfield>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-floppy-disk me-2"></i> SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

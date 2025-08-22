@@ -25,11 +25,12 @@ public class JobAccountingService : IJobAccountingService
         this.dbContext = dbContext;
     }
 
-    public IQueryable<JobAccountingReadModel> Query()
+    public IQueryable<JobAccountingReadModel> Query(long jobId)
     {
         return repository.Query()
             .Include(e => e.Job)
             .Include(e => e.AccountingType)
+            .Where(e => e.JobId == jobId)
             .Project<JobAccountingReadModel>(mapper);
     }
 

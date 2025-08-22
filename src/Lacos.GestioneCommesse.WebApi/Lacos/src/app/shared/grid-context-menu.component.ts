@@ -144,6 +144,9 @@ export class GridContextMenuComponent extends BaseComponent {
     if (event.item.text === "Commessa") {
       this.router.navigate(['/job-details'], { queryParams: { jobId: jobId } });
     }
+    if (event.item.text === "Voci Contabili Commessa") {
+      this.router.navigate(['/job-accountings'], { queryParams: { jobId: jobId } });
+    }
     if (event.item.text === "Attività Commessa") {
       this.router.navigate(['/activities'], { queryParams: { jobId: jobId } });
     }

@@ -52,6 +52,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/producttypes'], 'Tipi Prodotto',
                     e => e.startsWith('/producttypes'),
                     e => e.isAuthorized(Role.Administrator)
+                ),
+                new MenuEntry(['/accountingtypes'], 'Voci Contabili',
+                    e => e.startsWith('/accountingtypes'),
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new MenuEntry(['/tickets'], 'Tickets',

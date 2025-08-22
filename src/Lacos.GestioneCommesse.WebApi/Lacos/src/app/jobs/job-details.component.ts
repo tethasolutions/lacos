@@ -7,6 +7,8 @@ import { Job } from '../services/jobs/models';
 import { AddressModel } from '../shared/models/address.model';
 import { AddressesService } from '../services/addresses.service';
 import { JobModalComponent } from './job-modal.component';
+import { UserService } from '../services/security/user.service';
+import { Role, User } from '../services/security/models';
 
 @Component({
     selector: 'app-job-details',
@@ -16,10 +18,13 @@ export class JobDetailsComponent extends BaseComponent {
 
     @ViewChild('jobDetailModal', { static: true })
     jobModal: JobModalComponent;
+    user: User;
+    isOperator: boolean = true;
 
     constructor(
         private readonly _service: JobsService,
         private readonly _addressService: AddressesService,
+        private readonly _user: UserService,
         private readonly _route: ActivatedRoute
     ) {
         super();
@@ -31,6 +36,8 @@ export class JobDetailsComponent extends BaseComponent {
 
     ngOnInit() {
         this._subscribeRouteParams();
+        this.user = this._user.getUser();
+        this.isOperator = (this.user.role == Role.Operator);
     }
 
     private _subscribeRouteParams() {
@@ -82,5 +89,5 @@ export class JobDetailsComponent extends BaseComponent {
                 .subscribe()
         );
     }
-    
+
 }

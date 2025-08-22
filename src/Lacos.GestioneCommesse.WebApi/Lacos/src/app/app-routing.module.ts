@@ -33,6 +33,8 @@ import { HelperDocumentsComponent } from './helperdocuments/helperdocuments.comp
 import { JobsSuspendedComponent } from './jobs/jobs-suspended.component';
 import { InterventionMessagesListComponent } from './messages/interventionmessages-list.component';
 import { JobsArchiveComponent } from './jobs/jobs-archive.component';
+import { AccountingTypesComponent } from './accountingtypes/accountingtypes.component';
+import { JobAccountingsComponent } from './job-accounting/jobaccountings.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -67,6 +69,8 @@ const routes: Routes = [
     { path: 'notification-operators', component: NotificationOperatorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'helpertypes', component: HelperTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'helperdocuments', component: HelperDocumentsComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'accountingtypes', component: AccountingTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'job-accountings', component: JobAccountingsComponent, canActivate: [AuthGuard.asInjectableGuard] },
 ];
 
 @NgModule({

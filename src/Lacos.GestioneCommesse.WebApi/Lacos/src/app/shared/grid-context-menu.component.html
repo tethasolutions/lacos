@@ -6,6 +6,7 @@
         <kendo-menu-item text="Ticket Commessa"></kendo-menu-item>
         <kendo-menu-item text="Ordini d'acquisto Commessa"></kendo-menu-item>
         <kendo-menu-item text="Interventi Commessa"></kendo-menu-item>
+        <kendo-menu-item text="Voci Contabili Commessa" *ngIf="!isOperator"></kendo-menu-item>
     </kendo-menu-item>
     <kendo-menu-item text="Copia Attività" *ngIf="isActivityGrid"></kendo-menu-item>
     <kendo-menu-item text="Copia Ordine d'acquisto" *ngIf="isPurchaseOrderGrid"></kendo-menu-item>

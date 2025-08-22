@@ -17,10 +17,10 @@ public class JobAccountingsController : LacosApiController
         this.service = service;
     }
 
-    [HttpGet("read")]
-    public async Task<DataSourceResult> Read([LacosDataSourceRequest] DataSourceRequest request)
+    [HttpGet("read/{jobId}")]
+    public async Task<DataSourceResult> Read(long jobId, [LacosDataSourceRequest] DataSourceRequest request)
     {
-        return await service.Query()
+        return await service.Query(jobId)
             .ToDataSourceResultAsync(request);
     }
 

@@ -58,4 +58,8 @@
     <hr>
 </div>
 <app-interventions-list [viewNewInterventionButton]="false"></app-interventions-list>
+<div>
+    <hr>
+</div>
+<app-jobaccountings *ngIf="!isOperator"></app-jobaccountings>
 <app-job-modal #jobDetailModal></app-job-modal>

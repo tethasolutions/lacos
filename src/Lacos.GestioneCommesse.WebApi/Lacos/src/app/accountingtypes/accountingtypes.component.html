@@ -1,0 +1,41 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h4>Tipologie Voci Contabili</h4>
+    </div>
+    <div class="col-auto">
+        <button (click)="createAccountingType()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<div class="grid-container">
+    <kendo-grid [data]="dataAccountingTypes" [pageSize]="stateGridAccountingTypes.take"
+        [skip]="stateGridAccountingTypes.skip" [sort]="stateGridAccountingTypes.sort"
+        [filter]="stateGridAccountingTypes.filter" [group]="stateGridAccountingTypes.group" filterable="menu"
+        [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
+        (dataStateChange)="dataStateChange($event)">
+        <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
+        <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+        <kendo-grid-column field="generateAlert" title="Genera Alert">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.generateAlert | bool}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button (click)="editAccountingType(dataItem)" class="btn btn-primary btn-sm grid-action-button"
+                    title="Modifica">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button (click)="deleteAccountingType(dataItem)" class="btn btn-danger btn-sm grid-action-button"
+                    title="Elimina">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
+
+<app-accountingType-modal #accountingTypeModal></app-accountingType-modal>

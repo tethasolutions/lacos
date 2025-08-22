@@ -55,6 +55,7 @@ public class JobMappingProfile : Profile
             .Ignore(x => x.Referent)
             .Ignore(x => x.IsInternalJob)
             .Ignore(x => x.Messages)
+            .Ignore(x => x.Accountings)
             .MapMember(x => x.JobDate, (x, y) => y.IsTransient() ? x.Date : y.JobDate)
             .MapMember(x => x.CustomerId, (x, y) => y.IsTransient() ? x.CustomerId : y.CustomerId)
             .AfterMap(AfterMap);

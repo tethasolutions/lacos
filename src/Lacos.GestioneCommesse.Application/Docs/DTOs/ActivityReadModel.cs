@@ -53,5 +53,4 @@ public class ActivityReadModel
 
     public PurchaseOrderStatus? PurchaseOrderStatus { get; set; }
 
-    public decimal? QuotationAmount { get; set; }
 }

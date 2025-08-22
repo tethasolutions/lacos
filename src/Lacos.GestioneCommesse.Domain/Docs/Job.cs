@@ -34,6 +34,7 @@ public class Job : FullAuditedEntity, ILogEntity
     public ICollection<Ticket> Tickets { get; set; }
     public ICollection<JobAttachment> Attachments { get; set; }
     public ICollection<Message> Messages { get; set; }
+    public ICollection<JobAccounting> Accountings { get; set; }
 
     public Job()
     {
@@ -41,6 +42,8 @@ public class Job : FullAuditedEntity, ILogEntity
         PurchaseOrders = new List<PurchaseOrder>();
         Attachments = new List<JobAttachment>();
         Messages = new List<Message>();
+        Tickets = new List<Ticket>();
+        Accountings = new List<JobAccounting>();
     }
 
     public void SetCode(int year, int number)

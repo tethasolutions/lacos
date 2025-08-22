@@ -4,7 +4,6 @@ export class ActivityTypeModel {
     pictureRequired: boolean;
     isInternal: boolean;
     isExternal: boolean;
-    hasQuotation: boolean;
     colorHex: string;
 
     statusLabel0: string;
@@ -22,7 +21,6 @@ export class ActivityTypeModel {
         this.pictureRequired = false;
         this.isInternal = false;
         this.isExternal = false;
-        this.hasQuotation = false;
         this.colorHex = null;
         this.statusLabel0 = "In attesa";
         this.statusLabel1 = "In corso";

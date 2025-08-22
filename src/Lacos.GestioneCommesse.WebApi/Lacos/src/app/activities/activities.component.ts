@@ -68,7 +68,6 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     lateJobsToNotify: any[] = [];
     lateActivitiesToNotify: IActivityReadModel[] = [];
     isOperator: boolean = true;
-    hasQuotation: boolean = false;
 
     readonly activityStatusNames = activityStatusNames;
 
@@ -149,7 +148,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
 
     create() {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null, false,
-            "In attesa", "In corso", "Pronto", "Completata", false, null, false, [], []);
+            "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
         if (this.job) {
             activity.addressId = this.job.addressId;
         }
@@ -415,7 +414,6 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                 .pipe(
                     map(e => {
                         const activityType = Object.assign(new ActivityTypeModel(), e);
-                        this.hasQuotation = activityType.hasQuotation;
                         this.console.log(activityType);
                     })
                 ).subscribe();
@@ -493,7 +491,6 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                     { autoWidth: true },
                     { autoWidth: true },
                     { autoWidth: true },
-                    { autoWidth: true },
                     { autoWidth: true }
                 ],
                 title: 'Commesse',
@@ -507,8 +504,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                             { value: 'Riferimento', bold: true },
                             { value: 'Note', bold: true },
                             { value: 'Operatore', bold: true },
-                            { value: 'Inserito Da', bold: true },
-                            { value: 'Val. Preventivo', bold: true }
+                            { value: 'Inserito Da', bold: true }
                         ]
                     },
                     ...this.data.data.map((item: any) => ({
@@ -520,8 +516,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                             { value: item.jobReference },
                             { value: item.shortDescription },
                             { value: item.referentName },
-                            { value: item.lastOperator },
-                            { value: item.quotationAmount ? item.quotationAmount : '' }
+                            { value: item.lastOperator }
                         ]
                     }))
                 ]

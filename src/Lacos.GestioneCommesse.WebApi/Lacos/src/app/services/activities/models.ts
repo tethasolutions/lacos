@@ -62,7 +62,6 @@ export interface IActivityReadModel {
     readonly totalDependencies: number;
     readonly fulfilledDependencies: number;
     readonly purchaseOrderStatus: PurchaseOrderStatus;
-    readonly quotationAmount: number;
 }
 
 export class Activity {
@@ -90,7 +89,6 @@ export class Activity {
         public statusLabel2: string,
         public statusLabel3: string,
         public isFloorDelivery: boolean,
-        public quotationAmount: number,
         public canHaveDependencies: boolean,
         public attachments: ActivityAttachmentModel[],
         public messages: MessageReadModel[]
@@ -120,7 +118,7 @@ export class Activity {
 
         return new Activity(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.supplierId, o.addressId,
             o.typeId, o.referentId, o.startDate, o.expirationDate, o.isMandatoryExpiration, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery,
-            o.quotationAmount, o.canHaveDependencies, attachments, messages);
+            o.canHaveDependencies, attachments, messages);
     }
 
 }
@@ -160,7 +158,6 @@ export class ActivityDetail {
         readonly hasDependencies: boolean,
         readonly totalDependencies: number,
         readonly fulfilledDependencies: number,
-        readonly quotationAmount: number,
         public attachments: ActivityAttachmentModel[],
         public messages: MessageReadModel[]
     ) {
@@ -171,7 +168,7 @@ export class ActivityDetail {
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.shortDescription, this.informations, this.description, this.jobId, this.supplierId,
             this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.isMandatoryExpiration, 
-            this.statusLabel0, this.statusLabel1, this.statusLabel2, this.statusLabel3, this.isFloorDelivery, this.quotationAmount, 
+            this.statusLabel0, this.statusLabel1, this.statusLabel2, this.statusLabel3, this.isFloorDelivery, 
             this.canHaveDependencies, this.attachments, this.messages);
     }
 
@@ -182,7 +179,7 @@ export class ActivityDetail {
         return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate, o.isMandatoryExpiration,
             o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery, o.canHaveDependencies,
-            o.hasDependencies, o.totalDependencies, o.fulfilledDependencies, o.quotationAmount, attachments, messages);
+            o.hasDependencies, o.totalDependencies, o.fulfilledDependencies, attachments, messages);
     }
 
 }

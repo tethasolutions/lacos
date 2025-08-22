@@ -48,11 +48,6 @@
             {{dataItem.hasDependencies | bool}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="hasQuotation" title="Contiene preventivo">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.hasQuotation | bool}}
-        </ng-template>
-    </kendo-grid-column>
     <kendo-grid-column field="colorHex" title="Colore">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="operator-color-in-grid" [style.background-color]="dataItem.colorHex"></div>

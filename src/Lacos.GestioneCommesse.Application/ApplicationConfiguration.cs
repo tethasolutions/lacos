@@ -43,7 +43,9 @@ public static class ApplicationConfiguration
             .AddScoped<IMessagesService, MessagesService>()
             .AddScoped<INotificationOperatorService, NotificationOperatorService> ()
             .AddScoped<IHelperTypeService, HelperTypeService> ()
-            .AddScoped<IHelperDocumentService, HelperDocumentService> ();
+            .AddScoped<IHelperDocumentService, HelperDocumentService> ()
+            .AddScoped<IJobAccountingService, JobAccountingService> ()
+            .AddScoped<IAccountingTypeService, AccountingTypeService> ();
 
         return services;
     }

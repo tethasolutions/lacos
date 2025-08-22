@@ -5259,3 +5259,148 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    ALTER TABLE [Docs].[JobAttachments] DROP CONSTRAINT [FK_JobAttachments_Jobs_JobId];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    DECLARE @var33 sysname;
+    SELECT @var33 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Registry].[ActivityTypes]') AND [c].[name] = N'HasQuotation');
+    IF @var33 IS NOT NULL EXEC(N'ALTER TABLE [Registry].[ActivityTypes] DROP CONSTRAINT [' + @var33 + '];');
+    ALTER TABLE [Registry].[ActivityTypes] DROP COLUMN [HasQuotation];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    DECLARE @var34 sysname;
+    SELECT @var34 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Docs].[Activities]') AND [c].[name] = N'QuotationAmount');
+    IF @var34 IS NOT NULL EXEC(N'ALTER TABLE [Docs].[Activities] DROP CONSTRAINT [' + @var34 + '];');
+    ALTER TABLE [Docs].[Activities] DROP COLUMN [QuotationAmount];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    CREATE TABLE [Registry].[AccountingTypes] (
+        [Id] bigint NOT NULL IDENTITY,
+        [Name] nvarchar(200) NOT NULL,
+        [Description] nvarchar(max) NULL,
+        [GenerateAlert] bit NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_AccountingTypes] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    CREATE TABLE [Docs].[JobAccountings] (
+        [Id] bigint NOT NULL IDENTITY,
+        [JobId] bigint NOT NULL,
+        [AccountingTypeId] bigint NOT NULL,
+        [Amount] decimal(14,2) NOT NULL,
+        [Note] nvarchar(max) NULL,
+        [IsPaid] bit NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_JobAccountings] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_JobAccountings_AccountingTypes_AccountingTypeId] FOREIGN KEY ([AccountingTypeId]) REFERENCES [Registry].[AccountingTypes] ([Id]),
+        CONSTRAINT [FK_JobAccountings_Jobs_JobId] FOREIGN KEY ([JobId]) REFERENCES [Docs].[Jobs] ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    CREATE INDEX [IX_JobAccountings_AccountingTypeId] ON [Docs].[JobAccountings] ([AccountingTypeId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    CREATE INDEX [IX_JobAccountings_JobId] ON [Docs].[JobAccountings] ([JobId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    ALTER TABLE [Docs].[JobAttachments] ADD CONSTRAINT [FK_JobAttachments_Jobs_JobId] FOREIGN KEY ([JobId]) REFERENCES [Docs].[Jobs] ([Id]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    INSERT INTO Registry.AccountingTypes (Name,Description,GenerateAlert,CreatedOn,CreatedById,CreatedBy,IsDeleted) VALUES ('Preventivo','Preventivo commessa',0,getdate(),1,'admin',0);INSERT INTO Registry.AccountingTypes (Name,Description,GenerateAlert,CreatedOn,CreatedById,CreatedBy,IsDeleted) VALUES ('Preventivo','Preventivo commessa',0,getdate(),1,'admin',0);INSERT INTO Registry.AccountingTypes (Name,Description,GenerateAlert,CreatedOn,CreatedById,CreatedBy,IsDeleted) VALUES ('Preventivo','Preventivo commessa',0,getdate(),1,'admin',0);INSERT INTO Registry.AccountingTypes (Name,Description,GenerateAlert,CreatedOn,CreatedById,CreatedBy,IsDeleted) VALUES ('Preventivo','Preventivo commessa',0,getdate(),1,'admin',0);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250822121756_add job accountings and co'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250822121756_add job accountings and co', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

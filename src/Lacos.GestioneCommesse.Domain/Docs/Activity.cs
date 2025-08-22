@@ -34,8 +34,6 @@ public class Activity : FullAuditedEntity, ILogEntity
 
     public ActivityStatus Status { get; set; }
 
-    public decimal? QuotationAmount { get; set; }
-
     public ICollection<Intervention> Interventions { get; set; }
     public ICollection<ActivityProduct> ActivityProducts { get; set; }
     public ICollection<ActivityAttachment> Attachments { get; set; }

@@ -167,7 +167,7 @@ export class JobsCompletedComponent extends BaseComponent implements OnInit {
 
     createActivity(job: IJobReadModel) {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, job.id, null, null, null, null, null, null, false, 
-            "In attesa", "In corso", "Pronto", "Completata", false, null, false, [], []);
+            "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
         const options = new ActivityModalOptions(activity);
 
         this._subscriptions.push(

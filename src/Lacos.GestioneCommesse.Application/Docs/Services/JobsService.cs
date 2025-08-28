@@ -126,27 +126,23 @@ public class JobsService : IJobsService
     public async Task<JobDto> Get(long id, bool showInterventionNotes = false)
     {
         var job = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
-            .Include(e => e.Activities)
-            .ThenInclude(e => e.Interventions)
-            .ThenInclude(e => e.Notes)
-            .Include(e => e.Messages)
-            .ThenInclude(e => e.Operator)
-            .Include(e => e.Messages)
-            .ThenInclude(e => e.MessageNotifications)
-            .ThenInclude(e => e.Operator)
             .Where(e => e.Id == id)
+            .Project<JobDto>(mapper)
             .FirstOrDefaultAsync(), QueryFilter.OperatorEntity);
 
-        if (job == null)
-        {
-            throw new NotFoundException($"Commessa con Id {id} non trovata.");
-        }
 
         if (showInterventionNotes)
         {
+            var jobNotes = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
+            .Include(e => e.Activities)
+            .ThenInclude(e => e.Interventions)
+            .ThenInclude(e => e.Notes)
+            .Where(e => e.Id == id)
+
+            .FirstOrDefaultAsync(), QueryFilter.OperatorEntity);
             var notes = string.Join(
             "; ",
-            job.Activities?
+            jobNotes.Activities?
              .SelectMany(a => a.Interventions ?? Enumerable.Empty<Intervention>())
              .SelectMany(i => i.Notes ?? Enumerable.Empty<InterventionNote>())
              .Select(n => n.Notes)
@@ -156,7 +152,7 @@ public class JobsService : IJobsService
             if (!notes.IsNullOrEmpty()) job.Description += "\n<i>Note interventi:</i> " + notes;
         }
 
-        return job.MapTo<JobDto>(mapper);
+        return job;
     }  
 
     public async Task<JobDto> Create(JobDto jobDto)

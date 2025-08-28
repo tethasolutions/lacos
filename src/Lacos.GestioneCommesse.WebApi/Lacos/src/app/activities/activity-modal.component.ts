@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, viewChild, ViewChild } from '@angular/core';
 import { Activity, ActivityStatus } from '../services/activities/models';
 import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
@@ -31,6 +31,7 @@ import { MessageModalComponent } from '../messages/message-modal.component';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
 import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
 import { SecurityService } from '../services/security/security.service';
+import { JobAccountingsModalComponent } from '../job-accounting/jobaccountings-modal.component';
 
 @Component({
     selector: 'app-activity-modal',
@@ -43,6 +44,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
     @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
     @ViewChild('dependenciesModal', { static: false }) dependenciesModal: DependenciesModalComponent;
+    @ViewChild('jobAccountingsModal', { static: false }) jobAccountingsModal: JobAccountingsModalComponent;
 
     activityTypes: ActivityTypeModel[];
     customer: CustomerModel;
@@ -59,6 +61,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     user: User;
     currentOperator: OperatorModel;
     unreadMessages: number;
+    isAdministrationActivity: boolean = false;
 
     attachments: Array<FileInfo> = [];
     album: string[] = [];
@@ -157,6 +160,10 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         this.dependenciesModal.open();
     }
 
+    onOpenJobAccountings() {
+        this.jobAccountingsModal.open(this.options.activity.jobId);
+    }
+
     override open(options: ActivityModalOptions) {
         const result = super.open(options);
 
@@ -192,6 +199,9 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         this.status = options.activity.status;
 
         if (this.options.activity.typeId) {
+            //TODO sistemare con flag nell'activity type
+            this.isAdministrationActivity = this.options.activity.typeId === 29;
+
             this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
             if (this.selectedActivityType.isInternal && this.options.activity.supplierId) {
                 this.onSupplierChange();
@@ -299,11 +309,11 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
 
         this.readAddresses(customerId);
 
-        //if (this.options.activity.addressId) return;
-
-        const addressId = this.jobs
-            .find(e => e.id === this.options.activity.jobId).addressId;
-        this.options.activity.addressId = addressId;
+        if (this.options.activity.addressId) {
+            const addressId = this.jobs
+                .find(e => e.id === this.options.activity.jobId).addressId;
+            this.options.activity.addressId = addressId;
+        }
     }
 
     createAddress() {

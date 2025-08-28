@@ -7,6 +7,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export class ActivityLateNotificationComponent {
   @Input() id!: number;
+  @Input() jobId!: number;
   @Input() jobCode!: string;
   @Input() shortDescription!: string;
   @Input() expirationDate!: string | Date;
@@ -21,5 +22,15 @@ export class ActivityLateNotificationComponent {
 
   getStorageKey(): string {
     return `activityLateClosed_${this.userId}_${this.id}`;
+  }
+
+  openJobDetails() {
+    const url = `#/job-details?jobId=${this.jobId}`;
+    window.location.href = url;
+  }
+
+  openActivityDetails() {
+    const url = `#/activities/${this.id}`;
+    window.location.href = url;
   }
 }

@@ -34,13 +34,13 @@
                 <div class="col-md-3">
                     <kendo-formfield class="form-group">
                         <label>Importo</label>
-                        <kendo-numerictextbox name="amount" [(ngModel)]="options.amount"
-                            [format]="'c2'" [decimals]="2" [min]="0" required>
+                        <kendo-numerictextbox name="amount" [(ngModel)]="options.amount" [format]="'c2'" [decimals]="2"
+                            [min]="0" required>
                         </kendo-numerictextbox>
                         <kendo-formerror>Importo è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                 </div>
-                
+
                 <div class="col-md-3">
                     <label>Pagato</label>
                     <div class="form-group">
@@ -56,6 +56,32 @@
                         <label>Note</label>
                         <kendo-textbox [(ngModel)]="options.note" name="note">
                         </kendo-textbox>
+                    </kendo-formfield>
+                </div>
+            </div>
+            <div class="row riga-form" *ngIf="options.isPaid && !initialFlagIsPaid">
+                <div class="col-md-12">
+                    <kendo-formfield class="form-group">
+                        <label>Destinatari commento automatico</label>
+                        <div class="form-group">
+                            <kendo-multiselect [data]="operators" textField="name" valueField="id" name="operators"
+                                [(ngModel)]="options.targetOperators" [allowCustom]="false" [valuePrimitive]="true"
+                                [readonly]="readonly" style="max-width: 1000px;">
+                                <ng-template kendoMultiSelectItemTemplate let-dataItem>
+                                    <div class="d-flex gap-1">
+                                        <app-operator-avatar [options]="dataItem"></app-operator-avatar>
+                                        {{ dataItem.name }}
+                                    </div>
+                                </ng-template>
+                                <ng-template kendoMultiSelectTagTemplate let-dataItem>
+                                    <div class="d-flex gap-1">
+                                        <app-operator-avatar [options]="dataItem"></app-operator-avatar>
+                                        {{ dataItem.name }}
+                                    </div>
+                                </ng-template>
+                            </kendo-multiselect>
+                            <div class="validation-message" [control]="form.controls['operators']"></div>
+                        </div>
                     </kendo-formfield>
                 </div>
             </div>

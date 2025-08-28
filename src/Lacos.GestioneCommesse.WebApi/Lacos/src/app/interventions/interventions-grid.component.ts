@@ -150,8 +150,6 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
     }
 
     sendReport(interventionId: number, customerEmail: string) {
-        const user = this._userService.getUser();
-        var sendEmail = false;
         this._messageBox.confirm("Vuoi inviare il rapportino alla mail del cliente (" + customerEmail + ")?", "Invio rapportino")
         .pipe(
             filter(e => e),

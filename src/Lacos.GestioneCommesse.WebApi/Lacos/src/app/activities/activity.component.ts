@@ -113,6 +113,21 @@ export class ActivityComponent extends BaseComponent implements OnInit {
     }
 
     createIntervention() {
+        if (this.activity.hasUnpaidAccounts) {
+            this._subscriptions.push(
+                this._messageBox.confirm('Attenzione: l\'attività è collegata a conti non saldati. Continuare ugualmente?')
+                    .pipe(
+                        filter(result => result === true),
+                        tap(() => this._createIntervention())
+                    )
+                    .subscribe()
+            );
+        } else {
+            this._createIntervention();
+        }
+    }
+
+    private _createIntervention() {
         const now = new Date();
         const intervention = new Intervention(0, new Date(new Date(new Date().setMinutes(0)).setSeconds(0)),
             new Date(new Date(new Date().setMinutes(0)).setSeconds(0)).addHours(1), InterventionStatus.Scheduled, false,

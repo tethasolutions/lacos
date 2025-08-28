@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Dal;
+using Lacos.GestioneCommesse.Dal.Migrations;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
@@ -74,25 +75,25 @@ public class JobsService : IJobsService
             .Project<JobReadModel>(mapper);
     }
 
-    public async Task<JobDto> GetTicketJob(long CustomerId, long? AddressId, string TicketCode)
+    public async Task<JobDto> GetTicketJob(TicketJobRequest request)
     {
         var jobDto = await repository.Query()
-            .Where(e => e.IsInternalJob && e.Year == DateTime.Now.Year && e.CustomerId == CustomerId)
+            .Where(e => e.IsInternalJob && e.Year == DateTime.Now.Year && e.CustomerId == request.CustomerId)
             .Project<JobDto>(mapper)
             .FirstOrDefaultAsync();
 
         if (jobDto == null)
         {
-            var customer = await customerRepository.Get(CustomerId);
+            var customer = await customerRepository.Get(request.CustomerId);
             
             jobDto = new JobDto();
-            jobDto.CustomerId = CustomerId;
-            jobDto.AddressId = AddressId;
+            jobDto.CustomerId = request.CustomerId;
+            jobDto.AddressId = request.AddressId;
             jobDto.Year = DateTime.Now.Year;
-            jobDto.Reference = "Ticket " + TicketCode + ((customer != null) ? " - " + customer.Name : "");
+            jobDto.Reference = "Ticket " + request.TicketCode + ((customer != null) ? " - " + customer.Name : "");
             jobDto.Date = DateTime.Now;
             jobDto.Status = JobStatus.Pending;
-            jobDto.Description = " ";
+            jobDto.Description = request.TicketDescription;
             jobDto.Attachments = Enumerable.Empty<JobAttachmentDto>();
             jobDto.Messages = Enumerable.Empty<MessageReadModel>();
 
@@ -122,22 +123,40 @@ public class JobsService : IJobsService
             return jobDto;
     }
 
-    public async Task<JobDto> Get(long id)
+    public async Task<JobDto> Get(long id, bool showInterventionNotes = false)
     {
-        var jobDto = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
+        var job = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()
+            .Include(e => e.Activities)
+            .ThenInclude(e => e.Interventions)
+            .ThenInclude(e => e.Notes)
+            .Include(e => e.Messages)
+            .ThenInclude(e => e.Operator)
+            .Include(e => e.Messages)
+            .ThenInclude(e => e.MessageNotifications)
+            .ThenInclude(e => e.Operator)
             .Where(e => e.Id == id)
-            .Project<JobDto>(mapper)
             .FirstOrDefaultAsync(), QueryFilter.OperatorEntity);
 
-        //jobDto.Messages = jobDto.Messages.Where(m => m.OperatorId == session.CurrentUser.OperatorId ||
-        //    m.TargetOperatorsId.Contains(session.CurrentUser.OperatorId.ToString()));
-
-        if (jobDto == null)
+        if (job == null)
         {
             throw new NotFoundException($"Commessa con Id {id} non trovata.");
         }
 
-        return jobDto;
+        if (showInterventionNotes)
+        {
+            var notes = string.Join(
+            "; ",
+            job.Activities?
+             .SelectMany(a => a.Interventions ?? Enumerable.Empty<Intervention>())
+             .SelectMany(i => i.Notes ?? Enumerable.Empty<InterventionNote>())
+             .Select(n => n.Notes)
+             .Where(s => !string.IsNullOrWhiteSpace(s))
+            ?? Enumerable.Empty<string>());
+
+            if (!notes.IsNullOrEmpty()) job.Description += "\n<i>Note interventi:</i> " + notes;
+        }
+
+        return job.MapTo<JobDto>(mapper);
     }  
 
     public async Task<JobDto> Create(JobDto jobDto)

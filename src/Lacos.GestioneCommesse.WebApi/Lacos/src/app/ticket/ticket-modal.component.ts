@@ -188,7 +188,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
                 .pipe(
                     tap(() => {
                         this._subscriptions.push(
-                            this._serviceJob.getTicketJob(this.options.customerId, this.options.addressId, this.options.code.replace("/", "-"))
+                            this._serviceJob.getTicketJob(this.options.customerId, this.options.addressId, this.options.code.replace("/", "-"), this.options.description)
                                 .pipe(
                                     tap(e => this.options.jobId = e.id),
                                     tap(() => {

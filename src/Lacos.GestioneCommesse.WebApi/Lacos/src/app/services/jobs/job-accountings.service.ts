@@ -15,17 +15,17 @@ export class JobAccountingsService {
         private readonly _http: HttpClient
     ) {}
 
-    readJobAccountings(state: State, jobId: number) {
+    readJobAccountings(state: State) {
         const params = toDataSourceRequestString(state);
         const hasGroups = state.group && state.group.length;
 
-        return this._http.get<GridDataResult>(`${this._baseUrl}/read/${jobId}?${params}`)
+        return this._http.get<GridDataResult>(`${this._baseUrl}/read/?${params}`)
             .pipe(
                 map(e =>
                     {
                         const jobAccountings: Array<JobAccountingModel> = [];
-                        e.data.forEach(item => {
-                            const jobAccounting: JobAccountingModel = Object.assign(new JobAccountingModel(item.id, item.jobId, item.accountingTypeId, item.amount, item.note, item.isPaid), item);
+                        e.data.forEach(e => {
+                            const jobAccounting: JobAccountingModel = Object.assign(new JobAccountingModel(e.id, e.jobId, e.accountingTypeId, e.amount, e.note, e.isPaid, e.targetOperators), e);
                             jobAccountings.push(jobAccounting);
                         });
                         return <GridDataResult>{
@@ -64,7 +64,7 @@ export class JobAccountingsService {
         return this._http.get<JobAccountingModel>(`${this._baseUrl}/${id}`)
             .pipe(
                 map(e => {
-                    const jobAccounting = Object.assign(new JobAccountingModel(e.id, e.jobId, e.accountingTypeId, e.amount, e.note, e.isPaid), e);
+                    const jobAccounting = Object.assign(new JobAccountingModel(e.id, e.jobId, e.accountingTypeId, e.amount, e.note, e.isPaid, e.targetOperators), e);
                     return jobAccounting;
                 })
             );

@@ -35,6 +35,8 @@ public class ActivityDetailDto
     public bool? HasDependencies { get; set; }
     public int? TotalDependencies { get; set; }
     public int? FulfilledDependencies { get; set; }
+
+    public bool? HasUnpaidAccounts { get; set; }
     
     public IEnumerable<ActivityAttachmentDto>? Attachments { get; set; }
     public IEnumerable<MessageReadModel>? Messages { get; set; }

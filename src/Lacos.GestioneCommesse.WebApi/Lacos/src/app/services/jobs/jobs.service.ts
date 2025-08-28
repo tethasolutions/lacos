@@ -45,8 +45,16 @@ export class JobsService {
             );
     }
 
-    getTicketJob(customerId: number, addressId: number, ticketCode: string) {
-        return this._http.get<Job>(`${this._baseUrl}/getTicketJob/${customerId}/${addressId}/${ticketCode}`)
+    getWithNotes(id: number) {
+        return this._http.get<Job>(`${this._baseUrl}/getwithnotes/${id}`)
+            .pipe(
+                map(e => Job.build(e, this._userService.getUser().operatorId))
+            );
+    }
+
+    getTicketJob(customerId: number, addressId: number, ticketCode: string, ticketDescription: string) {
+        const request = { customerId, addressId, ticketCode, ticketDescription };
+        return this._http.post<Job>(`${this._baseUrl}/getTicketJob`, request)
             .pipe(
                 map(e => Job.build(e, this._userService.getUser().operatorId))
             );

@@ -12,4 +12,5 @@ public class JobAccountingDto : BaseEntityDto
     public decimal Amount { get; set; }
     public string? Note { get; set; }
     public bool IsPaid { get; set; }
+    public ICollection<long>? TargetOperators { get; set; }
 }

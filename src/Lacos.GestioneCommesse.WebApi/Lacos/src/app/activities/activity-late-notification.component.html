@@ -10,7 +10,8 @@
 </style>
 
 <div class="job-late-toast alert alert-danger alert-dismissible fade show" role="alert">
-    <strong>Attenzione!</strong> L'attività <b>{{shortDescription}}</b> della commessa <b>{{jobCode}}</b> è in ritardo<br/>
+    <strong>Attenzione!</strong> L'attività <a (click)="openActivityDetails()" style="cursor:pointer;"><b>{{shortDescription}}</b></a> 
+    della commessa <a (click)="openJobDetails()" style="cursor:pointer;"><b>{{jobCode}}</b></a> è in ritardo<br/>
     (scadenza tassativa: <strong>{{expirationDate | date:'dd/MM/yyyy'}}</strong>)
     <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
 </div>

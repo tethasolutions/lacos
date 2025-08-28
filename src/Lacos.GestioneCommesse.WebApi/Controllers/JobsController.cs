@@ -44,16 +44,22 @@ public class JobsController : LacosApiController
             .ToDataSourceResultAsync(request);
     }
 
-    [HttpGet("getTicketJob/{customerId}/{AddressId}/{ticketCode}")]
-    public Task<JobDto> GetTicketJob(long CustomerId, long? AddressId, string TicketCode)
+    [HttpPost("getTicketJob")]
+    public Task<JobDto> GetTicketJob(TicketJobRequest request)
     {
-        return service.GetTicketJob(CustomerId, AddressId, TicketCode);
+        return service.GetTicketJob(request);
     }
 
     [HttpGet("{id}")]
     public Task<JobDto> Get(long id)
     {
         return service.Get(id);
+    }
+
+    [HttpGet("getwithnotes/{id}")]
+    public Task<JobDto> GetWithNotes(long id)
+    {
+        return service.Get(id,true);
     }
 
     [HttpPost]

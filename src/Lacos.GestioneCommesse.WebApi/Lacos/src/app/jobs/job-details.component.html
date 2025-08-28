@@ -61,5 +61,5 @@
 <div>
     <hr>
 </div>
-<app-jobaccountings *ngIf="!isOperator"></app-jobaccountings>
+<app-jobaccountings *ngIf="!isOperator" [viewExportExcel]="false"></app-jobaccountings>
 <app-job-modal #jobDetailModal></app-job-modal>

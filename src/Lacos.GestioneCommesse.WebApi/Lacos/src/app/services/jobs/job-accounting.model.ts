@@ -7,12 +7,13 @@ export class JobAccountingModel {
         public accountingTypeId: number,
         public amount: number,
         public note: string,
-        public isPaid: boolean
+        public isPaid: boolean,
+        public targetOperators: number[]
     ) {
     }
 
     static build(o: JobAccountingModel) {
-        return new JobAccountingModel(o.id, o.jobId, o.accountingTypeId, o.amount, o.note, o.isPaid);
+        return new JobAccountingModel(o.id, o.jobId, o.accountingTypeId, o.amount, o.note, o.isPaid, o.targetOperators);
     }
     
 }
@@ -23,6 +24,7 @@ export interface IJobAccountingReadModel {
         readonly jobId: number;
         readonly jobCode: string;
         readonly jobReference: string;
+        readonly customer: string;
         readonly accountingTypeId: number;
         readonly accountingTypeName: string;
         readonly generateAlert: boolean;

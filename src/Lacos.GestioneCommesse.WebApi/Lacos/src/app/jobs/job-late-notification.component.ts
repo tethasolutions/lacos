@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ApiUrls } from '../services/common/api-urls';
 
 @Component({
   selector: 'app-job-late-notification',
@@ -12,6 +13,8 @@ export class JobLateNotificationComponent {
   @Input() userId!: string;
   @Output() closed = new EventEmitter<number>();
 
+  private readonly _baseUrl = `${ApiUrls.baseUrl}`;
+
   close() {
     // Salva nel localStorage la chiusura (userId + jobId)
     localStorage.setItem(this.getStorageKey(), 'closed');
@@ -20,5 +23,10 @@ export class JobLateNotificationComponent {
 
   getStorageKey(): string {
     return `jobLateClosed_${this.userId}_${this.jobId}`;
+  }
+
+  openJobDetails() {
+    const url = `#/job-details?jobId=${this.jobId}`;
+    window.location.href = url;
   }
 }

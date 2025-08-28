@@ -7,6 +7,8 @@ import { AccountingTypeModel } from '../shared/models/accounting-type.model';
 import { AccountingTypesService } from '../services/accountingTypes.service';
 import { tap } from 'rxjs';
 import { State } from '@progress/kendo-data-query';
+import { OperatorModel } from '../shared/models/operator.model';
+import { OperatorsService } from '../services/operators.service';
 
 @Component({
   selector: 'app-jobaccounting-modal',
@@ -16,16 +18,25 @@ import { State } from '@progress/kendo-data-query';
 export class JobAccountingModalComponent extends ModalFormComponent<JobAccountingModel> implements OnInit {
 
   accountingTypes: AccountingTypeModel[];
+  operators: OperatorModel[];
+  initialFlagIsPaid: boolean = false;
 
   constructor(
     readonly messageBox: MessageBoxService,
-    readonly _accountingTypesService: AccountingTypesService
+    readonly _accountingTypesService: AccountingTypesService,
+    readonly _operatorsService: OperatorsService
   ) {
     super(messageBox);
   }
 
   ngOnInit() {
     this._getAccountingTypes();
+    this._getOperators();
+  }
+
+  override open(options: JobAccountingModel) {
+    this.initialFlagIsPaid = options?.isPaid;
+    return super.open(options);
   }
 
   protected _canClose(): boolean {
@@ -52,6 +63,22 @@ export class JobAccountingModalComponent extends ModalFormComponent<JobAccountin
         ).subscribe()
     );
 
+  }
+
+  private _getOperators() {
+    const state: State = {
+      sort: [
+        { field: 'name', dir: 'asc' }
+      ]
+    };
+
+    this._subscriptions.push(
+      this._operatorsService.readOperators(state)
+        .pipe(
+          tap(e => this.operators = e.data as OperatorModel[])
+        )
+        .subscribe()
+    )
   }
 
 }

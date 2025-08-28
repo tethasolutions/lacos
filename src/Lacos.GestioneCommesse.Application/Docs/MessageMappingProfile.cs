@@ -24,10 +24,12 @@ public class MessageMappingProfile : Profile
 
         CreateMap<Message, MessageReadModel>()
             .MapMember(x => x.OperatorName, y => y.Operator!.Name)
-            .MapMember(x => x.ElementCode, y => (y.JobId != null) ? "Commessa " + CustomDbFunctions.FormatCode(y.Job.Number, y.Job.Year, 3) :
-                    ((y.ActivityId != null) ? "Attività " + y.Activity.Type.Name :
-                    ((y.TicketId != null) ? "Ticket " + CustomDbFunctions.FormatCode(y.Ticket.Number, y.Ticket.Year, 3) :
-                    ((y.PurchaseOrderId != null) ? "Ordine " + CustomDbFunctions.FormatCode(y.PurchaseOrder.Number, y.PurchaseOrder.Year, 3) : null))))
+            .MapMember(x => x.ElementCode, y => "not used")
+            //y => (y.JobId != null) ? "Commessa " + CustomDbFunctions.FormatCode(y.Job.Number, y.Job.Year, 3) :
+            //        ((y.ActivityId != null) ? "Attività " + y.Activity.Type.Name :
+            //        ((y.TicketId != null) ? "Ticket " + CustomDbFunctions.FormatCode(y.Ticket.Number, y.Ticket.Year, 3) :
+            //        ((y.PurchaseOrderId != null) ? "Ordine " + CustomDbFunctions.FormatCode(y.PurchaseOrder.Number, y.PurchaseOrder.Year, 3) : null))))
+            
             //.MapMember(x => x.IsRead, y => (!y.MessageNotifications.Any() || y.MessageNotifications.All(e => e.IsRead)))
             .MapMember(x => x.TargetOperatorsId, y => string.Join(",", y.MessageNotifications.Select(mn => mn.OperatorId).Distinct()))
             .MapMember(x => x.TargetOperators, y => string.Join(",", y.MessageNotifications.Select(mn => mn.Operator.Name).Distinct()));

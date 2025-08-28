@@ -1,7 +1,3 @@
-import { NumberSymbol } from '@angular/common';
-import { Dictionary } from '../common/models';
-import { OperatorModel } from 'src/app/shared/models/operator.model';
-
 export class MessageReadModel {
 
     date: Date;

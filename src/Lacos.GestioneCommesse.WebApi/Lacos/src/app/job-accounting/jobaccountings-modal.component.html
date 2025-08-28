@@ -1,0 +1,18 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="close()" [resizable]="false" [draggable]="false" [top]="100">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Voci contabili commessa
+            </div>
+            <div class="text-right">
+                <button type="button" (click)="close()" class="btn btn-secondary">
+                    CHIUDI
+                </button>
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <app-jobaccountings [jobId]="jobId" [viewExportExcel]="false"></app-jobaccountings>
+    </kendo-window>
+</div>

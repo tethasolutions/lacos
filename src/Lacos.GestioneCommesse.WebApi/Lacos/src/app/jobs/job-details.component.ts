@@ -55,7 +55,7 @@ export class JobDetailsComponent extends BaseComponent {
 
     protected _read() {
         this._subscriptions.push(
-            this._service.get(this._jobId)
+            this._service.getWithNotes(this._jobId)
                 .pipe(
                     tap(e => {
                         this.job = e;

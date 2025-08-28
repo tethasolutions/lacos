@@ -160,6 +160,7 @@ import { AccountingTypesService } from './services/accountingTypes.service';
 import { JobAccountingsService } from './services/jobs/job-accountings.service';
 import { JobAccountingModalComponent } from './job-accounting/jobaccounting-modal.component';
 import { JobAccountingsComponent } from './job-accounting/jobaccountings.component';
+import { JobAccountingsModalComponent } from './job-accounting/jobaccountings-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -261,7 +262,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         AccountingTypeModalComponent,
         AccountingTypesComponent,
         JobAccountingModalComponent,
-        JobAccountingsComponent
+        JobAccountingsComponent,
+        JobAccountingsModalComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,

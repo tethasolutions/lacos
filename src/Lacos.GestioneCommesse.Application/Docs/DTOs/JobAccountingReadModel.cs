@@ -11,6 +11,7 @@ public class JobAccountingReadModel
     public long JobId { get; set; }
     public string? JobCode { get; set; }
     public string? JobReference { get; set; }
+    public string? Customer { get; set; }
     public long AccountingTypeId { get; set; }
     public string? AccountingTypeName { get; set; }
     public bool? GenerateAlert { get; set; }

@@ -140,7 +140,7 @@
                     <label>Tassativa</label>
                     <div class="form-group">
                         <kendo-switch name="isMandatoryExpiration" [(ngModel)]="options.activity.isMandatoryExpiration" onLabel="Si"
-                            offLabel="No">
+                            offLabel="No" [disabled]="isOperator">
                         </kendo-switch>
                     </div>
                 </div>
@@ -289,6 +289,9 @@
                         <button type="button" (click)="onOpenDependecies()" class="btn btn-primary">
                             <i class="fa fa-link me-2"></i> DIPENDENZE
                         </button>
+                        <button type="button" (click)="onOpenJobAccountings()" class="btn btn-primary" *ngIf="isAdministrationActivity">
+                            <i class="fa fa-money-bill-wave"></i> VOCI CONTABILI
+                        </button>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -311,3 +314,4 @@
 <app-message-modal #messageModal></app-message-modal>
 <app-gallery-modal #galleryModal></app-gallery-modal>
 <app-dependencies-modal #dependenciesModal [jobId]="options.activity.jobId" [activityId]="options.activity.id" *ngIf="options"></app-dependencies-modal>
+<app-jobaccountings-modal #jobAccountingsModal [jobId]="options.activity.jobId" *ngIf="options"></app-jobaccountings-modal>

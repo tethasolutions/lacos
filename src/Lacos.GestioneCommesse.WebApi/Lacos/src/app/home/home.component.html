@@ -15,7 +15,7 @@
         </div>
         <div class="row">
             <div *ngFor="let activityType of activitiesCounters" class="col-sm-12 col-md-6 col-lg-2">
-                <a class="btn btn-light dashboardBtn" [routerLink]="['/activities']"
+                <a class="btn btn-light dashboardBtnActivity" [routerLink]="['/activities']"
                     [queryParams]="{typeId: activityType.activityId}"
                     [style.background-color]="activityType.activityColor || '#3485fd'" routerLinkActive="active">
                     <div class="row">

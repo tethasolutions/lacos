@@ -308,8 +308,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
             .find(e => e.id === this.options.activity.jobId).customerId;
 
         this.readAddresses(customerId);
-
-        if (this.options.activity.addressId) {
+        if (this.options.activity.addressId == null) {
             const addressId = this.jobs
                 .find(e => e.id === this.options.activity.jobId).addressId;
             this.options.activity.addressId = addressId;

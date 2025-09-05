@@ -19,9 +19,8 @@
         [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
         (dataStateChange)="dataStateChange($event)" (cellClick)="gridMenu.onCellClick($event,false)">
         <ng-template kendoGridToolbarTemplate *ngIf="viewExportExcel">
-            <button type="button" class="btn btn-primary" (click)="exportToExcel()">
-                Esporta in Excel
-            </button>
+            <button type="button" class="btn btn-primary" (click)="exportCurrentGrid()">Esporta Excel</button>
+            <button type="button" class="btn btn-primary" (click)="exportOnlyUnpaidAll()">Esporta Excel (non pagati)</button>
         </ng-template>
         <kendo-grid-column field="jobCode" title="Commessa" [width]="1" *ngIf="viewExportExcel"> </kendo-grid-column>
         <kendo-grid-column field="customer" title="Cliente" *ngIf="viewExportExcel"> </kendo-grid-column>

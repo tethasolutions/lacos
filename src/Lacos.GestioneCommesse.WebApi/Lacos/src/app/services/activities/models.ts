@@ -191,6 +191,7 @@ export class ActivityCounter {
     readonly name: string;
     readonly active: number;
     readonly expired: number;
+    readonly order: number;
 
     constructor() {
         this.id = null;
@@ -198,6 +199,7 @@ export class ActivityCounter {
         this.name = null;
         this.active = null;
         this.expired = null;
+        this.order = 0;
     }
 
 }

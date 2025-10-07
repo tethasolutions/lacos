@@ -5,6 +5,7 @@ export class ActivityTypeModel {
     isInternal: boolean;
     isExternal: boolean;
     colorHex: string;
+    order: number;
 
     statusLabel0: string;
     statusLabel1: string;

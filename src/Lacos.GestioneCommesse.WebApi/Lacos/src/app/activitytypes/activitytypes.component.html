@@ -18,6 +18,7 @@
             [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
             (dataStateChange)="dataStateChange($event)">
     <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
+    <kendo-grid-column field="order" title="Ordinamento"></kendo-grid-column>
     <kendo-grid-column field="pictureRequired" title="Immagine Obbligatoria">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.pictureRequired | bool}}

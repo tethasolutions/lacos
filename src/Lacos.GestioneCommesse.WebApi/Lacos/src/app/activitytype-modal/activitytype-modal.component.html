@@ -28,13 +28,20 @@
                         <kendo-formerror>Nome è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label>Ordinamento</label>
+                        <kendo-numerictextbox [(ngModel)]="options.order" name="order" [min]="0" [format]="'n0'" required></kendo-numerictextbox>
+                        <kendo-formerror>Ordine è un campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-3">
                     <kendo-formfield class="form-group">
                         <label>Colore</label>
                         <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" format="hex"  required></kendo-colorpicker>
-                        <kendo-formerror>Colore è il campo obbligatorio</kendo-formerror>
+                        <kendo-formerror>Colore è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
-                </div>      
+                </div>
             </div>
             <div class="row riga-form">
                 <div class="col-md-3">

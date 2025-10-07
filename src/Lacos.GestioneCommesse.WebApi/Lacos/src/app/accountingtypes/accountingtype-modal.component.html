@@ -41,11 +41,26 @@
             </div>
             <div class="row riga-form">
                 <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label>Ordinamento</label>
+                        <kendo-numerictextbox [(ngModel)]="options.order" name="order" [min]="0" [format]="'n0'" required></kendo-numerictextbox>
+                        <kendo-formerror>Ordine è un campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-3">
                     <label>Genera Alert</label>
                     <div class="form-group">
                         <kendo-switch name="generateAlert" [(ngModel)]="options.generateAlert" onLabel="Si" offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['generateAlert']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Segno Negativo</label>
+                    <div class="form-group">
+                        <kendo-switch name="isNegative" [(ngModel)]="options.isNegative" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['isNegative']"></div>
                     </div>
                 </div>
             </div>

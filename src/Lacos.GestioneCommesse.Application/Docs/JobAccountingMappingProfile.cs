@@ -28,6 +28,8 @@ public class JobAccountingMappingProfile : Profile
            .MapMember(x => x.JobReference, y => y.Job!.Reference)
            .MapMember(x => x.Customer, y => y.Job!.Customer == null ? null : y.Job.Customer.Name)
            .MapMember(x => x.AccountingTypeName, y => y.AccountingType.Name)
+           .MapMember(x => x.AccountingTypeOrder, y => y.AccountingType.Order)
+           .MapMember(x => x.AccountingTypeIsNegative, y => y.AccountingType.IsNegative)
            .MapMember(x => x.GenerateAlert, y => y.AccountingType.GenerateAlert);
 
     }

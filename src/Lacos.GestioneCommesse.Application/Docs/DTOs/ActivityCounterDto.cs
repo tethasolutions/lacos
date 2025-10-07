@@ -13,5 +13,6 @@ namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
         public string? ActivityColor { get; set; }
         public int Active { get; set; }
         public int Expired { get; set; }
-    }
+        public int? Order { get; set; }
+}
 

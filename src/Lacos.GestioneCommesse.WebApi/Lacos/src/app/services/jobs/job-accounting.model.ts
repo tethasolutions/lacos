@@ -27,6 +27,8 @@ export interface IJobAccountingReadModel {
         readonly customer: string;
         readonly accountingTypeId: number;
         readonly accountingTypeName: string;
+        readonly accountingTypeOrder: number;
+        readonly accountingTypeIsNegative: boolean;
         readonly generateAlert: boolean;
         readonly amount: number;
         readonly note: string;

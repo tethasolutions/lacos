@@ -8,6 +8,7 @@
         public bool IsInternal { get; set; }
         public bool IsExternal { get; set; }
         public string? ColorHex { get; set; }
+        public int? Order { get; set; }
 
         public string? StatusLabel0 { get; set; }
         public string? StatusLabel1 { get; set; }

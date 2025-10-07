@@ -1888,10 +1888,16 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsNegative")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1958,6 +1964,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("int");
 
                     b.Property<bool>("PictureRequired")
                         .HasColumnType("bit");

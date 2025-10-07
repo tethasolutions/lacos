@@ -449,11 +449,13 @@ public class ActivitiesService : IActivitiesService
                     ActivityId = group.Key,
                     ActivityName = group.First().Type.Name,
                     ActivityColor = group.First().Type.ColorHex,
+                    Order = group.First().Type.Order,
                     Active = group.Where(e => e.ExpirationDate >= DateTimeOffset.UtcNow.Date).Count(),
                     Expired = group.Where(e => e.ExpirationDate < DateTimeOffset.UtcNow.Date).Count()
                 })
                 //.Project<ActivityCounterDto>(mapper)
-                .OrderBy(e => e.ActivityName)
+                .OrderBy(e => e.Order)
+                .ThenBy(e => e.ActivityName)
                 .ToListAsync();
             return await query;
         }

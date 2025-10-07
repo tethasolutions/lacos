@@ -14,6 +14,8 @@ public class JobAccountingReadModel
     public string? Customer { get; set; }
     public long AccountingTypeId { get; set; }
     public string? AccountingTypeName { get; set; }
+    public int? AccountingTypeOrder { get; set; }
+    public bool? AccountingTypeIsNegative { get; set; }
     public bool? GenerateAlert { get; set; }
     public decimal Amount { get; set; }
     public string? Note { get; set; }

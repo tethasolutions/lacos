@@ -18,9 +18,15 @@
         (dataStateChange)="dataStateChange($event)">
         <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
         <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+        <kendo-grid-column field="order" title="Ordinamento"></kendo-grid-column>
         <kendo-grid-column field="generateAlert" title="Genera Alert">
             <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.generateAlert | bool}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="isNegative" title="Segno Negativo">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.isNegative | bool}}
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="95">

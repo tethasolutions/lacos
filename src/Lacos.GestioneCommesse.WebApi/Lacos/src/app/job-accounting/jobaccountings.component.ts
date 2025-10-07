@@ -30,7 +30,7 @@ export class JobAccountingsComponent extends BaseComponent implements OnInit {
       logic: 'and'
     },
     group: [],
-    sort: [{ field: 'jobCode', dir: 'asc' }, { field: 'accountingTypeName', dir: 'asc' }]
+    sort: [{ field: 'jobCode', dir: 'asc' }, { field: 'accountingTypeOrder', dir: 'asc' }]
   };
 
   _jobId: number;
@@ -176,7 +176,7 @@ export class JobAccountingsComponent extends BaseComponent implements OnInit {
         ],
         logic: 'and'
       },
-      sort: [{ field: 'jobCode', dir: 'asc' }, { field: 'accountingTypeName', dir: 'asc' }]
+      sort: [{ field: 'jobCode', dir: 'asc' }, { field: 'accountingTypeOrder', dir: 'asc' }]
     };
 
     this._subscriptions.push(
@@ -255,18 +255,43 @@ export class JobAccountingsComponent extends BaseComponent implements OnInit {
       saveAs(dataURL, filename);
     });
   }
-
+  
   private buildPivot(source: readonly IJobAccountingReadModel[]): {
     rows: Array<Record<string, string | number>>;
     typeCols: string[];
   } {
-    const typeSet = new Set<string>();
-    for (const r of source) {
-      const t = (r.accountingTypeName ?? '').trim();
-      if (t) typeSet.add(t);
-    }
-    const typeCols = Array.from(typeSet).sort((a, b) => a.localeCompare(b));
+    type TypeMeta = { name: string; order: number; isNegative: boolean };
 
+    // 1) Costruisco la mappa dei tipi: name -> { order, isNegative }
+    const typesMap = new Map<string, TypeMeta>();
+    for (const r of source) {
+      const name = (r.accountingTypeName ?? '').trim();
+      if (!name) continue;
+
+      const order = Number.isFinite(r.accountingTypeOrder)
+        ? (r.accountingTypeOrder as number)
+        : Number.MAX_SAFE_INTEGER; // fallback se non impostato
+
+      const isNegative = !!r.accountingTypeIsNegative;
+
+      const existing = typesMap.get(name);
+      if (!existing) {
+        typesMap.set(name, { name, order, isNegative });
+      } else {
+        // preferisco l'ordine minimo e aggrego il flag negativo (OR logico)
+        if (order < existing.order) existing.order = order;
+        existing.isNegative = existing.isNegative || isNegative;
+      }
+    }
+
+    // 2) Calcolo le colonne dinamiche ordinate per 'order', poi per nome
+    const typeCols = Array
+      .from(typesMap.values())
+      .sort((a, b) => (a.order - b.order) || a.name.localeCompare(b.name))
+      .map(m => m.name);
+
+    // 3) Group by chiavi (rimango fedele al tuo codice attuale: customer, jobCode, jobReference)
+    //    Se vuoi includere anche jobId: aggiungilo nella chiave e nelle staticCols.
     const map = new Map<JobKey, {
       customer: string;
       jobCode: string;
@@ -288,51 +313,57 @@ export class JobAccountingsComponent extends BaseComponent implements OnInit {
       }
       const entry = map.get(key)!;
       const col = (r.accountingTypeName ?? '').trim();
-      if (col) entry.amounts[col] = (entry.amounts[col] ?? 0) + (Number.isFinite(r.amount) ? r.amount : 0);
+      if (col) {
+        entry.amounts[col] = (entry.amounts[col] ?? 0) + (Number.isFinite(r.amount) ? r.amount : 0);
+      }
     }
 
+    // 4) Materializzo le righe + calcolo Totale con segno per tipo
     const rows = Array.from(map.values()).map(entry => {
       const obj: Record<string, string | number> = {
         customer: entry.customer,
         jobCode: entry.jobCode,
         jobReference: entry.jobReference
       };
+
+      // valori per colonna tipo (sempre somma "positiva"/grezza)
       for (const t of typeCols) obj[t] = entry.amounts[t] ?? 0;
-      obj['Total'] = typeCols.reduce((acc, t) => acc + (Number(obj[t]) || 0), 0);
+
+      // Totale: sommo o sottraggo in base al flag del tipo
+      const total = typeCols.reduce((acc, t) => {
+        const amount = Number(obj[t]) || 0;
+        const neg = typesMap.get(t)?.isNegative ?? false;
+        return acc + (neg ? -amount : amount);
+      }, 0);
+
+      obj['Total'] = total;
       return obj;
     });
 
     return { rows, typeCols };
   }
 
+
   private buildWorkbookOptions(
     rows: Array<Record<string, string | number>>,
     typeCols: string[]
   ): WorkbookOptions {
-    // Mappa chiave->etichetta per le colonne “fisse”
     const staticCols: Array<{ key: string; label: string }> = [
       { key: 'customer', label: 'Cliente' },
       { key: 'jobCode', label: 'Commessa' },
       { key: 'jobReference', label: 'Riferimento' }
     ];
 
-    // Colonne dinamiche: etichetta = nome del tipo contabile
     const dynamicCols = typeCols.map(t => ({ key: t, label: t }));
-
-    // Colonna totale (se vuoi “Totale” in IT, cambia label)
     const totalCol = { key: 'Total', label: 'Totale' };
-
-    // Metadati colonna complessivi in ordine
     const colsMeta = [...staticCols, ...dynamicCols, totalCol];
 
-    // Larghezze colonna basate sulla CHIAVE (non sull’etichetta visuale)
     const columns = colsMeta.map(c => ({
       width: ['jobReference', 'customer'].includes(c.key) ? 300
         : c.key === 'jobCode' ? 160
           : 120
     }));
 
-    // Riga header: usa le LABEL rinominate
     const headerRow = {
       cells: colsMeta.map(c => ({
         value: c.label,

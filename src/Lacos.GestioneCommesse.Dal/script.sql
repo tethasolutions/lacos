@@ -5404,3 +5404,80 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250910123735_add activitytype order'
+)
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [Order] int NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250910123735_add activitytype order'
+)
+BEGIN
+    UPDATE Registry.ActivityTypes SET [Order] = 10
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250910123735_add activitytype order'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250910123735_add activitytype order', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250910125301_add total voice accountingtypes'
+)
+BEGIN
+    ALTER TABLE [Registry].[AccountingTypes] ADD [IsNegative] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250910125301_add total voice accountingtypes'
+)
+BEGIN
+    ALTER TABLE [Registry].[AccountingTypes] ADD [Order] int NOT NULL DEFAULT 0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250910125301_add total voice accountingtypes'
+)
+BEGIN
+    UPDATE Registry.AccountingTypes SET [Order] = 10
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250910125301_add total voice accountingtypes'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250910125301_add total voice accountingtypes', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -1,0 +1,67 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="600" [top]="200">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Voce Listino
+            </div>
+            <div class="text-right">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                </button>
+                <button type="button" (click)="close()" class="btn btn-primary">
+                    <i class="fa fa-floppy-disk me-2"></i> SALVA
+                </button>
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateOperatorForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options">
+            <div class="row riga-form">
+                <div class="col-md-12">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Descrizione voce Listino</label>
+                        <kendo-textbox [(ngModel)]="options.description" name="description" required></kendo-textbox>
+                        <kendo-formerror>Descrizione voce Listino è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Diritto d'uscita</label>
+                        <kendo-numerictextbox [(ngModel)]="options.serviceCallFee" name="serviceCallFee" required [format]="'c2'" [decimals]="2" [min]="0"></kendo-numerictextbox>
+                        <kendo-formerror>Campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Costo Extra</label>
+                        <kendo-numerictextbox [(ngModel)]="options.extraFee" name="extraFee" required [format]="'c2'" [decimals]="2" [min]="0"></kendo-numerictextbox>
+                        <kendo-formerror>Campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Costo KM</label>
+                        <kendo-numerictextbox [(ngModel)]="options.travelFee" name="travelFee" required [format]="'c2'" [decimals]="2" [min]="0"></kendo-numerictextbox>
+                        <kendo-formerror>Campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-6">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Limite KM</label>
+                        <kendo-numerictextbox [(ngModel)]="options.limitKm" name="limitKm" required [min]="0" [step]="1"></kendo-numerictextbox>
+                        <kendo-formerror>Campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-floppy-disk me-2"></i> SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>

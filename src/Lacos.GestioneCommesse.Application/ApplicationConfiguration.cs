@@ -1,6 +1,7 @@
 ﻿using Lacos.GestioneCommesse.Application.CheckLists.Services;
 using Lacos.GestioneCommesse.Application.Customers.Services;
 using Lacos.GestioneCommesse.Application.Docs.Services;
+using Lacos.GestioneCommesse.Application.MaintenancePriceLists.Services;
 using Lacos.GestioneCommesse.Application.NotificationOperators.Service;
 using Lacos.GestioneCommesse.Application.Operators.Services;
 using Lacos.GestioneCommesse.Application.Products.Service;
@@ -45,7 +46,8 @@ public static class ApplicationConfiguration
             .AddScoped<IHelperTypeService, HelperTypeService> ()
             .AddScoped<IHelperDocumentService, HelperDocumentService> ()
             .AddScoped<IJobAccountingService, JobAccountingService> ()
-            .AddScoped<IAccountingTypeService, AccountingTypeService> ();
+            .AddScoped<IAccountingTypeService, AccountingTypeService> ()
+            .AddScoped<IMaintenancePriceListService, MaintenancePriceListService> ();
 
         return services;
     }

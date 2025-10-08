@@ -2454,6 +2454,127 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("HelperTypes", "Registry");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.MaintenancePriceList", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<long>("HourlyRate")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MaintenancePriceLists", "Registry");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.MaintenancePriceListItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<decimal>("ExtraFee")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LimitKm")
+                        .HasColumnType("int");
+
+                    b.Property<long>("MaintenancePriceListId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("ServiceCallFee")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
+                    b.Property<decimal>("TravelFee")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaintenancePriceListId");
+
+                    b.ToTable("MaintenancePriceListItems", "Registry");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.NotificationOperator", b =>
                 {
                     b.Property<long>("Id")
@@ -3610,6 +3731,17 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("HelperType");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.MaintenancePriceListItem", b =>
+                {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.MaintenancePriceList", "MaintenancePriceList")
+                        .WithMany("Items")
+                        .HasForeignKey("MaintenancePriceListId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("MaintenancePriceList");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.NotificationOperator", b =>
                 {
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Operator", "Operator")
@@ -3790,6 +3922,11 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.HelperType", b =>
                 {
                     b.Navigation("HelperDocuments");
+                });
+
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.MaintenancePriceList", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Operator", b =>

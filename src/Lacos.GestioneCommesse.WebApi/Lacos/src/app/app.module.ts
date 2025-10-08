@@ -161,6 +161,10 @@ import { JobAccountingsService } from './services/jobs/job-accountings.service';
 import { JobAccountingModalComponent } from './job-accounting/jobaccounting-modal.component';
 import { JobAccountingsComponent } from './job-accounting/jobaccountings.component';
 import { JobAccountingsModalComponent } from './job-accounting/jobaccountings-modal.component';
+import { MaintenancePriceListComponent } from './maintenance-price-list/maintenance-price-list.component';
+import { MaintenancePriceListItemModalComponent } from './maintenance-price-list/maintenance-price-list-item-modal.component';
+import { MaintenancePriceListModalComponent } from './maintenance-price-list/maintenance-price-list-modal.component';
+import { MaintenancePriceListService } from './services/maintenance-price-list.service';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -263,7 +267,10 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         AccountingTypesComponent,
         JobAccountingModalComponent,
         JobAccountingsComponent,
-        JobAccountingsModalComponent
+        JobAccountingsModalComponent,
+        MaintenancePriceListComponent,
+        MaintenancePriceListModalComponent,
+        MaintenancePriceListItemModalComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,
@@ -331,7 +338,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         HelperTypesService,
         HelperDocumentsService,
         AccountingTypesService,
-        JobAccountingsService
+        JobAccountingsService,
+        MaintenancePriceListService
     ]
 })
 export class AppModule { }

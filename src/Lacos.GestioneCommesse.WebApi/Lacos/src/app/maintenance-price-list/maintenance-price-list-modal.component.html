@@ -1,0 +1,90 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="50">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Listino Manutenzione
+            </div>
+            <div class="text-right">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                </button>
+                <button type="button" (click)="close()" class="btn btn-primary">
+                    <i class="fa fa-floppy-disk me-2"></i> SALVA
+                </button>
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form name="updateOperatorForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()"
+            *ngIf="options" class="redimensionModal">
+            <div class="row riga-form">
+                <div class="col-md-8">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Descrizione</label>
+                        <kendo-textbox [(ngModel)]="options.description" name="description" required>
+                        </kendo-textbox>
+                        <kendo-formerror>Descrizione è il campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-4">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Costo Orario</label>
+                        <kendo-numerictextbox [(ngModel)]="options.hourlyRate" name="hourlyRate" required [format]="'c2'" [decimals]="2" [min]="0"></kendo-numerictextbox>
+                        <kendo-formerror>Campo obbligatorio</kendo-formerror>
+                    </kendo-formfield>
+                </div>
+            </div>
+            <div class="row riga-form">
+                <div class="col-md-12">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="col">
+                            <!-- <h4>Voci maintenancePriceList</h4> -->
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" (click)="createNewItem()" class="btn btn-primary btn-sm"
+                                title="Aggiungi voce">
+                                <i class="fas fa-plus"></i>
+                                Aggiungi voce
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid-container">
+                        <kendo-grid [data]="options.items" filterable="none" [sortable]="true" [pageable]="false"
+                            scrollable="none" [style.width.px]="screenWidth">
+                            <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+                            <kendo-grid-column field="serviceCallFee" title="Diritto d'uscita" [format]="'c2'"></kendo-grid-column>
+                            <kendo-grid-column field="extraFee" title="Extra Costo" [format]="'c2'"></kendo-grid-column>
+                            <kendo-grid-column field="limitKm" title="Limite KM"></kendo-grid-column>
+                            <kendo-grid-column field="travelFee" title="Costo KM" [format]="'c2'"></kendo-grid-column>
+                            <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" "
+                                [width]="95">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <button type="button" (click)="editItem(dataItem)"
+                                        class="btn btn-primary btn-sm grid-action-button" title="Modifica">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" (click)="deleteItem(dataItem)"
+                                        class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-5">
+                <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">
+                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-floppy-disk me-2"></i> SALVA
+                </button>
+            </div>
+        </form>
+    </kendo-window>
+</div>
+
+<app-maintenance-price-list-item-modal #maintenancePriceListItemModal></app-maintenance-price-list-item-modal>

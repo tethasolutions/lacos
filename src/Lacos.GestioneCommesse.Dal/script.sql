@@ -5481,3 +5481,81 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251008132803_add maintenance price list'
+)
+BEGIN
+    CREATE TABLE [Registry].[MaintenancePriceLists] (
+        [Id] bigint NOT NULL IDENTITY,
+        [Description] nvarchar(max) NULL,
+        [HourlyRate] bigint NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_MaintenancePriceLists] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251008132803_add maintenance price list'
+)
+BEGIN
+    CREATE TABLE [Registry].[MaintenancePriceListItems] (
+        [Id] bigint NOT NULL IDENTITY,
+        [MaintenancePriceListId] bigint NOT NULL,
+        [Description] nvarchar(max) NULL,
+        [ServiceCallFee] decimal(14,2) NOT NULL,
+        [TravelFee] decimal(14,2) NOT NULL,
+        [LimitKm] int NOT NULL,
+        [ExtraFee] decimal(14,2) NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_MaintenancePriceListItems] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_MaintenancePriceListItems_MaintenancePriceLists_MaintenancePriceListId] FOREIGN KEY ([MaintenancePriceListId]) REFERENCES [Registry].[MaintenancePriceLists] ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251008132803_add maintenance price list'
+)
+BEGIN
+    CREATE INDEX [IX_MaintenancePriceListItems_MaintenancePriceListId] ON [Registry].[MaintenancePriceListItems] ([MaintenancePriceListId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251008132803_add maintenance price list'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251008132803_add maintenance price list', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -35,6 +35,7 @@ import { InterventionMessagesListComponent } from './messages/interventionmessag
 import { JobsArchiveComponent } from './jobs/jobs-archive.component';
 import { AccountingTypesComponent } from './accountingtypes/accountingtypes.component';
 import { JobAccountingsComponent } from './job-accounting/jobaccountings.component';
+import { MaintenancePriceListComponent } from './maintenance-price-list/maintenance-price-list.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -71,6 +72,7 @@ const routes: Routes = [
     { path: 'helperdocuments', component: HelperDocumentsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'accountingtypes', component: AccountingTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'job-accountings', component: JobAccountingsComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'maintenance-price-lists', component: MaintenancePriceListComponent, canActivate: [AuthGuard.asInjectableGuard] },
 ];
 
 @NgModule({

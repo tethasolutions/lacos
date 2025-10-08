@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Customers.DTOs;
+using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Telerik.Barcode;
@@ -23,7 +24,14 @@ namespace Lacos.GestioneCommesse.Application.Customers
                 .Ignore(x => x.UserId)
                 .Ignore(x => x.Jobs)
                 .Ignore(x => x.Products)
-                .Ignore(x => x.Tickets);
+                .Ignore(x => x.Tickets)
+                .Ignore(x => x.Addresses)
+                .AfterMap(AfterMap);
+
+        }
+        private static void AfterMap(CustomerDto customerDto, Customer customer, ResolutionContext context)
+        {
+            if (customerDto.Addresses != null) customerDto.Addresses.Merge(customer.Addresses, (addressDto, address) => addressDto.Id == address.Id, (_, item) => item.CustomerId = customer.Id, context);
         }
     }
 }

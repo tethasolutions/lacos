@@ -258,8 +258,7 @@
                     <kendo-formfield class="form-group">
                         <label>Allegati</label>
                         <kendo-upload [(ngModel)]="this.attachments" (success)="AttachmentExecutionSuccess($event)"
-                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload"
-                            [restrictions]="{ allowedExtensions: ['.jpg', '.png', '.pdf', '.docx'] }">
+                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
                             <ng-template kendoUploadFileInfoTemplate let-files>
                                 <a (click)="downloadAttachment(files[0].name)" class="pointer">
                                     {{ files[0].name }}

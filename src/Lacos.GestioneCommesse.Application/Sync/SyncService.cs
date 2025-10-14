@@ -428,7 +428,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                             StartDate = DateTime.Now.Date,
                             ExpirationDate = DateTime.Now.Date.AddDays(7),
                             RowNumber = (entity.Activity!.Job!.Activities.Max(x => x.RowNumber) != null) ? (entity.Activity.Job.Activities.Max(x => x.RowNumber) + 1) : 100,
-                            ShortDescription = "Riprogrammazione intervento: " + entity.Activity.ShortDescription,
+                            ShortDescription = "Riprogrammazione intervento: " + entity.RescheduleNotes,
                             Informations = entity.Activity.Informations,
                             Description = entity.RescheduleNotes,
                             AddressId = entity.Activity.AddressId,

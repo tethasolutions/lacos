@@ -76,7 +76,7 @@
                     <label>Commessa/e</label>
                     <kendo-multiselect [data]="jobsList" [(ngModel)]="options.purchaseOrder.jobs" name="jobs"
                         textField="fullName" valueField="id" [valuePrimitive]="true" [filterable]="true"
-                        [filterSettings]="{ operator: 'contains', ignoreCase: true }" (filterChange)="onJobsFilterChange($event)"
+                        [filterSettings]="{ operator: 'contains', ignoreCase: true }" (filterChange)="onJobsFilterChange($event)" (click)="onJobsClick()"
                         [placeholder]="'Seleziona commesse'" [autoClose]="false" [disabled]="jobReadonly">
                     </kendo-multiselect>
                     <div class="validation-message" [control]="form.controls['jobs']"></div>

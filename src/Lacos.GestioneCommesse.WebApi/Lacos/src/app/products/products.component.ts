@@ -9,6 +9,8 @@ import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { ProductModalComponent } from '../product-modal/product-modal.component';
 import { ProductQrCodeModalComponent } from '../product-qr-code-modal/product-qr-code-modal.component';
 import { ApiUrls } from '../services/common/api-urls';
+import { Workbook } from '@progress/kendo-angular-excel-export';
+import { saveAs } from '@progress/kendo-file-saver';
 
 @Component({
   selector: 'app-products',
@@ -25,24 +27,24 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   products: GridDataResult;
 
   stateGridProducts: State = {
-      skip: 0,
-      take: 30,
-      filter: {
-          filters: [],
-          logic: 'and'
-      },
-      group: [],
-      sort: []
+    skip: 0,
+    take: 30,
+    filter: {
+      filters: [],
+      logic: 'and'
+    },
+    group: [],
+    sort: []
   };
 
   productSelezionato = new ProductModel();
   screenWidth: number;
 
   constructor(
-      private readonly _productsService: ProductsService,
-      private readonly _messageBox: MessageBoxService
+    private readonly _productsService: ProductsService,
+    private readonly _messageBox: MessageBoxService
   ) {
-      super();
+    super();
   }
 
   ngOnInit() {
@@ -56,24 +58,24 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   }
 
   private updateScreenSize(): void {
-    this.screenWidth = window.innerWidth -44;
+    this.screenWidth = window.innerWidth - 44;
     if (this.screenWidth > 1876) this.screenWidth = 1876;
-    if (this.screenWidth < 1400) this.screenWidth = 1400;     
+    if (this.screenWidth < 1400) this.screenWidth = 1400;
   }
 
 
   dataStateChange(state: State) {
     this.stateGridProducts = state;
     this._readProducts();
-}
+  }
 
   protected _readProducts() {
     this._subscriptions.push(
       this._productsService.readProducts(this.stateGridProducts)
         .pipe(
-            tap(e => {
-              this.products = e;
-            })
+          tap(e => {
+            this.products = e;
+          })
         )
         .subscribe()
     );
@@ -83,16 +85,16 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     this.productModal.loadData();
     const request = new ProductModel();
     this._subscriptions.push(
-        this.productModal.open(request)
-            .pipe(
-                filter(e => e),
-                switchMap(() => this._productsService.createProduct(request)),
-                tap(e => {
-                  this._messageBox.success(`Prodotto creato`);
-                }),
-                tap(() => this._readProducts())
-            )
-            .subscribe()
+      this.productModal.open(request)
+        .pipe(
+          filter(e => e),
+          switchMap(() => this._productsService.createProduct(request)),
+          tap(e => {
+            this._messageBox.success(`Prodotto creato`);
+          }),
+          tap(() => this._readProducts())
+        )
+        .subscribe()
     );
   }
 
@@ -100,18 +102,18 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     this._subscriptions.push(
       this._productsService.getProductDetail(id)
         .pipe(
-            map(e => {
-              return Object.assign(new ProductModel(), e);
-            }),
-            switchMap(e => this.productModal.open(e)),
-            filter(e => e),
-            map(() => this.productModal.options),
-            switchMap(e => this._productsService.updateProduct(e, id)),
-            map(() => this.productModal.options),
-            tap(e => this._messageBox.success(`Prodotto aggiornato`)),
-            tap(() => this._readProducts())
+          map(e => {
+            return Object.assign(new ProductModel(), e);
+          }),
+          switchMap(e => this.productModal.open(e)),
+          filter(e => e),
+          map(() => this.productModal.options),
+          switchMap(e => this._productsService.updateProduct(e, id)),
+          map(() => this.productModal.options),
+          tap(e => this._messageBox.success(`Prodotto aggiornato`)),
+          tap(() => this._readProducts())
         )
-      .subscribe()
+        .subscribe()
     );
   }
 
@@ -124,7 +126,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
               tap(e => this._messageBox.success(`Prodotto "${product.description}" cancellato con successo`)),
               tap(() => this._readProducts())
             )
-          .subscribe()
+            .subscribe()
         );
       }
     });
@@ -134,5 +136,70 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     this._subscriptions.push(
       this.productQrCodeModal.open(product).subscribe()
     );
+  }
+
+  exportToExcel(): void {
+    var tempState = Object.assign({}, this.stateGridProducts);
+    tempState.take = this.products.total;
+
+    this._subscriptions.push(
+      this._productsService.readProducts(tempState)
+        .pipe(
+          tap(e => {
+            this.products = e;
+            const options = this.getExportOptions();
+            const workbook = new Workbook(options);
+            workbook.toDataURL().then((dataURL) => {
+              saveAs(dataURL, 'prodotti.xlsx');
+            });
+            this._readProducts();
+            this._messageBox.success('Esportazione avvenuta con successo');
+          }),
+        )
+        .subscribe()
+    );
+
+  }
+
+  private getExportOptions(): any {
+    return {
+      sheets: [{
+        columns: [
+          { autoWidth: true },
+          { autoWidth: true },
+          { autoWidth: true },
+          { autoWidth: true },
+          { autoWidth: true },
+          { autoWidth: true },
+          { autoWidth: true },
+          { autoWidth: true }
+        ],
+        title: 'Prodotti',
+        rows: [
+          {
+            cells: [
+              { value: 'Tipologia Impianto', bold: true },
+              { value: 'Codice', bold: true },
+              { value: 'Nome', bold: true },
+              { value: 'Descrizione', bold: true },
+              { value: 'Matricola', bold: true },
+              { value: 'Dismesso', bold: true },
+              { value: 'Man. Mensile', bold: true }
+            ]
+          },
+          ...this.products.data.map((item: any) => ({
+            cells: [
+              { value: item.productType },
+              { value: item.code },
+              { value: item.name },
+              { value: item.description },
+              { value: item.serialNumber },
+              { value: item.isDecommissioned ? 'Sì' : 'No' },
+              { value: item.monthlyMaintenance ? 'Sì' : 'No' }
+            ]
+          }))
+        ]
+      }]
+    };
   }
 }

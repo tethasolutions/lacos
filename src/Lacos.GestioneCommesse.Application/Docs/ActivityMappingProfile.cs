@@ -38,7 +38,7 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.LastOperator, y => y.CreatedBy)
            .MapMember(x => x.ReferentName, y => (y.Referent != null) ? y.Referent.Name : "")
            .MapMember(x => x.HasAttachments, y => y.Attachments.Any())
-           .MapMember(x => x.IsExpired, y => (y.Status == ActivityStatus.Completed)
+           .MapMember(x => x.IsExpired, y => (y.Status == ActivityStatus.Completed || y.Status == ActivityStatus.Ready)
                 ? false
                 : (y.ExpirationDate == null
                     ? false

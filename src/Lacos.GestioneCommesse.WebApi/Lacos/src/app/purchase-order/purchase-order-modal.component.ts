@@ -41,6 +41,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
 
     jobsList: SelectableJob[];
+    originalJobsList: SelectableJob[];
     job: Job;
     jobReadonly: boolean;
     status: PurchaseOrderStatus;
@@ -175,9 +176,13 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     }
 
     onJobsFilterChange(value: string) {
-        this.jobsList = this.jobsList.filter(j =>
+        this.jobsList = this.originalJobsList.filter(j =>
             j.fullName.toLowerCase().includes(value.toLowerCase())
         );
+    }
+
+    onJobsClick() {
+        this.jobsList = [...this.originalJobsList];
     }
 
     protected override _canClose() {
@@ -195,16 +200,6 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
             this._activityTypesService.readActivityTypesListPO()
                 .pipe(
                     tap(e => this.activityTypes = e)
-                )
-                .subscribe()
-        );
-    }
-
-    private _getJob(id: number) {
-        this._subscriptions.push(
-            this._jobsService.get(id)
-                .pipe(
-                    tap(e => this.job = e)
                 )
                 .subscribe()
         );
@@ -261,7 +256,10 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         this._subscriptions.push(
             this._jobsService.read(state)
                 .pipe(
-                    tap(e => this.jobsList = (e.data as IJobReadModel[]).map(e => new SelectableJob(e)))
+                    tap(e => {
+                        this.originalJobsList = (e.data as IJobReadModel[]).map(e => new SelectableJob(e));
+                        this.jobsList = [...this.originalJobsList];
+                    })
                 )
                 .subscribe()
         );

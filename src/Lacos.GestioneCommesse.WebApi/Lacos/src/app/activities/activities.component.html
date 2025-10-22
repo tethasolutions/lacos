@@ -14,26 +14,17 @@
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
 <div class="job-late-toast-container">
-  <ng-container *ngFor="let job of lateJobsToNotify">
-    <app-job-late-notification
-      [jobId]="job.jobId"
-      [jobCode]="job.jobCode"
-      [mandatoryDate]="job.jobMandatoryDate"
-      [userId]="user.id"
-      (closed)="onLateJobNotificationClosed($event)">
-    </app-job-late-notification>
-  </ng-container>
-  <ng-container *ngFor="let act of lateActivitiesToNotify">
-    <app-activity-late-notification
-      [id]="act.id"
-      [jobId]="act.jobId"
-      [jobCode]="act.jobCode"
-      [shortDescription]="act.shortDescription"
-      [expirationDate]="act.expirationDate"
-      [userId]="user.id"
-      (closed)="onLateActivityNotificationClosed($event)">
-    </app-activity-late-notification>
-  </ng-container>
+    <ng-container *ngFor="let job of lateJobsToNotify">
+        <app-job-late-notification [jobId]="job.jobId" [jobCode]="job.jobCode" [mandatoryDate]="job.jobMandatoryDate"
+            [userId]="user.id" (closed)="onLateJobNotificationClosed($event)">
+        </app-job-late-notification>
+    </ng-container>
+    <ng-container *ngFor="let act of lateActivitiesToNotify">
+        <app-activity-late-notification [id]="act.id" [jobId]="act.jobId" [jobCode]="act.jobCode"
+            [shortDescription]="act.shortDescription" [expirationDate]="act.expirationDate" [userId]="user.id"
+            (closed)="onLateActivityNotificationClosed($event)">
+        </app-activity-late-notification>
+    </ng-container>
 </div>
 
 <div class="grid-container">
@@ -65,7 +56,8 @@
                     {{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                 </div>
                 <div *ngIf="dataItem.jobIsInLate" class="job-alert" kendoTooltip title="Scadenza Tassativa">
-                    {{dataItem.jobMandatoryDate | date:"dd/MM/yyyy"}} <i class="fa fa-exclamation-triangle" aria-hidden="true" ></i>
+                    {{dataItem.jobMandatoryDate | date:"dd/MM/yyyy"}} <i class="fa fa-exclamation-triangle"
+                        aria-hidden="true"></i>
                 </div>
             </ng-template>
         </kendo-grid-column>
@@ -102,7 +94,8 @@
         <kendo-grid-column field="expirationDate" title="Scadenza" filter="date" format="dd/MM/yyyy" [width]="1">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div class="text-nowrap" [ngClass]="{'job-alert': dataItem.isExpired}">
-                    {{dataItem.expirationDate | date:'dd/MM/yyyy'}} <i class="fa fa-exclamation-triangle" aria-hidden="true" *ngIf="dataItem.isMandatoryExpiration"></i>
+                    {{dataItem.expirationDate | date:'dd/MM/yyyy'}} <i class="fa fa-exclamation-triangle"
+                        aria-hidden="true" *ngIf="dataItem.isMandatoryExpiration"></i>
                 </div>
             </ng-template>
         </kendo-grid-column>
@@ -177,7 +170,8 @@
                         <i class="fa fa-paperclip"></i>
                     </button>
                     <button class="btn btn-outline-primary btn-sm" title="Visualizza dipendenze"
-                        [disabled]="!dataItem.hasDependencies" (click)="openDependencies(dataItem.jobId, dataItem.id, dataItem.canHaveDependencies)">
+                        [disabled]="!dataItem.hasDependencies"
+                        (click)="openDependencies(dataItem.jobId, dataItem.id, dataItem.canHaveDependencies)">
                         <i class="fa fa-link"></i>
                     </button>
                     <button [disabled]="!dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
@@ -187,7 +181,12 @@
                 </div>
             </ng-template>
         </kendo-grid-column>
-
+        @if (!isOperator)
+        {
+        <div *kendoGridDetailTemplate="let dataItem">
+            <app-interventions-grid [activityId]="dataItem.id"></app-interventions-grid>
+        </div>
+        }
     </kendo-grid>
 </div>
 

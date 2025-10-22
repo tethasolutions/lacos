@@ -11,58 +11,65 @@
 </div>
 
 <div class="grid-container">
-<kendo-grid [data]="products" [pageSize]="stateGridProducts.take" 
-            [skip]="stateGridProducts.skip" [sort]="stateGridProducts.sort" 
-            [filter]="stateGridProducts.filter"
-            [group]="stateGridProducts.group" filterable="menu" 
-            [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
-            (dataStateChange)="dataStateChange($event)">
-    <kendo-grid-column field="productType" title="Tipologia impianto"></kendo-grid-column>
-    <kendo-grid-column field="code" title="Codice"></kendo-grid-column>
-    <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
-    <kendo-grid-column field="pictureFileName" title="Immagine">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <img *ngIf="dataItem.pictureFileName != null" [src]="pathImage + dataItem.pictureFileName" alt="" width="100px">
+    <kendo-grid [data]="products" [pageSize]="stateGridProducts.take" [skip]="stateGridProducts.skip"
+        [sort]="stateGridProducts.sort" [filter]="stateGridProducts.filter" [group]="stateGridProducts.group"
+        filterable="menu" [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
+        (dataStateChange)="dataStateChange($event)">
+        <ng-template kendoGridToolbarTemplate>
+            <button type="button" class="btn btn-primary" (click)="exportToExcel()">
+                Esporta in Excel
+            </button>
         </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
-    <kendo-grid-column field="serialNumber" title="Matricola"></kendo-grid-column>
-    <kendo-grid-column field="isDecommissioned" title="Dismesso" [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            @if (dataItem.isDecommissioned) {
+        <kendo-grid-column field="productType" title="Tipologia impianto"></kendo-grid-column>
+        <kendo-grid-column field="code" title="Codice"></kendo-grid-column>
+        <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
+        <kendo-grid-column field="pictureFileName" title="Immagine">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <img *ngIf="dataItem.pictureFileName != null" [src]="pathImage + dataItem.pictureFileName" alt=""
+                    width="100px">
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+        <kendo-grid-column field="serialNumber" title="Matricola"></kendo-grid-column>
+        <kendo-grid-column field="isDecommissioned" title="Dismesso" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                @if (dataItem.isDecommissioned) {
                 <span class="job-alert">{{dataItem.isDecommissioned | bool}}</span>
-            }
-            @else
-            {
+                }
+                @else
+                {
                 {{dataItem.isDecommissioned | bool}}
-            }
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="monthlyMaintenance" title="Man. Mens." [width]="1">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            @if (dataItem.monthlyMaintenance) {
+                }
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="monthlyMaintenance" title="Man. Mens." [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                @if (dataItem.monthlyMaintenance) {
                 <strong>{{dataItem.monthlyMaintenance | bool}}</strong>
-            }
-            @else
-            {
+                }
+                @else
+                {
                 {{dataItem.monthlyMaintenance | bool}}
-            }
-        </ng-template>
-    </kendo-grid-column>
-    <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <button *ngIf="dataItem.qrCode != '0000'" (click)="viewQrCodeProduct(dataItem)" class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">
-                <i class="fas fa-qrcode"></i>
-            </button>
-            <button (click)="editProduct(dataItem.id)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
-                <i class="fas fa-edit"></i>
-            </button>
-            <button (click)="deleteProduct(dataItem.id)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
-                <i class="fas fa-trash"></i>
-            </button>
-        </ng-template>
-    </kendo-grid-column>
-</kendo-grid>
+                }
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button *ngIf="dataItem.qrCode != '0000'" (click)="viewQrCodeProduct(dataItem)"
+                    class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">
+                    <i class="fas fa-qrcode"></i>
+                </button>
+                <button (click)="editProduct(dataItem.id)" class="btn btn-primary btn-sm grid-action-button"
+                    title="Modifica">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button (click)="deleteProduct(dataItem.id)" class="btn btn-danger btn-sm grid-action-button"
+                    title="Elimina">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
 </div>
 
 <app-product-modal #productModal></app-product-modal>

@@ -459,7 +459,15 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             .filter(a => {
                 if (actAlreadyClosed(a.id)) return false;
                 if (!a.isMandatoryExpiration) return false;
-                if (!a.expirationDate) return false;
+                if ((
+                    a.lastOperator != this.user.userName &&
+                    a.referentId != this.currentOperator.id
+                ) ||
+                    (
+                        this.currentOperator.activityTypes.length > 0
+                        && !this.currentOperator.activityTypes.contains(a.typeId)
+                    )
+                ) return false;
                 return a.isExpired;
             });
     }
@@ -493,7 +501,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                     { autoWidth: true },
                     { autoWidth: true }
                 ],
-                title: 'Commesse',
+                title: 'Attività',
                 rows: [
                     {
                         cells: [

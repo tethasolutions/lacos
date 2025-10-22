@@ -172,6 +172,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         //quando viene evaso l'ordine viene creato un nuovo commento al creatore dell'ordine
         bool isChangedAsCompleted = (purchaseOrder.Status != purchaseOrderDto.Status && purchaseOrderDto.Status == PurchaseOrderStatus.Completed);
+        bool isChangedAsPartialCompleted = (purchaseOrder.Status != purchaseOrderDto.Status && purchaseOrderDto.Status == PurchaseOrderStatus.Partial);
 
         purchaseOrder = purchaseOrderDto.MapTo(purchaseOrder, mapper);
 
@@ -234,13 +235,15 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         }
 
         //quando viene evaso l'ordine viene creato un nuovo commento al creatore dell'ordine
-        if (isChangedAsCompleted)
+        if (isChangedAsCompleted || isChangedAsPartialCompleted)
         {
+            var partialText = isChangedAsPartialCompleted ? "parzialmente " : "";
+
             var message = new MessageDto()
             {
                 OperatorId = (long)session.CurrentUser.OperatorId,
                 Date = DateTimeOffset.Now,
-                Note = $"L'ordine {purchaseOrder.Number} del fornitore {purchaseOrder.Supplier.Name} è stato consegnato",
+                Note = $"L'ordine {purchaseOrder.Number} del fornitore {purchaseOrder.Supplier.Name} è stato {partialText}consegnato",
                 IsFromApp = true
             };
 

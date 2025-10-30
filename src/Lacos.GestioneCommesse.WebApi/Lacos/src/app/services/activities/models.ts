@@ -38,6 +38,8 @@ export interface IActivityReadModel {
     readonly jobReference: string;
     readonly jobHasHighPriority: boolean;
     readonly jobMandatoryDate: Date | string;
+    readonly jobReferentId: number;
+    readonly jobCreatorUserId: number;
     readonly jobIsInLate: boolean;
     readonly customer: string;
     readonly startDate: Date | string;

@@ -11,6 +11,8 @@ public class ActivityReadModel
     public string? JobReference { get; set; }
     public bool? JobHasHighPriority { get; set; }
     public DateTimeOffset? JobMandatoryDate { get; set; }
+    public long? JobReferentId { get; set; }
+    public long? JobCreatorUserId { get; set; }
     public bool? JobIsInLate { get; set; }
     public string? ShortDescription { get; set; }
     public ActivityStatus Status { get; set; }

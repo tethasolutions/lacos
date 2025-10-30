@@ -433,6 +433,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             .filter(j => {
                 if (jobAlreadyClosed(j.jobId)) return false;
                 if (!j.jobMandatoryDate) return false;
+                if (j.jobReferentId != this.currentOperator.id &&
+                    j.jobCreatorUserId != this.user.id) return false;
 
                 const mandatoryDate = new Date(j.jobMandatoryDate);
                 mandatoryDate.setHours(0, 0, 0, 0);

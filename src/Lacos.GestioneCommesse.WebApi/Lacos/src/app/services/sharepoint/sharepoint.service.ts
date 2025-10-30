@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, tap } from 'rxjs';
+import { EMPTY, expand, map, reduce, tap } from 'rxjs';
 import { ApiUrls } from '../common/api-urls';
 
 @Injectable({ providedIn: 'root' })
@@ -34,12 +34,26 @@ export class SharepointService {
     ) { }
 
     getChildren(itemId: string = this.rootItemId) {
-        const url = `${this._apiUrl}/${itemId}/children`;
-        return this._http.get<GraphResponse<IItem>>(url, { headers: this._headers })
-            .pipe(
-                map(response => response.value),
-                map(items => items.map(item => item.folder ? new SharepointFolder(item.name, item.id, item.parentReference.path, item.webUrl) : new SharepointFile(item.name, item.id, item.parentReference.path, item.webUrl)))
-            );
+        // richiedo un numero elevato di elementi per pagina (max 999 per Graph)
+        const url = `${this._apiUrl}/${itemId}/children?$top=999`;
+
+        return this._http.get<any>(url, { headers: this._headers }).pipe(
+            // espandi le richieste finché esiste nextLink
+            expand(response => {
+                const next = response['@odata.nextLink'];
+                return next ? this._http.get<any>(next, { headers: this._headers }) : EMPTY;
+            }),
+            // estrae solo la proprietà value di ogni pagina
+            map(response => response.value as IItem[]),
+            // concatena tutte le pagine in un unico array
+            reduce((acc, value) => acc.concat(value), [] as IItem[]),
+            // converte IItem in SharepointFolder o SharepointFile
+            map(items => items.map(item => {
+                return item.folder
+                    ? new SharepointFolder(item.name, item.id, item.parentReference.path, item.webUrl ?? '')
+                    : new SharepointFile(item.name, item.id, item.parentReference.path, item.webUrl ?? '');
+            }))
+        );
     }
 
     getParentFolderPath(itemId: string) {

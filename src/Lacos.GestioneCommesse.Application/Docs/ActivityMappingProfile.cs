@@ -27,6 +27,8 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.JobReference, y => y.Job!.Reference)
            .MapMember(x => x.JobHasHighPriority, y => y.Job!.HasHighPriority)
            .MapMember(x => x.JobMandatoryDate, y => y.Job!.MandatoryDate)
+           .MapMember(x => x.JobReferentId, y => y.Job!.ReferentId)
+           .MapMember(x => x.JobCreatorUserId, y => y.Job!.CreatedById)
            .MapMember(x => x.JobIsInLate, y => (y.Job!.Status != JobStatus.InProgress && y.Job!.Status != JobStatus.Pending)
                 ? false
                 : (y.Job!.MandatoryDate == null

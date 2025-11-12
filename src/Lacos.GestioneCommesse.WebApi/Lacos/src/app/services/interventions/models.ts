@@ -30,6 +30,7 @@ export class Intervention {
         public status: InterventionStatus,
         public toBeReschedule: boolean,
         public description: string,
+        public finalNotes: string,
         public vehicleId: number,
         public activityId: number,
         public jobId: number,
@@ -43,7 +44,7 @@ export class Intervention {
 
     static build(o: Intervention) {
         const notes = o.notes.map(e => InterventionNote.build(e));
-        return new Intervention(o.id, o.start, o.end, o.status, o.toBeReschedule, o.description, o.vehicleId,
+        return new Intervention(o.id, o.start, o.end, o.status, o.toBeReschedule, o.description, o.finalNotes, o.vehicleId,
             o.activityId, o.jobId, o.operators, o.activityProducts, notes);
     }
 

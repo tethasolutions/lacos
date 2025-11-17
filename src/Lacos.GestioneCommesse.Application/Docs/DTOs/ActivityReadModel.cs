@@ -34,6 +34,7 @@ public class ActivityReadModel
     public bool IsExpired { get; set; }
     public bool IsInternal { get; set; }
     public bool IsFromTicket { get; set; }
+    public bool HasInterventions { get; set; }
 
     public int? UnreadMessages { get; set; }
 

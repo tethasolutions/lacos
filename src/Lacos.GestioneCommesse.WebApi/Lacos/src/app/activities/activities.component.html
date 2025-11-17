@@ -183,9 +183,9 @@
         </kendo-grid-column>
         @if (!isOperator)
         {
-        <div *kendoGridDetailTemplate="let dataItem">
+        <ng-template kendoGridDetailTemplate [kendoGridDetailTemplateShowIf]="checkHasInterventions" let-dataItem>
             <app-interventions-grid [activityId]="dataItem.id"></app-interventions-grid>
-        </div>
+        </ng-template>
         }
     </kendo-grid>
 </div>

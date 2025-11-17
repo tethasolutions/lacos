@@ -137,7 +137,7 @@ public class JobAccountingService : IJobAccountingService
 
         var operatorId = session.CurrentUser?.OperatorId;
 
-        if (operatorId != null && jobAccountingDto.TargetOperators.Count() > 0)
+        if (operatorId != null && jobAccountingDto.TargetOperators != null && jobAccountingDto.TargetOperators.Count() > 0)
         {
             var accountingType = await accountingTypeRepository.Get(jobAccounting.AccountingTypeId);
 

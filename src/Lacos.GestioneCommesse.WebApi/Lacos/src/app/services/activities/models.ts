@@ -52,6 +52,7 @@ export interface IActivityReadModel {
     readonly isExpired: boolean;
     readonly isInternal: boolean;
     readonly isFromTicket: boolean;
+    readonly hasInterventions: boolean;
     readonly statusLabel0: string;
     readonly statusLabel1: string;
     readonly statusLabel2: string;

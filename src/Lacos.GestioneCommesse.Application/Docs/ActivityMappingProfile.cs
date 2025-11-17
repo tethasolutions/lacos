@@ -47,6 +47,7 @@ public class ActivityMappingProfile : Profile
                     : y.ExpirationDate.Value.AddHours(2).AddDays(-5) < DateTimeOffset.Now.Date))
            .MapMember(x => x.IsInternal, y => y.Type!.IsInternal)
            .MapMember(x => x.IsFromTicket, y => y.Job!.Tickets.Any(t => t.ActivityId == y.Id))
+           .MapMember(x => x.HasInterventions, y => y.Interventions.Any())
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)

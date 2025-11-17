@@ -482,6 +482,10 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this.lateActivitiesToNotify = this.lateActivitiesToNotify.filter(a => a.id !== id);
     }
 
+    checkHasInterventions(dataItem: IActivityReadModel): boolean {
+        return dataItem.hasInterventions;
+    }
+
     exportToExcel(): void {
         const options = this.getExportOptions();
         const workbook = new Workbook(options);

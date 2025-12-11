@@ -7,6 +7,9 @@
             <i class="fas fa-plus"></i>
             NUOVO
         </button>
+        <button (click)="syncAllDistances()" class="btn btn-primary btn-sm ms-2" *ngIf="isAdmin">
+            SINCRONIZZA DISTANZE
+        </button>
     </div>
 </div>
 

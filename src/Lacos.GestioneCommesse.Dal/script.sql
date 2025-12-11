@@ -5559,3 +5559,37 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251211142908_add distancekm'
+)
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD [DistanceKm] decimal(14,2) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251211142908_add distancekm'
+)
+BEGIN
+    ALTER TABLE [Registry].[Addresses] ADD [IsInsideAreaC] bit NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251211142908_add distancekm'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251211142908_add distancekm', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

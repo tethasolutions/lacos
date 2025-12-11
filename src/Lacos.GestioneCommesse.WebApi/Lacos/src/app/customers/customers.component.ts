@@ -11,6 +11,8 @@ import { CustomerModel } from '../shared/models/customer.model';
 import { AddressModel } from '../shared/models/address.model';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
 import { StorageService } from '../services/common/storage.service';
+import { Role, User } from '../services/security/models';
+import { UserService } from '../services/security/user.service';
 
 @Component({
   selector: 'app-customers',
@@ -35,11 +37,14 @@ export class CustomersComponent extends BaseComponent implements OnInit {
   };
 
   customerSelezionato = new CustomerModel();
+  user: User;
+  isAdmin: boolean = false;
   screenWidth: number;
 
   constructor(
     private readonly _customerService: CustomerService,
     private readonly _addressesService: AddressesService,
+    private readonly _user: UserService,
     private readonly _messageBox: MessageBoxService,
     private readonly _storageService: StorageService
   ) {
@@ -50,6 +55,8 @@ export class CustomersComponent extends BaseComponent implements OnInit {
     this._resumeState();
     this._readCustomers();
     this.updateScreenSize();
+    this.user = this._user.getUser();
+    this.isAdmin = (this.user.role == Role.Administrator);
   }
 
   @HostListener('window:resize', ['$event'])
@@ -58,9 +65,9 @@ export class CustomersComponent extends BaseComponent implements OnInit {
   }
 
   private updateScreenSize(): void {
-    this.screenWidth = window.innerWidth -44;
+    this.screenWidth = window.innerWidth - 44;
     if (this.screenWidth > 1876) this.screenWidth = 1876;
-    if (this.screenWidth < 1400) this.screenWidth = 1400;     
+    if (this.screenWidth < 1400) this.screenWidth = 1400;
   }
 
 
@@ -207,5 +214,16 @@ export class CustomersComponent extends BaseComponent implements OnInit {
         );
       }
     });
+  }
+
+  syncAllDistances() {
+    this._subscriptions.push(
+      this._addressesService.syncDistances()
+        .pipe(
+          tap(() => this._messageBox.success(`Distanze sincronizzate con successo`)),
+          tap(() => this._readCustomers())
+        )
+        .subscribe()
+    );
   }
 }

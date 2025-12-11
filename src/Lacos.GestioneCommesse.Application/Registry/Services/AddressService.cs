@@ -5,6 +5,9 @@ using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http;
+using System.Net.Http.Json;
 
 namespace Lacos.GestioneCommesse.Application.Registry.Services;
 
@@ -17,33 +20,34 @@ public interface IAddressService
     Task<IEnumerable<AddressDto>> GetSupplierAddresses(long supplierId);
     Task<IEnumerable<AddressDto>> GetCustomerAddresses(long customerId);
 
-    Task<AddressDto> CreateAddress(
-        AddressDto addressDto);
+    Task<AddressDto> CreateAddress(AddressDto addressDto);
 
-    Task<AddressDto> UpdateAddress(
-        long id,
-        AddressDto addressDto);
+    Task<AddressDto> UpdateAddress(long id, AddressDto addressDto);
 
-    Task DeleteAddress(
-        long id);
+    Task DeleteAddress(long id);
 
-    Task<AddressDto> SetMainAddress(
-        long id);
+    Task<AddressDto> SetMainAddress(long id);
+
+    Task SyncDistances(long? customerId = null, long? supplierId = null, bool? syncAll = false);
+
 }
 
 public class AddressService : IAddressService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Address> addressRepository;
+    private readonly INominatimService nominatimService;
     private readonly ILacosDbContext dbContext;
 
     public AddressService(
         IMapper mapper,
         IRepository<Address> addressRepository,
+        INominatimService nominatimService,
         ILacosDbContext dbContext)
     {
         this.mapper = mapper;
         this.addressRepository = addressRepository;
+        this.nominatimService = nominatimService;
         this.dbContext = dbContext;
     }
 
@@ -68,6 +72,12 @@ public class AddressService : IAddressService
         if (address.IsMainAddress && address.SupplierId != null) ResetSupplierAddresses(address.SupplierId, null);
         if (address.IsMainAddress && address.CustomerId != null) ResetCustomerAddresses(address.CustomerId, null);
 
+        var distanceResult = await nominatimService.GetDistanceAsync("Via S. Defendente, 98, 20010 Boffalora Sopra Ticino MI Italy",
+            $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy");
+
+        address.DistanceKm = distanceResult.DistanceKm;
+        address.IsInsideAreaC = distanceResult.IsInsideAreaC;
+
         await addressRepository.Insert(address);
 
         await dbContext.SaveChanges();
@@ -87,6 +97,12 @@ public class AddressService : IAddressService
         }
 
         addressDto.MapTo(address, mapper);
+
+        var distanceResult = await nominatimService.GetDistanceAsync("Via S. Defendente, 98, 20010 Boffalora Sopra Ticino MI Italy",
+            $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy");
+
+        address.DistanceKm = distanceResult.DistanceKm;
+        address.IsInsideAreaC = distanceResult.IsInsideAreaC;
 
         await dbContext.SaveChanges();
 
@@ -214,6 +230,7 @@ public class AddressService : IAddressService
 
         return addresses.MapTo<IEnumerable<AddressDto>>(mapper);
     }
+
     public async Task<IEnumerable<AddressDto>> GetCustomerAddresses(
         long customerId)
     {
@@ -229,5 +246,46 @@ public class AddressService : IAddressService
         }
 
         return addresses.MapTo<IEnumerable<AddressDto>>(mapper);
+    }
+
+    public async Task SyncDistances(long? customerId = null, long? supplierId = null, bool? syncAll = false)
+    {
+        var addresses = await addressRepository
+            .Query()
+            .ToListAsync();
+
+        if (syncAll == true)
+        {
+            addresses = addresses.Where(x => x.DistanceKm == null).ToList();
+        }
+
+        if (customerId != null)
+        {
+            addresses = addresses.Where(x => x.CustomerId == customerId).ToList();
+        }
+
+        if (supplierId != null)
+        {
+            addresses = addresses.Where(x => x.SupplierId == supplierId).ToList();
+        }
+
+        foreach (var address in addresses)
+            {
+            try
+            {
+                var distanceResult = await nominatimService.GetDistanceAsync("Via S. Defendente, 98, 20010 Boffalora Sopra Ticino MI Italy",
+                    $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy");
+                address.DistanceKm = distanceResult.DistanceKm;
+                address.IsInsideAreaC = distanceResult.IsInsideAreaC;
+                addressRepository.Update(address);
+                Thread.Sleep(1000);
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+        await dbContext.SaveChanges();
+
     }
 }

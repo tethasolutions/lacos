@@ -23,7 +23,7 @@ public static class ApplicationConfiguration
         services
             .AddScoped<ISecurityContextFactory, SecurityContextFactory>()
             .AddScoped<ISecurityService, SecurityService>()
-            .AddScoped<ISharedService, SharedService> ()
+            .AddScoped<ISharedService, SharedService>()
             .AddScoped<IAccessTokenProvider, TAccessTokenProvider>()
             .AddScoped<ICustomerService, CustomerService>()
             .AddScoped<ISupplierService, SupplierService>()
@@ -42,12 +42,14 @@ public static class ApplicationConfiguration
             .AddScoped<ITicketsService, TicketsService>()
             .AddScoped<IPurchaseOrdersService, PurchaseOrdersService>()
             .AddScoped<IMessagesService, MessagesService>()
-            .AddScoped<INotificationOperatorService, NotificationOperatorService> ()
-            .AddScoped<IHelperTypeService, HelperTypeService> ()
-            .AddScoped<IHelperDocumentService, HelperDocumentService> ()
-            .AddScoped<IJobAccountingService, JobAccountingService> ()
-            .AddScoped<IAccountingTypeService, AccountingTypeService> ()
-            .AddScoped<IMaintenancePriceListService, MaintenancePriceListService> ();
+            .AddScoped<INotificationOperatorService, NotificationOperatorService>()
+            .AddScoped<IHelperTypeService, HelperTypeService>()
+            .AddScoped<IHelperDocumentService, HelperDocumentService>()
+            .AddScoped<IJobAccountingService, JobAccountingService>()
+            .AddScoped<IAccountingTypeService, AccountingTypeService>()
+            .AddScoped<IMaintenancePriceListService, MaintenancePriceListService>();
+
+        services.AddHttpClient<INominatimService, NominatimService>();
 
         return services;
     }

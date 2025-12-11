@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Customers.DTOs;
+using Lacos.GestioneCommesse.Application.Registry.Services;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Framework.Exceptions;
@@ -25,15 +26,18 @@ public class CustomerService : ICustomerService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Customer> customerRepository;
+    private readonly IAddressService addressService;
     private readonly ILacosDbContext dbContext;
 
     public CustomerService(
         IMapper mapper,
         IRepository<Customer> customerRepository,
+        IAddressService addressService,
         ILacosDbContext dbContext)
     {
         this.mapper = mapper;
         this.customerRepository = customerRepository;
+        this.addressService = addressService;
         this.dbContext = dbContext;
     }
 
@@ -84,6 +88,8 @@ public class CustomerService : ICustomerService
         dto.MapTo(customer, mapper);
         customerRepository.Update(customer);
         await dbContext.SaveChanges();
+
+        await addressService.SyncDistances(customer.Id);
 
         return customer.MapTo<CustomerDto>(mapper);
     }

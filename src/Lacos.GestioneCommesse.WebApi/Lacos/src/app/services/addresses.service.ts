@@ -8,12 +8,12 @@ import { AddressModel } from '../shared/models/address.model';
 
 @Injectable()
 export class AddressesService {
-    
+
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/addresses`;
 
     constructor(
         private readonly _http: HttpClient
-    ) {}
+    ) { }
 
     createAddress(request: AddressModel) {
         return this._http.post<AddressModel>(`${this._baseUrl}/address`, request);
@@ -49,8 +49,8 @@ export class AddressesService {
                 map(() => { })
             );
     }
-    
-    getCustomerAddresses(customerId: number) {      
+
+    getCustomerAddresses(customerId: number) {
         return this._http.get<Array<AddressModel>>(`${this._baseUrl}/address/customer/${customerId}`)
             .pipe(
                 map(result => {
@@ -63,8 +63,8 @@ export class AddressesService {
                 })
             );
     }
-    
-    getSupplierAddresses(supplierId: number) {      
+
+    getSupplierAddresses(supplierId: number) {
         return this._http.get<Array<AddressModel>>(`${this._baseUrl}/address/supplier/${supplierId}`)
             .pipe(
                 map(result => {
@@ -78,7 +78,7 @@ export class AddressesService {
             );
     }
 
-    getAddresses() {      
+    getAddresses() {
         return this._http.get<Array<AddressModel>>(`${this._baseUrl}/addresses`)
             .pipe(
                 map(result => {
@@ -89,6 +89,13 @@ export class AddressesService {
                     });
                     return addresses;
                 })
+            );
+    }
+
+    syncDistances() {
+        return this._http.put<void>(`${this._baseUrl}/sync-distances`, null)
+            .pipe(
+                map(() => { })
             );
     }
 }

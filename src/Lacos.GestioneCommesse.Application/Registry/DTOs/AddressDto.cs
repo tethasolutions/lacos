@@ -16,5 +16,7 @@
         public string? ContactName { get; set; }
         public string? ContactReference { get; set; }
         public bool IsMainAddress { get; set; }
+        public decimal? DistanceKm { get; set; } 
+        public bool? IsInsideAreaC { get; set; }
     }
 }

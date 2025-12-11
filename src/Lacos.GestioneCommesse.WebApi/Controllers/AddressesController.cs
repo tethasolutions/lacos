@@ -88,6 +88,14 @@ public class AddressesController : LacosApiController
         return Ok(address);
     }
 
+    [HttpPut("sync-distances")]
+    public async Task<IActionResult> SyncDistances()
+    {
+        await addressService.SyncDistances();
+
+        return Ok();
+    }
+
     [HttpPut("set-address-as-main/{id}")]
     public async Task<IActionResult> SetAddressAsMain(long id)
     {

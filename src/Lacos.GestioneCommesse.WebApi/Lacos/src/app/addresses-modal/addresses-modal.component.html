@@ -1,7 +1,7 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="1000" [top]="110">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="1200" [top]="110">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Gestione indirizzi
@@ -16,7 +16,7 @@
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        
+
         <div class="d-flex align-items-center master-detail-grid-header">
             <div class="col"></div>
             <div class="col-auto">
@@ -27,60 +27,84 @@
             </div>
         </div>
         <div class="grid-container">
-<kendo-grid [data]="customer.addresses" [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth" *ngIf="customer.id != null">
-            <kendo-grid-column field="description" title="Tipo"></kendo-grid-column>
-            <kendo-grid-column field="city" title="Città"></kendo-grid-column>
-            <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
-            <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
-            <kendo-grid-column field="jobReference" title="Rifer. Comm."></kendo-grid-column>
-            <kendo-grid-column field="isMainAddress" title="Principale">
-                <ng-template kendoGridCellTemplate let-dataItemAddress>
-                    {{dataItemAddress.isMainAddress | bool}}
-                </ng-template>
-            </kendo-grid-column>
-            <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
-                <ng-template kendoGridCellTemplate let-dataItemAddress>
-                    <button (click)="editAddress(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button *ngIf="!dataItemAddress.isMainAddress"
-                        (click)="setAddressAsMain(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Seleziona come principale">
-                        <i class="fas fa-check"></i>
-                    </button>
-                    <button (click)="deleteAddress(dataItemAddress)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </ng-template>
-            </kendo-grid-column>
-        </kendo-grid>
-</div>
+            <kendo-grid [data]="customer.addresses" [sortable]="false" [pageable]="false" scrollable="none"
+                [style.width.px]="screenWidth" *ngIf="customer.id != null">
+                <kendo-grid-column field="description" title="Tipo"></kendo-grid-column>
+                <kendo-grid-column field="city" title="Città"></kendo-grid-column>
+                <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
+                <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
+                <kendo-grid-column field="jobReference" title="Rifer. Comm."></kendo-grid-column>
+                <kendo-grid-column field="distanceKm" title="Distanza (km)">
+                    <ng-template kendoGridCellTemplate let-dataItemAddress>
+                        {{dataItemAddress.distanceKm | number:'1.2-2'}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="isInsideAreaC" title="Dentro Area C">
+                    <ng-template kendoGridCellTemplate let-dataItemAddress>
+                        {{dataItemAddress.isInsideAreaC | bool}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="isMainAddress" title="Principale">
+                    <ng-template kendoGridCellTemplate let-dataItemAddress>
+                        {{dataItemAddress.isMainAddress | bool}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="210">
+                    <ng-template kendoGridCellTemplate let-dataItemAddress>
+                        <button (click)="openMap(dataItemAddress)" class="btn btn-warning btn-sm grid-action-button"
+                            title="Apri mappa">
+                            <i class="fas fa-globe"></i>
+                        </button>
+                        <button (click)="openGoogleMap(dataItemAddress)"
+                            class="btn btn-warning btn-sm grid-action-button" title="Verifica con google maps">
+                            <i class="fas fa-map-location"></i>
+                        </button>
+                        <button (click)="editAddress(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button"
+                            title="Modifica">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button *ngIf="!dataItemAddress.isMainAddress" (click)="setAddressAsMain(dataItemAddress)"
+                            class="btn btn-primary btn-sm grid-action-button" title="Seleziona come principale">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button (click)="deleteAddress(dataItemAddress)"
+                            class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
         <div class="grid-container">
-<kendo-grid [data]="supplier.addresses" [sortable]="false" [pageable]="false" scrollable="none" [style.width.px]="screenWidth" *ngIf="supplier.id != null">
-            <kendo-grid-column field="city" title="Città"></kendo-grid-column>
-            <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
-            <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
-            <kendo-grid-column field="jobReference" title="Rif. Indirizzo"></kendo-grid-column>
-            <kendo-grid-column field="isMainAddress" title="Principale">
-                <ng-template kendoGridCellTemplate let-dataItemAddress>
-                    {{dataItemAddress.isMainAddress | bool}}
-                </ng-template>
-            </kendo-grid-column>
-            <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
-                <ng-template kendoGridCellTemplate let-dataItemAddress>
-                    <button (click)="editAddress(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Modifica">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button *ngIf="!dataItemAddress.isMainAddress"
-                        (click)="setAddressAsMain(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button" title="Seleziona come principale">
-                        <i class="fas fa-check"></i>
-                    </button>
-                    <button (click)="deleteAddress(dataItemAddress)" class="btn btn-danger btn-sm grid-action-button" title="Elimina">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </ng-template>
-            </kendo-grid-column>
-        </kendo-grid>
-</div>
+            <kendo-grid [data]="supplier.addresses" [sortable]="false" [pageable]="false" scrollable="none"
+                [style.width.px]="screenWidth" *ngIf="supplier.id != null">
+                <kendo-grid-column field="city" title="Città"></kendo-grid-column>
+                <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
+                <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
+                <kendo-grid-column field="jobReference" title="Rif. Indirizzo"></kendo-grid-column>
+                <kendo-grid-column field="isMainAddress" title="Principale">
+                    <ng-template kendoGridCellTemplate let-dataItemAddress>
+                        {{dataItemAddress.isMainAddress | bool}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
+                    <ng-template kendoGridCellTemplate let-dataItemAddress>
+                        <button (click)="editAddress(dataItemAddress)" class="btn btn-primary btn-sm grid-action-button"
+                            title="Modifica">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button *ngIf="!dataItemAddress.isMainAddress" (click)="setAddressAsMain(dataItemAddress)"
+                            class="btn btn-primary btn-sm grid-action-button" title="Seleziona come principale">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button (click)="deleteAddress(dataItemAddress)"
+                            class="btn btn-danger btn-sm grid-action-button" title="Elimina">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
 
         <div class="text-right mt-5">
             <button type="button" (click)="dismiss()" class="btn btn-secondary me-2">

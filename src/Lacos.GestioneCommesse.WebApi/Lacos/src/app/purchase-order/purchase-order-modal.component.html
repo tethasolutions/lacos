@@ -116,6 +116,34 @@
 
             <div class="border-green mb-3"></div>
 
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Descrizione</label>
+                    <div class="form-group">
+                        <kendo-editor name="description" [(ngModel)]="options.purchaseOrder.description" required
+                            [resizable]="true" [iframe]="false"
+                            [pasteCleanupSettings]="{ convertMsLists: true, removeAttributes: ['style'], removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
+                            <kendo-toolbar>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
+                                    <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                                <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor
+                                    view="gradient"></kendo-toolbar-colorpicker>
+                                <kendo-toolbar-buttongroup>
+                                    <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
+                                </kendo-toolbar-buttongroup>
+                            </kendo-toolbar>
+                        </kendo-editor>
+                        <div class="validation-message" [control]="form.controls['description']"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-green mb-3"></div>
+
             <div class="mb-3">
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <h5 class="mb-0">
@@ -161,34 +189,6 @@
                                 </ng-template>
                             </kendo-grid-column>
                         </kendo-grid>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-green mb-3"></div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Descrizione</label>
-                    <div class="form-group">
-                        <kendo-editor name="description" [(ngModel)]="options.purchaseOrder.description" required
-                            [resizable]="true" [iframe]="false"
-                            [pasteCleanupSettings]="{ convertMsLists: true, removeAttributes: ['style'], removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
-                            <kendo-toolbar>
-                                <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
-                                    <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
-                                <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
-                                <kendo-toolbar-colorpicker kendoEditorForeColor
-                                    view="gradient"></kendo-toolbar-colorpicker>
-                                <kendo-toolbar-buttongroup>
-                                    <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
-                                </kendo-toolbar-buttongroup>
-                            </kendo-toolbar>
-                        </kendo-editor>
-                        <div class="validation-message" [control]="form.controls['description']"></div>
                     </div>
                 </div>
             </div>

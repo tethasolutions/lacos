@@ -165,6 +165,7 @@ import { MaintenancePriceListComponent } from './maintenance-price-list/maintena
 import { MaintenancePriceListItemModalComponent } from './maintenance-price-list/maintenance-price-list-item-modal.component';
 import { MaintenancePriceListModalComponent } from './maintenance-price-list/maintenance-price-list-modal.component';
 import { MaintenancePriceListService } from './services/maintenance-price-list.service';
+import { DistanceErrorsComponent } from './customers/distance-errors.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -270,7 +271,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         JobAccountingsModalComponent,
         MaintenancePriceListComponent,
         MaintenancePriceListModalComponent,
-        MaintenancePriceListItemModalComponent
+        MaintenancePriceListItemModalComponent,
+        DistanceErrorsComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,

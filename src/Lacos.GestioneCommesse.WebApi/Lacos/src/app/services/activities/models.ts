@@ -58,6 +58,7 @@ export interface IActivityReadModel {
     readonly statusLabel2: string;
     readonly statusLabel3: string;
     readonly isFloorDelivery: boolean;
+    readonly includeMaintenanceCosts: boolean;
     readonly createdOn: Date | string;
     readonly editedOn: Date | string;
     readonly canHaveDependencies: boolean;
@@ -92,6 +93,7 @@ export class Activity {
         public statusLabel2: string,
         public statusLabel3: string,
         public isFloorDelivery: boolean,
+        public includeMaintenanceCosts: boolean,
         public canHaveDependencies: boolean,
         public attachments: ActivityAttachmentModel[],
         public messages: MessageReadModel[]
@@ -121,7 +123,7 @@ export class Activity {
 
         return new Activity(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.supplierId, o.addressId,
             o.typeId, o.referentId, o.startDate, o.expirationDate, o.isMandatoryExpiration, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery,
-            o.canHaveDependencies, attachments, messages);
+            o.includeMaintenanceCosts, o.canHaveDependencies, attachments, messages);
     }
 
 }
@@ -157,6 +159,7 @@ export class ActivityDetail {
         readonly statusLabel2: string,
         readonly statusLabel3: string,
         readonly isFloorDelivery: boolean,
+        readonly includeMaintenanceCosts: boolean,
         readonly canHaveDependencies: boolean,
         readonly hasDependencies: boolean,
         readonly totalDependencies: number,
@@ -172,7 +175,7 @@ export class ActivityDetail {
     asActivity() {
         return new Activity(this.id, this.status, this.number, this.shortDescription, this.informations, this.description, this.jobId, this.supplierId,
             this.addressId, this.typeId, this.referentId, this.startDate, this.expirationDate, this.isMandatoryExpiration, 
-            this.statusLabel0, this.statusLabel1, this.statusLabel2, this.statusLabel3, this.isFloorDelivery, 
+            this.statusLabel0, this.statusLabel1, this.statusLabel2, this.statusLabel3, this.isFloorDelivery, this.includeMaintenanceCosts,
             this.canHaveDependencies, this.attachments, this.messages);
     }
 
@@ -182,7 +185,7 @@ export class ActivityDetail {
 
         return new ActivityDetail(o.id, o.status, o.number, o.shortDescription, o.informations, o.description, o.jobId, o.job, o.customerId,
             o.customer, o.supplierId, o.addressId, o.address, o.typeId, o.type, o.startDate, o.expirationDate, o.isMandatoryExpiration,
-            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery, o.canHaveDependencies,
+            o.referentId, o.referent, o.statusLabel0, o.statusLabel1, o.statusLabel2, o.statusLabel3, o.isFloorDelivery, o.includeMaintenanceCosts,  o.canHaveDependencies,
             o.hasDependencies, o.totalDependencies, o.fulfilledDependencies, o.hasUnpaidAccounts, attachments, messages);
     }
 

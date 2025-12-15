@@ -148,7 +148,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
 
     create() {
         const activity = new Activity(0, ActivityStatus.Pending, null, null, null, null, this._jobId, null, null, null, null, null, null, false,
-            "In attesa", "In corso", "Pronto", "Completata", false, false, [], []);
+            "In attesa", "In corso", "Pronto", "Completata", false, false, false, [], []);
         if (this.job) {
             activity.addressId = this.job.addressId;
         }

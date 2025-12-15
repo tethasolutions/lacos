@@ -1,13 +1,14 @@
-﻿using Lacos.GestioneCommesse.Application.Security;
+﻿using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using Lacos.GestioneCommesse.Application.Customers.Services;
+using Lacos.GestioneCommesse.Application.Registry.DTOs;
+using Lacos.GestioneCommesse.Application.Registry.Services;
+using Lacos.GestioneCommesse.Application.Security;
 using Lacos.GestioneCommesse.Application.Security.DTOs;
 using Lacos.GestioneCommesse.WebApi.Auth;
 using Lacos.GestioneCommesse.WebApi.Models.Security;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Lacos.GestioneCommesse.Application.Registry.DTOs;
-using Lacos.GestioneCommesse.Application.Registry.Services;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -91,7 +92,7 @@ public class AddressesController : LacosApiController
     [HttpPut("sync-distances")]
     public async Task<IActionResult> SyncDistances()
     {
-        await addressService.SyncDistances();
+        await addressService.SyncDistances(null,null,true);
 
         return Ok();
     }
@@ -103,4 +104,12 @@ public class AddressesController : LacosApiController
 
         return Ok(address);
     }
+
+    [HttpGet("distance-errors")]
+    public async Task<ActionResult<DataSourceResult>> GetDistanceErrors([DataSourceRequest] DataSourceRequest request)
+    {
+        var customers = await addressService.GetDistanceErrors();
+        return Ok(await customers.ToDataSourceResultAsync(request));
+    }
+
 }

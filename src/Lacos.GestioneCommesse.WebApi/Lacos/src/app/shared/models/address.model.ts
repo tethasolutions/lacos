@@ -16,6 +16,8 @@ export class AddressModel {
     jobReference: string;
     contactName: string;
     contactReference: string;
+    distanceKm: number;
+    isInsideAreaC: boolean;
     tempId: string;
 
     get fullAddress(): string {
@@ -25,6 +27,16 @@ export class AddressModel {
         if (this.city !== null) { result += `${this.city} `; }
         if (this.province !== null) { result += ` (${this.province}) `; }
         if (this.zipCode !== null) { result += `, ${this.zipCode}`; }
+        return result;
+    }
+
+    get fullAddressForDistance(): string {
+        //{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy
+        let result = '';
+        if (this.streetAddress !== null) { result += `${this.streetAddress} `; }
+        if (this.zipCode !== null) { result += `${this.zipCode} `; }
+        if (this.city !== null) { result += `${this.city} `; }
+        if (this.province !== null) { result += `${this.province})`; }
         return result;
     }
 
@@ -44,4 +56,19 @@ export class AddressModel {
         this.contactReference = null;
         this.tempId = uuidv4();
     }
+
+}
+
+export class AddressReadModel {
+    id: number;
+    customerName: string;
+    description: string;
+    city: string;
+    streetAddress: string;
+    province: string;
+    zipCode: string;
+    fullAddressForDistance: string
+    distanceKm: number;
+    isInsideAreaC: boolean;
+        
 }

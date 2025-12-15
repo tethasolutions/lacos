@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251215155544_add purchaseorderexpenses")]
+    partial class addpurchaseorderexpenses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,9 +211,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<DateTimeOffset?>("ExpirationDate")
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
-
-                    b.Property<bool?>("IncludeMaintenanceCosts")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Informations")
                         .HasColumnType("nvarchar(max)");

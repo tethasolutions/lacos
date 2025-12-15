@@ -1,0 +1,45 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h4>Possibili indirizzi errati</h4>
+    </div>
+</div>
+
+<div class="grid-container">
+    <kendo-grid [data]="dataAddresses" [pageSize]="stateGrid.take" [skip]="stateGrid.skip" [sort]="stateGrid.sort"
+        [filter]="stateGrid.filter" [group]="stateGrid.group" filterable="menu" [sortable]="true" [pageable]="true"
+        scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)">
+        <kendo-grid-column field="customerName" title="Cliente"></kendo-grid-column>
+        <kendo-grid-column field="streetAddress" title="Indirizzo"></kendo-grid-column>
+        <kendo-grid-column field="zipCode" title="CAP"></kendo-grid-column>
+        <kendo-grid-column field="city" title="Città"></kendo-grid-column>
+        <kendo-grid-column field="province" title="Provincia"></kendo-grid-column>
+        <kendo-grid-column field="distanceKm" title="Distanza (km)">
+            <ng-template kendoGridCellTemplate let-dataItemAddress>
+                {{dataItemAddress.distanceKm | number:'1.2-2'}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="isInsideAreaC" title="Dentro Area C">
+            <ng-template kendoGridCellTemplate let-dataItemAddress>
+                {{dataItemAddress.isInsideAreaC | bool}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="140">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button (click)="openMap(dataItem)" class="btn btn-warning btn-sm grid-action-button"
+                    title="Apri mappa">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <button (click)="openGoogleMap(dataItem)" class="btn btn-warning btn-sm grid-action-button"
+                    title="Verifica con google maps">
+                    <i class="fas fa-map-location"></i>
+                </button>
+                <button (click)="editAddress(dataItem)" class="btn btn-primary btn-sm grid-action-button"
+                    title="Modifica">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
+
+<app-address-modal #addressModal></app-address-modal>

@@ -32,6 +32,7 @@ import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-moda
 import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
 import { SecurityService } from '../services/security/security.service';
 import { JobAccountingsModalComponent } from '../job-accounting/jobaccountings-modal.component';
+import { JobAccountingsService } from '../services/jobs/job-accountings.service';
 
 @Component({
     selector: 'app-activity-modal',
@@ -67,6 +68,8 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     album: string[] = [];
     targetOperatorsArray: number[];
     readonly isOperator: boolean;
+    private _hasJobAccountingsChecked = false;
+    private _hasJobAccountings = false;
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/activities`;
 
@@ -85,6 +88,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         private readonly _addressesService: AddressesService,
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
+        private readonly _jobAccountingsService: JobAccountingsService,
         private readonly _messagesService: MessagesService
     ) {
         super(messageBox);
@@ -167,6 +171,9 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     override open(options: ActivityModalOptions) {
         const result = super.open(options);
 
+        this._hasJobAccountingsChecked = false;
+        this._hasJobAccountings = false;
+
         this.attachments = [];
         this.album = [];
         if (options.activity.attachments != null) {
@@ -217,6 +224,37 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
 
         if (this.form.invalid) {
             this._messageBox.error('Compilare correttamente tutti i campi.');
+            return false;
+        }
+
+        if (this.options.activity.typeId == this.activityTypes.find(e => e.name == 'AMMINISTRAZIONE')?.id) {
+            if (!this._hasJobAccountingsChecked) {
+                const jobAccountingsState: State = {
+                    filter: {
+                        filters: [
+                            { field: 'jobId', operator: 'eq', value: this.options.activity.jobId }
+                        ],
+                        logic: 'and'
+                    }
+                };
+
+                this._subscriptions.push(
+                    this._jobAccountingsService.hasJobAccountings(jobAccountingsState)
+                        .subscribe(e => {
+                            this._hasJobAccountings = e;
+                            this._hasJobAccountingsChecked = true;
+                            if (!e) {
+                                this._messageBox.error('Per le attività di amministrazione è necessario associare almeno una contabilizzazione alla commessa.');
+                            } else {
+                                this.close();
+                            }
+                        })
+                );
+
+                return false;
+            }
+
+            return this._hasJobAccountings;
         }
 
         return this.form.valid;

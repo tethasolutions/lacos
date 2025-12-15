@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 public interface INominatimService
 {
-    public Task<DistanceResult> GetDistanceAsync(string originAddress, string destinationAddress);
+    public Task<DistanceResult> GetDistanceAsync(string originAddress, string originCity, string destinationAddress, string destinationCity);
 }
 
 public class NominatimService : INominatimService
@@ -27,17 +27,15 @@ public class NominatimService : INominatimService
         }
 
     }
-    public async Task<DistanceResult> GetDistanceAsync(string originAddress, string destinationAddress)
+    public async Task<DistanceResult> GetDistanceAsync(string originAddress, string originCity, string destinationAddress, string destinationCity)
     {
-        // 1) Geocoding indirizzi
-        var originCoords = await GeocodeAsync(originAddress);
-        var destCoords = await GeocodeAsync(destinationAddress);
+        decimal distanceKm = 0;
+        decimal durationMinutes = 0;
 
-        // 2) Routing con OSRM
+        var originCoords = await GeocodeAsync(originAddress, originCity);
+        var destCoords = await GeocodeAsync(destinationAddress, destinationCity);
+
         var route = await GetRouteAsync(originCoords, destCoords);
-
-        decimal distanceKm;
-        decimal durationMinutes;
 
         if (route != null)
         {
@@ -71,7 +69,7 @@ public class NominatimService : INominatimService
     }
 
 
-    public async Task<(double lat, double lon)> GeocodeAsync(string address)
+    public async Task<(double lat, double lon)> GeocodeAsync(string address, string? city = null)
     {
         var url = $"{NominatimBaseUrl}/search" +
                   $"?q={Uri.EscapeDataString(address)}" +
@@ -90,6 +88,22 @@ public class NominatimService : INominatimService
         var results = JsonSerializer.Deserialize<List<NominatimResult>>(json, options);
 
         var first = results?.FirstOrDefault();
+
+        // Se non trova risultati per l'indirizzo completo, prova con la città
+        if (first == null && !string.IsNullOrWhiteSpace(city))
+        {
+            var cityUrl = $"{NominatimBaseUrl}/search" +
+                          $"?q={Uri.EscapeDataString(city)}" +
+                          $"&format=json&addressdetails=0&limit=1";
+
+            using var cityResponse = await _httpClient.GetAsync(cityUrl);
+            cityResponse.EnsureSuccessStatusCode();
+
+            var cityJson = await cityResponse.Content.ReadAsStringAsync();
+            results = JsonSerializer.Deserialize<List<NominatimResult>>(cityJson, options);
+            first = results?.FirstOrDefault();
+        }
+
         if (first == null)
             throw new Exception($"Nominatim non ha trovato risultati per l'indirizzo: {address}");
 

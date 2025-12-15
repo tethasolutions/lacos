@@ -130,6 +130,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 new MenuEntry(['/interventionmessages-list'], 'Commenti Interventi da App',
                     e => e.startsWith('/interventionmessages-list'),
                     e => e.isAuthenticated()
+                ),
+                new MenuEntry(['/distance-errors'], 'Possibili Indirizzi Errati',
+                    e => e.startsWith('/distance-errors'),
+                    e => e.isAuthorized(Role.Administrator)
                 )
             ]),
             new DropDownMenuEntry('Gestione', [

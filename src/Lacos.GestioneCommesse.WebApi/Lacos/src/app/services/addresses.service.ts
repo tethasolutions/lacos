@@ -4,7 +4,8 @@ import { map } from 'rxjs/operators';
 import { ApiUrls } from './common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
-import { AddressModel } from '../shared/models/address.model';
+import { AddressModel, AddressReadModel } from '../shared/models/address.model';
+import { readData } from './common/functions';
 
 @Injectable()
 export class AddressesService {
@@ -90,6 +91,12 @@ export class AddressesService {
                     return addresses;
                 })
             );
+    }
+
+    readDistanceErrors(state: State) {
+        const url = `${this._baseUrl}/distance-errors`
+
+        return readData(this._http, state, url);
     }
 
     syncDistances() {

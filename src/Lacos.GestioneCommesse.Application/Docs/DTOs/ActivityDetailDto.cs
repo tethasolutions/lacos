@@ -31,6 +31,7 @@ public class ActivityDetailDto
     public string? StatusLabel3 { get; set; }
 
     public bool? IsFloorDelivery { get; set; }
+    public bool? IncludeMaintenanceCosts { get; set; }
     public bool? CanHaveDependencies { get; set; }
     public bool? HasDependencies { get; set; }
     public int? TotalDependencies { get; set; }

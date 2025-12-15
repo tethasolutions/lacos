@@ -31,6 +31,7 @@ public class Activity : FullAuditedEntity, ILogEntity
     public bool IsNewReferent { get; set; }
 
     public bool? IsFloorDelivery { get; set; }
+    public bool? IncludeMaintenanceCosts { get; set; }
 
     public ActivityStatus Status { get; set; }
 

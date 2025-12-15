@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Lacos.GestioneCommesse.Application.Registry.Services;
 using Lacos.GestioneCommesse.Application.Suppliers.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
@@ -25,15 +26,18 @@ public class SupplierService : ISupplierService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Supplier> supplierRepository;
+    private readonly IAddressService addressService;
     private readonly ILacosDbContext dbContext;
 
     public SupplierService(
         IMapper mapper,
         IRepository<Supplier> supplierRepository,
+        IAddressService addressService,
         ILacosDbContext dbContext)
     {
         this.mapper = mapper;
         this.supplierRepository = supplierRepository;
+        this.addressService = addressService;
         this.dbContext = dbContext;
     }
 
@@ -84,6 +88,8 @@ public class SupplierService : ISupplierService
         dto.MapTo(supplier, mapper);
         supplierRepository.Update(supplier);
         await dbContext.SaveChanges();
+
+        await addressService.SyncDistances(null,supplier.Id);
 
         return supplier.MapTo<SupplierDto>(mapper);
     }

@@ -44,6 +44,7 @@ public class ActivityReadModel
     public string? StatusLabel3 { get; set; }
 
     public bool? IsFloorDelivery { get; set; }
+    public bool? IncludeMaintenanceCosts { get; set; }
 
     public DateTimeOffset? CreatedOn { get; set; }
     public DateTimeOffset? EditedOn { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Lacos.GestioneCommesse.Application.Customers.DTOs;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Registry;
@@ -29,6 +30,7 @@ public interface IAddressService
     Task<AddressDto> SetMainAddress(long id);
 
     Task SyncDistances(long? customerId = null, long? supplierId = null, bool? syncAll = false);
+    Task<IEnumerable<AddressReadModel>> GetDistanceErrors();
 
 }
 
@@ -71,9 +73,9 @@ public class AddressService : IAddressService
 
         if (address.IsMainAddress && address.SupplierId != null) ResetSupplierAddresses(address.SupplierId, null);
         if (address.IsMainAddress && address.CustomerId != null) ResetCustomerAddresses(address.CustomerId, null);
-
-        var distanceResult = await nominatimService.GetDistanceAsync("Via S. Defendente, 98, 20010 Boffalora Sopra Ticino MI Italy",
-            $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy");
+        
+        var distanceResult = await nominatimService.GetDistanceAsync("Via S. Defendente, 98, 20010 Boffalora Sopra Ticino MI Italy", "Boffalora Sopra Ticino",
+            $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy", $"{address.City}");
 
         address.DistanceKm = distanceResult.DistanceKm;
         address.IsInsideAreaC = distanceResult.IsInsideAreaC;
@@ -98,8 +100,8 @@ public class AddressService : IAddressService
 
         addressDto.MapTo(address, mapper);
 
-        var distanceResult = await nominatimService.GetDistanceAsync("Via S. Defendente, 98, 20010 Boffalora Sopra Ticino MI Italy",
-            $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy");
+        var distanceResult = await nominatimService.GetDistanceAsync("Via S. Defendente, 98, 20010 Boffalora Sopra Ticino MI Italy", "Boffalora Sopra Ticino",
+            $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy", $"{address.City}");
 
         address.DistanceKm = distanceResult.DistanceKm;
         address.IsInsideAreaC = distanceResult.IsInsideAreaC;
@@ -273,19 +275,32 @@ public class AddressService : IAddressService
             {
             try
             {
+                if (address.City == null) continue;
                 var distanceResult = await nominatimService.GetDistanceAsync("Via S. Defendente, 98, 20010 Boffalora Sopra Ticino MI Italy",
-                    $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy");
+                    "Boffalora Sopra Ticino", $"{address.StreetAddress} {address.ZipCode} {address.City} {address.Province} italy", $"{address.City}");
                 address.DistanceKm = distanceResult.DistanceKm;
                 address.IsInsideAreaC = distanceResult.IsInsideAreaC;
                 addressRepository.Update(address);
-                Thread.Sleep(1000);
+                await dbContext.SaveChanges();
+                Thread.Sleep(500);
             }
             catch(Exception ex)
             {
 
             }
         }
-        await dbContext.SaveChanges();
 
+    }
+
+    public async Task<IEnumerable<AddressReadModel>> GetDistanceErrors()
+    {
+        var addresses = await addressRepository
+            .Query()
+            .AsNoTracking()
+            .Include(x => x.Customer)
+            .Where(x => x.SupplierId == null && x.DistanceKm > 200)
+            .ToArrayAsync();
+
+        return addresses.MapTo<IEnumerable<AddressReadModel>>(mapper);
     }
 }

@@ -5593,3 +5593,91 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251215155544_add purchaseorderexpenses'
+)
+BEGIN
+    CREATE TABLE [Docs].[PurchaseOrderExpenses] (
+        [Id] bigint NOT NULL IDENTITY,
+        [PurchaseOrderId] bigint NOT NULL,
+        [JobId] bigint NOT NULL,
+        [Note] nvarchar(max) NULL,
+        [Quantity] decimal(14,2) NOT NULL,
+        [Amount] decimal(14,2) NOT NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_PurchaseOrderExpenses] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_PurchaseOrderExpenses_Jobs_JobId] FOREIGN KEY ([JobId]) REFERENCES [Docs].[Jobs] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_PurchaseOrderExpenses_PurchaseOrders_PurchaseOrderId] FOREIGN KEY ([PurchaseOrderId]) REFERENCES [Docs].[PurchaseOrders] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251215155544_add purchaseorderexpenses'
+)
+BEGIN
+    CREATE INDEX [IX_PurchaseOrderExpenses_JobId] ON [Docs].[PurchaseOrderExpenses] ([JobId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251215155544_add purchaseorderexpenses'
+)
+BEGIN
+    CREATE INDEX [IX_PurchaseOrderExpenses_PurchaseOrderId] ON [Docs].[PurchaseOrderExpenses] ([PurchaseOrderId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251215155544_add purchaseorderexpenses'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251215155544_add purchaseorderexpenses', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251215160020_add includemaintenancecostes'
+)
+BEGIN
+    ALTER TABLE [Docs].[Activities] ADD [IncludeMaintenanceCosts] bit NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251215160020_add includemaintenancecostes'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251215160020_add includemaintenancecostes', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

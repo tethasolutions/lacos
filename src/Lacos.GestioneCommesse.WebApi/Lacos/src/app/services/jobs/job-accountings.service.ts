@@ -5,15 +5,16 @@ import { ApiUrls } from '../common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { JobAccountingModel } from './job-accounting.model';
+import { readData } from '../common/functions';
 
 @Injectable()
 export class JobAccountingsService {
-    
+
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/jobaccountings`;
 
     constructor(
         private readonly _http: HttpClient
-    ) {}
+    ) { }
 
     readJobAccountings(state: State) {
         const params = toDataSourceRequestString(state);
@@ -21,20 +22,27 @@ export class JobAccountingsService {
 
         return this._http.get<GridDataResult>(`${this._baseUrl}/read/?${params}`)
             .pipe(
-                map(e =>
-                    {
-                        const jobAccountings: Array<JobAccountingModel> = [];
-                        e.data.forEach(e => {
-                            const jobAccounting: JobAccountingModel = Object.assign(new JobAccountingModel(e.id, e.jobId, e.accountingTypeId, e.amount, e.note, e.isPaid, e.targetOperators), e);
-                            jobAccountings.push(jobAccounting);
-                        });
-                        return <GridDataResult>{
-                            data: hasGroups ? translateDataSourceResultGroups(jobAccountings) : jobAccountings,
-                            total: e.total
-                        };
-                    }
+                map(e => {
+                    const jobAccountings: Array<JobAccountingModel> = [];
+                    e.data.forEach(e => {
+                        const jobAccounting: JobAccountingModel = Object.assign(new JobAccountingModel(e.id, e.jobId, e.accountingTypeId, e.amount, e.note, e.isPaid, e.targetOperators), e);
+                        jobAccountings.push(jobAccounting);
+                    });
+                    return <GridDataResult>{
+                        data: hasGroups ? translateDataSourceResultGroups(jobAccountings) : jobAccountings,
+                        total: e.total
+                    };
+                }
                 )
             );
+    }
+
+    hasJobAccountings(state: State) {
+        const url = `${this._baseUrl}/read`;
+
+        return readData(this._http, state, url).pipe(
+            map(result => result.data != null && result.data.length > 0)
+        );
     }
 
     createJobAccounting(request: JobAccountingModel) {

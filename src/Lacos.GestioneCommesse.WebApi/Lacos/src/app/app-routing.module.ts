@@ -36,6 +36,7 @@ import { JobsArchiveComponent } from './jobs/jobs-archive.component';
 import { AccountingTypesComponent } from './accountingtypes/accountingtypes.component';
 import { JobAccountingsComponent } from './job-accounting/jobaccountings.component';
 import { MaintenancePriceListComponent } from './maintenance-price-list/maintenance-price-list.component';
+import { DistanceErrorsComponent } from './customers/distance-errors.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -73,6 +74,7 @@ const routes: Routes = [
     { path: 'accountingtypes', component: AccountingTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'job-accountings', component: JobAccountingsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'maintenance-price-lists', component: MaintenancePriceListComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'distance-errors', component: DistanceErrorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
 ];
 
 @NgModule({

@@ -19,7 +19,10 @@ namespace Lacos.GestioneCommesse.Application.Registry
                 .Ignore(x => x.Jobs)
                 .Ignore(x => x.Activities)
                 .Ignore(x => x.Tickets);
-            
+
+            CreateMap<Address, AddressReadModel>()
+                .MapMember(x => x.CustomerName, y => y.Customer!.Name)
+                .MapMember(x => x.FullAddressForDistance, y => y.StreetAddress + " " + y.ZipCode + " " + y.City + " " + y.Province + " italy");
         }
     }
 }

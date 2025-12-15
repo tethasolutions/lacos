@@ -431,11 +431,11 @@ app-activities {
     }
 
     .purchase-order-completed .purchase-order-status {
-        @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
+        @include striped-background(rgba(35, 194, 88, 0.3), rgba(13, 253, 65, .1));
     }
 
     .purchase-order-partial .purchase-order-status {
-        @include striped-background(rgba(35, 167, 18, 0.3), rgba(77, 253, 13, 0.1));
+        @include striped-background(rgba(215, 248, 67, 0.3), rgba(13, 253, 65, .1));
     }
 
     .purchase-order-pending .purchase-order-status {
@@ -446,25 +446,6 @@ app-activities {
         @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
     }
 
-    .purchase-order-canceled .purchase-order-status {
-        @include striped-background(rgba(220, 53, 69, .3), rgba(220, 53, 69, .1));
-    }
-
-    .purchase-order-completed .purchase-order-status {
-        @include striped-background(rgba(18, 167, 51, 0.3), rgba(13, 253, 65, .1));
-    }
-
-    .purchase-order-partial .purchase-order-status {
-        @include striped-background(rgba(35, 167, 18, 0.3), rgba(77, 253, 13, 0.1));
-    }
-
-    .purchase-order-pending .purchase-order-status {
-        @include striped-background(rgba(255, 193, 7, .3), rgba(255, 193, 7, .1));
-    }
-
-    .purchase-order-ordered .purchase-order-status {
-        @include striped-background(rgba(13, 202, 240, .3), rgba(13, 202, 240, .1));
-    }
 }
 
 .add-customer-button,

@@ -217,13 +217,24 @@ export class CustomersComponent extends BaseComponent implements OnInit {
   }
 
   syncAllDistances() {
-    this._subscriptions.push(
-      this._addressesService.syncDistances()
-        .pipe(
-          tap(() => this._messageBox.success(`Distanze sincronizzate con successo`)),
-          tap(() => this._readCustomers())
-        )
-        .subscribe()
-    );
+    this._messageBox.confirm(`Sei sicuro di voler sincronizzare le distanze di tutti gli indirizzi? L'operazione potrebbe richiedere diversi minuti.`, 'Conferma l\'azione').subscribe(result => {
+      if (result == true) {
+        this._subscriptions.push(
+          this._addressesService.syncDistances()
+            .pipe(
+              tap(() => this._messageBox.success(`Distanze sincronizzate con successo`)),
+              tap(() => this._readCustomers())
+            )
+            .subscribe()
+        );
+      }
+    });
   }
+  
+  openMap(address: AddressModel) {
+    const addressForMap = encodeURIComponent(address.fullAddressForDistance + ' italy');
+    const url = `https://www.openstreetmap.org/search?query=${addressForMap}`;
+    window.open(url, '_blank');
+  }
+
 }

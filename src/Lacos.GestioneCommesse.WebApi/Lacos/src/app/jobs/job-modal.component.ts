@@ -153,6 +153,11 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
             this._messageBox.error('Compilare correttamente tutti i campi.');
         }
 
+        if (this.options.expirationDate == null && this.options.mandatoryDate == null) {
+            this._messageBox.error('Inserire almeno una tra Data Scadenza e Data Obbligatoria.');
+            return false;
+        }
+
         return this.form.valid;
     }
 

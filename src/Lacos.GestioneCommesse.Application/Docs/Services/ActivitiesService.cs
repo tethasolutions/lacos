@@ -30,6 +30,9 @@ public class ActivitiesService : IActivitiesService
     private readonly IRepository<Job> jobRepository;
     private readonly IRepository<Ticket> ticketRepository;
     private readonly IRepository<PurchaseOrder> purchaseOrderRepository;
+    private readonly IRepository<PurchaseOrderExpense> purchaseOrderExpenseRepository;
+    private readonly IRepository<GlobalSetting> globalSettingRepository;
+    private readonly IPurchaseOrdersService purchaseOrdersService;
     private readonly ILacosSession session;
     private readonly ILogger<ActivitiesService> logger;
 
@@ -60,7 +63,10 @@ public class ActivitiesService : IActivitiesService
         IRepository<Job> jobRepository,
         IRepository<Ticket> ticketRepository,
         IRepository<PurchaseOrder> purchaseOrderRepository,
-        ILacosSession session, 
+        IRepository<PurchaseOrderExpense> purchaseOrderExpenseRepository,
+        IRepository<GlobalSetting> globalSettingRepository,
+        IPurchaseOrdersService purchaseOrdersService,
+        ILacosSession session,
         ILogger<ActivitiesService> logger
     )
     {
@@ -74,6 +80,9 @@ public class ActivitiesService : IActivitiesService
         this.jobRepository = jobRepository;
         this.ticketRepository = ticketRepository;
         this.purchaseOrderRepository = purchaseOrderRepository;
+        this.purchaseOrderExpenseRepository = purchaseOrderExpenseRepository;
+        this.globalSettingRepository = globalSettingRepository;
+        this.purchaseOrdersService = purchaseOrdersService;
         this.session = session;
         this.logger = logger;
     }
@@ -184,6 +193,8 @@ public class ActivitiesService : IActivitiesService
             }
         }
 
+        await HandleFloorDeliveryAsync(activity);
+
         return await Get(activity.Id);
     }
 
@@ -213,6 +224,7 @@ public class ActivitiesService : IActivitiesService
         }
 
         bool IsReferentChanged = activity.ReferentId != activityDto.ReferentId;
+        bool IsFloorDeliveryChanged = activity.IsFloorDelivery != activityDto.IsFloorDelivery;
 
         activity = activityDto.MapTo(activity, mapper);
 
@@ -319,6 +331,12 @@ public class ActivitiesService : IActivitiesService
                 $"cambio stato ticket {ticket.Number.ToString("000")}/{ticket.Year} '{PreviousStatus}' -> '{ticket.Status}' ");
             ticketRepository.Update(ticket);
             await dbContext.SaveChanges();
+        }
+
+
+        if (IsFloorDeliveryChanged && activity.IsFloorDelivery == true)
+        {
+            await HandleFloorDeliveryAsync(activity);
         }
 
         return await Get(activity.Id);
@@ -728,4 +746,114 @@ public class ActivitiesService : IActivitiesService
         return dto;
     }
 
+    public async Task<FloorDeliverySettings> GetFloorDeliverySettings()
+    {
+        FloorDeliverySettings settings = new FloorDeliverySettings();
+
+        settings.SupplierId = (long)await globalSettingRepository.Query()
+            .AsNoTracking()
+            .Where(s => s.Type == GlobalSettingType.FloorDeliverySupplierId)
+            .Select(s => s.ValueNumber)
+            .FirstOrDefaultAsync();
+
+        settings.Amount = (long)await globalSettingRepository.Query()
+            .AsNoTracking()
+            .Where(s => s.Type == GlobalSettingType.FloorDeliveryExpenseAmount)
+            .Select(s => s.ValueNumber)
+            .FirstOrDefaultAsync();
+
+        settings.Note = await globalSettingRepository.Query()
+            .AsNoTracking()
+            .Where(s => s.Type == GlobalSettingType.FloorDeliveryExpenseNote)
+            .Select(s => s.ValueString.ToString())
+            .FirstOrDefaultAsync();
+
+        return settings;
+    }
+
+    private async Task HandleFloorDeliveryAsync(Activity activity)
+    {
+        if (activity == null) return;
+
+        if (activity.IsFloorDelivery != true)
+        {
+            return;
+        }
+
+        var floorDeliverySettings = await GetFloorDeliverySettings();
+
+        // cerca ordine esistente tra le dipendenze dell'attività
+        var existingPO = activity.PurchaseOrderDependencies
+            .FirstOrDefault(e => e.SupplierId == floorDeliverySettings.SupplierId);
+
+        if (existingPO != null)
+        {
+            var hasFloorDeliveryExpenses = await purchaseOrderExpenseRepository.Query()
+                .Where(e => e.PurchaseOrderId == existingPO.Id && e.Note == floorDeliverySettings.Note)
+                .AnyAsync();
+
+            if (!hasFloorDeliveryExpenses)
+            {
+                var purchaseOrderExpense = new PurchaseOrderExpense
+                {
+                    PurchaseOrderId = existingPO.Id,
+                    Note = floorDeliverySettings.Note,
+                    Amount = floorDeliverySettings.Amount,
+                    Quantity = 1,
+                    JobId = activity.JobId
+                };
+                await purchaseOrderExpenseRepository.Insert(purchaseOrderExpense);
+                await dbContext.SaveChanges();
+            }
+
+            return;
+        }
+
+        // crea nuovo ordine d'acquisto tramite servizio
+        var purchaseOrder = new PurchaseOrderDto
+        {
+            Id = 0,
+            Date = DateTimeOffset.UtcNow,
+            Year = DateTimeOffset.UtcNow.Year,
+            SupplierId = floorDeliverySettings.SupplierId,
+            Description = $"Spese consegna a piano - Attività {activity.ShortDescription}",
+            Status = PurchaseOrderStatus.Pending,
+            OperatorId = session.CurrentUser!.OperatorId,
+            ActivityTypeId = activity.TypeId,
+            Jobs = new List<long> { activity.JobId },
+            Items = new List<PurchaseOrderItemDto>(),
+            Attachments = new List<PurchaseOrderAttachmentDto>(),
+            Messages = new List<MessageReadModel>(),
+            Expenses = new List<PurchaseOrderExpenseDto>
+            {
+                new PurchaseOrderExpenseDto
+                {
+                    Id = 0,
+                    JobId = activity.JobId,
+                    Note = floorDeliverySettings.Note,
+                    Amount = floorDeliverySettings.Amount,
+                    Quantity = 1
+                }
+            }
+        };
+
+        var newPurchaseOrder = await purchaseOrdersService.Create(purchaseOrder);
+        if (newPurchaseOrder != null)
+        {
+            var po = await purchaseOrderRepository.Get(newPurchaseOrder.Id);
+            if (po != null)
+            {
+                activity.PurchaseOrderDependencies.Add(po);
+                repository.Update(activity);
+                await dbContext.SaveChanges();
+            }
+        }
+    }
+}
+
+public class FloorDeliverySettings
+{
+    public long SupplierId { get; set; }
+    public long Amount { get; set; }
+    public string Note { get; set; }
 }

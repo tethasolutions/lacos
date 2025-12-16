@@ -136,3 +136,17 @@ export class JobCopy {
     }
 
 }
+
+export interface SelectableJob {
+
+    readonly id: number;
+    readonly customer: string;
+    readonly year: number;
+    readonly number: number;
+    readonly code: string;
+    readonly fullName: string;
+    readonly customerId: number;
+    readonly addressId: number;
+    readonly description: string;
+
+}

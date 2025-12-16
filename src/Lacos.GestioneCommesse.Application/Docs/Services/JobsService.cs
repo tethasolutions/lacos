@@ -58,6 +58,12 @@ public class JobsService : IJobsService
             .Project<JobReadModel>(mapper);
     }
 
+    public IQueryable<JobSelectableModel> GetSelectables()
+    {
+        return repository.Query()
+            .Project<JobSelectableModel>(mapper);
+    }
+
     public IQueryable<JobReadModel> QueryCurrentJobs()
     {
         return repository.Query()

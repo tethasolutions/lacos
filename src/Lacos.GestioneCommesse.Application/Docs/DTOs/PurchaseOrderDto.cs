@@ -25,10 +25,12 @@ public class PurchaseOrderDto : BaseEntityDto
     public IEnumerable<MessageReadModel>? Messages { get; set; }
 
     public IEnumerable<PurchaseOrderItemDto> Items { get; set; }
+    public IEnumerable<PurchaseOrderExpenseDto> Expenses { get; set; }
     public PurchaseOrderDto()
     {
         Jobs = new List<long>();
         Items = new List<PurchaseOrderItemDto>();
+        Expenses = new List<PurchaseOrderExpenseDto>();
     }
 
 } 

@@ -61,6 +61,7 @@ export class PurchaseOrder {
         public operatorId: number,
         public jobs: number[],
         public items: PurchaseOrderItem[],
+        public expenses: PurchaseOrderExpense[],
         public attachments: PurchaseOrderAttachmentModel[],
         public userAttachments: PurchaseOrderAttachmentModel[],
         public adminAttachments: PurchaseOrderAttachmentModel[],
@@ -72,12 +73,13 @@ export class PurchaseOrder {
 
     static build(o: PurchaseOrder, operatorId: number) {
         const items = o.items.map(e => PurchaseOrderItem.build(e));
+        const expenses = o.expenses.map(e => PurchaseOrderExpense.build(e));
         const attachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e));
         const userAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => !e.isAdminDocument);
         const adminAttachments = o.attachments.map(e => PurchaseOrderAttachmentModel.build(e)).filter(e => e.isAdminDocument);
         const messages = o.messages.map(e => MessageReadModel.build(e, operatorId));
         return new PurchaseOrder(o.id, o.number, o.year, o.date, o.expectedDate, o.description, o.status, o.activityTypeId, o.supplierId,
-            o.supplierName, o.operatorId, o.jobs, items, attachments, userAttachments, adminAttachments, messages);
+            o.supplierName, o.operatorId, o.jobs, items, expenses, attachments, userAttachments, adminAttachments, messages);
     }
 
 }
@@ -100,5 +102,27 @@ export class PurchaseOrderItem {
 
     static build(o: PurchaseOrderItem) {
         return new PurchaseOrderItem(o.id, o.purchaseOrderId, o.productId, o.productName, o.productImage, o.quantity);
+    }
+}
+
+export class PurchaseOrderExpense {
+
+    constructor(
+        readonly id: number,
+        readonly purchaseOrderId: number,
+        public jobId: number,
+        public jobCode: string,
+        public note: string,
+        public quantity: number,
+        public amount: number
+    ) {
+    }
+
+    clone() {
+        return new PurchaseOrderExpense(this.id, this.purchaseOrderId, this.jobId, this.jobCode, this.note, this.quantity, this.amount);
+    }
+
+    static build(o: PurchaseOrderExpense) {
+        return new PurchaseOrderExpense(o.id, o.purchaseOrderId, o.jobId, o.jobCode, o.note, o.quantity, o.amount);
     }
 }

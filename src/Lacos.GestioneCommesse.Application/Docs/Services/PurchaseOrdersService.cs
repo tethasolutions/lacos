@@ -66,7 +66,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     public IQueryable<PurchaseOrderSummary> Query(long? jobId)
     {
         if (jobId != null)
-        { 
+        {
             var filtered = summaryRepository.Query()
                 .AsNoTracking()
                 .ToList()
@@ -110,7 +110,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         if (purchaseOrderDto.Jobs != null)
         {
             foreach (long jobId in purchaseOrderDto.Jobs)
-            { 
+            {
                 var job = await jobRepository.Query()
                     .Where(e => e.Id == jobId)
                     .FirstOrDefaultAsync();
@@ -142,6 +142,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Where(x => x.Id == purchaseOrderDto.Id)
             .Include(x => x.Supplier)
             .Include(x => x.Items)
+            .Include(x => x.Expenses)
             .Include(x => x.Attachments)
             .Include(x => x.Messages)
             .Include(x => x.Jobs)
@@ -179,9 +180,9 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         //check if has parent activities
         if ((purchaseOrder.Status == PurchaseOrderStatus.Completed)
             && purchaseOrder.ParentActivities.Any())
+        {
+            foreach (var job in purchaseOrder.Jobs)
             {
-                foreach (var job in purchaseOrder.Jobs)
-                {
                 logger.LogWarning($"[{job.Id}]Commessa {job.Number.ToString("000")}/{job.Year}: " +
                     $"Ordine del {purchaseOrder.Date.ToString("dd/MM/yy")} in stato '{purchaseOrder.Status}' " +
                     $"è dipendenza di altre {purchaseOrder.ParentActivities.Count()} attività");
@@ -255,8 +256,8 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             if (targetOperatorId != null)
             {
                 if (purchaseOrder.ParentActivities.Any())
-                { 
-                    foreach(var activity in purchaseOrder.ParentActivities)
+                {
+                    foreach (var activity in purchaseOrder.ParentActivities)
                     {
                         message.ActivityId = activity.Id;
                         await messagesService.Create(message, targetOperatorId.ToString());
@@ -292,6 +293,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
             .Where(x => x.Id == copyDto.SourceId)
             .Include(x => x.Attachments)
             .Include(x => x.Items)
+            .Include(x => x.Expenses)
             .FirstOrDefaultAsync();
 
         PurchaseOrder purchaseOrder = new PurchaseOrder();
@@ -302,6 +304,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         purchaseOrder.Jobs.Add(await jobRepository.Get(copyDto.JobId));
         purchaseOrder.Description = sourcePurchaseOrder.Description;
         purchaseOrder.Items = sourcePurchaseOrder.Items;
+        purchaseOrder.Expenses = sourcePurchaseOrder.Expenses;
         purchaseOrder.Status = PurchaseOrderStatus.Pending;
         purchaseOrder.SupplierId = sourcePurchaseOrder.SupplierId;
         purchaseOrder.ActivityTypeId = sourcePurchaseOrder.ActivityTypeId;
@@ -327,6 +330,7 @@ public class PurchaseOrdersService : IPurchaseOrdersService
     {
         var purchaseOrder = await repository.Query()
             .Include(e => e.Items)
+            .Include(e => e.Expenses)
             .FirstOrDefaultAsync(e => e.Id == id);
 
         if (purchaseOrder == null)
@@ -437,20 +441,5 @@ public class PurchaseOrdersService : IPurchaseOrdersService
 
         return query;
 
-        //var job = jobRepository.Query().FirstOrDefault(j => j.Id == jobId);
-
-        //if (job == null)
-        //{
-        //    throw new NotFoundException($"Commessa con Id {jobId} non trovata.");
-        //}
-
-        //var query = repository
-        //    .Query()
-        //    .AsNoTracking()
-        //    .Where(e => e.Jobs.Contains(job));
-
-        //return query
-        //    .AsQueryable()
-        //    .Project<PurchaseOrderReadModel>(mapper);
     }
 }

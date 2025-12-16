@@ -166,6 +166,8 @@ import { MaintenancePriceListItemModalComponent } from './maintenance-price-list
 import { MaintenancePriceListModalComponent } from './maintenance-price-list/maintenance-price-list-modal.component';
 import { MaintenancePriceListService } from './services/maintenance-price-list.service';
 import { DistanceErrorsComponent } from './customers/distance-errors.component';
+import { PurchaseOrderExpense } from './services/purchase-orders/models';
+import { PurchaseOrderExpenseModalComponent } from './purchase-order/purchase-order-expense-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -246,6 +248,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         PurchaseOrdersComponent,
         PurchaseOrderModalComponent,
         PurchaseOrderItemModalComponent,
+        PurchaseOrderExpenseModalComponent,
         PurchaseOrderStatusPipe,
         MessageModalComponent,
         MessagesListComponent,

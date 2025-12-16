@@ -5681,3 +5681,111 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251216084803_add expenses relations'
+)
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrderExpenses] DROP CONSTRAINT [FK_PurchaseOrderExpenses_PurchaseOrders_PurchaseOrderId];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251216084803_add expenses relations'
+)
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrderExpenses] ADD CONSTRAINT [FK_PurchaseOrderExpenses_PurchaseOrders_PurchaseOrderId] FOREIGN KEY ([PurchaseOrderId]) REFERENCES [Docs].[PurchaseOrders] ([Id]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251216084803_add expenses relations'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251216084803_add expenses relations', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251216123731_add globalsettings'
+)
+BEGIN
+    CREATE TABLE [Registry].[GlobalSettings] (
+        [Id] bigint NOT NULL IDENTITY,
+        [Type] int NULL,
+        [Value] bigint NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_GlobalSettings] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251216123731_add globalsettings'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251216123731_add globalsettings', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251216125514_add globalsettings valuestring'
+)
+BEGIN
+    EXEC sp_rename N'[Registry].[GlobalSettings].[Value]', N'ValueNumber', N'COLUMN';
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251216125514_add globalsettings valuestring'
+)
+BEGIN
+    ALTER TABLE [Registry].[GlobalSettings] ADD [ValueString] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251216125514_add globalsettings valuestring'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251216125514_add globalsettings valuestring', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

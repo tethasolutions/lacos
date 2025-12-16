@@ -24,6 +24,7 @@ public class PurchaseOrder : FullAuditedEntity, ILogEntity
 
 
     public ICollection<PurchaseOrderItem> Items { get; set; }
+    public ICollection<PurchaseOrderExpense> Expenses { get; set; }
     public ICollection<PurchaseOrderAttachment> Attachments { get; set; }
     public ICollection<Message> Messages { get; set; }
     public ICollection<Activity> ParentActivities { get; set; }
@@ -32,6 +33,7 @@ public class PurchaseOrder : FullAuditedEntity, ILogEntity
     {
         Jobs = new List<Job>();
         Items = new List<PurchaseOrderItem>();
+        Expenses = new List<PurchaseOrderExpense>();
         Attachments = new List<PurchaseOrderAttachment>();
         Messages = new List<Message>();
         ParentActivities = new List<Activity>();

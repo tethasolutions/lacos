@@ -2422,6 +2422,61 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("EntityLogs", "Registry");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.GlobalSetting", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("ValueNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ValueString")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GlobalSettings", "Registry");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.HelperDocument", b =>
                 {
                     b.Property<long>("Id")
@@ -3683,9 +3738,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .IsRequired();
 
                     b.HasOne("Lacos.GestioneCommesse.Domain.Docs.PurchaseOrder", "PurchaseOrder")
-                        .WithMany()
+                        .WithMany("Expenses")
                         .HasForeignKey("PurchaseOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Job");
@@ -3965,6 +4020,8 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.PurchaseOrder", b =>
                 {
                     b.Navigation("Attachments");
+
+                    b.Navigation("Expenses");
 
                     b.Navigation("Items");
 

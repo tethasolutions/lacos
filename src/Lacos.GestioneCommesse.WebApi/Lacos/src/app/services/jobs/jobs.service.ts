@@ -26,6 +26,12 @@ export class JobsService {
         return readData(this._http, state, url);
     }
     
+    getSelectable(state: State) {
+        const url = `${this._baseUrl}/getselectables`
+
+        return readData(this._http, state, url);
+    }
+
     readCurrentJobs(state: State) {
         const url = `${this._baseUrl}/readcurrentjobs`
 

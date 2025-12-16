@@ -9,6 +9,7 @@ namespace Lacos.GestioneCommesse.Application.Docs.Services;
 public interface IJobsService
 {
     IQueryable<JobReadModel> Query();
+    IQueryable<JobSelectableModel> GetSelectables();
     IQueryable<JobReadModel> QueryCurrentJobs();
     IQueryable<JobReadModel> QueryArchivedJobs();
     Task<JobDto> GetTicketJob(TicketJobRequest request);

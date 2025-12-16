@@ -27,6 +27,7 @@ public class PurchaseOrderMappingProfile : Profile
             .Ignore(x => x.Supplier)
             .Ignore(x => x.Jobs)
             .Ignore(x => x.Items)
+            .Ignore(x => x.Expenses)
             .Ignore(x => x.Attachments)
             .Ignore(x => x.Operator)
             .Ignore(x => x.Messages)
@@ -47,6 +48,14 @@ public class PurchaseOrderMappingProfile : Profile
             .MapMember(x => x.ProductName, y => y.Product!.Code + " - " + y.Product!.Name)
             .MapMember(x => x.ProductImage, y => y.Product!.PictureFileName);
 
+        CreateMap<PurchaseOrderExpenseDto, PurchaseOrderExpense>()
+            .IgnoreCommonMembers()
+            .Ignore(x => x.Job)
+            .Ignore(x => x.PurchaseOrder);
+
+        CreateMap<PurchaseOrderExpense, PurchaseOrderExpenseDto>()
+            .MapMember(x => x.JobCode, y => y.Job != null ? CustomDbFunctions.FormatCode(y.Job.Number, y.Job.Year, 3) : null);
+
         CreateMap<PurchaseOrderAttachment, PurchaseOrderAttachmentReadModel>();
         CreateMap<PurchaseOrderAttachmentReadModel, PurchaseOrderAttachment>()
            .Ignore(x => x.PurchaseOrder)
@@ -62,7 +71,8 @@ public class PurchaseOrderMappingProfile : Profile
     private static void AfterMap(PurchaseOrderDto orderDto, PurchaseOrder order, ResolutionContext context)
     {
         orderDto.Items.Merge(order.Items, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
-        orderDto.Attachments.Merge(order.Attachments, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
-        orderDto.Messages.Merge(order.Messages, (itemDto, item) => itemDto.Id == item.Id, (_, item) => item.PurchaseOrderId = order.Id, context);
+        orderDto.Expenses.Merge(order.Expenses, (expenseDto, expense) => expenseDto.Id == expense.Id, (_, expense) => expense.PurchaseOrderId = order.Id, context);
+        orderDto.Attachments.Merge(order.Attachments, (attachmentDto, attachment) => attachmentDto.Id == attachment.Id, (_, attachment) => attachment.PurchaseOrderId = order.Id, context);
+        orderDto.Messages.Merge(order.Messages, (messageDto, message) => messageDto.Id == message.Id, (_, message) => message.PurchaseOrderId = order.Id, context);
     }
 }

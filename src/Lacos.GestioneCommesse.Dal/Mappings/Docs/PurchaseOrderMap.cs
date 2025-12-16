@@ -17,6 +17,7 @@ public class PurchaseOrderMap : BaseEntityMapping<PurchaseOrder>
             .IsRequired();
 
         builder.OneToMany(e => e.Items, e => e.PurchaseOrder, e => e.PurchaseOrderId);
+        builder.OneToMany(e => e.Expenses, e => e.PurchaseOrder, e => e.PurchaseOrderId);
         builder.OneToMany(e => e.Messages, e => e.PurchaseOrder, e => e.PurchaseOrderId);
         builder.ManyToMany(e => e.Jobs, e => e.PurchaseOrders, "PurchaseOrdersJobs", "Docs");
     }

@@ -4,12 +4,12 @@ import { NgForm } from '@angular/forms';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { JobsService } from '../services/jobs/jobs.service';
 import { State, process } from '@progress/kendo-data-query';
-import { IJobReadModel, Job } from '../services/jobs/models';
+import { IJobReadModel, Job, SelectableJob } from '../services/jobs/models';
 import { getToday, listEnum } from '../services/common/functions';
 import { ApiUrls } from '../services/common/api-urls';
 import { SupplierModel } from '../shared/models/supplier.model';
 import { SupplierService } from '../services/supplier.service';
-import { PurchaseOrder, PurchaseOrderItem, PurchaseOrderStatus } from '../services/purchase-orders/models';
+import { PurchaseOrder, PurchaseOrderExpense, PurchaseOrderItem, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderItemModalComponent } from './purchase-order-item-modal.component';
 import { filter, map, switchMap, tap } from 'rxjs';
 import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
@@ -28,6 +28,7 @@ import { SecurityService } from '../services/security/security.service';
 import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-modal.component';
 import { ActivityTypesService } from '../services/activityTypes.service';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
+import { PurchaseOrderExpenseModalComponent } from './purchase-order-expense-modal.component';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -36,6 +37,7 @@ import { ActivityTypeModel } from '../shared/models/activity-type.model';
 export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrderModalOptions> implements OnInit {
 
     @ViewChild('purchaseOrderItemModal', { static: true }) purchaseOrderItemModal: PurchaseOrderItemModalComponent;
+    @ViewChild('purchaseOrderExpenseModal', { static: true }) purchaseOrderExpenseModal: PurchaseOrderExpenseModalComponent;
     @ViewChild('supplierModal', { static: true }) supplierModal: SupplierModalComponent;
     @ViewChild('messageModal', { static: true }) messageModal: MessageModalComponent;
     @ViewChild('galleryModal', { static: true }) galleryModal: GalleryModalComponent;
@@ -44,17 +46,33 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     originalJobsList: SelectableJob[];
     job: Job;
     jobReadonly: boolean;
+
+    get selectedJobsList(): SelectableJob[] {
+        if (!this.jobsList || !this.options?.purchaseOrder?.jobs) {
+            return [];
+        }
+        return this.jobsList.filter(j => this.options.purchaseOrder.jobs.includes(j.id));
+    }
     status: PurchaseOrderStatus;
     selectedJob: SelectableJob;
     suppliers: SupplierModel[];
-    gridState: State = {
+    gridStateItem: State = {
         skip: 0,
         take: 30,
         sort: [
             { field: 'productName', dir: 'asc' }
         ]
     };
-    gridData: GridDataResult;
+    gridDataItems: GridDataResult;
+    gridStateExpense: State = {
+        skip: 0,
+        take: 30,
+        sort: [
+            { field: 'jobCode', dir: 'asc' },
+            { field: 'note', dir: 'asc' }
+        ]
+    };
+    gridDataExpenses: GridDataResult;
 
     activityTypes: ActivityTypeModel[];
     userAttachments: Array<FileInfo> = [];
@@ -99,7 +117,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         this.options.purchaseOrder.supplierName = this.suppliers.find(e => e.id == this.options.purchaseOrder.supplierId)?.name ?? '';
     }
 
-    addProduct() {
+    addItem() {
         const item = new PurchaseOrderItem(0, this.options.purchaseOrder.id, null, null, null, 1);
 
         this._subscriptions.push(
@@ -112,7 +130,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         );
     }
 
-    edit(item: PurchaseOrderItem) {
+    editItem(item: PurchaseOrderItem) {
         const updatedItem = item.clone();
 
         this._subscriptions.push(
@@ -125,7 +143,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         );
     }
 
-    askRemove(item: PurchaseOrderItem) {
+    removeItem(item: PurchaseOrderItem) {
         this._subscriptions.push(
             this._messageBox.confirm(`Sei sicuro di voler rimuovere il prodotto ${item.productName}?`)
                 .pipe(
@@ -136,10 +154,52 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         );
     }
 
-    onDataStateChange(state: DataStateChangeEvent | State) {
-        this.gridState = state;
-        this.console.log(state);
-        this.gridData = process(this.options.purchaseOrder.items, this.gridState);
+    onDataItemsStateChange(state: DataStateChangeEvent | State) {
+        this.gridStateItem = state;
+        this.gridDataItems = process(this.options.purchaseOrder.items, this.gridStateItem);
+    }
+    
+    addExpense() {
+        const expense = new PurchaseOrderExpense(0, this.options.purchaseOrder.id, 
+            this.selectedJobsList.first().id, this.selectedJobsList.first().code, null, 1, 0);
+
+        this._subscriptions.push(
+            this.purchaseOrderExpenseModal.open(expense)
+                .pipe(
+                    filter(e => e),
+                    tap(() => this._afterExpenseAdded(expense))
+                )
+                .subscribe()
+        );
+    }
+
+    editExpense(expense: PurchaseOrderExpense) {
+        const updatedExpense = expense.clone();
+
+        this._subscriptions.push(
+            this.purchaseOrderExpenseModal.open(updatedExpense)
+                .pipe(
+                    filter(e => e),
+                    tap(() => this._afterExpenseUpdated(expense, updatedExpense))
+                )
+                .subscribe()
+        );
+    }
+
+    removeExpense(expense: PurchaseOrderExpense) {
+        this._subscriptions.push(
+            this._messageBox.confirm(`Sei sicuro di voler rimuovere la voce ${expense.note}?`)
+                .pipe(
+                    filter(e => e),
+                    tap(() => this._afterExpenseRemoved(expense))
+                )
+                .subscribe()
+        );
+    }
+
+    onDataExpensesStateChange(state: DataStateChangeEvent | State) {
+        this.gridStateExpense = state;
+        this.gridDataExpenses = process(this.options.purchaseOrder.expenses, this.gridStateExpense);
     }
 
     override open(options: PurchaseOrderModalOptions) {
@@ -169,7 +229,8 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
 
         this.jobReadonly = this.user.role != Role.Administrator;
         this.status = options.purchaseOrder.status;
-        this.onDataStateChange(this.gridState);
+        this.onDataItemsStateChange(this.gridStateItem);
+        this.onDataExpensesStateChange(this.gridStateExpense);
         this.updateUnreadCounter();
 
         return result;
@@ -249,15 +310,16 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
                 logic: 'and'
             },
             sort: [
-                { field: 'date', dir: 'asc' }
+                { field: 'year', dir: 'asc' },
+                { field: 'number', dir: 'asc' }
             ]
         };
 
         this._subscriptions.push(
-            this._jobsService.read(state)
+            this._jobsService.getSelectable(state)
                 .pipe(
                     tap(e => {
-                        this.originalJobsList = (e.data as IJobReadModel[]).map(e => new SelectableJob(e));
+                        this.originalJobsList = e.data as SelectableJob[];
                         this.jobsList = [...this.originalJobsList];
                     })
                 )
@@ -267,23 +329,44 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
 
     private _afterProductAdded(item: PurchaseOrderItem) {
         this.options.purchaseOrder.items.push(item);
-        this.onDataStateChange(this.gridState);
+        this.onDataItemsStateChange(this.gridStateItem);
 
         this._messageBox.success(`Prodotto aggiunto`);
     }
 
     private _afterProductUpdated(originalItem: PurchaseOrderItem, updatedItem: PurchaseOrderItem) {
         this.options.purchaseOrder.items.replace(originalItem, updatedItem);
-        this.onDataStateChange(this.gridState);
+        this.onDataItemsStateChange(this.gridStateItem);
 
         this._messageBox.success(`Prodotto aggiornato`);
     }
 
     private _afterProductRemoved(item: PurchaseOrderItem) {
         this.options.purchaseOrder.items.remove(item);
-        this.onDataStateChange(this.gridState);
+        this.onDataItemsStateChange(this.gridStateItem);
 
         this._messageBox.success(`Prodotto rimosso`);
+    }
+
+    private _afterExpenseAdded(expense: PurchaseOrderExpense) {
+        this.options.purchaseOrder.expenses.push(expense);
+        this.onDataExpensesStateChange(this.gridStateItem);
+
+        this._messageBox.success(`Voce costo aggiunta`);
+    }
+
+    private _afterExpenseUpdated(originalExpense: PurchaseOrderExpense, updatedExpense: PurchaseOrderExpense) {
+        this.options.purchaseOrder.expenses.replace(originalExpense, updatedExpense);
+        this.onDataExpensesStateChange(this.gridStateItem);
+
+        this._messageBox.success(`Voce costo aggiornata`);
+    }
+
+    private _afterExpenseRemoved(expense: PurchaseOrderExpense) {
+        this.options.purchaseOrder.expenses.remove(expense);
+        this.onDataExpensesStateChange(this.gridStateItem);
+
+        this._messageBox.success(`Voce costo rimossa`);
     }
 
     downloadAttachment(fileName: string) {
@@ -441,30 +524,6 @@ export class PurchaseOrderModalOptions {
     constructor(
         readonly purchaseOrder: PurchaseOrder
     ) {
-    }
-
-}
-
-class SelectableJob {
-
-    readonly id: number;
-    readonly customer: string;
-    readonly code: string;
-    readonly fullName: string;
-    readonly customerId: number;
-    readonly addressId: number;
-    readonly description: string;
-
-    constructor(
-        job: IJobReadModel
-    ) {
-        this.id = job.id;
-        this.customer = job.customer;
-        this.code = job.code;
-        this.fullName = `${job.code} - ${job.customer}` + ((job.reference) ? ` - ${job.reference}` : ``);
-        this.customerId = job.customerId;
-        this.addressId = job.addressId;
-        this.description = job.description;
     }
 
 }

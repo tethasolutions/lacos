@@ -42,6 +42,11 @@ public class JobMappingProfile : Profile
                     ? false 
                     : y.MandatoryDate.Value.AddHours(2).AddDays(-5) < DateTimeOffset.Now.Date));
 
+        CreateMap<Job, JobSelectableModel>()
+            .MapMember(x => x.Code, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3))
+            .MapMember(x => x.Customer, y => y.Customer!.Name)
+            .MapMember(x => x.FullName, y => CustomDbFunctions.FormatCode(y.Number, y.Year, 3) + " - " + y.Customer!.Name + (y.Reference != null ? y.Reference : ""));
+
         CreateMap<JobDto, Job>()
             .IgnoreCommonMembers()
             .Ignore(x => x.Activities)

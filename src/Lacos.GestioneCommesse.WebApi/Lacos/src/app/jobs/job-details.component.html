@@ -19,8 +19,12 @@
     <div class="col-md-3 col-sm-6">
         <h6>Contatti</h6>
         @if (address){
-        <p>{{address.fullAddress}}<br />
-            Tel: {{address.telephone}}</p>
+        <p>{{address.fullAddress}}
+            <span *ngIf="address.telephone"><br />Tel: {{address.telephone}}</span>
+            <span *ngIf="address.jobReference"><br />Rif.: {{address.jobReference}}</span>
+            <span *ngIf="address.contactName"><br />Contatto: {{address.contactName}}</span>
+            <span *ngIf="address.contactReference"><br />Tel. Contatto: {{address.contactReference}}</span>
+        </p>
         }
     </div>
     <div class="col-md-1 col-sm-6">

@@ -218,7 +218,7 @@ export class JobsSuspendedComponent extends BaseComponent implements OnInit {
     createPurchaseOrder(job: IJobReadModel) {
         const today = getToday();
         const order = new PurchaseOrder(0, null, today.getFullYear(), today, null, null, PurchaseOrderStatus.Pending, null, null, null,
-            this.currentOperator.id, [job.id], [], [], [], [], []);
+            this.currentOperator.id, [job.id], [], [], [], [], [], []);
         const options = new PurchaseOrderModalOptions(order);
 
         this._subscriptions.push(

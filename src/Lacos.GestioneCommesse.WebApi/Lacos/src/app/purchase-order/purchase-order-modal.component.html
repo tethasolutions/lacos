@@ -76,7 +76,8 @@
                     <label>Commessa/e</label>
                     <kendo-multiselect [data]="jobsList" [(ngModel)]="options.purchaseOrder.jobs" name="jobs"
                         textField="fullName" valueField="id" [valuePrimitive]="true" [filterable]="true"
-                        [filterSettings]="{ operator: 'contains', ignoreCase: true }" (filterChange)="onJobsFilterChange($event)" (click)="onJobsClick()"
+                        [filterSettings]="{ operator: 'contains', ignoreCase: true }"
+                        (filterChange)="onJobsFilterChange($event)" (click)="onJobsClick()"
                         [placeholder]="'Seleziona commesse'" [autoClose]="false" [disabled]="jobReadonly">
                     </kendo-multiselect>
                     <div class="validation-message" [control]="form.controls['jobs']"></div>
@@ -144,54 +145,98 @@
 
             <div class="border-green mb-3"></div>
 
-            <div class="mb-3">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <h5 class="mb-0">
-                        Prodotti
-                    </h5>
-                    <button type="button" (click)="addProduct()" class="btn btn-primary btn-sm"
-                        title="Aggiungi prodotto">
-                        <i class="fas fa-plus"></i> Aggiungi prodotto
-                    </button>
-                </div>
-                <div>
-                    <div class="grid-container">
-                        <kendo-grid [data]="gridData" [pageSize]="gridState.take" [skip]="gridState.skip"
-                            [sort]="gridState.sort" filterable="menu" [filter]="gridState.filter"
-                            [group]="gridState.group" [sortable]="true" [pageable]="true" scrollable="none"
-                            [style.width.px]="screenWidth" (dataStateChange)="onDataStateChange($event)">
-
-                            <kendo-grid-column field="productImage" title="&nbsp;" [sortable]="false"
-                                [filterable]="false" [width]="1">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    <a *ngIf="dataItem.productImage" [href]="imagesUrl + dataItem.productImage"
-                                        target="_blank">
-                                        <img [src]="imagesUrl + dataItem.productImage" class="thumbnail-s">
-                                    </a>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column field="productName" title="Nome">
-                            </kendo-grid-column>
-                            <kendo-grid-column field="quantity" title="Q.ta" [width]="1" filter="numeric" format="0.00">
-                            </kendo-grid-column>
-                            <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div class="d-flex text-nowrap gap-1">
-                                        <button type="button" class="btn btn-primary btn-sm" title="Modifica"
-                                            (click)="edit(dataItem)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm" title="Rimuovi"
-                                            (click)="askRemove(dataItem)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </ng-template>
-                            </kendo-grid-column>
-                        </kendo-grid>
-                    </div>
-                </div>
-            </div>
+            <kendo-tabstrip>
+                <kendo-tabstrip-tab [selected]="true">
+                    <ng-template kendoTabTitle>
+                        <strong>Voci di costo</strong>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <button type="button" (click)="addExpense()" class="btn btn-primary btn-sm"
+                            title="Aggiungi costo">
+                            <i class="fas fa-plus"></i> Aggiungi costo
+                        </button>
+                        <div class="grid-container">
+                            <kendo-grid [data]="gridDataExpenses" [pageSize]="gridStateExpense.take" [skip]="gridStateExpense.skip"
+                                [sort]="gridStateExpense.sort" filterable="menu" [filter]="gridStateExpense.filter"
+                                [group]="gridStateExpense.group" [sortable]="true" [pageable]="true" scrollable="none"
+                                (dataStateChange)="onDataExpensesStateChange($event)">
+                                <kendo-grid-column field="jobCode" title="Commessa">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="note" title="Note">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="quantity" title="Q.ta" [width]="1" filter="numeric"
+                                    format="0.00">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="amount" title="Importo" [width]="1" filter="numeric"
+                                    format="0.00">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" "
+                                    [width]="1">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <div class="d-flex text-nowrap gap-1">
+                                            <button type="button" class="btn btn-primary btn-sm" title="Modifica"
+                                                (click)="editExpense(dataItem)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" title="Rimuovi"
+                                                (click)="removeExpense(dataItem)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </ng-template>
+                                </kendo-grid-column>
+                            </kendo-grid>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <kendo-tabstrip-tab>
+                    <ng-template kendoTabTitle>
+                        <strong>Prodotti</strong>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <button type="button" (click)="addItem()" class="btn btn-primary btn-sm"
+                            title="Aggiungi prodotto">
+                            <i class="fas fa-plus"></i> Aggiungi prodotto
+                        </button>
+                        <div class="grid-container">
+                            <kendo-grid [data]="gridDataItems" [pageSize]="gridStateItem.take" [skip]="gridStateItem.skip"
+                                [sort]="gridStateItem.sort" filterable="menu" [filter]="gridStateItem.filter"
+                                [group]="gridStateItem.group" [sortable]="true" [pageable]="true" scrollable="none"
+                                (dataStateChange)="onDataItemsStateChange($event)">
+                                <kendo-grid-column field="productImage" title="&nbsp;" [sortable]="false"
+                                    [filterable]="false" [width]="1">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a *ngIf="dataItem.productImage" [href]="imagesUrl + dataItem.productImage"
+                                            target="_blank">
+                                            <img [src]="imagesUrl + dataItem.productImage" class="thumbnail-s">
+                                        </a>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <kendo-grid-column field="productName" title="Nome">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="quantity" title="Q.ta" [width]="1" filter="numeric"
+                                    format="0.00">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" "
+                                    [width]="1">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <div class="d-flex text-nowrap gap-1">
+                                            <button type="button" class="btn btn-primary btn-sm" title="Modifica"
+                                                (click)="editItem(dataItem)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" title="Rimuovi"
+                                                (click)="removeItem(dataItem)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </ng-template>
+                                </kendo-grid-column>
+                            </kendo-grid>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+            </kendo-tabstrip>
 
             <hr class="border-green" />
             <!--<kendo-expansionpanel title="Commenti ({{options.activity.messages.length}})" subtitle="Visualizza messaggi">-->
@@ -318,6 +363,7 @@
 </div>
 
 <app-purchase-order-item-modal #purchaseOrderItemModal></app-purchase-order-item-modal>
+<app-purchase-order-expense-modal #purchaseOrderExpenseModal [jobs]="selectedJobsList"></app-purchase-order-expense-modal>
 <app-supplier-modal #supplierModal></app-supplier-modal>
 <app-message-modal #messageModal></app-message-modal>
 <app-gallery-modal #galleryModal></app-gallery-modal>

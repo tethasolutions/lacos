@@ -30,6 +30,13 @@ public class JobsController : LacosApiController
             .ToDataSourceResultAsync(request);
     }
 
+    [HttpGet("getselectables")]
+    public Task<DataSourceResult> GetSelectables(DataSourceRequest request)
+    {
+        return service.GetSelectables()
+            .ToDataSourceResultAsync(request);
+    }
+
     [HttpGet("readcurrentjobs")]
     public Task<DataSourceResult> ReadCurrentJobs(DataSourceRequest request)
     {

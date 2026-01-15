@@ -506,7 +506,19 @@ namespace Lacos.GestioneCommesse.Application.Sync
             try
             {
                 SyncRemoteFullDbDto syncFullDb = new SyncRemoteFullDbDto();
-
+                syncFullDb.Addresses = await GetAllModifiedRecord<Address, SyncAddressDto>(date);
+                syncFullDb.Customers = await GetAllModifiedRecord<Customer, SyncCustomerDto>(date);
+                syncFullDb.Products = await GetAllModifiedRecord<Product, SyncProductDto>(date);
+                syncFullDb.ProductDocuments = await GetAllModifiedRecord<ProductDocument, SyncProductDocumentDto>(date);
+                syncFullDb.ProductTypes = await GetAllModifiedRecord<ProductType, SyncProductTypeDto>(date);
+                syncFullDb.Suppliers = await GetAllModifiedRecord<Supplier, SyncSupplierDto>(date);
+                syncFullDb.ActivityTypes = await GetAllActivityTypeModifiedRecord(date);
+                
+                #if (DEBUG)
+                    if(date<DateTime.Now.AddMonths(-1))
+                    date = date.AddMonths(-1);
+                #endif
+                
                 syncFullDb.Activities = await GetAllModifiedRecord<Activity, SyncActivityDto>(date);
                 syncFullDb.ActivityProducts = await GetAllModifiedRecord<ActivityProduct, SyncActivityProductDto>(date);
                 syncFullDb.ActivityAttachments = await GetAllModifiedRecord<ActivityAttachment, SyncActivityAttachmentsDto>(date);
@@ -523,17 +535,8 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 syncFullDb.TicketPictures = await GetAllModifiedRecord<TicketPicture, SyncTicketPictureDto>(date);
                 syncFullDb.CheckLists = await GetAllModifiedRecord<CheckList, SyncCheckListDto>(date);
                 syncFullDb.CheckListItems = await GetAllModifiedRecord<CheckListItem, SyncCheckListItemDto>(date);
-                syncFullDb.Customers = await GetAllModifiedRecord<Customer, SyncCustomerDto>(date);
-                syncFullDb.Addresses = await GetAllModifiedRecord<Address, SyncAddressDto>(date);
                 syncFullDb.OperatorDocuments = await GetAllModifiedRecord<OperatorDocument, SyncOperatorDocumentDto>(date);
-                syncFullDb.Products = await GetAllModifiedRecord<Product, SyncProductDto>(date);
-                syncFullDb.ProductDocuments = await GetAllModifiedRecord<ProductDocument, SyncProductDocumentDto>(date);
-                syncFullDb.ProductTypes = await GetAllModifiedRecord<ProductType, SyncProductTypeDto>(date);
-                syncFullDb.Suppliers = await GetAllModifiedRecord<Supplier, SyncSupplierDto>(date);
-                syncFullDb.ActivityTypes = await GetAllActivityTypeModifiedRecord(date);
                 syncFullDb.Interventions = await GetAllInterventionModifiedRecord(date);
-
-
                 return syncFullDb;
             }
             catch (Exception e)
@@ -850,7 +853,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             try
             {
                 var repository = serviceProvider.GetRequiredService<IRepository<Intervention>>();
-
+                
                 var list = await dbContext.ExecuteWithDisabledQueryFilters(() =>
                         repository.Query()
                             .AsNoTracking()
@@ -901,7 +904,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
             try
             {
                 var repository = serviceProvider.GetRequiredService<IRepository<ActivityType>>();
-
+                
                 var list = await dbContext.ExecuteWithDisabledQueryFilters(() =>
                         repository.Query()
                             .AsNoTracking()

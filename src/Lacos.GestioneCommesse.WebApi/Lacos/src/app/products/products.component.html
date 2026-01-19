@@ -53,8 +53,12 @@
                 }
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="130">
+        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="170">
             <ng-template kendoGridCellTemplate let-dataItem>
+                <button (click)="searchProduct(dataItem.code)" class="btn btn-primary btn-sm grid-action-button"
+                    title="Ricerca attività prodotto">
+                    <i class="fas fa-search"></i>
+                </button>
                 <button *ngIf="dataItem.qrCode != '0000'" (click)="viewQrCodeProduct(dataItem)"
                     class="btn btn-primary btn-sm grid-action-button" title="Visualizza QR">
                     <i class="fas fa-qrcode"></i>

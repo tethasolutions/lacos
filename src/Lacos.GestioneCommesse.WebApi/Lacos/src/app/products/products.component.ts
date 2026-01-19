@@ -11,6 +11,7 @@ import { ProductQrCodeModalComponent } from '../product-qr-code-modal/product-qr
 import { ApiUrls } from '../services/common/api-urls';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -42,7 +43,8 @@ export class ProductsComponent extends BaseComponent implements OnInit {
 
   constructor(
     private readonly _productsService: ProductsService,
-    private readonly _messageBox: MessageBoxService
+    private readonly _messageBox: MessageBoxService,
+    private readonly router: Router
   ) {
     super();
   }
@@ -159,6 +161,10 @@ export class ProductsComponent extends BaseComponent implements OnInit {
         .subscribe()
     );
 
+  }
+
+  searchProduct(code: string) {
+    this.router.navigate(['/activities-from-product',code]);
   }
 
   private getExportOptions(): any {

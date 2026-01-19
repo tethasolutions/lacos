@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -6,27 +6,26 @@ import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { Activity, ActivityStatus, IActivityReadModel, activityStatusNames } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
-import { ActivatedRoute, Params } from '@angular/router';
 import { ActivityModalComponent, ActivityModalOptions } from './activity-modal.component';
-import { OperatorsService } from '../services/operators.service';
 import { OperatorModel } from '../shared/models/operator.model';
-import { UserService } from '../services/security/user.service';
 import { User } from '../services/security/models';
 import { CustomerService } from '../services/customer.service';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { CustomerModel } from '../shared/models/customer.model';
-import { StorageService } from '../services/common/storage.service';
 import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-activities-from-product',
     templateUrl: 'activities-from-product.component.html'
 })
-export class ActivitiesFromProductComponent extends BaseComponent {
+export class ActivitiesFromProductComponent extends BaseComponent implements OnInit {
 
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('jobsAttachmentsModal', { static: true }) jobsAttachmentsModal: JobsAttachmentsModalComponent;
+
+    productCode: string;
 
     data: GridDataResult;
     gridState: State = {
@@ -51,16 +50,24 @@ export class ActivitiesFromProductComponent extends BaseComponent {
     constructor(
         private readonly _service: ActivitiesService,
         private readonly _messageBox: MessageBoxService,
-        private readonly _route: ActivatedRoute,
         private readonly _customerService: CustomerService,
+        private readonly route: ActivatedRoute
     ) {
         super();
+    }
+
+    ngOnInit() {
+        this.productCode = this.route.snapshot.paramMap.get('productCode') ?? '';
+        if (this.productCode) {
+            this.productSearchField = this.productCode.toString();
+            this._search();
+        }
     }
 
     filterProduct() {
         this._search();
     }
-    
+
     dataStateChange(state: State) {
         this.gridState = state;
         this._search();

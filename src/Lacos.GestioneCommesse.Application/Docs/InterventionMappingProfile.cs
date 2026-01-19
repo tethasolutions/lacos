@@ -18,7 +18,10 @@ public class InterventionMappingProfile : Profile
             .MapMember(x => x.ActivityTypeId, y => y.Activity!.TypeId)
             .MapMember(x => x.ActivityColor, y => y.Activity!.Type!.ColorHex)
             .MapMember(x => x.JobId, y => y.Activity!.JobId)
-            .MapMember(x => x.CanBeRemoved, y => y.Status == InterventionStatus.Scheduled);
+            .MapMember(x => x.CanBeRemoved, y => y.Status == InterventionStatus.Scheduled)
+            .MapMember(x => x.HasServiceFee, y => y.Activity!.Type!.HasServiceFees)
+            .MapMember(x => x.TotalServiceFee, y => y.ServiceFee + y.ServiceCallFee + y.ExtraFee + y.TravelFee)
+            .MapMember(x => x.TotalServiceFeeDescription, y => $"Costo Intervento: {y.ServiceFee.ToString("c")}\nDiritto d'uscita: {y.ServiceCallFee.ToString("c")}\nCosto Viaggio: {y.TravelFee.ToString("c")}\nCosto Extra (Area C): {y.ExtraFee.ToString("c")}");
 
         CreateMap<Operator, InterventionOperatorReadModel>();
 

@@ -22,6 +22,10 @@ public class InterventionReadModel
     public long JobId { get; set; }
     public bool CanBeRemoved { get; set; }
 
+    public bool? HasServiceFee { get; set; }
+    public decimal? TotalServiceFee { get; set; }
+    public string? TotalServiceFeeDescription { get; set; }
+
     public InterventionReadModel()
     {
         Operators = new List<InterventionOperatorReadModel>();

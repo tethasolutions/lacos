@@ -17,5 +17,6 @@ public class PurchaseOrderSummary
     public string? OperatorName { get; set; }
     public bool HasAttachments { get; set; }
     public int UnreadMessages { get; set; }
+    public decimal? TotalExpenses { get; set; }
 
 }

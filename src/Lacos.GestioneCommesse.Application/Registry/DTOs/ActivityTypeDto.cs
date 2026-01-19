@@ -7,6 +7,8 @@
         public bool PictureRequired { get; set; }
         public bool IsInternal { get; set; }
         public bool IsExternal { get; set; }
+        public bool IsAdministrative { get; set; }
+        public bool HasServiceFees { get; set; }
         public string? ColorHex { get; set; }
         public int? Order { get; set; }
 

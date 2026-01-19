@@ -62,7 +62,6 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     user: User;
     currentOperator: OperatorModel;
     unreadMessages: number;
-    isAdministrationActivity: boolean = false;
 
     attachments: Array<FileInfo> = [];
     album: string[] = [];
@@ -206,9 +205,6 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
         this.status = options.activity.status;
 
         if (this.options.activity.typeId) {
-            //TODO sistemare con flag nell'activity type
-            this.isAdministrationActivity = this.options.activity.typeId === 29;
-
             this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
             if (this.selectedActivityType.isInternal && this.options.activity.supplierId) {
                 this.onSupplierChange();

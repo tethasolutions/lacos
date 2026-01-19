@@ -18,6 +18,10 @@ public class InterventionDto
     public IEnumerable<long> ActivityProducts { get; set; }
     public IEnumerable<InterventionNoteDto>? Notes { get; set; }
 
+    public decimal ServiceCallFee { get; set; }
+    public decimal ServiceFee { get; set; }
+    public decimal TravelFee { get; set; }
+    public decimal ExtraFee { get; set; }
 
     public InterventionDto()
     {

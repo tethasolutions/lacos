@@ -51,7 +51,14 @@
             <div [innerHTML]="dataItem.description | domsanitizer"></div>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="toBeReschedule" title="Da Rischedulare">
+    <kendo-grid-column field="totalServiceFee" title="Costo Intervento" [width]="1">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span class="text-nowrap" kendoTooltip [title]="dataItem.totalServiceFeeDescription">
+                {{dataItem.totalServiceFee | currency:'EUR':'symbol':'1.2-2'}}
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="toBeReschedule" title="Da Rischedulare" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.toBeReschedule | bool}}
         </ng-template>

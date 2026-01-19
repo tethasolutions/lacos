@@ -5789,3 +5789,89 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260119150143_add intervention fee'
+)
+BEGIN
+    ALTER TABLE [Docs].[Interventions] ADD [ExtraFee] decimal(14,2) NOT NULL DEFAULT 0.0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260119150143_add intervention fee'
+)
+BEGIN
+    ALTER TABLE [Docs].[Interventions] ADD [ServiceCallFee] decimal(14,2) NOT NULL DEFAULT 0.0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260119150143_add intervention fee'
+)
+BEGIN
+    ALTER TABLE [Docs].[Interventions] ADD [ServiceFee] decimal(14,2) NOT NULL DEFAULT 0.0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260119150143_add intervention fee'
+)
+BEGIN
+    ALTER TABLE [Docs].[Interventions] ADD [TravelFee] decimal(14,2) NOT NULL DEFAULT 0.0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260119150143_add intervention fee'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260119150143_add intervention fee', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260119193641_add activity type new bools'
+)
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [HasServiceFees] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260119193641_add activity type new bools'
+)
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [IsAdministrative] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260119193641_add activity type new bools'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260119193641_add activity type new bools', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

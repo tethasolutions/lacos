@@ -68,6 +68,14 @@
                         <div class="validation-message" [control]="form.controls['isExternal']"></div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <label>Attività Amministrativa</label>
+                    <div class="form-group">
+                        <kendo-switch name="isAdministrative" [(ngModel)]="options.isAdministrative" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['isAdministrative']"></div>
+                    </div>
+                </div>
             </div>
             <div class="row riga-form">
                 <div class="col-md-3">
@@ -92,6 +100,14 @@
                         <kendo-switch name="hasDependencies" [(ngModel)]="options.hasDependencies" onLabel="Si" offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['hasDependencies']"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Gestisce costi manutenzione</label>
+                    <div class="form-group">
+                        <kendo-switch name="hasServiceFees" [(ngModel)]="options.hasServiceFees" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['hasServiceFees']"></div>
                     </div>
                 </div>
             </div>

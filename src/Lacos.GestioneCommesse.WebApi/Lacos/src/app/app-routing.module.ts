@@ -59,6 +59,7 @@ const routes: Routes = [
     { path: 'tickets', component: TicketsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities', component: ActivitiesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities-from-product', component: ActivitiesFromProductComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'activities-from-product/:productCode', component: ActivitiesFromProductComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activities/:activityId', component: ActivityComponent, canActivate: [AuthGuard.asInjectableGuard], resolve: { activity: ActivitiesService.asActivityDetailResolver } },
     { path: 'interventions-list', component: InterventionsListComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'interventions', component: InterventionsComponent, canActivate: [AuthGuard.asInjectableGuard] },

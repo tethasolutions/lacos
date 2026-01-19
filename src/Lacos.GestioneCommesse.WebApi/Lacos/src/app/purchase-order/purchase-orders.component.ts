@@ -11,7 +11,7 @@ import { getToday } from '../services/common/functions';
 import { ActivatedRoute, Params } from '@angular/router';
 import { StorageService } from '../services/common/storage.service';
 import { OperatorModel } from '../shared/models/operator.model';
-import { User } from '../services/security/models';
+import { Role, User } from '../services/security/models';
 import { UserService } from '../services/security/user.service';
 import { OperatorsService } from '../services/operators.service';
 import { JobsService } from '../services/jobs/jobs.service';
@@ -22,7 +22,7 @@ import { CustomerModel } from '../shared/models/customer.model';
 import { CustomerModalComponent } from '../customer-modal/customer-modal.component';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
-import { Job } from '../services/jobs/models';
+import { SecurityService } from '../services/security/security.service';
 
 @Component({
     selector: 'app-purchase-orders',
@@ -39,6 +39,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     user: User;
     currentOperator: OperatorModel;
     screenWidth: number;
+    readonly isOperator: boolean;
 
     data: GridDataResult;
     gridState: State = {
@@ -60,6 +61,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
     readonly purchaseOrderStatusNames = purchaseOrderStatusNames;
 
     constructor(
+        security: SecurityService,
         private readonly _service: PurchaseOrdersService,
         private readonly _messageBox: MessageBoxService,
         private readonly _route: ActivatedRoute,
@@ -70,6 +72,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         private readonly _jobService: JobsService
     ) {
         super();
+        this.isOperator = security.isAuthorized(Role.Operator);
     }
 
     ngOnInit() {

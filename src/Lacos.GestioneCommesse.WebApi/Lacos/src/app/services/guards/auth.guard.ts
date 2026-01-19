@@ -33,6 +33,7 @@ export class AuthGuard {
             case url === '/orders':
             case url === '/activities':
             case url === '/activities-from-product':
+            case (/^\/activities-from-product\/[^\/]+$/gi).test(url):
             case url === '/users':
             case url === '/customers':
             case url === '/suppliers':

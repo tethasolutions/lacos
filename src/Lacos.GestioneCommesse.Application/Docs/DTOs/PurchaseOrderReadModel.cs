@@ -1,6 +1,4 @@
-﻿using Lacos.GestioneCommesse.Application.Shared;
-using Lacos.GestioneCommesse.Domain.Docs;
-using Lacos.GestioneCommesse.Domain.Registry;
+﻿using Lacos.GestioneCommesse.Domain.Docs;
 
 namespace Lacos.GestioneCommesse.Application.Docs.DTOs;
 
@@ -25,5 +23,6 @@ public class PurchaseOrderReadModel
     public string? OperatorName { get; set; }
 
     public int? UnreadMessages { get; set; }
+    public decimal? TotalExpenses { get; set; }
 
 }

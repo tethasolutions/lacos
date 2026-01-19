@@ -8,15 +8,12 @@ using Lacos.GestioneCommesse.Framework.Exceptions;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
-using Telerik.Reporting.Processing;
-using Telerik.Reporting;
-using Parameter = Telerik.Reporting.Parameter;
-using Westcar.WebApplication.Dal;
-using System.Linq.Expressions;
-using System.Net.Mail;
-using System.Net;
-using System.Linq;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
+using Telerik.Reporting;
+using Telerik.Reporting.Processing;
+using Westcar.WebApplication.Dal;
+using Parameter = Telerik.Reporting.Parameter;
 
 namespace Lacos.GestioneCommesse.Application.Docs.Services;
 
@@ -32,6 +29,7 @@ public class InterventionsService : IInterventionsService
     private readonly IViewRepository<InterventionProductCheckListItemKO> productCheckListItemKORepository;
     private readonly IRepository<Job> jobRepository;
     private readonly IRepository<Ticket> ticketRepository;
+    private readonly IRepository<MaintenancePriceListItem> mainentancePriceListItemRepository; 
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
     private readonly ILogger<ActivitiesService> logger;
@@ -64,6 +62,7 @@ public class InterventionsService : IInterventionsService
         IViewRepository<InterventionProductCheckListItemKO> productCheckListItemKORepository,
         IRepository<Job> jobRepository,
         IRepository<Ticket> ticketRepository,
+        IRepository<MaintenancePriceListItem> mainentancePriceListItemRepository,
         ILacosSession session,
         ILogger<ActivitiesService> logger
     )
@@ -79,6 +78,7 @@ public class InterventionsService : IInterventionsService
         this.productCheckListItemKORepository = productCheckListItemKORepository;
         this.jobRepository = jobRepository;
         this.ticketRepository = ticketRepository;
+        this.mainentancePriceListItemRepository = mainentancePriceListItemRepository;
         this.session = session;
         this.logger = logger;
     }
@@ -126,11 +126,23 @@ public class InterventionsService : IInterventionsService
             await MergeInterventionOperators(intervention, interventionDto.Operators);
             await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
 
-            await repository.Insert(intervention);
+            var activity = await activityRepository.Query()
+                .Include(a => a.Address)
+                .Include(a => a.Type)
+                .Where(a => a.Id == intervention.ActivityId)
+                .FirstOrDefaultAsync();
 
+            if (activity != null)
+            {
+                if (activity.Type.HasServiceFees)
+                {
+                    UpdateInterventionServiceFees(activity, intervention);
+                }
+            }
+
+            await repository.Insert(intervention);
             await dbContext.SaveChanges();
 
-            Activity activity = await activityRepository.Get(intervention.ActivityId);
             if (activity != null)
             {
                 activity.ExpirationDate = intervention.Start;
@@ -166,6 +178,8 @@ public class InterventionsService : IInterventionsService
         //    throw new LacosException("Non puoi modificare un intervento già completato.");
         //}
 
+        bool needToUpdateFees = (intervention.Start != interventionDto.Start || intervention.End != interventionDto.End);
+
         var previousActivityId = intervention.ActivityId;
         intervention = interventionDto.MapTo(intervention, mapper);
 
@@ -173,6 +187,23 @@ public class InterventionsService : IInterventionsService
         {
             await MergeInterventionOperators(intervention, interventionDto.Operators);
             await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
+
+            if (needToUpdateFees)
+            {
+                var activity = await activityRepository.Query()
+                    .Include(a => a.Address)
+                    .Include(a => a.Type)
+                    .Where(a => a.Id == intervention.ActivityId)
+                    .FirstOrDefaultAsync();
+
+                if (activity != null)
+                {
+                    if (activity.Type.HasServiceFees)
+                    {
+                        UpdateInterventionServiceFees(activity, intervention);
+                    }
+                }
+            }
 
             repository.Update(intervention);
 
@@ -189,6 +220,25 @@ public class InterventionsService : IInterventionsService
         }
 
         return await Get(intervention.Id);
+    }
+
+    private async void UpdateInterventionServiceFees (Activity activity, Intervention intervention)
+    {        
+        var maintenancePriceList = await mainentancePriceListItemRepository.Query()
+            .AsNoTracking()
+            .Include(m => m.MaintenancePriceList)
+            .Where(m => activity.Address.DistanceKm <= m.LimitKm)
+            .OrderBy(m => m.LimitKm)
+            .FirstOrDefaultAsync();
+        if (maintenancePriceList != null)
+        {
+            var TimeSpanDuration = CalculateWorkingHoursDifference(intervention.Start, intervention.End);
+            intervention.ServiceFee = maintenancePriceList.MaintenancePriceList!.HourlyRate * TimeSpanDuration;
+            intervention.ServiceCallFee = maintenancePriceList.ServiceCallFee;
+            intervention.TravelFee = (decimal)maintenancePriceList.TravelFee * (decimal)activity.Address.DistanceKm * 2;
+            intervention.ExtraFee = activity.Address.IsInsideAreaC == true ? maintenancePriceList.ExtraFee : 0;
+        }
+        
     }
 
     public async Task Delete(long id)
@@ -521,4 +571,70 @@ public class InterventionsService : IInterventionsService
         return query;
     }
 
+    // Piano (pseudocodice dettagliato):
+    // 1. Metodo pubblico statico `CalculateWorkingHoursDifference(DateTimeOffset start, DateTimeOffset end)`.
+    // 2. Se `end <= start` ritorna 0.
+    // 3. Se `start.Date == end.Date` ritorna differenza semplice in ore: (end - start).TotalHours.
+    // 4. Altrimenti:
+    //    a. Convertire start e end in UTC per lavorare su un riferimento unico (startUtc, endUtc).
+    //    b. Iterare ogni giorno intero dal giorno di startUtc fino al giorno di endUtc (inclusi).
+    //    c. Per ogni giorno costruire due intervalli lavorativi in UTC:
+    //       - mattina: 08:00 - 13:00
+    //       - pomeriggio: 14:00 - 18:00
+    //    d. Per ciascun intervallo calcolare l'overlap con l'intervallo complessivo [startUtc, endUtc].
+    //       - overlap = max(0, min(intervalEnd, endUtc) - max(intervalStart, startUtc))
+    //       - sommare le ore di overlap al totale (ogni giornata non supera così i 9h).
+    //    e. Restituire il totale come double (ore), arrotondato a 2 decimali.
+    // 5. Implementare una funzione locale `OverlapHours` per calcolare le ore di sovrapposizione tra due intervalli.
+    // Nota: si usano DateTime in UTC per semplicità e robustezza rispetto a differenze di offset/DST.
+
+    /// <summary>
+    /// Calcola la differenza in ore tra due date considerando, se le date sono diverse,
+    /// un massimo di 9 ore per giornata lavorativa (08:00-13:00 e 14:00-18:00).
+    /// Se le date sono uguali, viene usata la differenza reale in ore senza vincoli sugli orari lavorativi.
+    /// </summary>
+    /// <param name="start">Data/ora di inizio</param>
+    /// <param name="end">Data/ora di fine</param>
+    /// <returns>Numero di ore totali calcolate secondo le regole descritte</returns>
+    public static decimal CalculateWorkingHoursDifference(DateTimeOffset start, DateTimeOffset end)
+    {
+        if (end <= start)
+        {
+            return 0;
+        }
+
+        // Se stesso giorno: differenza semplice
+        if (start.Date == end.Date)
+        {
+            return (decimal)Math.Round((end - start).TotalHours, 2);
+        }
+
+        // Lavoriamo in UTC per avere un riferimento unico e sicuro rispetto agli offset
+        DateTime startUtc = start.ToUniversalTime().DateTime;
+        DateTime endUtc = end.ToUniversalTime().DateTime;
+
+        decimal totalHours = 0;
+
+        // Itera giorno per giorno
+        for (DateTime day = startUtc.Date; day <= endUtc.Date; day = day.AddDays(1))
+        {
+            DateTime morningStart = new DateTime(day.Year, day.Month, day.Day, 7, 0, 0, DateTimeKind.Utc);
+            DateTime morningEnd = new DateTime(day.Year, day.Month, day.Day, 12, 0, 0, DateTimeKind.Utc);
+            DateTime afternoonStart = new DateTime(day.Year, day.Month, day.Day, 13, 0, 0, DateTimeKind.Utc);
+            DateTime afternoonEnd = new DateTime(day.Year, day.Month, day.Day, 17, 0, 0, DateTimeKind.Utc);
+
+            totalHours += OverlapHours(morningStart, morningEnd, startUtc, endUtc);
+            totalHours += OverlapHours(afternoonStart, afternoonEnd, startUtc, endUtc);
+        }
+
+        return (decimal)Math.Round(totalHours,2);
+
+        static decimal OverlapHours(DateTime intervalStart, DateTime intervalEnd, DateTime overallStart, DateTime overallEnd)
+        {
+            DateTime s = intervalStart > overallStart ? intervalStart : overallStart;
+            DateTime e = intervalEnd < overallEnd ? intervalEnd : overallEnd;
+            if (e <= s) return 0;
+            return (decimal)Math.Round((e - s).TotalHours,2);
+        }
+    }
 }

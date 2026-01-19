@@ -446,6 +446,10 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
 
+                    b.Property<decimal>("ExtraFee")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
                     b.Property<string>("FinalNotes")
                         .HasColumnType("nvarchar(max)");
 
@@ -463,6 +467,14 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<string>("RescheduleNotes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("ServiceCallFee")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
+                    b.Property<decimal>("ServiceFee")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
                     b.Property<DateTimeOffset>("Start")
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
@@ -472,6 +484,10 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<bool?>("ToBeReschedule")
                         .HasColumnType("bit");
+
+                    b.Property<decimal>("TravelFee")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
 
                     b.Property<long?>("VehicleId")
                         .HasColumnType("bigint");
@@ -1735,6 +1751,10 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<string>("SupplierName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("TotalExpenses")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
                     b.Property<int>("UnreadMessages")
                         .HasColumnType("int");
 
@@ -2018,7 +2038,13 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<bool?>("HasDependencies")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("HasServiceFees")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("InfluenceJobStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAdministrative")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")

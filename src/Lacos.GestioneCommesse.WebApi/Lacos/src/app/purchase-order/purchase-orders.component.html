@@ -64,6 +64,8 @@
         </kendo-grid-column>
         <kendo-grid-column field="activityTypeName" title="Tipologia">
         </kendo-grid-column>
+        <kendo-grid-column field="totalExpenses" title="Totale Ordine" format="c2" *ngIf="!isOperator" >
+        </kendo-grid-column>
         <kendo-grid-column field="operatorName" title="Inserito da">
         </kendo-grid-column>
         <kendo-grid-column field="unreadMessages" title="" filterable="false">

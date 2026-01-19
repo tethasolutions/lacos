@@ -18,14 +18,12 @@ import { ActivatedRoute, Params } from '@angular/router';
 export class InterventionsGridComponent extends BaseComponent implements OnInit, OnChanges {
 
     @Input() viewTitle: boolean = false;
-    
-    @Input()
-    activityId: number;
+
+    @Input() activityId: number;
 
     private _jobId: number;
 
-    @Input()
-    interventionModal: InterventionModalComponent;
+    @Input() interventionModal: InterventionModalComponent;
 
     @Output()
     readonly interventionUpdated = new EventEmitter<Intervention>();
@@ -38,6 +36,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
     screenWidth: number;
 
     data: GridDataResult;
+
     gridState: State = {
         skip: 0,
         take: 30,

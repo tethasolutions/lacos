@@ -4,6 +4,8 @@ export class ActivityTypeModel {
     pictureRequired: boolean;
     isInternal: boolean;
     isExternal: boolean;
+    isAdministrative: boolean;
+    hasServiceFees: boolean;
     colorHex: string;
     order: number;
 

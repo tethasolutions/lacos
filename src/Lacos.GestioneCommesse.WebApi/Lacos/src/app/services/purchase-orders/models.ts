@@ -36,6 +36,7 @@ export interface IPurchaseOrderReadModel {
     readonly operatorName: string;
     readonly hasAttachments: boolean;
     readonly unreadMessages: number;
+    readonly totalExpenses: number;
 }
 
 export class PurchaseOrder {

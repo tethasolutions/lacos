@@ -20,7 +20,11 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Docs
         public long? VehicleId { get; set; }
         public long? ActivityId { get; set; }
         public IEnumerable<long> OperatorIds { get; set; } = new List<long>();
-        
+
+        public decimal ServiceCallFee { get; set; }
+        public decimal ServiceFee { get; set; }
+        public decimal TravelFee { get; set; }
+        public decimal ExtraFee { get; set; }
     }
     
 }

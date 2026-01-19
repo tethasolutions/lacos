@@ -105,6 +105,7 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
            .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3)
+           .MapMember(x => x.IsAdministrative, y => y.Type!.IsAdministrative)
            .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies);
 
         CreateMap<Activity, ActivityDetailDto>()
@@ -113,12 +114,15 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.CustomerId, y => y.Job!.CustomerId)
            .MapMember(x => x.Customer, y => y.Job!.Customer!.Name)
            .MapMember(x => x.Address, y => y.Address != null ? y.Address.StreetAddress + ", " + y.Address.City + " (" + y.Address.Province + ")" : "")
+           .MapMember(x => x.DistanceKm, y=> y.Address != null ? y.Address.DistanceKm : 0)
+           .MapMember(x => x.IsInsideAreaC, y => y.Address != null ? y.Address.IsInsideAreaC : null)
            .MapMember(x => x.Type, y => y.Type!.Name)
            .MapMember(x => x.Referent, y => (y.Referent != null) ? y.Referent.Name : "")
            .MapMember(x => x.StatusLabel0, y => y.Type!.StatusLabel0)
            .MapMember(x => x.StatusLabel1, y => y.Type!.StatusLabel1)
            .MapMember(x => x.StatusLabel2, y => y.Type!.StatusLabel2)
            .MapMember(x => x.StatusLabel3, y => y.Type!.StatusLabel3)
+           .MapMember(x => x.IsAdministrative, y => y.Type!.IsAdministrative)
            .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies)
            .MapMember(x => x.HasDependencies, y => y.ActivityDependencies.Any() || y.PurchaseOrderDependencies.Any())
            .MapMember(x => x.TotalDependencies, y => (y.ActivityDependencies.Any() ? y.ActivityDependencies.Count() : 0) +

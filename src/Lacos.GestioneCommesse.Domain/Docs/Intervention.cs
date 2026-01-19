@@ -25,6 +25,11 @@ public class Intervention : FullAuditedEntity, ILogEntity
     public long ActivityId { get; set; }
     public Activity? Activity { get; set; }
 
+    public decimal ServiceCallFee { get; set; }
+    public decimal ServiceFee { get; set; }
+    public decimal TravelFee { get; set; }
+    public decimal ExtraFee { get; set; }
+
     public ICollection<Operator> Operators { get; set; }
     public ICollection<InterventionNote> Notes { get; set; }
     public ICollection<InterventionProduct> Products { get; set; }

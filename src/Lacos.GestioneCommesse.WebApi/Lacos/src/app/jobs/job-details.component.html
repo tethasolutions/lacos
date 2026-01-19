@@ -20,6 +20,7 @@
         <h6>Contatti</h6>
         @if (address){
         <p>{{address.fullAddress}}
+            <span *ngIf="address.distanceKm > 0"><br /><i class="fa fa-road me-1"></i><i>distanza: {{address.distanceKm}} km</i></span>
             <span *ngIf="address.telephone"><br />Tel: {{address.telephone}}</span>
             <span *ngIf="address.jobReference"><br />Rif.: {{address.jobReference}}</span>
             <span *ngIf="address.contactName"><br />Contatto: {{address.contactName}}</span>

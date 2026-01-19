@@ -18,33 +18,43 @@
             [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
             (dataStateChange)="dataStateChange($event)">
     <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
-    <kendo-grid-column field="order" title="Ordinamento"></kendo-grid-column>
-    <kendo-grid-column field="pictureRequired" title="Immagine Obbligatoria">
+    <kendo-grid-column field="order" title="Ordine"></kendo-grid-column>
+    <kendo-grid-column field="pictureRequired" title="Img Obblig.">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.pictureRequired | bool}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="isInternal" title="Attività interna">
+    <kendo-grid-column field="isInternal" title="Interna">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.isInternal | bool}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="isExternal" title="Attività fornitore">
+    <kendo-grid-column field="isExternal" title="Fornitore">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.isExternal | bool}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="influenceJobStatus" title="Influenza stato commesse">
+    <kendo-grid-column field="isAdministrative" title="Amministrativa">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.isAdministrative | bool}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="hasServiceFees" title="Costi Manut.">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.hasServiceFees | bool}}
+        </ng-template>  
+    </kendo-grid-column>
+    <kendo-grid-column field="influenceJobStatus" title="Influenza stato comm.">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.influenceJobStatus | bool}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="viewInPurchaseOrder" title="Visibile in Ordini Acq">
+    <kendo-grid-column field="viewInPurchaseOrder" title="Visibile in Ord Acq">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.viewInPurchaseOrder | bool}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="hasDependencies" title="Può avere dipendenze">
+    <kendo-grid-column field="hasDependencies" title="Può avere dipend.">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.hasDependencies | bool}}
         </ng-template>

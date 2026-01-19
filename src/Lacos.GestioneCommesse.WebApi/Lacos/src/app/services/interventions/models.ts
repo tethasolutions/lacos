@@ -36,7 +36,11 @@ export class Intervention {
         public jobId: number,
         public operators: number[],
         public activityProducts: number[],
-        public notes: InterventionNote[]
+        public notes: InterventionNote[],
+        public ServiceCallFee: number,
+        public ServiceFee: number,
+        public TravelFee: number,
+        public ExtraFee: number
     ) {
         this.start = new Date(start);
         this.end = new Date(end);
@@ -45,7 +49,7 @@ export class Intervention {
     static build(o: Intervention) {
         const notes = o.notes.map(e => InterventionNote.build(e));
         return new Intervention(o.id, o.start, o.end, o.status, o.toBeReschedule, o.description, o.finalNotes, o.vehicleId,
-            o.activityId, o.jobId, o.operators, o.activityProducts, notes);
+            o.activityId, o.jobId, o.operators, o.activityProducts, notes, o.ServiceCallFee, o.ServiceFee, o.TravelFee, o.ExtraFee);
     }
 
     toJSON() {
@@ -79,7 +83,9 @@ export interface IInterventionReadModel {
     readonly activityId: number;
     readonly jobId: number;
     readonly canBeRemoved: boolean;
-
+    readonly hasServiceFees: boolean;
+    readonly totalServiceFee: number;
+    readonly totalServiceFeeDescription: string;
 }
 
 

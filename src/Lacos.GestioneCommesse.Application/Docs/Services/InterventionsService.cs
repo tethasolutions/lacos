@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using Lacos.GestioneCommesse.Application.Shared.Services;
 using Lacos.GestioneCommesse.Dal;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Domain.Registry;
@@ -33,6 +34,7 @@ public class InterventionsService : IInterventionsService
     private readonly ILacosSession session;
     private readonly ILacosDbContext dbContext;
     private readonly ILogger<ActivitiesService> logger;
+    private readonly ISharedService sharedService;
 
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
     j.Activities
@@ -64,7 +66,8 @@ public class InterventionsService : IInterventionsService
         IRepository<Ticket> ticketRepository,
         IRepository<MaintenancePriceListItem> mainentancePriceListItemRepository,
         ILacosSession session,
-        ILogger<ActivitiesService> logger
+        ILogger<ActivitiesService> logger,
+        ISharedService sharedService
     )
     {
         this.mapper = mapper;
@@ -81,6 +84,7 @@ public class InterventionsService : IInterventionsService
         this.mainentancePriceListItemRepository = mainentancePriceListItemRepository;
         this.session = session;
         this.logger = logger;
+        this.sharedService = sharedService;
     }
 
     public IQueryable<InterventionReadModel> Query()
@@ -136,7 +140,33 @@ public class InterventionsService : IInterventionsService
             {
                 if (activity.Type.HasServiceFees)
                 {
-                    UpdateInterventionServiceFees(activity, intervention);
+                    await UpdateInterventionServiceFees(activity, intervention);
+                }
+
+                //invio mail creazione intervento
+                foreach (var interventionOperator in intervention.Operators)
+                {
+                    if (interventionOperator.Email == null)
+                    {
+                        continue;
+                    }
+
+                    var body = $"<p>Gentile {interventionOperator.Name},</p>" +
+                        $"<p>ti informiamo che ti è stato assegnato il seguente intervento:</p>" +
+                        $"<ul><li><strong>Cliente:</strong> {intervention.Activity.Job.Customer.Name}</li>" +
+                        $"<li><strong>Luogo:</strong> {activity.Address.StreetAddress} {activity.Address.ZipCode} {activity.Address.City} {activity.Address.Province}</li>" +
+                        $"<li><strong>Link mappa:</strong> <a href='https://www.google.it/maps/place/{activity.Address.StreetAddress} {activity.Address.ZipCode} {activity.Address.City} {activity.Address.Province}'>Apri in Google Maps</a></li>" +
+                        $"<li><strong>Data e ora inizio:</strong> {intervention.Start.ToString("dd/MM/yyyy HH:mm")}</li>" +
+                        $"<li><strong>Data e ora fine:</strong> {intervention.End.ToString("dd/MM/yyyy HH:mm")}</li>" +
+                        $"<li><strong>Tipologia intervento:</strong> {activity.Type.Name}</li>" +
+                        $"<li><strong>Descrizione:</strong> {intervention.Description}</li>" +
+                        $"</ul>" +
+                        $"<p>Ti chiediamo di prendere in carico l’intervento e di aggiornare lo stato secondo le procedure previste, segnalando eventuali criticità o necessità di supporto.</p>" +
+                        $"<p>Per qualsiasi dubbio o informazione aggiuntiva, puoi fare riferimento a <strong>{activity.Referent}</strong>.</p>" +
+                        $"<p>Grazie per la collaborazione.<br />" +
+                        $"Cordiali saluti<br />" +
+                        $"<strong><i>Staff Lacos</i></strong></p>";
+                    await sharedService.SendMessage(interventionOperator.Email!, "", "Nuovo intervento assegnato", body);
                 }
             }
 
@@ -178,7 +208,7 @@ public class InterventionsService : IInterventionsService
         //    throw new LacosException("Non puoi modificare un intervento già completato.");
         //}
 
-        bool needToUpdateFees = (intervention.Start != interventionDto.Start || intervention.End != interventionDto.End);
+        bool hasScheduledTimeUpdated = (intervention.Start != interventionDto.Start || intervention.End != interventionDto.End);
 
         var previousActivityId = intervention.ActivityId;
         intervention = interventionDto.MapTo(intervention, mapper);
@@ -188,11 +218,14 @@ public class InterventionsService : IInterventionsService
             await MergeInterventionOperators(intervention, interventionDto.Operators);
             await MergeInterventionProducts(intervention, interventionDto.ActivityProducts);
 
-            if (needToUpdateFees)
+            if (hasScheduledTimeUpdated)
             {
                 var activity = await activityRepository.Query()
                     .Include(a => a.Address)
                     .Include(a => a.Type)
+                    .Include(a => a.Job)
+                    .ThenInclude(a => a.Customer)
+                    .Include(a => a.Referent)
                     .Where(a => a.Id == intervention.ActivityId)
                     .FirstOrDefaultAsync();
 
@@ -200,13 +233,42 @@ public class InterventionsService : IInterventionsService
                 {
                     if (activity.Type.HasServiceFees)
                     {
-                        UpdateInterventionServiceFees(activity, intervention);
+                        await UpdateInterventionServiceFees(activity, intervention);
+                    }
+
+                    if (hasScheduledTimeUpdated)
+                    {
+                        //invio mail modifica intervento
+                        foreach (var interventionOperator in intervention.Operators)
+                        {
+                            if (interventionOperator.Email == null)
+                            {
+                                continue;
+                            }
+
+                            var body = $"<p>Gentile {interventionOperator.Name},</p>" +
+                                $"<p>ti informiamo che il seguente intervento ha avuto una variazione di orario:</p>" +
+                                $"<ul><li><strong>Cliente:</strong> {activity.Job.Customer.Name}</li>" +
+                                $"<li><strong>Luogo:</strong> {activity.Address.StreetAddress} {activity.Address.ZipCode} {activity.Address.City} {activity.Address.Province}</li>" +
+                                $"<li><strong>Link mappa:</strong> <a href='https://www.google.it/maps/place/{activity.Address.StreetAddress} {activity.Address.ZipCode} {activity.Address.City} {activity.Address.Province}'>Apri in Google Maps</a></li>" +
+                                $"<li><strong>Data e ora inizio:</strong> {intervention.Start.ToString("dd/MM/yyyy HH:mm")}</li>" +
+                                $"<li><strong>Data e ora fine:</strong> {intervention.End.ToString("dd/MM/yyyy HH:mm")}</li>" +
+                                $"<li><strong>Tipologia intervento:</strong> {activity.Type.Name}</li>" +
+                                $"<li><strong>Descrizione:</strong> {intervention.Description}</li>" +
+                                $"</ul>" +
+                                $"<p>Ti chiediamo di prendere in carico l’intervento e di aggiornare lo stato secondo le procedure previste, segnalando eventuali criticità o necessità di supporto.</p>" +
+                                //$"<p>Per qualsiasi dubbio o informazione aggiuntiva, puoi fare riferimento a <strong>{activity.Referent}</strong>.</p>" +
+                                $"<p>Grazie per la collaborazione.<br />" +
+                                $"Cordiali saluti<br />" +
+                                $"<strong><i>Staff Lacos</i></strong></p>";
+                            await sharedService.SendMessage(interventionOperator.Email!, "", "Variazione intervento assegnato", body);
+                        }
                     }
                 }
+
             }
 
             repository.Update(intervention);
-
             await dbContext.SaveChanges();
 
             await UpdateActivityStatus(intervention.ActivityId);
@@ -222,7 +284,7 @@ public class InterventionsService : IInterventionsService
         return await Get(intervention.Id);
     }
 
-    private async void UpdateInterventionServiceFees (Activity activity, Intervention intervention)
+    private async Task UpdateInterventionServiceFees (Activity activity, Intervention intervention)
     {        
         var maintenancePriceList = await mainentancePriceListItemRepository.Query()
             .AsNoTracking()

@@ -36,7 +36,7 @@ export class AddressModel {
         if (this.streetAddress !== null) { result += `${this.streetAddress} `; }
         if (this.zipCode !== null) { result += `${this.zipCode} `; }
         if (this.city !== null) { result += `${this.city} `; }
-        if (this.province !== null) { result += `${this.province})`; }
+        if (this.province !== null) { result += `${this.province}`; }
         return result;
     }
 

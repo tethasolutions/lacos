@@ -3,16 +3,14 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
 using Lacos.GestioneCommesse.Application.Docs.Services;
-using Lacos.GestioneCommesse.Application.Products.Service;
+using Lacos.GestioneCommesse.Application.Shared.Services;
 using Lacos.GestioneCommesse.Domain.Docs;
 using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
 using Lacos.GestioneCommesse.WebApi.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Configuration;
 using System.Net.Mail;
-using System.Runtime.CompilerServices;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 

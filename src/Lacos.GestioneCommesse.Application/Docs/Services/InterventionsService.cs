@@ -133,6 +133,9 @@ public class InterventionsService : IInterventionsService
             var activity = await activityRepository.Query()
                 .Include(a => a.Address)
                 .Include(a => a.Type)
+                .Include(a => a.Job)
+                .ThenInclude(a => a.Customer)
+                .Include(a => a.Referent)
                 .Where(a => a.Id == intervention.ActivityId)
                 .FirstOrDefaultAsync();
 
@@ -150,19 +153,20 @@ public class InterventionsService : IInterventionsService
                     {
                         continue;
                     }
+                    string address = activity.Address != null ? activity.Address.StreetAddress + " " + activity.Address.ZipCode + " " + activity.Address.City + " " + activity.Address.Province : "";
 
                     var body = $"<p>Gentile {interventionOperator.Name},</p>" +
                         $"<p>ti informiamo che ti è stato assegnato il seguente intervento:</p>" +
-                        $"<ul><li><strong>Cliente:</strong> {intervention.Activity.Job.Customer.Name}</li>" +
-                        $"<li><strong>Luogo:</strong> {activity.Address.StreetAddress} {activity.Address.ZipCode} {activity.Address.City} {activity.Address.Province}</li>" +
-                        $"<li><strong>Link mappa:</strong> <a href='https://www.google.it/maps/place/{activity.Address.StreetAddress} {activity.Address.ZipCode} {activity.Address.City} {activity.Address.Province}'>Apri in Google Maps</a></li>" +
+                        $"<ul><li><strong>Cliente:</strong> {activity.Job.Customer.Name}</li>" +
+                        $"<li><strong>Luogo:</strong> {address}</li>" +
+                        $"<li><strong>Link mappa:</strong> <a href='https://www.google.it/maps/place/{address}'>Apri in Google Maps</a></li>" +
                         $"<li><strong>Data e ora inizio:</strong> {intervention.Start.ToString("dd/MM/yyyy HH:mm")}</li>" +
                         $"<li><strong>Data e ora fine:</strong> {intervention.End.ToString("dd/MM/yyyy HH:mm")}</li>" +
                         $"<li><strong>Tipologia intervento:</strong> {activity.Type.Name}</li>" +
                         $"<li><strong>Descrizione:</strong> {intervention.Description}</li>" +
                         $"</ul>" +
                         $"<p>Ti chiediamo di prendere in carico l’intervento e di aggiornare lo stato secondo le procedure previste, segnalando eventuali criticità o necessità di supporto.</p>" +
-                        $"<p>Per qualsiasi dubbio o informazione aggiuntiva, puoi fare riferimento a <strong>{activity.Referent}</strong>.</p>" +
+//                        $"<p>Per qualsiasi dubbio o informazione aggiuntiva, puoi fare riferimento a <strong>{activity.Referent}</strong>.</p>" +
                         $"<p>Grazie per la collaborazione.<br />" +
                         $"Cordiali saluti<br />" +
                         $"<strong><i>Staff Lacos</i></strong></p>";
@@ -245,12 +249,13 @@ public class InterventionsService : IInterventionsService
                             {
                                 continue;
                             }
+                            string address = activity.Address != null ? activity.Address.StreetAddress + " " + activity.Address.ZipCode + " " + activity.Address.City + " " + activity.Address.Province : "";
 
                             var body = $"<p>Gentile {interventionOperator.Name},</p>" +
                                 $"<p>ti informiamo che il seguente intervento ha avuto una variazione di orario:</p>" +
                                 $"<ul><li><strong>Cliente:</strong> {activity.Job.Customer.Name}</li>" +
-                                $"<li><strong>Luogo:</strong> {activity.Address.StreetAddress} {activity.Address.ZipCode} {activity.Address.City} {activity.Address.Province}</li>" +
-                                $"<li><strong>Link mappa:</strong> <a href='https://www.google.it/maps/place/{activity.Address.StreetAddress} {activity.Address.ZipCode} {activity.Address.City} {activity.Address.Province}'>Apri in Google Maps</a></li>" +
+                                $"<li><strong>Luogo:</strong> {address}</li>" +
+                                $"<li><strong>Link mappa:</strong> <a href='https://www.google.it/maps/place/{address}'>Apri in Google Maps</a></li>" +
                                 $"<li><strong>Data e ora inizio:</strong> {intervention.Start.ToString("dd/MM/yyyy HH:mm")}</li>" +
                                 $"<li><strong>Data e ora fine:</strong> {intervention.End.ToString("dd/MM/yyyy HH:mm")}</li>" +
                                 $"<li><strong>Tipologia intervento:</strong> {activity.Type.Name}</li>" +

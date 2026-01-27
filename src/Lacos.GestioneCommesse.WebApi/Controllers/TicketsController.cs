@@ -6,10 +6,10 @@ using Lacos.GestioneCommesse.Framework.Configuration;
 using Lacos.GestioneCommesse.Framework.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Configuration;
 using static Lacos.GestioneCommesse.WebApi.Controllers.InterventionsController;
 using System.Net.Mail;
 using Lacos.GestioneCommesse.Domain.Docs;
+using Lacos.GestioneCommesse.Application.Shared.Services;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 

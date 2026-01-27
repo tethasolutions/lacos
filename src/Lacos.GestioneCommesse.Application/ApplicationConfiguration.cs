@@ -8,6 +8,7 @@ using Lacos.GestioneCommesse.Application.Products.Service;
 using Lacos.GestioneCommesse.Application.Registry.Services;
 using Lacos.GestioneCommesse.Application.Security;
 using Lacos.GestioneCommesse.Application.Session;
+using Lacos.GestioneCommesse.Application.Shared.Services;
 using Lacos.GestioneCommesse.Application.Suppliers.Services;
 using Lacos.GestioneCommesse.Application.Sync;
 using Lacos.GestioneCommesse.Application.Vehicles.Services;

@@ -207,8 +207,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         if (this.options.jobId) {
             this._newActivity(ticket);
         }
-        else
-        {
+        else {
             this._messageBox.info("Prima di creare l'attività è necessario creare una commessa");
         }
     }
@@ -266,8 +265,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         if (this.options.jobId) {
             this._newPurchaseOrder(ticket);
         }
-        else
-        {
+        else {
             this._messageBox.info("Prima di creare l'attività è necessario creare una commessa");
         }
     }
@@ -293,14 +291,30 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         );
     }
 
-    protected override _canClose() {
+    override close() {
         this.form.markAsDirty();
 
         if (this.form.invalid) {
             this._messageBox.error('Compilare correttamente tutti i campi.');
+            return;
         }
 
-        return this.form.valid;
+        if (this.options.id != 0 && this.options.activityId == null && this.options.purchaseOrderId == null) {
+            this._subscriptions.push(
+                this._messageBox.confirm(`Non è stata creata un\'attività o un ordine di acquisto collegato al ticket, chiudere comunque?`, `Conferma chiusura`)
+                    .pipe(
+                        filter(result => result),
+                        tap(() => super.close())
+                    )
+                    .subscribe()
+            );
+        } else {
+            super.close();
+        }
+    }
+
+    protected override _canClose() {
+        return true;
     }
 
     private _getData() {

@@ -168,7 +168,7 @@ public class ActivitiesService : IActivitiesService
         ActivityType activityType = await activityTypeRepository.Get(activity.TypeId);
         if ((bool)activityType.InfluenceJobStatus && activity.JobId != null)
         {
-            Job job = await jobRepository.Query()
+            var job = await jobRepository.Query()
                 .Where(e => e.Id == activity.JobId)
                 .Include(e => e.Activities)
                 .ThenInclude(e => e.Type)
@@ -190,6 +190,7 @@ public class ActivitiesService : IActivitiesService
                     }
                     catch (Exception ex) { }
                 }
+
             }
         }
 

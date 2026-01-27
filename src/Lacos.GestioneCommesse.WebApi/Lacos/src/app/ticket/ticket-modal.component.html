@@ -99,7 +99,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label>Commessa</label>
+                    <label>Commessa</label>{{options.customerId}}
                     <div class="form-group">
                         <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
                             [(ngModel)]="options.jobId" [suggest]="true" [allowCustom]="false"

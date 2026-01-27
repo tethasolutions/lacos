@@ -686,12 +686,12 @@ public class InterventionsService : IInterventionsService
         for (DateTime day = startUtc.Date; day <= endUtc.Date; day = day.AddDays(1))
         {
             DateTime morningStart = new DateTime(day.Year, day.Month, day.Day, 7, 0, 0, DateTimeKind.Utc);
-            DateTime morningEnd = new DateTime(day.Year, day.Month, day.Day, 12, 0, 0, DateTimeKind.Utc);
-            DateTime afternoonStart = new DateTime(day.Year, day.Month, day.Day, 13, 0, 0, DateTimeKind.Utc);
+            //DateTime morningEnd = new DateTime(day.Year, day.Month, day.Day, 12, 0, 0, DateTimeKind.Utc);
+            //DateTime afternoonStart = new DateTime(day.Year, day.Month, day.Day, 13, 0, 0, DateTimeKind.Utc);
             DateTime afternoonEnd = new DateTime(day.Year, day.Month, day.Day, 17, 0, 0, DateTimeKind.Utc);
 
-            totalHours += OverlapHours(morningStart, morningEnd, startUtc, endUtc);
-            totalHours += OverlapHours(afternoonStart, afternoonEnd, startUtc, endUtc);
+            totalHours += OverlapHours(morningStart, afternoonEnd, startUtc, endUtc);
+            //totalHours += OverlapHours(afternoonStart, afternoonEnd, startUtc, endUtc);
         }
 
         return (decimal)Math.Round(totalHours,2);

@@ -406,6 +406,8 @@ namespace Lacos.GestioneCommesse.Application.Sync
 
                 entity.CustomerSignatureName = signDto.NameSurname;
                 entity.FinalNotes = signDto.FinalNotes;
+                if(entity.ServiceFee != signDto.NewServiceFee)
+                    entity.ServiceFee = signDto.NewServiceFee;
                 entity.RescheduleNotes = signDto.RescheduleNotes;
                 entity.CustomerSignatureFileName = signDto.Filename;
                 entity.ToBeReschedule = signDto.ToBeReschedule;
@@ -513,10 +515,12 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 syncFullDb.ProductTypes = await GetAllModifiedRecord<ProductType, SyncProductTypeDto>(date);
                 syncFullDb.Suppliers = await GetAllModifiedRecord<Supplier, SyncSupplierDto>(date);
                 syncFullDb.ActivityTypes = await GetAllActivityTypeModifiedRecord(date);
+                syncFullDb.MaintenancePriceLists = await GetAllModifiedRecord<MaintenancePriceList, SyncMaintenancePriceListDto>(date);
+                
                 
                 #if (DEBUG)
                     if(date<DateTime.Now.AddMonths(-1))
-                    date = date.AddMonths(-1);
+                    date = DateTime.Now.AddMonths(-1);
                 #endif
                 
                 syncFullDb.Activities = await GetAllModifiedRecord<Activity, SyncActivityDto>(date);
@@ -537,6 +541,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 syncFullDb.CheckListItems = await GetAllModifiedRecord<CheckListItem, SyncCheckListItemDto>(date);
                 syncFullDb.OperatorDocuments = await GetAllModifiedRecord<OperatorDocument, SyncOperatorDocumentDto>(date);
                 syncFullDb.Interventions = await GetAllInterventionModifiedRecord(date);
+                
                 return syncFullDb;
             }
             catch (Exception e)

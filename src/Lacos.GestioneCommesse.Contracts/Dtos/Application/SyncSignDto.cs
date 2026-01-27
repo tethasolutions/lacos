@@ -14,6 +14,7 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Application
         public long InterventionId { get; set; }
         public string FinalNotes { get; set; }
         public string RescheduleNotes { get; set; }
+        public decimal NewServiceFee { get; set; }
         public string NameSurname { get; set; }
         public string Filename { get; set; }
         public byte[]? Content{ get; set; }

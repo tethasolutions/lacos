@@ -50,7 +50,9 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<OperatorDocument, SyncOperatorDocumentDto>();
             CreateMap<Vehicle, SyncVehicleDto>();
             CreateMap<User, SyncUserDto>();
-
+            CreateMap<MaintenancePriceList, SyncMaintenancePriceListDto>();
+         
+            
             CreateMap<SyncInterventionDto, Intervention>()
                 .IgnoreCommonMembers()
                 .IgnoreNavigationPropertyEntity();

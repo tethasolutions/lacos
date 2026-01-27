@@ -16,5 +16,8 @@
         public string? JobReference { get; set; }
         public string? ContactName { get; set; }
         public string? ContactReference { get; set; }
+        public decimal? DistanceKm { get; set; }
+        public bool? IsInsideAreaC { get; set; }
+
     }
 }

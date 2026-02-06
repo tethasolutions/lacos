@@ -1,0 +1,72 @@
+<div class="k-overlay" *ngIf="opened"></div>
+
+<div class="k-window-wrapper" *ngIf="opened">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [width]="1000" [top]="110">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Movimenti Magazzino - {{ productName }}
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+
+        <div class="d-flex align-items-center mb-3">
+            <div class="col"></div>
+            <div class="col-auto">
+                <button (click)="createMovement()" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i>
+                    NUOVO MOVIMENTO
+                </button>
+            </div>
+        </div>
+
+        <div class="grid-container">
+            <kendo-grid [data]="movements" [pageSize]="stateGrid.take" [skip]="stateGrid.skip"
+                [sort]="stateGrid.sort" [filter]="stateGrid.filter"
+                filterable="menu" [sortable]="true" [pageable]="true" scrollable="none"
+                (dataStateChange)="dataStateChange($event)">
+                <kendo-grid-column field="movementDate" title="Data" [width]="150">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{ dataItem.movementDate | date:'dd/MM/yyyy HH:mm' }}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="movementType" title="Tipo" [width]="120">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <span [ngClass]="{
+                            'text-success': dataItem.movementType === 1,
+                            'text-danger': dataItem.movementType === 2
+                        }">
+                            <strong>{{ getMovementTypeLabel(dataItem.movementType) }}</strong>
+                        </span>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="quantity" title="Quantità" [width]="120">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <span [ngClass]="{
+                            'text-success': dataItem.movementType === 1,
+                            'text-danger': dataItem.movementType === 2
+                        }">
+                            <strong>{{ dataItem.movementType === 1 ? '+' : '-' }}{{ dataItem.quantity }}</strong>
+                        </span>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="notes" title="Note"></kendo-grid-column>
+                <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="60">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <button (click)="deleteMovement(dataItem)" class="btn btn-danger btn-sm grid-action-button"
+                            title="Elimina">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+
+        <div class="text-right mt-3">
+            <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                CHIUDI
+            </button>
+        </div>
+    </kendo-window>
+</div>
+
+<app-warehouse-movement-modal #movementModal></app-warehouse-movement-modal>

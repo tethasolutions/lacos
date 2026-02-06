@@ -8,6 +8,10 @@ public class Product : FullAuditedEntity, ILogEntity
     public string? Name { get; set; }
     public string? Description { get; set; }
     public string? Note { get; set; }
+    public string? Brand { get; set; }
+    public string? Side { get; set; } 
+    public string? Size { get; set; }
+    public string? Material { get; set; }
 
     // immagine della porta rei
     public string? PictureFileName { get; set; }
@@ -42,10 +46,12 @@ public class Product : FullAuditedEntity, ILogEntity
     public ICollection<ActivityProduct> ActivityProducts { get; set; }
     public ICollection<ProductDocument> Documents { get; set; }
 
+    public ICollection<WarehouseMovement> WarehouseMovements { get; set; }
     public Product()
     {
         PurchaseOrderItems = new List<PurchaseOrderItem>();
         ActivityProducts = new List<ActivityProduct>();
         Documents = new List<ProductDocument>();
+        WarehouseMovements = new List<WarehouseMovement>();
     }
 }

@@ -1931,6 +1931,70 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("TicketPictures", "Docs");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.WarehouseMovement", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("DeletedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<string>("EditedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("EditedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("EditedOn")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("MovementDate")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<int>("MovementType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("WarehouseMovements", "Docs");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.AccountingType", b =>
                 {
                     b.Property<long>("Id")
@@ -2930,6 +2994,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<long?>("AddressId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Brand")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -2988,6 +3055,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("Material")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("MonthlyMaintenance")
                         .HasColumnType("bit");
 
@@ -3024,6 +3094,12 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Property<string>("SerialNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Side")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VocType")
                         .HasMaxLength(50)
@@ -3165,6 +3241,9 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsSparePart")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWarehouseManaged")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -3845,6 +3924,17 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Ticket");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Docs.WarehouseMovement", b =>
+                {
+                    b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Product", "Product")
+                        .WithMany("WarehouseMovements")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.Address", b =>
                 {
                     b.HasOne("Lacos.GestioneCommesse.Domain.Registry.Customer", "Customer")
@@ -4130,6 +4220,8 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.Navigation("Documents");
 
                     b.Navigation("PurchaseOrderItems");
+
+                    b.Navigation("WarehouseMovements");
                 });
 
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Registry.ProductType", b =>

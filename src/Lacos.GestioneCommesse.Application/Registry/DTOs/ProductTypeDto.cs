@@ -9,5 +9,6 @@
         public bool IsReiDoor { get; set; }
         public bool IsSparePart { get; set; }
         public string? ColorHex { get; set; }
+        public bool IsWarehouseManaged { get; set; }
     }
 }

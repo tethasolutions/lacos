@@ -6,6 +6,7 @@ import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { ProductModel } from '../shared/models/product.model';
 import { ProductTypeModel } from "../shared/models/product-type.model";
+import { readData } from './common/functions';
 
 @Injectable()
 export class ProductsService {
@@ -31,6 +32,11 @@ export class ProductsService {
             );
     }
 
+    readProductsStockQuantities(state: State) {
+            const url = `${this._baseUrl}/products-stock-quantities`
+            return readData(this._http, state, url);
+    }
+
     readSpareParts(state: State) {
         const params = toDataSourceRequestString(state);
         const hasGroups = state.group && state.group.length;
@@ -48,6 +54,22 @@ export class ProductsService {
     
     readProductTypes() {
         return this._http.get<Array<ProductTypeModel>>(`${this._baseUrl}/product-types`)
+            .pipe(
+                map(e =>
+                    {
+                        const productTypes: Array<ProductTypeModel> = [];
+                        e.forEach(item => {
+                            const productType: ProductTypeModel = Object.assign(new ProductTypeModel(), item);
+                            productTypes.push(productType);
+                        });
+                        return productTypes;
+                    }
+                )
+            );
+    }
+
+    readProductTypesWarehouse() {
+        return this._http.get<Array<ProductTypeModel>>(`${this._baseUrl}/product-types-warehouse`)
             .pipe(
                 map(e =>
                     {

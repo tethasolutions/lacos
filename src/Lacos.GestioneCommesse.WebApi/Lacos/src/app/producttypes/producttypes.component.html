@@ -30,6 +30,11 @@
             {{dataItemAddress.isSparePart | bool}}
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="isWarehouseManaged" title="Gestione Magazzino">
+        <ng-template kendoGridCellTemplate let-dataItemAddress>
+            {{dataItemAddress.isWarehouseManaged | bool}}
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="colorHex" title="Colore">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class="operator-color-in-grid" [style.background-color]="dataItem.colorHex"></div>

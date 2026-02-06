@@ -110,6 +110,10 @@ export class MenuComponent extends BaseComponent implements OnInit {
                 e => e.startsWith('/purchase-orders'),
                 e => e.isAuthenticated()
             ),
+            new MenuEntry(['/products-stock-quantities'], 'Magazzino',
+                e => e.startsWith('/products-stock-quantities'),
+                e => e.isAuthenticated()
+            ),
             new DropDownMenuEntry('Utility Varie', [
                 new MenuEntry(['/interventions-ko'], 'Interventi KO',
                     e => e.startsWith('/interventions-ko'),

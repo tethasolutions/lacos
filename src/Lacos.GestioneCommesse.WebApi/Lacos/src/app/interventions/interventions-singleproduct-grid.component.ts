@@ -1,10 +1,10 @@
 import { Component, HostListener, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
-import { GridDataResult } from '@progress/kendo-angular-grid';
+import { GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
 import { tap } from 'rxjs';
 import { InterventionsService } from '../services/interventions/interventions.service';
-import { IInterventionProductReadModel } from '../services/interventions/models';
+import { IInterventionProductReadModel, IInterventionReadModel, InterventionStatus } from '../services/interventions/models';
 import { InterventionProductChecklistItemsModalComponent } from './intervention-product-checklist-items-modal.component';
 
 @Component({
@@ -84,4 +84,18 @@ export class InterventionsSingleProductGridComponent extends BaseComponent imple
         );
     }
 
+    readonly rowCallback = (context: RowClassArgs) => {
+        const intervention = context.dataItem as IInterventionReadModel;
+
+        switch (true) {
+            case intervention.status === InterventionStatus.Scheduled:
+                return { 'intervention-scheduled': true };
+            case intervention.status === InterventionStatus.CompletedSuccesfully:
+                return { 'intervention-completed': true };
+            case intervention.status === InterventionStatus.CompletedUnsuccesfully:
+                return { 'intervention-failed': true };
+            default:
+                return {};
+        }
+    };
 }

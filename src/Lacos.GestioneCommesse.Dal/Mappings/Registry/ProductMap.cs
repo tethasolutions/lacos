@@ -49,5 +49,6 @@ public class ProductMap : BaseEntityMapping<Product>
         builder.OneToMany(e => e.PurchaseOrderItems, e => e.Product, e => e.ProductId);
         builder.OneToMany(e => e.ActivityProducts, e => e.Product, e => e.ProductId);
         builder.OneToMany(e => e.Documents, e => e.Product, e => e.ProductId);
+        builder.OneToMany(e => e.WarehouseMovements, e => e.Product, e => e.ProductId);
     }
 }

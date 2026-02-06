@@ -37,6 +37,7 @@ import { AccountingTypesComponent } from './accountingtypes/accountingtypes.comp
 import { JobAccountingsComponent } from './job-accounting/jobaccountings.component';
 import { MaintenancePriceListComponent } from './maintenance-price-list/maintenance-price-list.component';
 import { DistanceErrorsComponent } from './customers/distance-errors.component';
+import { ProductsStockQuantitiesComponent } from './products/products-stock-quantities.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -50,6 +51,7 @@ const routes: Routes = [
     { path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'checklist', component: ChecklistComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'products', component: ProductsComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'products-stock-quantities', component: ProductsStockQuantitiesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'activitytypes', component: ActivityTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'producttypes', component: ProductTypesComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs', component: JobsComponent, canActivate: [AuthGuard.asInjectableGuard] },

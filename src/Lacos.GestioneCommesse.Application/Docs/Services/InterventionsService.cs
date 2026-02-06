@@ -326,6 +326,44 @@ public class InterventionsService : IInterventionsService
         {
             throw new LacosException("Non puoi eliminare un intervento già completato.");
         }
+        
+        //recupero dati per invio mail di annullamento
+        var activity = await activityRepository.Query()
+            .Include(a => a.Address)
+            .Include(a => a.Type)
+            .Include(a => a.Job)
+            .ThenInclude(a => a.Customer)
+            .Include(a => a.Referent)
+            .Where(a => a.Id == intervention.ActivityId)
+            .FirstOrDefaultAsync();
+
+        if (activity != null)
+        {
+            //invio mail modifica intervento
+            foreach (var interventionOperator in intervention.Operators)
+            {
+                if (interventionOperator.Email == null)
+                {
+                    continue;
+                }
+                string address = activity.Address != null ? activity.Address.StreetAddress + " " + activity.Address.ZipCode + " " + activity.Address.City + " " + activity.Address.Province : "";
+
+                var body = $"<p>Gentile {interventionOperator.Name},</p>" +
+                    $"<p>ti informiamo che il seguente intervento <strong>è stato annullato</strong>:</p>" +
+                    $"<ul><li><strong>Cliente:</strong> {activity.Job.Customer.Name}</li>" +
+                    $"<li><strong>Luogo:</strong> {address}</li>" +
+                    $"<li><strong>Link mappa:</strong> <a href='https://www.google.it/maps/place/{address}'>Apri in Google Maps</a></li>" +
+                    $"<li><strong>Data e ora inizio:</strong> {intervention.Start.ToString("dd/MM/yyyy HH:mm")}</li>" +
+                    $"<li><strong>Data e ora fine:</strong> {intervention.End.ToString("dd/MM/yyyy HH:mm")}</li>" +
+                    $"<li><strong>Tipologia intervento:</strong> {activity.Type.Name}</li>" +
+                    $"<li><strong>Descrizione:</strong> {intervention.Description}</li>" +
+                    $"</ul>" +
+                    $"<p>Grazie per la collaborazione.<br />" +
+                    $"Cordiali saluti<br />" +
+                    $"<strong><i>Staff Lacos</i></strong></p>";
+                await sharedService.SendMessage(interventionOperator.Email!, "", "Annullamento intervento assegnato", body);
+            }
+        }
 
         await using (var transaction = await dbContext.BeginTransaction())
         {

@@ -33,6 +33,13 @@ public class ProductsController : LacosApiController
         return await products.ToDataSourceResultAsync(request);
     }
 
+    [HttpGet("products-stock-quantities")]
+    public async Task<DataSourceResult> GetProductsStockQuantities([DataSourceRequest] DataSourceRequest request)
+    {
+        var products = (productService.GetProductsStockQuantities());
+        return await products.ToDataSourceResultAsync(request);
+    }
+
     [HttpGet("products/spare-parts")]
     public async Task<DataSourceResult> GetSpareParts([DataSourceRequest] DataSourceRequest request)
     {
@@ -80,6 +87,13 @@ public class ProductsController : LacosApiController
     public async Task<List<ProductTypeDto>> GetProductTypes()
     {
         List<ProductTypeDto> productTypes = (await productService.GetProductTypes()).ToList();
+        return productTypes;
+    }
+
+    [HttpGet("product-types-warehouse")]
+    public async Task<List<ProductTypeDto>> GetProductTypesWarehouse()
+    {
+        List<ProductTypeDto> productTypes = (await productService.GetProductTypesWarehouse()).ToList();
         return productTypes;
     }
 

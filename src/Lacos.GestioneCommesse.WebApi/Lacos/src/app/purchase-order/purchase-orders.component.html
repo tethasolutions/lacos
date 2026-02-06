@@ -25,18 +25,6 @@
                 Esporta in Excel
             </button>
         </ng-template>
-        <kendo-grid-column field="jobCodes" title="Comm." [width]="1" *ngIf="viewExportExcel">
-        </kendo-grid-column>
-        <kendo-grid-column field="date" title="Dt Ord." filter="date" [width]="1">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                {{dataItem.date | date:'dd/MM/yyyy'}}
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="expectedDate" title="Prevista Cons." filter="date" [width]="1">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                {{dataItem.expectedDate | date:'dd/MM/yyyy'}}
-            </ng-template>
-        </kendo-grid-column>
         <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="purchase-order-status">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                 let-filterService="filterService">
@@ -50,6 +38,13 @@
                 </span>
             </ng-template>
         </kendo-grid-column>
+        <kendo-grid-column field="jobCodes" title="Comm." [width]="1" *ngIf="viewExportExcel">
+        </kendo-grid-column>
+        <kendo-grid-column field="date" title="Dt Ord." filter="date" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.date | date:'dd/MM/yyyy'}}
+            </ng-template>
+        </kendo-grid-column>
         <kendo-grid-column field="jobReferences" title="Riferimenti Comm." [width]="1" *ngIf="viewExportExcel">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div [innerHTML]="dataItem.jobReferences | domsanitizer"></div>
@@ -60,6 +55,11 @@
         <kendo-grid-column field="description" title="Note">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <div [innerHTML]="dataItem.description | domsanitizer"></div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="expectedDate" title="Prevista Cons." filter="date" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.expectedDate | date:'dd/MM/yyyy'}}
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="activityTypeName" title="Tipologia">

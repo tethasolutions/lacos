@@ -25,13 +25,6 @@
                 Esporta in Excel
             </button>
         </ng-template>
-        <kendo-grid-column field="date" title="Data" filter="date" [width]="1">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                {{dataItem.date | date:'dd/MM/yyyy'}}
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="code" title="Codice" [width]="1">
-        </kendo-grid-column>
         <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="ticket-status">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                 let-filterService="filterService">
@@ -44,6 +37,13 @@
                     {{dataItem.status | ticketStatus}}
                 </span>
             </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="date" title="Data" filter="date" [width]="1">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.date | date:'dd/MM/yyyy'}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="code" title="Codice" [width]="1">
         </kendo-grid-column>
         <kendo-grid-column field="customerName" title="Cliente" *ngIf="viewExportExcel">
             <ng-template kendoGridCellTemplate let-dataItem>

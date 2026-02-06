@@ -34,7 +34,7 @@
                                 <label class="custom-form-field-label">Tipologia prodotto</label>
                                 <kendo-combobox [data]="productTypes" [(ngModel)]="options.productTypeId"
                                     name="productTypeId" suggest="true" textField="name" [valuePrimitive]="true"
-                                    valueField="id" (valueChange)="checkIfImpiantoIsPortaRei()" required>
+                                    valueField="id" (valueChange)="checkIfImpiantoIsPortaRei(); checkIfWarehouseManaged();" required>
                                 </kendo-combobox>
                                 <kendo-formerror>Tipologia prodotto è il campo obbligatorio</kendo-formerror>
                             </kendo-formfield>
@@ -42,8 +42,8 @@
                         <div class="col-md-1">
                             <kendo-formfield class="form-group">
                                 <label class="custom-form-field-label">Dismesso</label>
-                                <kendo-switch name="isDecommissioned" [(ngModel)]="options.isDecommissioned" onLabel="Si"
-                                    offLabel="No">
+                                <kendo-switch name="isDecommissioned" [(ngModel)]="options.isDecommissioned"
+                                    onLabel="Si" offLabel="No">
                                 </kendo-switch>
                             </kendo-formfield>
                         </div>
@@ -68,34 +68,68 @@
                     </kendo-formfield>
                     <kendo-formfield class="form-group">
                         <label>{{imageLabel}}</label>
-                        <kendo-upload [(ngModel)]="this.attachmentsFileInfo"
-                            (success)="ImageExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
-                            [removeUrl]="uploadRemoveUrl" name="myUpload">
+                        <kendo-upload [(ngModel)]="this.attachmentsFileInfo" (success)="ImageExecutionSuccess($event)"
+                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" name="myUpload">
                         </kendo-upload>
-                        <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
+                        <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
                     </kendo-formfield>
                     <kendo-formfield class="form-group">
                         <label><strong>Documenti</strong></label>
-                        <kendo-upload [(ngModel)]="this.documents"
-                            (success)="DocumentExecutionSuccess($event)" [saveUrl]="uploadSaveUrl"
-                            [removeUrl]="uploadRemoveUrl" name="myUploadDoc">
+                        <kendo-upload [(ngModel)]="this.documents" (success)="DocumentExecutionSuccess($event)"
+                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" name="myUploadDoc">
                             <ng-template kendoUploadFileInfoTemplate let-files>
                                 <a (click)="downloadAttachment(files[0].name)" class="pointer">
                                     {{ files[0].name }}
                                 </a>
                             </ng-template>
                         </kendo-upload>
-                        <kendo-upload-messages dropFilesHere=" " ></kendo-upload-messages>
+                        <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
                     </kendo-formfield>
                 </div>
                 <div class="col-md-4" style="text-align:center">
                     <img *ngIf="options.pictureFileName != null" [src]="pathImage + options.pictureFileName" alt=""
                         width="100%">
-                    <kendo-qrcode *ngIf="qrCode != null && isImpiantoPortaRei" [value]="qrCode"
-                        errorCorrection="M" encoding="UTF_8" style="max-width: 100px;">
+                    <kendo-qrcode *ngIf="qrCode != null && isImpiantoPortaRei" [value]="qrCode" errorCorrection="M"
+                        encoding="UTF_8" style="max-width: 100px;">
                     </kendo-qrcode>
                 </div>
             </div>
+            @if (isWarehouseManaged)
+            {
+            <div class="row">
+                <hr />
+                <div class="col-md-12">
+                    <label><strong>Dati Magazzino</strong></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Marca</label>
+                        <kendo-textbox [(ngModel)]="options.brand" name="brand"> </kendo-textbox>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Lato</label>
+                        <kendo-textbox [(ngModel)]="options.side" name="side"> </kendo-textbox>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Dimensioni</label>
+                        <kendo-textbox [(ngModel)]="options.size" name="size"> </kendo-textbox>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-3">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Materiale</label>
+                        <kendo-textbox [(ngModel)]="options.material" name="material">
+                        </kendo-textbox>
+                    </kendo-formfield>
+                </div>
+            </div>
+            }
             <div class="row" *ngIf="isImpiantoPortaRei">
                 <hr />
                 <div class="col-md-8">
@@ -104,11 +138,13 @@
                 <div class="col-md-4">
                     <div class="row">
                         <div class="col-4">
-                            <kendo-textbox [(ngModel)]="options.qrCodePrefix" name="qrCodePrefix" [maxlength]="10"> </kendo-textbox>
+                            <kendo-textbox [(ngModel)]="options.qrCodePrefix" name="qrCodePrefix" [maxlength]="10">
+                            </kendo-textbox>
                         </div>
                         <div class="col-1">/</div>
-                        <div class="col-7">                            
-                            <kendo-textbox [(ngModel)]="options.qrCodeNumber" name="qrCodeNumber" [maxlength]="10"> </kendo-textbox>
+                        <div class="col-7">
+                            <kendo-textbox [(ngModel)]="options.qrCodeNumber" name="qrCodeNumber" [maxlength]="10">
+                            </kendo-textbox>
                         </div>
                     </div>
                 </div>
@@ -183,8 +219,8 @@
                         <div class="col-md-2">
                             <kendo-formfield class="form-group">
                                 <label class="custom-form-field-label">Manutenz. Mensile</label>
-                                <kendo-switch name="monthlyMaintenance" [(ngModel)]="options.monthlyMaintenance" onLabel="Si"
-                                    offLabel="No">
+                                <kendo-switch name="monthlyMaintenance" [(ngModel)]="options.monthlyMaintenance"
+                                    onLabel="Si" offLabel="No">
                                 </kendo-switch>
                             </kendo-formfield>
                         </div>

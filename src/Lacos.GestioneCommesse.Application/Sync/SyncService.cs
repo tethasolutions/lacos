@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Lacos.GestioneCommesse.Application.Docs.DTOs;
+﻿using AutoMapper;
 using Lacos.GestioneCommesse.Application.Docs.Services;
 using Lacos.GestioneCommesse.Contracts.Dtos;
 using Lacos.GestioneCommesse.Contracts.Dtos.Application;
@@ -423,24 +415,33 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     if (rescheduleActivityId != null)
                     {
                         var activityRepository = serviceProvider.GetRequiredService<IRepository<Activity>>();
-                        var activity = new Activity()
+                        var alreadyRescheduledActivity = await activityRepository.Query()
+                            .Where(x => x.JobId == entity.Activity!.JobId && 
+                                x.TypeId == rescheduleActivityId.Value && 
+                                x.Description == entity.RescheduleNotes)
+                            .SingleOrDefaultAsync();
+
+                        if (alreadyRescheduledActivity == null)
                         {
-                            JobId = entity.Activity!.JobId,
-                            TypeId = rescheduleActivityId.Value,
-                            StartDate = DateTime.Now.Date,
-                            ExpirationDate = DateTime.Now.Date.AddDays(7),
-                            RowNumber = (entity.Activity!.Job!.Activities.Max(x => x.RowNumber) != null) ? (entity.Activity.Job.Activities.Max(x => x.RowNumber) + 1) : 100,
-                            ShortDescription = "Riprogrammazione intervento: " + entity.RescheduleNotes,
-                            Informations = entity.Activity.Informations,
-                            Description = entity.RescheduleNotes,
-                            AddressId = entity.Activity.AddressId,
-                            ReferentId = entity.Activity.ReferentId,
-                            IsNewReferent = true,
-                            IsFloorDelivery = entity.Activity.IsFloorDelivery,
-                            Status = ActivityStatus.Pending
-                        };
-                        await activityRepository.Insert(activity);
-                        await dbContext.SaveChanges();
+                            var activity = new Activity()
+                            {
+                                JobId = entity.Activity!.JobId,
+                                TypeId = rescheduleActivityId.Value,
+                                StartDate = DateTime.Now.Date,
+                                ExpirationDate = DateTime.Now.Date.AddDays(7),
+                                RowNumber = (entity.Activity!.Job!.Activities.Max(x => x.RowNumber) != null) ? (entity.Activity.Job.Activities.Max(x => x.RowNumber) + 1) : 100,
+                                ShortDescription = "Riprogrammazione intervento: " + entity.RescheduleNotes,
+                                Informations = entity.Activity.Informations,
+                                Description = entity.RescheduleNotes,
+                                AddressId = entity.Activity.AddressId,
+                                ReferentId = entity.Activity.ReferentId,
+                                IsNewReferent = true,
+                                IsFloorDelivery = entity.Activity.IsFloorDelivery,
+                                Status = ActivityStatus.Pending
+                            };
+                            await activityRepository.Insert(activity);
+                            await dbContext.SaveChanges();
+                        }
                     }
                     else
                     {

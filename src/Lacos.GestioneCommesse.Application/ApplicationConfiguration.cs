@@ -48,7 +48,8 @@ public static class ApplicationConfiguration
             .AddScoped<IHelperDocumentService, HelperDocumentService>()
             .AddScoped<IJobAccountingService, JobAccountingService>()
             .AddScoped<IAccountingTypeService, AccountingTypeService>()
-            .AddScoped<IMaintenancePriceListService, MaintenancePriceListService>();
+            .AddScoped<IMaintenancePriceListService, MaintenancePriceListService>()
+            .AddScoped<IWarehouseMovementService, WarehouseMovementService>();
 
         services.AddHttpClient<INominatimService, NominatimService>();
 

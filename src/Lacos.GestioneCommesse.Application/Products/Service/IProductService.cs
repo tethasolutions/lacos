@@ -12,13 +12,15 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
 {
      public interface IProductService
      {
-         IQueryable<ProductReadModel> GetProducts();
+        IQueryable<ProductReadModel> GetProducts();
+        IQueryable<ProductStockReadModel> GetProductsStockQuantities();
         IQueryable<ProductReadModel> GetSpareParts();
         Task<ProductDto> GetProductDetail(long productId);
-         Task UpdateProduct(long id, ProductDto productDto);
-         Task<ProductDto> CreateProduct(ProductDto productDto);
-         Task DeleteProduct(long productId);
-         Task<IEnumerable<ProductTypeDto>> GetProductTypes();
+        Task UpdateProduct(long id, ProductDto productDto);
+        Task<ProductDto> CreateProduct(ProductDto productDto);
+        Task DeleteProduct(long productId);
+        Task<IEnumerable<ProductTypeDto>> GetProductTypes();
+        Task<IEnumerable<ProductTypeDto>> GetProductTypesWarehouse();
         Task<ProductDocumentReadModel> DownloadProductDocument(string filename);
         Task<IEnumerable<ProductDocumentReadModel>> GetAllProductDocuments(long productId);
     }
@@ -50,6 +52,17 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
             return products;
         }
 
+        public IQueryable<ProductStockReadModel> GetProductsStockQuantities()
+        {
+            var products = productRepository
+                .Query()
+                .AsNoTracking()
+                .Include(x => x.ProductType)
+                .Include(x => x.WarehouseMovements)
+                .Where(x => x.ProductType.IsWarehouseManaged)
+                .Project<ProductStockReadModel>(mapper);
+            return products;
+        }
         public IQueryable<ProductReadModel> GetSpareParts()
         {
             var products = productRepository
@@ -132,6 +145,19 @@ namespace Lacos.GestioneCommesse.Application.Products.Service
             var productTypes = await productTypeRepository
                 .Query()
                 .AsNoTracking()
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+
+            return productTypes.MapTo<IEnumerable<ProductTypeDto>>(mapper);
+        }
+
+        public async Task<IEnumerable<ProductTypeDto>> GetProductTypesWarehouse()
+        {
+            var productTypes = await productTypeRepository
+                .Query()
+                .AsNoTracking()
+                .Where(x => x.IsWarehouseManaged)
+                .OrderBy(x => x.Name)
                 .ToListAsync();
 
             return productTypes.MapTo<IEnumerable<ProductTypeDto>>(mapper);

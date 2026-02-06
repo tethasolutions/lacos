@@ -15,8 +15,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  templateUrl: './products.component.html'
 })
 
 export class ProductsComponent extends BaseComponent implements OnInit {

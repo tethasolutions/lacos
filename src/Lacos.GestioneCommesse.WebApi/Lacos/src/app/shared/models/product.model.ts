@@ -9,12 +9,16 @@ export class ProductModel {
     name: string;
     description: string;
     note: string;
+
     pictureFileName: string;
     qrCodePrefix: string;
     qrCodeNumber: string;
     productTypeId: number;
     productType: ProductTypeModel;
-
+    brand: string;
+    side: string;
+    size: string;
+    material: string;
     customerId: number;
     addressId: number;
     location: string;
@@ -36,6 +40,10 @@ export class ProductModel {
         this.name = null;
         this.description = null;
         this.note = null;
+        this.brand = null;
+        this.side = null;
+        this.size = null;
+        this.material = null;
         this.pictureFileName = null;
         this.qrCodePrefix = null;
         this.qrCodeNumber = null;
@@ -71,4 +79,22 @@ export interface ProductReadModel {
     readonly productTypeId: number;
     readonly monthlyMaintenance: boolean;
     readonly isDecommissioned: boolean;
+    readonly serialNumber: string;
+    readonly brand: string;
+    readonly side: string;
+    readonly size: string;
+    readonly material: string;
+}
+
+export interface ProductStockReadModel {
+    readonly id: number;
+    readonly productType: string;
+    readonly code: string;
+    readonly name: string;
+    readonly description: string;
+    readonly brand: string;
+    readonly side: string;
+    readonly size: string;
+    readonly material: string;
+    readonly stockQuantity: number;
 }

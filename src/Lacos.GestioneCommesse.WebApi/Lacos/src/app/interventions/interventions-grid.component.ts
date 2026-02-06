@@ -1,10 +1,10 @@
 import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BaseComponent } from '../shared/base.component';
-import { CellClickEvent, GridDataResult } from '@progress/kendo-angular-grid';
+import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
 import { InterventionsService } from '../services/interventions/interventions.service';
 import { filter, switchMap, tap } from 'rxjs';
-import { IInterventionReadModel, Intervention, interventionStatusNames } from '../services/interventions/models';
+import { IInterventionReadModel, Intervention, InterventionStatus, interventionStatusNames } from '../services/interventions/models';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { InterventionModalComponent } from './intervention-modal.component';
 import { ApiUrls } from '../services/common/api-urls';
@@ -60,22 +60,22 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
         super();
     }
 
-    ngOnInit() {        
+    ngOnInit() {
         this._subscribeRouteParams();
         this._read();
         this.updateScreenSize();
-      }
-    
-      @HostListener('window:resize', ['$event'])
-      onResize(event: Event): void {
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
         this.updateScreenSize();
-      }
-    
-      private updateScreenSize(): void {
-        this.screenWidth = window.innerWidth -44;
+    }
+
+    private updateScreenSize(): void {
+        this.screenWidth = window.innerWidth - 44;
         if (this.screenWidth > 1876) this.screenWidth = 1876;
-        if (this.screenWidth < 1400) this.screenWidth = 1400;     
-      }
+        if (this.screenWidth < 1400) this.screenWidth = 1400;
+    }
 
 
     ngOnChanges(changes: SimpleChanges) {
@@ -150,13 +150,13 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
     sendReport(interventionId: number, customerEmail: string) {
         this._messageBox.confirm("Vuoi inviare il rapportino alla mail del cliente (" + customerEmail + ")?", "Invio rapportino")
-        .pipe(
-            filter(e => e),
-            switchMap(() => 
-                this._service.sendReport(interventionId, customerEmail)
+            .pipe(
+                filter(e => e),
+                switchMap(() =>
+                    this._service.sendReport(interventionId, customerEmail)
+                )
             )
-        )
-        .subscribe();
+            .subscribe();
     }
 
     protected _read() {
@@ -184,7 +184,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
         this._read();
     }
-    
+
     private _buildActivityIdFilter() {
         const that = this;
 
@@ -203,7 +203,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
     private _buildJobIdFilter() {
         const that = this;
-        
+
         return {
             field: 'jobId',
             get operator() {
@@ -213,7 +213,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
             },
             get value() {
                 return that._jobId
-                   ? that._jobId
+                    ? that._jobId
                     : 0;
             }
         };
@@ -231,4 +231,20 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
         this._jobId = isNaN(+params['jobId']) ? null : +params['jobId'];
         this._read();
     }
+
+    readonly rowCallback = (context: RowClassArgs) => {
+        const intervention = context.dataItem as IInterventionReadModel;
+
+        switch (true) {
+            case intervention.status === InterventionStatus.Scheduled:
+                return { 'intervention-scheduled': true };
+            case intervention.status === InterventionStatus.CompletedSuccesfully:
+                return { 'intervention-completed': true };
+            case intervention.status === InterventionStatus.CompletedUnsuccesfully:
+                return { 'intervention-failed': true };
+            default:
+                return {};
+        }
+    };
+    
 }

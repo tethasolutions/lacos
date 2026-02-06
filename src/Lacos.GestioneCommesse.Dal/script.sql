@@ -5875,3 +5875,117 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206105548_add products field for warehouse'
+)
+BEGIN
+    ALTER TABLE [Registry].[ProductTypes] ADD [IsWarehouseManaged] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206105548_add products field for warehouse'
+)
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD [Brand] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206105548_add products field for warehouse'
+)
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD [Material] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206105548_add products field for warehouse'
+)
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD [Side] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206105548_add products field for warehouse'
+)
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD [Size] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206105548_add products field for warehouse'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260206105548_add products field for warehouse', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206134557_add warehousemovement'
+)
+BEGIN
+    CREATE TABLE [Docs].[WarehouseMovements] (
+        [Id] bigint NOT NULL IDENTITY,
+        [ProductId] bigint NOT NULL,
+        [MovementDate] datetimeoffset(3) NOT NULL,
+        [MovementType] int NOT NULL,
+        [Quantity] int NOT NULL,
+        [Notes] nvarchar(max) NULL,
+        [CreatedOn] datetimeoffset(3) NOT NULL,
+        [CreatedBy] nvarchar(max) NULL,
+        [CreatedById] bigint NULL,
+        [EditedOn] datetimeoffset(3) NULL,
+        [EditedBy] nvarchar(max) NULL,
+        [EditedById] bigint NULL,
+        [DeletedOn] datetimeoffset(3) NULL,
+        [DeletedBy] nvarchar(max) NULL,
+        [DeletedById] bigint NULL,
+        [IsDeleted] bit NOT NULL,
+        CONSTRAINT [PK_WarehouseMovements] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_WarehouseMovements_Products_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [Registry].[Products] ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206134557_add warehousemovement'
+)
+BEGIN
+    CREATE INDEX [IX_WarehouseMovements_ProductId] ON [Docs].[WarehouseMovements] ([ProductId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260206134557_add warehousemovement'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260206134557_add warehousemovement', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -1,0 +1,57 @@
+<div class="d-flex align-items-center mb-3">
+    <div class="col">
+        <h4>Magazzino - Giacenza Prodotti</h4>
+    </div>
+    <div class="col-auto">
+        <button (click)="createProduct()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+            NUOVO
+        </button>
+    </div>
+</div>
+
+<div class="grid-container">
+    <kendo-grid [data]="products" [pageSize]="stateGridProducts.take" [skip]="stateGridProducts.skip"
+        [sort]="stateGridProducts.sort" [filter]="stateGridProducts.filter" [group]="stateGridProducts.group"
+        filterable="menu" [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
+        (dataStateChange)="dataStateChange($event)">
+        <ng-template kendoGridToolbarTemplate>
+            <button type="button" class="btn btn-primary" (click)="exportToExcel()">
+                Esporta in Excel
+            </button>
+        </ng-template>
+        <kendo-grid-column field="productType" title="Tipologia"></kendo-grid-column>
+        <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
+        <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
+        <kendo-grid-column field="brand" title="Marca"></kendo-grid-column>
+        <kendo-grid-column field="side" title="Lato"></kendo-grid-column>
+        <kendo-grid-column field="size" title="Dimensione"></kendo-grid-column>
+        <kendo-grid-column field="material" title="Materiale"></kendo-grid-column>
+        <kendo-grid-column field="stockQuantity" title="Giacenza">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <span [ngClass]="{'text-danger': dataItem.stockQuantity <= 0}">
+                    <strong>{{ dataItem.stockQuantity }}</strong>
+                </span>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="170">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button (click)="viewMovements(dataItem)" class="btn btn-primary btn-sm grid-action-button"
+                    title="Visualizza Movimenti">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button (click)="editProduct(dataItem.id)" class="btn btn-primary btn-sm grid-action-button"
+                    title="Modifica">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button (click)="deleteProduct(dataItem.id)" class="btn btn-danger btn-sm grid-action-button"
+                    title="Elimina">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
+
+<app-product-modal #productModal [warehouseManaged]="true"></app-product-modal>
+<app-warehouse-movements-modal #warehouseMovementsModal></app-warehouse-movements-modal>

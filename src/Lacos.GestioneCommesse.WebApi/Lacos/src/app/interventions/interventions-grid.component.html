@@ -8,18 +8,11 @@
 
 <div class="grid-container">
 <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
-    [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
+    [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true" [rowClass]="rowCallback" 
     scrollable="none" [style.width.px]="screenWidth" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)"
     (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event)">
 
-    <ng-container *ngIf="!activityId">
-        <kendo-grid-column field="customer" title="Cliente">
-        </kendo-grid-column>
-        <kendo-grid-column field="customerAddress" title="Indirizzo">
-        </kendo-grid-column>
-    </ng-container>
-
-    <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric">
+    <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="intervention-status">
         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
             let-filterService="filterService">
             <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
@@ -32,6 +25,13 @@
             </span>
         </ng-template>
     </kendo-grid-column>
+
+    <ng-container *ngIf="!activityId">
+        <kendo-grid-column field="customer" title="Cliente">
+        </kendo-grid-column>
+        <kendo-grid-column field="customerAddress" title="Indirizzo">
+        </kendo-grid-column>
+    </ng-container>
     <kendo-grid-column field="start" title="Inizio" filter="date" [width]="1">
         <ng-template kendoGridCellTemplate let-dataItem>
             <span class="text-nowrap">

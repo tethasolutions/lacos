@@ -166,8 +166,11 @@ import { MaintenancePriceListItemModalComponent } from './maintenance-price-list
 import { MaintenancePriceListModalComponent } from './maintenance-price-list/maintenance-price-list-modal.component';
 import { MaintenancePriceListService } from './services/maintenance-price-list.service';
 import { DistanceErrorsComponent } from './customers/distance-errors.component';
-import { PurchaseOrderExpense } from './services/purchase-orders/models';
 import { PurchaseOrderExpenseModalComponent } from './purchase-order/purchase-order-expense-modal.component';
+import { ProductsStockQuantitiesComponent } from './products/products-stock-quantities.component';
+import { WarehouseMovementModalComponent } from './warehouse-movements/warehouse-movement-modal.component';
+import { WarehouseService } from './services/warehouse.service';
+import { WarehouseMovementsModalComponent } from './warehouse-movements/warehouse-movements-modal.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -275,7 +278,10 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         MaintenancePriceListComponent,
         MaintenancePriceListModalComponent,
         MaintenancePriceListItemModalComponent,
-        DistanceErrorsComponent
+        DistanceErrorsComponent,
+        ProductsStockQuantitiesComponent,
+        WarehouseMovementsModalComponent,
+        WarehouseMovementModalComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         NavigationModule,
@@ -344,7 +350,8 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         HelperDocumentsService,
         AccountingTypesService,
         JobAccountingsService,
-        MaintenancePriceListService
+        MaintenancePriceListService,
+        WarehouseService
     ]
 })
 export class AppModule { }

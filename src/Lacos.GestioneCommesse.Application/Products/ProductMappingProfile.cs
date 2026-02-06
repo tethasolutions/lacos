@@ -3,6 +3,7 @@ using Lacos.GestioneCommesse.Domain.Registry;
 using Lacos.GestioneCommesse.Application.Products.DTOs;
 using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Application.Docs.DTOs;
+using Lacos.GestioneCommesse.Domain.Docs;
 
 namespace Lacos.GestioneCommesse.Application.Products
 {
@@ -20,11 +21,19 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.PurchaseOrderItems)
                 .Ignore(x => x.ActivityProducts)
                 .Ignore(x => x.Documents)
+                .Ignore(x => x.WarehouseMovements)
                 .AfterMap(AfterMap);
 
             CreateMap<Product, ProductReadModel>()
                 .MapMember(x => x.QrCode, y => (y.QrCodePrefix ?? "") + (y.QrCodeNumber?? "")) 
                 .MapMember(x => x.ProductType, y => y.ProductType.Name);
+
+            CreateMap<Product, ProductStockReadModel>()
+                .MapMember(x => x.ProductType, y => y.ProductType.Name)
+                .MapMember(x => x.StockQuantity, y => (y.WarehouseMovements.Any(p => p.MovementType == WarehouseMovementType.Inbound) ? 
+                    y.WarehouseMovements.Where(p => p.MovementType == WarehouseMovementType.Inbound).Sum(p => p.Quantity) : 0) -
+                    (y.WarehouseMovements.Any(p => p.MovementType == WarehouseMovementType.Outbound) ?
+                    y.WarehouseMovements.Where(p => p.MovementType == WarehouseMovementType.Outbound).Sum(p => p.Quantity) : 0));
 
             CreateMap<ProductReadModel, Product>()
                 .Ignore(x => x.Note)
@@ -45,6 +54,7 @@ namespace Lacos.GestioneCommesse.Application.Products
                 .Ignore(x => x.Documents)
                 .Ignore(x => x.QrCodeNumber)
                 .Ignore(x => x.QrCodePrefix)
+                .Ignore(x => x.WarehouseMovements)
                 .IgnoreCommonMembers();
 
             CreateMap<ProductDocument, ProductDocumentReadModel>();

@@ -6,6 +6,7 @@ export class ProductTypeModel {
     isReiDoor: boolean;
     isSparePart: boolean;
     colorHex: string;
+    isWarehouseManaged: boolean;
 
     constructor() {
         this.id = null;
@@ -15,5 +16,6 @@ export class ProductTypeModel {
         this.isReiDoor = false;
         this.isSparePart = false;
         this.colorHex = null;
+        this.isWarehouseManaged = false;
     }
 }

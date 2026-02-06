@@ -15,4 +15,8 @@ public class ProductReadModel
     public bool? MonthlyMaintenance { get; set; }
     public bool? IsDecommissioned { get; set; }
     public string? SerialNumber { get; set; }
+    public string? Brand { get; set; }
+    public string? Side { get; set; }
+    public string? Size { get; set; }
+    public string? Material { get; set; }
 }

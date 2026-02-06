@@ -26,6 +26,8 @@ import { ProductDocumentModel } from '../shared/models/product-document.model';
 
 export class ProductModalComponent extends ModalFormComponent<ProductModel> {
 
+  @Input() warehouseManaged = false;
+
   @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
   @ViewChild('addressModal', { static: true }) addressModal: AddressModalComponent;
 
@@ -46,6 +48,7 @@ export class ProductModalComponent extends ModalFormComponent<ProductModel> {
   pathImage = `${ApiUrls.baseUrl}/attachments/`;
   attachmentsFileInfo: any;
   isImpiantoPortaRei = false;
+  isWarehouseManaged = false;
   imageLabel: string;
 
   constructor(
@@ -71,12 +74,27 @@ export class ProductModalComponent extends ModalFormComponent<ProductModel> {
   }
 
   protected _readProductTypes() {
+    if (this.warehouseManaged) {
+      this._subscriptions.push(
+        this._productsService.readProductTypesWarehouse()
+          .pipe(
+            tap(e => {
+              this.productTypes = e;
+              this.checkIfImpiantoIsPortaRei();
+              this.isWarehouseManaged = true;
+            })
+          )
+          .subscribe()
+      );
+      return;
+    }
     this._subscriptions.push(
       this._productsService.readProductTypes()
         .pipe(
           tap(e => {
             this.productTypes = e;
             this.checkIfImpiantoIsPortaRei();
+            this.checkIfWarehouseManaged();
           })
         )
         .subscribe()
@@ -174,6 +192,15 @@ export class ProductModalComponent extends ModalFormComponent<ProductModel> {
     const productTypeSelezionato: ProductTypeModel = this.productTypes.find(x => x.id === this.options.productTypeId);
     if (productTypeSelezionato != undefined) {
       this.isImpiantoPortaRei = productTypeSelezionato.isReiDoor;
+    }
+  }
+
+  checkIfWarehouseManaged() {
+    this.isWarehouseManaged = false;
+    if (this.options.productTypeId == null || this.options.productTypeId == undefined) { return; }
+    const productTypeSelezionato: ProductTypeModel = this.productTypes.find(x => x.id === this.options.productTypeId);
+    if (productTypeSelezionato != undefined) {
+      this.isWarehouseManaged = productTypeSelezionato.isWarehouseManaged;
     }
   }
 

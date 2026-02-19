@@ -223,18 +223,19 @@
                                     <div class="col-md-6 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}"
                                         [innerHTML]="item.note | domsanitizer"></div>
                                     <div class="col-md-2" style="text-align: right;">
-                                        <button [disabled]="item.operatorId != currentOperator.id" type="button"
+                                        <button [disabled]="disableEditOrDeleteMessage(item)" type="button"
                                             class="btn btn-outline-primary btn-sm me-2" title="Modifica"
                                             (click)="editMessage(item)">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="btn btn-outline-primary btn-sm me-2" type="button"
-                                            title="Segna come letto" [disabled]="item.isRead"
-                                            (click)="markAsRead(item)">
-                                            <i class="fa-regular fa-square-check" *ngIf="item.isRead"></i>
-                                            <i class="fa-regular fa-square" *ngIf="!item.isRead"></i>
+                                            [disabled]="!isMyComment(item.targetOperators)" (click)="markAsRead(item)">
+                                            <i class="fa-regular fa-square-check" *ngIf="item.isRead"
+                                                title="Segna da leggere"></i>
+                                            <i class="fa-regular fa-square" *ngIf="!item.isRead"
+                                                title="Segna come letto"></i>
                                         </button>
-                                        <button [disabled]="item.operatorId != currentOperator.id" type="button"
+                                        <button [disabled]="disableEditOrDeleteMessage(item)" type="button"
                                             class="btn btn-outline-danger btn-sm" title="Elimina"
                                             (click)="deleteMessage(item)">
                                             <i class="fas fa-trash"></i>
@@ -248,33 +249,122 @@
             </div>
             <!--</kendo-expansionpanel>-->
             <hr class="border-green" />
-
             <div class="row">
-                <div class="col-md-3">
-                    <kendo-formfield class="form-group">
-                        <label>Allegati</label>
-                        <kendo-upload [(ngModel)]="this.attachments" (success)="AttachmentExecutionSuccess($event)"
-                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true" name="myUpload">
-                            <ng-template kendoUploadFileInfoTemplate let-files>
-                                <a (click)="downloadAttachment(files[0].name)" class="pointer">
-                                    {{ files[0].name }}
-                                </a>
+                <div class="col-md-12">
+                    <label>Allegati</label>
+                    <kendo-tabstrip style="max-width: 1200px;">
+                        <kendo-tabstrip-tab title="Preventivo" [selected]="isAdmin" *ngIf="isAdmin">
+                            <ng-template kendoTabContent>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <kendo-upload [(ngModel)]="attachmentsPreventivo"
+                                            (success)="AttachmentExecutionSuccess($event, JobAttachmentType.Preventivo)"
+                                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true"
+                                            name="uploadPreventivo">
+                                            <ng-template kendoUploadFileInfoTemplate let-files>
+                                                <a (click)="downloadAttachment(files[0].name)" class="pointer">
+                                                    {{ files[0].name }}
+                                                </a>
+                                            </ng-template>
+                                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
+                                        </kendo-upload>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div *ngFor="let item of getAttachmentsByType(JobAttachmentType.Preventivo); let i = index"
+                                                class="col-2">
+                                                <a href="javascript:void(0)"
+                                                    (click)="openImage(i, JobAttachmentType.Preventivo)"
+                                                    *ngIf="item.isImage">
+                                                    <img [src]="pathImage + item.fileName" width="90%"
+                                                        [title]="item.displayName" />
+                                                </a>
+                                                <a [href]="pathImage + item.fileName" target="_blank"
+                                                    *ngIf="!item.isImage">
+                                                    <img src="assets/document.jpg" width="90%"
+                                                        [title]="item.displayName" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </ng-template>
-                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
-                        </kendo-upload>
-                    </kendo-formfield>
-                </div>
-                <div class="col-md-9">
-                    <div class="row">
-                        <div *ngFor="let item of options.attachments; let i = index" class="col-2">
-                            <a href="javascript:void(0)" (click)="openImage(i)" *ngIf="item.isImage">
-                                <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName" />
-                            </a>
-                            <a [href]="pathImage + item.fileName" target="_blank" *ngIf="!item.isImage">
-                                <img src="assets/document.jpg" width="90%" [title]="item.displayName" />
-                            </a>
-                        </div>
-                    </div>
+                        </kendo-tabstrip-tab>
+                        <kendo-tabstrip-tab title="Rilievo" [selected]="!isAdmin">
+                            <ng-template kendoTabContent>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <kendo-upload [(ngModel)]="attachmentsRilievo"
+                                            (success)="AttachmentExecutionSuccess($event, JobAttachmentType.Rilievo)"
+                                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true"
+                                            name="uploadRilievo">
+                                            <ng-template kendoUploadFileInfoTemplate let-files>
+                                                <a (click)="downloadAttachment(files[0].name)" class="pointer">
+                                                    {{ files[0].name }}
+                                                </a>
+                                            </ng-template>
+                                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
+                                        </kendo-upload>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div *ngFor="let item of getAttachmentsByType(JobAttachmentType.Rilievo); let i = index"
+                                                class="col-2">
+                                                <a href="javascript:void(0)"
+                                                    (click)="openImage(i, JobAttachmentType.Rilievo)"
+                                                    *ngIf="item.isImage">
+                                                    <img [src]="pathImage + item.fileName" width="90%"
+                                                        [title]="item.displayName" />
+                                                </a>
+                                                <a [href]="pathImage + item.fileName" target="_blank"
+                                                    *ngIf="!item.isImage">
+                                                    <img src="assets/document.jpg" width="90%"
+                                                        [title]="item.displayName" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-tabstrip-tab>
+                        <kendo-tabstrip-tab title="Altro" *ngIf="isAdmin">
+                            <ng-template kendoTabContent>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <kendo-upload [(ngModel)]="attachmentsAltro"
+                                            (success)="AttachmentExecutionSuccess($event, JobAttachmentType.Altro)"
+                                            [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [multiple]="true"
+                                            name="uploadAltro">
+                                            <ng-template kendoUploadFileInfoTemplate let-files>
+                                                <a (click)="downloadAttachment(files[0].name)" class="pointer">
+                                                    {{ files[0].name }}
+                                                </a>
+                                            </ng-template>
+                                            <kendo-upload-messages dropFilesHere=" "></kendo-upload-messages>
+                                        </kendo-upload>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div *ngFor="let item of getAttachmentsByType(JobAttachmentType.Altro); let i = index"
+                                                class="col-2">
+                                                <a href="javascript:void(0)"
+                                                    (click)="openImage(i, JobAttachmentType.Altro)"
+                                                    *ngIf="item.isImage">
+                                                    <img [src]="pathImage + item.fileName" width="90%"
+                                                        [title]="item.displayName" />
+                                                </a>
+                                                <a [href]="pathImage + item.fileName" target="_blank"
+                                                    *ngIf="!item.isImage">
+                                                    <img src="assets/document.jpg" width="90%"
+                                                        [title]="item.displayName" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-tabstrip-tab>
+                    </kendo-tabstrip>
                 </div>
             </div>
             <div class="d-flex justify-content-end gap-2 mt-5" *ngIf="!jobReadOnly || !isOperator">

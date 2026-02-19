@@ -111,6 +111,9 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     onActivityTypeChange() {
         this.selectedActivityType = this.activityTypes.find(e => e.id == this.options.activity.typeId);
         this.options.activity.shortDescription = this.selectedActivityType.name;
+        if (this.selectedActivityType.name == 'POSA') {
+            this.options.activity.shortDescription = 'POSA Da Programmare';
+        }
         this.selectedJob = this.jobs.find(e => e.id == this.options.activity.jobId);
         if (this.selectedActivityType.isInternal) {
             this.onSupplierChange();
@@ -120,7 +123,17 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
                     .find(e => e.id === this.options.activity.jobId).customerId;
                 this.readAddresses(customerId);
             }
-            //this.options.activity.description = this.selectedJob.description;
+            if (this.options.activity.jobId) {
+                this._activityTypesService.getDefaultOperator(this.selectedActivityType.id).pipe(
+                    tap(e => {
+                        this.options.activity.referentId = e.id;
+                    })
+                ).subscribe();
+                if (this.job.mandatoryDate) {
+                    this.options.activity.expirationDate = this.job.mandatoryDate.addDays(-3);
+                    this.options.activity.isMandatoryExpiration = true;
+                }
+            }
         }
         else {
             const customerId = this.jobs
@@ -465,8 +478,8 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
             this._messagesService.markAsRead(message.id, this.currentOperator.id)
                 .pipe(
                     tap(() => {
-                        message.isRead = true;
-                        this._messageBox.success('Commento letto');
+                        message.isRead = !message.isRead;
+                        this._messageBox.success('Commento aggiornato');
                         this.updateUnreadCounter();
                     })
                 )
@@ -522,6 +535,17 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     openImage(index: number) {
         const options = new GalleryModalInput(this.album, index);
         this.galleryModal.open(options).subscribe();
+    }
+
+    isMyComment(targetOperators: string): boolean {
+        if (targetOperators == null || targetOperators.length == 0) return false;
+        return targetOperators.includes(this.currentOperator.name);
+    }
+
+    disableEditOrDeleteMessage(message: MessageReadModel): boolean {
+        if (!this.isOperator && message.isFromApp) return false;
+        if (message.operatorId != this.currentOperator.id) return true;
+        return false;
     }
 
 }

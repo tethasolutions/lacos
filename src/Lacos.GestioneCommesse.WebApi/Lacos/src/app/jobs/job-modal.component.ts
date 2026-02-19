@@ -16,7 +16,7 @@ import { listEnum } from '../services/common/functions';
 import { ApiUrls } from '../services/common/api-urls';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { JobAttachmentUploadFileModel } from '../services/jobs/job-attachment-upload-file.model';
-import { JobAttachmentModel } from '../services/jobs/job-attachment.model';
+import { JobAttachmentModel, JobAttachmentType } from '../services/jobs/job-attachment.model';
 import { State } from '@progress/kendo-data-query';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
@@ -45,23 +45,20 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
 
     public windowState: WindowState = "default";
 
-    //public sharepointRootPath: string = this._sharepoint.rootPath;
-
-    // get selectedSharepointPath() {
-    //     return !this._selectedSharepointPath ? this.sharepointRootPath : this._selectedSharepointPath
-    // }
-
     customers: CustomerModel[];
     addresses: AddressModel[];
     operators: OperatorModel[];
-    attachments: Array<FileInfo> = [];
+    attachmentsPreventivo: Array<FileInfo> = [];
+    attachmentsRilievo: Array<FileInfo> = [];
+    attachmentsAltro: Array<FileInfo> = [];
     messages: MessageReadModel[];
     user: User;
     currentOperator: OperatorModel;
     unreadMessages: number;
-    album: string[] = [];
     targetOperatorsArray: number[];
     readonly isOperator: boolean;
+    readonly isAdmin: boolean;
+    readonly JobAttachmentType = JobAttachmentType;
 
     readonly states = listEnum<JobStatus>(JobStatus);
 
@@ -87,6 +84,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     ) {
         super(messageBox);
         this.isOperator = security.isAuthorized(Role.Operator);
+        this.isAdmin = security.isAuthorized(Role.Administrator);
     }
 
     ngOnInit() {
@@ -103,17 +101,27 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
     override open(job: Job) {
         const result = super.open(job);
 
-        this.attachments = [];
-        this.album = [];
+        this.attachmentsPreventivo = [];
+        this.attachmentsRilievo = [];
+        this.attachmentsAltro = [];
         this.contactName = null;
         this.contactReference = null;
 
         if (job.attachments != null) {
             this.options.attachments.forEach(element => {
                 if (element.displayName != null && element.fileName != null) {
-                    this.attachments.push({ name: element.displayName });
-                    if (element.isImage) this.album.push(this.pathImage + element.fileName);
-                    if (!element.isImage) this.album.push("assets/document.jpg");
+                    const fileInfo: FileInfo = { name: element.displayName };
+                    switch (element.type) {
+                        case JobAttachmentType.Preventivo:
+                            this.attachmentsPreventivo.push(fileInfo);
+                            break;
+                        case JobAttachmentType.Rilievo:
+                            this.attachmentsRilievo.push(fileInfo);
+                            break;
+                        default:
+                            this.attachmentsAltro.push(fileInfo);
+                            break;
+                    }
                 }
             });
         }
@@ -208,7 +216,7 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
                 .subscribe()
         );
     }
-    
+
     browseSharepointPath(path: string, folderName: string, browseMode: boolean) {
         const options: ISharepointModalOptions = {
             path,
@@ -254,9 +262,9 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
                     map(e => {
                         this.addresses = e;
                     }),
-                    tap(() => { 
+                    tap(() => {
                         this.onAddressChange();
-                     })
+                    })
                 )
                 .subscribe()
         );
@@ -285,15 +293,26 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         window.open(url);
     }
 
-    public AttachmentExecutionSuccess(e: SuccessEvent): void {
+    public AttachmentExecutionSuccess(e: SuccessEvent, type: JobAttachmentType): void {
         const file = e.response.body as JobAttachmentUploadFileModel;
         if (file != null) {
-            let jobAttachmentModal = new JobAttachmentModel(0, file.originalFileName, file.fileName, this.options.id);
-            this.options.attachments.push(jobAttachmentModal);
+            let jobAttachment = new JobAttachmentModel(0, file.originalFileName, file.fileName, this.options.id, type);
+            this.options.attachments.push(jobAttachment);
         } else {
             const deletedFile = e.files[0].name;
-            this.options.attachments.findAndRemove(e => e.displayName === deletedFile);
+            this.options.attachments.findAndRemove(a => a.displayName === deletedFile && a.type === type);
         }
+    }
+
+    getAttachmentsByType(type: JobAttachmentType): JobAttachmentModel[] {
+        return this.options.attachments?.filter(a => a.type === type) ?? [];
+    }
+
+    openImage(index: number, type: JobAttachmentType) {
+        const album = this.getAttachmentsByType(type)
+            .map(a => a.isImage ? this.pathImage + a.fileName : 'assets/document.jpg');
+        const galleryOptions = new GalleryModalInput(album, index);
+        this.galleryModal.open(galleryOptions).subscribe();
     }
 
     private _getOperators() {
@@ -329,16 +348,6 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
             return;
         }
         this.createMessage();
-        // this._subscriptions.push(
-        //     this._messagesService.getElementTargetOperators(this.currentOperator.id, this.options.id, "J")
-        //         .pipe(
-        //             tap(e => {
-        //                 this.targetOperatorsArray = e;
-        //                 this.createMessage();
-        //             })
-        //         )
-        //         .subscribe()
-        // );
     }
 
     createMessage() {
@@ -366,9 +375,9 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
             this._messagesService.markAsRead(message.id, this.currentOperator.id)
                 .pipe(
                     tap(() => {
-                        message.isRead = true;
+                        message.isRead = !message.isRead;
                         this.updateUnreadCounter();
-                        this._messageBox.success('Commento letto');
+                        this._messageBox.success('Commento aggiornato');
                     })
                 )
                 .subscribe()
@@ -381,7 +390,6 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         originalMsg.date = message.date;
         originalMsg.note = message.note;
         this.updateUnreadCounter();
-        //this._read();
     }
 
     editMessage(message: MessageReadModel) {
@@ -420,10 +428,14 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
         this.unreadMessages = this.options.messages.count(e => !e.isRead);
     }
 
-
-    openImage(index: number) {
-        const options = new GalleryModalInput(this.album, index);
-        this.galleryModal.open(options).subscribe();
+    isMyComment(targetOperators: string): boolean {
+        if (targetOperators == null || targetOperators.length == 0) return false;
+        return targetOperators.includes(this.currentOperator.name);
     }
-
+    
+    disableEditOrDeleteMessage(message: MessageReadModel): boolean {
+        if (!this.isOperator && message.isFromApp) return false;
+        if (message.operatorId != this.currentOperator.id) return true;
+        return false;
+    }
 }

@@ -35,10 +35,10 @@ public class InterventionsController : LacosApiController
         this.sharedService = sharedService;
     }
 
-    [HttpGet("read")]
-    public Task<DataSourceResult> Read(DataSourceRequest request)
+    [HttpGet("read/{filterHistorical}")]
+    public Task<DataSourceResult> Read(DataSourceRequest request, bool filterHistorical)
     {
-        return service.Query()
+        return service.Query(filterHistorical)
             .ToDataSourceResultAsync(request);
     }
 

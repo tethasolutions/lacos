@@ -9,7 +9,7 @@ import { ApiUrls } from '../services/common/api-urls';
 import { JobsService } from '../services/jobs/jobs.service';
 import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
 import { TicketsService } from '../services/tickets/tickets.service';
-import { JobAttachmentModel } from '../services/jobs/job-attachment.model';
+import { JobAttachmentModel, JobAttachmentType } from '../services/jobs/job-attachment.model';
 import { PurchaseOrderAttachmentModel } from '../services/purchase-orders/purchase-order-attachment.model';
 import { TicketAttachmentModel } from '../services/tickets/ticket-attachment.model';
 import { InterventionsService } from '../services/interventions/interventions.service';
@@ -95,7 +95,22 @@ export class JobsAttachmentsModalComponent extends ModalComponent<[number, numbe
         return true;
     }
 
+    get visibleAttachments(): JobAttachmentModel[] {
+        if (!this.attachments) return [];
+        return this.isAdmin
+            ? this.attachments
+            : this.attachments.filter(a => a.type === JobAttachmentType.Rilievo);
+    }
+
     public CreateUrl(fileName: string, displayName: string): string {
         return `${this._baseUrl}/activity-attachment/download-file/${fileName}/${displayName}`;
+    }
+
+    public attachmentTypeName(type: JobAttachmentType): string {
+        switch (type) {
+            case JobAttachmentType.Preventivo: return 'Preventivo';
+            case JobAttachmentType.Rilievo: return 'Rilievo';
+            default: return 'Altro';
+        }
     }
 }

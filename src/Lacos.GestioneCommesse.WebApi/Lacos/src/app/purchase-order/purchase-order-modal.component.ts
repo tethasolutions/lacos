@@ -84,6 +84,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     isAdmin: boolean;
     album: string[] = [];
     targetOperatorsArray: number[];
+    readonly isOperator: boolean;
 
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
@@ -103,6 +104,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         private readonly _messagesService: MessagesService
     ) {
         super(messageBox);
+        this.isOperator = security.isAuthorized(Role.Operator);
         this.isAdmin = security.isAuthorized(Role.Administrator);
     }
 
@@ -457,8 +459,8 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
             this._messagesService.markAsRead(message.id, this.currentOperator.id)
                 .pipe(
                     tap(() => {
-                        message.isRead = true;
-                        this._messageBox.success('Commento letto');
+                        message.isRead = !message.isRead;
+                        this._messageBox.success('Commento aggiornato');
                         this.updateUnreadCounter();
                     })
                 )
@@ -517,6 +519,16 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         this.galleryModal.open(options).subscribe();
     }
 
+    isMyComment(targetOperators: string): boolean {
+        if (targetOperators == null || targetOperators.length == 0) return false;
+        return targetOperators.includes(this.currentOperator.name);
+    }
+    
+    disableEditOrDeleteMessage(message: MessageReadModel): boolean {
+        if (!this.isOperator && message.isFromApp) return false;
+        if (message.operatorId != this.currentOperator.id) return true;
+        return false;
+    }
 }
 
 export class PurchaseOrderModalOptions {

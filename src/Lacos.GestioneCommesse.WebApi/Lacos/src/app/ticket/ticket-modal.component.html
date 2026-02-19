@@ -74,7 +74,8 @@
                     <div class="form-group">
                         <kendo-combobox [data]="customers" [valuePrimitive]="true" textField="name" valueField="id"
                             name="customerId" [(ngModel)]="options.customerId" required [suggest]="true"
-                            [allowCustom]="false" [disabled]="!!options.id" class="customer-combobox" (valueChange)="onCustomerChange()">
+                            [allowCustom]="false" [disabled]="!!options.id" class="customer-combobox"
+                            (valueChange)="onCustomerChange()">
                         </kendo-combobox>
                         <button (click)="createCustomer()" type="button" class="btn btn-primary add-customer-button"
                             title="Nuovo cliente">
@@ -103,10 +104,11 @@
                     <div class="form-group">
                         <kendo-combobox [data]="jobs" textField="fullName" valueField="id" name="jobId"
                             [(ngModel)]="options.jobId" [suggest]="true" [allowCustom]="false"
-                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" class="customer-combobox" [valuePrimitive]="true" [disabled]="!options.customerId">
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}" class="customer-combobox"
+                            [valuePrimitive]="true" [disabled]="!options.customerId">
                         </kendo-combobox>
-                        <button (click)="createJobTicket()" [disabled]="options.id == 0" type="button" class="btn btn-primary add-customer-button"
-                            title="Nuovo cliente">
+                        <button (click)="createJobTicket()" [disabled]="options.id == 0" type="button"
+                            class="btn btn-primary add-customer-button" title="Nuovo cliente">
                             <i class="fa fa-plus"></i>
                         </button>
                         <div class="validation-message" [control]="form.controls['jobId']"></div>
@@ -119,7 +121,8 @@
                     <label>Note</label>
                     <div class="form-group">
                         <kendo-editor name="description" [(ngModel)]="options.description" required [resizable]="true"
-                            [iframe]="false" [pasteCleanupSettings]="{ convertMsLists: true, removeAttributes: ['style'], removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
+                            [iframe]="false"
+                            [pasteCleanupSettings]="{ convertMsLists: true, removeAttributes: ['style'], removeHtmlComments: true, removeMsClasses: true, removeMsStyles: true, removeInvalidHTML: true }">
                             <kendo-toolbar>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
@@ -127,7 +130,8 @@
                                     <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
                                 <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
-                                <kendo-toolbar-colorpicker kendoEditorForeColor view="gradient"></kendo-toolbar-colorpicker>
+                                <kendo-toolbar-colorpicker kendoEditorForeColor
+                                    view="gradient"></kendo-toolbar-colorpicker>
                                 <kendo-toolbar-buttongroup>
                                     <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
                                 </kendo-toolbar-buttongroup>
@@ -138,7 +142,7 @@
                 </div>
             </div>
 
-            <hr class="border-green"/>
+            <hr class="border-green" />
             <!--<kendo-expansionpanel title="Commenti ({{options.activity.messages.length}})" subtitle="Visualizza messaggi">-->
             <div class="row">
                 <div class="col-md-12">
@@ -158,22 +162,24 @@
                                     <div class="col-md-2 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
                                         {{item.date | date:'dd/MM/yyyy'}}</div>
                                     <div class="col-md-3 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}">
-                                        {{item.operatorName}} | <i class="fas fa-users" [title]="'Destinatari: ' + item.targetOperators"></i></div>
+                                        {{item.operatorName}} | <i class="fas fa-users"
+                                            [title]="'Destinatari: ' + item.targetOperators"></i></div>
                                     <div class="col-md-5 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}"
                                         [innerHTML]="item.note | domsanitizer"></div>
                                     <div class="col-md-2" style="text-align: right;">
-                                        <button [disabled]="item.operatorId != currentOperator.id" type="button"
-                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica" 
+                                        <button [disabled]="disableEditOrDeleteMessage(item)" type="button"
+                                            class="btn btn-outline-primary btn-sm me-2" title="Modifica"
                                             (click)="editMessage(item)">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="btn btn-outline-primary btn-sm me-2" type="button"
-                                            title="Segna come letto" [disabled]="item.isRead"
-                                            (click)="markAsRead(item)">
-                                            <i class="fa-regular fa-square-check" *ngIf="item.isRead"></i>
-                                            <i class="fa-regular fa-square" *ngIf="!item.isRead"></i>
+                                            (click)="markAsRead(item)" [disabled]="!isMyComment(item.targetOperators)">
+                                            <i class="fa-regular fa-square-check" *ngIf="item.isRead"
+                                                title="Segna da leggere"></i>
+                                            <i class="fa-regular fa-square" *ngIf="!item.isRead"
+                                                title="Segna come letto"></i>
                                         </button>
-                                        <button [disabled]="item.operatorId != currentOperator.id" type="button"
+                                        <button [disabled]="disableEditOrDeleteMessage(item)" type="button"
                                             class="btn btn-outline-danger btn-sm" title="Elimina"
                                             (click)="deleteMessage(item)">
                                             <i class="fas fa-trash"></i>
@@ -186,7 +192,7 @@
                 </div>
             </div>
             <!--</kendo-expansionpanel>-->
-            <hr class="border-green"/>
+            <hr class="border-green" />
 
             <div class="row">
                 <div class="col-md-3">
@@ -208,7 +214,7 @@
                         <div *ngFor="let item of options.pictures; let i = index" class="col-2">
                             <a href="javascript:void(0)" (click)="openImage(i)">
                                 <img [src]="pathImage + item.fileName" width="90%" [title]="item.displayName" />
-                            </a> 
+                            </a>
                         </div>
                     </div>
                 </div>

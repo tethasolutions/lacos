@@ -145,14 +145,14 @@ export class ProductsStockQuantitiesComponent extends BaseComponent implements O
     tempState.take = this.products.total;
 
     this._subscriptions.push(
-      this._productsService.readProducts(tempState)
+      this._productsService.readProductsStockQuantities(tempState)
         .pipe(
           tap(e => {
             this.products = e;
             const options = this.getExportOptions();
             const workbook = new Workbook(options);
             workbook.toDataURL().then((dataURL) => {
-              saveAs(dataURL, 'prodotti.xlsx');
+              saveAs(dataURL, 'magazzino.xlsx');
             });
             this._readWarehouseProducts();
             this._messageBox.success('Esportazione avvenuta con successo');

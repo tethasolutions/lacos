@@ -17,7 +17,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class InterventionsGridComponent extends BaseComponent implements OnInit, OnChanges {
 
-    @Input() viewTitle: boolean = false;
+    @Input() filterHistorical: boolean = false;
 
     @Input() activityId: number;
 
@@ -161,7 +161,7 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
 
     protected _read() {
         this._subscriptions.push(
-            this._service.read(this.gridState)
+            this._service.read(this.gridState, this.filterHistorical)
                 .pipe(
                     tap(e => this.data = e)
                 )
@@ -246,5 +246,9 @@ export class InterventionsGridComponent extends BaseComponent implements OnInit,
                 return {};
         }
     };
-    
+
+    resetFilter() {
+        this.filterHistorical = false;
+        this._read();
+    }
 }

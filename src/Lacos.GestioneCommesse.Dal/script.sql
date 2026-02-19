@@ -5989,3 +5989,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219095023_job attachment type'
+)
+BEGIN
+    ALTER TABLE [Docs].[JobAttachments] ADD [Type] int NOT NULL DEFAULT 0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219095023_job attachment type'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260219095023_job attachment type', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

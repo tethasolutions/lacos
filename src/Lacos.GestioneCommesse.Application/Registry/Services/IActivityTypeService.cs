@@ -7,6 +7,7 @@ using Lacos.GestioneCommesse.Framework.Extensions;
 using Lacos.GestioneCommesse.Framework.Session;
 using Microsoft.EntityFrameworkCore;
 using Lacos.GestioneCommesse.Framework.Exceptions;
+using Lacos.GestioneCommesse.Application.Operators.DTOs;
 
 namespace Lacos.GestioneCommesse.Application.Registry.Services
 {
@@ -19,6 +20,7 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
         Task UpdateActivityType(long id, ActivityTypeDto activityTypeDto);
 
         Task<ActivityTypeDto> GetActivityType(long id);
+        Task<OperatorDto> GetDefaultOperator(long activityTypeId);
 
     }
 
@@ -26,16 +28,19 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
     {
         private readonly IMapper mapper;
         private readonly IRepository<ActivityType> activityTypeRepository;
+        private readonly IRepository<Operator> operatorRepository;
         private readonly ILacosDbContext dbContext;
         private readonly ILacosSession session;
 
         public ActivityTypeService(
             IMapper mapper,
             IRepository<ActivityType> activityTypeRepository,
+            IRepository<Operator> operatorRepository,
             ILacosDbContext dbContext, ILacosSession session)
         {
             this.mapper = mapper;
             this.activityTypeRepository = activityTypeRepository;
+            this.operatorRepository = operatorRepository;
             this.dbContext = dbContext;
             this.session = session;
         }
@@ -87,6 +92,23 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
                 .Project<ActivityTypeDto>(mapper)
                 .OrderBy(e => e.Name)
                 .ToListAsync();
+        }
+
+        public async Task<OperatorDto> GetDefaultOperator(long activityTypeId)
+        {
+            var result = await operatorRepository
+                .Query()
+                .AsNoTracking()
+                .Include(o => o.ActivityTypes)
+                .Where(o => o.ActivityTypes.Any(a => a.Id == activityTypeId))
+                .FirstOrDefaultAsync();
+
+            if (result == null)
+            {
+                throw new LacosException("Nessun operatore associato al tipo attività");
+            }
+
+            return result.MapTo<OperatorDto>(mapper);
         }
 
         public async Task UpdateActivityType(long id, ActivityTypeDto activityTypeDto)

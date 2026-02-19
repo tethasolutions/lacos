@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { ApiUrls } from '../common/api-urls';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { Intervention, InterventionNote, InterventionProductCheckList} from './models';
@@ -17,8 +17,8 @@ export class InterventionsService {
     ) {
     }
 
-    read(state: State) {
-        const url = `${this._baseUrl}/read`
+    read(state: State, filterHistorical: boolean = false) {
+        const url = `${this._baseUrl}/read/${filterHistorical}`;
 
         return readData(this._http, state, url);
     }

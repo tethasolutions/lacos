@@ -9,6 +9,7 @@ import { AddressesService } from '../services/addresses.service';
 import { JobModalComponent } from './job-modal.component';
 import { UserService } from '../services/security/user.service';
 import { Role, User } from '../services/security/models';
+import { JobsAttachmentsModalComponent } from './jobs-attachments-modal.component';
 
 @Component({
     selector: 'app-job-details',
@@ -18,6 +19,10 @@ export class JobDetailsComponent extends BaseComponent {
 
     @ViewChild('jobDetailModal', { static: true })
     jobModal: JobModalComponent;
+
+    @ViewChild('jobsAttachmentsModal', { static: true })
+    jobsAttachmentsModal: JobsAttachmentsModalComponent;
+
     user: User;
     isOperator: boolean = true;
 
@@ -90,4 +95,13 @@ export class JobDetailsComponent extends BaseComponent {
         );
     }
 
+    openAttachments() {
+        this._subscriptions.push(
+            this.jobsAttachmentsModal.open([this._jobId, 0, 0])
+                .pipe(
+                    filter(e => e)
+                )
+                .subscribe()
+        );
+    }
 }

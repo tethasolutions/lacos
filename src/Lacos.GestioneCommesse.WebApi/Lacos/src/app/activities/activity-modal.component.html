@@ -227,18 +227,18 @@
                                     <div class="col-md-6 messageRowPadding" [ngClass]="{'messageUnread':!item.isRead}"
                                         [innerHTML]="item.note | domsanitizer"></div>
                                     <div class="col-md-2" style="text-align: right;">
-                                        <button [disabled]="item.operatorId != currentOperator.id" type="button"
+                                        <button [disabled]="disableEditOrDeleteMessage(item)" type="button"
                                             class="btn btn-outline-primary btn-sm me-2" title="Modifica"
                                             (click)="editMessage(item)">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-outline-primary btn-sm me-2" type="button"
-                                            title="Segna come letto" [disabled]="item.isRead"
+                                        <button class="btn btn-outline-primary btn-sm me-2" type="button" [disabled]="!isMyComment(item.targetOperators)"
+                                             title="Segna come letto"
                                             (click)="markAsRead(item)">
-                                            <i class="fa-regular fa-square-check" *ngIf="item.isRead"></i>
-                                            <i class="fa-regular fa-square" *ngIf="!item.isRead"></i>
+                                            <i class="fa-regular fa-square-check" *ngIf="item.isRead" title="Segna da leggere"></i>
+                                            <i class="fa-regular fa-square" *ngIf="!item.isRead" title="Segna come letto"></i>
                                         </button>
-                                        <button [disabled]="item.operatorId != currentOperator.id" type="button"
+                                        <button [disabled]="disableEditOrDeleteMessage(item)" type="button"
                                             class="btn btn-outline-danger btn-sm" title="Elimina"
                                             (click)="deleteMessage(item)">
                                             <i class="fas fa-trash"></i>

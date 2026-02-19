@@ -4,6 +4,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Application.Registry.Services;
+using Lacos.GestioneCommesse.Application.Operators.DTOs;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;
 
@@ -29,6 +30,13 @@ public class ActivityTypesController : LacosApiController
     {
         var activityType = await activityTypeService.GetActivityType(id);
         return activityType;
+    }
+
+    [HttpGet("default-operator/{id}")]
+    public async Task<OperatorDto> GetDefaultOperator(long id)
+    {
+        var activityOperator = await activityTypeService.GetDefaultOperator(id);
+        return activityOperator;
     }
 
     [HttpPut("activitytype/{id}")]

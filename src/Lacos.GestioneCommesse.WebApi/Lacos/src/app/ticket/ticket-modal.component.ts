@@ -19,7 +19,7 @@ import { TicketAttachmentUploadFileModel } from '../services/tickets/ticket-atta
 import { ApiUrls } from '../services/common/api-urls';
 import { MessageModalComponent } from '../messages/message-modal.component';
 import { MessageModalOptions, MessageModel, MessageReadModel } from '../services/messages/models';
-import { User } from '../services/security/models';
+import { Role, User } from '../services/security/models';
 import { OperatorModel } from '../shared/models/operator.model';
 import { OperatorsService } from '../services/operators.service';
 import { UserService } from '../services/security/user.service';
@@ -32,6 +32,7 @@ import { State } from '@progress/kendo-data-query';
 import { AddressesService } from '../services/addresses.service';
 import { AddressModel } from '../shared/models/address.model';
 import { AddressModalComponent } from '../address-modal/address-modal.component';
+import { SecurityService } from '../services/security/security.service';
 
 @Component({
     selector: 'app-ticket-modal',
@@ -56,6 +57,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     targetOperatorsArray: number[];
     jobs: SelectableJob[];
     addresses: AddressModel[];
+    readonly isOperator: boolean;
 
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/tickets`;
     pathImage = `${ApiUrls.baseAttachmentsUrl}/`;
@@ -65,6 +67,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
     readonly states = listEnum<TicketStatus>(TicketStatus);
 
     constructor(
+        private security: SecurityService,
         private readonly _customersService: CustomerService,
         private readonly _serviceJob: JobsService,
         private readonly _serviceActivity: ActivitiesService,
@@ -77,6 +80,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         private readonly _addressService: AddressesService
     ) {
         super(messageBox);
+        this.isOperator = security.isAuthorized(Role.Operator);
     }
 
     ngOnInit() {
@@ -404,8 +408,8 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
             this._messagesService.markAsRead(message.id, this.currentOperator.id)
                 .pipe(
                     tap(() => {
-                        message.isRead = true;
-                        this._messageBox.success('Commento letto');
+                        message.isRead = !message.isRead;
+                        this._messageBox.success('Commento aggiornato');
                         this.updateUnreadCounter();
                     })
                 )
@@ -463,6 +467,16 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
         this.galleryModal.open(options).subscribe();
     }
 
+    isMyComment(targetOperators: string): boolean {
+        if (targetOperators == null || targetOperators.length == 0) return false;
+        return targetOperators.includes(this.currentOperator.name);
+    }
+
+    disableEditOrDeleteMessage(message: MessageReadModel): boolean {
+        if (!this.isOperator && message.isFromApp) return false;
+        if (message.operatorId != this.currentOperator.id) return true;
+        return false;
+    }
 }
 
 class SelectableJob {

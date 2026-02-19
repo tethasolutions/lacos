@@ -87,7 +87,7 @@ public class InterventionsService : IInterventionsService
         this.sharedService = sharedService;
     }
 
-    public IQueryable<InterventionReadModel> Query()
+    public IQueryable<InterventionReadModel> Query(bool filterHistorical)
     {
         var query = repository.Query();
 
@@ -100,6 +100,11 @@ public class InterventionsService : IInterventionsService
                     i.Activity!.Type!.Operators.Any(o => o.Id == user.OperatorId) ||
                     i.Operators.Any(o => o.Id == user.OperatorId)
                 );
+        }
+
+        if (filterHistorical)
+        {
+            query = query.Where(x => x.Start.Date >= DateTimeOffset.Now.AddDays(-5) || x.Status == InterventionStatus.Scheduled);
         }
 
         return query
@@ -205,6 +210,14 @@ public class InterventionsService : IInterventionsService
         if (intervention == null)
         {
             throw new NotFoundException($"Intervento con Id {interventionDto.Id} non trovato.");
+        }
+
+        if (intervention.ExtraFee != 0 || intervention.ServiceCallFee != 0 || intervention.ServiceFee != 0 || intervention.TravelFee != 0)
+        {
+            interventionDto.ServiceCallFee = intervention.ServiceCallFee;
+            interventionDto.ServiceFee = intervention.ServiceFee;
+            interventionDto.TravelFee = intervention.TravelFee;
+            interventionDto.ExtraFee = intervention.ExtraFee;
         }
 
         //if (intervention.Status != InterventionStatus.Scheduled)

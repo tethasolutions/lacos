@@ -5,6 +5,7 @@ import { ApiUrls } from './common/api-urls';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { State, toDataSourceRequestString, translateDataSourceResultGroups } from '@progress/kendo-data-query';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
+import { OperatorModel } from '../shared/models/operator.model';
 
 @Injectable()
 export class ActivityTypesService {
@@ -66,6 +67,16 @@ export class ActivityTypesService {
                 map(e => {
                     const activityType = Object.assign(new ActivityTypeModel(), e);
                     return activityType;
+                })
+            );
+    }
+
+    getDefaultOperator(activityTypeId: number) {
+        return this._http.get<OperatorModel>(`${this._baseUrl}/default-operator/${activityTypeId}`)
+            .pipe(
+                map(e => {
+                    const operator = Object.assign(new OperatorModel(), e);
+                    return operator;
                 })
             );
     }

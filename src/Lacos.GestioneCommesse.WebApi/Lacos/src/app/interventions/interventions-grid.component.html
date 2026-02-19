@@ -1,8 +1,8 @@
 <app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
-<div class="d-flex align-items-center mb-3" *ngIf="viewTitle">
+<div class="d-flex align-items-center mb-3" *ngIf="filterHistorical">
     <div class="col">
-        <h4>Interventi</h4>
+        <button class="btn btn-primary" (click)="resetFilter()">Visualizza Tutti</button>
     </div>
 </div>
 

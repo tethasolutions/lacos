@@ -6,9 +6,13 @@
             <h4>Dettaglio commessa {{job.code}}</h4>
         </div>
         <div class="col-auto">
-            <a class="btn btn-primary btn-sm" (click)="edit()">
+            <a class="btn btn-primary btn-sm me-2" (click)="edit()">
                 <span class="fa fa-edit"></span>
                 Scheda commessa
+            </a>
+            <a class="btn btn-primary btn-sm" (click)="openAttachments()">
+                <span class="fa fa-paperclip"></span>
+                Allegati commessa
             </a>
         </div>
     </div>
@@ -68,3 +72,4 @@
 </div>
 <app-jobaccountings *ngIf="!isOperator" [viewExportExcel]="false"></app-jobaccountings>
 <app-job-modal #jobDetailModal></app-job-modal>
+<app-jobs-attachments-modal #jobsAttachmentsModal></app-jobs-attachments-modal>

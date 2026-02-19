@@ -180,7 +180,7 @@ public class MessagesService : IMessagesService
     public async Task ReadMessage(long messageId, long operatorId)
     {
         var MessageNotifications = await notificationRepository.Query()
-            .Where(e => e.MessageId == messageId && e.OperatorId == operatorId && e.IsRead == false)
+            .Where(e => e.MessageId == messageId && e.OperatorId == operatorId)
             .ToListAsync();
 
         if (MessageNotifications == null)
@@ -190,7 +190,7 @@ public class MessagesService : IMessagesService
 
         foreach (var Notification in MessageNotifications)
         {
-            Notification.IsRead = true;
+            Notification.IsRead = !Notification.IsRead;
             notificationRepository.Update(Notification);
         }
 

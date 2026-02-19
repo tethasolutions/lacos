@@ -31,30 +31,33 @@ public class NominatimService : INominatimService
     {
         decimal distanceKm = 0;
         decimal durationMinutes = 0;
+        bool insideAreaC = false;
 
         var originCoords = await GeocodeAsync(originAddress, originCity);
         var destCoords = await GeocodeAsync(destinationAddress, destinationCity);
 
-        var route = await GetRouteAsync(originCoords, destCoords);
+        if (originCoords.lat != 0 && originCoords.lon != 0 && destCoords.lat != 0 && destCoords.lon != 0) {
+            var route = await GetRouteAsync(originCoords, destCoords);
 
-        if (route != null)
-        {
-            distanceKm = (decimal)route.Distance / 1000;
-            durationMinutes = (decimal)route.Duration / 60;
+            if (route != null)
+            {
+                distanceKm = (decimal)route.Distance / 1000;
+                durationMinutes = (decimal)route.Duration / 60;
+            }
+            else
+            {
+                // FALLBACK: distanza “a volo d’uccello”
+                distanceKm = CalculateHaversineKm(originCoords.lat, originCoords.lon, destCoords.lat, destCoords.lon);
+
+                // Se vuoi, puoi ipotizzare una durata media (es. 50 km/h → 0.83 km/min)
+                durationMinutes = (decimal)distanceKm / 50 * 60;
+
+                Console.WriteLine($"Usato fallback Haversine per distanza tra '{originAddress}' e '{destinationAddress}'.");
+            }
+
+            // 3) Verifica Area C sulla destinazione
+            insideAreaC = IsPointInsideAreaC(destCoords.lat, destCoords.lon);
         }
-        else
-        {
-            // FALLBACK: distanza “a volo d’uccello”
-            distanceKm = CalculateHaversineKm(originCoords.lat, originCoords.lon, destCoords.lat, destCoords.lon);
-
-            // Se vuoi, puoi ipotizzare una durata media (es. 50 km/h → 0.83 km/min)
-            durationMinutes = (decimal)distanceKm / 50 * 60;
-
-            Console.WriteLine($"Usato fallback Haversine per distanza tra '{originAddress}' e '{destinationAddress}'.");
-        }
-
-        // 3) Verifica Area C sulla destinazione
-        bool insideAreaC = IsPointInsideAreaC(destCoords.lat, destCoords.lon);
 
         return new DistanceResult
         {
@@ -71,49 +74,57 @@ public class NominatimService : INominatimService
 
     public async Task<(double lat, double lon)> GeocodeAsync(string address, string? city = null)
     {
-        var url = $"{NominatimBaseUrl}/search" +
-                  $"?q={Uri.EscapeDataString(address)}" +
-                  $"&format=json&addressdetails=0&limit=1";
+        try { 
+            var url = $"{NominatimBaseUrl}/search" +
+                      $"?q={Uri.EscapeDataString(address)}" +
+                      $"&format=json&addressdetails=0&limit=1";
 
-        using var response = await _httpClient.GetAsync(url);
-        response.EnsureSuccessStatusCode();
+            using var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
 
-        var json = await response.Content.ReadAsStringAsync();
+            var json = await response.Content.ReadAsStringAsync();
 
-        var options = new JsonSerializerOptions
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var results = JsonSerializer.Deserialize<List<NominatimResult>>(json, options);
+
+            var first = results?.FirstOrDefault();
+
+            // Se non trova risultati per l'indirizzo completo, prova con la città
+            if (first == null && !string.IsNullOrWhiteSpace(city))
+            {
+                var cityUrl = $"{NominatimBaseUrl}/search" +
+                              $"?q={Uri.EscapeDataString(city)}" +
+                              $"&format=json&addressdetails=0&limit=1";
+
+                using var cityResponse = await _httpClient.GetAsync(cityUrl);
+                cityResponse.EnsureSuccessStatusCode();
+
+                var cityJson = await cityResponse.Content.ReadAsStringAsync();
+                results = JsonSerializer.Deserialize<List<NominatimResult>>(cityJson, options);
+                first = results?.FirstOrDefault();
+            }
+
+            if (first == null)
+                throw new Exception($"Nominatim non ha trovato risultati per l'indirizzo: {address}");
+
+            if (!double.TryParse(first.Lat, System.Globalization.CultureInfo.InvariantCulture, out var lat) ||
+                !double.TryParse(first.Lon, System.Globalization.CultureInfo.InvariantCulture, out var lon))
+            {
+                throw new Exception($"Coordinate non valide restituite da Nominatim per: {address}");
+            }
+            return (lat, lon);
+        }
+        catch(Exception ex)
         {
-            PropertyNameCaseInsensitive = true
-        };
-
-        var results = JsonSerializer.Deserialize<List<NominatimResult>>(json, options);
-
-        var first = results?.FirstOrDefault();
-
-        // Se non trova risultati per l'indirizzo completo, prova con la città
-        if (first == null && !string.IsNullOrWhiteSpace(city))
-        {
-            var cityUrl = $"{NominatimBaseUrl}/search" +
-                          $"?q={Uri.EscapeDataString(city)}" +
-                          $"&format=json&addressdetails=0&limit=1";
-
-            using var cityResponse = await _httpClient.GetAsync(cityUrl);
-            cityResponse.EnsureSuccessStatusCode();
-
-            var cityJson = await cityResponse.Content.ReadAsStringAsync();
-            results = JsonSerializer.Deserialize<List<NominatimResult>>(cityJson, options);
-            first = results?.FirstOrDefault();
+            //throw new Exception($"Errore chiamata servizio Nominatim");
+            Console.WriteLine($"Errore chiamata servizio Nominatim '{ex.Message}'");
+            return (0, 0);
         }
 
-        if (first == null)
-            throw new Exception($"Nominatim non ha trovato risultati per l'indirizzo: {address}");
-
-        if (!double.TryParse(first.Lat, System.Globalization.CultureInfo.InvariantCulture, out var lat) ||
-            !double.TryParse(first.Lon, System.Globalization.CultureInfo.InvariantCulture, out var lon))
-        {
-            throw new Exception($"Coordinate non valide restituite da Nominatim per: {address}");
-        }
-
-        return (lat, lon);
     }
 
     private async Task<OsrmRoute?> GetRouteAsync((double lat, double lon) origin, (double lat, double lon) dest)

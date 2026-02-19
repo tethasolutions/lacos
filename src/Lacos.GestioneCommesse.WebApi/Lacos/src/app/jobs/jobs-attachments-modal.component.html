@@ -9,12 +9,15 @@
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
         <kendo-panelbar>
-            <kendo-panelbar-item title="Allegati Commesse ({{attachments.length}})" *ngIf="attachments.length > 0">
+            <kendo-panelbar-item title="Allegati Commesse ({{visibleAttachments.length}})" *ngIf="visibleAttachments.length > 0">
                 <ng-template kendoPanelBarContent>
-                    <div *ngFor="let item of attachments" class="col-12">
+                    <div *ngFor="let item of visibleAttachments" class="col-12">
                         <div class="row checklist-row">
-                            <div class="col-10">
+                            <div class="col-8">
                                 <p>{{item.displayName}}</p>
+                            </div>
+                            <div class="col-2">
+                                <span class="badge bg-secondary">{{attachmentTypeName(item.type)}}</span>
                             </div>
                             <div class="col-2" *ngIf="item.fileName" style="text-align: right;">
                                 <a [href]="CreateUrl(item.fileName,item.displayName)" target="_blank"><i

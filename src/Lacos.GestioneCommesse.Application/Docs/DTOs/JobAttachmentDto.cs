@@ -1,4 +1,6 @@
-﻿namespace Lacos.GestioneCommesse.Application.Docs.DTOs
+﻿using Lacos.GestioneCommesse.Domain.Docs;
+
+namespace Lacos.GestioneCommesse.Application.Docs.DTOs
 {
     public class JobAttachmentDto
     {
@@ -6,5 +8,6 @@
         public string? DisplayName { get; set; }
         public string? FileName { get; set; }
         public long JobId { get; set; }
+        public JobAttachmentType Type { get; set; }
     }
 }

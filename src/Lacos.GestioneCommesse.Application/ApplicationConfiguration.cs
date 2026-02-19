@@ -12,6 +12,8 @@ using Lacos.GestioneCommesse.Application.Shared.Services;
 using Lacos.GestioneCommesse.Application.Suppliers.Services;
 using Lacos.GestioneCommesse.Application.Sync;
 using Lacos.GestioneCommesse.Application.Vehicles.Services;
+using System.Net.Security;
+using System.Security.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lacos.GestioneCommesse.Application;
@@ -51,7 +53,11 @@ public static class ApplicationConfiguration
             .AddScoped<IMaintenancePriceListService, MaintenancePriceListService>()
             .AddScoped<IWarehouseMovementService, WarehouseMovementService>();
 
-        services.AddHttpClient<INominatimService, NominatimService>();
+        services.AddHttpClient<INominatimService, NominatimService>()
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13
+            });
 
         return services;
     }

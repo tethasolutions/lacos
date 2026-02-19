@@ -19,4 +19,5 @@ public class ProductReadModel
     public string? Side { get; set; }
     public string? Size { get; set; }
     public string? Material { get; set; }
+    public decimal? DefaultPrice { get; set; }
 }

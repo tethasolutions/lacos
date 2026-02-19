@@ -1,13 +1,10 @@
 import { Component, Input, input, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent, ModalFormComponent } from '../shared/modal.component';
-import { tap } from 'rxjs';
 import { MessageBoxService } from '../services/common/message-box.service';
-import { ProductsService } from '../services/products.service';
-import { ProductReadModel } from '../shared/models/product.model';
-import { State } from '@progress/kendo-data-query';
-import { ApiUrls } from '../services/common/api-urls';
 import { PurchaseOrderExpense } from '../services/purchase-orders/models';
 import { SelectableJob } from '../services/jobs/models';
+import { SecurityService } from '../services/security/security.service';
+import { Role } from '../services/security/models';
 
 @Component({
     selector: 'app-purchase-order-expense-modal',
@@ -17,10 +14,14 @@ export class PurchaseOrderExpenseModalComponent extends ModalFormComponent<Purch
 
     @Input() jobs = new Array<SelectableJob>();
 
+    readonly isAdmin: boolean = false;
+
     constructor(
-        messageBox: MessageBoxService
+        messageBox: MessageBoxService,
+        readonly security: SecurityService
     ) {
         super(messageBox);
+        this.isAdmin = security.isAuthorized(Role.Administrator);
     }
 
     ngOnInit() {
@@ -38,6 +39,10 @@ export class PurchaseOrderExpenseModalComponent extends ModalFormComponent<Purch
 
         if (this.form.invalid) {
             this._messageBox.error('Compilare correttamente tutti i campi.');
+        }
+
+        if (this.form.valid) {
+            this.options.totalAmount = (this.options.quantity ?? 0) * (this.options.unitPrice ?? 0);
         }
 
         return this.form.valid;

@@ -20,12 +20,24 @@
             class="redimensionModal">
 
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-4">
+                    <label>Tipo Prodotto</label>
+                    <div class="form-group">
+                        <kendo-combobox [data]="productTypes" textField="name" valueField="id"
+                            name="productType" [valuePrimitive]="true" [(ngModel)]="selectedProductTypeId"
+                            [suggest]="true" [allowCustom]="false"
+                            [kendoDropDownFilter]="{caseSensitive:false, operator:'contains'}"
+                            (valueChange)="onProductTypeChange()">
+                        </kendo-combobox>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <label>Prodotto</label>
                     <div class="form-group">
                         <kendo-combobox [data]="products" textField="fullName" valueField="id" name="product"
                             [valuePrimitive]="true" [(ngModel)]="options.productId" required [suggest]="true"
-                            [allowCustom]="false" (valueChange)="onProductChange()">
+                            [allowCustom]="false" [disabled]="selectedProductTypeId == null"
+                            (valueChange)="onProductChange()">
                             <ng-template kendoComboBoxItemTemplate let-dataItem>
                                 <div class="d-flex align-items-center gap-1">
                                     <img *ngIf="dataItem.pictureFileName" [src]="imagesUrl + dataItem.pictureFileName"
@@ -47,6 +59,20 @@
                         </kendo-numerictextbox>
                         <div class="validation-message" [control]="form.controls['quantity']"></div>
                     </div>
+                </div>
+                <div class="col-md-2" *ngIf="isAdmin">
+                    <label>Prezzo Unit.</label>
+                    <div class="form-group">
+                        <kendo-numerictextbox name="unitPrice" [(ngModel)]="options.unitPrice" [min]="0" required
+                            format="0.00" [decimals]="2">
+                        </kendo-numerictextbox>
+                        <div class="validation-message" [control]="form.controls['unitPrice']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="isAdmin">
+                <div class="col-md-12 text-end">
+                    <strong>Totale: {{ (options.quantity ?? 0) * (options.unitPrice ?? 0) | number:'1.2-2' }} €</strong>
                 </div>
             </div>
 

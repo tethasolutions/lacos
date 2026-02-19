@@ -17,6 +17,8 @@ import { ApiUrls } from '../services/common/api-urls';
 import { RemoveEvent, SuccessEvent, FileInfo, FileState, SelectEvent } from "@progress/kendo-angular-upload";
 import { UploadFileModel } from '../shared/models/upload-file.model';
 import { ProductDocumentModel } from '../shared/models/product-document.model';
+import { SecurityService } from '../services/security/security.service';
+import { Role } from '../services/security/models';
 
 @Component({
   selector: 'app-product-modal',
@@ -37,6 +39,7 @@ export class ProductModalComponent extends ModalFormComponent<ProductModel> {
   productTypes: Array<ProductTypeModel> = [];
   customers: Array<CustomerModel> = [];
   customerSelezionato = new CustomerModel();
+  readonly isAdmin: boolean = false;
 
   documents: Array<FileInfo> = [];
   attachmentsUploads: Array<UploadFileModel> = [];
@@ -53,11 +56,13 @@ export class ProductModalComponent extends ModalFormComponent<ProductModel> {
 
   constructor(
     messageBox: MessageBoxService,
+    private readonly security: SecurityService,
     private readonly _productsService: ProductsService,
     private readonly _customerService: CustomerService,
     private readonly _addressesService: AddressesService
   ) {
     super(messageBox);
+    this.isAdmin = security.isAuthorized(Role.Administrator);
     this.openedEvent.subscribe(item => {
       this.loadData();
     });

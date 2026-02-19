@@ -1595,10 +1595,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(14, 2)
-                        .HasColumnType("decimal");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1642,6 +1638,14 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("Quantity")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
+                    b.Property<decimal>("UnitPrice")
                         .HasPrecision(14, 2)
                         .HasColumnType("decimal");
 
@@ -1702,6 +1706,14 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("Quantity")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
+
+                    b.Property<decimal>("UnitPrice")
                         .HasPrecision(14, 2)
                         .HasColumnType("decimal");
 
@@ -3021,6 +3033,10 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<long?>("CustomerId")
                         .HasColumnType("bigint");
+
+                    b.Property<decimal?>("DefaultPrice")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("decimal");
 
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");

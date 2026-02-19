@@ -79,6 +79,7 @@ namespace Lacos.GestioneCommesse.Application
                 .Ignore(x => x.Side)
                 .Ignore(x => x.Size)
                 .Ignore(x => x.Material)
+                .Ignore(x => x.DefaultPrice)
                 .Ignore(x => x.MonthlyMaintenance)
                 .Ignore(x => x.IsDecommissioned)
                 .IgnoreCommonMembers()
@@ -89,6 +90,8 @@ namespace Lacos.GestioneCommesse.Application
                 .IgnoreCommonMembers()
                 .IgnoreNavigationPropertyEntity();
             CreateMap<SyncPurchaseOrderItemDto, PurchaseOrderItem>()
+                .Ignore(x => x.UnitPrice)
+                .Ignore(x => x.TotalAmount)
                 .IgnoreCommonMembers()
                 .IgnoreNavigationPropertyEntity();
             CreateMap<SyncTicketDto, Ticket>()

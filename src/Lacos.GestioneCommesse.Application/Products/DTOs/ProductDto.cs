@@ -12,6 +12,7 @@
         public string? Side { get; set; }
         public string? Size { get; set; }
         public string? Material { get; set; }
+        public decimal? DefaultPrice { get; set; }
         public string? PictureFileName { get; set; }
         public string? QrCodePrefix { get; set; }
         public string? QrCodeNumber { get; set; }

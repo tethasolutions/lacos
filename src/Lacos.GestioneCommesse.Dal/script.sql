@@ -6014,3 +6014,80 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219103951_product default price'
+)
+BEGIN
+    ALTER TABLE [Registry].[Products] ADD [DefaultPrice] decimal(14,2) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219103951_product default price'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260219103951_product default price', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219111242_purchase orders prices'
+)
+BEGIN
+    EXEC sp_rename N'[Docs].[PurchaseOrderExpenses].[Amount]', N'TotalAmount', N'COLUMN';
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219111242_purchase orders prices'
+)
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrderExpenses] ADD [UnitPrice] decimal(14,2) NOT NULL DEFAULT 0.0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219111242_purchase orders prices'
+)
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrderItems] ADD [TotalAmount] decimal(14,2) NOT NULL DEFAULT 0.0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219111242_purchase orders prices'
+)
+BEGIN
+    ALTER TABLE [Docs].[PurchaseOrderItems] ADD [UnitPrice] decimal(14,2) NOT NULL DEFAULT 0.0;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260219111242_purchase orders prices'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260219111242_purchase orders prices', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

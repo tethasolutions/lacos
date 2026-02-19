@@ -19,6 +19,7 @@ export class ProductModel {
     side: string;
     size: string;
     material: string;
+    defaultPrice: number;
     customerId: number;
     addressId: number;
     location: string;
@@ -44,6 +45,7 @@ export class ProductModel {
         this.side = null;
         this.size = null;
         this.material = null;
+        this.defaultPrice = 0;
         this.pictureFileName = null;
         this.qrCodePrefix = null;
         this.qrCodeNumber = null;
@@ -84,6 +86,7 @@ export interface ProductReadModel {
     readonly side: string;
     readonly size: string;
     readonly material: string;
+    readonly defaultPrice: number;
 }
 
 export interface ProductStockReadModel {
@@ -96,5 +99,6 @@ export interface ProductStockReadModel {
     readonly side: string;
     readonly size: string;
     readonly material: string;
+    readonly defaultPrice: number;
     readonly stockQuantity: number;
 }

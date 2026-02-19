@@ -82,7 +82,8 @@ export class JobCopyModalComponent extends ModalFormComponent<JobCopy> implement
                         this.options.customerId = e.id;
                         this._messageBox.success(`Cliente ${request.name} creato`);
                     }),
-                    tap(() => this._getData())
+                    tap(() => this._getData()),
+                    tap(() => this.onCustomerChange())
                 )
                 .subscribe()
         );

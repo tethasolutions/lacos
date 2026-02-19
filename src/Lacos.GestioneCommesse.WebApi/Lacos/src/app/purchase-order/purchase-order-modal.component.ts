@@ -120,7 +120,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     }
 
     addItem() {
-        const item = new PurchaseOrderItem(0, this.options.purchaseOrder.id, null, null, null, 1);
+        const item = new PurchaseOrderItem(0, this.options.purchaseOrder.id, null, null, null, 1, 0, 0);
 
         this._subscriptions.push(
             this.purchaseOrderItemModal.open(item)
@@ -163,7 +163,7 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     
     addExpense() {
         const expense = new PurchaseOrderExpense(0, this.options.purchaseOrder.id, 
-            this.selectedJobsList.first().id, this.selectedJobsList.first().code, null, 1, 0);
+            this.selectedJobsList.first().id, this.selectedJobsList.first().code, null, 1, 0, 0);
 
         this._subscriptions.push(
             this.purchaseOrderExpenseModal.open(expense)

@@ -164,11 +164,14 @@
                                 </kendo-grid-column>
                                 <kendo-grid-column field="note" title="Note">
                                 </kendo-grid-column>
-                                <kendo-grid-column field="quantity" title="Q.ta" [width]="1" filter="numeric"
+                                <kendo-grid-column field="quantity" title="Q.tà" [width]="100" filter="numeric"
                                     format="0.00">
                                 </kendo-grid-column>
-                                <kendo-grid-column field="amount" title="Importo" [width]="1" filter="numeric"
-                                    format="0.00">
+                                <kendo-grid-column field="unitPrice" title="Prezzo Unit." [width]="120" filter="numeric"
+                                    format="0.00" *ngIf="isAdmin">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="totalAmount" title="Totale" [width]="120" filter="numeric"
+                                    format="0.00" *ngIf="isAdmin">
                                 </kendo-grid-column>
                                 <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" "
                                     [width]="1">
@@ -214,8 +217,14 @@
                                 </kendo-grid-column>
                                 <kendo-grid-column field="productName" title="Nome">
                                 </kendo-grid-column>
-                                <kendo-grid-column field="quantity" title="Q.ta" [width]="1" filter="numeric"
+                                <kendo-grid-column field="quantity" title="Q.tà" [width]="100" filter="numeric"
                                     format="0.00">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="unitPrice" title="Prezzo Unit." [width]="120" filter="numeric"
+                                    format="0.00" *ngIf="isAdmin">
+                                </kendo-grid-column>
+                                <kendo-grid-column field="totalAmount" title="Totale" [width]="120" filter="numeric"
+                                    format="0.00" *ngIf="isAdmin">
                                 </kendo-grid-column>
                                 <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" "
                                     [width]="1">

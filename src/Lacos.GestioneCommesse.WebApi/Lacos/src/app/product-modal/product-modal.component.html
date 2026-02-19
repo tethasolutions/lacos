@@ -34,7 +34,8 @@
                                 <label class="custom-form-field-label">Tipologia prodotto</label>
                                 <kendo-combobox [data]="productTypes" [(ngModel)]="options.productTypeId"
                                     name="productTypeId" suggest="true" textField="name" [valuePrimitive]="true"
-                                    valueField="id" (valueChange)="checkIfImpiantoIsPortaRei(); checkIfWarehouseManaged();" required>
+                                    valueField="id"
+                                    (valueChange)="checkIfImpiantoIsPortaRei(); checkIfWarehouseManaged();" required>
                                 </kendo-combobox>
                                 <kendo-formerror>Tipologia prodotto è il campo obbligatorio</kendo-formerror>
                             </kendo-formfield>
@@ -126,6 +127,14 @@
                         <label class="custom-form-field-label">Materiale</label>
                         <kendo-textbox [(ngModel)]="options.material" name="material">
                         </kendo-textbox>
+                    </kendo-formfield>
+                </div>
+                <div class="col-md-3" *ngIf="isAdmin">
+                    <kendo-formfield class="form-group">
+                        <label class="custom-form-field-label">Prezzo d'acquisto</label>
+                        <kendo-numerictextbox [(ngModel)]="options.defaultPrice" name="defaultPrice" format="0.00"
+                            [decimals]="2">
+                        </kendo-numerictextbox>
                     </kendo-formfield>
                 </div>
             </div>

@@ -11,5 +11,6 @@ public class ProductStockReadModel
     public string? Side { get; set; }
     public string? Size { get; set; }
     public string? Material { get; set; }
+    public decimal? DefaultPrice { get; set; }
     public int StockQuantity { get; set; }
 }

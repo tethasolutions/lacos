@@ -93,16 +93,18 @@ export class PurchaseOrderItem {
         public productId: number,
         public productName: string,
         public productImage: string,
-        public quantity: number
+        public quantity: number,
+        public unitPrice: number,
+        public totalAmount: number
     ) {
     }
 
     clone() {
-        return new PurchaseOrderItem(this.id, this.purchaseOrderId, this.productId, this.productName, this.productImage, this.quantity);
+        return new PurchaseOrderItem(this.id, this.purchaseOrderId, this.productId, this.productName, this.productImage, this.quantity, this.unitPrice, this.totalAmount);
     }
 
     static build(o: PurchaseOrderItem) {
-        return new PurchaseOrderItem(o.id, o.purchaseOrderId, o.productId, o.productName, o.productImage, o.quantity);
+        return new PurchaseOrderItem(o.id, o.purchaseOrderId, o.productId, o.productName, o.productImage, o.quantity, o.unitPrice, o.totalAmount);
     }
 }
 
@@ -115,15 +117,16 @@ export class PurchaseOrderExpense {
         public jobCode: string,
         public note: string,
         public quantity: number,
-        public amount: number
+        public unitPrice: number,
+        public totalAmount: number
     ) {
     }
 
     clone() {
-        return new PurchaseOrderExpense(this.id, this.purchaseOrderId, this.jobId, this.jobCode, this.note, this.quantity, this.amount);
+        return new PurchaseOrderExpense(this.id, this.purchaseOrderId, this.jobId, this.jobCode, this.note, this.quantity, this.unitPrice, this.totalAmount);
     }
 
     static build(o: PurchaseOrderExpense) {
-        return new PurchaseOrderExpense(o.id, o.purchaseOrderId, o.jobId, o.jobCode, o.note, o.quantity, o.amount);
+        return new PurchaseOrderExpense(o.id, o.purchaseOrderId, o.jobId, o.jobCode, o.note, o.quantity, o.unitPrice, o.totalAmount);
     }
 }

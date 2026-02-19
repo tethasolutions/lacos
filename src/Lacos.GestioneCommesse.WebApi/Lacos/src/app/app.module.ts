@@ -20,7 +20,7 @@ import { PDFExportModule } from '@progress/kendo-angular-pdf-export';
 import { InputsModule, NumericTextBoxModule, SwitchModule } from '@progress/kendo-angular-inputs';
 import { DropDownButtonModule } from '@progress/kendo-angular-buttons';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
-import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { DropDownsModule, SharedModule } from '@progress/kendo-angular-dropdowns';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { NotificationModule } from '@progress/kendo-angular-notification';
 import { EditorModule } from '@progress/kendo-angular-editor';
@@ -284,34 +284,33 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         WarehouseMovementModalComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
-        NavigationModule,
-        ButtonsModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        IntlModule,
-        AppRoutingModule,
-        NotificationModule,
-        GridModule,
-        ContextMenuModule,
-        DialogsModule,
-        DropDownsModule,
-        NumericTextBoxModule,
-        DateInputsModule,
-        TooltipsModule,
-        DropDownButtonModule,
-        SwitchModule,
-        PDFExportModule,
-        ExcelModule,
-        InputsModule,
-        PDFModule,
-        UploadsModule,
-        SchedulerModule,
-        LayoutModule,
-        BarcodesModule,
-        EditorModule,
-        UploadModule,
-        HttpClientModule
-    ],
+    NavigationModule,
+    ButtonsModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    IntlModule,
+    AppRoutingModule,
+    NotificationModule,
+    GridModule,
+    ContextMenuModule,
+    DialogsModule,
+    DropDownsModule,
+    NumericTextBoxModule,
+    DateInputsModule,
+    TooltipsModule,
+    DropDownButtonModule,
+    SwitchModule,
+    PDFExportModule,
+    ExcelModule,
+    InputsModule,
+    PDFModule,
+    UploadsModule,
+    SchedulerModule,
+    LayoutModule,
+    BarcodesModule,
+    EditorModule,
+    UploadModule,
+    HttpClientModule, SharedModule],
     providers: [
         {
             provide: LOCALE_ID, useValue: 'it'

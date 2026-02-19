@@ -21,7 +21,7 @@ public class PurchaseOrderMappingProfile : Profile
             .MapMember(x => x.HasAttachments, y => y.Attachments.Any())
             .MapMember(x => x.UnreadMessages, y => y.Messages.SelectMany(e => e.MessageNotifications).Count(e => !e.IsRead))
             .MapMember(x => x.Type, y => y.ActivityType.Name)
-            .MapMember(x => x.TotalExpenses, y => y.Expenses.Sum(e => e.Amount));
+            .MapMember(x => x.TotalExpenses, y => y.Expenses.Sum(e => e.TotalAmount)+y.Items.Sum(i => i.TotalAmount));
 
         CreateMap<PurchaseOrderDto, PurchaseOrder>()
             .IgnoreCommonMembers()

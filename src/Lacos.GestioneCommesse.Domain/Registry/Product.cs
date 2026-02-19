@@ -12,6 +12,7 @@ public class Product : FullAuditedEntity, ILogEntity
     public string? Side { get; set; } 
     public string? Size { get; set; }
     public string? Material { get; set; }
+    public decimal? DefaultPrice { get; set; }
 
     // immagine della porta rei
     public string? PictureFileName { get; set; }

@@ -197,7 +197,8 @@ export class JobModalComponent extends ModalFormComponent<Job> implements OnInit
                         this.readAddresses();
                         this._messageBox.success(`Cliente ${request.name} creato`);
                     }),
-                    tap(() => this._getData())
+                    tap(() => this._getData()),
+                    tap(() => this.onCustomerChange())
                 )
                 .subscribe()
         );

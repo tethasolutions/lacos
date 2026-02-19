@@ -799,7 +799,7 @@ public class ActivitiesService : IActivitiesService
                 {
                     PurchaseOrderId = existingPO.Id,
                     Note = floorDeliverySettings.Note,
-                    Amount = floorDeliverySettings.Amount,
+                    TotalAmount = floorDeliverySettings.Amount,
                     Quantity = 1,
                     JobId = activity.JobId
                 };
@@ -832,7 +832,7 @@ public class ActivitiesService : IActivitiesService
                     Id = 0,
                     JobId = activity.JobId,
                     Note = floorDeliverySettings.Note,
-                    Amount = floorDeliverySettings.Amount,
+                    TotalAmount = floorDeliverySettings.Amount,
                     Quantity = 1
                 }
             }

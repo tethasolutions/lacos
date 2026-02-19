@@ -12,6 +12,7 @@ public class PurchaseOrderExpense : FullAuditedEntity, ILogEntity
 
     public string? Note { get; set; }
     public decimal Quantity { get; set; }
-    public decimal Amount { get; set; }
+    public decimal UnitPrice { get; set; }
+    public decimal TotalAmount { get; set; }
 
 }

@@ -22,7 +22,8 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<Intervention, SyncInterventionDto>()
                 .MapMember(x=>x.OperatorIds,y=>y.Operators.Select(x=>x.Id).ToList());
             CreateMap<InterventionDispute, SyncInterventionDisputeDto>();
-            CreateMap<InterventionNote, SyncInterventionNoteDto>();
+            CreateMap<InterventionNote, SyncInterventionNoteDto>()
+                .Ignore(x=>x.MessageOperatorIdsList);
             CreateMap<InterventionProduct, SyncInterventionProductDto>();
             CreateMap<InterventionProductCheckList, SyncInterventionProductCheckListDto>();
             CreateMap<InterventionProductCheckListItem, SyncInterventionProductCheckListItemDto>();
@@ -59,6 +60,7 @@ namespace Lacos.GestioneCommesse.Application
             CreateMap<SyncInterventionDisputeDto, InterventionDispute>()
                 .IgnoreCommonMembers().IgnoreNavigationPropertyEntity();
             CreateMap<SyncInterventionNoteDto, InterventionNote>()
+                .MapMember(x=>x.MessageOperatorIds,y=>string.Empty)
                 .IgnoreCommonMembers()
                 .IgnoreNavigationPropertyEntity();
             CreateMap<SyncInterventionProductDto, InterventionProduct>()

@@ -17,6 +17,9 @@ public class Operator : FullAuditedEntity
 
     public string? SignatureFileName { get; set; }
 
+    public bool IsDefaultAppMessageOperator { get; set; }
+    public bool IsOptionalAppMessageOperator { get; set; }
+    
     public ICollection<ActivityType> ActivityTypes { get; set; }
     public ICollection<Job> Jobs { get; set; }
     public ICollection<OperatorDocument> Documents { get; set; }

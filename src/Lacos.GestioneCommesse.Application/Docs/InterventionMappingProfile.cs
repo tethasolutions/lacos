@@ -67,6 +67,7 @@ public class InterventionMappingProfile : Profile
            .Ignore(x => x.OperatorId)
            .Ignore(x => x.Operator)
            .Ignore(x => x.Intervention)
+           .Ignore(x => x.MessageOperatorIds)
            .IgnoreCommonMembers();
 
 

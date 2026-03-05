@@ -7,7 +7,8 @@ public class SyncOperatorDto:SyncBaseDto
     public string? Name { get; set; }
     public long? DefaultVehicleId { get; set; }
     public long? UserId { get; set; }
-
     public string? SignatureFileName { get; set; }
+    public bool IsDefaultAppMessageOperator { get; set; }
+    public bool IsOptionalAppMessageOperator { get; set; }
 
 }

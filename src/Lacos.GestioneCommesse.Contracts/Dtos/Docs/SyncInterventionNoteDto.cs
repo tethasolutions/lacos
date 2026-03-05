@@ -7,5 +7,7 @@
     public string? Notes { get; set; }
     public long? OperatorId { get; set; }
     public long? InterventionId { get; set; }
+    public List<long>? MessageOperatorIdsList { get; set; }
+    
     }
 }

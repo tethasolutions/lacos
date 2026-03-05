@@ -4,6 +4,7 @@ using Lacos.GestioneCommesse.Dal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lacos.GestioneCommesse.Dal.Migrations
 {
     [DbContext(typeof(LacosDbContext))]
-    partial class LacosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260302145812_Add_Operator_App_Message_Operator_Fields")]
+    partial class Add_Operator_App_Message_Operator_Fields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -599,10 +602,6 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("MessageOperatorIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
                         .IsRequired()
@@ -2916,13 +2915,7 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<bool>("IsDefaultAppMessageOperator")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsOptionalAppMessageOperator")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -2935,6 +2928,12 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
 
                     b.Property<long?>("UserId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("isDefaultAppMessageOperator")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isOptionalAppMessageOperator")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

@@ -7,6 +7,12 @@
         public string? Description { get; set; }
         public string? Note { get; set; }
 
+        public string? Brand { get; set; }
+        public string? Side { get; set; } 
+        public string? Size { get; set; }
+        public string? Material { get; set; }
+        public decimal? DefaultPrice { get; set; }
+        
         // immagine della porta rei
         public string? PictureFileName { get; set; }
 

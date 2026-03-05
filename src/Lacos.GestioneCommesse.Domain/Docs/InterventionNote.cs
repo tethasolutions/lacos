@@ -13,4 +13,6 @@ public class InterventionNote : FullAuditedEntity, ILogEntity
 
     public long InterventionId { get; set; }
     public Intervention? Intervention { get; set; }
+    
+    public string MessageOperatorIds { get; set; }
 }

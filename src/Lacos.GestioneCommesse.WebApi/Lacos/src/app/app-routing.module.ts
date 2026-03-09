@@ -38,6 +38,7 @@ import { JobAccountingsComponent } from './job-accounting/jobaccountings.compone
 import { MaintenancePriceListComponent } from './maintenance-price-list/maintenance-price-list.component';
 import { DistanceErrorsComponent } from './customers/distance-errors.component';
 import { ProductsStockQuantitiesComponent } from './products/products-stock-quantities.component';
+import { JobSummaryComponent } from './jobs/job-summary.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -68,6 +69,7 @@ const routes: Routes = [
     { path: 'interventions-ko', component: InterventionsKoComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'purchase-orders', component: PurchaseOrdersComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'job-details', component: JobDetailsComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'job-summary', component: JobSummaryComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'jobs-progress-status', component: JobsProgressStatusComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'messages-list', component: MessagesListComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'interventionmessages-list', component: InterventionMessagesListComponent, canActivate: [AuthGuard.asInjectableGuard] },

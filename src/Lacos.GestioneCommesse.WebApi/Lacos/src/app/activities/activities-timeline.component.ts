@@ -27,16 +27,14 @@ import { ActivityTypesService } from '../services/activityTypes.service';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 
 @Component({
-    selector: 'app-activities',
-    templateUrl: 'activities.component.html'
+    selector: 'app-activities-timeline',
+    templateUrl: 'activities-timeline.component.html'
 })
-export class ActivitiesComponent extends BaseComponent implements OnInit {
+export class ActivitiesTimelineComponent extends BaseComponent implements OnInit {
     [x: string]: any;
 
     @Input() viewExportExcel: boolean = true;
-    @Input() viewInternals: boolean = false;
-    @Input() viewAdministratives: boolean = false;
-
+    
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('jobsAttachmentsModal', { static: true }) jobsAttachmentsModal: JobsAttachmentsModalComponent;
@@ -56,7 +54,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'jobIsInLate', dir: 'desc' }, { field: 'startDate', dir: 'asc' }, { field: 'expirationDate', dir: 'asc' }]
+        sort: [{ field: 'startDate', dir: 'asc' }, { field: 'expirationDate', dir: 'asc' }, { field: 'number', dir: 'asc' }]
     };
 
     private _jobId: number;
@@ -276,9 +274,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     };
 
     protected _read() {
-        if (this.viewInternals) {
             this._subscriptions.push(
-                this._service.readInternals(this.gridState)
+                this._service.readExternals(this.gridState)
                     .pipe(
                         tap(e => {
                             this.data = e;
@@ -287,31 +284,6 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
                     )
                     .subscribe()
             );
-        }
-        if (this.viewAdministratives) {
-            this._subscriptions.push(
-                this._service.readAdministratives(this.gridState)
-                    .pipe(
-                        tap(e => {
-                            this.data = e;
-                            this.checkLateJobsToNotify();
-                        })
-                    )
-                    .subscribe()
-            );
-        }
-        if (!this.viewInternals && !this.viewAdministratives) {
-            this._subscriptions.push(
-                this._service.read(this.gridState)
-                    .pipe(
-                        tap(e => {
-                            this.data = e;
-                            this.checkLateJobsToNotify();
-                        })
-                    )
-                    .subscribe()
-            );
-        }
     }
 
     protected _getCurrentOperator(userId: number) {

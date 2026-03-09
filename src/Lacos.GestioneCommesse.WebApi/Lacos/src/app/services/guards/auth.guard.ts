@@ -48,6 +48,7 @@ export class AuthGuard {
             case url === '/jobs-completed':
             case url === '/jobs-suspended':
             case url === '/jobs-archive':
+            case url === '/job-summary':
             case url === '/job-details':
             case url === '/jobs-progress-status':
             case url === '/purchase-orders':

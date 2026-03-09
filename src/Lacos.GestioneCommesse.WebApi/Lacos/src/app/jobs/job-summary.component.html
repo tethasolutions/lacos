@@ -1,0 +1,118 @@
+@if (job)
+{
+<div class="row border-bottom mb-3">
+    <div class="d-flex align-items-center mb-3">
+        <div class="col">
+            <h4>Dettaglio commessa {{job.code}}</h4>
+        </div>
+        <div class="col-auto">
+            <a class="btn btn-primary btn-sm me-2" (click)="edit()">
+                <span class="fa fa-edit"></span>
+                Scheda commessa
+            </a>
+            <a class="btn btn-primary btn-sm" (click)="openAttachments()">
+                <span class="fa fa-paperclip"></span>
+                Allegati commessa
+            </a>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-6">
+        <h6>Riferimento</h6>
+        <p>{{job.reference}}</p>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <h6>Contatti</h6>
+        @if (address){
+        <p>{{address.fullAddress}}
+            <span *ngIf="address.distanceKm > 0"><br /><i class="fa fa-road me-1"></i><i>distanza:
+                    {{address.distanceKm}} km</i></span>
+            <span *ngIf="address.telephone"><br />Tel: {{address.telephone}}</span>
+            <span *ngIf="address.jobReference"><br />Rif.: {{address.jobReference}}</span>
+            <span *ngIf="address.contactName"><br />Contatto: {{address.contactName}}</span>
+            <span *ngIf="address.contactReference"><br />Tel. Contatto: {{address.contactReference}}</span>
+        </p>
+        }
+    </div>
+    <div class="col-md-1 col-sm-6">
+        <h6>Data</h6>
+        <p>{{job.date | date:'dd/MM/yyyy' }}</p>
+    </div>
+    <div class="col-md-1 col-sm-6">
+        <h6>Stato</h6>
+        <p>{{job.status | jobStatus}}</p>
+    </div>
+    <div class="col-md-5 col-sm-6">
+        <h6>
+            <button class="btn btn-link p-0" style="margin-top: -5px" type="button" data-bs-toggle="collapse"
+                data-bs-target="#noteAccordion" aria-expanded="false" aria-controls="noteAccordion">
+                Note <i class="fa fa-chevron-down"></i>
+            </button>
+        </h6>
+        <div id="noteAccordion">
+            <div [innerHTML]="job.description | domsanitizer"></div>
+        </div>
+    </div>
+</div>
+}
+
+<kendo-tabstrip>
+    <kendo-tabstrip-tab title="Attività Amministrative">
+        <ng-template kendoTabTitle>
+            <strong>Attività Amministrative</strong>
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-activities [viewExportExcel]="false" [viewAdministratives]="true"></app-activities>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="Attività Interne">
+        <ng-template kendoTabTitle>
+            <strong>Attività Interne</strong>
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-activities [viewExportExcel]="false" [viewInternals]="true"></app-activities>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="Attività">
+        <ng-template kendoTabTitle>
+            <strong>Attività (timeline)</strong>
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-activities-timeline [viewExportExcel]="false"></app-activities-timeline>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="Ordini di lavoro">
+        <ng-template kendoTabTitle>
+            <strong>Ordini di lavoro</strong>
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-purchase-orders [viewExportExcel]="false"></app-purchase-orders>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="Interventi">
+        <ng-template kendoTabTitle>
+            <strong>Interventi</strong>
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-interventions-list [viewNewInterventionButton]="false"></app-interventions-list>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="Ticket">
+        <ng-template kendoTabTitle>
+            <strong>Ticket</strong>
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-tickets [viewExportExcel]="false"></app-tickets>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab *ngIf="!isOperator" title="Voci Contabili">
+        <ng-template kendoTabTitle>
+            <strong>Voci Contabili</strong>
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-jobaccountings *ngIf="!isOperator" [viewExportExcel]="false"></app-jobaccountings>
+        </ng-template>
+    </kendo-tabstrip-tab>
+</kendo-tabstrip>
+
+<app-job-modal #jobDetailModal></app-job-modal>
+<app-jobs-attachments-modal #jobsAttachmentsModal></app-jobs-attachments-modal>

@@ -31,6 +31,24 @@ export class ActivitiesService {
         return readData(this._http, state, url);
     }
 
+    readInternals(state: State) {
+        const url = `${this._baseUrl}/read_internals`
+
+        return readData(this._http, state, url);
+    }
+
+    readAdministratives(state: State) {
+        const url = `${this._baseUrl}/read_administratives`
+
+        return readData(this._http, state, url);
+    }
+
+    readExternals(state: State) {
+        const url = `${this._baseUrl}/read_externals`
+
+        return readData(this._http, state, url);
+    }
+
     activitiesFromProduct(state: State, product: string) {
         const url = `${this._baseUrl}/${product}/activitiesFromProduct`
 

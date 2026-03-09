@@ -5,6 +5,9 @@ namespace Lacos.GestioneCommesse.Application.Docs.Services;
 public interface IActivitiesService
 {
     IQueryable<ActivityReadModel> Query();
+    IQueryable<ActivityReadModel> GetInternals();
+    IQueryable<ActivityReadModel> GetAdministratives();
+    IQueryable<ActivityReadModel> GetExternals();
     IQueryable<ActivityReadModel> GetActivitiesFromProduct(string product);
     Task<ActivityDto> Get(long id);
     Task<ActivityDetailDto> GetDetail(long id);

@@ -107,6 +107,71 @@ public class ActivitiesService : IActivitiesService
             .Project<ActivityReadModel>(mapper);
     }
 
+    public IQueryable<ActivityReadModel> GetInternals()
+    {
+        var query = repository.Query()
+            .AsNoTracking()
+            .Include(e => e.Type)
+            .Where(e => e.Type!.IsInternal);
+
+        if (session.IsAuthenticated() && session.IsAuthorized(Role.Operator))
+        {
+            var user = session.CurrentUser!;
+
+            query = query
+                .Where(e =>
+                    e.Type!.Operators.Any(o => o.Id == user.OperatorId) ||
+                    e.Interventions.Any(i => i.Operators.Any(o => o.Id == user.OperatorId))
+                );
+        }
+
+        return query
+            .Project<ActivityReadModel>(mapper);
+    }
+
+    public IQueryable<ActivityReadModel> GetAdministratives()
+    {
+        var query = repository.Query()
+            .AsNoTracking()
+            .Include(e => e.Type)
+            .Where(e => e.Type!.IsAdministrative);
+
+        if (session.IsAuthenticated() && session.IsAuthorized(Role.Operator))
+        {
+            var user = session.CurrentUser!;
+
+            query = query
+                .Where(e =>
+                    e.Type!.Operators.Any(o => o.Id == user.OperatorId) ||
+                    e.Interventions.Any(i => i.Operators.Any(o => o.Id == user.OperatorId))
+                );
+        }
+
+        return query
+            .Project<ActivityReadModel>(mapper);
+    }
+
+    public IQueryable<ActivityReadModel> GetExternals()
+    {
+        var query = repository.Query()
+            .AsNoTracking()
+            .Include(e => e.Type)
+            .Where(e => !e.Type!.IsInternal && !e.Type!.IsAdministrative);
+
+        if (session.IsAuthenticated() && session.IsAuthorized(Role.Operator))
+        {
+            var user = session.CurrentUser!;
+
+            query = query
+                .Where(e =>
+                    e.Type!.Operators.Any(o => o.Id == user.OperatorId) ||
+                    e.Interventions.Any(i => i.Operators.Any(o => o.Id == user.OperatorId))
+                );
+        }
+
+        return query
+            .Project<ActivityReadModel>(mapper);
+    }
     public async Task<ActivityDto> Get(long id)
     {
             var activityDto = await dbContext.ExecuteWithDisabledQueryFilters(async () => await repository.Query()

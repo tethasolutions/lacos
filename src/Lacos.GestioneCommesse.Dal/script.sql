@@ -6091,3 +6091,62 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260302145812_Add_Operator_App_Message_Operator_Fields'
+)
+BEGIN
+    ALTER TABLE [Registry].[Operators] ADD [isDefaultAppMessageOperator] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260302145812_Add_Operator_App_Message_Operator_Fields'
+)
+BEGIN
+    ALTER TABLE [Registry].[Operators] ADD [isOptionalAppMessageOperator] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260302145812_Add_Operator_App_Message_Operator_Fields'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260302145812_Add_Operator_App_Message_Operator_Fields', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260303141119_Add_InterventionNote_MessageOperatorIds'
+)
+BEGIN
+    ALTER TABLE [Docs].[InterventionNotes] ADD [MessageOperatorIds] nvarchar(max) NOT NULL DEFAULT N'';
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260303141119_Add_InterventionNote_MessageOperatorIds'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260303141119_Add_InterventionNote_MessageOperatorIds', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -583,13 +583,14 @@ namespace Lacos.GestioneCommesse.Application.Sync
             return list;
         }
 
-        private async Task<List<TDto>> InsertUpdateAllModified<TDto, TEntity>(List<TDto> tdoModels) where TEntity : FullAuditedEntity where TDto : SyncBaseDto
+        private async Task<List<TDto>> InsertUpdateAllModified<TDto, TEntity>(List<TDto> dtoModels) where TEntity : FullAuditedEntity where TDto : SyncBaseDto
         {
             var repository = serviceProvider.GetRequiredService<IRepository<TEntity>>();
             List<TDto>  list = new List<TDto>();
             
-            foreach (var model in tdoModels)
+            foreach (var model in dtoModels)
             {
+
                 var entity = await
                     repository
                         .Query()
@@ -663,17 +664,18 @@ namespace Lacos.GestioneCommesse.Application.Sync
                             serviceProvider.GetRequiredService<IRepository<NotificationOperator>>();
                         var messageNotificationRepository =
                             serviceProvider.GetRequiredService<IRepository<MessageNotification>>();
-                        var notificationOperators = await notificationOperatorRepository.Query()
-                            .AsNoTracking()
-                            .ToListAsync();
+                        var syncInterventionNoteDto = model as SyncInterventionNoteDto;
+                        var notificationOperators = syncInterventionNoteDto.MessageOperatorIdsList;
+                            //    await notificationOperatorRepository.Query()
+                            //.AsNoTracking()
+                            //.ToListAsync();
                         foreach (var notificationOperator in notificationOperators)
                         {
                             MessageNotification notification = new MessageNotification();
                             notification.MessageId = message.Id;
-                            notification.OperatorId = (long) notificationOperator.OperatorId;
+                            notification.OperatorId = (long) notificationOperator;
                             notification.IsRead = false;
                             await messageNotificationRepository.Insert(notification);
-
                         }
 
                         await dbContext.SaveChanges();

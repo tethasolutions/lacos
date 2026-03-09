@@ -29,6 +29,27 @@ public class ActivitiesController : LacosApiController
             .ToDataSourceResultAsync(request);
     }
 
+    [HttpGet("read_internals")]
+    public Task<DataSourceResult> ReadInternals([DataSourceRequest] DataSourceRequest request)
+    {
+        return service.GetInternals()
+            .ToDataSourceResultAsync(request);
+    }
+
+    [HttpGet("read_administratives")]
+    public Task<DataSourceResult> ReadAdministratives([DataSourceRequest] DataSourceRequest request)
+    {
+        return service.GetAdministratives()
+            .ToDataSourceResultAsync(request);
+    }
+
+    [HttpGet("read_externals")]
+    public Task<DataSourceResult> ReadExternals([DataSourceRequest] DataSourceRequest request)
+    {
+        return service.GetExternals()
+            .ToDataSourceResultAsync(request);
+    }
+
     [HttpGet("{product}/activitiesFromProduct")]
     public Task<DataSourceResult> activitiesFromProducts([DataSourceRequest] DataSourceRequest request, string product)
     {

@@ -1,0 +1,433 @@
+/* === Layout === */
+.timeline-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.timeline-container {
+    max-width: 600px;
+    min-width: 400px;
+    flex-shrink: 0;
+}
+
+/* === Timeline === */
+.timeline {
+    position: relative;
+    padding: 0;
+    list-style: none;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 16px;
+    width: 2px;
+    background-color: #dee2e6;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 44px;
+    padding-bottom: 20px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 8px;
+    top: 12px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #dee2e6;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.timeline-date {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-bottom: 4px;
+}
+
+.timeline-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-left: 6px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease;
+}
+
+.timeline-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.timeline-card.selected {
+    box-shadow: 0 0 0 2px #0d6efd;
+}
+
+/* Dot colors matching status */
+.timeline-item.status-pending .timeline-dot {
+    border-color: #ffc107;
+    background-color: #fff3cd;
+}
+
+.timeline-item.status-inprogress .timeline-dot {
+    border-color: #0dcaf0;
+    background-color: #cff4fc;
+}
+
+.timeline-item.status-ready .timeline-dot {
+    border-color: #a9e913;
+    background-color: #edfcce;
+}
+
+.timeline-item.status-completed .timeline-dot {
+    border-color: #12a733;
+    background-color: #d1f5d9;
+}
+
+.timeline-item.is-expired .timeline-dot {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+/* === Timeline Card Content === */
+.timeline-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.timeline-header .activity-type-badge {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.timeline-header .job-code {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.timeline-header .status-badge {
+    font-size: 0.7rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge.badge-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.badge-inprogress {
+    background-color: #cff4fc;
+    color: #055160;
+}
+
+.status-badge.badge-ready {
+    background-color: #edfcce;
+    color: #4a6b00;
+}
+
+.status-badge.badge-completed {
+    background-color: #d1f5d9;
+    color: #0a5c1f;
+}
+
+.timeline-description {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+.timeline-details {
+    font-size: 0.75rem;
+    color: #6c757d;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin-bottom: 6px;
+}
+
+.timeline-details .detail-item {
+    white-space: nowrap;
+}
+
+.timeline-details .detail-item i {
+    width: 14px;
+    text-align: center;
+    margin-right: 2px;
+}
+
+.timeline-actions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.timeline-actions .btn {
+    padding: 1px 6px;
+    font-size: 0.75rem;
+}
+
+.progress-container {
+    background-color: #e9ecef;
+    border-radius: 4px;
+    height: 16px;
+    font-size: 0.65rem;
+    line-height: 16px;
+    overflow: hidden;
+    margin-top: 2px;
+}
+
+.progress-container .progress-bar {
+    color: #fff;
+    text-align: center;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-hide {
+    display: none;
+}
+
+.unread-badge {
+    color: #dc3545;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* === Detail Panel === */
+.detail-panel {
+    flex: 1;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background: #fff;
+    padding: 16px;
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.detail-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.detail-panel-header h5 {
+    margin: 0;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-panel-header .activity-type-badge {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* === Detail Sections === */
+.detail-summary {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.detail-section {
+    margin-bottom: 0;
+    padding: 12px 0;
+    border-top: 2px solid #dee2e6;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #495057;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-section-title i {
+    width: 16px;
+    text-align: center;
+}
+
+.detail-section-count {
+    background: #6c757d;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0 6px;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+/* Section accent colors */
+.detail-section-interventions {
+    border-top-color: #0dcaf0;
+}
+
+.detail-section-interventions .detail-section-title {
+    color: #055160;
+}
+
+.detail-section-interventions .detail-section-count {
+    background: #0dcaf0;
+    color: #055160;
+}
+
+.detail-section-activities {
+    border-top-color: #ffc107;
+}
+
+.detail-section-activities .detail-section-title {
+    color: #856404;
+}
+
+.detail-section-activities .detail-section-count {
+    background: #ffc107;
+    color: #856404;
+}
+
+.detail-section-orders {
+    border-top-color: #6f42c1;
+}
+
+.detail-section-orders .detail-section-title {
+    color: #6f42c1;
+}
+
+.detail-section-orders .detail-section-count {
+    background: #6f42c1;
+    color: #fff;
+}
+
+.detail-section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* === Detail Cards === */
+.detail-card {
+    border: 1px solid #dee2e6;
+    border-left: 6px solid #dee2e6;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+}
+
+.detail-card-success {
+    border-left-color: #12a733;
+}
+
+.detail-card-danger {
+    border-left-color: #dc3545;
+}
+
+.detail-card-warning {
+    border-left-color: #ffc107;
+}
+
+.detail-card-info {
+    border-left-color: #0dcaf0;
+}
+
+.detail-card-ready {
+    border-left-color: #a9e913;
+}
+
+.detail-card-partial {
+    border-left-color: #6c757d;
+}
+
+.detail-card-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.detail-card-header .activity-type-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.detail-card-header .badge {
+    font-size: 0.7rem;
+    padding: 1px 5px;
+}
+
+.detail-card-header .status-badge {
+    font-size: 0.7rem;
+}
+
+.detail-card-body {
+    color: #6c757d;
+}
+
+.detail-card-row {
+    margin-bottom: 2px;
+    line-height: 1.4;
+}
+
+.detail-card-row i {
+    width: 14px;
+    text-align: center;
+    margin-right: 3px;
+}
+
+.detail-card-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid #e9ecef;
+}
+
+.detail-card-actions .btn {
+    padding: 1px 6px;
+    font-size: 0.9rem;
+}
+
+.operator-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 3px;
+    vertical-align: middle;
+}

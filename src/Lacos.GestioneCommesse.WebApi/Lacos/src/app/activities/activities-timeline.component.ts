@@ -1,5 +1,5 @@
-import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { GridDataResult } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
@@ -21,29 +21,45 @@ import { JobsAttachmentsModalComponent } from '../jobs/jobs-attachments-modal.co
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
 import { DependenciesModalComponent } from '../dependencies/dependencies-modal.component';
-import { PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { Job } from '../services/jobs/models';
 import { ActivityTypesService } from '../services/activityTypes.service';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
+import { InterventionsService } from '../services/interventions/interventions.service';
+import { IInterventionReadModel, Intervention, interventionStatusNames } from '../services/interventions/models';
+import { PurchaseOrdersService } from '../services/purchase-orders/purchase-orders.service';
+import { IPurchaseOrderReadModel, purchaseOrderStatusNames } from '../services/purchase-orders/models';
+import { DependencyModel } from '../shared/models/dependency.models';
+import { InterventionModalComponent } from '../interventions/intervention-modal.component';
+import { ApiUrls } from '../services/common/api-urls';
+import { PurchaseOrderModalComponent, PurchaseOrderModalOptions } from '../purchase-order/purchase-order-modal.component';
 
 @Component({
     selector: 'app-activities-timeline',
-    templateUrl: 'activities-timeline.component.html'
+    templateUrl: 'activities-timeline.component.html',
+    styleUrls: ['activities-timeline.component.css']
 })
 export class ActivitiesTimelineComponent extends BaseComponent implements OnInit {
     [x: string]: any;
 
-    @Input() viewExportExcel: boolean = true;
-    
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
     @ViewChild('jobsAttachmentsModal', { static: true }) jobsAttachmentsModal: JobsAttachmentsModalComponent;
     @ViewChild('dependenciesModal', { static: false }) dependenciesModal: DependenciesModalComponent;
+    @ViewChild('interventionModal', { static: true }) interventionModal: InterventionModalComponent;
+    @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
 
     data: GridDataResult;
+    activities: IActivityReadModel[] = [];
+    selectedActivity: IActivityReadModel = null;
+    dependentActivities: IActivityReadModel[] = [];
+    dependentPurchaseOrders: IPurchaseOrderReadModel[] = [];
+    interventions: IInterventionReadModel[] = [];
+    detailLoading: boolean = false;
+    readonly interventionStatusNames = interventionStatusNames;
+    readonly purchaseOrderStatusNames = purchaseOrderStatusNames;
     gridState: State = {
         skip: 0,
-        take: 30,
+        take: 1000,
         filter: {
             filters: [
                 this._buildStatusFilter(),
@@ -60,11 +76,9 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
     private _jobId: number;
     private _typeId: number;
     private _referentId: number;
-    private cellArgs: CellClickEvent;
     user: User;
     currentOperator: OperatorModel;
     job: Job;
-    screenWidth: number;
     lateJobsToNotify: any[] = [];
     lateActivitiesToNotify: IActivityReadModel[] = [];
     isOperator: boolean = true;
@@ -79,20 +93,19 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
         private readonly _user: UserService,
         private readonly _customerService: CustomerService,
         private readonly _operatorsService: OperatorsService,
-        private readonly _storageService: StorageService,
-        private readonly _jobsService: JobsService
+        private readonly _jobsService: JobsService,
+        private readonly _interventionsService: InterventionsService,
+        private readonly _purchaseOrdersService: PurchaseOrdersService
     ) {
         super();
         this.data = null;
     }
 
     ngOnInit() {
-        this._resumeState();
         this._subscribeRouteParams();
         this.user = this._user.getUser();
         this._getCurrentOperator(this.user.id);
         this.isOperator = (this.user.role == Role.Operator);
-        this.updateScreenSize();
 
         if (this._jobId) {
             this._subscriptions.push(
@@ -103,38 +116,10 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
                     .subscribe()
             );
         }
-
-    }
-
-    @HostListener('window:resize', ['$event'])
-    onResize(event: Event): void {
-        this.updateScreenSize();
-    }
-
-    private updateScreenSize(): void {
-        this.screenWidth = window.innerWidth - 44;
-        if (this.screenWidth > 1876) this.screenWidth = 1876;
-        if (this.screenWidth < 1400) this.screenWidth = 1400;
-    }
-
-    private _resumeState() {
-        const savedState = this._storageService.get<State>(window.location.hash, true);
-        if (savedState == null) return;
-        this.gridState = savedState;
-    }
-
-    private _saveState() {
-        this._storageService.save(this.gridState, window.location.hash, true);
-    }
-
-    dataStateChange(state: State) {
-        this.gridState = state;
-        this._saveState();
-        this._read();
     }
 
     askRemove(activity: IActivityReadModel) {
-        const text = `Sei sicuro di voler rimuovere l'attività ${activity.number}?`;
+        const text = `Sei sicuro di voler rimuovere l'attività ${activity.shortDescription}?`;
 
         this._subscriptions.push(
             this._messageBox.confirm(text, 'Attenzione')
@@ -180,22 +165,6 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
         );
     }
 
-    onDblClick(): void {
-        if (!this.cellArgs.isEdited) {
-            this._subscriptions.push(
-                this._service.get(this.cellArgs.dataItem.id)
-                    .pipe(
-                        map(e => new ActivityModalOptions(e)),
-                        switchMap(e => this.activityModal.open(e)),
-                        filter(e => e),
-                        switchMap(() => this._service.update(this.activityModal.options.activity)),
-                        tap(() => this._afterActivityUpdated())
-                    )
-                    .subscribe()
-            )
-        }
-    }
-
     openCustomer(customerId: number): void {
         this._subscriptions.push(
             this._customerService.getCustomer(customerId)
@@ -233,57 +202,240 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
         this.dependenciesModal.open();
     }
 
-    cellClickHandler(args: CellClickEvent): void {
-        this.cellArgs = args;
+    getTimelineItemClass(item: IActivityReadModel): { [key: string]: boolean } {
+        return {
+            'status-pending': item.status === ActivityStatus.Pending,
+            'status-inprogress': item.status === ActivityStatus.InProgress,
+            'status-ready': item.status === ActivityStatus.Ready,
+            'status-completed': item.status === ActivityStatus.Completed,
+            'is-expired': item.status !== ActivityStatus.Completed && item.isExpired
+        };
     }
-    readonly rowCallback = (context: RowClassArgs) => {
-        const activity = context.dataItem as IActivityReadModel;
-        const classes: { [key: string]: boolean } = {};
 
-        // Activity status classes
-        if (activity.status === ActivityStatus.Completed) {
-            classes['activity-completed'] = true;
-        } else if (activity.status === ActivityStatus.Pending) {
-            classes['activity-pending'] = true;
-        } else if (activity.status === ActivityStatus.InProgress) {
-            classes['activity-in-progress'] = true;
-        } else if (activity.status === ActivityStatus.Ready) {
-            classes['activity-ready'] = true;
-        } else if (
-            activity.status != ActivityStatus.Completed &&
-            !!activity.expirationDate &&
-            new Date(activity.expirationDate).addDays(1).isPast()
-        ) {
-            classes['activity-expired'] = true;
+    getStatusBadgeClass(item: IActivityReadModel): { [key: string]: boolean } {
+        return {
+            'badge-pending': item.status === ActivityStatus.Pending,
+            'badge-inprogress': item.status === ActivityStatus.InProgress,
+            'badge-ready': item.status === ActivityStatus.Ready,
+            'badge-completed': item.status === ActivityStatus.Completed
+        };
+    }
+
+    selectActivity(item: IActivityReadModel) {
+        if (this.selectedActivity?.id === item.id) {
+            this.selectedActivity = null;
+            this.dependentActivities = [];
+            this.dependentPurchaseOrders = [];
+            this.interventions = [];
+            return;
         }
 
-        // Purchase order status classes
-        if (activity.purchaseOrderStatus === PurchaseOrderStatus.Completed) {
-            classes['purchase-order-completed'] = true;
-        } else if (activity.purchaseOrderStatus === PurchaseOrderStatus.Pending) {
-            classes['purchase-order-pending'] = true;
-        } else if (activity.purchaseOrderStatus === PurchaseOrderStatus.Ordered) {
-            classes['purchase-order-ordered'] = true;
-        } else if (activity.purchaseOrderStatus === PurchaseOrderStatus.Partial) {
-            classes['purchase-order-partial'] = true;
-        } else if (activity.purchaseOrderStatus === PurchaseOrderStatus.Canceled) {
-            classes['purchase-order-canceled'] = true;
+        this.selectedActivity = item;
+        this.dependentActivities = [];
+        this.dependentPurchaseOrders = [];
+        this.interventions = [];
+        this.detailLoading = true;
+
+        this._loadInterventions(item);
+        this._loadDependencies(item);
+    }
+
+    private _loadInterventions(item: IActivityReadModel) {
+        const state: State = {
+            skip: 0,
+            take: 1000,
+            filter: {
+                filters: [{ field: 'activityId', operator: 'eq', value: item.id }],
+                logic: 'and'
+            },
+            sort: [{ field: 'start', dir: 'desc' }]
+        };
+
+        this._subscriptions.push(
+            this._interventionsService.read(state)
+                .pipe(
+                    tap(e => {
+                        this.interventions = (e.data || []) as IInterventionReadModel[];
+                        this._checkDetailLoaded();
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    private _loadDependencies(item: IActivityReadModel) {
+        if (!item.hasDependencies) {
+            this.detailLoading = false;
+            return;
         }
 
-        return classes;
-    };
+        this._subscriptions.push(
+            this._service.readDependencies(item.id)
+                .pipe(
+                    tap(deps => this._loadDependencyDetails(item, deps))
+                )
+                .subscribe()
+        );
+    }
 
-    protected _read() {
+    private _loadDependencyDetails(item: IActivityReadModel, deps: DependencyModel) {
+        if (deps.activityDependenciesId?.length > 0) {
+            const state: State = {
+                skip: 0,
+                take: 1000,
+                filter: {
+                    filters: deps.activityDependenciesId.map(id => ({ field: 'id', operator: 'eq', value: id })),
+                    logic: 'or'
+                }
+            };
             this._subscriptions.push(
-                this._service.readExternals(this.gridState)
+                this._service.readJobActivities(state, item.jobId)
                     .pipe(
                         tap(e => {
-                            this.data = e;
-                            this.checkLateJobsToNotify();
+                            this.dependentActivities = (e.data || []) as IActivityReadModel[];
+                            this._checkDetailLoaded();
                         })
                     )
                     .subscribe()
             );
+        }
+
+        if (deps.purchaseOrderDependenciesId?.length > 0) {
+            const state: State = {
+                skip: 0,
+                take: 1000,
+                filter: {
+                    filters: deps.purchaseOrderDependenciesId.map(id => ({ field: 'id', operator: 'eq', value: id })),
+                    logic: 'or'
+                }
+            };
+            this._subscriptions.push(
+                this._purchaseOrdersService.readJobPurchaseOrders(state, item.jobId)
+                    .pipe(
+                        tap(e => {
+                            this.dependentPurchaseOrders = (e.data || []) as IPurchaseOrderReadModel[];
+                            this._checkDetailLoaded();
+                        })
+                    )
+                    .subscribe()
+            );
+        }
+
+        if (!deps.activityDependenciesId?.length && !deps.purchaseOrderDependenciesId?.length) {
+            this._checkDetailLoaded();
+        }
+    }
+
+    private _checkDetailLoaded() {
+        this.detailLoading = false;
+    }
+
+    downloadReport(interventionId: number) {
+        const user = this._user.getUser();
+        window.open(`${ApiUrls.baseApiUrl}/interventions/download-report/${interventionId}?access_token=${user.accessToken}`, '_blank');
+    }
+
+    sendReport(interventionId: number, customerEmail: string) {
+        this._subscriptions.push(
+            this._messageBox.confirm('Vuoi inviare il rapportino alla mail del cliente (' + customerEmail + ')?', 'Invio rapportino')
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._interventionsService.sendReport(interventionId, customerEmail)),
+                    tap(() => this._messageBox.success('Rapportino inviato.'))
+                )
+                .subscribe()
+        );
+    }
+
+    editIntervention(intervention: IInterventionReadModel) {
+        this._subscriptions.push(
+            this._interventionsService.get(intervention.id)
+                .pipe(
+                    switchMap(e => this.interventionModal.open(e)),
+                    filter(e => e),
+                    switchMap(() => this._interventionsService.update(this.interventionModal.options)),
+                    tap(() => {
+                        this._messageBox.success('Intervento aggiornato.');
+                        if (this.selectedActivity) {
+                            this._loadInterventions(this.selectedActivity);
+                        }
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    askRemoveIntervention(intervention: IInterventionReadModel) {
+        if (!intervention.canBeRemoved) {
+            return;
+        }
+
+        this._subscriptions.push(
+            this._messageBox.confirm('Sei sicuro di voler rimuovere l\'intervento selezionato?', 'Attenzione')
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._interventionsService.delete(intervention.id)),
+                    tap(() => {
+                        this._messageBox.success('Intervento rimosso.');
+                        if (this.selectedActivity) {
+                            this._loadInterventions(this.selectedActivity);
+                        }
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    editPurchaseOrder(purchaseOrder: IPurchaseOrderReadModel) {
+        this._subscriptions.push(
+            this._purchaseOrdersService.get(purchaseOrder.id)
+                .pipe(
+                    map(e => new PurchaseOrderModalOptions(e)),
+                    switchMap(e => this.purchaseOrderModal.open(e)),
+                    filter(e => e),
+                    switchMap(() => this._purchaseOrdersService.update(this.purchaseOrderModal.options.purchaseOrder)),
+                    tap(() => {
+                        this._messageBox.success('Ordine aggiornato.');
+                        if (this.selectedActivity) {
+                            this._loadDependencies(this.selectedActivity);
+                        }
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    askRemovePurchaseOrder(purchaseOrder: IPurchaseOrderReadModel) {
+        const text = `Sei sicuro di voler rimuovere l'ordine selezionato?`;
+
+        this._subscriptions.push(
+            this._messageBox.confirm(text, 'Attenzione')
+                .pipe(
+                    filter(e => e),
+                    switchMap(() => this._purchaseOrdersService.delete(purchaseOrder.id)),
+                    tap(() => {
+                        this._messageBox.success('Ordine rimosso.');
+                        if (this.selectedActivity) {
+                            this._loadDependencies(this.selectedActivity);
+                        }
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    protected _read() {
+        this._subscriptions.push(
+            this._service.readExternals(this.gridState)
+                .pipe(
+                    tap(e => {
+                        this.data = e;
+                        this.activities = (e.data || []) as IActivityReadModel[];
+                        this.checkLateJobsToNotify();
+                    })
+                )
+                .subscribe()
+        );
     }
 
     protected _getCurrentOperator(userId: number) {
@@ -311,11 +463,6 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
     private _subscribeRouteParams() {
         this._route.queryParams
             .pipe(
-                // switchMap(e =>
-                //     +e['jobId']
-                //         ? this._jobsService.get(+e['jobId'])
-                //         : of(void 0)
-                // ),                
                 tap(e => this._setParams(e))
             )
             .subscribe();
@@ -363,8 +510,6 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
 
     private _buildReferentIdFilter() {
         const that = this;
-
-        //if (that._referentId == null) return {};
 
         return {
             field: 'referentId',
@@ -481,10 +626,6 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
 
     onLateActivityNotificationClosed(id: number) {
         this.lateActivitiesToNotify = this.lateActivitiesToNotify.filter(a => a.id !== id);
-    }
-
-    checkHasInterventions(dataItem: IActivityReadModel): boolean {
-        return dataItem.hasInterventions;
     }
 
     exportToExcel(): void {

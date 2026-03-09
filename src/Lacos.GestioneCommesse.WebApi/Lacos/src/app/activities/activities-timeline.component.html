@@ -1,17 +1,15 @@
 <div class="d-flex align-items-center mb-3">
     <div class="col">
-        <h4>Attività</h4>
+        <h4>Attivit&agrave;</h4>
     </div>
 
-    <div class="col-auto">
+    <div class="col-auto d-flex gap-2">
         <button (click)="create()" class="btn btn-primary btn-sm">
             <i class="fas fa-plus"></i>
             NUOVA
         </button>
     </div>
 </div>
-
-<app-grid-context-menu #gridMenu key="jobId"></app-grid-context-menu>
 
 <div class="job-late-toast-container">
     <ng-container *ngFor="let job of lateJobsToNotify">
@@ -27,170 +25,351 @@
     </ng-container>
 </div>
 
-<div class="grid-container">
-    <kendo-grid [data]="data" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
-        [filter]="gridState.filter" [group]="gridState.group" filterable="menu" [sortable]="true" [pageable]="true"
-        (dataStateChange)="dataStateChange($event)" [rowClass]="rowCallback" (cellClick)="cellClickHandler($event)"
-        (dblclick)="onDblClick()" (cellClick)="gridMenu.onCellClick($event,true)" scrollable="none"
-        [style.width.px]="screenWidth">
-        <ng-template kendoGridToolbarTemplate *ngIf="viewExportExcel">
-            <button type="button" class="btn btn-primary" (click)="exportToExcel()">
-                Esporta in Excel
-            </button>
-        </ng-template>
-        <kendo-grid-column field="activityColor" [sortable]="true" [filterable]="false" title=" " class="activity-color"
-            width="1" kendoTooltip>
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <div [style.background-color]="dataItem.activityColor" title="{{dataItem.type}}">&nbsp;</div>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="customer" title="Cliente" *ngIf="viewExportExcel">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <a (click)="openCustomer(dataItem.customerId)" style="cursor: pointer;">{{dataItem.customer}}</a>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="jobCode" title="Commessa" [width]="1" *ngIf="viewExportExcel">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <div *ngIf="!dataItem.jobHasHighPriority">{{dataItem.jobCode}}</div>
-                <div *ngIf="dataItem.jobHasHighPriority" class="job-alert">
-                    {{dataItem.jobCode}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+<div class="timeline-layout">
+    <!-- LEFT: Timeline -->
+    <div class="timeline-container">
+        <div class="timeline" *ngIf="activities?.length > 0">
+            <div class="timeline-item"
+                *ngFor="let item of activities"
+                [ngClass]="getTimelineItemClass(item)">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">
+                    <i class="fa fa-calendar"></i> {{item.createdOn | date:'dd/MM/yyyy'}}
+                    <span *ngIf="item.editedOn"> &mdash; mod. {{item.editedOn | date:'dd/MM/yyyy'}}</span>
                 </div>
-                <div *ngIf="dataItem.jobIsInLate" class="job-alert" kendoTooltip title="Scadenza Tassativa">
-                    {{dataItem.jobMandatoryDate | date:"dd/MM/yyyy"}} <i class="fa fa-exclamation-triangle"
-                        aria-hidden="true"></i>
-                </div>
-            </ng-template>
-        </kendo-grid-column>
-        <!-- <kendo-grid-column field="number" title="N." [width]="1" filter="numeric" format="n0">
-    </kendo-grid-column> -->
-        <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="activity-status">
-            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                let-filterService="filterService">
-                <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
-                    [data]="activityStatusNames">
-                </app-multiselect-grid-column-filter>
-            </ng-template>
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <span class="text-nowrap">
-                    {{dataItem | activityStatus}}
-                </span>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="jobReference" title="Riferimento" *ngIf="viewExportExcel">
-        </kendo-grid-column>
-        <kendo-grid-column field="shortDescription" title="Descrizione Attività">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                {{dataItem.shortDescription}}<br />
-                <div class="progress-container" [ngClass]="{'progress-hide': (dataItem.totalDependencies == 0)}"
-                    kendoTooltip
-                    title="Dipendenze evase {{dataItem.fulfilledDependencies}} / {{dataItem.totalDependencies}}">
-                    <div class="progress-bar"
-                        [style.width.%]="dataItem.totalDependencies ? (dataItem.fulfilledDependencies / dataItem.totalDependencies * 100) : 0">
-                        {{dataItem.fulfilledDependencies}} / {{dataItem.totalDependencies}}
+                <div class="timeline-card"
+                    [class.selected]="selectedActivity?.id === item.id"
+                    [style.border-left-color]="item.activityColor"
+                    (click)="selectActivity(item)"
+                    (dblclick)="edit(item)">
+
+                    <!-- Header -->
+                    <div class="timeline-header">
+                        <span class="activity-type-badge" [style.background-color]="item.activityColor"
+                            [title]="item.type"></span>
+                        <span class="status-badge" [ngClass]="getStatusBadgeClass(item)">
+                            {{item | activityStatus}}
+                        </span>
+                        <span *ngIf="item.unreadMessages" class="unread-badge" (click)="edit(item); $event.stopPropagation()">
+                            <i class="fa-regular fa-message"></i> {{item.unreadMessages}}
+                        </span>
+                        <span *ngIf="item.isFromTicket" class="badge bg-secondary" style="font-size: 0.7rem;">Ticket</span>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="timeline-description">
+                        {{item.shortDescription}}
+                        <div class="progress-container" [ngClass]="{'progress-hide': (item.totalDependencies == 0)}"
+                            [title]="'Dipendenze evase ' + item.fulfilledDependencies + ' / ' + item.totalDependencies">
+                            <div class="progress-bar"
+                                [style.width.%]="item.totalDependencies ? (item.fulfilledDependencies / item.totalDependencies * 100) : 0">
+                                {{item.fulfilledDependencies}} / {{item.totalDependencies}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details row -->
+                    <div class="timeline-details">
+                        <span class="detail-item" [ngClass]="{'job-alert': item.isExpired}">
+                            <i class="fa fa-clock"></i> Scad: {{item.expirationDate | date:'dd/MM/yyyy'}}
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true" *ngIf="item.isMandatoryExpiration"></i>
+                        </span>
+                        <span class="detail-item" *ngIf="item.jobIsInLate" class="job-alert">
+                            <i class="fa fa-exclamation-triangle"></i> Tass: {{item.jobMandatoryDate | date:'dd/MM/yyyy'}}
+                        </span>
+                        <span class="detail-item" *ngIf="item.purchaseOrderStatus">
+                            <i class="fa fa-bag-shopping"></i>
+                            <a [routerLink]="['/purchase-orders']" [queryParams]="{jobId: item.jobId}"
+                                (click)="$event.stopPropagation()">
+                                {{item.purchaseOrderStatus | purchaseOrderStatus}}
+                            </a>
+                        </span>
+                        <span class="detail-item">
+                            <i class="fa fa-hard-hat"></i>
+                            <span *ngIf="!item.isNewReferent || item.referentId != currentOperator?.id">{{item.referentName}}</span>
+                            <span *ngIf="item.isNewReferent && item.referentId == currentOperator?.id" class="job-alert">
+                                {{item.referentName}} <i class="fa fa-bell" aria-hidden="true"></i>
+                            </span>
+                        </span>
+                        <span class="detail-item" *ngIf="item.lastOperator">
+                            <i class="fa fa-pen"></i> {{item.lastOperator}}
+                        </span>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="timeline-actions">
+                        <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(item); $event.stopPropagation()">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', item.id]"
+                            [disabled]="item.isInternal" (click)="$event.stopPropagation()">
+                            <i class="fas fa-gear"></i>
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati"
+                            [disabled]="!item.hasAttachments" (click)="openAttachments(item.jobId, item.id); $event.stopPropagation()">
+                            <i class="fa fa-paperclip"></i>
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" title="Visualizza dipendenze"
+                            [disabled]="!item.hasDependencies"
+                            (click)="openDependencies(item.jobId, item.id, item.canHaveDependencies); $event.stopPropagation()">
+                            <i class="fa fa-link"></i>
+                        </button>
+                        <button [disabled]="!item.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
+                            (click)="askRemove(item); $event.stopPropagation()">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="expirationDate" title="Scadenza" filter="date" format="dd/MM/yyyy" [width]="1">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <div class="text-nowrap" [ngClass]="{'job-alert': dataItem.isExpired}">
-                    {{dataItem.expirationDate | date:'dd/MM/yyyy'}} <i class="fa fa-exclamation-triangle"
-                        aria-hidden="true" *ngIf="dataItem.isMandatoryExpiration"></i>
-                </div>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="purchaseOrderStatus" title="Stato OA" [width]="1" filter="numeric"
-            class="purchase-order-status">
-            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                let-filterService="filterService">
-                <app-multiselect-grid-column-filter [column]="column" [filter]="filter" [filterService]="filterService"
-                    [data]="purchaseOrderStatusNames">
-                </app-multiselect-grid-column-filter>
-            </ng-template>
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <span class="text-nowrap">
-                    <button class="btn btn-outline-primary btn-sm" title="Visualizza ordini d'acquisto"
-                        [routerLink]="['/purchase-orders']" [queryParams]="{jobId: dataItem.jobId}"
-                        *ngIf="dataItem.purchaseOrderStatus">
-                        <i class="fa fa-bag-shopping"></i>
-                    </button>
-                    {{dataItem.purchaseOrderStatus | purchaseOrderStatus}}
+            </div>
+        </div>
+
+        <div *ngIf="activities?.length === 0" class="text-muted mt-3">
+            Nessuna attivit&agrave; trovata.
+        </div>
+    </div>
+
+    <!-- RIGHT: Detail Panel -->
+    <div class="detail-panel" *ngIf="selectedActivity">
+        <div class="detail-panel-header">
+            <h5>
+                <span class="activity-type-badge" [style.background-color]="selectedActivity.activityColor"></span>
+                {{selectedActivity.shortDescription}}
+            </h5>
+            <div class="d-flex gap-1">
+            <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(selectedActivity); $event.stopPropagation()">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', selectedActivity.id]"
+                [disabled]="selectedActivity.isInternal" (click)="$event.stopPropagation()">
+                <i class="fas fa-gear"></i>
+            </button>
+            <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati"
+                [disabled]="!selectedActivity.hasAttachments" (click)="openAttachments(selectedActivity.jobId, selectedActivity.id); $event.stopPropagation()">
+                <i class="fa fa-paperclip"></i>
+            </button>
+            <button class="btn btn-outline-primary btn-sm" title="Visualizza dipendenze"
+                [disabled]="!selectedActivity.hasDependencies"
+                (click)="openDependencies(selectedActivity.jobId, selectedActivity.id, selectedActivity.canHaveDependencies); $event.stopPropagation()">
+                <i class="fa fa-link"></i>
+            </button>
+            <button [disabled]="!selectedActivity.canBeRemoved" class="btn btn-danger btn-sm me-5" title="Rimuovi"
+                (click)="askRemove(selectedActivity); $event.stopPropagation()">
+                <i class="fas fa-trash"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" (click)="selectActivity(selectedActivity)" title="Chiudi">
+                <i class="fa fa-times"></i>
+            </button>
+            </div>
+        </div>
+
+        <!-- Activity Summary -->
+        <div class="detail-summary" [style.border-left-color]="selectedActivity.activityColor">
+            <div class="detail-summary-row">
+                <span class="status-badge" [ngClass]="getStatusBadgeClass(selectedActivity)">
+                    {{selectedActivity | activityStatus}}
                 </span>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="referentName" title="Operatore">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <div *ngIf="!dataItem.isNewReferent || dataItem.referentId != currentOperator?.id">
-                    {{dataItem.referentName}}</div>
-                <div *ngIf="dataItem.isNewReferent && dataItem.referentId == currentOperator?.id" class="job-alert">
-                    {{dataItem.referentName}} <i class="fa fa-bell" aria-hidden="true"></i>
+                <span *ngIf="selectedActivity.isFromTicket" class="badge bg-secondary" style="font-size: 0.7rem;">Ticket</span>
+            </div>
+            <div class="detail-summary-row" *ngIf="selectedActivity.type">
+                <span class="detail-summary-label">Tipo</span> {{selectedActivity.type}}
+            </div>
+            <div class="detail-summary-row">
+                <span class="detail-summary-label">Scadenza</span>
+                <span [class.job-alert]="selectedActivity.isExpired">
+                    {{selectedActivity.expirationDate | date:'dd/MM/yyyy'}}
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true" *ngIf="selectedActivity.isMandatoryExpiration"></i>
+                </span>
+            </div>
+            <div class="detail-summary-row" *ngIf="selectedActivity.referentName">
+                <span class="detail-summary-label">Operatore</span>
+                {{selectedActivity.referentName}}
+            </div>
+            <div class="detail-summary-row">
+                <span class="detail-summary-label">Inserita</span>
+                {{selectedActivity.createdOn | date:'dd/MM/yyyy'}}
+                <span *ngIf="selectedActivity.lastOperator"> da {{selectedActivity.lastOperator}}</span>
+            </div>
+        </div>
+
+        <div *ngIf="detailLoading" class="text-center text-muted py-3">
+            <i class="fa fa-spinner fa-spin"></i> Caricamento...
+        </div>
+
+        <!-- Interventions -->
+        <div class="detail-section detail-section-interventions" *ngIf="interventions.length > 0">
+            <div class="detail-section-title">
+                <i class="fa fa-wrench"></i> Interventi
+                <span class="detail-section-count">{{interventions.length}}</span>
+            </div>
+            <div class="detail-section-content">
+                <div *ngFor="let intv of interventions" class="detail-card"
+                    [ngClass]="{
+                        'detail-card-success': intv.status === 1,
+                        'detail-card-danger': intv.status === 2,
+                        'detail-card-info': intv.status === 0
+                    }">
+                    <div class="detail-card-header">
+                        <span class="badge"
+                            [ngClass]="{
+                                'bg-info': intv.status === 0,
+                                'bg-success': intv.status === 1,
+                                'bg-danger': intv.status === 2
+                            }">
+                            {{interventionStatusNames[intv.status]}}
+                        </span>
+                        <span *ngIf="intv.toBeReschedule" class="badge bg-warning text-dark ms-1">Da riprogrammare</span>
+                    </div>
+                    <div class="detail-card-body">
+                        <div class="detail-card-row">
+                            <i class="fa fa-calendar"></i>
+                            {{intv.start | date:'dd/MM/yyyy HH:mm'}} - {{intv.end | date:'dd/MM/yyyy HH:mm'}}
+                        </div>
+                        <div class="detail-card-row" *ngIf="intv.customer">
+                            <i class="fa fa-user"></i> {{intv.customer}}
+                        </div>
+                        <div class="detail-card-row" *ngIf="intv.customerAddress">
+                            <i class="fa fa-map-marker-alt"></i> {{intv.customerAddress}}
+                        </div>
+                        <div class="detail-card-row" *ngIf="intv.description">
+                            <i class="fa fa-comment"></i>
+                            <span [innerHTML]="intv.description | domsanitizer"></span>
+                        </div>
+                        <div class="detail-card-row" *ngIf="intv.operators?.length">
+                            <i class="fa fa-users"></i>
+                            <span *ngFor="let op of intv.operators; let last = last">
+                                <span class="operator-dot" [style.background-color]="op.colorHex"></span>{{op.name}}<span *ngIf="!last">, </span>
+                            </span>
+                        </div>
+                        <div class="detail-card-row" *ngIf="intv.hasServiceFees">
+                            <i class="fa fa-euro-sign"></i>
+                            <span [title]="intv.totalServiceFeeDescription">
+                                {{intv.totalServiceFee | currency:'EUR':'symbol':'1.2-2'}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="detail-card-actions">
+                        <button class="btn btn-primary btn-sm" title="Download Rapportino"
+                            (click)="downloadReport(intv.id)">
+                            <i class="fas fa-file"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm" [title]="intv.customerEmail || ''"
+                            [disabled]="!intv.customerEmail"
+                            (click)="sendReport(intv.id, intv.customerEmail)">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm" title="Modifica"
+                            (click)="editIntervention(intv)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button [disabled]="!intv.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
+                            (click)="askRemoveIntervention(intv)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="createdOn" title="Ins. / Mod." filterable="false" [width]="1">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <div class="text-nowrap" style="font-size: 0.8rem;">
-                    <i>Ins: {{dataItem.createdOn | date:'dd/MM/yyyy'}}</i>
-                    @if (dataItem.editedOn){<br /><i>Mod: {{dataItem.editedOn | date:'dd/MM/yyyy'}}</i>}
+            </div>
+        </div>
+
+        <!-- Dependent Activities -->
+        <div class="detail-section detail-section-activities" *ngIf="dependentActivities.length > 0">
+            <div class="detail-section-title">
+                <i class="fa fa-link"></i> Attivit&agrave; Dipendenti
+                <span class="detail-section-count">{{dependentActivities.length}}</span>
+            </div>
+            <div class="detail-section-content">
+                <div *ngFor="let dep of dependentActivities" class="detail-card"
+                    [ngClass]="{
+                        'detail-card-success': dep.status === 3,
+                        'detail-card-warning': dep.status === 0,
+                        'detail-card-info': dep.status === 1,
+                        'detail-card-ready': dep.status === 2
+                    }">
+                    <div class="detail-card-header">
+                        <span class="activity-type-badge" [style.background-color]="dep.activityColor"></span>
+                        <strong>{{dep.jobCode}}</strong>
+                        <span class="status-badge ms-1" [ngClass]="getStatusBadgeClass(dep)">
+                            {{dep | activityStatus}}
+                        </span>
+                    </div>
+                    <div class="detail-card-body">
+                        <div class="detail-card-row">{{dep.shortDescription}}</div>
+                        <div class="detail-card-row" *ngIf="dep.expirationDate">
+                            <i class="fa fa-clock"></i> Scad: {{dep.expirationDate | date:'dd/MM/yyyy'}}
+                        </div>
+                        <div class="detail-card-row" *ngIf="dep.referentName">
+                            <i class="fa fa-hard-hat"></i> {{dep.referentName}}
+                        </div>
+                    </div>
                 </div>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="lastOperator" title="Inser. Da" [width]="1">
-        </kendo-grid-column>
-        <kendo-grid-column field="isFromTicket" title="Ticket" [width]="1" filterable="false">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                @if (dataItem.isFromTicket) {
-                <strong>{{dataItem.isFromTicket | bool}}</strong>
-                }
-                @else {
-                {{dataItem.isFromTicket | bool}}
-                }
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="unreadMessages" title="" filterable="false">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <div *ngIf="dataItem.unreadMessages" style="width: 35px; text-align: center;"><a
-                        (click)="edit(dataItem)" style="cursor: pointer;"><i
-                            class="fa-regular fa-message job-alert"></i> <span class="job-alert">
-                            {{dataItem.unreadMessages}}</span></a></div>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <div class="d-flex text-nowrap gap-1">
-                    <button class="btn btn-primary btn-sm" title="Modifica" (click)="edit(dataItem)">
+            </div>
+        </div>
+
+        <!-- Dependent Purchase Orders -->
+        <div class="detail-section detail-section-orders" *ngIf="dependentPurchaseOrders.length > 0">
+            <div class="detail-section-title">
+                <i class="fa fa-bag-shopping"></i> Ordini d'Acquisto Dipendenti
+                <span class="detail-section-count">{{dependentPurchaseOrders.length}}</span>
+            </div>
+            <div class="detail-section-content">
+                <div *ngFor="let po of dependentPurchaseOrders" class="detail-card"
+                    [ngClass]="{
+                        'detail-card-success': po.status === 2,
+                        'detail-card-warning': po.status === 0,
+                        'detail-card-info': po.status === 1,
+                        'detail-card-partial': po.status === 3,
+                        'detail-card-danger': po.status === 4
+                    }">
+                    <div class="detail-card-header">
+                        <span class="badge"
+                            [ngClass]="{
+                                'bg-warning text-dark': po.status === 0,
+                                'bg-info': po.status === 1,
+                                'bg-success': po.status === 2,
+                                'bg-secondary': po.status === 3,
+                                'bg-danger': po.status === 4
+                            }">
+                            {{purchaseOrderStatusNames[po.status]}}
+                        </span>
+                        <strong class="ms-1">{{po.supplierName}}</strong>
+                    </div>
+                    <div class="detail-card-body">
+                        <div class="detail-card-row" *ngIf="po.description">
+                            <div [innerHTML]="po.description"></div>
+                        </div>
+                        <div class="detail-card-row" *ngIf="po.date">
+                            <i class="fa fa-calendar"></i> Data: {{po.date | date:'dd/MM/yyyy'}}
+                        </div>
+                        <div class="detail-card-row" *ngIf="po.expectedDate">
+                            <i class="fa fa-clock"></i> Prevista: {{po.expectedDate | date:'dd/MM/yyyy'}}
+                        </div>
+                        <div class="detail-card-row" *ngIf="po.operatorName">
+                            <i class="fa fa-hard-hat"></i> {{po.operatorName}}
+                        </div>
+                        <div class="detail-card-row" *ngIf="po.totalExpenses">
+                            <i class="fa fa-euro-sign"></i> {{po.totalExpenses | number:'1.2-2'}}
+                        </div>
+                    </div>
+                    <div class="detail-card-actions">
+                        <button class="btn btn-primary btn-sm" title="Modifica" (click)="editPurchaseOrder(po)">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-primary btn-sm" title="Gestisci" [routerLink]="['/activities', dataItem.id]"
-                        [disabled]="dataItem.isInternal">
-                        <i class="fas fa-gear"></i>
-                    </button>
                     <button class="btn btn-outline-primary btn-sm" title="Visualizza allegati"
-                        [disabled]="!dataItem.hasAttachments" (click)="openAttachments(dataItem.jobId, dataItem.id)">
+                        [disabled]="!po.hasAttachments" (click)="openAttachments(po.id)">
                         <i class="fa fa-paperclip"></i>
                     </button>
-                    <button class="btn btn-outline-primary btn-sm" title="Visualizza dipendenze"
-                        [disabled]="!dataItem.hasDependencies"
-                        (click)="openDependencies(dataItem.jobId, dataItem.id, dataItem.canHaveDependencies)">
-                        <i class="fa fa-link"></i>
-                    </button>
-                    <button [disabled]="!dataItem.canBeRemoved" class="btn btn-danger btn-sm" title="Rimuovi"
-                        (click)="askRemove(dataItem)">
+                    <button class="btn btn-danger btn-sm" title="Rimuovi" (click)="askRemovePurchaseOrder(po)">
                         <i class="fas fa-trash"></i>
                     </button>
+                    </div>
                 </div>
-            </ng-template>
-        </kendo-grid-column>
-        @if (!isOperator)
-        {
-        <ng-template kendoGridDetailTemplate [kendoGridDetailTemplateShowIf]="checkHasInterventions" let-dataItem>
-            <app-interventions-grid [activityId]="dataItem.id"></app-interventions-grid>
-        </ng-template>
-        }
-    </kendo-grid>
+            </div>
+        </div>
+    </div>
 </div>
 
 <app-activity-modal #activityModal></app-activity-modal>
 <app-customer-modal #customerModal></app-customer-modal>
 <app-jobs-attachments-modal #jobsAttachmentsModal></app-jobs-attachments-modal>
 <app-dependencies-modal #dependenciesModal></app-dependencies-modal>
+<app-intervention-modal #interventionModal></app-intervention-modal>
+<app-purchase-order-modal #purchaseOrderModal></app-purchase-order-modal>

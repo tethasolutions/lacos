@@ -56,6 +56,14 @@
 }
 
 <kendo-tabstrip>
+    <kendo-tabstrip-tab title="Attività" selected="true">
+        <ng-template kendoTabTitle>
+            <strong>Attività (timeline)</strong>
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-activities-timeline [viewExportExcel]="false"></app-activities-timeline>
+        </ng-template>
+    </kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="Attività Amministrative">
         <ng-template kendoTabTitle>
             <strong>Attività Amministrative</strong>
@@ -70,14 +78,6 @@
         </ng-template>
         <ng-template kendoTabContent>
             <app-activities [viewExportExcel]="false" [viewInternals]="true"></app-activities>
-        </ng-template>
-    </kendo-tabstrip-tab>
-    <kendo-tabstrip-tab title="Attività">
-        <ng-template kendoTabTitle>
-            <strong>Attività (timeline)</strong>
-        </ng-template>
-        <ng-template kendoTabContent>
-            <app-activities-timeline [viewExportExcel]="false"></app-activities-timeline>
         </ng-template>
     </kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="Ordini di lavoro">

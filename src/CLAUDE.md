@@ -9,11 +9,26 @@ Lacos is an enterprise work order management system (Gestione Commesse) built wi
 - **Frontend**: Angular 17 with Kendo UI components, Bootstrap 5
 - **Language**: Italian localization (it-IT) primary
 
+## Solution Structure
+
+**Solution file**: `Lacos - Gestione Commesse.sln`
+
+| Project | Role |
+|---------|------|
+| `Lacos.GestioneCommesse.Domain` | Entity definitions |
+| `Lacos.GestioneCommesse.Framework` | Cross-cutting (session, auth, exceptions) |
+| `Lacos.GestioneCommesse.Dal` | EF Core DbContext, repositories, migrations |
+| `Lacos.GestioneCommesse.Contracts` | DTOs for API layer |
+| `Lacos.GestioneCommesse.Application` | Business services by domain |
+| `Lacos.GestioneCommesse.WebApi` | API controllers + Angular frontend in `Lacos/` |
+
+No test projects or CI/CD pipelines exist.
+
 ## Build & Development Commands
 
 ### Backend (.NET)
 ```bash
-dotnet build                    # Build solution
+dotnet build "Lacos - Gestione Commesse.sln"   # Build solution
 # Or F5/Ctrl+Shift+B in Visual Studio 2022
 # API runs on http://*:37998
 ```
@@ -23,37 +38,26 @@ dotnet build                    # Build solution
 cd src/Lacos.GestioneCommesse.WebApi/Lacos
 
 npm start                       # Dev server on port 4200
-npm run release                 # Production build to ../wwwroot
-npm run extract-i18n           # Extract i18n strings
+npm run release                 # Production build to ../wwwroot with base-href /lacos/
+npm run extract-i18n           # Extract i18n strings to src/locale/
 npm run kendo-translate        # Translate Kendo components to Italian
 ```
 
 ### Database
-- EF Core Code-First migrations in `Lacos.GestioneCommesse.Dal/Migrations/`
-- Connection string in `appsettings.json` → `ConnectionStrings:Default`
+- SQL Server with EF Core Code-First migrations in `Lacos.GestioneCommesse.Dal/Migrations/`
+- Connection string in `appsettings.json` → `ConnectionStrings:Default` (uses Integrated Security)
+- Serilog writes to `EventLogs` table in `Logs` schema
 
 ## Architecture
 
-**6-Layer Clean Architecture:**
+**DI Registration Chain** (in `WebApiConfiguration.AddWebApi`):
+`AddFramework` → `AddDal` → `AddApplication` → `AddMappings` (AutoMapper validated at startup)
 
-```
-Domain/           → Entity definitions (BaseEntity, AuditedEntity, FullAuditedEntity)
-                    Subfolders: Application/ (jobs, interventions), Registry/ (master data), Security/
+**Middleware Pipeline**: DefaultFiles → StaticFiles → Routing → CORS → ExceptionHandler → Auth → Endpoints
 
-Framework/        → Cross-cutting: ILacosSession, exceptions, password hashing, token generation
+**Error Handling**: `UnauthorizedException`→401, `NotFoundException`→404, `LacosException`→400, default→500
 
-Dal/              → Data access: IRepository<T>, LacosDbContext, migrations
-                    Query filters: SoftDelete (auto-excludes deleted), OperatorEntity (tenant scoping)
-
-Contracts/        → DTOs for API layer
-
-Application/      → Business services organized by domain (Customers/, Interventions/, Jobs/, etc.)
-                    Each has: Services/, DTOs/, Mappings/ (AutoMapper profiles)
-
-WebApi/           → Controllers inherit LacosApiController, routes at api/[controller]
-                    Auth via AuthorizeFilter + [RequireUser]/[RequireRole] attributes
-                    Contains Angular app in Lacos/ subfolder
-```
+**JSON**: Newtonsoft.Json with `DateParseHandling.DateTimeOffset` and `DateTimeZoneHandling.RoundtripKind`
 
 ## Key Patterns
 
@@ -118,7 +122,10 @@ ILacosSession.CurrentUser    // UserId, OperatorId, UserName, Roles
 
 ## Frontend Structure (Angular)
 
-- Feature modules per domain with lazy loading
-- HTTP interceptors for auth tokens, error handling, loading indicators
-- Services communicate with API via HttpClient
-- Kendo components for grids, forms, dialogs
+- **Routing**: Hash-based (`useHash: true`), `onSameUrlNavigation: 'reload'`, all routes guarded by `AuthGuard.asInjectableGuard` except login/logout
+- **No lazy loading** — all components imported eagerly in `app.module.ts`
+- **Interceptors**: `headers.interceptor.ts` (Bearer token), `response.interceptor.ts` (error handling), `loader.interceptor.ts` (loading spinner), `upload.interceptor.ts` (file uploads)
+- **Services** in `src/app/services/` organized by domain, each wrapping HttpClient calls to `api/[controller]`
+- **UI**: Kendo UI 15.5 (Grid, Scheduler, Dialog, DateInputs, Dropdowns) + Bootstrap 5 + ng-bootstrap
+- **i18n**: Italian (it-IT) via XLIFF files in `src/locale/`
+- **Code style**: 4-space indentation, single quotes for TypeScript (see `.editorconfig`)

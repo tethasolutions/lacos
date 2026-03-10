@@ -303,12 +303,31 @@ public class PurchaseOrdersService : IPurchaseOrdersService
         purchaseOrder.Year = DateTimeOffset.Now.Year;
         purchaseOrder.Jobs.Add(await jobRepository.Get(copyDto.JobId));
         purchaseOrder.Description = sourcePurchaseOrder.Description;
-        purchaseOrder.Items = sourcePurchaseOrder.Items;
-        purchaseOrder.Expenses = sourcePurchaseOrder.Expenses;
         purchaseOrder.Status = PurchaseOrderStatus.Pending;
         purchaseOrder.SupplierId = sourcePurchaseOrder.SupplierId;
         purchaseOrder.ActivityTypeId = sourcePurchaseOrder.ActivityTypeId;
         purchaseOrder.OperatorId = session.CurrentUser.OperatorId;
+        foreach (var item in sourcePurchaseOrder.Items)
+        {
+            purchaseOrder.Items.Add(new PurchaseOrderItem()
+            {
+                ProductId = item.ProductId,
+                Quantity = item.Quantity,
+                UnitPrice = item.UnitPrice,
+                TotalAmount = item.TotalAmount
+            });
+        }
+        foreach (var expense in sourcePurchaseOrder.Expenses)
+        {
+            purchaseOrder.Expenses.Add(new PurchaseOrderExpense()
+            {
+                Note = expense.Note,
+                Quantity = expense.Quantity,
+                UnitPrice = expense.UnitPrice,
+                TotalAmount = expense.TotalAmount,
+                JobId = copyDto.JobId
+});
+        }
         foreach (var attachment in sourcePurchaseOrder.Attachments)
         {
             purchaseOrder.Attachments.Add(new PurchaseOrderAttachment()

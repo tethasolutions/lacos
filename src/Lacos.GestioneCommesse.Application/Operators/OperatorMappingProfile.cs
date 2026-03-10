@@ -28,8 +28,6 @@ public class OperatorMappingProfile : Profile
             .Ignore(x => x.Documents)
             .Ignore(x => x.Jobs)
             .Ignore(x => x.NotificationOperators)
-            .Ignore(x=>x.IsDefaultAppMessageOperator)
-            .Ignore(x=>x.IsOptionalAppMessageOperator)
             .AfterMap(AfterMap);
 
         CreateMap<Operator, OperatorReadModel>()

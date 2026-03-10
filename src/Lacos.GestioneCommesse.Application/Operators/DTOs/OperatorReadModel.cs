@@ -12,6 +12,8 @@ namespace Lacos.GestioneCommesse.Application.Operators.DTOs
         public VehicleDto? DefaultVehicle { get; set; }
         public bool HasUser { get; set; }
         public string? Username { get; set; }
+        public bool IsDefaultAppMessageOperator { get; set; }
+        public bool IsOptionalAppMessageOperator { get; set; }
 
         public ICollection<OperatorDocumentDto> Documents { get; set; }
     }

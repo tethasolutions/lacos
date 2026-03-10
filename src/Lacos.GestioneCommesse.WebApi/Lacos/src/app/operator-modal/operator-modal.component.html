@@ -69,13 +69,29 @@
                 </div>
             </div>
 
+            <div class="row riga-form">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <kendo-label class="k-checkbox-label me-2" [for]="notification">Destinatario Default App Apollo</kendo-label>
+                        <kendo-switch name="isDefaultAppMessageOperator" [(ngModel)]="options.isDefaultAppMessageOperator" onLabel="Si" offLabel="No" [disabled]="options.isOptionalAppMessageOperator">
+                        </kendo-switch>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <kendo-label class="k-checkbox-label me-2" [for]="notification">Destinatario Opzionale App Apollo</kendo-label>
+                        <kendo-switch name="isOptionalAppMessageOperator" [(ngModel)]="options.isOptionalAppMessageOperator" onLabel="Si" offLabel="No" [disabled]="options.isDefaultAppMessageOperator">
+                        </kendo-switch>
+                    </div>
+                </div>
+            </div>
+
             <div class="row riga-form form-group">
                 <div class="col-md-2">
                     <div class="form-group">
                         <kendo-label class="k-checkbox-label" [for]="notification">Assegna Utente?</kendo-label>
                         <kendo-switch name="hasUser" [(ngModel)]="options.hasUser" onLabel="Si" offLabel="No">
                         </kendo-switch>
-                        <div class="validation-message" [control]="form.controls['pictureRequired']"></div>
                     </div>
                 </div>
                 <div class="col-md-5" *ngIf="options.hasUser">

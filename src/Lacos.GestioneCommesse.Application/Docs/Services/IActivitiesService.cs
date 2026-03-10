@@ -19,8 +19,10 @@ public interface IActivitiesService
     Task<IEnumerable<ActivityCounterDto>> GetActivitiesCounters();
     Task<ActivityCounterNewDto> GetNewActivitiesCounter();
     Task<ActivityDto> CopyActivity(CopyDto activityCopyDto);
-    IQueryable<ActivityReadModel> GetJobActivities(long jobId); 
+    IQueryable<ActivityReadModel> GetJobActivities(long jobId);
+    IQueryable<ActivityReadModel> GetActivitiesWithDependenciesByJobs(IEnumerable<long> jobIds);
     Task UpdateDependencies(long id, DependencyDto dependencyDto);
+    Task AddPurchaseOrderDependency(long activityId, long purchaseOrderId);
     Task<DependencyDto> GetDependencies(long id);
 
 

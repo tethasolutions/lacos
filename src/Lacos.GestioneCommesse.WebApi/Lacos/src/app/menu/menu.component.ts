@@ -257,27 +257,31 @@ export class MenuComponent extends BaseComponent implements OnInit {
     }
 
     private _getTicketsCounters() {
-        this._subscriptions.push(
-            this._ticketService.readTicketsCounters()
-                .pipe(
-                    tap(e => {
-                        this.ticketsCounters = e;
-                    })
-                )
-                .subscribe()
-        );
+        if (this.user) {
+            this._subscriptions.push(
+                this._ticketService.readTicketsCounters()
+                    .pipe(
+                        tap(e => {
+                            this.ticketsCounters = e;
+                        })
+                    )
+                    .subscribe()
+            );
+        }
     }
 
     private _getNewActivitiesCounter() {
-        this._subscriptions.push(
-            this._activityService.readNewActivitiesCounter()
-                .pipe(
-                    tap(e => {
-                        this.newActivitiesCounter = e;
-                    })
-                )
-                .subscribe()
-        );
+        if (this.user) {
+            this._subscriptions.push(
+                this._activityService.readNewActivitiesCounter()
+                    .pipe(
+                        tap(e => {
+                            this.newActivitiesCounter = e;
+                        })
+                    )
+                    .subscribe()
+            );
+        }
     }
 
     protected _getCurrentOperator(userId: number) {

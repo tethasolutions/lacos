@@ -288,6 +288,7 @@ export class TicketModalComponent extends ModalFormComponent<Ticket> implements 
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._servicePurchaseOrder.create(purchaseOrder)),
+                    switchMap(e => this.purchaseOrderModal.linkPendingDependency(e.id).pipe(map(() => e))),
                     tap(e => ticket.purchaseOrderId = e.id),
                     tap(e => this._messageBox.success(`Ticket aggiornato con successo`)),
                     tap(() => this.close())

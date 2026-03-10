@@ -118,7 +118,21 @@ public class ActivitiesController : LacosApiController
     public Task<DataSourceResult> GetJobActivities([DataSourceRequest] DataSourceRequest request, long jobId)
     {
         return service.GetJobActivities(jobId)
-            .ToDataSourceResultAsync(request); 
+            .ToDataSourceResultAsync(request);
+    }
+
+    [HttpGet("activities-with-dependencies-by-jobs/{jobIds}")]
+    public Task<DataSourceResult> GetActivitiesWithDependenciesByJobs([DataSourceRequest] DataSourceRequest request, string jobIds)
+    {
+        var ids = jobIds?.Split(',').Select(long.Parse) ?? Enumerable.Empty<long>();
+        return service.GetActivitiesWithDependenciesByJobs(ids)
+            .ToDataSourceResultAsync(request);
+    }
+
+    [HttpPut("add-purchase-order-dependency/{activityId}/{purchaseOrderId}")]
+    public Task AddPurchaseOrderDependency(long activityId, long purchaseOrderId)
+    {
+        return service.AddPurchaseOrderDependency(activityId, purchaseOrderId);
     }
 
     [HttpPut("update-dependencies/{id}")]

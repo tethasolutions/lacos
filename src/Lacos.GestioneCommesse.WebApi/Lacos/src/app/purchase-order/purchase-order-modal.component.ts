@@ -11,7 +11,7 @@ import { SupplierModel } from '../shared/models/supplier.model';
 import { SupplierService } from '../services/supplier.service';
 import { PurchaseOrder, PurchaseOrderExpense, PurchaseOrderItem, PurchaseOrderStatus } from '../services/purchase-orders/models';
 import { PurchaseOrderItemModalComponent } from './purchase-order-item-modal.component';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { filter, map, of, switchMap, tap } from 'rxjs';
 import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { FileInfo, SuccessEvent } from '@progress/kendo-angular-upload';
 import { PurchaseOrderAttachmentUploadFileModel } from '../services/purchase-orders/purchage-order-attachment-upload-file.model';
@@ -29,6 +29,8 @@ import { GalleryModalComponent, GalleryModalInput } from '../shared/gallery-moda
 import { ActivityTypesService } from '../services/activityTypes.service';
 import { ActivityTypeModel } from '../shared/models/activity-type.model';
 import { PurchaseOrderExpenseModalComponent } from './purchase-order-expense-modal.component';
+import { ActivitiesService } from '../services/activities/activities.service';
+import { IActivityReadModel } from '../services/activities/models';
 
 @Component({
     selector: 'app-purchase-order-modal',
@@ -86,6 +88,16 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
     targetOperatorsArray: number[];
     readonly isOperator: boolean;
 
+    linkDependencyDialogOpened = false;
+    linkDependencyActivities: GridDataResult;
+    linkDependencyGridState: State = {
+        skip: 0,
+        take: 30,
+        sort: [{ field: 'jobCode', dir: 'asc' }, { field: 'shortDescription', dir: 'asc' }]
+    };
+    pendingLinkActivityId: number = null;
+    pendingLinkActivityDescription: string = null;
+
     readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
     private readonly _baseUrl = `${ApiUrls.baseApiUrl}/purchase-orders`;
     uploadSaveUrl = `${this._baseUrl}/purchase-order-attachment/upload-file`;
@@ -101,7 +113,8 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         private readonly _operatorsService: OperatorsService,
         private readonly _user: UserService,
         private readonly _activityTypesService: ActivityTypesService,
-        private readonly _messagesService: MessagesService
+        private readonly _messagesService: MessagesService,
+        private readonly _activitiesService: ActivitiesService
     ) {
         super(messageBox);
         this.isOperator = security.isAuthorized(Role.Operator);
@@ -206,6 +219,8 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
 
     override open(options: PurchaseOrderModalOptions) {
         const result = super.open(options);
+        this.pendingLinkActivityId = null;
+        this.pendingLinkActivityDescription = null;
         this._getJobs();
 
         this.userAttachments = [];
@@ -528,6 +543,83 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
         if (!this.isOperator && message.isFromApp) return false;
         if (message.operatorId != this.currentOperator.id) return true;
         return false;
+    }
+
+    openLinkDependencyDialog() {
+        this.linkDependencyDialogOpened = true;
+        this._loadLinkDependencyActivities();
+    }
+
+    closeLinkDependencyDialog() {
+        this.linkDependencyDialogOpened = false;
+    }
+
+    linkDependencyDataStateChange(state: State) {
+        this.linkDependencyGridState = state;
+        this._loadLinkDependencyActivities();
+    }
+
+    linkPurchaseOrderToActivity(activity: IActivityReadModel) {
+        const isNewPurchaseOrder = !this.options.purchaseOrder.id;
+
+        const link$ = isNewPurchaseOrder
+            ? of(null).pipe(
+                tap(() => {
+                    this.pendingLinkActivityId = activity.id;
+                    this.pendingLinkActivityDescription = activity.shortDescription;
+                })
+            )
+            : this._activitiesService.addPurchaseOrderDependency(activity.id, this.options.purchaseOrder.id);
+
+        this._subscriptions.push(
+            link$
+                .pipe(
+                    switchMap(() => this._messageBox.confirm(
+                        'Utilizzare la descrizione dell\'attività collegata come descrizione dell\'ordine?',
+                        'Copia descrizione'
+                    )),
+                    switchMap(copyDescription => {
+                        if (copyDescription) {
+                            return this._activitiesService.get(activity.id).pipe(
+                                tap(activityDetail => {
+                                    this.options.purchaseOrder.description = activityDetail.shortDescription + activityDetail.informations;
+                                })
+                            );
+                        }
+                        return of(null);
+                    }),
+                    tap(() => {
+                        const msg = isNewPurchaseOrder
+                            ? `Attività "${activity.shortDescription}" selezionata. Il collegamento verrà creato dopo il salvataggio.`
+                            : `Ordine d'acquisto collegato all'attività "${activity.shortDescription}"`;
+                        this._messageBox.success(msg);
+                        this.closeLinkDependencyDialog();
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    linkPendingDependency(purchaseOrderId: number) {
+        if (!this.pendingLinkActivityId) {
+            return of(null);
+        }
+        return this._activitiesService.addPurchaseOrderDependency(this.pendingLinkActivityId, purchaseOrderId).pipe(
+            tap(() => {
+                this.pendingLinkActivityId = null;
+                this.pendingLinkActivityDescription = null;
+            })
+        );
+    }
+
+    private _loadLinkDependencyActivities() {
+        this._subscriptions.push(
+            this._activitiesService.readActivitiesWithDependenciesByJobs(this.linkDependencyGridState, this.options.purchaseOrder.jobs)
+                .pipe(
+                    tap(e => this.linkDependencyActivities = e)
+                )
+                .subscribe()
+        );
     }
 }
 

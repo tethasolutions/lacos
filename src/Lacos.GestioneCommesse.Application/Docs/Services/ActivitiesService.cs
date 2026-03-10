@@ -750,6 +750,48 @@ public class ActivitiesService : IActivitiesService
             .Project<ActivityReadModel>(mapper);
     }
 
+    public IQueryable<ActivityReadModel> GetActivitiesWithDependenciesByJobs(IEnumerable<long> jobIds)
+    {
+        var jobIdList = jobIds.ToList();
+        var activities = repository
+            .Query()
+            .AsNoTracking()
+            .Where(e => jobIdList.Contains(e.JobId) && e.Type!.HasDependencies == true);
+
+        return activities
+            .AsQueryable()
+            .Project<ActivityReadModel>(mapper);
+    }
+
+    public async Task AddPurchaseOrderDependency(long activityId, long purchaseOrderId)
+    {
+        var activity = await repository.Query()
+            .Include(a => a.PurchaseOrderDependencies)
+            .FirstOrDefaultAsync(a => a.Id == activityId);
+
+        if (activity == null)
+        {
+            throw new NotFoundException($"Attività con Id {activityId} non trovata.");
+        }
+
+        if (activity.PurchaseOrderDependencies.Any(po => po.Id == purchaseOrderId))
+        {
+            return;
+        }
+
+        var purchaseOrder = await purchaseOrderRepository.Query()
+            .FirstOrDefaultAsync(po => po.Id == purchaseOrderId);
+
+        if (purchaseOrder == null)
+        {
+            throw new NotFoundException($"Ordine d'acquisto con Id {purchaseOrderId} non trovato.");
+        }
+
+        activity.PurchaseOrderDependencies.Add(purchaseOrder);
+        repository.Update(activity);
+        await dbContext.SaveChanges();
+    }
+
     public async Task UpdateDependencies(long id, DependencyDto dependencyDto)
     {
         var activity = await repository.Query()

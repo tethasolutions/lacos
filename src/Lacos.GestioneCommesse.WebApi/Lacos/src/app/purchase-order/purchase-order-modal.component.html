@@ -358,13 +358,24 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end gap-2 mt-5">
-                <button type="button" (click)="dismiss()" class="btn btn-secondary">
-                    <i class="fa fa-rotate-left me-2"></i> ANNULLA
-                </button>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-floppy-disk me-2"></i> SALVA
-                </button>
+            <div class="d-flex justify-content-between mt-5">
+                <div>
+                    <button *ngIf="options.purchaseOrder.jobs?.length > 0" type="button"
+                        (click)="openLinkDependencyDialog()" class="btn btn-outline-primary">
+                        <i class="fa fa-link me-2"></i> COLLEGA AD ATTIVITÀ
+                    </button>
+                    <span *ngIf="pendingLinkActivityId" class="ms-2 text-success align-middle">
+                        <i class="fa fa-check me-1"></i> {{pendingLinkActivityDescription}}
+                    </span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" (click)="dismiss()" class="btn btn-secondary">
+                        <i class="fa fa-rotate-left me-2"></i> ANNULLA
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-floppy-disk me-2"></i> SALVA
+                    </button>
+                </div>
             </div>
         </form>
     </kendo-window>
@@ -375,3 +386,62 @@
 <app-supplier-modal #supplierModal></app-supplier-modal>
 <app-message-modal #messageModal></app-message-modal>
 <app-gallery-modal #galleryModal></app-gallery-modal>
+
+<div class="k-overlay" *ngIf="linkDependencyDialogOpened"></div>
+<div class="k-window-wrapper" *ngIf="linkDependencyDialogOpened">
+    <kendo-window (close)="closeLinkDependencyDialog()" [resizable]="false" [draggable]="false" [width]="1000"
+        [top]="150">
+        <kendo-window-titlebar>
+            <div class="k-window-title">
+                Collega Ordine d'Acquisto come Dipendenza
+            </div>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <p>Seleziona l'attività a cui collegare questo ordine d'acquisto come dipendenza:</p>
+        <div class="grid-container">
+            <kendo-grid [data]="linkDependencyActivities" [pageSize]="linkDependencyGridState.take"
+                [skip]="linkDependencyGridState.skip" [sort]="linkDependencyGridState.sort"
+                [filter]="linkDependencyGridState.filter" filterable="menu" [sortable]="true" [pageable]="true"
+                scrollable="none" (dataStateChange)="linkDependencyDataStateChange($event)">
+                <kendo-grid-column field="activityColor" [sortable]="true" [filterable]="false" title=" "
+                    class="activity-color" width="1" kendoTooltip>
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <div [style.background-color]="dataItem.activityColor" title="{{dataItem.type}}">&nbsp;</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="jobCode" title="Commessa" [width]="120">
+                </kendo-grid-column>
+                <kendo-grid-column field="status" title="Stato" [width]="1" filter="numeric" class="activity-status">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <span class="text-nowrap">
+                            {{dataItem | activityStatus}}
+                        </span>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="shortDescription" title="Descrizione Attività">
+                </kendo-grid-column>
+                <kendo-grid-column field="expirationDate" title="Scadenza" filter="date" format="dd/MM/yyyy"
+                    [width]="1">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <div class="text-nowrap">
+                            {{dataItem.expirationDate | date:'dd/MM/yyyy'}}
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="id" [sortable]="false" [filterable]="false" title=" " [width]="1">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <button type="button" class="btn btn-primary btn-sm text-nowrap"
+                            (click)="linkPurchaseOrderToActivity(dataItem)" [disabled]="options.purchaseOrder.jobs.length == 0">
+                            <i class="fa fa-link me-1"></i> Collega
+                        </button>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <button type="button" (click)="closeLinkDependencyDialog()" class="btn btn-secondary">
+                <i class="fa fa-rotate-left me-2"></i> CHIUDI
+            </button>
+        </div>
+    </kendo-window>
+</div>

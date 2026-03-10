@@ -255,6 +255,7 @@ export class JobsComponent extends BaseComponent implements OnInit {
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._purchaseOrdersService.create(order)),
+                    switchMap(e => this.purchaseOrderModal.linkPendingDependency(e.id).pipe(map(() => e))),
                     tap(() => this._afterPurchaseOrderCreated(job.id)),
 
                 )

@@ -140,6 +140,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
                 .pipe(
                     filter(e => e),
                     switchMap(() => this._service.create(purchaseOrder)),
+                    switchMap(e => this.purchaseOrderModal.linkPendingDependency(e.id).pipe(map(() => e))),
                     tap(() => this._afterPurchaseOrderCreated())
                 )
                 .subscribe()

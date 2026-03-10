@@ -131,6 +131,19 @@ export class ActivitiesService {
         return readData(this._http, state, url);
     }
 
+    readActivitiesWithDependenciesByJobs(state: State, jobIds: number[]) {
+        const url = `${this._baseUrl}/activities-with-dependencies-by-jobs/${jobIds.join(',')}`;
+
+        return readData(this._http, state, url);
+    }
+
+    addPurchaseOrderDependency(activityId: number, purchaseOrderId: number) {
+        return this._http.put<void>(`${this._baseUrl}/add-purchase-order-dependency/${activityId}/${purchaseOrderId}`, null)
+            .pipe(
+                map(() => { })
+            );
+    }
+
     readNewActivitiesCounter() {
         return this._http.get<NewActivityCounter>(`${this._baseUrl}/new-activities-counter`)
             .pipe(

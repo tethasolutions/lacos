@@ -5,6 +5,7 @@ import { BaseComponent } from '../shared/base.component';
 import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { Activity, ActivityStatus, IActivityReadModel, activityStatusNames } from '../services/activities/models';
+import { MessageReadModel } from '../services/messages/models';
 import { ActivitiesService } from '../services/activities/activities.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ActivityModalComponent, ActivityModalOptions } from './activity-modal.component';
@@ -48,12 +49,16 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
     @ViewChild('interventionModal', { static: true }) interventionModal: InterventionModalComponent;
     @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
 
+    @Input() viewInternals: boolean = false;
+
     data: GridDataResult;
     activities: IActivityReadModel[] = [];
     selectedActivity: IActivityReadModel = null;
     dependentActivities: IActivityReadModel[] = [];
     dependentPurchaseOrders: IPurchaseOrderReadModel[] = [];
     interventions: IInterventionReadModel[] = [];
+    activityMessages: MessageReadModel[] = [];
+    messagesExpanded: boolean = false;
     detailLoading: boolean = false;
     readonly interventionStatusNames = interventionStatusNames;
     readonly purchaseOrderStatusNames = purchaseOrderStatusNames;
@@ -227,6 +232,8 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
             this.dependentActivities = [];
             this.dependentPurchaseOrders = [];
             this.interventions = [];
+            this.activityMessages = [];
+            this.messagesExpanded = false;
             return;
         }
 
@@ -234,10 +241,13 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
         this.dependentActivities = [];
         this.dependentPurchaseOrders = [];
         this.interventions = [];
+        this.activityMessages = [];
+        this.messagesExpanded = false;
         this.detailLoading = true;
 
         this._loadInterventions(item);
         this._loadDependencies(item);
+        this._loadMessages(item);
     }
 
     private _loadInterventions(item: IActivityReadModel) {
@@ -257,6 +267,18 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
                     tap(e => {
                         this.interventions = (e.data || []) as IInterventionReadModel[];
                         this._checkDetailLoaded();
+                    })
+                )
+                .subscribe()
+        );
+    }
+
+    private _loadMessages(item: IActivityReadModel) {
+        this._subscriptions.push(
+            this._service.get(item.id)
+                .pipe(
+                    tap(e => {
+                        this.activityMessages = e.messages || [];
                     })
                 )
                 .subscribe()
@@ -425,8 +447,12 @@ export class ActivitiesTimelineComponent extends BaseComponent implements OnInit
     }
 
     protected _read() {
+        const read$ = this.viewInternals
+            ? this._service.readInternals(this.gridState)
+            : this._service.readExternals(this.gridState);
+
         this._subscriptions.push(
-            this._service.readExternals(this.gridState)
+            read$
                 .pipe(
                     tap(e => {
                         this.data = e;

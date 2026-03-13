@@ -756,7 +756,7 @@ public class ActivitiesService : IActivitiesService
         var activities = repository
             .Query()
             .AsNoTracking()
-            .Where(e => jobIdList.Contains(e.JobId) && e.Type!.HasDependencies == true);
+            .Where(e => jobIdList.Contains(e.JobId) && (e.Type!.HasDependencies == true || e.Type!.IsInternal));
 
         return activities
             .AsQueryable()

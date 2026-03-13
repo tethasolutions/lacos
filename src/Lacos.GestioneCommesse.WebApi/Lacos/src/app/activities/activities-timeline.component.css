@@ -332,6 +332,41 @@
     color: #fff;
 }
 
+.detail-section-messages {
+    border-top-color: #198754;
+}
+
+.detail-section-messages .detail-section-title {
+    color: #0f5132;
+}
+
+.detail-section-messages .detail-section-count {
+    background: #198754;
+    color: #fff;
+}
+
+.messages-accordion-toggle {
+    cursor: pointer;
+    user-select: none;
+}
+
+.messages-accordion-toggle:hover {
+    opacity: 0.8;
+}
+
+.detail-card-message {
+    border-left-color: #198754;
+}
+
+.detail-card-unread {
+    background-color: #f0faf4;
+    border-left-color: #0d6efd;
+}
+
+.detail-card-unread .detail-card-header strong {
+    color: #0d6efd;
+}
+
 .detail-section-content {
     display: flex;
     flex-direction: column;

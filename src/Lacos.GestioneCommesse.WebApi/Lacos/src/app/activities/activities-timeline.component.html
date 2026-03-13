@@ -195,6 +195,32 @@
             <i class="fa fa-spinner fa-spin"></i> Caricamento...
         </div>
 
+        <!-- Messages -->
+        <div class="detail-section detail-section-messages" *ngIf="activityMessages.length > 0">
+            <div class="detail-section-title messages-accordion-toggle" (click)="messagesExpanded = !messagesExpanded">
+                <i class="fa fa-comment"></i> Commenti
+                <span class="detail-section-count">{{activityMessages.length}}</span>
+                <i class="fa ms-auto" [ngClass]="messagesExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            </div>
+            <div class="detail-section-content" *ngIf="messagesExpanded">
+                <div *ngFor="let msg of activityMessages" class="detail-card detail-card-message"
+                    [ngClass]="{'detail-card-unread': !msg.isRead}">
+                    <div class="detail-card-header">
+                        <strong>{{msg.operatorName}}</strong>
+                        <span class="text-muted ms-2" *ngIf="msg.targetOperators" style="font-size: 0.75rem;">
+                            <i class="fas fa-users"></i> {{msg.targetOperators}}
+                        </span>
+                        <span class="text-muted ms-auto" style="font-size: 0.75rem;">
+                            {{msg.date | date:'dd/MM/yyyy'}}
+                        </span>
+                    </div>
+                    <div class="detail-card-body">
+                        <div class="detail-card-row" [innerHTML]="msg.note | domsanitizer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Interventions -->
         <div class="detail-section detail-section-interventions" *ngIf="interventions.length > 0">
             <div class="detail-section-title">

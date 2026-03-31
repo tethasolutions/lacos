@@ -177,6 +177,7 @@ export class ActivityModalComponent extends ModalFormComponent<ActivityModalOpti
     }
 
     onOpenJobAccountings() {
+        this._hasJobAccountingsChecked = false;
         this.jobAccountingsModal.open(this.options.activity.jobId);
     }
 

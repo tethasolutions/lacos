@@ -6,7 +6,7 @@ import { State } from '@progress/kendo-data-query';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { Activity, ActivityStatus, IActivityReadModel, activityStatusNames } from '../services/activities/models';
 import { ActivitiesService } from '../services/activities/activities.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ActivityModalComponent, ActivityModalOptions } from './activity-modal.component';
 import { JobsService } from '../services/jobs/jobs.service';
 import { OperatorsService } from '../services/operators.service';
@@ -56,7 +56,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
             logic: 'and'
         },
         group: [],
-        sort: [{ field: 'jobIsInLate', dir: 'desc' }, { field: 'startDate', dir: 'asc' }, { field: 'expirationDate', dir: 'asc' }]
+        sort: [{ field: 'type', dir: 'asc' }, { field: 'jobIsInLate', dir: 'desc' }, { field: 'startDate', dir: 'asc' }, { field: 'expirationDate', dir: 'asc' }]
     };
 
     private _jobId: number;
@@ -70,6 +70,8 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     lateJobsToNotify: any[] = [];
     lateActivitiesToNotify: IActivityReadModel[] = [];
     isOperator: boolean = true;
+    activityTypes: ActivityTypeModel[];
+    selectedActivityType: ActivityTypeModel;
 
     readonly activityStatusNames = activityStatusNames;
 
@@ -78,6 +80,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         private readonly _activityTypeService: ActivityTypesService,
         private readonly _messageBox: MessageBoxService,
         private readonly _route: ActivatedRoute,
+        private readonly _router: Router,
         private readonly _user: UserService,
         private readonly _customerService: CustomerService,
         private readonly _operatorsService: OperatorsService,
@@ -89,6 +92,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit() {
+        this._getActivityTypes();
         this._resumeState();
         this._subscribeRouteParams();
         this.user = this._user.getUser();
@@ -235,6 +239,15 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this.dependenciesModal.open();
     }
 
+    onActivityTypeChange() {
+        this._router.navigate([], {
+            relativeTo: this._route,
+            queryParams: { typeId: this.selectedActivityType.id ?? null },
+            queryParamsHandling: 'merge'
+        });
+        this._read();
+    }
+
     cellClickHandler(args: CellClickEvent): void {
         this.cellArgs = args;
     }
@@ -324,6 +337,16 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         );
     }
 
+    private _getActivityTypes() {
+        this._subscriptions.push(
+            this._activityTypeService.readActivityTypesList()
+                .pipe(
+                    tap(e => this.activityTypes = e)
+                )
+                .subscribe()
+        );
+    }
+    
     private _afterActivityCreated() {
         this._messageBox.success('Attività creata.')
 

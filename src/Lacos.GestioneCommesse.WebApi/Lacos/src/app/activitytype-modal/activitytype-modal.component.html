@@ -1,7 +1,7 @@
 <div class="k-overlay" *ngIf="opened"></div>
 
 <div class="k-window-wrapper" *ngIf="opened">
-    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false"[top]="100">
+    <kendo-window (close)="dismiss()" [resizable]="false" [draggable]="false" [top]="100">
         <kendo-window-titlebar>
             <div class="k-window-title">
                 Tipologia Attività
@@ -16,14 +16,13 @@
             </div>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form name="updateActivityTypeForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()" *ngIf="options" class="redimensionModal">
+        <form name="updateActivityTypeForm" #form="ngForm" novalidate autocomplete="off" (ngSubmit)="close()"
+            *ngIf="options" class="redimensionModal">
             <div class="row riga-form">
                 <div class="col-md-6">
                     <kendo-formfield class="form-group">
                         <label>Nome</label>
-                        <kendo-textbox [(ngModel)]="options.name" 
-                            name="name"
-                            required>
+                        <kendo-textbox [(ngModel)]="options.name" name="name" required>
                         </kendo-textbox>
                         <kendo-formerror>Nome è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
@@ -31,14 +30,16 @@
                 <div class="col-md-3">
                     <kendo-formfield class="form-group">
                         <label>Ordinamento</label>
-                        <kendo-numerictextbox [(ngModel)]="options.order" name="order" [min]="0" [format]="'n0'" required></kendo-numerictextbox>
+                        <kendo-numerictextbox [(ngModel)]="options.order" name="order" [min]="0" [format]="'n0'"
+                            required></kendo-numerictextbox>
                         <kendo-formerror>Ordine è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                 </div>
                 <div class="col-md-3">
                     <kendo-formfield class="form-group">
                         <label>Colore</label>
-                        <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" format="hex"  required></kendo-colorpicker>
+                        <kendo-colorpicker [(ngModel)]="options.colorHex" name="colorHex" format="hex"
+                            required></kendo-colorpicker>
                         <kendo-formerror>Colore è un campo obbligatorio</kendo-formerror>
                     </kendo-formfield>
                 </div>
@@ -47,7 +48,8 @@
                 <div class="col-md-3">
                     <label>Immagine obbligatoria</label>
                     <div class="form-group">
-                        <kendo-switch name="pictureRequired" [(ngModel)]="options.pictureRequired" onLabel="Si" offLabel="No">
+                        <kendo-switch name="pictureRequired" [(ngModel)]="options.pictureRequired" onLabel="Si"
+                            offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['pictureRequired']"></div>
                     </div>
@@ -71,7 +73,8 @@
                 <div class="col-md-3">
                     <label>Attività Amministrativa</label>
                     <div class="form-group">
-                        <kendo-switch name="isAdministrative" [(ngModel)]="options.isAdministrative" onLabel="Si" offLabel="No">
+                        <kendo-switch name="isAdministrative" [(ngModel)]="options.isAdministrative" onLabel="Si"
+                            offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['isAdministrative']"></div>
                     </div>
@@ -81,7 +84,8 @@
                 <div class="col-md-3">
                     <label>Influenza stato commessa</label>
                     <div class="form-group">
-                        <kendo-switch name="influenceJobStatus" [(ngModel)]="options.influenceJobStatus" onLabel="Si" offLabel="No">
+                        <kendo-switch name="influenceJobStatus" [(ngModel)]="options.influenceJobStatus" onLabel="Si"
+                            offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['influenceJobStatus']"></div>
                     </div>
@@ -89,7 +93,8 @@
                 <div class="col-md-3">
                     <label>Visibile in Ordini d'acquisto</label>
                     <div class="form-group">
-                        <kendo-switch name="viewInPurchaseOrder" [(ngModel)]="options.viewInPurchaseOrder" onLabel="Si" offLabel="No">
+                        <kendo-switch name="viewInPurchaseOrder" [(ngModel)]="options.viewInPurchaseOrder" onLabel="Si"
+                            offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['viewInPurchaseOrder']"></div>
                     </div>
@@ -97,7 +102,8 @@
                 <div class="col-md-3">
                     <label>Può avere dipendenze</label>
                     <div class="form-group">
-                        <kendo-switch name="hasDependencies" [(ngModel)]="options.hasDependencies" onLabel="Si" offLabel="No">
+                        <kendo-switch name="hasDependencies" [(ngModel)]="options.hasDependencies" onLabel="Si"
+                            offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['hasDependencies']"></div>
                     </div>
@@ -105,9 +111,21 @@
                 <div class="col-md-3">
                     <label>Gestisce costi manutenzione</label>
                     <div class="form-group">
-                        <kendo-switch name="hasServiceFees" [(ngModel)]="options.hasServiceFees" onLabel="Si" offLabel="No">
+                        <kendo-switch name="hasServiceFees" [(ngModel)]="options.hasServiceFees" onLabel="Si"
+                            offLabel="No">
                         </kendo-switch>
                         <div class="validation-message" [control]="form.controls['hasServiceFees']"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row riga-form">
+                <div class="col-md-3">
+                    <label>Può essere programmata</label>
+                    <div class="form-group">
+                        <kendo-switch name="canBeScheduled" [(ngModel)]="options.canBeScheduled" onLabel="Si"
+                            offLabel="No">
+                        </kendo-switch>
+                        <div class="validation-message" [control]="form.controls['canBeScheduled']"></div>
                     </div>
                 </div>
             </div>

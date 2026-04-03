@@ -6150,3 +6150,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260403123709_add_canbeschedule_activitytype'
+)
+BEGIN
+    ALTER TABLE [Registry].[ActivityTypes] ADD [CanBeScheduled] bit NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260403123709_add_canbeschedule_activitytype'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260403123709_add_canbeschedule_activitytype', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

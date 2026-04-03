@@ -38,6 +38,15 @@
                 Esporta in Excel
             </button>
         </ng-template>
+        <ng-template kendoGridToolbarTemplate *ngIf="!viewExportExcel">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <label for="activityTypeSelect" class="mb-0">Tipo Attività:</label>
+                <kendo-dropdownlist id="activityTypeSelect" [data]="activityTypes" textField="name" valueField="id"
+                    [(ngModel)]="selectedActivityType" (valueChange)="onActivityTypeChange()" style="width: 300px;"
+                    [defaultItem]="{ id: null, name: 'Tutti' }">
+                </kendo-dropdownlist>
+            </div>
+        </ng-template>
         <kendo-grid-column field="activityColor" [sortable]="true" [filterable]="false" title=" " class="activity-color"
             width="1" kendoTooltip>
             <ng-template kendoGridCellTemplate let-dataItem>

@@ -22,6 +22,7 @@ public class ActivityType : FullAuditedEntity, ILogEntity
     public bool? InfluenceJobStatus { get; set; }
     public bool? ViewInPurchaseOrder { get; set; }
     public bool? HasDependencies { get; set; }
+    public bool? CanBeScheduled { get; set; }
 
     public ICollection<Activity> Activities { get; set; }
     public ICollection<CheckList> CheckLists { get; set; }

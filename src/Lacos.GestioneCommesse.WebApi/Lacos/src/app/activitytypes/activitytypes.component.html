@@ -34,7 +34,7 @@
             {{dataItem.isExternal | bool}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="isAdministrative" title="Amministrativa">
+    <kendo-grid-column field="isAdministrative" title="Amministr.">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.isAdministrative | bool}}
         </ng-template>
@@ -44,12 +44,12 @@
             {{dataItem.hasServiceFees | bool}}
         </ng-template>  
     </kendo-grid-column>
-    <kendo-grid-column field="influenceJobStatus" title="Influenza stato comm.">
+    <kendo-grid-column field="influenceJobStatus" title="Influenza comm.">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.influenceJobStatus | bool}}
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="viewInPurchaseOrder" title="Visibile in Ord Acq">
+    <kendo-grid-column field="viewInPurchaseOrder" title="Visibile OdA">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.viewInPurchaseOrder | bool}}
         </ng-template>
@@ -57,6 +57,11 @@
     <kendo-grid-column field="hasDependencies" title="Può avere dipend.">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.hasDependencies | bool}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="canBeScheduled" title="Può essere progr.">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.canBeScheduled | bool}}
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="colorHex" title="Colore">

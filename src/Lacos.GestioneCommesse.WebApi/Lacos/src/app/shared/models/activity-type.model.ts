@@ -17,6 +17,7 @@ export class ActivityTypeModel {
     influenceJobStatus: boolean;
     viewInPurchaseOrder: boolean;
     hasDependencies: boolean;
+    canBeScheduled: boolean;
 
     constructor() {
         this.id = null;
@@ -32,6 +33,7 @@ export class ActivityTypeModel {
         this.influenceJobStatus = false;
         this.viewInPurchaseOrder = false;
         this.hasDependencies = false;
+        this.canBeScheduled = false;
     }
 }
 

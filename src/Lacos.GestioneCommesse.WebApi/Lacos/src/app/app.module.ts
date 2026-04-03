@@ -174,6 +174,7 @@ import { WarehouseService } from './services/warehouse.service';
 import { WarehouseMovementsModalComponent } from './warehouse-movements/warehouse-movements-modal.component';
 import { JobSummaryComponent } from './jobs/job-summary.component';
 import { ActivitiesTimelineComponent } from './activities/activities-timeline.component';
+import { ActivitiesCalendarComponent } from './activities/activities-calendar.component';
 
 registerLocaleData(localeIt, 'it', localeExtraIt);
 
@@ -228,6 +229,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
         MultiselectGridColumnFilterComponent,
         ActivitiesComponent,
         ActivitiesTimelineComponent,
+        ActivitiesCalendarComponent,
         ActivitiesFromProductComponent,
         ActivityComponent,
         ActivityModalComponent,

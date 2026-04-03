@@ -11,57 +11,57 @@
 </div>
 
 <div class="grid-container">
-<kendo-grid [data]="dataActivityTypes" [pageSize]="stateGridActivityTypes.take" 
-            [skip]="stateGridActivityTypes.skip" [sort]="stateGridActivityTypes.sort" 
+<kendo-grid [data]="dataActivityTypes" [pageSize]="stateGridActivityTypes.take"
+            [skip]="stateGridActivityTypes.skip" [sort]="stateGridActivityTypes.sort"
             [filter]="stateGridActivityTypes.filter"
-            [group]="stateGridActivityTypes.group" filterable="menu" 
+            [group]="stateGridActivityTypes.group" filterable="menu"
             [sortable]="true" [pageable]="true" scrollable="none" [style.width.px]="screenWidth"
             (dataStateChange)="dataStateChange($event)">
     <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
     <kendo-grid-column field="order" title="Ordine"></kendo-grid-column>
     <kendo-grid-column field="pictureRequired" title="Img Obblig.">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.pictureRequired | bool}}
+            <span [style.font-weight]="dataItem.pictureRequired ? 'bold' : 'normal'">{{dataItem.pictureRequired | bool}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="isInternal" title="Interna">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.isInternal | bool}}
+            <span [style.font-weight]="dataItem.isInternal ? 'bold' : 'normal'">{{dataItem.isInternal | bool}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="isExternal" title="Esterna">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.isExternal | bool}}
+            <span [style.font-weight]="dataItem.isExternal ? 'bold' : 'normal'">{{dataItem.isExternal | bool}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="isAdministrative" title="Amministr.">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.isAdministrative | bool}}
+            <span [style.font-weight]="dataItem.isAdministrative ? 'bold' : 'normal'">{{dataItem.isAdministrative | bool}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="hasServiceFees" title="Costi Manut.">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.hasServiceFees | bool}}
-        </ng-template>  
+            <span [style.font-weight]="dataItem.hasServiceFees ? 'bold' : 'normal'">{{dataItem.hasServiceFees | bool}}</span>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="influenceJobStatus" title="Influenza comm.">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.influenceJobStatus | bool}}
+            <span [style.font-weight]="dataItem.influenceJobStatus ? 'bold' : 'normal'">{{dataItem.influenceJobStatus | bool}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="viewInPurchaseOrder" title="Visibile OdA">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.viewInPurchaseOrder | bool}}
+            <span [style.font-weight]="dataItem.viewInPurchaseOrder ? 'bold' : 'normal'">{{dataItem.viewInPurchaseOrder | bool}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="hasDependencies" title="Può avere dipend.">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.hasDependencies | bool}}
+            <span [style.font-weight]="dataItem.hasDependencies ? 'bold' : 'normal'">{{dataItem.hasDependencies | bool}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="canBeScheduled" title="Può essere progr.">
         <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.canBeScheduled | bool}}
+            <span [style.font-weight]="dataItem.canBeScheduled ? 'bold' : 'normal'">{{dataItem.canBeScheduled | bool}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="colorHex" title="Colore">

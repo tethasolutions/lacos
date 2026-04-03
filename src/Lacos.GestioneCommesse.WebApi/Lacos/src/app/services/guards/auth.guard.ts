@@ -61,6 +61,7 @@ export class AuthGuard {
             case url === '/job-accountings':
             case url === '/maintenance-price-lists':
             case url === '/distance-errors':
+            case url === '/activities-calendar':
                 return this._security.isAuthenticated();
             //return this._security.isAuthorized(Role.Operator);
             default:

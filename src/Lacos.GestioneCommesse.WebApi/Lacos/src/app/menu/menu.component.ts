@@ -97,9 +97,13 @@ export class MenuComponent extends BaseComponent implements OnInit {
                     e => e.startsWith('/activities'),
                     e => e.isAuthenticated()
                 ),
-                new MenuEntry(['/interventions'], 'Calendario',
+                new MenuEntry(['/interventions'], 'Calendario Interventi',
                     e => e === '/interventions',
                     e => e.isAuthorized(Role.Administrator)
+                ),
+                new MenuEntry(['/activities-calendar'], 'Calendario Attività',
+                    e => e === '/activities-calendar',
+                    e => e.isAuthenticated()
                 ),
                 new MenuEntry(['/interventions-list'], 'Elenco Interventi',
                     e => e.startsWith('/interventions-list'),

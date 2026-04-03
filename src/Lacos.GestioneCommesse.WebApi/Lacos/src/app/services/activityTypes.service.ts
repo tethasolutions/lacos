@@ -113,8 +113,24 @@ export class ActivityTypesService {
             );
     }
 
-    readActivityTypesListCalendar() {
-        return this._http.get<Array<ActivityTypeModel>>(`${this._baseUrl}/activitytypes-list-calendar`)
+    readActivityTypesInterventionCalendar() {
+        return this._http.get<Array<ActivityTypeModel>>(`${this._baseUrl}/activitytypes-intervention-calendar`)
+            .pipe(
+                map(e =>
+                    {
+                        const activityTypes: Array<ActivityTypeModel> = [];
+                        e.forEach(item => {
+                            const activityType: ActivityTypeModel = Object.assign(new ActivityTypeModel(), item);
+                            activityTypes.push(activityType);
+                        });
+                        return activityTypes;
+                    }
+                )
+            );
+    }
+
+    readActivityTypesActivityCalendar() {
+        return this._http.get<Array<ActivityTypeModel>>(`${this._baseUrl}/activitytypes-activity-calendar`)
             .pipe(
                 map(e =>
                     {

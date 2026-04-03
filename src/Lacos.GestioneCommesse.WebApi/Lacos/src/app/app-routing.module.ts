@@ -39,6 +39,7 @@ import { MaintenancePriceListComponent } from './maintenance-price-list/maintena
 import { DistanceErrorsComponent } from './customers/distance-errors.component';
 import { ProductsStockQuantitiesComponent } from './products/products-stock-quantities.component';
 import { JobSummaryComponent } from './jobs/job-summary.component';
+import { ActivitiesCalendarComponent } from './activities/activities-calendar.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -80,6 +81,7 @@ const routes: Routes = [
     { path: 'job-accountings', component: JobAccountingsComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'maintenance-price-lists', component: MaintenancePriceListComponent, canActivate: [AuthGuard.asInjectableGuard] },
     { path: 'distance-errors', component: DistanceErrorsComponent, canActivate: [AuthGuard.asInjectableGuard] },
+    { path: 'activities-calendar', component: ActivitiesCalendarComponent, canActivate: [AuthGuard.asInjectableGuard] }
 ];
 
 @NgModule({

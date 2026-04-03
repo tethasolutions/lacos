@@ -280,7 +280,7 @@ export class InterventionsCalendarComponent extends BaseComponent implements OnI
 
     private _getActivityTypes() {
         this._subscriptions.push(
-            this._activityTypesService.readActivityTypesListCalendar()
+            this._activityTypesService.readActivityTypesInterventionCalendar()
                 .pipe(
                     tap(e => this._setActivityTypes(e))
                 )

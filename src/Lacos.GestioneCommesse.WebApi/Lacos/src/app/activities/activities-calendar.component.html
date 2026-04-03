@@ -1,0 +1,99 @@
+<app-activity-modal #activityModal></app-activity-modal>
+
+<div class="d-flex flex-wrap gap-2 mb-2">
+    <button *ngFor="let activityType of activityTypes" type="button"
+        class="btn btn-sm btn-group align-items-center gap-1" (click)="toggleActivityType(activityType)"
+        [ngClass]="activityType.selected ? 'btn-secondary' : 'btn-outline-secondary'">
+        <span [style.background-color]="activityType.colorHex || '#3485fd'" class="bullet">
+        </span>
+        {{activityType.name}}
+    </button>
+</div>
+
+<kendo-scheduler [events]="activities" [selectedDate]="date" [workWeekStart]="1" [workWeekEnd]="6"
+    workDayStart="08:00" workDayEnd="19:00" [selectedViewIndex]="1" [showWorkHours]="true" [editable]="true"
+    [highlightOngoingEvents]="false" (dateChange)="onDateChange($event)" (eventDblClick)="onEventDblClick($event)"
+    (slotDblClick)="onSlotDblClick($event)" (resizeEnd)="onResizeEnd($event)" (dragEnd)="onDragEnd($event)"
+    (remove)="onRemove($event)" style="height: 800px;" [eventStyles]="eventStylesCallback">
+    <kendo-scheduler-day-view>
+        <ng-template kendoSchedulerEventTemplate let-event="event">
+            <div>
+                <div class="d-flex align-items-center gap-2">
+                    <b>
+                        {{event.dataItem.customer}}
+                    </b>
+                    <app-operator-avatar *ngIf="event.dataItem.referentId"
+                        [options]="{name: event.dataItem.referentName, colorHex: null}"></app-operator-avatar>
+                </div>
+                {{event.dataItem.address}}
+                <br>
+                {{event.dataItem.type}}
+                <br>
+                {{event.dataItem.jobCode}}
+            </div>
+        </ng-template>
+        <ng-template kendoSchedulerAllDayEventTemplate let-event="event">
+            <div class="d-flex align-items-center gap-2">
+                <span>
+                    {{event.dataItem.customer}}
+                </span>
+                <app-operator-avatar *ngIf="event.dataItem.referentId"
+                    [options]="{name: event.dataItem.referentName, colorHex: null}"></app-operator-avatar>
+                <div>
+                    {{event.dataItem.address}}
+                    &bull;
+                    {{event.dataItem.type}}
+                    &bull;
+                    {{event.dataItem.jobCode}}
+                </div>
+            </div>
+        </ng-template>
+    </kendo-scheduler-day-view>
+    <kendo-scheduler-work-week-view>
+        <ng-template kendoSchedulerEventTemplate let-event="event">
+            <div>
+                <div class="d-flex align-items-center gap-2">
+                    {{event.dataItem.customer}}
+                    <app-operator-avatar *ngIf="event.dataItem.referentId"
+                        [options]="{name: event.dataItem.referentName, colorHex: null}"></app-operator-avatar>
+                </div>
+                <div>
+                    {{event.dataItem.type}}
+                </div>
+                <div>
+                    {{event.dataItem.jobCode}}
+                </div>
+            </div>
+        </ng-template>
+        <ng-template kendoSchedulerAllDayEventTemplate let-event="event">
+            <div class="d-flex align-items-center gap-2">
+                <span>
+                    {{event.dataItem.customer}}
+                </span>
+                <app-operator-avatar *ngIf="event.dataItem.referentId"
+                    [options]="{name: event.dataItem.referentName, colorHex: null}"></app-operator-avatar>
+                <div>
+                    {{event.dataItem.type}}
+                    &bull;
+                    {{event.dataItem.jobCode}}
+                </div>
+            </div>
+        </ng-template>
+    </kendo-scheduler-work-week-view>
+    <kendo-scheduler-month-view>
+        <ng-template kendoSchedulerEventTemplate let-event="event">
+            <div class="d-flex align-items-center gap-2">
+                <span>
+                    {{event.dataItem.customer}}
+                </span>
+                <app-operator-avatar *ngIf="event.dataItem.referentId"
+                    [options]="{name: event.dataItem.referentName, colorHex: null}"></app-operator-avatar>
+                <div>
+                    {{event.dataItem.type}}
+                    &bull;
+                    {{event.dataItem.jobCode}}
+                </div>
+            </div>
+        </ng-template>
+    </kendo-scheduler-month-view>
+</kendo-scheduler>

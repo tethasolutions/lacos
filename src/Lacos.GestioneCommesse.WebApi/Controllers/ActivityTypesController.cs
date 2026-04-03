@@ -79,10 +79,17 @@ public class ActivityTypesController : LacosApiController
         return await activityTypeService.GetActivityTypes(true);
     }
 
-    [HttpGet("activitytypes-list-calendar")]
-    public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypesListCalendar()
+    [HttpGet("activitytypes-intervention-calendar")]
+    public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypesInterventionCalendar()
     {
         var ActivityTypes = await activityTypeService.GetActivityTypes();
         return ActivityTypes.Where(x => x.IsExternal == false && x.IsInternal == false);
+    }
+
+    [HttpGet("activitytypes-activity-calendar")]
+    public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypesActivityCalendar()
+    {
+        var ActivityTypes = await activityTypeService.GetActivityTypes();
+        return ActivityTypes.Where(x => x.CanBeScheduled == true);
     }
 }

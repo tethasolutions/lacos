@@ -13,4 +13,5 @@ public class ProductStockReadModel
     public string? Material { get; set; }
     public decimal? DefaultPrice { get; set; }
     public int StockQuantity { get; set; }
+    public string? PictureFileName { get; set; }
 }

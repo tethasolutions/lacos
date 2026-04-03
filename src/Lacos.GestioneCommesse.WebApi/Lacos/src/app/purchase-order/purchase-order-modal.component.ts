@@ -582,7 +582,8 @@ export class PurchaseOrderModalComponent extends ModalFormComponent<PurchaseOrde
                         if (copyDescription) {
                             return this._activitiesService.get(activity.id).pipe(
                                 tap(activityDetail => {
-                                    this.options.purchaseOrder.description = activityDetail.shortDescription + activityDetail.informations;
+                                    this.options.purchaseOrder.description = activityDetail.shortDescription ? activityDetail.shortDescription + ' ' : '' +
+                                     activityDetail.informations? activityDetail.informations : '';
                                 })
                             );
                         }

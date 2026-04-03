@@ -20,6 +20,16 @@
                 Esporta in Excel
             </button>
         </ng-template>
+        <kendo-grid-column field="pictureFileName" title=" " width="90" [filterable]="false" [sortable]="false">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <img *ngIf="dataItem.pictureFileName"
+                    [src]="imagesUrl + dataItem.pictureFileName"
+                    class="thumbnail-xs"
+                    #anchor
+                    (mouseenter)="showImagePopup(anchor, dataItem.pictureFileName)"
+                    (mouseleave)="hideImagePopup()">
+            </ng-template>
+        </kendo-grid-column>
         <kendo-grid-column field="productType" title="Tipologia"></kendo-grid-column>
         <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
         <kendo-grid-column field="description" title="Descrizione"></kendo-grid-column>
@@ -44,7 +54,7 @@
                     title="Modifica">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button (click)="deleteProduct(dataItem.id)" class="btn btn-danger btn-sm grid-action-button"
+                <button (click)="deleteProduct(dataItem)" class="btn btn-danger btn-sm grid-action-button"
                     title="Elimina">
                     <i class="fas fa-trash"></i>
                 </button>
@@ -55,3 +65,11 @@
 
 <app-product-modal #productModal [warehouseManaged]="true"></app-product-modal>
 <app-warehouse-movements-modal #warehouseMovementsModal></app-warehouse-movements-modal>
+
+<kendo-popup #imagePopup [anchor]="popupAnchor" [anchorAlign]="{ horizontal: 'right', vertical: 'center' }"
+    [popupAlign]="{ horizontal: 'left', vertical: 'center' }"
+    *ngIf="popupVisible">
+    <div class="p-1">
+        <img [src]="imagesUrl + popupImageFileName" style="max-width: 300px; max-height: 300px;">
+    </div>
+</kendo-popup>

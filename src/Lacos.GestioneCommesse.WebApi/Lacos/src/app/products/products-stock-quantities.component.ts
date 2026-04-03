@@ -22,8 +22,12 @@ export class ProductsStockQuantitiesComponent extends BaseComponent implements O
   @ViewChild('productModal', { static: true }) productModal: ProductModalComponent;
   @ViewChild('warehouseMovementsModal', { static: true }) warehouseMovementsModal: WarehouseMovementsModalComponent;
 
-  pathImage = `${ApiUrls.baseUrl}/attachments/`;
+  readonly imagesUrl = `${ApiUrls.baseAttachmentsUrl}/`;
   products: GridDataResult;
+
+  popupVisible = false;
+  popupAnchor: HTMLElement;
+  popupImageFileName: string;
 
   stateGridProducts: State = {
     skip: 0,
@@ -128,6 +132,16 @@ export class ProductsStockQuantitiesComponent extends BaseComponent implements O
         );
       }
     });
+  }
+
+  showImagePopup(anchor: HTMLElement, fileName: string) {
+    this.popupAnchor = anchor;
+    this.popupImageFileName = fileName;
+    this.popupVisible = true;
+  }
+
+  hideImagePopup() {
+    this.popupVisible = false;
   }
 
   viewMovements(product: any) {

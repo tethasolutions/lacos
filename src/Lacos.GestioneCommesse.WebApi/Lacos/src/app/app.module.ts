@@ -28,6 +28,7 @@ import { IntlModule } from '@progress/kendo-angular-intl';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TooltipsModule } from "@progress/kendo-angular-tooltip";
+import { PopupModule } from '@progress/kendo-angular-popup';
 import { StorageService } from './services/common/storage.service';
 import { UserService } from './services/security/user.service';
 import { VehiclesService } from './services/vehicles.service';
@@ -302,6 +303,7 @@ registerLocaleData(localeIt, 'it', localeExtraIt);
     NumericTextBoxModule,
     DateInputsModule,
     TooltipsModule,
+    PopupModule,
     DropDownButtonModule,
     SwitchModule,
     PDFExportModule,

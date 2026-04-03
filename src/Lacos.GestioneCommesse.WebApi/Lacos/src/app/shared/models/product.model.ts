@@ -101,4 +101,5 @@ export interface ProductStockReadModel {
     readonly material: string;
     readonly defaultPrice: number;
     readonly stockQuantity: number;
+    readonly pictureFileName: string;
 }

@@ -77,9 +77,9 @@ public class ProductsController : LacosApiController
     }
 
     [HttpDelete("product/{id}")]
-    public async Task<IActionResult> DeleteProduct(long productId)
+    public async Task<IActionResult> DeleteProduct(long id)
     {
-        await productService.DeleteProduct(productId);
+        await productService.DeleteProduct(id);
         return Ok();
     }
 

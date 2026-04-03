@@ -4,10 +4,6 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Lacos.GestioneCommesse.Application.Registry.DTOs;
 using Lacos.GestioneCommesse.Application.Registry.Services;
-using Lacos.GestioneCommesse.Application.Products.Service;
-using Lacos.GestioneCommesse.Framework.IO;
-using Microsoft.AspNetCore.Authorization;
-using System.Configuration;
 using Lacos.GestioneCommesse.Framework.Configuration;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers;

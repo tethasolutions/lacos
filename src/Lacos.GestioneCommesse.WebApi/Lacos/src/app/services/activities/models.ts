@@ -63,6 +63,7 @@ export interface IActivityReadModel {
     readonly editedOn: Date | string;
     readonly canHaveDependencies: boolean;
     readonly hasDependencies: boolean;
+    readonly hasUncompletedDependencies: boolean;
     readonly totalDependencies: number;
     readonly fulfilledDependencies: number;
     readonly purchaseOrderStatus: PurchaseOrderStatus;

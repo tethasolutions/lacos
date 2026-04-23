@@ -40,7 +40,8 @@ export class Intervention {
         public ServiceCallFee: number,
         public ServiceFee: number,
         public TravelFee: number,
-        public ExtraFee: number
+        public ExtraFee: number,
+        public updateDependencies: boolean
     ) {
         this.start = new Date(start);
         this.end = new Date(end);
@@ -49,7 +50,7 @@ export class Intervention {
     static build(o: Intervention) {
         const notes = o.notes.map(e => InterventionNote.build(e));
         return new Intervention(o.id, o.start, o.end, o.status, o.toBeReschedule, o.description, o.finalNotes, o.vehicleId,
-            o.activityId, o.jobId, o.operators, o.activityProducts, notes, o.ServiceCallFee, o.ServiceFee, o.TravelFee, o.ExtraFee);
+            o.activityId, o.jobId, o.operators, o.activityProducts, notes, o.ServiceCallFee, o.ServiceFee, o.TravelFee, o.ExtraFee, o.updateDependencies);
     }
 
     toJSON() {

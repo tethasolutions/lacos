@@ -57,6 +57,7 @@ public class ActivityMappingProfile : Profile
            .MapMember(x => x.EditedOn, y => y.EditedOn)
            .MapMember(x => x.CanHaveDependencies, y => y.Type!.HasDependencies)
            .MapMember(x => x.HasDependencies, y => y.ActivityDependencies.Any() || y.PurchaseOrderDependencies.Any())
+           .MapMember(x => x.HasUncompletedDependencies, y => y.ActivityDependencies.Any(a => a.Status < ActivityStatus.Ready) || y.PurchaseOrderDependencies.Any(p => p.Status < PurchaseOrderStatus.Completed))
            .MapMember(x => x.TotalDependencies, y => (y.ActivityDependencies.Any() ? y.ActivityDependencies.Count() : 0) + 
                 (y.PurchaseOrderDependencies.Any() ? y.PurchaseOrderDependencies.Count() : 0))
            .MapMember(x => x.FulfilledDependencies, y => (y.ActivityDependencies.Any(a => a.Status >= ActivityStatus.Ready) ? y.ActivityDependencies.Count(a => a.Status >= ActivityStatus.Ready) : 0) +

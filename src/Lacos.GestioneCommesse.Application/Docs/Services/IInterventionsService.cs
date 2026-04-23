@@ -11,7 +11,7 @@ public interface IInterventionsService
     Task<InterventionDto> Create(InterventionDto interventionDto);
     Task<InterventionDto> Update(InterventionDto interventionDto);
 
-    Task UpdateActivityStatus(long id);
+    Task UpdateActivityStatus(long id, bool updateDependencies = true);
 
     Task Delete(long id);
 

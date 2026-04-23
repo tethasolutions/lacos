@@ -51,6 +51,7 @@ public class ActivityReadModel
 
     public bool? CanHaveDependencies { get; set; }
     public bool? HasDependencies { get; set; }
+    public bool? HasUncompletedDependencies { get; set; }
 
     public int? TotalDependencies { get; set; }
     public int? FulfilledDependencies { get; set; }

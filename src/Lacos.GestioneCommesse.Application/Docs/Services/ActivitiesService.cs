@@ -310,7 +310,8 @@ public class ActivitiesService : IActivitiesService
                 if (parentActivity.Status != ActivityStatus.Completed)
                 {
                     if (parentActivity.ActivityDependencies.All(a => a.Status == ActivityStatus.Ready || a.Status == ActivityStatus.Completed)
-                    && parentActivity.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed))
+                    && parentActivity.PurchaseOrderDependencies.All(p => p.Status == PurchaseOrderStatus.Completed)
+                    && parentActivity.Status < ActivityStatus.Ready)
                     {
                         logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
                             $"Attività {parentActivity.RowNumber}/{parentActivity.Type!.Name}: tutte le dipendenze sono evase -> cambio stato '{parentActivity.Status}' -> '{ActivityStatus.InProgress}' ");

@@ -189,7 +189,7 @@ public class InterventionsService : IInterventionsService
                 await dbContext.SaveChanges();
             }
 
-            await UpdateActivityStatus(intervention.ActivityId);
+            await UpdateActivityStatus(intervention.ActivityId, interventionDto.UpdateDependencies);
 
             await transaction.CommitAsync();
         }
@@ -289,11 +289,11 @@ public class InterventionsService : IInterventionsService
             repository.Update(intervention);
             await dbContext.SaveChanges();
 
-            await UpdateActivityStatus(intervention.ActivityId);
+            await UpdateActivityStatus(intervention.ActivityId, interventionDto.UpdateDependencies);
 
             if (previousActivityId != intervention.ActivityId)
             {
-                await UpdateActivityStatus(previousActivityId);
+                await UpdateActivityStatus(previousActivityId, interventionDto.UpdateDependencies);
             }
 
             await transaction.CommitAsync();
@@ -441,7 +441,7 @@ public class InterventionsService : IInterventionsService
         intervention.Products.AddRange(productsToAdd);
     }
 
-    public async Task UpdateActivityStatus(long id)
+    public async Task UpdateActivityStatus(long id, bool updateDependencies = true)
     {
         var activity = await activityRepository.Query()
             .Where(e => e.Id == id)
@@ -477,38 +477,41 @@ public class InterventionsService : IInterventionsService
             activity.Status = newStatus;
         }
 
-        //check if has dependencies
-        if ((activity.Status == ActivityStatus.Ready)
-            && (activity.Type!.HasDependencies == true)
-            && (activity.ActivityDependencies.Any() || activity.PurchaseOrderDependencies.Any()))
+        if (updateDependencies)
         {
-            logger.LogWarning($"[{activity.JobId}]Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
-                $"Attività {activity.RowNumber}/{activity.Type!.Name} in stato '{activity.Status}': " +
-                $"impostazione evasione dipendenze");
-
-            if (activity.ActivityDependencies.Any())
+            //check if has dependencies
+            if ((activity.Status >= ActivityStatus.Ready)
+                && (activity.Type!.HasDependencies == true)
+                && (activity.ActivityDependencies.Any() || activity.PurchaseOrderDependencies.Any()))
             {
-                foreach (var dep in activity.ActivityDependencies)
+                logger.LogWarning($"[{activity.JobId}]Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                    $"Attività {activity.RowNumber}/{activity.Type!.Name} in stato '{activity.Status}': " +
+                    $"impostazione evasione dipendenze");
+
+                if (activity.ActivityDependencies.Any())
                 {
-                    if (activity.Status == ActivityStatus.Ready)
+                    foreach (var dep in activity.ActivityDependencies)
                     {
-                        logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
-                            $"Attività {dep.RowNumber}/{dep.Type!.Name}: cambio stato '{dep.Status}' -> '{ActivityStatus.Completed}' ");
-                        dep.Status = ActivityStatus.Completed;
+                        if (activity.Status >= ActivityStatus.Ready)
+                        {
+                            logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                                $"Attività {dep.RowNumber}/{dep.Type!.Name}: cambio stato '{dep.Status}' -> '{ActivityStatus.Completed}' ");
+                            dep.Status = ActivityStatus.Completed;
+                        }
                     }
                 }
+
+                //if (activity.PurchaseOrderDependencies.Any())
+                //{
+                //    foreach (var dep in activity.PurchaseOrderDependencies)
+                //    {
+                //        logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
+                //            $"Ordine d'acquisto {dep.Number}: cambio stato '{dep.Status}' -> '{PurchaseOrderStatus.Completed}' ");
+                //        dep.Status = PurchaseOrderStatus.Completed;
+                //    }
+                //}
+
             }
-
-            //if (activity.PurchaseOrderDependencies.Any())
-            //{
-            //    foreach (var dep in activity.PurchaseOrderDependencies)
-            //    {
-            //        logger.LogWarning($"[{activity.JobId}]-Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
-            //            $"Ordine d'acquisto {dep.Number}: cambio stato '{dep.Status}' -> '{PurchaseOrderStatus.Completed}' ");
-            //        dep.Status = PurchaseOrderStatus.Completed;
-            //    }
-            //}
-
         }
 
         await activityRepository.Update(id, e => e.Status = activity.Status);

@@ -23,6 +23,8 @@ public class InterventionDto
     public decimal TravelFee { get; set; }
     public decimal ExtraFee { get; set; }
 
+    public bool UpdateDependencies { get; set; }
+
     public InterventionDto()
     {
         Operators = new List<long>();

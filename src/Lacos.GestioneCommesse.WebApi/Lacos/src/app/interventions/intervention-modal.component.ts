@@ -41,7 +41,7 @@ export class InterventionModalComponent extends ModalFormComponent<Intervention>
 
     private readonly _searchProductsValueChange = new Subject<string>();
     private readonly _onSearchProductsValueChange = this._searchProductsValueChange.asObservable();
-    
+
     readonly states = listEnum<InterventionStatus>(InterventionStatus);
 
     constructor(
@@ -77,6 +77,7 @@ export class InterventionModalComponent extends ModalFormComponent<Intervention>
         this.jobReadonly = !!this.options.jobId;
         this.readonly = this.options.status !== InterventionStatus.Scheduled;
         this.filterProductsValue = null;
+        this.options.updateDependencies = true;
 
         this._getJobs();
         this._tryGetActivities();
@@ -109,13 +110,33 @@ export class InterventionModalComponent extends ModalFormComponent<Intervention>
         }
     }
 
+    checkDependencies() {
+        const activity = this.activities?.find(e => e.id === this.options.activityId);
+        if (!activity?.hasUncompletedDependencies) {
+            return null;
+        }
+        return this._messageBox.confirm(
+            `L'attività ${activity.fullName} ha dipendenze non completate. Premere Si per salvare forzando l'aggiornamento dello stato delle dipendenze, premere NO per salvare senza aggiorare lo stato delle dipendenze.`,
+            'Seleziona l\'azione'
+        );
+    }
+
     trySave() {
-        this.close();
-        // if (this.readonly) {
-        //     this.dismiss();
-        // } else {
-        //     this.close();
-        // }
+        if (!this._canClose()) {
+            return;
+        }
+
+        const obs = this.checkDependencies();
+        if (obs) {
+            this._subscriptions.push(
+                obs.subscribe(result => {
+                    this.options.updateDependencies = result;
+                    this.close();
+                })
+            );
+        } else {
+            this.close();
+        }
     }
 
     onSearchProductsValueChange(value: string) {
@@ -306,13 +327,13 @@ export class InterventionModalComponent extends ModalFormComponent<Intervention>
         )
     }
 
-    openNotes() {        
+    openNotes() {
         this._subscriptions.push(
             this.interventionNotesModal.open(this.options)
                 .subscribe()
         );
     }
-    
+
 }
 
 class SelectableJob {
@@ -339,6 +360,7 @@ class SelectableActivity {
     readonly customerAddress: string;
     readonly number: number;
     readonly fullName: string;
+    readonly hasUncompletedDependencies: boolean;
 
     constructor(
         activity: IActivityReadModel
@@ -347,6 +369,7 @@ class SelectableActivity {
         this.customerAddress = activity.address;
         this.number = activity.number;
         this.fullName = `${activity.number} - ${activity.shortDescription}`;
+        this.hasUncompletedDependencies = activity.hasUncompletedDependencies;
     }
 
 }

@@ -35,7 +35,7 @@ public class InterventionsService : IInterventionsService
     private readonly ILacosDbContext dbContext;
     private readonly ILogger<ActivitiesService> logger;
     private readonly ISharedService sharedService;
-
+    private readonly IMessagesService messagesService;
     private static readonly Expression<Func<Job, JobStatus>> StatusExpression = j =>
     j.Activities
     .All(e => e.Type.InfluenceJobStatus != true)
@@ -67,7 +67,8 @@ public class InterventionsService : IInterventionsService
         IRepository<MaintenancePriceListItem> mainentancePriceListItemRepository,
         ILacosSession session,
         ILogger<ActivitiesService> logger,
-        ISharedService sharedService
+        ISharedService sharedService,
+        IMessagesService messagesService
     )
     {
         this.mapper = mapper;
@@ -85,6 +86,7 @@ public class InterventionsService : IInterventionsService
         this.session = session;
         this.logger = logger;
         this.sharedService = sharedService;
+        this.messagesService = messagesService;
     }
 
     public IQueryable<InterventionReadModel> Query(bool filterHistorical)
@@ -470,11 +472,44 @@ public class InterventionsService : IInterventionsService
                         ? ActivityStatus.Ready
                         : ActivityStatus.Completed;
 
-        if (activity.Status != newStatus) {
+        if (activity.Status != newStatus)
+        {
             logger.LogWarning($"[{activity.JobId}]Commessa {activity.Job.Number.ToString("000")}/{activity.Job.Year}: " +
                 $"modifica interventi: attività {activity.RowNumber}/{activity.Type!.Name} cambio stato '{activity.Status}' -> '{newStatus}: " +
                 $"impostazione evasione dipendenze");
             activity.Status = newStatus;
+            if (newStatus == ActivityStatus.Completed)
+            {
+                var message = new MessageDto()
+                {
+                    OperatorId = (long)session.CurrentUser.OperatorId,
+                    Date = DateTimeOffset.Now,
+                    Note = $"Interventi per l'attività {activity.RowNumber}/{activity.Type!.Name} completati. Attività conclusa, pronta per fatturazione.",
+                    IsFromApp = true,
+                    ActivityId = activity.Id
+                };
+
+                var createdByOperatorId = await operatorRepository.Query()
+                    .Where(o => o.UserId == activity.CreatedById)
+                    .Select(o => o.Id)
+                    .FirstOrDefaultAsync();
+
+                var referentOperatorId = await operatorRepository.Query()
+                    .Where(o => o.UserId == activity.ReferentId)
+                    .Select(o => o.Id)
+                    .FirstOrDefaultAsync();
+
+                var targetOperatorIds = string.Join(",", new[]
+                {
+                    createdByOperatorId,
+                    referentOperatorId
+                });
+
+                if (targetOperatorIds != null)
+                {
+                    await messagesService.Create(message, string.Join(",", targetOperatorIds));
+                }
+            }
         }
 
         if (updateDependencies)

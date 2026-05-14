@@ -480,30 +480,46 @@ public class InterventionsService : IInterventionsService
             activity.Status = newStatus;
             if (newStatus == ActivityStatus.Completed)
             {
+                var operatorId = await operatorRepository.Query()
+                        .Where(o => o.UserId == 1)  //admin Apollo
+                        .Select(o => o.Id)
+                        .FirstOrDefaultAsync();
+
+                if (session.CurrentUser?.OperatorId != null)
+                {
+                    operatorId = (long)session.CurrentUser.OperatorId;
+                }
+
                 var message = new MessageDto()
                 {
-                    OperatorId = (long)session.CurrentUser.OperatorId,
+                    OperatorId = operatorId,
                     Date = DateTimeOffset.Now,
                     Note = $"Interventi per l'attività {activity.RowNumber}/{activity.Type!.Name} completati. Attività conclusa, pronta per fatturazione.",
                     IsFromApp = true,
                     ActivityId = activity.Id
                 };
 
+                var targetOperatorIds = new List<long>();
+
                 var createdByOperatorId = await operatorRepository.Query()
                     .Where(o => o.UserId == activity.CreatedById)
                     .Select(o => o.Id)
                     .FirstOrDefaultAsync();
+
+                if (createdByOperatorId != 0)
+                {
+                    targetOperatorIds.Add(createdByOperatorId);
+                }
 
                 var referentOperatorId = await operatorRepository.Query()
                     .Where(o => o.UserId == activity.ReferentId)
                     .Select(o => o.Id)
                     .FirstOrDefaultAsync();
 
-                var targetOperatorIds = string.Join(",", new[]
+                if (referentOperatorId != 0)
                 {
-                    createdByOperatorId,
-                    referentOperatorId
-                });
+                    targetOperatorIds.Add(referentOperatorId);
+                }
 
                 if (targetOperatorIds != null)
                 {

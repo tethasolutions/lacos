@@ -398,3 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 src/Lacos.GestioneCommesse.WebApi/wwwroot/attachments/
+/src/Lacos.GestioneCommesse.Application/Sync/SyncService.cs

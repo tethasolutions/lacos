@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(sqlcmd *)",
+      "Bash(git -C \"C:\\\\Users\\\\paolo\\\\Documents\\\\Visual Studio 2022\\\\Projects\\\\Lacos\" diff \"src/Lacos.GestioneCommesse.Application/Sync/SyncService.cs\")"
+    ]
+  }
+}

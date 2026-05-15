@@ -331,6 +331,21 @@ namespace Lacos.GestioneCommesse.Application.Sync
         public async Task<SyncLocalDbChanges> SyncFromAppToDB_LocalChanges(SyncLocalDbChanges syncLocalDbChanges)
         {
             SyncLocalDbChanges syncLocalDbChangesRemote = new SyncLocalDbChanges();
+
+            try
+            {
+                var appLogRepository = serviceProvider.GetRequiredService<IRepository<AppLog>>();
+                var appLog = new AppLog
+                {
+                    Timestamp = DateTimeOffset.UtcNow,
+                    Endpoint = "SyncFromAppToDB_LocalChanges",
+                    Data = System.Text.Json.JsonSerializer.Serialize(syncLocalDbChanges)
+                };
+                await appLogRepository.Insert(appLog);
+                await dbContext.SaveChanges();
+            }
+            catch { }
+
             try
             {
                 await using (var transaction = await dbContext.BeginTransaction())

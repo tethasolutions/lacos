@@ -97,6 +97,30 @@ namespace Lacos.GestioneCommesse.Dal.Migrations
                     b.ToTable("PurchaseOrdersJobs", "Docs");
                 });
 
+            modelBuilder.Entity("Lacos.GestioneCommesse.Domain.AppLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Data")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Endpoint")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasPrecision(3)
+                        .HasColumnType("datetimeoffset(3)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppLogs", "Logs");
+                });
+
             modelBuilder.Entity("Lacos.GestioneCommesse.Domain.Application.DocumentToSyncQueue", b =>
                 {
                     b.Property<long>("Id")

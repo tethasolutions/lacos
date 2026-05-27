@@ -11,6 +11,10 @@ import { ApiUrls } from '../services/common/api-urls';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { saveAs } from '@progress/kendo-file-saver';
 import { WarehouseMovementsModalComponent } from '../warehouse-movements/warehouse-movements-modal.component';
+import { UserService } from '../services/security/user.service';
+import { OperatorsService } from '../services/operators.service';
+import { OperatorModel } from '../shared/models/operator.model';
+import { Role, User } from '../services/security/models';
 
 @Component({
   selector: 'app-products-stock-quantities',
@@ -28,6 +32,9 @@ export class ProductsStockQuantitiesComponent extends BaseComponent implements O
   popupVisible = false;
   popupAnchor: HTMLElement;
   popupImageFileName: string;
+  isOperator: boolean = true;
+  user: User;
+  currentOperator: OperatorModel;
 
   stateGridProducts: State = {
     skip: 0,
@@ -44,12 +51,17 @@ export class ProductsStockQuantitiesComponent extends BaseComponent implements O
 
   constructor(
     private readonly _productsService: ProductsService,
+    private readonly _user: UserService,
+    private readonly _operatorsService: OperatorsService,
     private readonly _messageBox: MessageBoxService
   ) {
     super();
   }
 
   ngOnInit() {
+    this.user = this._user.getUser();
+    this._getCurrentOperator(this.user.id);
+    this.isOperator = (this.user.role == Role.Operator);
     this._readWarehouseProducts();
     this.updateScreenSize();
   }
@@ -65,6 +77,15 @@ export class ProductsStockQuantitiesComponent extends BaseComponent implements O
     if (this.screenWidth < 1400) this.screenWidth = 1400;
   }
 
+  protected _getCurrentOperator(userId: number) {
+    this._subscriptions.push(
+      this._operatorsService.getOperatorByUserId(userId)
+        .pipe(
+          tap(e => this.currentOperator = e)
+        )
+        .subscribe()
+    );
+  }
 
   dataStateChange(state: State) {
     this.stateGridProducts = state;

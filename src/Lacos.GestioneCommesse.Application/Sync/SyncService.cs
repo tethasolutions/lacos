@@ -433,7 +433,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                         var alreadyRescheduledActivity = await activityRepository.Query()
                             .Where(x => x.JobId == entity.Activity!.JobId && 
                                 x.TypeId == rescheduleActivityId.Value && 
-                                x.Description == entity.RescheduleNotes)
+                                x.Description == "Nota da posatore: " + entity.RescheduleNotes)
                             .SingleOrDefaultAsync();
 
                         if (alreadyRescheduledActivity == null)

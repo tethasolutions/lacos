@@ -37,6 +37,9 @@
         <kendo-grid-column field="side" title="Lato"></kendo-grid-column>
         <kendo-grid-column field="size" title="Dimensione"></kendo-grid-column>
         <kendo-grid-column field="material" title="Materiale"></kendo-grid-column>
+        @if(!isOperator) {
+            <kendo-grid-column field="defaultPrice" title="Prz. d'acquisto" [format]="'{0:c}'"></kendo-grid-column>
+        }
         <kendo-grid-column field="stockQuantity" title="Giacenza">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <span [ngClass]="{'text-danger': dataItem.stockQuantity <= 0}">

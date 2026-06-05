@@ -151,6 +151,13 @@ export class InterventionModalComponent extends ModalFormComponent<Intervention>
         }
     }
 
+    get minEnd(): Date {
+        if (!this.options?.start) return null;
+        const min = new Date(this.options.start);
+        min.setMinutes(min.getMinutes() + 30);
+        return min;
+    }
+
     onStartChange() {
         if (this.options.end < this.options.start) {
             this.options.end = this.options.start.addHours(1);

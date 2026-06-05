@@ -61,7 +61,7 @@
                 <div class="col-md-4">
                     <label>Fine</label>
                     <div class="form-group">
-                        <kendo-datetimepicker name="end" [(ngModel)]="options.end" required [min]="options.start"
+                        <kendo-datetimepicker name="end" [(ngModel)]="options.end" required [min]="minEnd"
                             [steps]="{minute:15}" [readonly]="readonly">
                         </kendo-datetimepicker>
                         <div class="validation-message" [control]="form.controls['end']"></div>

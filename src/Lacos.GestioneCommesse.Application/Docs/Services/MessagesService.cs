@@ -326,6 +326,9 @@ public class MessagesService : IMessagesService
         var AdminOperators = await operatorRepository.Query()
             .Where(e => e.User.Role == Domain.Security.Role.Administrator).ToListAsync();
 
+        var DefaultApolloOperators = await operatorRepository.Query()
+            .Where(e => e.IsDefaultApolloActivityMessageOperator == true).ToListAsync();
+
         List<long> operators = new List<long>();
 
         if (AdminOperators.Any())
@@ -359,9 +362,17 @@ public class MessagesService : IMessagesService
             Domain.Docs.Activity activity = await activityRepository.Get(elementId);
             if (activity != null)
             {
-                if (activity.ReferentId != null && activity.ReferentId != senderOperatorId)
+                //if (activity.ReferentId != null && activity.ReferentId != senderOperatorId)
+                //{
+                //    operators.Add((long)activity.ReferentId);
+                //}
+
+                foreach (Operator @operator in DefaultApolloOperators)
                 {
-                    operators.Add((long)activity.ReferentId);
+                    if (senderOperatorId != @operator.Id)
+                    {
+                        operators.Add(@operator.Id);
+                    }
                 }
 
                 activity = await activityRepository.Query()

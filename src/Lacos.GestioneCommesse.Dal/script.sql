@@ -6175,3 +6175,39 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260707090250_Add_Flag_IsDefaultApolloActivityMessageOperator'
+)
+BEGIN
+    ALTER TABLE [Registry].[Operators] ADD [IsDefaultApolloActivityMessageOperator] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260707090250_Add_Flag_IsDefaultApolloActivityMessageOperator'
+)
+BEGIN
+
+                    UPDATE Registry.Operators
+                    SET IsDefaultApolloActivityMessageOperator = 0
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260707090250_Add_Flag_IsDefaultApolloActivityMessageOperator'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260707090250_Add_Flag_IsDefaultApolloActivityMessageOperator', N'8.0.16');
+END;
+GO
+
+COMMIT;
+GO
+

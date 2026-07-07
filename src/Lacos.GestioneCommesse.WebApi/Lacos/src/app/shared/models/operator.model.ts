@@ -14,6 +14,7 @@ export class OperatorModel {
     documents: Array<OperatorDocumentModel>;
     activityTypes: number[];
     signatureFileName:string;
+    isDefaultApolloActivityMessageOperator: boolean;
     isDefaultAppMessageOperator: boolean;
     isOptionalAppMessageOperator: boolean;
 
@@ -30,6 +31,7 @@ export class OperatorModel {
         this.documents = [];
         this.activityTypes = [];
         this.signatureFileName = null;
+        this.isDefaultApolloActivityMessageOperator = false;
         this.isDefaultAppMessageOperator = false;
         this.isOptionalAppMessageOperator = false;
     }

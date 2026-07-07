@@ -17,6 +17,7 @@ public class Operator : FullAuditedEntity
 
     public string? SignatureFileName { get; set; }
 
+    public bool IsDefaultApolloActivityMessageOperator { get; set; }
     public bool IsDefaultAppMessageOperator { get; set; }
     public bool IsOptionalAppMessageOperator { get; set; }
     

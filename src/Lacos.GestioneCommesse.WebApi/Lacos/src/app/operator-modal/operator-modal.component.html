@@ -70,16 +70,23 @@
             </div>
 
             <div class="row riga-form">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <kendo-label class="k-checkbox-label me-2" [for]="notification">Destinatario Default App Apollo</kendo-label>
+                        <kendo-label class="k-checkbox-label me-2" [for]="notification">Dest. Default Att. Apollo </kendo-label>
+                        <kendo-switch name="isDefaultApolloActivityMessageOperator" [(ngModel)]="options.isDefaultApolloActivityMessageOperator" onLabel="Si" offLabel="No">
+                        </kendo-switch>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <kendo-label class="k-checkbox-label me-2" [for]="notification">Dest. Default App </kendo-label>
                         <kendo-switch name="isDefaultAppMessageOperator" [(ngModel)]="options.isDefaultAppMessageOperator" onLabel="Si" offLabel="No" [disabled]="options.isOptionalAppMessageOperator">
                         </kendo-switch>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <kendo-label class="k-checkbox-label me-2" [for]="notification">Destinatario Opzionale App Apollo</kendo-label>
+                        <kendo-label class="k-checkbox-label me-2" [for]="notification">Dest. Opzionale App</kendo-label>
                         <kendo-switch name="isOptionalAppMessageOperator" [(ngModel)]="options.isOptionalAppMessageOperator" onLabel="Si" offLabel="No" [disabled]="options.isDefaultAppMessageOperator">
                         </kendo-switch>
                     </div>

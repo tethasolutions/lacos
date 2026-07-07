@@ -23,7 +23,7 @@ public class MessagesListReadModel
     public string? ActivityType { get; set; }
     public string? ActivityColor { get; set; }
     public string? ActivityDescription { get; set; }
-
+    public DateTimeOffset? ActivityExpirationDate { get; set; }
 
     public long? JobId { get; set; }
     public long? ActivityId { get; set; }

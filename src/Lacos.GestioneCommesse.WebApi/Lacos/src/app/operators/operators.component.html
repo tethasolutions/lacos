@@ -20,6 +20,11 @@
     <kendo-grid-column field="name" title="Nome"></kendo-grid-column>
     <kendo-grid-column field="email" title="email"></kendo-grid-column>
     <kendo-grid-column field="defaultVehicle.description" title="Trasporto"></kendo-grid-column>
+    <kendo-grid-column field="isDefaultApolloActivityMessageOperator" title="Default Dest. Attività Apollo">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.isDefaultApolloActivityMessageOperator | bool}}
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column field="isDefaultAppMessageOperator" title="Destinatiario Default App">
         <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.isDefaultAppMessageOperator | bool}}

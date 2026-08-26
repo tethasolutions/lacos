@@ -8,6 +8,8 @@ using Lacos.GestioneCommesse.Contracts.Dtos.Security;
 using Lacos.GestioneCommesse.WebApi.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.IO.Compression;
 
 namespace Lacos.GestioneCommesse.WebApi.Controllers
 {
@@ -45,14 +47,36 @@ namespace Lacos.GestioneCommesse.WebApi.Controllers
             return result;
         }
 
-        
+
+        //[AllowAnonymous]
+        //[HttpPost("Db")]
+        //public async Task<SyncRemoteFullDbDto> SyncFromDBToApp_FullDb([FromBody] SyncDbDate dbDate)
+        //{
+        //    var result = await service.SyncFromDBToApp_FullDb(dbDate.Date);
+        //    return result;
+        //}
+
         [AllowAnonymous]
         [HttpPost("Db")]
-        public async Task<SyncRemoteFullDbDto> SyncFromDBToApp_FullDb([FromBody] SyncDbDate dbDate)
+        public async Task<IActionResult> SyncFromDBToApp_FullDb([FromBody] SyncDbDate dbDate)
         {
             var result = await service.SyncFromDBToApp_FullDb(dbDate.Date);
-            return result;
+
+            var json = JsonConvert.SerializeObject(result);
+            var jsonBytes = System.Text.Encoding.UTF8.GetBytes(json);
+
+            using var zipStream = new MemoryStream();
+            using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, leaveOpen: true))
+            {
+                var entry = archive.CreateEntry("fulldb.json", CompressionLevel.Optimal);
+                await using var entryStream = entry.Open();
+                await entryStream.WriteAsync(jsonBytes);
+            }
+
+            zipStream.Position = 0;
+            return File(zipStream.ToArray(), "application/zip", "fulldb.zip");
         }
+
 
         [AllowAnonymous]
         [HttpPost("LocalDb")]

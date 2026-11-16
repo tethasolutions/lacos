@@ -534,10 +534,10 @@ namespace Lacos.GestioneCommesse.Application.Sync
                 syncFullDb.MaintenancePriceLists = await GetAllModifiedRecord<MaintenancePriceList, SyncMaintenancePriceListDto>(date);
                 
                 
-                #if (DEBUG)
-                    if(date<DateTime.Now.AddMonths(-1))
-                    date = DateTime.Now.AddMonths(-1);
-                #endif
+                //#if (DEBUG)
+                //    if(date<DateTime.Now.AddMonths(-1))
+                //    date = DateTime.Now.AddMonths(-1);
+                //#endif
                 
                 syncFullDb.Activities = await GetAllModifiedRecord<Activity, SyncActivityDto>(date);
                 syncFullDb.ActivityProducts = await GetAllModifiedRecord<ActivityProduct, SyncActivityProductDto>(date);

@@ -15,6 +15,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 export class InterventionsListComponent extends BaseComponent implements OnInit {
 
     @Input() viewNewInterventionButton: boolean = true;
+    @Output() readonly interventionChanged = new EventEmitter<void>();
 
     @ViewChild('interventionsGrid', { static: true })
     interventionsGrid: InterventionsGridComponent;
@@ -58,6 +59,11 @@ export class InterventionsListComponent extends BaseComponent implements OnInit 
     private _afterCreated() {
         this._messageBox.success(`Intervento programmato.`);
 
+        this.interventionsGrid.refresh();
+        this.interventionChanged.emit();
+    }
+
+    refresh() {
         this.interventionsGrid.refresh();
     }
 

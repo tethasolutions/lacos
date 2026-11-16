@@ -9,7 +9,8 @@
 </div>
 
 
-<app-interventions-grid #interventionsGrid [interventionModal]="interventionModal" [filterHistorical]="true">
+<app-interventions-grid #interventionsGrid [interventionModal]="interventionModal" [filterHistorical]="true"
+    (interventionUpdated)="interventionChanged.emit()" (interventionRemoved)="interventionChanged.emit()">
 </app-interventions-grid>
 
 <app-intervention-modal #interventionModal></app-intervention-modal>

@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -36,6 +36,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
     @Input() viewExportExcel: boolean = true;
     @Input() viewInternals: boolean = false;
     @Input() viewAdministratives: boolean = false;
+    @Output() readonly activityChanged = new EventEmitter<void>();
 
     @ViewChild('activityModal', { static: true }) activityModal: ActivityModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
@@ -288,6 +289,10 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         return classes;
     };
 
+    refresh() {
+        this._read();
+    }
+
     protected _read() {
         if (this.viewInternals) {
             this._subscriptions.push(
@@ -351,12 +356,14 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this._messageBox.success('Attività creata.')
 
         this._read();
+        this.activityChanged.emit();
     }
 
     private _afterActivityUpdated() {
         this._messageBox.success('Attività aggiornata.')
 
         this._read();
+        this.activityChanged.emit();
     }
 
     private _subscribeRouteParams() {
@@ -378,6 +385,7 @@ export class ActivitiesComponent extends BaseComponent implements OnInit {
         this._messageBox.success(text);
 
         this._read();
+        this.activityChanged.emit();
     }
 
     private _buildJobIdFilter() {

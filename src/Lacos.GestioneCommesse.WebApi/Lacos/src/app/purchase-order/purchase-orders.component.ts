@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CellClickEvent, GridDataResult, RowClassArgs } from '@progress/kendo-angular-grid';
 import { MessageBoxService } from '../services/common/message-box.service';
 import { BaseComponent } from '../shared/base.component';
@@ -31,6 +31,7 @@ import { SecurityService } from '../services/security/security.service';
 export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
 
     @Input() viewExportExcel: boolean = true;
+    @Output() readonly purchaseOrderChanged = new EventEmitter<void>();
 
     @ViewChild('purchaseOrderModal', { static: true }) purchaseOrderModal: PurchaseOrderModalComponent;
     @ViewChild('customerModal', { static: true }) customerModal: CustomerModalComponent;
@@ -214,12 +215,14 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         this._messageBox.success('Ordine creato.')
 
         this._read();
+        this.purchaseOrderChanged.emit();
     }
 
     private _afterPurchaseOrderUpdated() {
         this._messageBox.success('Ordine aggiornato.')
 
         this._read();
+        this.purchaseOrderChanged.emit();
     }
 
     private _afterRemoved(purchaseOrder: IPurchaseOrderReadModel) {
@@ -228,6 +231,7 @@ export class PurchaseOrdersComponent extends BaseComponent implements OnInit {
         this._messageBox.success(text);
 
         this._read();
+        this.purchaseOrderChanged.emit();
     }
 
     private _buildJobIdFilter() {

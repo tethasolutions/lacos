@@ -180,6 +180,13 @@
                         <div class="validation-message" [control]="form.controls['description']"></div>
                     </div>
                 </div>
+                <div class="col-md-12" *ngIf="options.toBeReschedule">
+                    <label>Note riprogrammazione</label>
+                    <div class="form-group">
+                        <kendo-textarea name="rescheduleNotes" [(ngModel)]="options.rescheduleNotes"
+                            readonly="true"></kendo-textarea>
+                    </div>
+                </div>
                 <div class="col-md-12" *ngIf="options.finalNotes">
                     <label>Note finali</label>
                     <div class="form-group">

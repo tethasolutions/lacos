@@ -398,3 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 src/Lacos.GestioneCommesse.WebApi/wwwroot/attachments/
+
+# Angular compiled frontend output (npm run release)
+src/Lacos.GestioneCommesse.WebApi/wwwroot/it/

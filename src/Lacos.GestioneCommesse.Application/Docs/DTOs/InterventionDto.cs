@@ -11,6 +11,7 @@ public class InterventionDto
     public bool? ToBeReschedule { get; set; }
     public string? Description { get; set; }
     public string? FinalNotes { get; set; }
+    public string? RescheduleNotes { get; set; }
     public long? VehicleId { get; set; }
     public long ActivityId { get; set; }
     public long JobId { get; set; }

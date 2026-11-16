@@ -54,11 +54,11 @@
 </div>
 }
 
-<app-activities [viewExportExcel]="false"></app-activities>
+<app-activities #activities [viewExportExcel]="false" (activityChanged)="interventions.refresh()"></app-activities>
 <div>
     <hr>
 </div>
-<app-purchase-orders [viewExportExcel]="false"></app-purchase-orders>
+<app-purchase-orders [viewExportExcel]="false" (purchaseOrderChanged)="activities.refresh()"></app-purchase-orders>
 <div>
     <hr>
 </div>
@@ -66,7 +66,7 @@
 <div>
     <hr>
 </div>
-<app-interventions-list [viewNewInterventionButton]="false"></app-interventions-list>
+<app-interventions-list #interventions [viewNewInterventionButton]="false" (interventionChanged)="activities.refresh()"></app-interventions-list>
 <div>
     <hr>
 </div>

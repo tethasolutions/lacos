@@ -19,6 +19,9 @@ namespace Lacos.GestioneCommesse.Contracts.Dtos.Application
         public string Filename { get; set; }
         public byte[]? Content{ get; set; }
         public bool ToBeReschedule { get; set; }
+        public List<long>? RescheduleOperatorIds { get; set; }
+        public long OperatorId { get; set; }
+
         public SyncSignDto()
         { 
             Content = null;

@@ -417,7 +417,7 @@ namespace Lacos.GestioneCommesse.Application.Sync
                     entity.ServiceFee = signDto.NewServiceFee;
                 entity.RescheduleNotes = signDto.RescheduleNotes;
                 entity.CustomerSignatureFileName = signDto.Filename;
-                entity.ToBeReschedule = signDto.ToBeReschedule;
+                entity.ToBeReschedule = signDto.ToBeReschedule;                
                 entity.Start = signDto.Start;
                 entity.End = signDto.End;
                 //entity. = signDto.NameSurname;
@@ -456,6 +456,32 @@ namespace Lacos.GestioneCommesse.Application.Sync
                             };
                             await activityRepository.Insert(activity);
                             await dbContext.SaveChanges();
+
+                            if (activity.Id != 0)
+                            {
+
+                                var messageRepository = serviceProvider.GetRequiredService<IRepository<Message>>();
+                                var messageNotificationRepository = serviceProvider.GetRequiredService<IRepository<MessageNotification>>();
+                                Message message = new Message();
+                                message.OperatorId = signDto.OperatorId;
+                                message.ActivityId = activity.Id;
+                                message.Note = entity.RescheduleNotes;
+                                message.Date = DateTimeOffset.Now;
+                                message.IsFromApp = true;
+                                await messageRepository.Insert(message);
+                                await dbContext.SaveChanges();
+
+                                var notificationOperators = signDto.RescheduleOperatorIds ?? new List<long>();
+                                foreach (var notificationOperator in notificationOperators)
+                                {
+                                    MessageNotification notification = new MessageNotification();
+                                    notification.MessageId = message.Id;
+                                    notification.OperatorId = (long)notificationOperator;
+                                    notification.IsRead = false;
+                                    await messageNotificationRepository.Insert(notification);
+                                }
+                                await dbContext.SaveChanges();
+                            }
                         }
                     }
                     else

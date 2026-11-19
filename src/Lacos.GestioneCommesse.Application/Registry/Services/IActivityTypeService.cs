@@ -73,6 +73,7 @@ namespace Lacos.GestioneCommesse.Application.Registry.Services
         public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(bool filterPO = false)
         {
             var query = activityTypeRepository.Query()
+                .Include(a => a.Operators)
                 .AsNoTracking();
 
             if(session.IsAuthenticated() && session.IsAuthorized(Role.Operator))
